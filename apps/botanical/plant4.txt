@@ -23,6 +23,8 @@ const safePlantHelper=plantHelper
     .replaceAll("P.budShare==null?.44:P.budShare","P.budShare==null ? .44 : P.budShare")
     .replaceAll("open<.25?.72:1","open<.25 ? .72 : 1");
 html=html.replace(plantHelper,safePlantHelper);
-html=patchOnce(html,'            tab === "mix" &&',plantPanel+'            tab === "mix" &&','plant controls');
+/* Keep the whole-plant renderer/preset/quick toggle, but do not splice the
+   large Plant controls panel into the existing React child expression. */
+html=html.replace('["shape", "plant", "mix", "flame", "depth", "colour"].map','["shape", "mix", "flame", "depth", "colour"].map');
 return html;
 })
