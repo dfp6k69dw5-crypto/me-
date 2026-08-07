@@ -1,0 +1,38 @@
+  x*=sculpt.aspect;y/=Math.max(.28,sculpt.aspect);
+  return [x,y,z];
+}
+function applySculpt(){
+  if(!records.length)return;
+  for(let i=0;i<records.length;i++){let r=records[i],p=sculptOne(r,i,records.length);r.x=p[0];r.y=p[1];r.z=p[2];}
+  render();
+}
+function restoreBase(){for(const r of records){if(r.__bx!=null){r.x=r.__bx;r.y=r.__by;r.z=r.__bz;}}}
+function resculpt(){restoreBase();applySculpt();}
+function rebuildSculpt(){applyDynamics();rebuild();captureBase();applySculpt();runTests(false);}
+
+const style=document.createElement('style');style.textContent=`
+.sculptBox{background:linear-gradient(180deg,rgba(216,198,141,.055),transparent)}
+.sculptBox select{width:100%;background:#171c24;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:9px}
+.sculptBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.micro{font-size:11px;color:var(--muted);line-height:1.4;margin-top:8px}
+`;
+document.head.appendChild(style);
+const organismSection=document.querySelector('.panel .section');
+const sec=document.createElement('div');sec.className='section sculptBox';sec.innerHTML=`<h2>Sculpt the organism</h2>
+<div class="row"><label>Topology lens</label><select id="shapeLens"><option value="basin">Regime basins</option><option value="ribbon">Phase ribbon</option><option value="shell">State shell</option><option value="knot">OMEF knot</option><option value="filament">Filament</option><option value="membrane">Interaction membrane</option></select><div class="value">MODE</div></div>
+<div class="row"><label>Lobe force</label><input id="shapeLobes" type="range" min="0" max="200" value="72"><div class="value" id="shapeLobesV">72</div></div>
+<div class="row"><label>Nonlinear fold</label><input id="shapeFold" type="range" min="0" max="200" value="58"><div class="value" id="shapeFoldV">58</div></div>
+<div class="row"><label>State twist</label><input id="shapeTwist" type="range" min="0" max="200" value="48"><div class="value" id="shapeTwistV">48</div></div>
+<div class="row"><label>Radial warp</label><input id="shapeRadial" type="range" min="-100" max="100" value="18"><div class="value" id="shapeRadialV">18</div></div>
+<div class="row"><label>Shear</label><input id="shapeShear" type="range" min="-100" max="100" value="0"><div class="value" id="shapeShearV">0</div></div>
+<div class="row"><label>Aspect</label><input id="shapeAspect" type="range" min="35" max="180" value="100"><div class="value" id="shapeAspectV">100</div></div>
+<div class="row"><label>Phase gain</label><input id="shapePhase" type="range" min="0" max="200" value="72"><div class="value" id="shapePhaseV">72</div></div>
+<div class="sculptBtns"><button id="shapeRandom">Wild shape</button><button id="shapeReset">Reset shape</button></div><div class="micro">These controls transform geometry with regime probabilities, organ state, golden-cycle phase, hidden strain, confidence and spectral state. They are not opacity controls.</div>`;
+organismSection.insertAdjacentElement('afterend',sec);
+const dynSec=document.createElement('div');dynSec.className='section';dynSec.innerHTML=`<h2>Change the mathematics</h2>
+<div class="row"><label>Pair coupling</label><input id="dynCoupling" type="range" min="0" max="220" value="100"><div class="value" id="dynCouplingV">100</div></div>
+<div class="row"><label>Higher-order</label><input id="dynHigher" type="range" min="0" max="260" value="100"><div class="value" id="dynHigherV">100</div></div>
+<div class="row"><label>Regime memory</label><input id="dynRegime" type="range" min="5" max="98" value="72"><div class="value" id="dynRegimeV">72</div></div>
+<div class="row"><label>Cycle speed</label><input id="dynCycle" type="range" min="35" max="240" value="100"><div class="value" id="dynCycleV">100</div></div>
+<div class="row"><label>Cycle persistence</label><input id="dynPersist" type="range" min="45" max="160" value="100"><div class="value" id="dynPersistV">100</div></div>
+<div class="row"><label>Fibonacci feedback</label><input id="dynMemory" type="range" min="0" max="260" value="100"><div class="value" id="dynMemoryV">100</div></div>
+<div class="row"><label>Accounting pull</label><input id="dynAccounting" type="range" min="0" max="100" value="72"><div class="value" id="dynAccountingV">72</div></div>
