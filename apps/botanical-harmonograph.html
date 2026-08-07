@@ -11,7 +11,7 @@
 <script>
 (async function(){
   try {
-    const parts=[0,1,2,3,4,5].map(n=>`botanical/part${n}.txt?v=5`);
+    const parts=[0,1,2,3,4,5].map(n=>`botanical/part${n}.txt?v=6`);
     let html="";
     for(const p of parts){
       const r=await fetch(p,{cache:"no-store"});
@@ -30,13 +30,7 @@
       return src.split(needle).join(replacement);
     };
 
-    /*
-      Developmental-history model.
-      Inspired by the 2026 morphogenesis study: equal-ish total growth can leave
-      different final geometry when anisotropic and more even expansion occur in
-      a different order. This is a procedural analogy, not a claim that the paper
-      directly models petals.
-    */
+    /* Developmental-history model. */
     const growthHelper=`function growthTraceState(Q,u) {
     const h=Math.max(-1,Math.min(1,Q.growthHistory||0));
     const m=Math.max(0,Math.min(1.2,Q.growthMemory||0));
@@ -89,7 +83,6 @@ function growthTraceWidth(Q,u) {
       'const wAt = (u) => evalW(u, Q.mixW) * Q.pW * fy * (1 + Q.margin * 0.3 * snoise(u * 6.2, sd)) * growthTraceWidth(Q,u);',
       'vein growth history');
 
-    /* Replace independent petal jitter with low-amplitude, positionally correlated variation. */
     html=patchOnce(html,
 `        const g = P.irregular;
         const h = (i) => hash(sd, i);
@@ -122,7 +115,6 @@ function growthTraceWidth(Q,u) {
         const lenJ = 1 + g*(0.035*neighborBias+(h(7)-0.5)*0.08);`,
       'correlated petal variation');
 
-    /* Hybridise coherent developmental systems rather than unrelated controls. */
     html=patchOnce(html,
       'const rare=Math.random()<0.2, cap=(x,a,b)=>Math.max(a,Math.min(b,x));',
       'const rare=Math.random()<0.15, cap=(x,a,b)=>Math.max(a,Math.min(b,x));',
@@ -139,8 +131,6 @@ function growthTraceWidth(Q,u) {
       'P.mixW, P.mixK, P.mixZ, P.mixV,\n    ]);',
       'P.mixW, P.mixK, P.mixZ, P.mixV, P.growthHistory, P.growthMemory, P.growthSwitch,\n    ]);',
       'growth dependencies');
-
-    /* Expose the hidden developmental trajectory in the status label. */
     html=patchOnce(html,
 `    const status = (preset || "custom") + " · " + P.mode +
         (usesW ? " · " + P.arrangement : "") + (P.layers > 1 ? " · " + P.layers + " layers" : "");`,
@@ -148,6 +138,16 @@ function growthTraceWidth(Q,u) {
     const status = (preset || "custom") + " · " + P.mode +
         (usesW ? " · " + P.arrangement : "") + (P.layers > 1 ? " · " + P.layers + " layers" : "") + growthTag;`,
       'growth status');
+
+    const plantParts=[0,1,2,3,4].map(n=>`botanical/plant${n}.txt?v=1`);
+    let plantPatch="";
+    for(const p of plantParts){
+      const r=await fetch(p,{cache:"no-store"});
+      if(!r.ok) throw new Error(`${p}: HTTP ${r.status}`);
+      plantPatch+=await r.text();
+    }
+    const applyPlantPatch=(new Function("return "+plantPatch))();
+    html=applyPlantPatch(html,patchOnce);
 
     document.open();
     document.write(html);
