@@ -86,14 +86,21 @@ jobs:
           scripts=re.findall(r'<script>(.*?)</script>',html,re.S)
           assert len(scripts)==1, f'Expected one OMEF FULL script, got {len(scripts)}'
           Path('/tmp/omef_full.js').write_text(scripts[0])
+          sculpt=Path('apps/omef-full/sculpt-v2.js').read_text()
+          for needle in ['Sculpt the organism','Change the mathematics','shapeLens','dynCoupling','window.__OMEF_SCULPT__']:
+              assert needle in sculpt, f'Missing OMEF FULL v2 sculpt feature: {needle}'
+          Path('/tmp/omef_full_sculpt.js').write_text(sculpt)
           loader=Path('apps/omef-full.html').read_text()
           assert 'Array.from({length:6}' in loader
+          assert 'sculpt-v2.js' in loader
+          assert "lastIndexOf(marker)" in loader
           ls=re.findall(r'<script>(.*?)</script>',loader,re.S)
           assert len(ls)==1
           Path('/tmp/omef_full_loader.js').write_text(ls[0])
-          print('OMEF FULL assembled:',len(html),'characters; 123-D integrity hooks present')
+          print('OMEF FULL assembled:',len(html),'characters; 123-D engine + v2 sculpt hooks present')
           PY
           node --check /tmp/omef_full.js
+          node --check /tmp/omef_full_sculpt.js
           node --check /tmp/omef_full_loader.js
       - name: Check HTML files are nonempty
         run: |
