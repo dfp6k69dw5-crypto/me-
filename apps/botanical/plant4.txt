@@ -14,6 +14,15 @@
                     React.createElement(Slider,{label:"Leaf vein detail",value:P.leafVeins,min:0,max:1,step:.01,onChange:set("leafVeins")}),
                     React.createElement(Slider,{label:"Branching",value:P.branching,min:0,max:1,step:.01,onChange:set("branching"))))),
 `;
+const safePlantHelper=plantHelper
+    .replaceAll("P.naturalness==null?.48:P.naturalness","P.naturalness==null ? .48 : P.naturalness")
+    .replaceAll("P.branching==null?.62:P.branching","P.branching==null ? .62 : P.branching")
+    .replaceAll("clusters===1?.5:c/(clusters-1)","clusters===1 ? .5 : c/(clusters-1)")
+    .replaceAll("P.leafAmount==null?.85:P.leafAmount","P.leafAmount==null ? .85 : P.leafAmount")
+    .replaceAll("P.openFlowers==null?.52:P.openFlowers","P.openFlowers==null ? .52 : P.openFlowers")
+    .replaceAll("P.budShare==null?.44:P.budShare","P.budShare==null ? .44 : P.budShare")
+    .replaceAll("open<.25?.72:1","open<.25 ? .72 : 1");
+html=html.replace(plantHelper,safePlantHelper);
 html=patchOnce(html,'            tab === "mix" &&',plantPanel+'            tab === "mix" &&','plant controls');
 return html;
 })
