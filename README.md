@@ -1,45 +1,27 @@
-# me-
-Pop
+# Alex + Sarah Projects
 
+This repository is the home base for our runnable experiments.
 
-RESONATOR
-orbit
-move
-link
-pin
-↶
-↷
-output silent
-BODY
-STRIKE
-MIC
-AMP
-MOD
-Show hints
-Self-test
-Benchmark
-ENGINE RATE
-PRESETS
+## Easiest way to use them
 
-Save
-Load
-Delete
-Copy code
-Paste code
+Once GitHub Pages is enabled, open the project-home website and bookmark it. The home page has a button for each runnable project, so you do not need to browse GitHub code.
 
-SHAPE
+## Backup way without ChatGPT
 
+1. Open this repository in GitHub.
+2. Open the `apps` folder.
+3. Choose the `.html` file for the project you want.
+4. If Pages is enabled, use the project-home site instead; GitHub's normal file view displays source code rather than running the app.
 
+## Current apps
 
+- Resonator
+- Harmonograph
+- Botanical Harmonograph
+- Attractor Lab
+- OMEF experiments
+- Geo Pulse
+- Why Time Feels Weird
 
-
-
-
-
-Scramble the wiring
-KEYS
-▾
-RESONATOR
-MASSES & SPRINGS, AT AUDIO RATE
-There is no oscillator here. A structure of masses and springs is simulated 48,000 times a second, struck with a mallet, and listened to with a microphone. Everything you hear is the object moving.
-WAKE IT UP
+The original live Resonator is also available at:
+https://dfp6k69dw5-crypto.github.io/resonator-sarah/
