@@ -73,3 +73,8 @@ jobs:
           if bad: raise SystemExit('Bad HTML files: '+', '.join(bad))
           print('Standalone HTML files look present')
           PY
+      - name: Exercise Botanical Harmonograph in mobile Chrome
+        run: |
+          python -m pip install --disable-pip-version-check -q selenium
+          (google-chrome --version || chromium --version || chromium-browser --version)
+          python scripts/botanical_smoke.py
