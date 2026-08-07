@@ -14,68 +14,33 @@ n Object.assign({}, p, { [ch]: next });
     const pick = (a) => a[Math.floor(Math.random() * a.length)];
     const signed = (a, b) => (Math.random() < 0.5 ? -1 : 1) * R(a, b);
     const hybrid = () => {
-        const mode = pick(["petal", "petal", "bloom", "filament"]);
-        const arrangement = pick(["radial", "radial", "cruciform", "papilionaceous"]);
-        const next = {
-            mode, arrangement, strands: pick([1, 1, 2, 3]),
-            symmetry: pick([3, 4, 5, 6, 6, 8, 8, 10, 12]),
-            spread: R(0, 50),
-            lambda: Math.random() < 0.8 ? R(0.8, 4.5) : -R(0.5, 2.5),
-            k0: signed(0.5, 2), kp0: signed(0, 1.2), length: R(4.5, 9.5),
-            pW: R(0.28, 0.58), notch: Math.random() < 0.6 ? R(0.04, 0.2) : 0,
-            fold: Math.random() < 0.5 ? R(0.2, 1) : 0,
-            shear: arrangement === "cruciform" ? signed(0.12, 0.35) : signed(0, 0.16),
-            pleats: pick([0, 3, 4, 5]),
-            wingAngle: R(20, 52), keelAngle: R(125, 172), keelRise: -R(0.05, 0.35),
-            petal: R(0.09, 0.2), anthers: mode === "filament" && Math.random() < 0.5,
-            irregular: R(0.15, 0.8), margin: R(0.1, 0.7), veinN: pick([0, 3, 4, 5, 6, 7]),
-            veinReach: R(0.6, 0.95), veinBranch: Math.random() < 0.6 ? 1 : 0,
-            throat: R(0.25, 0.8), cup: R(0.4, 1.2), sheen: R(0.1, 0.6),
-            centre: Math.random() < 0.75, centreSize: R(0.12, 0.45), stamens: pick([0, 6, 8, 9, 12, 16]),
-            depth: pick([1, 1, 1, 2, 2, 3]), childN: pick([2, 3, 4]), childScale: R(0.28, 0.55),
-            childAt: R(0.55, 1), childTwist: signed(0, 40),
-            layers: pick([1, 1, 2, 3, 4, 5]), layerGap: R(0.3, 1), layerTwist: R(0, 32),
-            layerShrink: R(0.05, 0.2), layerDrift: R(0.1, 0.4), tilt: R(0.25, 0.9),
-            palette: pick(Object.keys(PALETTES)),
-        };
-        if (!locks.W)
-            next.mixW = pick([
-                mk(W_T, "add", [["arch", 1], ["claw", R(0.06, 0.16)], ["off", 0]]),
-                mk(W_T, "mul", [["arch", 1], ["frill", R(0.2, 0.45)], ["claw", R(0.05, 0.14)]]),
-                mk(W_T, "mul", [["round", 1], ["frill", R(0.15, 0.4)], ["off", 0]]),
-                mk(W_T, "add", [["arch", 0.85], ["bell", R(0.2, 0.5)], ["claw", 0.1]]),
-                mk(W_T, "mul", [["arch", 1], ["spiral", R(0.25, 0.6)], ["off", 0]]),
-                mk(W_T, "max", [["arch", 1], ["round", R(0.5, 0.9)], ["off", 0]]),
-            ]);
-        if (!locks.K)
-            next.mixK = pick([
-                mk(K_T, "add", [["elastica", 1], ["clothoid", R(0.15, 0.5)], ["off", 0]]),
-                mk(K_T, "add", [["elastica", 0.9], ["wave", R(0.15, 0.4)], ["off", 0]]),
-                mk(K_T, "add", [["elastica", 0.85], ["super", R(0.2, 0.5)], ["off", 0]]),
-                mk(K_T, "add", [["elastica", 0.9], ["roll", R(0.5, 0.9)], ["off", 0]]),
-                mk(K_T, "mul", [["elastica", 1], ["decay", R(0.3, 0.7)], ["off", 0]]),
-            ]);
-        if (!locks.Z)
-            next.mixZ = pick([
-                mk(Z_T, "add", [["flat", 0], ["off", 0], ["off", 0]]),
-                mk(Z_T, "add", [["axial", R(0.3, 0.8)], ["layer", R(0.3, 0.7)], ["off", 0]]),
-                mk(Z_T, "add", [["cone", R(0.3, 0.7)], ["off", 0], ["off", 0]]),
-                mk(Z_T, "add", [["helix", R(0.3, 0.8)], ["layer", R(0.2, 0.6)], ["off", 0]]),
-                mk(Z_T, "add", [["wave", R(0.25, 0.6)], ["axial", R(0.2, 0.5)], ["off", 0]]),
-            ]);
-        if (!locks.V)
-            next.mixV = pick([
-                mk(V_T, "add", [["linear", 1], ["off", 0], ["off", 0]]),
-                mk(V_T, "add", [["linear", 1], ["off", 0], ["off", 0]]),
-                mk(V_T, "add", [["linear", R(0.7, 0.95)], [pick(["swirl", "handkerchief", "horseshoe", "waves"]), R(0.08, 0.25)], ["off", 0]]),
-                mk(V_T, "add", [["linear", R(0.6, 0.85)], [pick(["spherical", "eyefish", "bubble", "julia"]), R(0.15, 0.35)], ["off", 0]]),
-                mk(V_T, "add", [["linear", R(0.5, 0.8)], ["swirl", R(0.1, 0.25)], [pick(["disc", "rings", "heart", "cylinder"]), R(0.08, 0.2)]]),
-            ]);
-        setP((p) => Object.assign({}, p, next));
-        setPreset("Hybrid");
-        replay();
+        /* Mix whole growth systems, not unrelated sliders. */
+        const pool=["Trefoil","Alyssum","Forget","Frilled","Flamebloom","Umbel"];
+        const A=Object.assign({},BASE,PRESETS[pick(pool)]),B=Object.assign({},BASE,PRESETS[pick(pool)]);
+        const rare=Math.random()<0.2, cap=(x,a,b)=>Math.max(a,Math.min(b,x));
+        const m=(k,j,a,b)=>cap((A[k]+B[k])*0.5+signed(0,j),a,b);
+        let arrangement=Math.random()<0.65?A.arrangement:B.arrangement;
+        if(!["radial","cruciform","papilionaceous"].includes(arrangement)) arrangement="radial";
+        const symmetry=arrangement==="cruciform"?4:arrangement==="papilionaceous"?pick(rare?[5,5,6,7]:[5,5,5,6]):pick(rare?[4,5,6,7,8,9,11,12]:[4,5,5,5,6,6,6,8]);
+        const layers=Math.random()<0.76?1:(Math.random()<0.88?2:3), pW=m("pW",.035,.25,rare?.57:.52);
+        const centre=Math.random()<0.92, depth=(A.depth>1||B.depth>1)&&Math.random()<0.24?2:1;
+        const next={mode:"petal",arrangement,strands:1,symmetry,spread:0,
+            lambda:m("lambda",.16,.8,4.1),k0:m("k0",.14,-1.1,1.7),kp0:m("kp0",.1,-.65,.65),length:m("length",.3,5,8.6),
+            pW,notch:cap(((A.notch||0)+(B.notch||0))*.5+(Math.random()<.18?R(0,.04):0),0,rare?.2:.14),fold:m("fold",.07,0,rare?.92:.75),
+            shear:arrangement==="cruciform"?signed(.12,.26):signed(0,arrangement==="papilionaceous"?.12:.07),pleats:pW<.34?pick([0,0,2,3]):pick([0,0,0,2]),
+            wingAngle:m("wingAngle",3,24,48),keelAngle:m("keelAngle",5,132,166),keelRise:m("keelRise",.03,-.3,-.04),petal:R(.11,.18),anthers:false,
+            irregular:R(rare?.24:.15,rare?.52:.38),margin:R(.12,rare?.5:.36),veinN:pW<.32?pick([7,8,9,10,12]):pick([4,5,6,7,8,9]),veinReach:R(.76,.95),veinBranch:Math.random()<.72?1:0,
+            throat:R(.28,.7),cup:R(.3,rare?1.05:.9),sheen:R(.12,.4),centre,centreSize:R(.11,rare?.3:.25),stamens:centre?Math.min(24,symmetry*(Math.random()<.32?2:1)):0,
+            depth,childN:depth>1?pick([3,4,5]):3,childScale:R(.34,.46),childAt:R(.86,1),childTwist:signed(0,12),
+            layers,layerGap:R(.42,.68),layerTwist:layers>1?(180/symmetry)*R(.8,1.15):0,layerShrink:R(.08,.16),layerDrift:R(.02,rare?.14:.09),tilt:R(.32,.66),
+            palette:Math.random()<.5?A.palette:B.palette};
+        if(!locks.W) next.mixW=pick([mk(W_T,"add",[["arch",1],["claw",R(.05,.12)],["off",0]]),mk(W_T,"mul",[["round",1],["frill",R(.04,rare?.2:.11)],["off",0]]),mk(W_T,"add",[["arch",.94],["bell",R(.08,.2)],["claw",R(.04,.09)]])]);
+        if(!locks.K) next.mixK=pick([mk(K_T,"add",[["elastica",1],["clothoid",R(.08,rare?.32:.22)],["off",0]]),mk(K_T,"mul",[["elastica",1],["decay",R(.12,.3)],["off",0]]),mk(K_T,"add",[["elastica",.96],["wave",R(.04,rare?.15:.09)],["off",0]])]);
+        if(!locks.Z) next.mixZ=pick([mk(Z_T,"add",[["flat",0],["off",0],["off",0]]),mk(Z_T,"add",[["cone",R(.12,.32)],["layer",layers>1?R(.16,.36):0],["off",0]]),mk(Z_T,"add",[["axial",R(.12,.3)],["layer",layers>1?R(.16,.34):0],["off",0]])]);
+        if(!locks.V) next.mixV=rare&&Math.random()<.38?mk(V_T,"add",[["linear",R(.91,.97)],[pick(["swirl","waves","bent"]),R(.02,.065)],["off",0]]):mk(V_T,"add",[["linear",1],["off",0],["off",0]]);
+        setP(p=>Object.assign({},p,next));setPreset(rare?"Wild hybrid":"Natural hybrid");replay();
     };
-    const strokes = useMemo(() => buildStrokes(P), [
+    /*pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp*/    const strokes = useMemo(() => buildStrokes(P), [
         P.mode, P.arrangement, P.symmetry, P.strands, P.spread, P.lambda, P.k0, P.kp0, P.length,
         P.pW, P.notch, P.fold, P.shear, P.pleats, P.wingAngle, P.keelAngle, P.keelRise,
         P.petal, P.anthers, P.antherLen,
@@ -90,8 +55,7 @@ n Object.assign({}, p, { [ch]: next });
             return;
         const ctx = cv.getContext("2d");
         const w = cv.width, h = cv.height, dpr = window.devicePixelRatio || 1;
-        ctx.fillStyle = "#07080B";
-        ctx.fillRect(0, 0, w, h);
+        if(P.fill&&P.botanic){const bg=ctx.createRadialGradient(w*.42,h*.34,0,w*.5,h*.5,Math.max(w,h)*.7);bg.addColorStop(0,"#243025");bg.addColorStop(.5,"#111913");bg.addColorStop(1,"#060806");ctx.fillStyle=bg;ctx.fillRect(0,0,w,h)}else{ctx.fillStyle="#07080B";ctx.fillRect(0,0,w,h)}
         if (!strokes.length)
             return;
         const st = Math.sin(P.tilt);
@@ -150,14 +114,14 @@ n Object.assign({}, p, { [ch]: next });
                 const bx = cx + px(b) * scale, by = cy + py(b) * scale;
                 const petal = tint(lit, (s.tone || 0) * 0.18);
                 const throat = mixc(petal, [252, 246, 198], P.throat);
-                const edge = dark(petal, 0.26);
+                const edge = dark(petal, 0.12);
                 ctx.save();
                 ctx.closePath();
                 ctx.clip();
                 const g1 = ctx.createLinearGradient(ax, ay, bx, by);
                 g1.addColorStop(0, css(throat));
-                g1.addColorStop(0.3, css(mixc(throat, petal, 0.75)));
-                g1.addColorStop(0.86, css(petal));
+                g1.addColorStop(0.22, css(mixc(throat, petal, 0.72)));
+                g1.addColorStop(0.92, css(petal));
                 g1.addColorStop(1, css(edge));
                 ctx.fillStyle = g1;
                 ctx.fillRect(0, 0, w, h);
@@ -165,22 +129,22 @@ n Object.assign({}, p, { [ch]: next });
                 const nx = (-dy / len) * len * 0.42, ny = (dx / len) * len * 0.42;
                 const mx2 = (ax + bx) / 2, my2 = (ay + by) / 2;
                 const g2 = ctx.createLinearGradient(mx2 - nx, my2 - ny, mx2 + nx, my2 + ny);
-                g2.addColorStop(0, "rgba(0,0,0," + (0.3 * P.cup).toFixed(3) + ")");
-                g2.addColorStop(0.5, "rgba(255,255,255," + (0.1 * P.cup).toFixed(3) + ")");
-                g2.addColorStop(1, "rgba(0,0,0," + (0.3 * P.cup).toFixed(3) + ")");
+                g2.addColorStop(0, "rgba(0,0,0," + (0.20 * P.cup).toFixed(3) + ")");
+                g2.addColorStop(0.5, "rgba(255,255,255," + (0.065 * P.cup).toFixed(3) + ")");
+                g2.addColorStop(1, "rgba(0,0,0," + (0.20 * P.cup).toFixed(3) + ")");
                 ctx.fillStyle = g2;
                 ctx.fillRect(0, 0, w, h);
                 if (P.sheen > 0.01) {
                     const hx = ax + dx * 0.62, hy = ay + dy * 0.62;
                     const g3 = ctx.createRadialGradient(hx, hy, 0, hx, hy, len * 0.55);
-                    g3.addColorStop(0, "rgba(255,255,255," + (0.4 * P.sheen).toFixed(3) + ")");
+                    g3.addColorStop(0, "rgba(255,255,255," + (0.23 * P.sheen).toFixed(3) + ")");
                     g3.addColorStop(1, "rgba(255,255,255,0)");
                     ctx.fillStyle = g3;
                     ctx.fillRect(0, 0, w, h);
                 }
                 ctx.restore();
-                ctx.strokeStyle = css(dark(petal, 0.34));
-                ctx.lineWidth = P.weight * 0.55 * dpr;
+                ctx.strokeStyle = css(dark(petal, 0.18));
+                ctx.lineWidth = P.weight * 0.30 * dpr;
                 ctx.stroke();
             }
             else if (P.fill && s.kind === "blade") {
