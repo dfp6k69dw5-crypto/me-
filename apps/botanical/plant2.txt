@@ -1,0 +1,37 @@
+n;i++){
+            const q=(i+.5)/n,ang=i*gold+R(-.12,.12)*nat,rad=A.rad*Math.sqrt(q)*R(.72,1.12),ex=Math.cos(ang)*rad,ey=Math.sin(ang)*rad*.70;
+            const x=A.x+ex,y=A.y+ey,life=.24+.62*q+c*.018;
+            stem(A.x,A.y,x,y,R(-1,1)*A.rad*.08*branch,.55,alphaAt(life-.08)*.70);
+            const mature=Math.max(0,Math.min(1,P.openFlowers==null?.52:P.openFlowers));
+            const budBias=Math.max(0,Math.min(1,P.budShare==null?.44:P.budShare));
+            const roll=rng();let open;
+            if(roll<mature) open=R(.68,1); else open=R(.03,.34+(.30*(1-budBias)));
+            const pink=Math.max(0,Math.min(1,(P.blush||.18)*(R(.45,1.15)+(q-.5)*.42)));
+            const size=A.rad*(.105+.055*rng())*(P.flowerSize||1)*(open<.25?.72:1);
+            floret(x,y,size,ang+R(-.4,.4),open,pink,life,3000+c*401+i*13,P.floretPetals||4);
+        }
+    }
+}
+`;
+
+html=patchOnce(html,'function BotanicalHarmonograph() {',plantHelper+'function BotanicalHarmonograph() {','whole plant helper');
+html=patchOnce(html,'fill: true, shading: 0.85, veins: 0.55,','fill: true, shading: 0.85, veins: 0.55,\n    wholePlant:false, plantSeed:17, clusterCount:3, clusterDensity:.72, clusterSpread:.72, flowerSize:.92, openFlowers:.52, budShare:.44, blush:.18, floretPetals:4, floretVeins:.75, naturalness:.48, leafAmount:.9, leafSize:.92, leafAspect:.82, leafSerration:.55, leafVeins:.78, branching:.62,','plant defaults');
+html=patchOnce(html,'const PRESETS = {\n    Trefoil:','const PRESETS = {\n    Hydrangea: { mode:"petal", arrangement:"cruciform", symmetry:4, wholePlant:true, plantSeed:17, clusterCount:4, clusterDensity:.78, clusterSpread:.76, flowerSize:.92, openFlowers:.48, budShare:.50, blush:.18, floretPetals:4, floretVeins:.82, naturalness:.52, leafAmount:.92, leafSize:.95, leafAspect:.86, leafSerration:.62, leafVeins:.88, branching:.68, fill:true, botanic:true, zoom:1 },\n    Trefoil:','hydrangea preset');
+html=patchOnce(html,`    const growthTag=P.growthHistory>0?" · axial→lateral":P.growthHistory<0?" · lateral→axial":"";
+    const status = (preset || "custom") + " · " + P.mode +
+        (usesW ? " · " + P.arrangement : "") + (P.layers > 1 ? " · " + P.layers + " layers" : "") + growthTag;`,`    const growthTag=P.growthHistory>0?" · axial→lateral":P.growthHistory<0?" · lateral→axial":"";
+    const status = P.wholePlant ? ((preset || "custom") + " · whole flowering cluster") : ((preset || "custom") + " · " + P.mode +
+        (usesW ? " · " + P.arrangement : "") + (P.layers > 1 ? " · " + P.layers + " layers" : "") + growthTag);`,'plant status');
+html=patchOnce(html,'const hybrid = () => {\n        /* Mix whole growth systems, not unrelated sliders. */',`const hybrid = () => {
+        if(P.wholePlant){
+            const cap=(x,a,b)=>Math.max(a,Math.min(b,x));
+            setP(p=>Object.assign({},p,{
+                plantSeed:Math.floor(Math.random()*100000)+1,
+                clusterCount:Math.round(cap(p.clusterCount+(Math.random()<.5?-1:1)*(Math.random()<.28?2:1),1,7)),
+                clusterDensity:cap(p.clusterDensity+(Math.random()-.5)*.26,.28,1.15),
+                clusterSpread:cap(p.clusterSpread+(Math.random()-.5)*.24,.35,1.25),
+                flowerSize:cap(p.flowerSize+(Math.random()-.5)*.20,.55,1.35),
+                openFlowers:cap(p.openFlowers+(Math.random()-.5)*.30,.18,.88),
+                budShare:cap(p.budShare+(Math.random()-.5)*.28,.08,.88),
+                blush:cap(p.blush+(Math.random()-.5)*.30,0,.9),
+                nat
