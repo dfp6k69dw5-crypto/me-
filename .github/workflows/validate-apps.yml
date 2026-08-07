@@ -63,6 +63,38 @@ jobs:
           node --check /tmp/bot_0.js
           node --check /tmp/bot_1.js
           node --check /tmp/bot_loader.js
+      - name: Assemble and syntax-check OMEF FULL
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          parts=[Path(f'apps/omef-full/part{i}.txt').read_text() for i in range(6)]
+          html=''.join(parts)
+          required=[
+              '<title>OMEF FULL — Total-State Attractor</title>',
+              'state vector = 123 dimensions',
+              'all 123 coordinates have non-zero projection routes',
+              'function drawBraids(map)',
+              'function drawMemory(map)',
+              'function drawTissue(map)',
+              'function drawGhosts(map)',
+              'function drawFrames(map)',
+              '</html>',
+          ]
+          for needle in required:
+              assert needle in html, f'Missing OMEF FULL feature: {needle}'
+          scripts=re.findall(r'<script>(.*?)</script>',html,re.S)
+          assert len(scripts)==1, f'Expected one OMEF FULL script, got {len(scripts)}'
+          Path('/tmp/omef_full.js').write_text(scripts[0])
+          loader=Path('apps/omef-full.html').read_text()
+          assert 'Array.from({length:6}' in loader
+          ls=re.findall(r'<script>(.*?)</script>',loader,re.S)
+          assert len(ls)==1
+          Path('/tmp/omef_full_loader.js').write_text(ls[0])
+          print('OMEF FULL assembled:',len(html),'characters; 123-D integrity hooks present')
+          PY
+          node --check /tmp/omef_full.js
+          node --check /tmp/omef_full_loader.js
       - name: Check HTML files are nonempty
         run: |
           python - <<'PY'
@@ -73,8 +105,11 @@ jobs:
           if bad: raise SystemExit('Bad HTML files: '+', '.join(bad))
           print('Standalone HTML files look present')
           PY
-      - name: Exercise Botanical Harmonograph in mobile Chrome
+      - name: Install browser test dependency
         run: |
           python -m pip install --disable-pip-version-check -q selenium
           (google-chrome --version || chromium --version || chromium-browser --version)
-          python scripts/botanical_smoke.py
+      - name: Exercise Botanical Harmonograph in mobile Chrome
+        run: python scripts/botanical_smoke.py
+      - name: Exercise OMEF FULL cumulatively in mobile Chrome
+        run: python scripts/omef_full_smoke.py
