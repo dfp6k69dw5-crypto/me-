@@ -1,0 +1,34 @@
+14K</div></div><div class="row"><label>Projection</label><input id="projection" type="range" min="0" max="100" value="53"><div class="value" id="projectionV">53</div></div><div class="row"><label>Regime space</label><input id="regimeSpace" type="range" min="0" max="100" value="68"><div class="value" id="regimeSpaceV">68</div></div></div>
+<div class="section"><h2>Formula geometry</h2><div class="row"><label>Particles</label><input id="particles" type="range" min="0" max="100" value="58"><div class="value" id="particlesV">58</div></div><div class="row"><label>Golden braids</label><input id="braids" type="range" min="0" max="100" value="72"><div class="value" id="braidsV">72</div></div><div class="row"><label>Fibonacci memory</label><input id="memory" type="range" min="0" max="100" value="63"><div class="value" id="memoryV">63</div></div><div class="row"><label>Coupling tissue</label><input id="tissue" type="range" min="0" max="100" value="56"><div class="value" id="tissueV">56</div></div><div class="row"><label>Correction ghosts</label><input id="ghosts" type="range" min="0" max="100" value="49"><div class="value" id="ghostsV">49</div></div><div class="checks" id="checks"></div></div>
+<div class="section"><h2>123-D anatomy</h2><div class="audit"><div class="chip"><strong>10</strong><span>organs U</span></div><div class="chip"><strong>4</strong><span>regimes S</span></div><div class="chip"><strong>36</strong><span>golden cycles Zφ</span></div><div class="chip"><strong>24</strong><span>closed drivers X</span></div><div class="chip"><strong>8</strong><span>factors F</span></div><div class="chip"><strong>12</strong><span>learning / memory L</span></div><div class="chip"><strong>21</strong><span>particle moments P</span></div><div class="chip"><strong>8</strong><span>diagnostics D</span></div><div class="chip"><strong>5000</strong><span>model particles</span></div></div><div class="note">Every one of the 123 state coordinates has a non-zero route into the visible projection. The 5,000-particle system is represented by its full uncertainty geometry and a display sample so an iPhone does not have to draw five thousand points around every orbit point.</div></div>
+<div class="section"><div class="grid"><button id="save">Save PNG</button><button id="testsBtn">Run full self-check</button></div><div class="tests" id="tests"></div></div>
+</div></div>
+<script>
+(function(){"use strict";
+const TAU=Math.PI*2, PHI=(1+Math.sqrt(5))/2;
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d',{alpha:false});
+const hud=document.getElementById('hud'), testsEl=document.getElementById('tests');
+const params={density:14000,projection:.53,regimeSpace:.68,particles:.58,braids:.72,memory:.63,tissue:.56,ghosts:.49};
+let seed=14, unfolded=false, records=[], stopped=false;
+const ORGAN=['rates','money','debt','production','fiscal','labor','inflation','stress','growth','hidden strain'];
+const REGIME=['Expansion','Inflation / Rate Stress','Credit / Market Stress','Recession / Contraction'];
+const U0=[.044664,-.253966,-.014980,-.463764,.652854,.189435,2.207535,.488329,.025189,.203578];
+const OMEGA_U=[.1954,.0681,.0914,.0687,.0733,.1093,.0603,.0554,.2302,.0480];
+const BETA_REC=[-.2855,.0666,-.0688,-.0043,.0910,-.0051,-.0706,-.0698,-.2840,.0542];
+const BETA_EQ=[.0927,-.0708,.0970,-.1468,-.0411,-.2242,.0353,.0176,.2458,-.0288];
+const BETA_REL=[-.1348,-.0670,-.1536,.1008,.0893,-.1885,-.0842,-.0958,-.0140,-.0718];
+const FIB=[1,1,2,3,5,8,13,21], FIBW=[.304611,.304611,.152306,.101537,.0609222,.0380764,.0234316,.0145053];
+const TSHORT=[18,30,48,18,30,48,18,30,48], TLONG=[29,49,78,29,49,78,29,49,78];
+const RHOS=[.94,.93,.92,.95,.91,.96,.93,.92,.94], RHOL=[.978,.972,.968,.981,.965,.984,.973,.969,.976];
+const LAYERS=[['core','Total-state trail'],['regime','Regime topology'],['particle','Particle geometry'],['braid','Golden-cycle braids'],['memory','Fibonacci memory'],['tissue','Coupling membranes'],['ghost','Correction ghosts'],['frames','Local deformation']];
+const layerOn={core:true,regime:true,particle:true,braid:true,memory:true,tissue:true,ghost:true,frames:true};
+function clamp(x,a=-1,b=1){return Math.max(a,Math.min(b,x))} function sigmoid(x){return 1/(1+Math.exp(-x))}
+function softmax(a){let m=Math.max(...a),e=a.map(x=>Math.exp(x-m)),s=e.reduce((p,c)=>p+c,0);return e.map(x=>x/s)}
+function dot(a,b){let s=0;for(let i=0;i<Math.min(a.length,b.length);i++)s+=a[i]*b[i];return s}
+function hash01(n){let x=Math.sin(n*12.9898+seed*78.233)*43758.5453;return x-Math.floor(x)}
+function signed(n){return hash01(n)*2-1}
+function argmax(a){let k=0;for(let i=1;i<a.length;i++)if(a[i]>a[k])k=i;return k}
+function avg(a){return a.reduce((p,c)=>p+c,0)/(a.length||1)}
+function stateVector(s){return s.U.concat(s.S,s.Z,s.X,s.F,s.L,s.P,s.D)}
+function makePair(){let A=Array.from({length:10},()=>Array(10).fill(0));for(let i=0;i<10;i++)for(let j=0;j<10;j++)if(i!==j){let r=signed(100+i*17+j*31);A[i][j]=r*(.035+.06*hash01(200+i*19+j*7));}return A}
+function makeTriads(){let t=[];for(let n=0;n<24;n++){let i=n%10,j=(n*3+2
