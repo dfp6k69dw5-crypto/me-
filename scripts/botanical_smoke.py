@@ -48,8 +48,11 @@ def dump_browser_state(driver, label):
     print(f"--- {label} browser log ---")
     for entry in driver.get_log("browser"):
         print(entry)
-    print(f"--- {label} source head ---")
-    print(driver.page_source[:2500])
+    source = driver.page_source
+    print(f"--- {label} source around 1157 ---")
+    lines = source.splitlines()
+    for i in range(1147, min(1165, len(lines))):
+        print(f"{i+1}: {lines[i]}")
 
 
 server = subprocess.Popen(
