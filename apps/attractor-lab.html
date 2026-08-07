@@ -1,19 +1,342 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OMEF Attractor Lab</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>OMEF Attractor Lab - Safari Safe</title>
 <style>
-:root {--bg:#0b1020; --panel:#111936; --panel2:#172143; --text:#eef3ff;--muted:#aebbd8; --accent:#83e6d0; --accent2:#a78bfa; --line:#27345c;--warn:#ffcf70;}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#18244f 0,#0b1020 42%,#060914 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}header{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;justify-content:space-between}h1{font-size:19px;margin:0;letter-spacing:.2px}.sub{color:var(--muted);font-size:12px;margin-top:4px}.wrap{display:grid;grid-template-columns:330px 1fr;min-height:calc(100vh - 74px)}aside{padding:16px;border-right:1px solid var(--line);background:rgba(10,15,34,.78);overflow:auto}main{position:relative;min-width:0}canvas{display:block;width:100%;height:calc(100vh - 74px)}.group{background:rgba(17,25,54,.9);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}.group h2{font-size:13px;margin:0 0 12px;color:#dfe8ff}label{font-size:12px;color:var(--muted);display:block;margin:9px 0 5px}input[type=range]{width:100%}input[type=number],select{width:100%;padding:8px 9px;border-radius:9px;border:1px solid var(--line);background:#0c1430;color:var(--text)}.row{display:grid;grid-template-columns:1fr 74px;gap:9px;align-items:center}.value{font-variant-numeric:tabular-nums;text-align:right;color:var(--accent);font-size:12px}button{border:1px solid var(--line);background:#1b2854;color:var(--text);padding:9px 11px;border-radius:10px;cursor:pointer;font-weight:650}button.primary{background:linear-gradient(135deg,#2a8d86,#6050bd);border-color:transparent}button:hover{filter:brightness(1.12)}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#0b1430;border:1px solid var(--line);border-radius:10px;padding:9px}.stat b{display:block;font-size:15px;margin-top:2px}.stat span{font-size:10px;color:var(--muted)}.legend{display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:11px;color:var(--muted)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}.notice{font-size:11px;color:var(--warn);line-height:1.45}.overlay{position:absolute;top:14px;left:16px;padding:8px 10px;border-radius:10px;background:rgba(6,9,20,.68);border:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--muted);pointer-events:none}.help{font-size:11px;line-height:1.5;color:var(--muted)}@media(max-width:850px){.wrap{grid-template-columns:1fr}aside{border-right:none;border-bottom:1px solid var(--line);max-height:none}canvas{height:62vh}}
-</style></head><body>
-<header><div><h1>OMEF Attractor Lab</h1><div class="sub">A usable closed dynamical prototype of the Step 14D architecture</div></div><button id="resetView">Reset view</button></header>
-<div class="wrap"><aside>
-<div class="group"><h2>Run the system</h2><div class="buttons"><button class="primary" id="generate">Generate orbit</button><button id="animate">Animate</button><button id="exportCsv">Export CSV</button><button id="randomize">New seed</button></div><label>Number of points</label><input id="points" type="number" min="500" max="40000" step="500" value="9000"/><label>Burn-in</label><input id="burn" type="number" min="0" max="10000" step="100" value="1500"/><label>Seed</label><input id="seed" type="number" min="1" max="999999" value="14"/></div>
-<div class="group"><h2>Attractor controls</h2><div class="row"><label>Contraction</label><div class="value" id="vContraction">0.985</div></div><input id="contraction" type="range" min="0.94" max="1.025" step="0.001" value="0.985"/><div class="row"><label>Nonlinear feedback</label><div class="value" id="vNonlinear">0.130</div></div><input id="nonlinear" type="range" min="0" max="0.45" step="0.005" value="0.13"/><div class="row"><label>Cycle strength</label><div class="value" id="vCycle">0.060</div></div><input id="cycle" type="range" min="0" max="0.24" step="0.005" value="0.06"/><div class="row"><label>Regime switching</label><div class="value" id="vSwitch">0.140</div></div><input id="switching" type="range" min="0.01" max="0.45" step="0.005" value="0.14"/><div class="row"><label>Driver coupling</label><div class="value" id="vDriver">1.000</div></div><input id="driver" type="range" min="0" max="2" step="0.025" value="1"/></div>
-<div class="group"><h2>View</h2><label>Projection</label><select id="projection"><option value="interpretable">Growth / inflation / systemic stress</option><option value="organs">Selected organs: growth / inflation / credit</option><option value="pca">Approximate PCA-style projection</option></select><div class="row"><label>Point size</label><div class="value" id="vSize">1.20</div></div><input id="pointSize" type="range" min="0.35" max="3.5" step="0.05" value="1.2"/><div class="row"><label>Trail shown</label><div class="value" id="vTrail">100%</div></div><input id="trail" type="range" min="2" max="100" step="1" value="100"/><div class="legend"><div><span class="dot" style="background:#66e3a4"></span>Expansion</div><div><span class="dot" style="background:#ffc866"></span>Rate stress</div><div><span class="dot" style="background:#ff6b8b"></span>Credit stress</div><div><span class="dot" style="background:#8f86ff"></span>Contraction</div></div></div>
-<div class="group"><h2>Current readout</h2><div class="stats"><div class="stat"><span>Dominant regime</span><b id="statRegime">—</b></div><div class="stat"><span>Confidence</span><b id="statConfidence">—</b></div><div class="stat"><span>Spectral margin</span><b id="statMargin">—</b></div><div class="stat"><span>Orbit spread</span><b id="statSpread">—</b></div></div></div>
-<div class="group notice">This is an exploratory structural attractor. It is useful for studying geometry, regimes, sensitivity, and bifurcations. It is not yet a calibrated economic forecasting product.</div><div class="group help">Drag to rotate. Use the mouse wheel or pinch to zoom. Change a control, then press <b>Generate orbit</b>. Export saves the visible orbit and all ten OMEF organs.</div></aside><main><canvas id="canvas"></canvas><div class="overlay" id="overlay">Generating…</div></main></div>
+:root{--bg:#efefef;--panel:#e8e8e8;--text:#444;--muted:#777;--line:#c7c7c7;--accent:#109b91;--canvas:#fff;--ink:0,0,0}
+body.dark{--bg:#0d0d0d;--panel:#1c1c1c;--text:#eee;--muted:#aaa;--line:#333;--canvas:#000;--ink:255,255,255}
+body.color{--bg:#07121b;--panel:#101d2a;--text:#eaf4ff;--muted:#a8bdce;--line:#294057;--accent:#36b7ff;--canvas:#06101a;--ink:120,210,255}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.app{max-width:980px;margin:0 auto;padding-bottom:40px}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:18px 16px}
+h1{margin:0;font-size:31px;letter-spacing:-.03em}.sub{font-size:14px;color:var(--muted);margin-top:5px}
+.stage{position:relative;background:var(--canvas);min-height:390px;border-bottom:1px solid var(--line);overflow:hidden}
+canvas{display:block;width:100%;height:auto;background:var(--canvas)}
+.badge{position:absolute;top:10px;left:10px;background:#000;color:#fff;font:18px Menlo,Consolas,monospace;padding:5px 8px;letter-spacing:.04em}
+.status{position:absolute;top:52px;left:10px;background:rgba(0,0,0,.72);color:#fff;border-radius:20px;padding:7px 11px;font-size:13px}
+.panel{margin:18px 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+section{padding:19px 16px;border-bottom:1px solid var(--line)}section:last-child{border-bottom:0}
+h2{margin:0 0 16px;font-size:28px}
+.row{display:grid;grid-template-columns:76px 1fr 56px;gap:9px;align-items:center;margin:12px 0;font-size:20px}
+.row label{color:var(--muted)}
+select,input[type=range],button{width:100%}
+input[type=range]{accent-color:var(--accent)}
+input[type=checkbox]{width:28px;height:28px;accent-color:var(--accent)}
+.value{background:#555;color:#fff;text-align:center;border-radius:8px;padding:6px 2px;font-size:14px;font-variant-numeric:tabular-nums}
+select,button{font:inherit;border-radius:9px;border:1px solid var(--line);padding:10px;background:var(--bg);color:var(--text)}
+button{background:var(--accent);color:#fff;border:0;font-weight:750;margin:5px 0}
+button.secondary{background:#555}.danger{background:#8c3b3b}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.tileGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tileGrid button{background:rgba(127,127,127,.15);border:1px solid var(--line);color:var(--text);font-size:14px;min-height:44px}
+.tileGrid button.active{background:var(--accent);color:#fff}
+.theme button{background:transparent;color:var(--accent);border:1px solid var(--line);margin:0}.theme button.active{background:var(--accent);color:#fff}
+.formula{display:none;margin-top:14px;background:rgba(127,127,127,.13);border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.45 Menlo,Consolas,monospace;white-space:pre-wrap}
+.small{color:var(--muted);font-size:14px;line-height:1.45}
+@media(min-width:720px){.row{grid-template-columns:120px 1fr 66px}.tileGrid{grid-template-columns:repeat(4,1fr)}.grid2{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<h1>OMEF Attractor Lab</h1>
+<div class="sub">Safari-safe single HTML · a–i inputs · visible chaotic tiles</div>
+</header>
+
+<div class="stage">
+<canvas id="cv" width="1000" height="760"></canvas>
+<div class="badge" id="count">Total drawn points: 0</div>
+<div class="status" id="status">booting</div>
+</div>
+
+<div class="panel">
+<section>
+<h2>Attractor Tiles</h2>
+<div class="tileGrid">
+<button class="tile active" data-t="clifford">Clifford</button>
+<button class="tile" data-t="dejong">De Jong</button>
+<button class="tile" data-t="hopalong">Hopalong</button>
+<button class="tile" data-t="lorenz">Lorenz 3D</button>
+<button class="tile" data-t="rossler">Rössler 3D</button>
+<button class="tile" data-t="aizawa">Aizawa 3D</button>
+<button class="tile" data-t="thomas">Thomas 3D</button>
+<button class="tile" data-t="halvorsen">Halvorsen 3D</button>
+<button class="tile" data-t="ikeda">Ikeda</button>
+<button class="tile" data-t="henon">Hénon</button>
+<button class="tile" data-t="tinkerbell">Tinkerbell</button>
+<button class="tile" data-t="gumowski">Gumowski–Mira</button>
+<button class="tile" data-t="duffing">Duffing</button>
+<button class="tile" data-t="chua">Chua 3D</button>
+<button class="tile" data-t="sna">Strange Nonchaotic</button>
+<button class="tile" data-t="omef">OMEF Hybrid</button>
+</div>
+<div class="row">
+<label>Type:</label>
+<select id="type">
+<option value="clifford">Clifford</option>
+<option value="dejong">De Jong</option>
+<option value="hopalong">Hopalong</option>
+<option value="lorenz">Lorenz 3D</option>
+<option value="rossler">Rössler 3D</option>
+<option value="aizawa">Aizawa 3D</option>
+<option value="thomas">Thomas 3D</option>
+<option value="halvorsen">Halvorsen 3D</option>
+<option value="ikeda">Ikeda</option>
+<option value="henon">Hénon</option>
+<option value="tinkerbell">Tinkerbell</option>
+<option value="gumowski">Gumowski–Mira</option>
+<option value="duffing">Duffing</option>
+<option value="chua">Chua 3D</option>
+<option value="sna">Strange Nonchaotic</option>
+<option value="omef">OMEF Hybrid</option>
+</select>
+<span></span>
+</div>
+</section>
+
+<section>
+<h2>Parameters</h2>
+<div id="sliders">
+<div class="row"><label>a:</label><input id="a" type="range" min="-3" max="3" step="0.01" value="2.07"><div id="av" class="value">2.07</div></div>
+<div class="row"><label>b:</label><input id="b" type="range" min="-3" max="3" step="0.01" value="2.33"><div id="bv" class="value">2.33</div></div>
+<div class="row"><label>c:</label><input id="c" type="range" min="-3" max="3" step="0.01" value="-0.09"><div id="cvv" class="value">-0.09</div></div>
+<div class="row"><label>d:</label><input id="d" type="range" min="-3" max="3" step="0.01" value="1.46"><div id="dv" class="value">1.46</div></div>
+<div class="row"><label>e:</label><input id="e" type="range" min="-3" max="3" step="0.01" value="0.2"><div id="ev" class="value">0.20</div></div>
+<div class="row"><label>f:</label><input id="f" type="range" min="-3" max="3" step="0.01" value="0.1"><div id="fv" class="value">0.10</div></div>
+<div class="row"><label>g:</label><input id="g" type="range" min="-3" max="3" step="0.01" value="0.4"><div id="gv" class="value">0.40</div></div>
+<div class="row"><label>h:</label><input id="h" type="range" min="-3" max="3" step="0.01" value="0.2"><div id="hv" class="value">0.20</div></div>
+<div class="row"><label>i:</label><input id="i" type="range" min="-3" max="3" step="0.01" value="0.1"><div id="iv" class="value">0.10</div></div>
+</div>
+<div class="grid2">
+<button id="random">Random visible</button>
+<button id="mutate">Mutate slightly</button>
+<button id="preset" class="secondary">Reset preset</button>
+<button id="render" class="secondary">Render again</button>
+</div>
+<p class="small">This version keeps all controls in the HTML first, so iPhone preview weirdness cannot erase them.</p>
+</section>
+
+<section>
+<h2>Rendering</h2>
+<div class="row"><label>Points:</label><input id="points" type="range" min="25000" max="900000" step="25000" value="250000"><div id="pointsv" class="value">250K</div></div>
+<div class="row"><label>Ink:</label><input id="ink" type="range" min="1" max="100" value="42"><div id="inkv" class="value">42</div></div>
+<div class="row"><label>Size:</label><input id="size" type="range" min="1" max="8" value="2"><div id="sizev" class="value">2</div></div>
+<div class="row"><label>Formula:</label><input id="showFormula" type="checkbox"><span></span></div>
+<div id="formula" class="formula">x′ = sin(a·y) + c·cos(a·x)
+y′ = sin(b·x) + d·cos(b·y)</div>
+</section>
+
+<section>
+<h2>Composition</h2>
+<div class="grid3 theme">
+<button id="darkBtn" data-theme="dark">Dark</button>
+<button id="lightBtn" class="active" data-theme="light">Light</button>
+<button id="colorBtn" data-theme="color">Color</button>
+</div>
+<div class="grid2">
+<button id="download">Save PNG</button>
+<button id="stop" class="danger">Stop</button>
+</div>
+</section>
+</div>
+</div>
+
 <script>
-"use strict";const ORGAN_NAMES=["r","m","d","p","f","ell","pi","s","g","h"];const REGIMES=["Expansion","Inflation/Rate Stress","Credit/Market Stress","Recession/Contraction"];const COLORS=[[102,227,164],[255,200,102],[255,107,139],[143,134,255]];function mulberry32(seed){return function(){let t=seed+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}function randn(rng){let u=0,v=0;while(!u)u=rng();while(!v)v=rng();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}function zeros(n){return Array(n).fill(0)}function dot(a,b){let s=0;for(let i=0;i<a.length;i++)s+=a[i]*b[i];return s}function matVec(A,x){return A.map(r=>dot(r,x))}function softmax(x){const m=Math.max(...x),e=x.map(v=>Math.exp(Math.max(-60,Math.min(60,v-m)))),s=e.reduce((a,b)=>a+b,0);return e.map(v=>v/s)}function tanhVec(x){return x.map(Math.tanh)}function norm(x){return Math.sqrt(dot(x,x))}function mean(x){return x.reduce((a,b)=>a+b,0)/x.length}function std(x){const m=mean(x);return Math.sqrt(mean(x.map(v=>(v-m)*(v-m))))}function mix(a,b,t){return a.map((v,i)=>v*(1-t)+b[i]*t)}function weightedMatrices(weights,mats){const rows=mats[0].length,cols=mats[0][0].length,out=Array.from({length:rows},()=>zeros(cols));for(let k=0;k<mats.length;k++)for(let i=0;i<rows;i++)for(let j=0;j<cols;j++)out[i][j]+=weights[k]*mats[k][i][j];return out}function makeMatrix(rows,cols,scale,rng,diag=0){return Array.from({length:rows},(_,i)=>Array.from({length:cols},(_,j)=>(i===j?diag:0)+randn(rng)*scale))}function params(seed){const rng=mulberry32(seed|0),base=makeMatrix(10,10,.055,rng,0),A=[];for(let k=0;k<4;k++){const M=Array.from({length:10},(_,i)=>Array.from({length:10},(_,j)=>(i===j?.79:0)+.45*base[i][j]+randn(rng)*.018));for(let i=0;i<10;i++){const rowSum=M[i].reduce((s,v)=>s+Math.abs(v),0);if(rowSum>.94)for(let j=0;j<10;j++)M[i][j]*=.94/rowSum}A.push(M)}return{A,Bd:Array.from({length:4},()=>makeMatrix(10,24,.022,rng)),Bf:Array.from({length:4},()=>makeMatrix(10,8,.030,rng)),Cm:Array.from({length:4},()=>makeMatrix(10,12,.015,rng)),logits:[[1.6,-.4,-.7,-.8],[-.5,1.5,-.4,-.7],[-.6,-.3,1.5,-.5],[-.5,-.5,-.4,1.5]],regimeU:makeMatrix(4,10,.22,rng),driverA:makeMatrix(24,24,.010,rng,.82),driverU:makeMatrix(24,10,.022,rng),factorA:makeMatrix(8,8,.016,rng,.83),factorU:makeMatrix(8,10,.035,rng),decay:Array.from({length:12},(_,i)=>.78+i*(.18/11))}}function initialState(){return{U:[.044664,-.253966,-.01498,-.463764,.652854,.189435,2.20754,.488329,.025189,.203578],regime:[.20,.43762,.18,.18238],cycles:Array.from({length:9},()=>Array.from({length:2},()=>[0,0])),drivers:zeros(24),factors:zeros(8),memory:zeros(12),confidence:.341027,margin:.0135417}}function step(s,p,cfg){const U=s.U,regimeTarget=softmax(matVec(p.logits.map(row=>row.map(v=>v)),s.regime).map((v,i)=>v+dot(p.regimeU[i],U)));let regime=mix(s.regime,regimeTarget,cfg.switching);const rs=regime.reduce((a,b)=>a+b,0);regime=regime.map(v=>v/rs);const phi=(1+Math.sqrt(5))/2,cycles=[],cycleSignal=zeros(10);for(let i=0;i<9;i++){cycles[i]=[];const sp=8+1.8*i,periods=[sp,phi*sp];for(let k=0;k<2;k++){let[x,y]=s.cycles[i][k];if(Math.hypot(x,y)<1e-9){x=.08+.01*i;y=.03+.005*k}const th=2*Math.PI/periods[k],xr=Math.cos(th)*x-Math.sin(th)*y,yr=Math.sin(th)*x+Math.cos(th)*y,radius=Math.hypot(xr,yr),target=(k===0?.22:.14)+.035*Math.tanh(Math.abs(U[i])),rg=k===0?.045:.025,mult=1+rg*(target-radius)/(radius+1e-9);cycles[i]=cycles[i]||[];cycles[i][k]=[xr*mult,yr*mult+.012*Math.tanh(U[i])]}cycleSignal[i]=cycles[i][0][0]+cycles[i][1][0]}const drivers=tanhVec(matVec(p.driverA,s.drivers).map((v,i)=>v+dot(p.driverU[i],U))),factors=tanhVec(matVec(p.factorA,s.factors).map((v,i)=>v+dot(p.factorU[i],U))),memIn=[...U.slice(0,6),mean(U),std(U),norm(U),...regime.slice(0,3)],memory=s.memory.map((v,i)=>p.decay[i]*v+(1-p.decay[i])*memIn[i]),A=weightedMatrices(regime,p.A),Bd=weightedMatrices(regime,p.Bd),Bf=weightedMatrices(regime,p.Bf),Cm=weightedMatrices(regime,p.Cm),cross=U.map((_,i)=>U[(i+9)%10]-U[(i+1)%10]),nonlinear=U.map((v,i)=>Math.tanh(v)*Math.tanh(cross[i]));let raw=matVec(A,U);const d=matVec(Bd,drivers),f=matVec(Bf,factors),m=matVec(Cm,memory);raw=raw.map((v,i)=>v+cfg.driver*d[i]+f[i]+m[i]+cfg.nonlinear*nonlinear[i]+cfg.cycle*cycleSignal[i]);const Un=raw.map(v=>cfg.contraction*Math.tanh(v)),movement=norm(Un.map((v,i)=>v-U[i])),spread=std(Un),margin=1-Math.max(...A.map(row=>row.reduce((sum,v)=>sum+Math.abs(v),0))),confidence=1/(1+Math.exp(2.8*(spread-Math.max(margin,-.2))));return{U:Un,regime,cycles,drivers,factors,memory,confidence,margin,movement}}function project(U,mode){if(mode==="organs")return[U[8],U[6],U[7]];if(mode==="pca"){const a=[.42,-.12,-.18,.31,.38,.22,-.19,-.28,.55,-.13],b=[-.16,.34,.22,-.18,.13,-.25,.61,.43,-.11,.36],c=[.11,-.27,.59,.13,-.31,.35,.18,.48,-.14,.22];return[dot(U,a),dot(U,b),dot(U,c)]}return[.38*U[8]+.24*U[3]+.20*U[5]+.18*U[1],.60*U[6]+.25*U[0]-.15*U[1],.42*U[7]+.31*U[2]+.27*U[9]]}let orbit=[],animating=false,animFrame=0;const canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d");let yaw=-.65,pitch=.35,zoom=1,drag=false,lastX=0,lastY=0;function cfg(){return{contraction:+document.getElementById("contraction").value,nonlinear:+document.getElementById("nonlinear").value,cycle:+document.getElementById("cycle").value,switching:+document.getElementById("switching").value,driver:+document.getElementById("driver").value}}function generate(){document.getElementById("overlay").textContent="Generating orbit…";setTimeout(()=>{const count=Math.max(500,Math.min(40000,+document.getElementById("points").value||9000)),burn=Math.max(0,Math.min(10000,+document.getElementById("burn").value||1500)),p=params(+document.getElementById("seed").value||14),C=cfg();let s=initialState(),arr=[];for(let i=0;i<count+burn;i++){s=step(s,p,C);if(i>=burn){const xyz=project(s.U,document.getElementById("projection").value);arr.push({xyz,U:s.U.slice(),regime:s.regime.slice(),confidence:s.confidence,margin:s.margin})}}orbit=arr;animFrame=orbit.length;updateStats();draw();document.getElementById("overlay").textContent=`${orbit.length.toLocaleString()} points · drag to rotate · wheel to zoom`},20)}function updateStats(){if(!orbit.length)return;const s=orbit[Math.min(animFrame,orbit.length)-1]||orbit[orbit.length-1],r=s.regime.indexOf(Math.max(...s.regime));document.getElementById("statRegime").textContent=REGIMES[r].replace("/Rate ","/");document.getElementById("statConfidence").textContent=(100*s.confidence).toFixed(1)+"%";document.getElementById("statMargin").textContent=s.margin.toFixed(3);const pts=orbit.map(o=>o.xyz),ranges=[0,1,2].map(k=>Math.max(...pts.map(p=>p[k]))-Math.min(...pts.map(p=>p[k])));document.getElementById("statSpread").textContent=mean(ranges).toFixed(3)}function resize(){const dpr=Math.min(2,window.devicePixelRatio||1),rect=canvas.getBoundingClientRect();canvas.width=Math.max(1,Math.floor(rect.width*dpr));canvas.height=Math.max(1,Math.floor(rect.height*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);draw()}function rotatePoint(p){let[x,y,z]=p;const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);let x1=cy*x+sy*z,z1=-sy*x+cy*z,y1=cp*y-sp*z1,z2=sp*y+cp*z1;return[x1,y1,z2]}function draw(){const w=canvas.clientWidth,h=canvas.clientHeight;ctx.clearRect(0,0,w,h);const grd=ctx.createRadialGradient(w*.52,h*.45,10,w*.52,h*.45,Math.max(w,h)*.72);grd.addColorStop(0,"rgba(24,35,75,.45)");grd.addColorStop(1,"rgba(4,7,17,.96)");ctx.fillStyle=grd;ctx.fillRect(0,0,w,h);if(!orbit.length)return;const pct=+document.getElementById("trail").value/100,end=Math.max(2,Math.min(orbit.length,animFrame||orbit.length)),start=Math.max(0,end-Math.floor(orbit.length*pct));let pts=orbit.slice(start,end);const all=orbit.map(o=>o.xyz),mins=[0,1,2].map(k=>Math.min(...all.map(p=>p[k]))),maxs=[0,1,2].map(k=>Math.max(...all.map(p=>p[k]))),center=mins.map((v,k)=>(v+maxs[k])/2),span=Math.max(...mins.map((v,k)=>maxs[k]-v),1e-6),size=+document.getElementById("pointSize").value,projected=pts.map(o=>{const q=o.xyz.map((v,k)=>(v-center[k])/span),r=rotatePoint(q),perspective=1/(1.6-.55*r[2]);return{x:w/2+r[0]*Math.min(w,h)*1.25*zoom*perspective,y:h/2-r[1]*Math.min(w,h)*1.25*zoom*perspective,z:r[2],o}}).sort((a,b)=>a.z-b.z);for(let i=0;i<projected.length;i++){const q=projected[i],reg=q.o.regime.indexOf(Math.max(...q.o.regime)),c=COLORS[reg],alpha=.13+.62*(i/projected.length);ctx.fillStyle=`rgba(${c[0]},${c[1]},${c[2]},${alpha})`;ctx.beginPath();ctx.arc(q.x,q.y,size*(.65+Math.max(0,q.z+.5)),0,Math.PI*2);ctx.fill()}const last=projected[projected.length-1];if(last){ctx.strokeStyle="rgba(255,255,255,.85)";ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(last.x,last.y,6,0,Math.PI*2);ctx.stroke()}}function animate(){animating=!animating;document.getElementById("animate").textContent=animating?"Pause":"Animate";if(animating){animFrame=10;const loop=()=>{if(!animating)return;animFrame=Math.min(orbit.length,animFrame+Math.max(2,Math.floor(orbit.length/800)));draw();if(animFrame>=orbit.length){animating=false;document.getElementById("animate").textContent="Animate";updateStats();return}requestAnimationFrame(loop)};requestAnimationFrame(loop)}}function exportCsv(){if(!orbit.length)return;const lines=[["A1","A2","A3","Regime","Confidence","SpectralMargin",...ORGAN_NAMES].join(",")];for(const o of orbit){const r=o.regime.indexOf(Math.max(...o.regime));lines.push([...o.xyz,REGIMES[r],o.confidence,o.margin,...o.U].map(v=>typeof v==="string"?`"${v}"`:v).join(","))}const blob=new Blob([lines.join("\n")],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="omef_attractor_orbit.csv";a.click();URL.revokeObjectURL(a.href)}for(const[id,out,digits]of[["contraction","vContraction",3],["nonlinear","vNonlinear",3],["cycle","vCycle",3],["switching","vSwitch",3],["driver","vDriver",3],["pointSize","vSize",2]])document.getElementById(id).addEventListener("input",e=>document.getElementById(out).textContent=(+e.target.value).toFixed(digits));document.getElementById("trail").addEventListener("input",e=>{document.getElementById("vTrail").textContent=e.target.value+"%";draw()});document.getElementById("projection").addEventListener("change",()=>generate());document.getElementById("generate").onclick=generate;document.getElementById("animate").onclick=animate;document.getElementById("exportCsv").onclick=exportCsv;document.getElementById("randomize").onclick=()=>{document.getElementById("seed").value=Math.floor(1+Math.random()*999998);generate()};document.getElementById("resetView").onclick=()=>{yaw=-.65;pitch=.35;zoom=1;draw()};canvas.addEventListener("mousedown",e=>{drag=true;lastX=e.clientX;lastY=e.clientY});window.addEventListener("mouseup",()=>drag=false);window.addEventListener("mousemove",e=>{if(!drag)return;yaw+=(e.clientX-lastX)*.007;pitch+=(e.clientY-lastY)*.007;pitch=Math.max(-1.5,Math.min(1.5,pitch));lastX=e.clientX;lastY=e.clientY;draw()});canvas.addEventListener("wheel",e=>{e.preventDefault();zoom*=Math.exp(-e.deltaY*.001);zoom=Math.max(.25,Math.min(5,zoom));draw()},{passive:false});canvas.addEventListener("touchstart",e=>{if(e.touches.length===1){drag=true;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY}},{passive:true});canvas.addEventListener("touchmove",e=>{if(drag&&e.touches.length===1){yaw+=(e.touches[0].clientX-lastX)*.007;pitch+=(e.touches[0].clientY-lastY)*.007;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;draw()}},{passive:true});canvas.addEventListener("touchend",()=>drag=false);window.addEventListener("resize",resize);resize();generate();
-</script></body></html>
+(function(){
+var cv=document.getElementById("cv");
+var ctx=cv.getContext("2d");
+var count=document.getElementById("count");
+var status=document.getElementById("status");
+var type=document.getElementById("type");
+var current="clifford";
+var token=0;
+var stopped=false;
+var timer=null;
+
+var presets={
+clifford:{a:2.07,b:2.33,c:-0.09,d:1.46,e:.2,f:.1,g:.4,h:.2,i:.1},
+dejong:{a:1.40,b:-2.30,c:2.40,d:-2.10,e:.1,f:.2,g:.2,h:.1,i:.1},
+hopalong:{a:1.00,b:.60,c:1.20,d:.2,e:.1,f:.1,g:.1,h:.1,i:.1},
+lorenz:{a:1.00,b:2.80,c:.80,d:.1,e:.1,f:.1,g:.1,h:.1,i:.1},
+rossler:{a:.20,b:.20,c:5.70,d:.1,e:.1,f:.1,g:.1,h:.1,i:.1},
+aizawa:{a:.95,b:.70,c:.60,d:3.50,e:.25,f:.10,g:.1,h:.1,i:.1},
+thomas:{a:.19,b:.1,c:.1,d:.1,e:.1,f:.1,g:.1,h:.1,i:.1},
+halvorsen:{a:1.40,b:.1,c:.1,d:.1,e:.1,f:.1,g:.1,h:.1,i:.1},
+ikeda:{a:.92,b:.40,c:6.00,d:1.00,e:.1,f:.1,g:.1,h:.1,i:.1},
+henon:{a:1.40,b:.30,c:.1,d:.1,e:.1,f:.1,g:.1,h:.1,i:.1},
+tinkerbell:{a:.90,b:-.60,c:2.00,d:.50,e:.1,f:.1,g:.1,h:.1,i:.1},
+gumowski:{a:.008,b:.05,c:.50,d:.1,e:.1,f:.1,g:.1,h:.1,i:.1},
+duffing:{a:.25,b:.30,c:1.00,d:.1,e:.1,f:.1,g:.1,h:.1,i:.1},
+chua:{a:1.50,b:2.80,c:.1,d:.1,e:.1,f:.1,g:.1,h:.1,i:.1},
+sna:{a:.68,b:.50,c:.1,d:.1,e:.1,f:.1,g:.1,h:.1,i:.1},
+omef:{a:1.10,b:.80,c:.60,d:.40,e:.20,f:.70,g:.50,h:.90,i:.30}
+};
+
+var formulas={
+clifford:"x′ = sin(a·y) + c·cos(a·x)\ny′ = sin(b·x) + d·cos(b·y)",
+dejong:"x′ = sin(a·y) − cos(b·x)\ny′ = sin(c·x) − cos(d·y)",
+hopalong:"x′ = y − sign(x)·sqrt(|b·x − c|)\ny′ = a − x",
+lorenz:"dx = σ(y−x)\ndy = x(ρ−z)−y\ndz = xy−βz",
+rossler:"dx = −y−z\ndy = x+a·y\ndz = b+z(x−c)",
+aizawa:"Aizawa 3D flow, projected to 2D.",
+thomas:"dx = sin(y) − b·x\ndy = sin(z) − b·y\ndz = sin(x) − b·z",
+halvorsen:"Halvorsen 3D chaotic flow.",
+ikeda:"t = c − d/(1+x²+y²)\nx′ = 1 + a(x cos t − y sin t)\ny′ = b(x sin t + y cos t)",
+henon:"x′ = 1 − a·x² + y\ny′ = b·x",
+tinkerbell:"x′ = x² − y² + a·x + b·y\ny′ = 2xy + c·x + d·y",
+gumowski:"Gumowski–Mira organic map.",
+duffing:"Forced Duffing oscillator.",
+chua:"Chua circuit double-scroll.",
+sna:"Quasiperiodic strange nonchaotic map.",
+omef:"x′ = sin(a·y)+c cos(b·x)+e sin(gxy)−h cos(iy)\ny′ = sin(d·x)+f cos(cy)+g sin(ax−by)−i cos(hx)"
+};
+
+function $(id){return document.getElementById(id);}
+function setStatus(s){status.innerHTML=s;}
+function rand(a,b){return a+Math.random()*(b-a);}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function fmt(n){if(n>=1000000)return (n/1000000).toFixed(1)+"M";if(n>=1000)return Math.round(n/1000)+"K";return ""+n;}
+function p(){
+ return {a:+$("a").value,b:+$("b").value,c:+$("c").value,d:+$("d").value,e:+$("e").value,f:+$("f").value,g:+$("g").value,h:+$("h").value,i:+$("i").value};
+}
+function setP(o){
+ var ks=["a","b","c","d","e","f","g","h","i"],k,j,valId;
+ for(j=0;j<ks.length;j++){
+  k=ks[j]; $(k).value=o[k];
+  valId=k+"v"; if(k==="c") valId="cvv";
+  $(valId).innerHTML=(+o[k]).toFixed(2);
+ }
+}
+function updateVals(){
+ var o=p(); $("av").innerHTML=o.a.toFixed(2); $("bv").innerHTML=o.b.toFixed(2); $("cvv").innerHTML=o.c.toFixed(2);
+ $("dv").innerHTML=o.d.toFixed(2); $("ev").innerHTML=o.e.toFixed(2); $("fv").innerHTML=o.f.toFixed(2);
+ $("gv").innerHTML=o.g.toFixed(2); $("hv").innerHTML=o.h.toFixed(2); $("iv").innerHTML=o.i.toFixed(2);
+ $("pointsv").innerHTML=fmt(+$("points").value); $("inkv").innerHTML=$("ink").value; $("sizev").innerHTML=$("size").value;
+}
+function clear(){
+ var bg=getComputedStyle(document.body).getPropertyValue("--canvas");
+ ctx.fillStyle=bg; ctx.fillRect(0,0,cv.width,cv.height);
+}
+function ink(){
+ return getComputedStyle(document.body).getPropertyValue("--ink");
+}
+function project(x,y,z,r){
+ var c=Math.cos(r),s=Math.sin(r),x2=x*c-z*s,z2=x*s+z*c,sc=1/(1+.10*z2);
+ return [x2*sc,y*sc];
+}
+function stepper(name,pp){
+ var x=.111,y=.071,z=.193,v=0,t=0,theta=0;
+ return function(){
+  var nx,ny,nz,dt,sigma,rho,beta,tb,ha,u,tt,delta,gamma,omega,acc,alpha,betaC,m0,m1,fx,gr;
+  if(name==="clifford"){nx=Math.sin(pp.a*y)+pp.c*Math.cos(pp.a*x)+.07*pp.e*Math.sin(pp.g*x*y);ny=Math.sin(pp.b*x)+pp.d*Math.cos(pp.b*y)-.07*pp.h*Math.cos(pp.i*x);x=nx;y=ny;return [x,y];}
+  if(name==="dejong"){nx=Math.sin(pp.a*y)-Math.cos(pp.b*x)+.04*pp.e*Math.sin(x*y);ny=Math.sin(pp.c*x)-Math.cos(pp.d*y)+.04*pp.f*Math.cos(x-y);x=nx;y=ny;return [x,y];}
+  if(name==="hopalong"){nx=y-Math.sign(x||1)*Math.sqrt(Math.abs(pp.b*x-pp.c));ny=pp.a-x+.025*pp.d*y;x=nx;y=ny;return [x,y];}
+  if(name==="lorenz"){dt=.006;sigma=8+Math.abs(pp.a)*4;rho=18+Math.abs(pp.b)*10;beta=2+Math.abs(pp.c);nx=x+dt*sigma*(y-x);ny=y+dt*(x*(rho-z)-y);nz=z+dt*(x*y-beta*z);x=nx;y=ny;z=nz;return project(x/12,y/12,z/12,t+=.001);}
+  if(name==="rossler"){dt=.018;nx=x+dt*(-y-z);ny=y+dt*(x+pp.a*y);nz=z+dt*(pp.b+z*(x-pp.c));x=nx;y=ny;z=nz;return project(x/8,y/8,z/8,t+=.001);}
+  if(name==="aizawa"){dt=.011;nx=x+dt*((z-pp.b)*x-Math.abs(pp.d)*y);ny=y+dt*(Math.abs(pp.d)*x+(z-pp.b)*y);nz=z+dt*(pp.c+pp.a*z-z*z*z/3-(x*x+y*y)*(1+pp.e*z)+pp.f*z*x*x*x);x=nx;y=ny;z=nz;return project(x,y,z,t+=.001);}
+  if(name==="thomas"){dt=.05;tb=Math.max(.05,Math.abs(pp.a));nx=x+dt*(Math.sin(y)-tb*x);ny=y+dt*(Math.sin(z)-tb*y);nz=z+dt*(Math.sin(x)-tb*z);x=nx;y=ny;z=nz;return project(x,y,z,t+=.001);}
+  if(name==="halvorsen"){dt=.006;ha=Math.max(.6,Math.abs(pp.a));nx=x+dt*(-ha*x-4*y-4*z-y*y);ny=y+dt*(-ha*y-4*z-4*x-z*z);nz=z+dt*(-ha*z-4*x-4*y-x*x);x=nx;y=ny;z=nz;return project(x/5,y/5,z/5,t+=.001);}
+  if(name==="ikeda"){u=clamp(Math.abs(pp.a),.4,.99);tt=pp.c-pp.d/(1+x*x+y*y);nx=1+u*(x*Math.cos(tt)-y*Math.sin(tt));ny=clamp(Math.abs(pp.b),.1,1.2)*(x*Math.sin(tt)+y*Math.cos(tt));x=nx;y=ny;return [x,y];}
+  if(name==="henon"){nx=1-pp.a*x*x+y;ny=pp.b*x;x=nx;y=ny;return [x,y];}
+  if(name==="tinkerbell"){nx=x*x-y*y+pp.a*x+pp.b*y;ny=2*x*y+pp.c*x+pp.d*y;x=nx;y=ny;return [x,y];}
+  if(name==="gumowski"){function f(q){return pp.a*q+2*(1-pp.a)*q*q/(1+q*q)} nx=y+pp.b*(1-pp.c*y*y)*y+f(x);ny=-x+f(nx);x=nx;y=ny;return [x,y];}
+  if(name==="duffing"){dt=.03;delta=Math.abs(pp.a);gamma=Math.abs(pp.b);omega=Math.abs(pp.c)+.2;acc=-delta*v+x-x*x*x+gamma*Math.cos(omega*t);v+=acc*dt;x+=v*dt;y=v;t+=dt;return [x,y];}
+  if(name==="chua"){dt=.008;alpha=8+Math.abs(pp.a)*5;betaC=12+Math.abs(pp.b)*8;m0=-1.143;m1=-.714;fx=m1*x+.5*(m0-m1)*(Math.abs(x+1)-Math.abs(x-1));nx=x+dt*(alpha*(y-x-fx));ny=y+dt*(x-y+z);nz=z+dt*(-betaC*y);x=nx;y=ny;z=nz;return project(x,y,z,t+=.001);}
+  if(name==="sna"){gr=(Math.sqrt(5)-1)/2;nx=pp.a*x*(1-x)+pp.b*Math.cos(theta);theta+=2*Math.PI*gr;y=Math.sin(theta)*x;x=nx;return [x,y];}
+  nx=Math.sin(pp.a*y)+pp.c*Math.cos(pp.b*x)+pp.e*Math.sin(pp.g*x*y)-pp.h*Math.cos(pp.i*y);
+  ny=Math.sin(pp.d*x)+pp.f*Math.cos(pp.c*y)+pp.g*Math.sin(pp.a*x-pp.b*y)-pp.i*Math.cos(pp.h*x);
+  x=nx;y=ny;return [x,y];
+ };
+}
+function bounds(name,pp,n){
+ var st=stepper(name,pp),minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,valid=0,q,x,y,i;
+ for(i=0;i<n;i++){
+  q=st(); if(i<100)continue; x=q[0]; y=q[1];
+  if(isFinite(x)&&isFinite(y)&&Math.abs(x)<100000&&Math.abs(y)<100000){
+   if(x<minX)minX=x;if(x>maxX)maxX=x;if(y<minY)minY=y;if(y>maxY)maxY=y;valid++;
+  }
+ }
+ if(valid<800||maxX-minX<.01||maxY-minY<.01)return null;
+ return {minX:minX,maxX:maxX,minY:minY,maxY:maxY,w:maxX-minX,h:maxY-minY};
+}
+function render(){
+ token++; var my=token; stopped=false; updateVals(); clear(); count.innerHTML="Total drawn points: 0"; setStatus("testing");
+ var pp=p(), name=current, total=+$("points").value, alpha=clamp(.015+(+$("ink").value)/650,.015,.17), dot=(+$("size").value)/2;
+ setTimeout(function(){
+  if(my!==token)return;
+  var b=bounds(name,pp,7000);
+  if(!b){setStatus("collapsed; try Random visible");return;}
+  var pad=55,scale=Math.min((cv.width-pad*2)/b.w,(cv.height-pad*2)/b.h),ox=cv.width/2-scale*(b.minX+b.maxX)/2,oy=cv.height/2+scale*(b.minY+b.maxY)/2;
+  var st=stepper(name,pp),drawn=0,rgb=ink();
+  ctx.fillStyle="rgba("+rgb+","+alpha+")";
+  setStatus("rendering");
+  function batch(){
+   var i,q,x,y,px,py;
+   if(my!==token||stopped){setStatus("stopped");return;}
+   ctx.beginPath();
+   for(i=0;i<3500&&drawn<total;i++,drawn++){
+    q=st();x=q[0];y=q[1];
+    if(!isFinite(x)||!isFinite(y))continue;
+    px=ox+x*scale;py=oy-y*scale;
+    if(px>=0&&px<cv.width&&py>=0&&py<cv.height)ctx.rect(px,py,dot,dot);
+   }
+   ctx.fill();
+   count.innerHTML="Total drawn points: "+drawn.toLocaleString();
+   if(drawn<total)setTimeout(batch,1);else setStatus("done");
+  }
+  batch();
+ },30);
+}
+function schedule(){clearTimeout(timer);timer=setTimeout(render,220);}
+function select(name,reset){
+ current=name; type.value=name; $("formula").innerHTML=formulas[name]||"";
+ var btns=document.getElementsByClassName("tile"),i;
+ for(i=0;i<btns.length;i++){btns[i].className=btns[i].getAttribute("data-t")===name?"tile active":"tile";}
+ if(reset)setP(presets[name]);
+ render();
+}
+function randomParams(name){
+ var o={a:rand(-3,3),b:rand(-3,3),c:rand(-3,3),d:rand(-3,3),e:rand(-3,3),f:rand(-3,3),g:rand(-3,3),h:rand(-3,3),i:rand(-3,3)};
+ if(name==="henon"){o.a=rand(1.1,1.43);o.b=rand(.18,.34);}
+ if(name==="lorenz"){o.a=rand(.4,2.5);o.b=rand(1.4,3);o.c=rand(.45,1.2);}
+ if(name==="rossler"){o.a=rand(.1,.38);o.b=rand(.1,.38);o.c=rand(4.5,7);}
+ if(name==="ikeda"){o.a=rand(.75,.98);o.b=rand(.35,.95);o.c=rand(5,7);o.d=rand(.7,1.3);}
+ if(name==="thomas"){o.a=rand(.15,.25);}
+ if(name==="halvorsen"){o.a=rand(1.15,1.8);}
+ if(name==="duffing"){o.a=rand(.05,.4);o.b=rand(.1,.65);o.c=rand(.7,1.7);}
+ if(name==="chua"){o.a=rand(.8,2.2);o.b=rand(1.5,3.2);}
+ if(name==="gumowski"){o.a=rand(-.5,.5);o.b=rand(-.9,.9);o.c=rand(-.9,.9);}
+ return o;
+}
+function randomVisible(){
+ var i,o,b; setStatus("hunting");
+ for(i=0;i<70;i++){o=randomParams(current);b=bounds(current,o,3000);if(b&&b.w>.1&&b.h>.1){setP(o);render();return;}}
+ setP(randomParams(current));render();
+}
+function mutate(){
+ var o=p(),ks=["a","b","c","d","e","f","g","h","i"],i,k;
+ for(i=0;i<ks.length;i++){k=ks[i];o[k]=clamp(o[k]+rand(-.16,.16),-3,3);}
+ setP(o);render();
+}
+
+function wire(){
+ var ks=["a","b","c","d","e","f","g","h","i"],i,tiles,themes;
+ for(i=0;i<ks.length;i++){$(ks[i]).oninput=function(){updateVals();schedule();};}
+ $("points").oninput=function(){updateVals();schedule();}; $("ink").oninput=function(){updateVals();schedule();}; $("size").oninput=function(){updateVals();schedule();};
+ $("random").onclick=randomVisible; $("mutate").onclick=mutate; $("preset").onclick=function(){setP(presets[current]);render();}; $("render").onclick=render; $("stop").onclick=function(){stopped=true;token++;};
+ $("download").onclick=function(){var a=document.createElement("a");a.download="omef-attractor.png";a.href=cv.toDataURL("image/png");a.click();};
+ type.onchange=function(){select(type.value,true);};
+ $("showFormula").onchange=function(){ $("formula").style.display=this.checked?"block":"none"; };
+ tiles=document.getElementsByClassName("tile");
+ for(i=0;i<tiles.length;i++){tiles[i].onclick=function(){select(this.getAttribute("data-t"),true);};}
+ themes=document.querySelectorAll("[data-theme]");
+ for(i=0;i<themes.length;i++){themes[i].onclick=function(){var j;for(j=0;j<themes.length;j++)themes[j].className="";this.className="active";document.body.className=this.getAttribute("data-theme")==="light"?"":this.getAttribute("data-theme");render();};}
+}
+try{wire();updateVals();setStatus("ready");render();}catch(e){setStatus("error: "+e.message);}
+})();
+</script>
+</body>
+</html>
