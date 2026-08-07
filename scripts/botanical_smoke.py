@@ -38,6 +38,20 @@ def canvas_signature(driver):
     """)
 
 
+def dump_browser_state(driver, label):
+    try:
+        body = driver.find_element(By.TAG_NAME, "body").text[:1800]
+    except Exception as exc:
+        body = f"<body unavailable: {exc}>"
+    print(f"--- {label} body ---")
+    print(body)
+    print(f"--- {label} browser log ---")
+    for entry in driver.get_log("browser"):
+        print(entry)
+    print(f"--- {label} source head ---")
+    print(driver.page_source[:2500])
+
+
 server = subprocess.Popen(
     [sys.executable, "-m", "http.server", str(PORT), "--bind", "127.0.0.1", "--directory", str(ROOT)],
     stdout=subprocess.DEVNULL,
@@ -56,7 +70,6 @@ try:
     time.sleep(0.8)
     driver = webdriver.Chrome(options=opts)
     try:
-        # iPhone-ish dimensions/touch layout without pretending this is WebKit.
         driver.execute_cdp_cmd("Emulation.setDeviceMetricsOverride", {
             "width": 390, "height": 844, "deviceScaleFactor": 3, "mobile": True
         })
@@ -64,7 +77,11 @@ try:
         driver.get(URL)
 
         wait_until(driver, lambda d: d.title == "Botanical Harmonograph", message="app title")
-        wait_until(driver, lambda d: len(d.find_elements(By.TAG_NAME, "canvas")) == 1, message="canvas")
+        try:
+            wait_until(driver, lambda d: len(d.find_elements(By.TAG_NAME, "canvas")) == 1, message="canvas")
+        except Exception:
+            dump_browser_state(driver, "canvas-timeout")
+            raise
         wait_until(driver, lambda d: len(d.find_elements(By.XPATH, "//button")) >= 4, message="controls")
 
         time.sleep(1.8)
