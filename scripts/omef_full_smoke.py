@@ -30,6 +30,13 @@ def signature(driver):
     """)
 
 
+def set_input(driver, element_id, value, event="input"):
+    driver.execute_script(
+        "const e=document.getElementById(arguments[0]); e.value=arguments[1]; e.dispatchEvent(new Event(arguments[2],{bubbles:true}));",
+        element_id, str(value), event,
+    )
+
+
 server = subprocess.Popen(
     [sys.executable, "-m", "http.server", str(PORT), "--bind", "127.0.0.1", "--directory", str(ROOT)],
     stdout=subprocess.DEVNULL,
@@ -54,6 +61,7 @@ try:
             wait(driver, lambda d: d.title == "OMEF FULL — Total-State Attractor")
             wait(driver, lambda d: d.execute_script("return document.body.dataset.selftest") == "PASS")
             wait(driver, lambda d: len(d.find_elements(By.TAG_NAME,"canvas")) == 1)
+            wait(driver, lambda d: len(d.find_elements(By.ID,"shapeLens")) == 1)
             txt=driver.find_element(By.ID,"tests").text
             if "ALL CHECKS PASSED" not in txt:
                 raise AssertionError(f"Layer {layer} did not report full self-check pass: {txt[-900:]}")
@@ -62,10 +70,30 @@ try:
                 raise AssertionError(f"Layer {layer} canvas wrong: {sig}")
             print(f"OMEF FULL cumulative layer {layer}: PASS; canvas={sig}")
 
+        sig_base=signature(driver)
+        set_input(driver,"shapeLens","shell","change")
+        time.sleep(.35)
+        sig_shell=signature(driver)
+        if sig_shell == sig_base:
+            raise AssertionError(f"Topology lens did not alter canvas: {sig_base}")
+
+        set_input(driver,"shapeFold",165)
+        time.sleep(.35)
+        sig_fold=signature(driver)
+        if sig_fold == sig_shell:
+            raise AssertionError(f"Nonlinear fold slider did not alter canvas: {sig_shell}")
+
+        set_input(driver,"dynCoupling",175)
+        wait(driver, lambda d: d.execute_script("return document.body.dataset.selftest") == "PASS")
+        time.sleep(1.0)
+        sig_dyn=signature(driver)
+        if sig_dyn == sig_fold:
+            raise AssertionError(f"Pair-coupling dynamics slider did not alter canvas: {sig_fold}")
+
         sig0=signature(driver)
         driver.find_element(By.ID,"mutate").click()
         wait(driver, lambda d: d.execute_script("return document.body.dataset.selftest") == "PASS")
-        time.sleep(1.2)
+        time.sleep(.7)
         sig1=signature(driver)
         if sig1 == sig0:
             raise AssertionError(f"Mutate species did not alter canvas signature: {sig0}")
@@ -83,7 +111,9 @@ try:
                 severe.append(msg)
         if severe:
             raise AssertionError("Browser errors:\n"+"\n".join(severe))
-        print("OMEF FULL mobile-browser smoke test passed; mutation",sig0,"->",sig1)
+        print("OMEF FULL v2 mobile-browser smoke test passed")
+        print("shape signatures:",sig_base,"-> shell",sig_shell,"-> fold",sig_fold,"-> dynamics",sig_dyn)
+        print("mutation:",sig0,"->",sig1)
     finally:
         driver.quit()
 finally:
