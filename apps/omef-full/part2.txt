@@ -1,0 +1,29 @@
+)%10,k=(n*7+5)%10;if(j===i)j=(j+1)%10;if(k===i||k===j)k=(k+2)%10;t.push({i,j,k,w:signed(600+n)*(.012+.022*hash01(700+n))});}return t}
+let BASE_A=makePair(), TRIADS=makeTriads();
+function initState(){let Z=[];for(let i=0;i<9;i++){let a=TAU*hash01(800+i),b=TAU*hash01(900+i);Z.push(Math.cos(a),Math.sin(a),Math.cos(b),Math.sin(b));}
+ let X=Array.from({length:24},(_,i)=>.18*signed(1000+i)); let F=Array.from({length:8},(_,i)=>.12*signed(1100+i)); let L=Array(12).fill(0); let P=Array(21).fill(0); let D=Array(8).fill(0);
+ return {U:U0.map((x,i)=>clamp(x/2.4 + .035*signed(1200+i),-1.4,1.4)),S:[.22,.44,.18,.16],Z,X,F,L,P,D,hist:Array(24).fill(U0[9]/2.4),rawU:null,revision:.05,step:0,regime:1,lastRegime:1,resample:false,rawResidual:0,residual:0};}
+function outcomes(U){let prec=sigmoid(-1.18+4*dot(BETA_REC,U)),eq=dot(BETA_EQ,U),rel=dot(BETA_REL,U);return [prec,eq,rel]}
+function regimeProb(U,prev,out,X){let r=U[0],m=U[1],d=U[2],p=U[3],f=U[4],l=U[5],pi=U[6],s=U[7],g=U[8],h=U[9];let scores=[1.2*g+.75*p+.65*l+.2*m-.65*s-.45*h+.12*X[0],1.05*pi+.65*r+.48*s+.4*h-.2*g+.1*X[1],1.15*s+.7*d+.8*h-.35*m-.45*g+.12*X[2],-.95*g-.75*p-.65*l+.8*h+.72*out[0]+.12*X[3]];let q=softmax(scores);return q.map((v,i)=>.72*prev[i]+.28*v).map((v,_,a)=>v/a.reduce((x,y)=>x+y,0))}
+function accountingResidual(U){return .32*U[3]+.24*U[8]+.18*U[4]-.15*U[2]-.11*U[7]-.08*U[6];}
+function correctAccounting(raw){let res=accountingResidual(raw);let v=[0,0,-.15,.32,.18,0,-.08,-.11,.24,0],den=dot(v,v)+1e-6;let out=raw.map((x,i)=>clamp(x-res*v[i]/den*.72,-1.35,1.35));return {U:out,residual:accountingResidual(out),rawResidual:res}}
+function updateZ(Z,U,n){let out=Z.slice();for(let i=0;i<9;i++){let si=i*4,as=Math.atan2(Z[si+1],Z[si]),al=Math.atan2(Z[si+3],Z[si+2]);as+=TAU/TSHORT[i]+.006*U[i];al+=TAU/TLONG[i]+.0035*U[(i+3)%10];let rs=RHOS[i],rl=RHOL[i];out[si]=rs*Math.cos(as)+(1-rs)*Math.tanh(U[i]);out[si+1]=rs*Math.sin(as);out[si+2]=rl*Math.cos(al)+(1-rl)*Math.tanh(U[(i+1)%10]);out[si+3]=rl*Math.sin(al);}return out}
+function stepState(s){let n=s.step+1, outc=outcomes(s.U);let F=s.F.map((v,i)=>clamp(.91*v+.045*s.U[(i*3)%10]+.025*Math.sin(.013*n*(i+1)+seed),-1.2,1.2));
+ let X=s.X.map((v,i)=>clamp(Math.tanh(.91*v+.045*s.U[i%10]+.027*F[i%8]+.018*s.L[i%12]+.025*Math.sin(.017*n*(i+2)+seed*.3)),-1.2,1.2));
+ let S=regimeProb(s.U,s.S,outc,X), reg=argmax(S), Z=updateZ(s.Z,s.U,n); let rev=clamp(.88*s.revision+.1*Math.sin(.021*n+seed)+.08*X[7],-.6,.6);
+ let mem=0;for(let k=0;k<8;k++)mem+=FIBW[k]*(s.hist[k]||0);let pair=Array(10).fill(0),tri=Array(10).fill(0);for(let i=0;i<10;i++)for(let j=0;j<10;j++)if(i!==j){let gate=Math.abs(BASE_A[i][j])<.041?.15:1;pair[i]+=BASE_A[i][j]*gate*Math.tanh(s.U[j]);}
+ for(const t of TRIADS){let gate=Math.abs(t.w)<.017?.2:1;tri[t.i]+=t.w*gate*Math.tanh(s.U[t.j])*Math.tanh(s.U[t.k]);}
+ let osc=Array(10).fill(0);for(let i=0;i<9;i++)osc[i]=.045*(Z[i*4]+Z[i*4+2]);osc[9]=.018*avg(osc.slice(0,9));
+ let bias=[[0,.02,-.01,.035,-.005,.04,-.03,-.04,.06,-.03],[.055,-.01,.025,-.03,.025,-.02,.08,.05,-.04,.07],[.03,-.055,.065,-.04,.025,-.045,.025,.09,-.07,.095],[-.02,-.04,.06,-.09,.01,-.08,-.01,.07,-.1,.11]][reg];
+ let raw=s.U.map((u,i)=>{let driver=.03*X[(i*2)%24]+.02*F[i%8]+.014*s.L[i%12];return Math.tanh(.83*u+pair[i]+tri[i]+osc[i]+driver+bias[i]+.012*Math.sin(n*.011*(i+1)+seed));});
+ raw[9]=Math.tanh(.56*raw[9]+.20*mem+.28*s.U[7]+.22*s.U[2]+.17*s.U[4]+.14*s.U[6]-.10*s.U[8]-.05*s.U[1]+.04*rev);
+ let corr=correctAccounting(raw); let movement=Math.sqrt(corr.U.reduce((z,x,i)=>z+(x-s.U[i])**2,0)/10); let spread=avg(corr.U.map((x,i)=>(x-s.U[i])**2));
+ let spectral=clamp(1-(.58+.23*avg(corr.U.map(Math.abs))+.12*Math.abs(pair[7])+.06*Math.abs(rev)),.05,.95); let connectivity=clamp(1-avg(BASE_A.flat().map(Math.abs))*5+.15*Math.cos(n*.004),0,1); let rank=clamp(3.2+6*(.4*movement+.6*(1-spectral)),1,10);
+ let uncertainty=clamp(.07+.5*spread+.12*Math.abs(corr.residual)+.09*(1-connectivity),.025,.65); let degeneracy=clamp(.055+.58*uncertainty+.08*Math.max(0,-spectral+.25),0,.82); let neff=5000*(1-degeneracy);
+ let humility=clamp(.38+1.25*uncertainty+.6*(1-spectral)+.25*Math.abs(rev)+.15*outc[0],.05,2.3), confidence=Math.exp(-humility); let resample=neff<2500;
+ let L=s.L.map((v,i)=>clamp(.86*v+.04*(corr.U[i%10]-s.U[i%10])+.025*rev*(i%2?1:-1)+.018*(S[i%4]-.25)+.012*Math.sin(n*.007*(i+1)),-1,1)); if(resample)L=L.map(v=>v*.82);
+ let P=corr.U.slice();for(let i=0;i<10;i++)P.push(Math.log(.03+uncertainty*(.35+.65*hash01(1500+i))));P.push(degeneracy);
+ let D=[confidence,humility,spectral,rank/10,movement,connectivity,Math.abs(rev),Math.abs(corr.residual)]; let hist=[corr.U[9]].concat(s.hist).slice(0,24);
+ return {U:corr.U,S,Z,X,F,L,P,D,hist,rawU:raw,revision:rev,step:n,regime:reg,lastRegime:s.regime,resample,rawResidual:corr.rawResidual,residual:corr.residual,outcomes:outc,mem};}
+const BLOCKS=[['U',0,10],['S',10,14],['Z',14,50],['X',50,74],['F',74,82],['L',82,94],['P',94,115],['D',115,123]];
+function projWeights(k,axis,twist){let a=(k+1)*(1.61803398875+twist*.013)+(axis+1)*2.41421356237+seed*.173;let v=Math.sin(a*1.77)+.6
