@@ -7,11 +7,11 @@
 <title>Loading Botanical Harmonograph…</title>
 <style>html,body{margin:0;min-height:100%;background:#07080B;color:#d7d4cc;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.load{min-height:100vh;display:grid;place-items:center;text-align:center;padding:28px}.small{opacity:.6;font-size:13px;margin-top:8px}</style>
 </head>
-<body><div class="load"><div><div>Loading Botanical Harmonograph…</div><div class="small">assembling the original app</div></div></div>
+<body><div class="load"><div><div>Loading Botanical Harmonograph…</div><div class="small">assembling the growth model</div></div></div>
 <script>
 (async function(){
   try {
-    const parts=[0,1,2,3,4,5].map(n=>`botanical/part${n}.txt?v=4`);
+    const parts=[0,1,2,3,4,5].map(n=>`botanical/part${n}.txt?v=5`);
     let html="";
     for(const p of parts){
       const r=await fetch(p,{cache:"no-store"});
@@ -21,52 +21,133 @@
     if(!html.includes("Botanical Harmonograph") || !html.includes("</html>")) throw new Error("source assembly was incomplete");
 
     const patchOnce=(src,needle,replacement,label)=>{
-      if(!src.includes(needle)) throw new Error("growth-history patch missing: "+label);
+      if(!src.includes(needle)) throw new Error("botanical patch missing: "+label);
       return src.replace(needle,replacement);
     };
+    const patchCount=(src,needle,replacement,count,label)=>{
+      const found=src.split(needle).length-1;
+      if(found!==count) throw new Error(`botanical patch ${label}: expected ${count}, found ${found}`);
+      return src.split(needle).join(replacement);
+    };
 
-    const growthHelper=`function growthTraceWidth(Q,u) {
+    /*
+      Developmental-history model.
+      Inspired by the 2026 morphogenesis study: equal-ish total growth can leave
+      different final geometry when anisotropic and more even expansion occur in
+      a different order. This is a procedural analogy, not a claim that the paper
+      directly models petals.
+    */
+    const growthHelper=`function growthTraceState(Q,u) {
     const h=Math.max(-1,Math.min(1,Q.growthHistory||0));
     const m=Math.max(0,Math.min(1.2,Q.growthMemory||0));
-    if(Math.abs(h)<1e-4||m<1e-4) return 1;
     const sw=Math.max(0.18,Math.min(0.82,Q.growthSwitch==null?0.52:Q.growthSwitch));
     const sm=(t)=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
     const late=sm((u-(sw-0.18))/0.36);
-    const sd=Q.seed||0;
+    return {h,m,sw,late};
+}
+function growthTraceU(Q,u) {
+    const q=growthTraceState(Q,u);
+    if(Math.abs(q.h)<1e-4||q.m<1e-4) return u;
+    const exponent=Math.max(0.78,Math.min(1.24,1-q.h*q.m*0.13));
+    return Math.max(0,Math.min(1,Math.pow(u,exponent)));
+}
+function growthTraceWidth(Q,u) {
+    const q=growthTraceState(Q,u), sd=Q.seed||0;
+    if(Math.abs(q.h)<1e-4||q.m<1e-4) return 1;
     let f=1;
-    if(h>0){
-        const env=Math.exp(-Math.pow((u-(sw+0.16))/0.22,2));
-        f+=m*h*(-0.10*(1-late)+0.22*late);
-        f+=0.045*m*h*env*Math.sin((3.2+1.3*m)*Math.PI*u+sd*0.011);
+    if(q.h>0){
+        const env=Math.exp(-Math.pow((u-(q.sw+0.16))/0.22,2));
+        f+=q.m*q.h*(-0.10*(1-q.late)+0.22*q.late);
+        f+=0.035*q.m*q.h*env*Math.sin((3.2+1.3*q.m)*Math.PI*u+sd*0.011);
     } else {
-        const a=-h,env=Math.exp(-Math.pow((u-(sw-0.10))/0.24,2));
-        f+=m*a*(0.18*(1-late)-0.08*late);
-        f+=0.035*m*a*env*Math.sin((2.6+1.0*m)*Math.PI*u+sd*0.011);
+        const a=-q.h,env=Math.exp(-Math.pow((u-(q.sw-0.10))/0.24,2));
+        f+=q.m*a*(0.18*(1-q.late)-0.08*q.late);
+        f+=0.030*q.m*a*env*Math.sin((2.6+q.m)*Math.PI*u+sd*0.011);
     }
-    return Math.max(0.68,Math.min(1.35,f));
+    return Math.max(0.72,Math.min(1.30,f));
 }
 `;
 
     html=patchOnce(html,
       'function petalParts(P, over, ll) {',
       growthHelper+'function petalParts(P, over, ll) {',
-      'petal helper');
+      'growth helper');
+
+    html=patchCount(html,
+      'const X = (u) => u - Q.notch * g(u);',
+      'const X = (u) => { const gu=growthTraceU(Q,u); return gu - Q.notch * g(gu); };',
+      2,
+      'longitudinal growth history');
+
     html=patchOnce(html,
       'const y = sgn * evalW(u, Q.mixW) * Q.pW * fy * wob;',
       'const y = sgn * evalW(u, Q.mixW) * Q.pW * fy * wob * growthTraceWidth(Q,u);',
-      'petal width');
+      'petal width history');
+
     html=patchOnce(html,
       'const wAt = (u) => evalW(u, Q.mixW) * Q.pW * fy * (1 + Q.margin * 0.3 * snoise(u * 6.2, sd));',
       'const wAt = (u) => evalW(u, Q.mixW) * Q.pW * fy * (1 + Q.margin * 0.3 * snoise(u * 6.2, sd)) * growthTraceWidth(Q,u);',
-      'vein growth trace');
+      'vein growth history');
+
+    /* Replace independent petal jitter with low-amplitude, positionally correlated variation. */
+    html=patchOnce(html,
+`        const g = P.irregular;
+        const h = (i) => hash(sd, i);
+        const over = {
+            pleats: detail ? P.pleats : 0,
+            seed: h(5) * 9,
+            pW: P.pW * (1 + (h(1) - 0.5) * 0.45 * g),
+            notch: cl01(P.notch * (1 + (h(2) - 0.5) * 0.9 * g)),
+            fold: Math.max(0, P.fold * (1 + (h(3) - 0.5) * 0.7 * g)),
+            shear: P.shear + (h(4) - 0.5) * 0.3 * g,
+        };
+        const rotJ = (h(6) - 0.5) * 0.34 * g;
+        const lenJ = 1 + (h(7) - 0.5) * 0.3 * g;`,
+`        const g = P.irregular;
+        const h = (i) => hash(sd, i);
+        const phase=(n/Math.max(1,slots.length))*Math.PI*2+(P.seed||0)*0.031;
+        const axisBias=Math.sin(phase), neighborBias=Math.sin(phase*0.5+1.7);
+        const over = {
+            pleats: detail ? P.pleats : 0,
+            seed: h(5) * 9,
+            pW: P.pW * (1 + g*(0.060*axisBias+0.025*neighborBias+(h(1)-0.5)*0.10)),
+            notch: cl01(P.notch * (1 + g*(0.10*axisBias+(h(2)-0.5)*0.24))),
+            fold: Math.max(0, P.fold * (1 + g*(0.08*axisBias+(h(3)-0.5)*0.18))),
+            shear: P.shear + g*(0.025*axisBias+(h(4)-0.5)*0.06),
+            growthHistory: P.growthHistory,
+            growthMemory: P.growthMemory,
+            growthSwitch: P.growthSwitch,
+        };
+        const rotJ = g*(0.025*axisBias+(h(6)-0.5)*0.06);
+        const lenJ = 1 + g*(0.035*neighborBias+(h(7)-0.5)*0.08);`,
+      'correlated petal variation');
+
+    /* Hybridise coherent developmental systems rather than unrelated controls. */
+    html=patchOnce(html,
+      'const rare=Math.random()<0.2, cap=(x,a,b)=>Math.max(a,Math.min(b,x));',
+      'const rare=Math.random()<0.15, cap=(x,a,b)=>Math.max(a,Math.min(b,x));',
+      'wild frequency');
     html=patchOnce(html,
       'const next={mode:"petal",arrangement,strands:1,symmetry,spread:0,',
       'const growthHistory=pick([1,1,1,-1,-1,0]),growthMemory=growthHistory===0?0:R(rare?.55:.32,rare?.92:.68),growthSwitch=R(.34,.68);\n        const next={mode:"petal",arrangement,strands:1,symmetry,spread:0,growthHistory,growthMemory,growthSwitch,',
       'hybrid growth trajectory');
     html=patchOnce(html,
+      'palette:Math.random()<.5?A.palette:B.palette};',
+      'palette:rare?pick(["Trefoil","Ink","Violet","Ember","Sulphur","Crimson","Verdigris"]):pick(["Trefoil","Ink","Violet","Ember","Sulphur","Crimson"])};',
+      'biological palette');
+    html=patchOnce(html,
       'P.mixW, P.mixK, P.mixZ, P.mixV,\n    ]);',
       'P.mixW, P.mixK, P.mixZ, P.mixV, P.growthHistory, P.growthMemory, P.growthSwitch,\n    ]);',
       'growth dependencies');
+
+    /* Expose the hidden developmental trajectory in the status label. */
+    html=patchOnce(html,
+`    const status = (preset || "custom") + " · " + P.mode +
+        (usesW ? " · " + P.arrangement : "") + (P.layers > 1 ? " · " + P.layers + " layers" : "");`,
+`    const growthTag=P.growthHistory>0?" · axial→lateral":P.growthHistory<0?" · lateral→axial":"";
+    const status = (preset || "custom") + " · " + P.mode +
+        (usesW ? " · " + P.arrangement : "") + (P.layers > 1 ? " · " + P.layers + " layers" : "") + growthTag;`,
+      'growth status');
 
     document.open();
     document.write(html);
