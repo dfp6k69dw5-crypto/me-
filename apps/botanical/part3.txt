@@ -1,0 +1,282 @@
+n Object.assign({}, p, { [ch]: next });
+        });
+    };
+    const chanProps = (ch, T, key) => ({
+        mix: P[ch], T,
+        locked: locks[key], onLock: () => setLocks((l) => Object.assign({}, l, { [key]: !l[key] })),
+        onOp: (o) => editMix(ch, (m) => { m.op = o; }),
+        onTerm: (i, t) => editMix(ch, (m) => { m.slots[i] = { t, w: m.slots[i].w, p: Object.assign({}, T[t].d) }; }),
+        onWeight: (i, w) => editMix(ch, (m) => { m.slots[i].w = w; }),
+        onParam: (i, k, v) => editMix(ch, (m) => { m.slots[i].p[k] = v; }),
+    });
+    const applyPreset = (n) => { setP(Object.assign({}, BASE, PRESETS[n])); setPreset(n); replay(); };
+    const R = (a, b) => a + Math.random() * (b - a);
+    const pick = (a) => a[Math.floor(Math.random() * a.length)];
+    const signed = (a, b) => (Math.random() < 0.5 ? -1 : 1) * R(a, b);
+    const hybrid = () => {
+        const mode = pick(["petal", "petal", "bloom", "filament"]);
+        const arrangement = pick(["radial", "radial", "cruciform", "papilionaceous"]);
+        const next = {
+            mode, arrangement, strands: pick([1, 1, 2, 3]),
+            symmetry: pick([3, 4, 5, 6, 6, 8, 8, 10, 12]),
+            spread: R(0, 50),
+            lambda: Math.random() < 0.8 ? R(0.8, 4.5) : -R(0.5, 2.5),
+            k0: signed(0.5, 2), kp0: signed(0, 1.2), length: R(4.5, 9.5),
+            pW: R(0.28, 0.58), notch: Math.random() < 0.6 ? R(0.04, 0.2) : 0,
+            fold: Math.random() < 0.5 ? R(0.2, 1) : 0,
+            shear: arrangement === "cruciform" ? signed(0.12, 0.35) : signed(0, 0.16),
+            pleats: pick([0, 3, 4, 5]),
+            wingAngle: R(20, 52), keelAngle: R(125, 172), keelRise: -R(0.05, 0.35),
+            petal: R(0.09, 0.2), anthers: mode === "filament" && Math.random() < 0.5,
+            irregular: R(0.15, 0.8), margin: R(0.1, 0.7), veinN: pick([0, 3, 4, 5, 6, 7]),
+            veinReach: R(0.6, 0.95), veinBranch: Math.random() < 0.6 ? 1 : 0,
+            throat: R(0.25, 0.8), cup: R(0.4, 1.2), sheen: R(0.1, 0.6),
+            centre: Math.random() < 0.75, centreSize: R(0.12, 0.45), stamens: pick([0, 6, 8, 9, 12, 16]),
+            depth: pick([1, 1, 1, 2, 2, 3]), childN: pick([2, 3, 4]), childScale: R(0.28, 0.55),
+            childAt: R(0.55, 1), childTwist: signed(0, 40),
+            layers: pick([1, 1, 2, 3, 4, 5]), layerGap: R(0.3, 1), layerTwist: R(0, 32),
+            layerShrink: R(0.05, 0.2), layerDrift: R(0.1, 0.4), tilt: R(0.25, 0.9),
+            palette: pick(Object.keys(PALETTES)),
+        };
+        if (!locks.W)
+            next.mixW = pick([
+                mk(W_T, "add", [["arch", 1], ["claw", R(0.06, 0.16)], ["off", 0]]),
+                mk(W_T, "mul", [["arch", 1], ["frill", R(0.2, 0.45)], ["claw", R(0.05, 0.14)]]),
+                mk(W_T, "mul", [["round", 1], ["frill", R(0.15, 0.4)], ["off", 0]]),
+                mk(W_T, "add", [["arch", 0.85], ["bell", R(0.2, 0.5)], ["claw", 0.1]]),
+                mk(W_T, "mul", [["arch", 1], ["spiral", R(0.25, 0.6)], ["off", 0]]),
+                mk(W_T, "max", [["arch", 1], ["round", R(0.5, 0.9)], ["off", 0]]),
+            ]);
+        if (!locks.K)
+            next.mixK = pick([
+                mk(K_T, "add", [["elastica", 1], ["clothoid", R(0.15, 0.5)], ["off", 0]]),
+                mk(K_T, "add", [["elastica", 0.9], ["wave", R(0.15, 0.4)], ["off", 0]]),
+                mk(K_T, "add", [["elastica", 0.85], ["super", R(0.2, 0.5)], ["off", 0]]),
+                mk(K_T, "add", [["elastica", 0.9], ["roll", R(0.5, 0.9)], ["off", 0]]),
+                mk(K_T, "mul", [["elastica", 1], ["decay", R(0.3, 0.7)], ["off", 0]]),
+            ]);
+        if (!locks.Z)
+            next.mixZ = pick([
+                mk(Z_T, "add", [["flat", 0], ["off", 0], ["off", 0]]),
+                mk(Z_T, "add", [["axial", R(0.3, 0.8)], ["layer", R(0.3, 0.7)], ["off", 0]]),
+                mk(Z_T, "add", [["cone", R(0.3, 0.7)], ["off", 0], ["off", 0]]),
+                mk(Z_T, "add", [["helix", R(0.3, 0.8)], ["layer", R(0.2, 0.6)], ["off", 0]]),
+                mk(Z_T, "add", [["wave", R(0.25, 0.6)], ["axial", R(0.2, 0.5)], ["off", 0]]),
+            ]);
+        if (!locks.V)
+            next.mixV = pick([
+                mk(V_T, "add", [["linear", 1], ["off", 0], ["off", 0]]),
+                mk(V_T, "add", [["linear", 1], ["off", 0], ["off", 0]]),
+                mk(V_T, "add", [["linear", R(0.7, 0.95)], [pick(["swirl", "handkerchief", "horseshoe", "waves"]), R(0.08, 0.25)], ["off", 0]]),
+                mk(V_T, "add", [["linear", R(0.6, 0.85)], [pick(["spherical", "eyefish", "bubble", "julia"]), R(0.15, 0.35)], ["off", 0]]),
+                mk(V_T, "add", [["linear", R(0.5, 0.8)], ["swirl", R(0.1, 0.25)], [pick(["disc", "rings", "heart", "cylinder"]), R(0.08, 0.2)]]),
+            ]);
+        setP((p) => Object.assign({}, p, next));
+        setPreset("Hybrid");
+        replay();
+    };
+    const strokes = useMemo(() => buildStrokes(P), [
+        P.mode, P.arrangement, P.symmetry, P.strands, P.spread, P.lambda, P.k0, P.kp0, P.length,
+        P.pW, P.notch, P.fold, P.shear, P.pleats, P.wingAngle, P.keelAngle, P.keelRise,
+        P.petal, P.anthers, P.antherLen,
+        P.depth, P.childN, P.childScale, P.childAt, P.childTwist, P.childFold, P.parity, P.childDetail,
+        P.irregular, P.margin, P.veinN, P.veinReach, P.veinBranch,
+        P.layers, P.layerGap, P.layerTwist, P.layerShrink, P.layerDrift,
+        P.mixW, P.mixK, P.mixZ, P.mixV,
+    ]);
+    const draw = useCallback(() => {
+        const cv = canvasRef.current;
+        if (!cv)
+            return;
+        const ctx = cv.getContext("2d");
+        const w = cv.width, h = cv.height, dpr = window.devicePixelRatio || 1;
+        ctx.fillStyle = "#07080B";
+        ctx.fillRect(0, 0, w, h);
+        if (!strokes.length)
+            return;
+        const st = Math.sin(P.tilt);
+        const px = (p) => p[0];
+        const py = (p) => p[1] - p[2] * st;
+        let mx = 0, maxArm = 1, zMin = 1e9, zMax = -1e9;
+        for (const s of strokes) {
+            maxArm = Math.max(maxArm, s.arm);
+            for (const p of s.pts) {
+                mx = Math.max(mx, Math.abs(px(p)), Math.abs(py(p)));
+                zMin = Math.min(zMin, p[2]);
+                zMax = Math.max(zMax, p[2]);
+            }
+        }
+        if (!isFinite(mx) || mx === 0)
+            return;
+        const zRange = zMax - zMin, isFlat = zRange < 0.02, zSpan = Math.max(1e-4, zRange);
+        const scale = ((Math.min(w, h) / 2) * 0.84 * P.zoom) / mx;
+        const cx = w / 2, cy = h / 2;
+        const RGB = PALETTES[P.palette].map((c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16)));
+        const col = (raw) => {
+            const t = cl01(0.5 + (raw - 0.5) * P.tone);
+            const f = t * (RGB.length - 1);
+            const i0 = Math.min(RGB.length - 2, Math.floor(f));
+            const u = f - i0, A = RGB[i0], B = RGB[i0 + 1];
+            return A.map((v, i) => v + (B[i] - v) * u);
+        };
+        const tint = (c, t) => c.map((v) => Math.min(255, v + (255 - v) * t));
+        const mixc = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+        const dark = (c, t) => c.map((v) => Math.max(0, v * (1 - t)));
+        const css = (c) => "rgb(" + c.map((v) => Math.round(v)).join(",") + ")";
+        const jit = (a) => ((((a + 1) * 73) % 97) / 97 - 0.5) * 0.1;
+        const total = strokes.length, prog = progRef.current;
+        const stag = Math.min(0.75, 40 / Math.max(1, total));
+        for (let i = 0; i < total; i++) {
+            const s = strokes[i];
+            const local = cl01(prog * total - i * stag);
+            if (local <= 0 || s.pts.length < 2)
+                continue;
+            const n = Math.max(1, Math.floor(local * (s.pts.length - 1)));
+            const zn = (s.z - zMin) / zSpan;
+            let lit = tint(col(s.arm / maxArm), Math.max(0, 0.05 + 0.26 * s.depth + jit(s.arm)));
+            if (!isFlat)
+                lit = dark(lit, (1 - zn) * 0.45 * P.zFade);
+            ctx.beginPath();
+            for (let j = 0; j <= n; j++) {
+                const p = s.pts[j];
+                if (j === 0)
+                    ctx.moveTo(cx + px(p) * scale, cy + py(p) * scale);
+                else
+                    ctx.lineTo(cx + px(p) * scale, cy + py(p) * scale);
+            }
+            if (P.fill && P.botanic && s.kind === "blade") {
+                const a = s.pts[0], b = s.pts[Math.floor(s.pts.length / 2)];
+                const ax = cx + px(a) * scale, ay = cy + py(a) * scale;
+                const bx = cx + px(b) * scale, by = cy + py(b) * scale;
+                const petal = tint(lit, (s.tone || 0) * 0.18);
+                const throat = mixc(petal, [252, 246, 198], P.throat);
+                const edge = dark(petal, 0.26);
+                ctx.save();
+                ctx.closePath();
+                ctx.clip();
+                const g1 = ctx.createLinearGradient(ax, ay, bx, by);
+                g1.addColorStop(0, css(throat));
+                g1.addColorStop(0.3, css(mixc(throat, petal, 0.75)));
+                g1.addColorStop(0.86, css(petal));
+                g1.addColorStop(1, css(edge));
+                ctx.fillStyle = g1;
+                ctx.fillRect(0, 0, w, h);
+                const dx = bx - ax, dy = by - ay, len = Math.hypot(dx, dy) + 1e-4;
+                const nx = (-dy / len) * len * 0.42, ny = (dx / len) * len * 0.42;
+                const mx2 = (ax + bx) / 2, my2 = (ay + by) / 2;
+                const g2 = ctx.createLinearGradient(mx2 - nx, my2 - ny, mx2 + nx, my2 + ny);
+                g2.addColorStop(0, "rgba(0,0,0," + (0.3 * P.cup).toFixed(3) + ")");
+                g2.addColorStop(0.5, "rgba(255,255,255," + (0.1 * P.cup).toFixed(3) + ")");
+                g2.addColorStop(1, "rgba(0,0,0," + (0.3 * P.cup).toFixed(3) + ")");
+                ctx.fillStyle = g2;
+                ctx.fillRect(0, 0, w, h);
+                if (P.sheen > 0.01) {
+                    const hx = ax + dx * 0.62, hy = ay + dy * 0.62;
+                    const g3 = ctx.createRadialGradient(hx, hy, 0, hx, hy, len * 0.55);
+                    g3.addColorStop(0, "rgba(255,255,255," + (0.4 * P.sheen).toFixed(3) + ")");
+                    g3.addColorStop(1, "rgba(255,255,255,0)");
+                    ctx.fillStyle = g3;
+                    ctx.fillRect(0, 0, w, h);
+                }
+                ctx.restore();
+                ctx.strokeStyle = css(dark(petal, 0.34));
+                ctx.lineWidth = P.weight * 0.55 * dpr;
+                ctx.stroke();
+            }
+            else if (P.fill && s.kind === "blade") {
+                const a = s.pts[0], b = s.pts[Math.floor(s.pts.length / 2)];
+                const grd = ctx.createLinearGradient(cx + px(a) * scale, cy + py(a) * scale, cx + px(b) * scale, cy + py(b) * scale);
+                grd.addColorStop(0, css(dark(lit, 0.46 * P.shading)));
+                grd.addColorStop(0.55, css(lit));
+                grd.addColorStop(1, css(tint(lit, 0.3 * P.shading)));
+                ctx.closePath();
+                ctx.fillStyle = grd;
+                ctx.fill();
+                ctx.strokeStyle = css(dark(lit, 0.5));
+                ctx.lineWidth = P.weight * 0.8 * dpr;
+                ctx.stroke();
+            }
+            else if (P.fill && s.kind === "vein") {
+                ctx.strokeStyle = "rgba(" + dark(lit, 0.45).map((v) => Math.round(v)).join(",") + "," + (0.42 * P.veins).toFixed(2) + ")";
+                ctx.lineWidth = Math.max(0.5, P.weight * 0.42) * dpr;
+                ctx.lineCap = "round";
+                ctx.stroke();
+            }
+            else {
+                ctx.strokeStyle = P.fill && s.kind === "detail" ? css(dark(lit, 0.34 * P.veins)) : css(lit);
+                ctx.lineWidth = (P.fill && s.kind === "detail" ? P.weight * 0.75 : P.weight) * dpr;
+                ctx.lineJoin = "round";
+                ctx.lineCap = "round";
+                ctx.stroke();
+            }
+            if (local < 1) {
+                const p = s.pts[n];
+                ctx.fillStyle = GOLD;
+                ctx.beginPath();
+                ctx.arc(cx + px(p) * scale, cy + py(p) * scale, 2.4 * dpr, 0, 7);
+                ctx.fill();
+            }
+        }
+        if (P.botanic && P.centre && P.mode !== "filament" && prog > 0.96) {
+            const rr = P.centreSize * scale * 0.5;
+            const gc = ctx.createRadialGradient(cx, cy, 0, cx, cy, rr);
+            gc.addColorStop(0, "rgba(244,238,150,0.95)");
+            gc.addColorStop(0.55, "rgba(196,206,96,0.8)");
+            gc.addColorStop(1, "rgba(120,140,60,0)");
+            ctx.fillStyle = gc;
+            ctx.beginPath();
+            ctx.arc(cx, cy, rr, 0, 7);
+            ctx.fill();
+            const ns = Math.round(P.stamens);
+            for (let i = 0; i < ns; i++) {
+                const a = (i / ns) * Math.PI * 2 + hash(i, 3) * 0.4;
+                const rad = rr * (0.5 + hash(i, 9) * 0.55);
+                const sx = cx + Math.cos(a) * rad, sy = cy + Math.sin(a) * rad * 0.9;
+                ctx.strokeStyle = "rgba(250,246,210,0.75)";
+                ctx.lineWidth = Math.max(0.7, 0.9 * dpr);
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.quadraticCurveTo(cx + Math.cos(a) * rad * 0.5, cy + Math.sin(a) * rad * 0.3, sx, sy);
+                ctx.stroke();
+                ctx.fillStyle = "rgba(232,196,74,0.95)";
+                ctx.beginPath();
+                ctx.arc(sx, sy, Math.max(1, rr * 0.09), 0, 7);
+                ctx.fill();
+            }
+        }
+    }, [strokes, P.zoom, P.palette, P.weight, P.tone, P.fill, P.shading, P.veins, P.tilt, P.zFade,
+        P.botanic, P.throat, P.cup, P.sheen, P.centre, P.centreSize, P.stamens]);
+    useEffect(() => {
+        const wrap = wrapRef.current, cv = canvasRef.current;
+        if (!wrap || !cv)
+            return;
+        const resize = () => {
+            const dpr = window.devicePixelRatio || 1;
+            const r = wrap.getBoundingClientRect();
+            if (r.width < 2 || r.height < 2)
+                return;
+            cv.width = Math.round(r.width * dpr);
+            cv.height = Math.round(r.height * dpr);
+            cv.style.width = r.width + "px";
+            cv.style.height = r.height + "px";
+            draw();
+        };
+        resize();
+        const ro = new ResizeObserver(resize);
+        ro.observe(wrap);
+        return () => ro.disconnect();
+    }, [draw]);
+    useEffect(() => {
+        const loop = () => {
+            if (progRef.current < 1)
+                progRef.current = Math.min(1, progRef.current + P.speed);
+            draw();
+            rafRef.current = requestAnimationFrame(loop);
+        };
+        rafRef.current = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(rafRef.current);
+    }, [draw, P.speed]);
+    const usesW = P.mode !== "filament";
+    const usesK = P.mode !== "petal";
+    const hasElastica = P.mixK.slots.some((s) => s.t === "elastica");
+    const hasHeight = P.layers > 1 || P.mixZ.slots.some((s) => s.t !== "off" && s.t !== "
