@@ -38,13 +38,31 @@ jobs:
           html=''.join(parts)
           assert '<title>Botanical Harmonograph</title>' in html
           assert '</html>' in html
+          required={
+              'petal hook':'function petalParts(P, over, ll) {',
+              'width hook':'const y = sgn * evalW(u, Q.mixW) * Q.pW * fy * wob;',
+              'vein hook':'const wAt = (u) => evalW(u, Q.mixW) * Q.pW * fy * (1 + Q.margin * 0.3 * snoise(u * 6.2, sd));',
+              'hybrid hook':'const next={mode:"petal",arrangement,strands:1,symmetry,spread:0,',
+              'status hook':'const status = (preset || "custom") + " · " + P.mode +',
+          }
+          for label,needle in required.items():
+              assert needle in html, f'Missing Botanical source hook: {label}'
+          assert html.count('const X = (u) => u - Q.notch * g(u);') == 2, 'Expected two petal/vein X hooks'
           scripts=re.findall(r'<script>(.*?)</script>', html, re.S)
           assert len(scripts) >= 2, f'Expected at least 2 script blocks, got {len(scripts)}'
           for i,s in enumerate(scripts): Path(f'/tmp/bot_{i}.js').write_text(s)
-          print('Botanical assembled:', len(html), 'characters;', len(scripts), 'script blocks')
+
+          loader=(Path('apps')/'botanical-harmonograph.html').read_text()
+          for term in ['growthTraceState','growthTraceU','growthTraceWidth','correlated petal variation','axial→lateral','lateral→axial']:
+              assert term in loader, f'Missing loader growth feature: {term}'
+          ls=re.findall(r'<script>(.*?)</script>', loader, re.S)
+          assert len(ls)==1, f'Expected one loader script, got {len(ls)}'
+          Path('/tmp/bot_loader.js').write_text(ls[0])
+          print('Botanical assembled:', len(html), 'characters;', len(scripts), 'script blocks; growth hooks present')
           PY
           node --check /tmp/bot_0.js
           node --check /tmp/bot_1.js
+          node --check /tmp/bot_loader.js
       - name: Check HTML files are nonempty
         run: |
           python - <<'PY'
