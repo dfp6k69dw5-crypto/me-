@@ -17,6 +17,7 @@ h1{margin:0;font-size:31px;letter-spacing:-.03em}.sub{font-size:14px;color:var(-
 canvas{display:block;width:100%;height:auto;background:var(--canvas)}
 .badge{position:absolute;top:10px;left:10px;background:#000;color:#fff;font:18px Menlo,Consolas,monospace;padding:5px 8px;letter-spacing:.04em}
 .status{position:absolute;top:52px;left:10px;background:rgba(0,0,0,.72);color:#fff;border-radius:20px;padding:7px 11px;font-size:13px}
+.focusToggle{position:absolute;top:10px;right:10px;z-index:4;width:auto;min-width:72px;background:rgba(0,0,0,.76);color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:8px 12px;margin:0;font-size:13px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .panel{margin:18px 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
 section{padding:19px 16px;border-bottom:1px solid var(--line)}section:last-child{border-bottom:0}
 h2{margin:0 0 16px;font-size:28px}
@@ -36,6 +37,29 @@ button.secondary{background:#555}.danger{background:#8c3b3b}
 .theme button{background:transparent;color:var(--accent);border:1px solid var(--line);margin:0}.theme button.active{background:var(--accent);color:#fff}
 .formula{display:none;margin-top:14px;background:rgba(127,127,127,.13);border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.45 Menlo,Consolas,monospace;white-space:pre-wrap}
 .small{color:var(--muted);font-size:14px;line-height:1.45}
+body.focus{overflow:hidden}
+body.focus header,body.focus .panel{display:none}
+body.focus .stage{position:fixed;inset:0;width:100vw;height:100svh;min-height:0;z-index:999;background:var(--canvas);border:0}
+body.focus canvas{width:100%;height:100%;object-fit:contain}
+@media(max-width:719px){
+ .app{padding-bottom:0}
+ header{padding:10px 12px}h1{font-size:23px}.sub{display:none}
+ .stage{position:sticky;top:0;z-index:30;height:46svh;min-height:320px;box-shadow:0 7px 22px rgba(0,0,0,.18)}
+ .stage canvas{width:100%;height:100%;object-fit:contain}
+ .badge{font-size:11px;max-width:58%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:5px 7px}
+ .status{top:40px;font-size:11px;padding:5px 8px}
+ .focusToggle{font-size:12px;padding:7px 10px;min-width:66px}
+ .panel{margin:0;border-radius:0;border-left:0;border-right:0}
+ section{padding:13px 12px}
+ h2{font-size:20px;margin-bottom:9px}
+ .row{grid-template-columns:28px 1fr 50px;gap:7px;margin:8px 0;font-size:16px}
+ .value{font-size:12px;padding:5px 2px}
+ .tileGrid{display:flex;gap:7px;overflow-x:auto;overscroll-behavior-x:contain;padding:1px 1px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+ .tileGrid::-webkit-scrollbar{display:none}
+ .tileGrid button{flex:0 0 auto;width:auto;min-height:38px;margin:0;padding:8px 12px;white-space:nowrap}
+ .small{display:none}
+ select,button{padding:9px}
+}
 @media(min-width:720px){.row{grid-template-columns:120px 1fr 66px}.tileGrid{grid-template-columns:repeat(4,1fr)}.grid2{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -50,6 +74,7 @@ button.secondary{background:#555}.danger{background:#8c3b3b}
 <canvas id="cv" width="1000" height="760"></canvas>
 <div class="badge" id="count">Total drawn points: 0</div>
 <div class="status" id="status">booting</div>
+<button id="focusToggle" class="focusToggle" type="button">Focus</button>
 </div>
 
 <div class="panel">
@@ -328,12 +353,13 @@ function wire(){
  $("points").oninput=function(){updateVals();schedule();}; $("ink").oninput=function(){updateVals();schedule();}; $("size").oninput=function(){updateVals();schedule();};
  $("random").onclick=randomVisible; $("mutate").onclick=mutate; $("preset").onclick=function(){setP(presets[current]);render();}; $("render").onclick=render; $("stop").onclick=function(){stopped=true;token++;};
  $("download").onclick=function(){var a=document.createElement("a");a.download="omef-attractor.png";a.href=cv.toDataURL("image/png");a.click();};
+ $("focusToggle").onclick=function(){var on=document.body.classList.toggle("focus");this.innerHTML=on?"Controls":"Focus";};
  type.onchange=function(){select(type.value,true);};
  $("showFormula").onchange=function(){ $("formula").style.display=this.checked?"block":"none"; };
  tiles=document.getElementsByClassName("tile");
  for(i=0;i<tiles.length;i++){tiles[i].onclick=function(){select(this.getAttribute("data-t"),true);};}
  themes=document.querySelectorAll("[data-theme]");
- for(i=0;i<themes.length;i++){themes[i].onclick=function(){var j;for(j=0;j<themes.length;j++)themes[j].className="";this.className="active";document.body.className=this.getAttribute("data-theme")==="light"?"":this.getAttribute("data-theme");render();};}
+ for(i=0;i<themes.length;i++){themes[i].onclick=function(){var j,keepFocus=document.body.classList.contains("focus");for(j=0;j<themes.length;j++)themes[j].className="";this.className="active";document.body.className=this.getAttribute("data-theme")==="light"?"":this.getAttribute("data-theme");if(keepFocus)document.body.classList.add("focus");render();};}
 }
 try{wire();updateVals();setStatus("ready");render();}catch(e){setStatus("error: "+e.message);}
 })();
