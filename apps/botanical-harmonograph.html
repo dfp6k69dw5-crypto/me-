@@ -11,7 +11,7 @@
 <script>
 (async function(){
   try {
-    const parts=[0,1,2,3,4,5].map(n=>`botanical/part${n}.txt?v=2`);
+    const parts=[0,1,2,3,4,5].map(n=>`botanical/part${n}.txt?v=4`);
     let html="";
     for(const p of parts){
       const r=await fetch(p,{cache:"no-store"});
@@ -19,6 +19,55 @@
       html+=await r.text();
     }
     if(!html.includes("Botanical Harmonograph") || !html.includes("</html>")) throw new Error("source assembly was incomplete");
+
+    const patchOnce=(src,needle,replacement,label)=>{
+      if(!src.includes(needle)) throw new Error("growth-history patch missing: "+label);
+      return src.replace(needle,replacement);
+    };
+
+    const growthHelper=`function growthTraceWidth(Q,u) {
+    const h=Math.max(-1,Math.min(1,Q.growthHistory||0));
+    const m=Math.max(0,Math.min(1.2,Q.growthMemory||0));
+    if(Math.abs(h)<1e-4||m<1e-4) return 1;
+    const sw=Math.max(0.18,Math.min(0.82,Q.growthSwitch==null?0.52:Q.growthSwitch));
+    const sm=(t)=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
+    const late=sm((u-(sw-0.18))/0.36);
+    const sd=Q.seed||0;
+    let f=1;
+    if(h>0){
+        const env=Math.exp(-Math.pow((u-(sw+0.16))/0.22,2));
+        f+=m*h*(-0.10*(1-late)+0.22*late);
+        f+=0.045*m*h*env*Math.sin((3.2+1.3*m)*Math.PI*u+sd*0.011);
+    } else {
+        const a=-h,env=Math.exp(-Math.pow((u-(sw-0.10))/0.24,2));
+        f+=m*a*(0.18*(1-late)-0.08*late);
+        f+=0.035*m*a*env*Math.sin((2.6+1.0*m)*Math.PI*u+sd*0.011);
+    }
+    return Math.max(0.68,Math.min(1.35,f));
+}
+`;
+
+    html=patchOnce(html,
+      'function petalParts(P, over, ll) {',
+      growthHelper+'function petalParts(P, over, ll) {',
+      'petal helper');
+    html=patchOnce(html,
+      'const y = sgn * evalW(u, Q.mixW) * Q.pW * fy * wob;',
+      'const y = sgn * evalW(u, Q.mixW) * Q.pW * fy * wob * growthTraceWidth(Q,u);',
+      'petal width');
+    html=patchOnce(html,
+      'const wAt = (u) => evalW(u, Q.mixW) * Q.pW * fy * (1 + Q.margin * 0.3 * snoise(u * 6.2, sd));',
+      'const wAt = (u) => evalW(u, Q.mixW) * Q.pW * fy * (1 + Q.margin * 0.3 * snoise(u * 6.2, sd)) * growthTraceWidth(Q,u);',
+      'vein growth trace');
+    html=patchOnce(html,
+      'const next={mode:"petal",arrangement,strands:1,symmetry,spread:0,',
+      'const growthHistory=pick([1,1,1,-1,-1,0]),growthMemory=growthHistory===0?0:R(rare?.55:.32,rare?.92:.68),growthSwitch=R(.34,.68);\n        const next={mode:"petal",arrangement,strands:1,symmetry,spread:0,growthHistory,growthMemory,growthSwitch,',
+      'hybrid growth trajectory');
+    html=patchOnce(html,
+      'P.mixW, P.mixK, P.mixZ, P.mixV,\n    ]);',
+      'P.mixW, P.mixK, P.mixZ, P.mixV, P.growthHistory, P.growthMemory, P.growthSwitch,\n    ]);',
+      'growth dependencies');
+
     document.open();
     document.write(html);
     document.close();
