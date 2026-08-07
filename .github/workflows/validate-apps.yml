@@ -1,0 +1,57 @@
+name: Validate project apps
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check launcher targets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, urllib.parse
+          root=Path('.')
+          text=(root/'index.html').read_text()
+          hrefs=re.findall(r'href="([^"]+)"', text)
+          missing=[]
+          for href in hrefs:
+              path=urllib.parse.urlparse(href).path
+              if path.startswith(('http://','https://','#')) or not path:
+                  continue
+              p=root/path
+              if not p.exists(): missing.append(path)
+          if missing:
+              raise SystemExit('Missing launcher targets: '+', '.join(missing))
+          print('All launcher targets exist:', len(hrefs))
+          PY
+      - name: Assemble and syntax-check Botanical Harmonograph
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          parts=[Path(f'apps/botanical/part{i}.txt').read_text() for i in range(6)]
+          html=''.join(parts)
+          assert '<title>Botanical Harmonograph</title>' in html
+          assert '</html>' in html
+          scripts=re.findall(r'<script>(.*?)</script>', html, re.S)
+          assert len(scripts) >= 2, f'Expected at least 2 script blocks, got {len(scripts)}'
+          for i,s in enumerate(scripts): Path(f'/tmp/bot_{i}.js').write_text(s)
+          print('Botanical assembled:', len(html), 'characters;', len(scripts), 'script blocks')
+          PY
+          node --check /tmp/bot_0.js
+          node --check /tmp/bot_1.js
+      - name: Check HTML files are nonempty
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          bad=[]
+          for p in Path('apps').glob('*.html'):
+              if p.stat().st_size < 100 or '<html' not in p.read_text(errors='ignore').lower(): bad.append(str(p))
+          if bad: raise SystemExit('Bad HTML files: '+', '.join(bad))
+          print('Standalone HTML files look present')
+          PY
