@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Time Feels Weird — Editorial Infographic</title>
+<style>
+  :root {
+    --bg: #10131c;
+    --panel: rgba(255,255,255,.075);
+    --panel2: rgba(255,255,255,.11);
+    --text: #f5f1e8;
+    --muted: #b9b3a7;
+    --gold: #d8b56d;
+    --blue: #8fb7ff;
+    --rose: #e18ba7;
+    --mint: #9be0c2;
+    --line: rgba(255,255,255,.17);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: radial-gradient(circle at top left, rgba(143,183,255,.20), transparent 35%), radial-gradient(circle at bottom right, rgba(216,181,109,.18), transparent 30%), linear-gradient(135deg, #0d1018, #171b29 55%, #11131d); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .infographic { width: min(1180px, 94vw); margin: 32px auto; padding: 28px; }
+  .hero { display: grid; grid-template-columns: 1fr 220px; gap: 28px; align-items: center; min-height: 330px; padding: 42px; border: 1px solid var(--line); border-radius: 34px; background: linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.045)), radial-gradient(circle at 80% 30%, rgba(216,181,109,.22), transparent 28%); box-shadow: 0 28px 90px rgba(0,0,0,.35); overflow: hidden; }
+  .kicker { color: var(--gold); text-transform: uppercase; letter-spacing: .18em; font-size: .78rem; font-weight: 800; }
+  h1 { margin: 0; font-size: clamp(3.2rem, 8vw, 7.5rem); line-height: .86; letter-spacing: -.07em; }
+  h2 { margin: 0 0 12px; font-size: 1.65rem; letter-spacing: -.035em; }
+  h3 { margin: 0 0 8px; color: var(--gold); }
+  p, li { color: var(--muted); line-height: 1.58; font-size: 1rem; }
+  .subtitle { max-width: 640px; font-size: 1.25rem; }
+  .clock-orb { width: 200px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(216,181,109,.45); background: radial-gradient(circle, rgba(216,181,109,.45), rgba(143,183,255,.12) 45%, transparent 70%); box-shadow: inset 0 0 45px rgba(255,255,255,.12), 0 0 70px rgba(216,181,109,.22); }
+  .clock-orb span { font-size: 1.8rem; font-weight: 900; letter-spacing: .16em; }
+  .grid { display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 18px; margin-top: 18px; }
+  .card { position: relative; padding: 26px; border-radius: 28px; background: linear-gradient(145deg, var(--panel), rgba(255,255,255,.035)); border: 1px solid var(--line); box-shadow: 0 18px 50px rgba(0,0,0,.22); overflow: hidden; }
+  .card:before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(255,255,255,.08), transparent 34%); pointer-events: none; }
+  .equation { margin-top: 24px; padding: 18px; border-radius: 20px; background: rgba(216,181,109,.12); color: #ffe8ad; border: 1px solid rgba(216,181,109,.28); font-weight: 800; letter-spacing: -.02em; }
+  .meter { height: 13px; border-radius: 99px; margin: 20px 0; background: rgba(255,255,255,.12); overflow: hidden; }
+  .meter:after { content: ""; display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--gold)); }
+  .meter.high:after { width: 88%; } .meter.low:after { width: 34%; }
+  .timeline { margin-top: 18px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .time-strip { margin-top: 20px; display: grid; grid-template-columns: 1.4fr .7fr 1.5fr .6fr; gap: 8px; }
+  .time-strip span { padding: 14px; border-radius: 16px; text-align: center; font-weight: 800; color: #11131d; }
+  .wide { background: linear-gradient(135deg, var(--gold), #fff0bb); } .thin { background: linear-gradient(135deg, var(--blue), #dbe7ff); }
+  .diagram { position: relative; height: 360px; margin-top: 10px; }
+  .node { position: absolute; width: 118px; height: 118px; border-radius: 50%; display: grid; place-items: center; text-align: center; font-weight: 900; border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.08); backdrop-filter: blur(10px); }
+  .node small { color: var(--muted); font-weight: 700; }
+  .center { left: 50%; top: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(216,181,109,.5), rgba(216,181,109,.08)); color: white; }
+  .n1 { left: 6%; top: 8%; color: var(--gold); } .n2 { right: 6%; top: 12%; color: var(--blue); } .n3 { left: 7%; bottom: 8%; color: var(--mint); } .n4 { right: 8%; bottom: 6%; color: var(--rose); }
+  .diagram:before, .diagram:after { content: ""; position: absolute; inset: 60px; border: 1px dashed rgba(255,255,255,.25); border-radius: 50%; }
+  .bars { height: 280px; display: flex; align-items: end; gap: 18px; padding-top: 30px; }
+  .bars div { flex: 1; min-height: 35%; border-radius: 18px 18px 8px 8px; background: linear-gradient(180deg, var(--rose), rgba(225,139,167,.18)); display: flex; align-items: end; justify-content: center; padding: 12px; }
+  .bars span { writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 900; color: white; text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; }
+  .layered { margin-top: 18px; background: linear-gradient(145deg, rgba(143,183,255,.12), rgba(216,181,109,.07)), rgba(255,255,255,.04); }
+  .present-window { margin-top: 26px; display: grid; grid-template-columns: 1fr 1.25fr 1fr; align-items: center; gap: 10px; }
+  .present-window span, .present-window strong { text-align: center; padding: 24px; border-radius: 20px; border: 1px solid var(--line); }
+  .present-window strong { font-size: 1.35rem; background: linear-gradient(135deg, rgba(216,181,109,.38), rgba(143,183,255,.22)); box-shadow: 0 0 50px rgba(216,181,109,.18); }
+  ul { padding-left: 20px; } .references { margin-top: 18px; } .references ol { padding-left: 22px; } .references li { margin-bottom: 8px; }
+  @media (max-width: 850px) { .infographic { padding: 14px; margin: 10px auto; } .hero, .grid, .two-col, .present-window { grid-template-columns: 1fr; } .hero { padding: 28px; } .clock-orb { width: 160px; } .time-strip { grid-template-columns: 1fr; } .diagram { height: 310px; } .node { width: 96px; height: 96px; font-size: .82rem; } }
+</style>
+</head>
+<body>
+<div class="infographic">
+  <header class="hero"><div><p class="kicker">Editorial Science Infographic</p><h1>Why Time Feels Weird</h1><p class="subtitle">A visual map of how the brain stretches, compresses, and reconstructs time.</p></div><div class="clock-orb"><span>NOW</span></div></header>
+  <section class="grid intro"><div class="card large"><h2>The central idea</h2><p>Clock time is steady. Felt time is not. Your brain builds time from attention, memory, bodily arousal, prediction, emotion, and change.</p><div class="equation">Felt Time = Attention × Memory × Emotion × Novelty</div></div><div class="card"><h3>Childhood</h3><div class="meter high"></div><p>More novelty creates denser memory. Looking back, the year feels longer.</p></div><div class="card"><h3>Adulthood</h3><div class="meter low"></div><p>Routine leaves fewer distinctive memory marks. Looking back, time compresses.</p></div></section>
+  <section class="timeline card"><h2>Two kinds of time</h2><div class="two-col"><div><h3>Prospective time</h3><p>When you are watching time pass, attention makes it feel slower.</p></div><div><h3>Retrospective time</h3><p>When you look back later, memory richness makes it feel longer.</p></div></div><div class="time-strip"><span class="wide">Bored waiting room</span><span class="thin">Routine week</span><span class="wide">Vacation day</span><span class="thin">Autopilot month</span></div></section>
+  <section class="grid"><div class="card brain"><h2>The brain’s timing network</h2><p>There is no single clock. Timing is distributed across cortico-striatal, dopaminergic, cerebellar, sensory, and attentional systems.</p><div class="diagram"><div class="node n1">Dopamine<br><small>tempo</small></div><div class="node n2">Basal<br>Ganglia</div><div class="node n3">Cortex<br><small>attention</small></div><div class="node n4">Cerebellum<br><small>precision</small></div><div class="node center">Felt<br>Duration</div></div></div><div class="card emotion"><h2>Fear can dilate the moment</h2><p>High arousal can make brief events feel longer while they are happening.</p><div class="bars"><div style="height:35%"><span>calm</span></div><div style="height:62%"><span>alert</span></div><div style="height:88%"><span>fear</span></div></div></div></section>
+  <section class="card layered"><h2>The “present” is a constructed window</h2><p>The brain binds signals arriving at slightly different times into one coherent moment.</p><div class="present-window"><span>past trace</span><strong>felt now</strong><span>prediction</span></div></section>
+  <section class="grid"><div class="card"><h2>Why years speed up</h2><ul><li>Less novelty</li><li>More routine</li><li>Fewer memory anchors</li><li>Proportional time shrinks with age</li></ul></div><div class="card"><h2>How to make time feel richer</h2><ul><li>Change environments</li><li>Learn unfamiliar skills</li><li>Notice sensory detail</li><li>Create memorable firsts</li></ul></div></section>
+  <section class="references card"><h2>Reference spine</h2><ol><li>Fontes et al. — Time Perception Mechanisms at Central Nervous System</li><li>Riemer et al. — Age-related changes in time perception</li><li>Fung et al. — Dopamine and time perception</li><li>Gable & Poole — Emotion and time perception</li><li>Stanford Encyclopedia — Temporal Consciousness</li></ol></section>
+</div>
+</body>
+</html>
