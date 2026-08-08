@@ -1,0 +1,37 @@
+name: Genome Flower DNA to Photo
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/genome-flower/**'
+      - 'scripts/genome_flower_smoke.py'
+      - 'scripts/genome_flower_photo_smoke.py'
+      - '.github/workflows/genome-flower-photo.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate-photo-flower:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check DNA-to-photo source contract
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('apps/genome-flower/photo-studio.html').read_text()
+          for needle in ['https://js.puter.com/v2/','gpt-image-2','GENERATE PHOTOGRAPH','FLORAL ARCHITECTURE','PIGMENT BIOLOGY','REPRODUCTIVE ORGANS','studio-v2.html']:
+              assert needle in p, f'Missing photo layer feature: {needle}'
+          g=Path('apps/genome-flower/genetic-control-engine.js').read_text()
+          assert "export const CONTROL_COUNT=CONTROL_DEFS.length" in g
+          assert g.count("['") >= 72
+          print('DNA-to-photo source contract present')
+          PY
+      - name: Install browser test dependency
+        run: |
+          python -m pip install --disable-pip-version-check -q selenium
+          (google-chrome --version || chromium --version || chromium-browser --version)
+      - name: Exercise core Genome Flower in mobile Chrome
+        run: python scripts/genome_flower_smoke.py
+      - name: Exercise DNA-to-photo shell in mobile Chrome
+        run: python scripts/genome_flower_photo_smoke.py
