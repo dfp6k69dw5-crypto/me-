@@ -16,6 +16,15 @@ def wait(driver, predicate, timeout=45):
     WebDriverWait(driver, timeout).until(lambda d: predicate(d))
 
 
+def status_text(driver):
+    return driver.find_element(By.ID,"status").text.strip().lower()
+
+
+def wait_rerender(driver):
+    wait(driver, lambda d: status_text(d) != "done", timeout=6)
+    wait(driver, lambda d: status_text(d) == "done", timeout=45)
+
+
 def signature(driver):
     return driver.execute_script("""
       const c=document.getElementById('cv');
@@ -64,31 +73,31 @@ try:
         driver.execute_cdp_cmd("Emulation.setTouchEmulationEnabled", {"enabled":True,"maxTouchPoints":5})
         driver.get(BASE)
         wait(driver, lambda d: d.title == "OMEF Total-State Attractor — Classic")
-        wait(driver, lambda d: d.find_element(By.ID,"status").text.strip().lower() == "done")
+        wait(driver, lambda d: status_text(d) == "done")
         sig0=signature(driver)
         if not sig0 or sig0[0] != 1000 or sig0[1] != 760 or sig0[3] <= 0:
             raise AssertionError(f"Initial OMEF canvas invalid: {sig0}")
 
         set_input(driver,"pair",175)
-        wait(driver, lambda d: d.find_element(By.ID,"status").text.strip().lower() == "done")
+        wait_rerender(driver)
         sig_pair=signature(driver)
         if sig_pair == sig0:
             raise AssertionError(f"Pair coupling did not alter canvas: {sig0}")
 
         set_input(driver,"regime",62)
-        wait(driver, lambda d: d.find_element(By.ID,"status").text.strip().lower() == "done")
+        wait_rerender(driver)
         sig_regime=signature(driver)
         if sig_regime == sig_pair:
             raise AssertionError(f"Regime switching did not alter canvas: {sig_pair}")
 
         set_input(driver,"lens","cycles","change")
-        wait(driver, lambda d: d.find_element(By.ID,"status").text.strip().lower() == "done")
+        wait_rerender(driver)
         sig_lens=signature(driver)
         if sig_lens == sig_regime:
             raise AssertionError(f"Projection lens did not alter canvas: {sig_regime}")
 
         driver.find_element(By.ID,"mutate").click()
-        wait(driver, lambda d: d.find_element(By.ID,"status").text.strip().lower() == "done")
+        wait_rerender(driver)
         sig_mut=signature(driver)
         if sig_mut == sig_lens:
             raise AssertionError(f"Mutation did not alter canvas: {sig_lens}")
