@@ -7,7 +7,7 @@
   if(!r.ok)throw new Error('source '+r.status);
   var html=await r.text();
   html=html.replace('<title>OMEF Attractor Lab — 384 Visual Genes</title>','<title>OMEF Attractor Lab — 384 Visual Genes · iPhone Safe</title>');
-  html=html.replace("var renderToken=0,stopped=false,renderTimer=null,inverted=false,cameraBounds=null,lastGeneTouched=-1;","var renderToken=0,stopped=false,renderTimer=null,inverted=false,cameraBounds=null,lastGeneTouched=-1,pendingPreview=false;\\nvar MOBILE_SAFE=(/iP(hone|ad|od)/.test(navigator.userAgent)||((navigator.maxTouchPoints||0)>1&&Math.min(screen.width||9999,screen.height||9999)<900));");
+  html=html.replace("var renderToken=0,stopped=false,renderTimer=null,inverted=false,cameraBounds=null,lastGeneTouched=-1;","var renderToken=0,stopped=false,renderTimer=null,inverted=false,cameraBounds=null,lastGeneTouched=-1,pendingPreview=false;\nvar MOBILE_SAFE=(/iP(hone|ad|od)/.test(navigator.userAgent)||((navigator.maxTouchPoints||0)>1&&Math.min(screen.width||9999,screen.height||9999)<900));");
   html=html.replace("function schedule(ms){clearTimeout(renderTimer);renderTimer=setTimeout(render,ms==null?110:ms)}","function schedule(ms,preview){clearTimeout(renderTimer);pendingPreview=!!preview;renderTimer=setTimeout(function(){var p=pendingPreview;pendingPreview=false;render(p)},ms==null?110:ms)}");
   html=html.replace("var C=compileGenome(),b=sampleBounds(C,6500);","var C=compileGenome(),b=sampleBounds(C,MOBILE_SAFE?3600:6500);");
   var a=html.indexOf('function render(){');
@@ -49,7 +49,7 @@
  requestAnimationFrame(batch)
 }`;
   html=html.slice(0,a)+safeRender+html.slice(b);
-  html=html.replace("setStatus('gene '+bank.code+'-'+String(j+1).padStart(2,'0'));schedule(75)\n  };","setStatus('gene '+bank.code+'-'+String(j+1).padStart(2,'0'));schedule(45,true)\\n  };\\n  input.onchange=function(){schedule(140,false)};");
+  html=html.replace("setStatus('gene '+bank.code+'-'+String(j+1).padStart(2,'0'));schedule(75)\n  };","setStatus('gene '+bank.code+'-'+String(j+1).padStart(2,'0'));schedule(45,true)\n  };\n  input.onchange=function(){schedule(140,false)};");
   html=html.replace("['points','ink','size','fill'].forEach(function(id){$(id).oninput=function(){updateRenderLabels();schedule(120)}});","['points','ink','size','fill'].forEach(function(id){$(id).oninput=function(){updateRenderLabels();schedule(55,true)};$(id).onchange=function(){schedule(150,false)}});");
   document.open();document.write(html);document.close();
  }catch(e){document.body.innerHTML='<div class="load"><div>Could not start the safe renderer.<div class="small">'+String(e.message||e)+'</div></div></div>'}
