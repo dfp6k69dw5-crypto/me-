@@ -1,6 +1,7 @@
 import {FlowerGenome} from '../apps/genome-flower/flower-genome.js';
 import {classifyFlower} from '../apps/genome-flower/photoreal-flower-renderer.js';
 
+// Distribution sanity check: body-plan labels must correspond to reachable phenotypes.
 const counts={};
 for(let seed=1;seed<=512;seed++){
   const g=new FlowerGenome({seed:(Math.imul(seed,2654435761)>>>0)});
