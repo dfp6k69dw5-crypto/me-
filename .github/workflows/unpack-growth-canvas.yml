@@ -2,7 +2,7 @@ name: Unpack Growth Canvas
 on:
   push:
     paths:
-      - 'apps/growth-canvas/growth-canvas.part04'
+      - 'apps/growth-canvas/growth-canvas.part04c'
 permissions:
   contents: write
 jobs:
@@ -18,7 +18,9 @@ jobs:
               apps/growth-canvas/growth-canvas.part01 \
               apps/growth-canvas/growth-canvas.part02 \
               apps/growth-canvas/growth-canvas.part03 \
-              apps/growth-canvas/growth-canvas.part04 > /tmp/growth.b64
+              apps/growth-canvas/growth-canvas.part04a \
+              apps/growth-canvas/growth-canvas.part04b \
+              apps/growth-canvas/growth-canvas.part04c > /tmp/growth.b64
           test "$(wc -c < /tmp/growth.b64)" -eq 19548
           base64 -d /tmp/growth.b64 > /tmp/growth.gz
           echo "0827d37146c945e94ca27b9e5719cf9c9f0325d56bbd3d0159a2bfc0e1e82bc8  /tmp/growth.gz" | sha256sum -c -
@@ -28,7 +30,9 @@ jobs:
                 apps/growth-canvas/growth-canvas.part01 \
                 apps/growth-canvas/growth-canvas.part02 \
                 apps/growth-canvas/growth-canvas.part03 \
-                apps/growth-canvas/growth-canvas.part04 \
+                apps/growth-canvas/growth-canvas.part04a \
+                apps/growth-canvas/growth-canvas.part04b \
+                apps/growth-canvas/growth-canvas.part04c \
                 apps/growth-canvas/growth-canvas.js.gz.b64
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
