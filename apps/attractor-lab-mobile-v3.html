@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>OMEF Attractor Lab — Stable Mobile 384</title>
+<style>
+:root{--bg:#050505;--panel:#0e0e0e;--line:#282828;--text:#f4f4f4;--muted:#858585}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}button{color:inherit;background:#171717;border:1px solid var(--line);border-radius:10px;padding:9px 10px;font-weight:700}
+.app{max-width:900px;margin:auto}.stage{position:sticky;top:0;z-index:20;background:#000;height:53svh;min-height:320px;border-bottom:1px solid var(--line)}
+canvas{width:100%;height:100%;display:block;object-fit:contain;background:#000}.hud{position:absolute;top:8px;left:8px;display:flex;gap:5px;flex-wrap:wrap;max-width:78%}
+.chip{font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace;padding:5px 7px;border:1px solid #343434;background:rgba(0,0,0,.78);border-radius:999px}.focus{position:absolute;right:8px;top:8px}
+.panel{background:#0d0d0d}.sec{padding:12px;border-bottom:1px solid var(--line)}.head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}h1{font-size:20px;margin:0;letter-spacing:-.03em}
+.note{font:9px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted)}.row{display:flex;gap:7px;overflow:auto;padding-bottom:5px;scrollbar-width:none}.row::-webkit-scrollbar{display:none}.row button{flex:0 0 auto;font-size:11px;white-space:nowrap}.row button.active{background:#eee;color:#050505;border-color:#eee}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.geneList{display:grid;grid-template-columns:1fr;gap:7px;max-height:47svh;overflow:auto}.gene{background:#141414;border:1px solid #242424;border-radius:9px;padding:7px}.gtop{display:flex;justify-content:space-between;gap:6px;font:10px ui-monospace,SFMono-Regular,Menlo,monospace}.route{font:9px ui-monospace,SFMono-Regular,Menlo,monospace;color:#707070;margin:2px 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}input[type=range]{width:100%;accent-color:#eee}.setting{font-size:11px}.settingTop{display:flex;justify-content:space-between;color:#bbb}.statusline{margin-top:8px;color:#777;font:9px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace}
+body.full{overflow:hidden}body.full .panel{display:none}body.full .stage{position:fixed;inset:0;width:100vw;height:100svh;z-index:99}.full .focus{top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right))}
+@media(min-width:760px){.geneList{grid-template-columns:1fr 1fr}.actions{grid-template-columns:repeat(4,1fr)}.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="stage"><canvas id="cv" width="480" height="640"></canvas><div class="hud"><span class="chip" id="status">boot</span><span class="chip" id="marks">0 marks</span><span class="chip">384 visual genes</span><span class="chip" id="perf">stable engine</span></div><button class="focus" id="focus">Focus</button></div>
+<div class="panel">
+<div class="sec"><div class="head"><h1>Attractor Lab — Stable Mobile 384</h1><span class="note">zero-allocation hot path</span></div><div class="note">Genes compile once per render. Orbit math reuses typed arrays, camera fitting is incremental, old renders are cancelled immediately, and raster conversion is chunked across animation frames.</div></div>
+<div class="sec"><div class="head"><b>Source</b><span class="note">16 engines</span></div><div class="row" id="sources"></div></div>
+<div class="sec"><div class="head"><b>Structure seed</b><span class="note">genome presets</span></div><div class="row" id="structures"></div></div>
+<div class="sec"><div class="head"><b>Visual genes</b><span class="note" id="bankNote"></span></div><div class="row" id="banks"></div><div class="geneList" id="genes"></div></div>
+<div class="sec"><div class="head"><b>Genome</b><span class="note" id="seedText"></span></div><div class="actions"><button id="newG">New genome</button><button id="mut2">Mutate 2%</button><button id="mut8">Mutate 8%</button><button id="refit">Refit camera</button></div></div>
+<div class="sec"><div class="head"><b>Rendering</b><span class="note">hard bounded</span></div><div class="grid">
+<div class="setting"><div class="settingTop"><span>Quality</span><span id="qv"></span></div><input id="quality" type="range" min="15000" max="80000" step="5000" value="30000"></div>
+<div class="setting"><div class="settingTop"><span>Ink</span><span id="iv"></span></div><input id="ink" type="range" min="20" max="100" value="58"></div>
+<div class="setting"><div class="settingTop"><span>Point body</span><span id="sv"></span></div><input id="size" type="range" min="1" max="4" value="1"></div>
+<div class="setting"><div class="settingTop"><span>Frame fill</span><span id="fv"></span></div><input id="fill" type="range" min="70" max="98" value="91"></div>
+</div><div class="actions" style="margin-top:8px"><button id="invert">Invert</button><button id="render">Render</button><button id="hunt">Hunt visible</button><button id="save">Save PNG</button></div><div class="statusline">Safety limits: ≤80K marks, ≤2.6 ms orbit work per frame, ≤160 orbit steps per frame, and a hard orbit-step ceiling. No render is allowed to run forever.</div></div>
+</div></div>
+<script src="mobile384-engine-v3.js?v=3"></script>
+</body></html>
