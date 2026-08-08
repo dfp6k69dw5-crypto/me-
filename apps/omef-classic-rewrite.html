@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>OMEF-A Classic Experiment</title>
+<style>
+:root{--bg:#efefef;--panel:#e8e8e8;--text:#444;--muted:#777;--line:#c7c7c7;--accent:#109b91;--canvas:#fff;--ink:0,0,0}
+body.dark{--bg:#0d0d0d;--panel:#1c1c1c;--text:#eee;--muted:#aaa;--line:#333;--canvas:#000;--ink:255,255,255}
+body.color{--bg:#07121b;--panel:#101d2a;--text:#eaf4ff;--muted:#a8bdce;--line:#294057;--accent:#36b7ff;--canvas:#06101a;--ink:120,210,255}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.app{max-width:980px;margin:0 auto;padding-bottom:40px}header{background:var(--panel);border-bottom:1px solid var(--line);padding:18px 16px}h1{margin:0;font-size:31px;letter-spacing:-.03em}.sub{font-size:14px;color:var(--muted);margin-top:5px}.stage{position:relative;background:var(--canvas);min-height:390px;border-bottom:1px solid var(--line);overflow:hidden}canvas{display:block;width:100%;height:auto;background:var(--canvas)}.badge{position:absolute;top:10px;left:10px;background:#000;color:#fff;font:18px Menlo,Consolas,monospace;padding:5px 8px;letter-spacing:.04em}.status{position:absolute;top:52px;left:10px;background:rgba(0,0,0,.72);color:#fff;border-radius:20px;padding:7px 11px;font-size:13px}.panel{margin:18px 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}section{padding:19px 16px;border-bottom:1px solid var(--line)}section:last-child{border-bottom:0}h2{margin:0 0 16px;font-size:28px}.row{display:grid;grid-template-columns:76px 1fr 56px;gap:9px;align-items:center;margin:12px 0;font-size:20px}.row label{color:var(--muted)}select,input[type=range],button{width:100%}input[type=range]{accent-color:var(--accent)}input[type=checkbox]{width:28px;height:28px;accent-color:var(--accent)}.value{background:#555;color:#fff;text-align:center;border-radius:8px;padding:6px 2px;font-size:14px;font-variant-numeric:tabular-nums}select,button{font:inherit;border-radius:9px;border:1px solid var(--line);padding:10px;background:var(--bg);color:var(--text)}button{background:var(--accent);color:#fff;border:0;font-weight:750;margin:5px 0}button.secondary{background:#555}.danger{background:#8c3b3b}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.tileGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tileGrid button{background:rgba(127,127,127,.15);border:1px solid var(--line);color:var(--text);font-size:14px;min-height:44px}.tileGrid button.active{background:var(--accent);color:#fff}.theme button{background:transparent;color:var(--accent);border:1px solid var(--line);margin:0}.theme button.active{background:var(--accent);color:#fff}.formula{display:none;margin-top:14px;background:rgba(127,127,127,.13);border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.45 Menlo,Consolas,monospace;white-space:pre-wrap}.small{color:var(--muted);font-size:14px;line-height:1.45}
+@media(max-width:719px){.app{padding-bottom:0}header{padding:10px 12px}h1{font-size:23px}.sub{display:none}.stage{position:sticky;top:0;z-index:30;height:46svh;min-height:320px}.stage canvas{width:100%;height:100%;object-fit:contain}.panel{margin:0;border-radius:0;border-left:0;border-right:0}section{padding:13px 12px}h2{font-size:20px;margin-bottom:9px}.row{grid-template-columns:28px 1fr 50px;gap:7px;margin:8px 0;font-size:16px}.value{font-size:12px;padding:5px 2px}.tileGrid{display:flex;gap:7px;overflow-x:auto;padding:1px 1px 8px}.tileGrid button{flex:0 0 auto;width:auto;min-height:38px;margin:0;padding:8px 12px;white-space:nowrap}.small{display:none}select,button{padding:9px}}
+@media(min-width:720px){.row{grid-template-columns:120px 1fr 66px}.tileGrid{grid-template-columns:repeat(4,1fr)}}
+</style></head>
+<body class="dark"><div class="app"><header><h1>OMEF-A · Classic Renderer Experiment</h1><div class="sub">Historical classic point engine. OMEF Hybrid and OMEF-A Experimental share the exact same renderer.</div></header>
+<div class="stage"><canvas id="cv" width="1000" height="760"></canvas><div class="badge" id="count">Total drawn points: 0</div><div class="status" id="status">booting</div></div>
+<div class="panel">
+<section><h2>Control specimen + OMEF</h2><div class="tileGrid">
+<button class="tile" data-t="clifford">Clifford</button><button class="tile" data-t="dejong">De Jong</button><button class="tile" data-t="omef">OMEF Hybrid</button><button class="tile active" data-t="omefa">OMEF-A Experimental</button>
+</div><div class="row"><label>Type:</label><select id="type"><option value="clifford">Clifford</option><option value="dejong">De Jong</option><option value="omef">OMEF Hybrid</option><option value="omefa" selected>OMEF-A Experimental</option></select><span></span></div></section>
+<section><h2>Parameters</h2><div id="sliders">
+<div class="row"><label>a:</label><input id="a" type="range" min="-3" max="3" step="0.01" value="1.15"><div id="av" class="value">1.15</div></div>
+<div class="row"><label>b:</label><input id="b" type="range" min="-3" max="3" step="0.01" value="1.45"><div id="bv" class="value">1.45</div></div>
+<div class="row"><label>c:</label><input id="c" type="range" min="-3" max="3" step="0.01" value="0.72"><div id="cvv" class="value">0.72</div></div>
+<div class="row"><label>d:</label><input id="d" type="range" min="-3" max="3" step="0.01" value="1.10"><div id="dv" class="value">1.10</div></div>
+<div class="row"><label>e:</label><input id="e" type="range" min="-3" max="3" step="0.01" value="1.20"><div id="ev" class="value">1.20</div></div>
+<div class="row"><label>f:</label><input id="f" type="range" min="-3" max="3" step="0.01" value="0.85"><div id="fv" class="value">0.85</div></div>
+<div class="row"><label>g:</label><input id="g" type="range" min="-3" max="3" step="0.01" value="1.10"><div id="gv" class="value">1.10</div></div>
+<div class="row"><label>h:</label><input id="h" type="range" min="-3" max="3" step="0.01" value="0.65"><div id="hv" class="value">0.65</div></div>
+<div class="row"><label>i:</label><input id="i" type="range" min="-3" max="3" step="0.01" value="0.35"><div id="iv" class="value">0.35</div></div>
+</div><div class="grid2"><button id="random">Random visible</button><button id="mutate">Mutate slightly</button><button id="preset" class="secondary">Reset preset</button><button id="render" class="secondary">Render again</button></div><p class="small">OMEF-A mapping: a pair coupling · b triad coupling · c market memory · d shadow feedback · e regime fluidity · f golden cycles · g Fibonacci memory · h spectral edge · i projection mix.</p></section>
+<section><h2>Rendering</h2><div class="row"><label>Points:</label><input id="points" type="range" min="25000" max="500000" step="25000" value="250000"><div id="pointsv" class="value">250K</div></div><div class="row"><label>Ink:</label><input id="ink" type="range" min="1" max="100" value="42"><div id="inkv" class="value">42</div></div><div class="row"><label>Size:</label><input id="size" type="range" min="1" max="8" value="2"><div id="sizev" class="value">2</div></div><div class="row"><label>Formula:</label><input id="showFormula" type="checkbox"><span></span></div><div id="formula" class="formula"></div></section>
+<section><h2>Composition</h2><div class="grid3 theme"><button data-theme="dark" class="active">Dark</button><button data-theme="light">Light</button><button data-theme="color">Color</button></div><div class="grid2"><button id="download">Save PNG</button><button id="stop" class="danger">Stop</button></div></section>
+</div></div>
+<script>
+(function(){
+var cv=document.getElementById('cv'),ctx=cv.getContext('2d'),count=document.getElementById('count'),status=document.getElementById('status'),type=document.getElementById('type'),current='omefa',token=0,stopped=false,timer=null;
+var presets={clifford:{a:2.07,b:2.33,c:-.09,d:1.46,e:.2,f:.1,g:.4,h:.2,i:.1},dejong:{a:1.4,b:-2.3,c:2.4,d:-2.1,e:.1,f:.2,g:.2,h:.1,i:.1},omef:{a:1.1,b:.8,c:.6,d:.4,e:.2,f:.7,g:.5,h:.9,i:.3},omefa:{a:1.15,b:1.45,c:.72,d:1.10,e:1.20,f:.85,g:1.10,h:.65,i:.35}};
+var formulas={clifford:"x′ = sin(a·y) + c·cos(a·x)\ny′ = sin(b·x) + d·cos(b·y)",dejong:"x′ = sin(a·y) − cos(b·x)\ny′ = sin(c·x) − cos(d·y)",omef:"Historical OMEF Hybrid recurrence",omefa:"OMEF-A autonomous recurrence\n10 organs U + 4 regime weights α + 8 Fibonacci delays + golden phases\nPair + triad + market-memory + shadow + regimes + golden cycles + Fibonacci delay + spectral edge\nRendered by the historical Classic point renderer."};
+function $(id){return document.getElementById(id)}function setStatus(s){status.textContent=s}function rand(a,b){return a+Math.random()*(b-a)}function clamp(v,a,b){return Math.max(a,Math.min(b,v))}function fmt(n){return n>=1000?Math.round(n/1000)+'K':''+n}
+function p(){return{a:+$('a').value,b:+$('b').value,c:+$('c').value,d:+$('d').value,e:+$('e').value,f:+$('f').value,g:+$('g').value,h:+$('h').value,i:+$('i').value}}
+function setP(o){['a','b','c','d','e','f','g','h','i'].forEach(function(k){$(k).value=o[k];$(k==='c'?'cvv':k+'v').textContent=(+o[k]).toFixed(2)})}
+function updateVals(){var o=p();['a','b','d','e','f','g','h','i'].forEach(function(k){$(k+'v').textContent=o[k].toFixed(2)});$('cvv').textContent=o.c.toFixed(2);$('pointsv').textContent=fmt(+$('points').value);$('inkv').textContent=$('ink').value;$('sizev').textContent=$('size').value}
+function clear(){ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--canvas');ctx.fillRect(0,0,cv.width,cv.height)}function ink(){return getComputedStyle(document.body).getPropertyValue('--ink')}
+function omefaStepper(pp){
+ var U=new Float64Array([.11,-.07,.19,-.13,.08,.04,.15,-.09,.12,.03]),prev=new Float64Array(U),hist=Array.from({length:34},function(){return new Float64Array(U)}),head=0,alpha=new Float64Array([.36,.24,.21,.19]),phase1=.2,phase2=1.1,phi=(1+Math.sqrt(5))/2,t=0;
+ var pair=0.22+0.18*Math.tanh(pp.a),tri=0.09+0.12*Math.tanh(pp.b),market=.04+.11*Math.tanh(pp.c),shadow=.03+.10*Math.tanh(pp.d),reg=.018+.06*(Math.tanh(pp.e)+1)/2,gold=.035+.095*(Math.tanh(pp.f)+1)/2,fib=.025+.10*(Math.tanh(pp.g)+1)/2,edge=.78+.16*(Math.tanh(pp.h)+1)/2,proj=(Math.tanh(pp.i)+1)/2;
+ function H(lag,i){return hist[(head-lag+34)%34][i]}
+ return function(){
+  prev.set(U);phase1+=.029*(1+.18*Math.sin(U[0]));phase2+=.029/phi*(1+.16*Math.sin(U[6]));
+  var s0=1.15*U[8]-.52*U[6],s1=.92*U[6]+.28*U[4]*U[4],s2=-.88*U[2]+.58*U[7],s3=-.95*U[8]-.42*U[0],m=Math.max(s0,s1,s2,s3),v=[Math.exp(s0-m),Math.exp(s1-m),Math.exp(s2-m),Math.exp(s3-m)],sum=v[0]+v[1]+v[2]+v[3];
+  for(var r=0;r<4;r++)alpha[r]=(1-reg)*alpha[r]+reg*v[r]/sum;
+  var N=new Float64Array(10);for(var i=0;i<10;i++){
+   var j=(i+3)%10,k=(i+7)%10,l=(i+5)%10;
+   var pairTerm=Math.sin(U[j]*1.7+i*.37)-.72*Math.cos(U[k]*1.31-i*.23);
+   var triTerm=U[j]*U[k]-U[l]*U[(i+1)%10];
+   var marketTerm=(H(13,j)-H(21,k))+.55*(H(8,i)-H(34%34,l));
+   var shadowTerm=(U[i]-H(13,i))-.65*(H(21,j)-H(34%34,k));
+   var regimeTerm=(alpha[0]-alpha[3])*Math.sin(.7+i*.43)+(alpha[1]-alpha[2])*Math.cos(.3+i*.29);
+   var goldenTerm=Math.sin(phase1+i*.61)+.72*Math.cos(phase2+i*.41);
+   var fibTerm=.43*H(1,i)+.27*H(3,j)+.18*H(8,k)+.12*H(13,l)-U[i];
+   var raw=edge*U[i]+pair*pairTerm+tri*triTerm+market*marketTerm+shadow*shadowTerm+.17*regimeTerm+gold*goldenTerm+fib*fibTerm;
+   N[i]=Math.tanh(raw);
+  }
+  hist[head].set(N);head=(head+1)%34;U.set(N);t++;
+  var xA=1.25*(U[0]-U[3])+.85*(U[7]-U[2])+.35*(H(8,9)-H(21,4));
+  var yA=1.18*(U[6]-U[8])+.78*(U[5]+U[1])+.32*(H(13,0)-H(3,7));
+  var xB=2.05*(alpha[0]-alpha[3])+.88*(U[2]*U[7]-U[1]*U[8])+.55*Math.sin(phase1);
+  var yB=2.05*(alpha[1]-alpha[2])+.88*(U[0]*U[6]-U[3]*U[5])+.55*Math.sin(phase2);
+  return [xA*(1-proj)+xB*proj,yA*(1-proj)+yB*proj];
+ }
+}
+function stepper(name,pp){var x=.111,y=.071;if(name==='omefa')return omefaStepper(pp);return function(){var nx,ny;if(name==='clifford'){nx=Math.sin(pp.a*y)+pp.c*Math.cos(pp.a*x)+.07*pp.e*Math.sin(pp.g*x*y);ny=Math.sin(pp.b*x)+pp.d*Math.cos(pp.b*y)-.07*pp.h*Math.cos(pp.i*x)}else if(name==='dejong'){nx=Math.sin(pp.a*y)-Math.cos(pp.b*x)+.04*pp.e*Math.sin(x*y);ny=Math.sin(pp.c*x)-Math.cos(pp.d*y)+.04*pp.f*Math.cos(x-y)}else{nx=Math.sin(pp.a*y)+pp.c*Math.cos(pp.b*x)+pp.e*Math.sin(pp.g*x*y)-pp.h*Math.cos(pp.i*y);ny=Math.sin(pp.d*x)+pp.f*Math.cos(pp.c*y)+pp.g*Math.sin(pp.a*x-pp.b*y)-pp.i*Math.cos(pp.h*x)}x=nx;y=ny;return[x,y]}}
+function bounds(name,pp,n){var st=stepper(name,pp),minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,valid=0,q,x,y;for(var i=0;i<n;i++){q=st();if(i<100)continue;x=q[0];y=q[1];if(isFinite(x)&&isFinite(y)&&Math.abs(x)<1e5&&Math.abs(y)<1e5){minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);valid++}}if(valid<800||maxX-minX<.01||maxY-minY<.01)return null;return{minX,maxX,minY,maxY,w:maxX-minX,h:maxY-minY}}
+function render(){token++;var my=token;stopped=false;updateVals();clear();count.textContent='Total drawn points: 0';setStatus('testing');var pp=p(),name=current,total=+$('points').value,alpha=clamp(.015+(+$('ink').value)/650,.015,.17),dot=(+$('size').value)/2;setTimeout(function(){if(my!==token)return;var b=bounds(name,pp,7000);if(!b){setStatus('collapsed; try Random visible');return}var pad=55,scale=Math.min((cv.width-pad*2)/b.w,(cv.height-pad*2)/b.h),ox=cv.width/2-scale*(b.minX+b.maxX)/2,oy=cv.height/2+scale*(b.minY+b.maxY)/2,st=stepper(name,pp),drawn=0,rgb=ink();ctx.fillStyle='rgba('+rgb+','+alpha+')';setStatus('rendering');function batch(){if(my!==token||stopped){setStatus('stopped');return}var start=performance.now();ctx.beginPath();while(drawn<total&&performance.now()-start<7){var q=st(),px=ox+q[0]*scale,py=oy-q[1]*scale;if(isFinite(px)&&isFinite(py)&&px>=0&&px<cv.width&&py>=0&&py<cv.height)ctx.rect(px,py,dot,dot);drawn++}ctx.fill();count.textContent='Total drawn points: '+drawn.toLocaleString();if(drawn<total)setTimeout(batch,0);else setStatus('done')}batch()},25)}
+function schedule(){clearTimeout(timer);timer=setTimeout(render,220)}function select(name,reset){current=name;type.value=name;$('formula').textContent=formulas[name]||'';document.querySelectorAll('.tile').forEach(function(b){b.classList.toggle('active',b.dataset.t===name)});if(reset)setP(presets[name]);render()}
+function randomParams(name){if(name!=='omefa')return{a:rand(-3,3),b:rand(-3,3),c:rand(-3,3),d:rand(-3,3),e:rand(-3,3),f:rand(-3,3),g:rand(-3,3),h:rand(-3,3),i:rand(-3,3)};return{a:rand(-2.5,2.5),b:rand(-2.5,2.5),c:rand(-2.2,2.2),d:rand(-2.2,2.2),e:rand(-2.5,2.5),f:rand(-2.5,2.5),g:rand(-2.5,2.5),h:rand(-2.5,2.5),i:rand(-3,3)}}
+function shapeScore(b){var ar=Math.max(b.w,b.h)/Math.max(.001,Math.min(b.w,b.h));return b.w*b.h/(1+.22*Math.max(0,ar-7))}
+function randomVisible(){setStatus('hunting');var best=null,bestS=-1;for(var i=0;i<90;i++){var o=randomParams(current),b=bounds(current,o,current==='omefa'?5000:3000);if(b&&b.w>.08&&b.h>.08){var s=shapeScore(b);if(s>bestS){best={o:o,b:b};bestS=s}if(s>.18&&Math.max(b.w,b.h)/Math.min(b.w,b.h)<8){setP(o);render();return}}}if(best){setP(best.o);render()}else{setP(randomParams(current));render()}}
+function mutate(){var o=p();['a','b','c','d','e','f','g','h','i'].forEach(function(k){o[k]=clamp(o[k]+rand(-.16,.16),-3,3)});setP(o);render()}
+function wire(){['a','b','c','d','e','f','g','h','i'].forEach(function(k){$(k).oninput=function(){updateVals();schedule()}});['points','ink','size'].forEach(function(k){$(k).oninput=function(){updateVals();schedule()}});$('random').onclick=randomVisible;$('mutate').onclick=mutate;$('preset').onclick=function(){setP(presets[current]);render()};$('render').onclick=render;$('stop').onclick=function(){stopped=true;token++};$('download').onclick=function(){var a=document.createElement('a');a.download='omef-a-classic.png';a.href=cv.toDataURL('image/png');a.click()};type.onchange=function(){select(type.value,true)};$('showFormula').onchange=function(){$('formula').style.display=this.checked?'block':'none'};document.querySelectorAll('.tile').forEach(function(b){b.onclick=function(){select(this.dataset.t,true)}});document.querySelectorAll('[data-theme]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-theme]').forEach(function(x){x.classList.remove('active')});b.classList.add('active');document.body.className=b.dataset.theme==='light'?'':b.dataset.theme;render()}})}
+try{wire();updateVals();$('formula').textContent=formulas[current];setStatus('ready');render()}catch(e){setStatus('error: '+e.message)}
+})();
+</script></body></html>
