@@ -19,9 +19,13 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          p=Path('apps/genome-flower/photo-studio.html').read_text()
-          for needle in ['https://js.puter.com/v2/','gpt-image-2','GENERATE PHOTOGRAPH','FLORAL ARCHITECTURE','PIGMENT BIOLOGY','REPRODUCTIVE ORGANS','studio-v2.html']:
-              assert needle in p, f'Missing photo layer feature: {needle}'
+          p=Path('apps/genome-flower/photo-studio-v2.html').read_text()
+          j=Path('apps/genome-flower/photo-layer.js').read_text()
+          for needle in ['GENERATE PHOTOGRAPH','studio-v2.html','photo-layer.js']:
+              assert needle in p, f'Missing photo studio feature: {needle}'
+          for needle in ['https://js.puter.com/v2/','gpt-image-2','FLORAL ARCHITECTURE','PIGMENT BIOLOGY','REPRODUCTIVE ORGANS','FULL 72-PATHWAY GENETIC CONTROL VECTOR','loadPuter']:
+              assert needle in j, f'Missing photo layer feature: {needle}'
+          assert '<script src="https://js.puter.com/v2/"></script>' not in p, 'Photo provider must not block DNA studio startup'
           g=Path('apps/genome-flower/genetic-control-engine.js').read_text()
           assert "export const CONTROL_COUNT=CONTROL_DEFS.length" in g
           assert g.count("['") >= 72
