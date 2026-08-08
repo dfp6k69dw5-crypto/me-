@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>OMEF-A Attractor — Classic</title>
+<style>
+:root{--bg:#efefef;--panel:#e8e8e8;--text:#444;--muted:#777;--line:#c7c7c7;--accent:#109b91;--canvas:#fff;--ink:0,0,0}
+body.dark{--bg:#0d0d0d;--panel:#1c1c1c;--text:#eee;--muted:#aaa;--line:#333;--canvas:#000;--ink:255,255,255}
+body.color{--bg:#07121b;--panel:#101d2a;--text:#eaf4ff;--muted:#a8bdce;--line:#294057;--accent:#36b7ff;--canvas:#06101a;--ink:120,210,255}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}.app{max-width:980px;margin:0 auto;padding-bottom:40px}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:18px 16px}h1{margin:0;font-size:31px;letter-spacing:-.03em}.sub{font-size:14px;color:var(--muted);margin-top:5px;line-height:1.4}
+.stage{position:relative;background:var(--canvas);min-height:390px;border-bottom:1px solid var(--line);overflow:hidden}canvas{display:block;width:100%;height:auto;background:var(--canvas);touch-action:none}.badge{position:absolute;top:10px;left:10px;background:#000;color:#fff;font:15px Menlo,Consolas,monospace;padding:5px 8px}.status{position:absolute;top:46px;left:10px;background:rgba(0,0,0,.72);color:#fff;border-radius:20px;padding:7px 11px;font-size:12px}.focusToggle{position:absolute;top:10px;right:10px;z-index:4;width:auto;min-width:72px;background:rgba(0,0,0,.76);color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:8px 12px;margin:0;font-size:13px}
+.panel{margin:18px 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}section{padding:19px 16px;border-bottom:1px solid var(--line)}section:last-child{border-bottom:0}h2{margin:0 0 13px;font-size:27px}.small{color:var(--muted);font-size:13px;line-height:1.45}.row{display:grid;grid-template-columns:126px 1fr 58px;gap:9px;align-items:center;margin:10px 0;font-size:16px}.row label{color:var(--muted)}select,input[type=range],button{width:100%}input[type=range]{accent-color:var(--accent)}input[type=checkbox]{width:26px;height:26px;accent-color:var(--accent)}.value{background:#555;color:#fff;text-align:center;border-radius:8px;padding:6px 2px;font-size:12px;font-variant-numeric:tabular-nums}select,button{font:inherit;border-radius:9px;border:1px solid var(--line);padding:10px;background:var(--bg);color:var(--text)}button{background:var(--accent);color:#fff;border:0;font-weight:750;margin:4px 0}button.secondary{background:#555}.danger{background:#8c3b3b}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.theme button{background:transparent;color:var(--accent);border:1px solid var(--line);margin:0}.theme button.active{background:var(--accent);color:#fff}.presetGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.presetGrid button{background:rgba(127,127,127,.15);border:1px solid var(--line);color:var(--text);font-size:13px}.presetGrid button.active{background:var(--accent);color:#fff}.formula{display:none;margin-top:12px;background:rgba(127,127,127,.13);border:1px solid var(--line);border-radius:10px;padding:12px;font:12px/1.55 Menlo,Consolas,monospace;white-space:pre-wrap}.metrics{font:11px/1.5 Menlo,Consolas,monospace;color:var(--muted);margin-top:10px}
+body.focus{overflow:hidden}body.focus header,body.focus .panel{display:none}body.focus .stage{position:fixed;inset:0;width:100vw;height:100svh;min-height:0;z-index:999;background:var(--canvas);border:0}body.focus canvas{width:100%;height:100%;object-fit:contain}
+@media(max-width:719px){.app{padding-bottom:0}header{padding:10px 12px}h1{font-size:23px}.sub{display:none}.stage{position:sticky;top:0;z-index:30;height:48svh;min-height:320px;box-shadow:0 7px 22px rgba(0,0,0,.18)}.stage canvas{width:100%;height:100%;object-fit:contain}.badge{font-size:10px;max-width:64%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:5px 7px}.status{top:39px;font-size:10px;padding:5px 8px}.focusToggle{font-size:12px;padding:7px 10px;min-width:66px}.panel{margin:0;border-radius:0;border-left:0;border-right:0}section{padding:13px 12px}h2{font-size:20px;margin-bottom:9px}.row{grid-template-columns:92px 1fr 48px;gap:7px;margin:8px 0;font-size:13px}.value{font-size:10px;padding:5px 2px}select,button{padding:9px}.presetGrid{grid-template-columns:1fr 1fr}.small{font-size:11px}}
+</style>
+</head>
+<body class="dark">
+<div class="app">
+<header><h1>OMEF-A Attractor</h1><div class="sub">Autonomous OMEF core · ≈800-D stored state · classic point renderer · expensive OMEF diagnostics run on a sparse cadence so the picture stays fast.</div></header>
+<div class="stage"><canvas id="cv" width="1000" height="760"></canvas><div class="badge" id="count">OMEF-A · 0 points</div><div class="status" id="status">booting</div><button id="focusToggle" class="focusToggle">Focus</button></div>
+<div class="panel">
+<section><h2>OMEF-A Species</h2><div class="presetGrid" id="presets"></div><div class="grid2"><button id="random">Random visible</button><button id="mutate">Mutate slightly</button><button id="reset" class="secondary">Reset preset</button><button id="render" class="secondary">Render again</button></div></section>
+<section><h2>OMEF Elements</h2>
+<div class="row"><label>Pair coupling</label><input id="pair" type="range" min="0" max="240" value="100"><div id="pairV" class="value">1.00</div></div>
+<div class="row"><label>Triad coupling</label><input id="triad" type="range" min="0" max="300" value="100"><div id="triadV" class="value">1.00</div></div>
+<div class="row"><label>Market memory</label><input id="market" type="range" min="0" max="240" value="100"><div id="marketV" class="value">1.00</div></div>
+<div class="row"><label>Shadow feedback</label><input id="shadow" type="range" min="0" max="240" value="100"><div id="shadowV" class="value">1.00</div></div>
+<div class="row"><label>Regime fluidity</label><input id="regime" type="range" min="0" max="240" value="100"><div id="regimeV" class="value">1.00</div></div>
+<div class="row"><label>Golden cycles</label><input id="golden" type="range" min="0" max="260" value="100"><div id="goldenV" class="value">1.00</div></div>
+<div class="row"><label>Fibonacci memory</label><input id="fib" type="range" min="0" max="260" value="100"><div id="fibV" class="value">1.00</div></div>
+<div class="row"><label>Learning</label><input id="learning" type="range" min="0" max="240" value="100"><div id="learningV" class="value">1.00</div></div>
+<div class="row"><label>Stability brake</label><input id="stability" type="range" min="20" max="220" value="100"><div id="stabilityV" class="value">1.00</div></div>
+<div class="row"><label>Accounting</label><input id="accounting" type="range" min="0" max="160" value="75"><div id="accountingV" class="value">0.75</div></div>
+<div class="row"><label>Projection</label><input id="projection" type="range" min="0" max="100" value="50"><div id="projectionV" class="value">50</div></div>
+<div class="small">These controls change the recursive OMEF-A state before a point exists. The 60-step organ history, 100 adaptive interaction states, four regimes, golden oscillators, Fibonacci hidden strain, volatility, observer correction and deterministic 5,000-particle degeneracy diagnostic are all inside the orbit engine.</div>
+<div id="metrics" class="metrics"></div>
+</section>
+<section><h2>Rendering</h2><div class="row"><label>Points</label><input id="points" type="range" min="10000" max="150000" step="10000" value="40000"><div id="pointsV" class="value">40K</div></div><div class="row"><label>Ink</label><input id="ink" type="range" min="1" max="100" value="34"><div id="inkV" class="value">34</div></div><div class="row"><label>Size</label><input id="size" type="range" min="1" max="6" value="1"><div id="sizeV" class="value">1</div></div><div class="row"><label>Frame fill</label><input id="fill" type="range" min="70" max="98" value="93"><div id="fillV" class="value">93%</div></div><div class="row"><label>Formula</label><input id="showFormula" type="checkbox"><span></span></div><div id="formula" class="formula">OMEF-A autonomous map
+
+Aₙ = N(Uₙ, Θₙ, Wᴹₙ, Iₙ)
+Ûₙ₊₁ = Πᴹₙ DΘₙ Aₙ / (1 + cₙ ||Uₙ||²)
+Yᴬₙ₊₁ = H̄ₙ(Ûₙ₊₁ + εᴬ Ωshadowₙ)
+Lₙ₊₁ = ρₙLₙ + Kₙ(Yᴬₙ₊₁ − H̄ₙÛₙ₊₁)
+Cₙ₊₁ = AccountingProject(Ûₙ₊₁ + ρₙLₙ₊₁ + Gₙ)
+Zφₙ₊₁ = Rφ(Zφₙ) + deterministic OMEF-state forcing
+hₙ₊₁ = 0.85·FibonacciMemory(h) + 0.15·strainBasket(U,I)
+αₙ₊₁ = deterministic four-regime transition
+Uₙ₊₁ = R̄α(Cₙ₊₁,Mₙ₊₁,Fₙ₊₁) + Cφₙ₊₁ + hₙ₊₁eₕ
+Hᴜₙ₊₁ = shift(Hᴜₙ,Uₙ₊₁)
+
+Fast implementation note:
+• the nonlinear OMEF core updates every orbit step
+• 60-step Wᴹ correlations update every 128 steps
+• Jacobian/spectral stability updates every 256 steps
+• deterministic 5,000-particle degeneracy updates every 1,024 steps
+• the renderer only receives the final 2-D projection</div></section>
+<section><h2>Composition</h2><div class="grid3 theme"><button data-theme="dark" class="active">Dark</button><button data-theme="light">Light</button><button data-theme="color">Color</button></div><div class="grid2" style="margin-top:8px"><button id="save">Save PNG</button><button id="stop" class="danger">Stop</button></div></section>
+</div></div>
+<script src="./omef-a-core.js?v=20260808-omefa1"></script>
+</body>
+</html>
