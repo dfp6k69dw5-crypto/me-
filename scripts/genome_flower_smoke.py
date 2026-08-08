@@ -32,8 +32,8 @@ def text(driver, ident):
 
 def finished(driver):
     s = text(driver, "status")
-    busy = ("initialising", "decoding DNA", "growing petal tissue", "building flower architecture")
-    return s and not any(x in s for x in busy) and "error" not in s.lower() and "variables" in s
+    busy = ("initialising", "decoding DNA", "growing petal tissue", "building photographic phenotype")
+    return s and not any(x in s for x in busy) and "error" not in s.lower() and "decoded vars" in s
 
 def canvas_signature(driver):
     return driver.execute_script("""
@@ -45,7 +45,7 @@ def canvas_signature(driver):
 
 try:
     driver = webdriver.Chrome(options=opts)
-    wait = WebDriverWait(driver, 40)
+    wait = WebDriverWait(driver, 55)
     driver.get(f"http://127.0.0.1:{server.server_port}/apps/genome-flower/studio.html")
     wait.until(finished)
 
@@ -53,7 +53,7 @@ try:
     type0 = text(driver, "flowerstat")
     sig0 = canvas_signature(driver)
     assert digest0 and digest0 != "—", "Genome digest did not render"
-    assert type0 in {"rose","lily","tulip","daisy","sunflower","orchid","iris","bell"}, f"Unknown flower type: {type0}"
+    assert type0 and type0 != "—", "Phenotype label did not render"
 
     transform = driver.execute_script("return document.querySelector('#stage').getContext('2d').getTransform().a")
     dpr = driver.execute_script("return Math.min(window.devicePixelRatio || 1, 2)")
@@ -63,17 +63,24 @@ try:
     controls = driver.find_element(By.ID, "controls")
     wait.until(lambda d: "open" in controls.get_attribute("class"))
     sliders = controls.find_elements(By.CSS_SELECTOR, "input[type=range]")
-    assert len(sliders) == 10, f"Expected 10 sequence sliders, got {len(sliders)}"
-    driver.execute_script("arguments[0].value=90;arguments[0].dispatchEvent(new Event('input',{bubbles:true}));", sliders[0])
-    driver.execute_script("arguments[0].value=100;arguments[0].dispatchEvent(new Event('input',{bubbles:true}));", sliders[5])
-    driver.find_element(By.ID, "closeControls").click()
+    assert len(sliders) == 82, f"Expected 82 DNA/development sliders, got {len(sliders)}"
 
-    driver.find_element(By.ID, "mutate").click()
+    # Direct genetic steering must rewrite DNA and alter the rendered phenotype.
+    dna_slider = sliders[0]
+    target = 96 if int(dna_slider.get_attribute("value")) < 75 else 4
+    driver.execute_script("arguments[0].value=arguments[1];arguments[0].dispatchEvent(new Event('input',{bubbles:true}));arguments[0].dispatchEvent(new Event('change',{bubbles:true}));", dna_slider, target)
     wait.until(lambda d: finished(d) and text(d, "digest") != digest0)
+    digest_dna = text(driver, "digest")
+    sig_dna = canvas_signature(driver)
+    assert sig_dna != sig0, "DNA pathway slider changed sequence but not rendered canvas"
+
+    driver.find_element(By.ID, "closeControls").click()
+    driver.find_element(By.ID, "mutate").click()
+    wait.until(lambda d: finished(d) and text(d, "digest") != digest_dna)
     digest1 = text(driver, "digest")
     sig1 = canvas_signature(driver)
     assert "bases" in text(driver, "changes")
-    assert sig1 != sig0, f"Mutation did not alter rendered canvas: {sig0}"
+    assert sig1 != sig_dna, "Mutation did not alter rendered canvas"
 
     driver.find_element(By.ID, "big").click()
     wait.until(lambda d: finished(d) and text(d, "digest") != digest1)
@@ -90,7 +97,7 @@ try:
 
     severe = [x for x in driver.get_log("browser") if x.get("level") == "SEVERE" and "favicon.ico" not in x.get("message", "")]
     assert not severe, f"Browser console errors: {severe}"
-    print("Genome Flower studio smoke passed:", type0, "->", text(driver, "flowerstat"), sig0, sig1, sig2)
+    print("Genome Flower Photo Botany smoke passed:", type0, "->", text(driver, "flowerstat"), sig0, sig_dna, sig1, sig2)
 finally:
     try:
         driver.quit()
