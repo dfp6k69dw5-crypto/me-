@@ -35,7 +35,7 @@ def core_finished(driver):
 try:
     driver = webdriver.Chrome(options=opts)
     wait = WebDriverWait(driver, 45)
-    driver.get(f"http://127.0.0.1:{server.server_port}/apps/genome-flower/photo-studio.html")
+    driver.get(f"http://127.0.0.1:{server.server_port}/apps/genome-flower/photo-studio-v2.html")
     wait.until(lambda d: d.find_element(By.ID, "core"))
     frame = driver.find_element(By.ID, "core")
     driver.switch_to.frame(frame)
@@ -51,8 +51,8 @@ try:
     driver.switch_to.default_content()
     wait.until(lambda d: d.execute_script("return !!window.__GENOME_PHOTO_TEST__"))
     prompt0 = driver.execute_script("return window.__GENOME_PHOTO_TEST__.buildPrompt()")
-    assert len(prompt0) > 1200, "Photo phenotype prompt is unexpectedly short"
-    for phrase in ["FLORAL ARCHITECTURE", "PIGMENT BIOLOGY", "REPRODUCTIVE ORGANS", "photorealistic macro botanical photograph"]:
+    assert len(prompt0) > 2500, "Photo phenotype prompt is unexpectedly short"
+    for phrase in ["FLORAL ARCHITECTURE", "PIGMENT BIOLOGY", "REPRODUCTIVE ORGANS", "FULL 72-PATHWAY GENETIC CONTROL VECTOR", "photorealistic macro botanical photograph"]:
         assert phrase in prompt0, f"Missing phenotype-to-photo prompt section: {phrase}"
     assert driver.find_element(By.ID, "renderPhoto").is_displayed()
     assert "GENERATE PHOTOGRAPH" in driver.find_element(By.ID, "renderPhoto").text
@@ -70,10 +70,10 @@ try:
     driver.switch_to.default_content()
     prompt1 = driver.execute_script("return window.__GENOME_PHOTO_TEST__.buildPrompt()")
     assert prompt1 != prompt0, "Changing a DNA locus did not change the photographic phenotype prompt"
+    vector_count = prompt1.split("FULL 72-PATHWAY GENETIC CONTROL VECTOR", 1)[1].count("=")
+    assert vector_count >= 72, f"Expected all 72 genetic controls in photo prompt, found {vector_count}"
 
     severe = [x for x in driver.get_log("browser") if x.get("level") == "SEVERE" and "favicon.ico" not in x.get("message", "")]
-    # The external image provider is intentionally not invoked in CI, so no credits/auth are required.
-    severe = [x for x in severe if "js.puter.com" not in x.get("message", "")]
     assert not severe, f"Browser console errors: {severe}"
     print("Genome Flower photo shell smoke passed:", digest0, "->", digest1, "prompt chars", len(prompt0), "->", len(prompt1))
 finally:
