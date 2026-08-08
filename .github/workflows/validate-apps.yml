@@ -103,6 +103,20 @@ jobs:
           node --check /tmp/omef_full.js
           node --check /tmp/omef_full_sculpt.js
           node --check /tmp/omef_full_loader.js
+      - name: Syntax-check OMEF Total-State Attractor
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html=Path('apps/omef-attractor-classic.html').read_text()
+          for needle in ['OMEF Total-State Attractor','123-dimensional OMEF state','function stepState(s)','function project(s,W,out)','Pair coupling','Fibonacci memory']:
+              assert needle in html, f'Missing standalone OMEF attractor feature: {needle}'
+          scripts=re.findall(r'<script>(.*?)</script>',html,re.S)
+          assert len(scripts)==1, f'Expected one standalone OMEF script, got {len(scripts)}'
+          Path('/tmp/omef_attractor_classic.js').write_text(scripts[0])
+          print('Standalone OMEF attractor:',len(html),'characters; recursive 123-D controls present')
+          PY
+          node --check /tmp/omef_attractor_classic.js
       - name: Check HTML files are nonempty
         run: |
           python - <<'PY'
