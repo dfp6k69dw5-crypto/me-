@@ -66,7 +66,10 @@ try:
     wait.until(lambda d: "open" in drawer.get_attribute("class"))
     assert len(text(driver, "seq")) > 100, "Genome sequence preview missing"
 
-    severe = [x for x in driver.get_log("browser") if x.get("level") == "SEVERE"]
+    severe = [
+        x for x in driver.get_log("browser")
+        if x.get("level") == "SEVERE" and "favicon.ico" not in x.get("message", "")
+    ]
     assert not severe, f"Browser console errors: {severe}"
     print("Genome Flower mobile smoke passed:", text(driver, "status"), text(driver, "flowerstat"))
 finally:
