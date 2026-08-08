@@ -1,14 +1,11 @@
 import {FlowerGenome} from './flower-genome.js';
 
 const BASES='ACGT';
+const ARCHITECTURE_GENES=[3,11,19,27];
 const clamp=(x,a=0,b=1)=>x<a?a:x>b?b:x;
 function rng32(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 function hash(...xs){let h=2166136261;for(const x0 of xs){let x=x0>>>0;for(let k=0;k<4;k++){h^=(x>>>(k*8))&255;h=Math.imul(h,16777619)}}return(h^(h>>>16))>>>0;}
-function altBase(old,rng,transitionBias){
-  const transitions={A:'G',G:'A',C:'T',T:'C'};
-  if(rng()<transitionBias)return transitions[old];
-  let b=old;while(b===old||b===transitions[old])b=BASES[(rng()*4)|0];return b;
-}
+function altBase(old,rng,transitionBias){const transitions={A:'G',G:'A',C:'T',T:'C'};if(rng()<transitionBias)return transitions[old];let b=old;while(b===old||b===transitions[old])b=BASES[(rng()*4)|0];return b;}
 function revcomp(s){const c={A:'T',T:'A',C:'G',G:'C'};let o='';for(let i=s.length-1;i>=0;i--)o+=c[s[i]];return o;}
 
 export const DEFAULT_SEQUENCE_PROFILE=Object.freeze({
@@ -17,6 +14,7 @@ export const DEFAULT_SEQUENCE_PROFILE=Object.freeze({
   transition:.58,
   hotspot:.38,
   regulatory:.58,
+  'Flower-family loci':.20,
   microIndel:.08,
   duplication:.05,
   inversion:.04,
@@ -32,6 +30,12 @@ export function mutateSequence(parent,profile={},big=false,seed=Date.now()){
   const n=Math.max(1,Math.min(big?850:180,Math.round(baseChanges+(big?260:60)*Math.pow(p.pressure,1.6))));
   const positions=[];
   function choosePos(){
+    if(rng()<p['Flower-family loci']){
+      const g=ARCHITECTURE_GENES[(rng()*ARCHITECTURE_GENES.length)|0];
+      let local=(rng()*B)|0;
+      if(rng()<p.regulatory)local=(rng()*Math.min(160,B))|0;
+      return g*B+local;
+    }
     if(rng()<p.hotspot){
       const g=(rng()*G)|0;
       let local=(rng()*B)|0;
@@ -48,7 +52,6 @@ export function mutateSequence(parent,profile={},big=false,seed=Date.now()){
   let changed=0;
   for(const pos of positions){const old=a[pos],b=altBase(old,rng,p.transition);if(b!==old){a[pos]=b;changed++;}}
 
-  // Length-preserving micro-indels: rotate a short local window.
   const indelOps=Math.round((big?14:4)*p.microIndel);
   for(let q=0;q<indelOps;q++){const s=choosePos(),w=3+((rng()*(big?18:9))|0),tmp=[];for(let k=0;k<w;k++)tmp.push(a[(s+k)%L]);const shift=1+((rng()*Math.max(1,w-1))|0);for(let k=0;k<w;k++){const i=(s+k)%L,b=tmp[(k+shift)%w];if(a[i]!==b)changed++;a[i]=b;}}
 
