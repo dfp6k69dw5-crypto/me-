@@ -63,8 +63,9 @@ try:
     controls = driver.find_element(By.ID, "controls")
     wait.until(lambda d: "open" in controls.get_attribute("class"))
     sliders = controls.find_elements(By.CSS_SELECTOR, "input[type=range]")
-    assert len(sliders) == 9, f"Expected 9 sequence sliders, got {len(sliders)}"
+    assert len(sliders) == 10, f"Expected 10 sequence sliders, got {len(sliders)}"
     driver.execute_script("arguments[0].value=90;arguments[0].dispatchEvent(new Event('input',{bubbles:true}));", sliders[0])
+    driver.execute_script("arguments[0].value=100;arguments[0].dispatchEvent(new Event('input',{bubbles:true}));", sliders[5])
     driver.find_element(By.ID, "closeControls").click()
 
     driver.find_element(By.ID, "mutate").click()
