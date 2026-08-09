@@ -2,20 +2,137 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07090d">
-<title>Macro Focus — iPhone Camera</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Macro Focus</title>
 <style>
-:root{--bg:#07090d;--panel:#10151d;--line:#2a3442;--text:#f4f7fb;--muted:#9aa7b8;--accent:#9de7cf;--warm:#e4d09a}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(900px 650px at 50% -10%,#162335 0,transparent 62%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{width:min(760px,92vw);margin:auto;padding:28px 0 64px}.back{display:inline-block;color:var(--muted);text-decoration:none;font-size:14px;margin-bottom:36px}.eyebrow{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}h1{font-size:clamp(52px,15vw,92px);line-height:.88;letter-spacing:-.06em;margin:14px 0 20px}.lead{font-size:19px;line-height:1.5;color:#c9d2df;max-width:620px}.reticle{width:170px;height:170px;margin:44px auto;border:1px solid rgba(157,231,207,.35);border-radius:50%;position:relative;box-shadow:0 0 60px rgba(157,231,207,.08)}.reticle:before,.reticle:after{content:"";position:absolute;background:var(--accent)}.reticle:before{width:1px;height:52px;left:50%;top:59px}.reticle:after{height:1px;width:52px;top:50%;left:59px}.dot{position:absolute;width:10px;height:10px;border:2px solid var(--accent);border-radius:50%;left:79px;top:79px}.status{text-align:center;font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.15em;color:var(--accent);margin-top:-24px;margin-bottom:42px}.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border-radius:20px;padding:22px;margin:12px 0}.card h2{margin:0 0 9px;font-size:21px}.card p{margin:0;color:var(--muted);line-height:1.55}.button{display:block;text-decoration:none;text-align:center;margin-top:20px;padding:17px;border-radius:15px;background:#eef4f1;color:#07100c;font-weight:800}.note{margin-top:22px;color:#778598;font-size:13px;line-height:1.5}</style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}body{position:fixed;inset:0}.stage{position:absolute;inset:0;background:#000}.stage video{width:100%;height:100%;object-fit:cover;background:#000;transform:scale(1);transition:transform .18s ease}.stage.zoomed video{transform:scale(2)}.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.46),transparent 18%,transparent 72%,rgba(0,0,0,.62))}.top{position:absolute;z-index:5;top:0;left:0;right:0;padding:calc(12px + env(safe-area-inset-top)) 16px 8px;display:flex;align-items:center;justify-content:space-between}.title{font-size:12px;font-weight:800;letter-spacing:.18em}.status{font-size:10px;font-weight:800;letter-spacing:.12em;padding:7px 9px;border:1px solid rgba(255,255,255,.35);border-radius:99px;background:rgba(0,0,0,.34);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.reticle{position:absolute;z-index:4;left:50%;top:45%;width:132px;height:132px;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.72);border-radius:24px;box-shadow:0 0 0 1px rgba(0,0,0,.2),0 0 36px rgba(255,255,255,.08);pointer-events:none}.reticle:before,.reticle:after{content:"";position:absolute;background:#fff;opacity:.82}.reticle:before{width:1px;height:28px;left:65px;top:51px}.reticle:after{height:1px;width:28px;left:51px;top:65px}.reticle .dot{position:absolute;width:7px;height:7px;border-radius:50%;border:1px solid #fff;left:62px;top:62px}.hint{position:absolute;z-index:5;left:50%;top:calc(45% + 83px);transform:translateX(-50%);font-size:11px;white-space:nowrap;letter-spacing:.08em;text-shadow:0 1px 8px #000}.controls{position:absolute;z-index:6;left:0;right:0;bottom:0;padding:14px 18px calc(18px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 84px 1fr;align-items:center;gap:14px}.btn{height:48px;border:1px solid rgba(255,255,255,.42);border-radius:24px;background:rgba(0,0,0,.35);color:#fff;font-size:12px;font-weight:800;letter-spacing:.11em;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.shutter{width:76px;height:76px;border-radius:50%;border:4px solid #fff;background:rgba(255,255,255,.18);justify-self:center;position:relative}.shutter:after{content:"";position:absolute;inset:6px;border-radius:50%;background:#fff}.start{position:absolute;z-index:20;inset:0;display:flex;align-items:center;justify-content:center;padding:28px;background:radial-gradient(circle at 50% 35%,#19242e 0,#060708 60%,#000 100%)}.start.hidden{display:none}.panel{width:min(360px,100%);text-align:center}.mark{width:96px;height:96px;border:1px solid rgba(255,255,255,.45);border-radius:24px;margin:0 auto 26px;position:relative}.mark:before,.mark:after{content:"";position:absolute;background:#fff}.mark:before{width:1px;height:34px;left:47px;top:30px}.mark:after{height:1px;width:34px;left:30px;top:47px}.panel h1{font-size:38px;line-height:.95;letter-spacing:-.04em;margin:0 0 12px}.panel p{color:#b8c0ca;line-height:1.45;margin:0 0 24px}.open{width:100%;height:58px;border:0;border-radius:18px;background:#fff;color:#000;font-size:15px;font-weight:850;letter-spacing:.08em}.error{margin-top:14px;font-size:12px;color:#ffb6b6;line-height:1.4;min-height:18px}.preview{position:absolute;z-index:30;inset:0;background:#000;display:none;flex-direction:column}.preview.show{display:flex}.preview img{width:100%;height:calc(100% - 92px);object-fit:contain;background:#000}.previewbar{height:92px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));display:flex;gap:12px;align-items:center}.previewbar button{flex:1;height:48px;border-radius:24px;border:1px solid rgba(255,255,255,.4);background:#151515;color:#fff;font-weight:800}.previewbar .save{background:#fff;color:#000}.fallback{display:none}
+</style>
 </head>
-<body><main class="wrap">
-<a class="back" href="../">‹ Project Home</a>
-<div class="eyebrow">Native iPhone camera experiment</div>
-<h1>MACRO<br>FOCUS</h1>
-<p class="lead">One job: make very small, very close things sharp. The native build biases autofocus toward nearby subjects and gives you a dedicated HUNT control when normal autofocus gets distracted by the background.</p>
-<div class="reticle"><div class="dot"></div></div><div class="status">NEAR FOCUS · READY</div>
-<div class="card"><h2>Why this one is native</h2><p>The near-focus behavior uses direct iPhone camera controls that a normal GitHub Pages web app cannot reliably access. The source is stored here in the repo and is ready to be built as an iPhone app.</p></div>
-<div class="card"><h2>Current controls</h2><p>Near-range autofocus preference, tap-to-focus, continuous refocusing, lens-position feedback, animated focus reticle, HUNT mode, and full-resolution photo capture.</p></div>
-<a class="button" href="https://github.com/maaronfanberg-lab/me-/tree/main/apps/macro-focus-ios">VIEW APP SOURCE IN GITHUB</a>
-<p class="note">This page is the launcher entry so Macro Focus is visible with the rest of the projects. Installing the native build on an iPhone still requires signing/building the app.</p>
-</main></body></html>
+<body>
+<div class="stage" id="stage">
+  <video id="video" autoplay muted playsinline webkit-playsinline></video>
+  <div class="shade"></div>
+  <div class="top"><div class="title">MACRO FOCUS</div><div class="status" id="status">CAMERA OFF</div></div>
+  <div class="reticle"><div class="dot"></div></div>
+  <div class="hint" id="hint">PUT THE SMALL THING HERE</div>
+  <div class="controls">
+    <button class="btn" id="hunt">HUNT</button>
+    <button class="shutter" id="shutter" aria-label="Take photo"></button>
+    <button class="btn" id="zoom">2× VIEW</button>
+  </div>
+</div>
+<div class="start" id="start">
+  <div class="panel">
+    <div class="mark"></div>
+    <h1>MACRO<br>FOCUS</h1>
+    <p>Point the rear camera at something small. Keep it inside the square and move the phone slightly until it snaps sharp.</p>
+    <button class="open" id="open">OPEN CAMERA</button>
+    <div class="error" id="error"></div>
+    <input class="fallback" id="fallback" type="file" accept="image/*" capture="environment">
+  </div>
+</div>
+<div class="preview" id="preview"><img id="photo" alt="Captured photo"><div class="previewbar"><button id="retake">RETAKE</button><button class="save" id="save">SAVE / OPEN</button></div></div>
+<canvas id="canvas" style="display:none"></canvas>
+<script>
+(function(){
+  var video=document.getElementById('video');
+  var start=document.getElementById('start');
+  var open=document.getElementById('open');
+  var error=document.getElementById('error');
+  var status=document.getElementById('status');
+  var hunt=document.getElementById('hunt');
+  var shutter=document.getElementById('shutter');
+  var zoom=document.getElementById('zoom');
+  var stage=document.getElementById('stage');
+  var canvas=document.getElementById('canvas');
+  var preview=document.getElementById('preview');
+  var photo=document.getElementById('photo');
+  var retake=document.getElementById('retake');
+  var save=document.getElementById('save');
+  var fallback=document.getElementById('fallback');
+  var stream=null, zoomed=false, lastData='';
+
+  function setStatus(s){status.textContent=s;}
+  function stopCamera(){if(stream){var tracks=stream.getTracks();for(var i=0;i<tracks.length;i++)tracks[i].stop();stream=null;}}
+
+  function requestCamera(){
+    error.textContent='';
+    setStatus('OPENING…');
+    var nav=navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
+    if(nav){
+      return navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}})
+      .catch(function(){return navigator.mediaDevices.getUserMedia({audio:false,video:true});});
+    }
+    return new Promise(function(resolve,reject){
+      var legacy=navigator.getUserMedia||navigator.webkitGetUserMedia||navigator.mozGetUserMedia;
+      if(!legacy){reject(new Error('Camera access is not available in this browser.'));return;}
+      legacy.call(navigator,{audio:false,video:true},resolve,reject);
+    });
+  }
+
+  function encourageContinuousFocus(track){
+    try{
+      if(!track || !track.getCapabilities || !track.applyConstraints)return;
+      var caps=track.getCapabilities();
+      if(caps && caps.focusMode && caps.focusMode.indexOf('continuous')!==-1){
+        track.applyConstraints({advanced:[{focusMode:'continuous'}]}).catch(function(){});
+      }
+    }catch(e){}
+  }
+
+  function startCamera(){
+    stopCamera();
+    requestCamera().then(function(s){
+      stream=s;
+      video.srcObject=s;
+      encourageContinuousFocus(s.getVideoTracks()[0]);
+      var p=video.play();
+      if(p&&p.catch)p.catch(function(){});
+      start.classList.add('hidden');
+      setStatus('AUTOFOCUS ON');
+      setTimeout(function(){setStatus('READY');},900);
+    }).catch(function(err){
+      setStatus('CAMERA OFF');
+      error.textContent='Tap Allow for camera access. If this browser blocks live camera, use Safari.';
+      fallback.style.display='block';
+      console.log(err);
+    });
+  }
+
+  open.addEventListener('click',startCamera);
+  hunt.addEventListener('click',function(){
+    setStatus('HUNTING…');
+    stopCamera();
+    setTimeout(function(){startCamera();},160);
+  });
+  zoom.addEventListener('click',function(){
+    zoomed=!zoomed;stage.classList.toggle('zoomed',zoomed);zoom.textContent=zoomed?'1× VIEW':'2× VIEW';
+  });
+  shutter.addEventListener('click',function(){
+    if(!video.videoWidth){setStatus('NOT READY');return;}
+    canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+    var ctx=canvas.getContext('2d');
+    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    lastData=canvas.toDataURL('image/jpeg',0.96);
+    photo.src=lastData;preview.classList.add('show');setStatus('CAPTURED');
+  });
+  retake.addEventListener('click',function(){preview.classList.remove('show');setStatus('READY');});
+  save.addEventListener('click',function(){
+    if(!lastData)return;
+    var w=window.open();
+    if(w){w.document.write('<meta name="viewport" content="width=device-width,initial-scale=1"><body style="margin:0;background:#000"><img src="'+lastData+'" style="width:100%;height:auto"><p style="color:white;font-family:-apple-system;padding:16px">Press and hold the photo, then choose Save Image.</p></body>');w.document.close();}
+  });
+  fallback.addEventListener('change',function(){
+    if(fallback.files&&fallback.files[0]){photo.src=URL.createObjectURL(fallback.files[0]);preview.classList.add('show');}
+  });
+
+  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+    setTimeout(function(){startCamera();},250);
+  }
+})();
+</script>
+</body>
+</html>
