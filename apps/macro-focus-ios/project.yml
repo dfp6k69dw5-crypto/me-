@@ -1,0 +1,24 @@
+name: MacroFocus
+options:
+  minimumXcodeGenVersion: 2.38.0
+settings:
+  base:
+    IPHONEOS_DEPLOYMENT_TARGET: 12.0
+    SWIFT_VERSION: 5.0
+    TARGETED_DEVICE_FAMILY: "1"
+targets:
+  MacroFocus:
+    type: application
+    platform: iOS
+    deploymentTarget: "12.0"
+    sources:
+      - path: MacroFocus
+        excludes:
+          - Info.plist
+    info:
+      path: MacroFocus/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.alexsarah.macrofocus
+        PRODUCT_NAME: MacroFocus
+        CODE_SIGN_STYLE: Automatic
