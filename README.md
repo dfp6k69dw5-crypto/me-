@@ -1,27 +1,19 @@
 # Alex + Sarah Projects
 
-This repository is the home base for our runnable experiments.
+## OPEN THE PROJECT HOME
 
-## Easiest way to use them
+https://maaronfanberg-lab.github.io/me-/
 
-Once GitHub Pages is enabled, open the project-home website and bookmark it. The home page has a button for each runnable project, so you do not need to browse GitHub code.
+Tap that link to open the launcher with Resonator and the other current projects.
 
-## Backup way without ChatGPT
-
-1. Open this repository in GitHub.
-2. Open the `apps` folder.
-3. Choose the `.html` file for the project you want.
-4. If Pages is enabled, use the project-home site instead; GitHub's normal file view displays source code rather than running the app.
-
-## Current apps
+## Current launcher
 
 - Resonator
 - Harmonograph
-- Botanical Harmonograph
 - Attractor Lab
-- OMEF experiments
+- OMEF-A Attractor
+- OMEF Total-State Prototype
+- OMEF FULL
 - Geo Pulse
-- Why Time Feels Weird
 
-The original live Resonator is also available at:
-https://dfp6k69dw5-crypto.github.io/resonator-sarah/
+This repository is the permanent home base for our runnable experiments. GitHub Pages is already enabled, so you should not need to browse the code to use the projects.
