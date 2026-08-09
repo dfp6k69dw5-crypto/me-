@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR · OMEF spatial field…</div><script>
 (async()=>{try{
  if(!('DecompressionStream' in window)) throw new Error('This browser is too old for the compressed app loader.');
- const parts=['01','02','03','04a','04b','04c','04d','04e','04f','04g','05','06','07','08','09'];
+ const parts=['01','02','03','04','05','06','07','08','09'];
  let b='';
  for(const n of parts){
    const r=await fetch('resonator-parts/'+n+'.txt',{cache:'no-store'});
@@ -11,6 +11,7 @@
  const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
  const ds=new DecompressionStream('gzip');
  const text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
+ if(!text.includes('<title>RESONATOR</title>')||!text.includes('Spatial field')) throw new Error('RESONATOR payload failed integrity check.');
  document.open();document.write(text);document.close();
 }catch(e){
  document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';
