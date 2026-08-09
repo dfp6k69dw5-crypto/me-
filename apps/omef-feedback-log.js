@@ -1,7 +1,7 @@
 (function(){'use strict';
 const $=id=>document.getElementById(id),cv=$('cv'),ctx=cv.getContext('2d'),count=$('count'),status=$('status');
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),rand=(a,b)=>a+Math.random()*(b-a),fmt=n=>n>=1000?Math.round(n/1000)+'K':''+n;
-let token=0,stopped=false,previewPending=false,currentWild='Clifford';
+let token=0,stopped=false,previewPending=false,previewTimer=null,currentWild='Clifford';
 
 const macros=[
  ['a','Pair coupling',-3,3,.01,1.15],['b','Triad coupling',-3,3,.01,1.45],['c','Market memory',-3,3,.01,.72],
@@ -183,7 +183,8 @@ function render(preview=false){
   batch();
  },preview?5:20);
 }
-function requestPreview(){if(!$('livePreview').checked||previewPending)return;previewPending=true;setTimeout(()=>{previewPending=false;render(true)},120)}
+function requestPreview(){if(!$('livePreview').checked||previewPending)return;previewPending=true;previewTimer=setTimeout(()=>{previewPending=false;previewTimer=null;render(true)},120)}
+function cancelPreview(){if(previewTimer){clearTimeout(previewTimer);previewTimer=null}previewPending=false}
 function apply(o){allDefs.forEach(d=>{if(o[d[0]]!==undefined)$(d[0]).value=o[d[0]]});updateValues()}
 function reset(){allDefs.forEach(d=>$(d[0]).value=d[5]);updateValues();render(false)}
 function mutate(){
@@ -202,8 +203,8 @@ function randomVisible(){
  if(best){apply(best.o);render(false)}else render(false);
 }
 function wire(){
- allDefs.forEach(d=>{const e=$(d[0]);e.addEventListener('input',()=>{updateValues();requestPreview()});e.addEventListener('change',()=>render(false))});
- ['points','ink','size'].forEach(k=>{$(k).addEventListener('input',()=>{updateValues();requestPreview()});$(k).addEventListener('change',()=>render(false))});
+ allDefs.forEach(d=>{const e=$(d[0]);e.addEventListener('input',()=>{updateValues();requestPreview()});e.addEventListener('change',()=>{cancelPreview();render(false)})});
+ ['points','ink','size'].forEach(k=>{$(k).addEventListener('input',()=>{updateValues();requestPreview()});$(k).addEventListener('change',()=>{cancelPreview();render(false)})});
  $('random').onclick=randomVisible;$('mutate').onclick=mutate;$('preset').onclick=reset;$('render').onclick=()=>render(false);$('reroll').onclick=()=>{pickWild();render(false)};
  $('stop').onclick=()=>{stopped=true;token++;status.textContent='stopped'};
  $('download').onclick=()=>{const a=document.createElement('a');a.download='omef-a-feedback-log.png';a.href=cv.toDataURL('image/png');a.click()};
