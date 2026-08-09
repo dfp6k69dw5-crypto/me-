@@ -16,4 +16,8 @@ Tap that link to open the launcher with Resonator and the other current projects
 - OMEF FULL
 - Geo Pulse
 
-This repository is the permanent home base for our runnable experiments. GitHub Pages is already enabled, so you should not need to browse the code to use the projects.
+## Native iPhone projects
+
+- Macro Focus — near-biased autofocus camera for tiny subjects, targeting iPhone 6 / iOS 12+. Source: `apps/macro-focus-ios/`
+
+This repository is the permanent home base for our runnable experiments. GitHub Pages is already enabled for the web projects. Native iPhone projects live here as source code and must be built/signed as iOS apps rather than opened directly in GitHub Pages.
