@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07090d">
+<title>Macro Focus — iPhone Camera</title>
+<style>
+:root{--bg:#07090d;--panel:#10151d;--line:#2a3442;--text:#f4f7fb;--muted:#9aa7b8;--accent:#9de7cf;--warm:#e4d09a}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(900px 650px at 50% -10%,#162335 0,transparent 62%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{width:min(760px,92vw);margin:auto;padding:28px 0 64px}.back{display:inline-block;color:var(--muted);text-decoration:none;font-size:14px;margin-bottom:36px}.eyebrow{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}h1{font-size:clamp(52px,15vw,92px);line-height:.88;letter-spacing:-.06em;margin:14px 0 20px}.lead{font-size:19px;line-height:1.5;color:#c9d2df;max-width:620px}.reticle{width:170px;height:170px;margin:44px auto;border:1px solid rgba(157,231,207,.35);border-radius:50%;position:relative;box-shadow:0 0 60px rgba(157,231,207,.08)}.reticle:before,.reticle:after{content:"";position:absolute;background:var(--accent)}.reticle:before{width:1px;height:52px;left:50%;top:59px}.reticle:after{height:1px;width:52px;top:50%;left:59px}.dot{position:absolute;width:10px;height:10px;border:2px solid var(--accent);border-radius:50%;left:79px;top:79px}.status{text-align:center;font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.15em;color:var(--accent);margin-top:-24px;margin-bottom:42px}.card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border-radius:20px;padding:22px;margin:12px 0}.card h2{margin:0 0 9px;font-size:21px}.card p{margin:0;color:var(--muted);line-height:1.55}.button{display:block;text-decoration:none;text-align:center;margin-top:20px;padding:17px;border-radius:15px;background:#eef4f1;color:#07100c;font-weight:800}.note{margin-top:22px;color:#778598;font-size:13px;line-height:1.5}</style>
+</head>
+<body><main class="wrap">
+<a class="back" href="../">‹ Project Home</a>
+<div class="eyebrow">Native iPhone camera experiment</div>
+<h1>MACRO<br>FOCUS</h1>
+<p class="lead">One job: make very small, very close things sharp. The native build biases autofocus toward nearby subjects and gives you a dedicated HUNT control when normal autofocus gets distracted by the background.</p>
+<div class="reticle"><div class="dot"></div></div><div class="status">NEAR FOCUS · READY</div>
+<div class="card"><h2>Why this one is native</h2><p>The near-focus behavior uses direct iPhone camera controls that a normal GitHub Pages web app cannot reliably access. The source is stored here in the repo and is ready to be built as an iPhone app.</p></div>
+<div class="card"><h2>Current controls</h2><p>Near-range autofocus preference, tap-to-focus, continuous refocusing, lens-position feedback, animated focus reticle, HUNT mode, and full-resolution photo capture.</p></div>
+<a class="button" href="https://github.com/maaronfanberg-lab/me-/tree/main/apps/macro-focus-ios">VIEW APP SOURCE IN GITHUB</a>
+<p class="note">This page is the launcher entry so Macro Focus is visible with the rest of the projects. Installing the native build on an iPhone still requires signing/building the app.</p>
+</main></body></html>
