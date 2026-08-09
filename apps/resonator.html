@@ -10,8 +10,17 @@
  }
  const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
  const ds=new DecompressionStream('gzip');
- const text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
+ let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
  if(!text.includes('<title>RESONATOR</title>')||!text.includes('Spatial field')) throw new Error('RESONATOR payload failed integrity check.');
+ // iPhone safe mode: favor uninterrupted audio over maximum visual/oversampling load.
+ // The physical model is unchanged; only the requested engine rate, oversampling ceiling,
+ // renderer cost and buffered-fallback safety margin are reduced.
+ text=text.replace("state.rate=+(function(){try{return localStorage.getItem('resonator.rate');}catch(e){return null;}}()||32000);","state.rate=22050;");
+ text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
+ text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
+ text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
+ text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
+ text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
  document.open();document.write(text);document.close();
 }catch(e){
  document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';
