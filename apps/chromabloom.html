@@ -2,16 +2,31 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080814">
 <title>Chromabloom — Invent a Color</title>
 
 <style>
   * { box-sizing: border-box; }
 
+  :root {
+    /* Safe defaults so the bloom is visible before JavaScript runs. */
+    --a: #7c4dff;
+    --b: #00c8ff;
+    --core: #fff2b8;
+    --sat: 1.7;
+    --contrast: 1.25;
+    --blur: 4px;
+    --speed: 14s;
+  }
+
+  html, body { min-height: 100%; }
+
   body {
     margin: 0;
     min-height: 100vh;
-    font-family: system-ui, sans-serif;
+    min-height: 100dvh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: white;
     background: #05050a;
     overflow-x: hidden;
@@ -20,7 +35,11 @@
   #field {
     position: fixed;
     inset: 0;
-    transition: background 1.4s ease;
+    z-index: 0;
+    background-color: #080814;
+    background-image: radial-gradient(circle at 50% 42%, var(--b) 0%, #080814 48%, #030309 82%);
+    transition: background 1s ease;
+    overflow: hidden;
   }
 
   #field::before,
@@ -32,53 +51,63 @@
     border-radius: 50%;
     filter: blur(70px);
     mix-blend-mode: screen;
-    opacity: .65;
+    opacity: .62;
     animation: drift 14s ease-in-out infinite alternate;
+    will-change: transform;
   }
 
   #field::before {
     left: -20vmax;
     top: -20vmax;
-    background: var(--a);
+    background-color: var(--a);
   }
 
   #field::after {
     right: -20vmax;
     bottom: -20vmax;
-    background: var(--b);
+    background-color: var(--b);
     animation-duration: 18s;
   }
 
-  .bloom {
+  .bloom-wrap {
     position: fixed;
-    left: 50%;
-    top: 45%;
-    width: min(60vw, 520px);
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    display: grid;
+    place-items: center;
+  }
+
+  .bloom {
+    width: min(72vw, 560px);
     aspect-ratio: 1;
-    transform: translate(-50%, -50%);
     border-radius: 50%;
-    background:
-      radial-gradient(circle at 38% 34%,
-        rgba(255,255,255,.9),
-        var(--core) 14%,
-        var(--a) 42%,
-        transparent 70%);
+    background-color: var(--a);
+    background-image:
+      radial-gradient(circle at 36% 30%,
+        rgba(255,255,255,.98) 0%,
+        var(--core) 12%,
+        var(--a) 38%,
+        var(--b) 67%,
+        rgba(0,0,0,0) 74%);
     filter:
       saturate(var(--sat))
       contrast(var(--contrast))
       blur(var(--blur));
     box-shadow:
-      0 0 100px var(--a),
-      0 0 220px var(--b);
+      0 0 45px var(--core),
+      0 0 110px var(--a),
+      0 0 230px var(--b);
     animation: breathe var(--speed) ease-in-out infinite alternate;
+    will-change: transform, filter;
   }
 
   .panel {
     position: relative;
     z-index: 5;
-    width: min(92%, 520px);
+    width: min(92%, 540px);
     margin: 0 auto;
-    padding-top: 65vh;
+    padding-top: max(62vh, 430px);
     padding-bottom: 60px;
     text-align: center;
   }
@@ -87,35 +116,42 @@
     margin: 0;
     font-size: clamp(36px, 8vw, 70px);
     letter-spacing: -.05em;
+    text-shadow: 0 2px 24px rgba(0,0,0,.55);
   }
 
   .subtitle {
-    opacity: .72;
+    opacity: .8;
     margin: 8px 0 25px;
+    text-shadow: 0 2px 16px rgba(0,0,0,.65);
   }
 
   button {
-    border: 1px solid rgba(255,255,255,.25);
+    border: 1px solid rgba(255,255,255,.3);
     border-radius: 999px;
     padding: 15px 25px;
+    font: inherit;
     font-size: 17px;
     color: white;
-    background: rgba(255,255,255,.12);
+    background: rgba(255,255,255,.14);
+    -webkit-backdrop-filter: blur(18px);
     backdrop-filter: blur(18px);
     cursor: pointer;
+    box-shadow: 0 10px 35px rgba(0,0,0,.25);
   }
 
-  button:hover {
-    background: rgba(255,255,255,.2);
-  }
+  button:hover { background: rgba(255,255,255,.22); }
+  button:active { transform: scale(.98); }
 
   .controls {
     margin-top: 25px;
     padding: 22px;
+    border: 1px solid rgba(255,255,255,.1);
     border-radius: 24px;
-    background: rgba(10,10,20,.45);
+    background: rgba(10,10,20,.58);
+    -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
     text-align: left;
+    box-shadow: 0 18px 60px rgba(0,0,0,.3);
   }
 
   label {
@@ -127,51 +163,55 @@
     font-size: 14px;
   }
 
-  input[type="range"] {
-    width: 100%;
-  }
+  input[type="range"] { width: 100%; }
 
   #name {
     margin-top: 20px;
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 700;
+    text-shadow: 0 2px 16px rgba(0,0,0,.7);
   }
 
   #code {
-    font-family: monospace;
-    opacity: .65;
+    min-height: 1.2em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    opacity: .72;
     margin-top: 4px;
   }
 
   @keyframes breathe {
-    from {
-      transform: translate(-50%, -50%) scale(.88) rotate(-4deg);
-    }
-    to {
-      transform: translate(-50%, -50%) scale(1.12) rotate(4deg);
-    }
+    from { transform: scale(.86) rotate(-4deg); }
+    to   { transform: scale(1.12) rotate(4deg); }
   }
 
   @keyframes drift {
     from { transform: translate(-8%, -5%) scale(.9); }
     to   { transform: translate(12%, 10%) scale(1.2); }
   }
+
+  @media (max-height: 700px) {
+    .bloom { width: min(58vw, 390px); }
+    .panel { padding-top: 58vh; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bloom, #field::before, #field::after { animation: none; }
+  }
 </style>
 </head>
 
 <body>
-
 <div id="field"></div>
-<div class="bloom"></div>
+<div class="bloom-wrap"><div class="bloom" aria-hidden="true"></div></div>
 
-<div class="panel">
+<main class="panel">
   <h1>Chromabloom</h1>
   <div class="subtitle">A tiny machine for colors that almost shouldn't exist.</div>
 
-  <button id="invent">Invent a Color</button>
+  <button id="invent" type="button">Invent a Color</button>
 
   <div id="name">Carrie's First Color</div>
-  <div id="code"></div>
+  <div id="code">warming up the spectrum…</div>
 
   <div class="controls">
     <label>
@@ -199,82 +239,96 @@
       <input id="breathing" type="range" min="3" max="20" value="9">
     </label>
   </div>
-</div>
+</main>
 
 <script>
-const root = document.documentElement;
+(() => {
+  const root = document.documentElement;
+  const field = document.querySelector("#field");
+  const strange = document.querySelector("#strange");
+  const dream = document.querySelector("#dream");
+  const shimmer = document.querySelector("#shimmer");
+  const afterglow = document.querySelector("#afterglow");
+  const breathing = document.querySelector("#breathing");
+  const nameEl = document.querySelector("#name");
+  const codeEl = document.querySelector("#code");
+  const inventButton = document.querySelector("#invent");
 
-const strange = document.querySelector("#strange");
-const dream = document.querySelector("#dream");
-const shimmer = document.querySelector("#shimmer");
-const afterglow = document.querySelector("#afterglow");
-const breathing = document.querySelector("#breathing");
-const nameEl = document.querySelector("#name");
-const codeEl = document.querySelector("#code");
+  const prefixes = [
+    "Velvet", "Ghost", "Electric", "Moon", "Impossible",
+    "Quiet", "Nebula", "Secret", "Glass", "Dream",
+    "Prismatic", "Lucid", "Astral", "Soft", "Wild"
+  ];
 
-const prefixes = [
-  "Velvet", "Ghost", "Electric", "Moon", "Impossible",
-  "Quiet", "Nebula", "Secret", "Glass", "Dream"
-];
+  const suffixes = [
+    "Bloom", "Violet", "Ember", "Mist", "Pulse",
+    "Lumen", "Echo", "Halo", "Flare", "Pearl",
+    "Aurora", "Gleam", "Whisper", "Nova", "Drift"
+  ];
 
-const suffixes = [
-  "Bloom", "Violet", "Ember", "Mist", "Pulse",
-  "Lumen", "Echo", "Halo", "Flare", "Pearl"
-];
+  function colorName() {
+    const a = prefixes[Math.floor(Math.random() * prefixes.length)];
+    const b = suffixes[Math.floor(Math.random() * suffixes.length)];
+    return `${a} ${b}`;
+  }
 
-function colorName() {
-  const a = prefixes[Math.floor(Math.random() * prefixes.length)];
-  const b = suffixes[Math.floor(Math.random() * suffixes.length)];
-  return `${a} ${b}`;
-}
+  function hsl(h, s, l) {
+    const hue = ((Math.round(h) % 360) + 360) % 360;
+    const sat = Math.max(0, Math.min(100, Math.round(s)));
+    const light = Math.max(0, Math.min(100, Math.round(l)));
+    return `hsl(${hue}, ${sat}%, ${light}%)`;
+  }
 
-function render() {
-  const h = Number(strange.value);
-  const d = Number(dream.value);
-  const s = Number(shimmer.value);
-  const g = Number(afterglow.value);
-  const t = Number(breathing.value);
+  function render() {
+    const h = Number(strange.value);
+    const d = Number(dream.value);
+    const s = Number(shimmer.value);
+    const g = Number(afterglow.value);
+    const t = Number(breathing.value);
 
-  const h2 = (h + 115 + d * .9) % 360;
-  const h3 = (h + 220 - s * .6) % 360;
+    const h2 = (h + 115 + d * 0.9) % 360;
+    const h3 = (h + 220 - s * 0.6 + 360) % 360;
 
-  const a = `oklch(${55 + d*.22}% ${0.12 + s*.0023} ${h})`;
-  const b = `oklch(${45 + g*.3}% ${0.10 + d*.002} ${h2})`;
-  const core = `oklch(${75 + g*.18}% ${0.05 + s*.0018} ${h3})`;
+    /* HSL is intentionally used for broad browser/webview compatibility. */
+    const a = hsl(h, 62 + s * 0.34, 42 + d * 0.18);
+    const b = hsl(h2, 58 + d * 0.38, 35 + g * 0.24);
+    const core = hsl(h3, 55 + s * 0.30, 72 + g * 0.18);
 
-  root.style.setProperty("--a", a);
-  root.style.setProperty("--b", b);
-  root.style.setProperty("--core", core);
-  root.style.setProperty("--sat", `${1 + s/45}`);
-  root.style.setProperty("--contrast", `${1 + d/180}`);
-  root.style.setProperty("--blur", `${Math.max(0, 9 - g/14)}px`);
-  root.style.setProperty("--speed", `${23 - t}s`);
+    root.style.setProperty("--a", a);
+    root.style.setProperty("--b", b);
+    root.style.setProperty("--core", core);
+    root.style.setProperty("--sat", String(1.05 + s / 48));
+    root.style.setProperty("--contrast", String(1.02 + d / 190));
+    root.style.setProperty("--blur", `${Math.max(0, 8 - g / 15)}px`);
+    root.style.setProperty("--speed", `${Math.max(4, 23 - t)}s`);
 
-  document.querySelector("#field").style.background =
-    `radial-gradient(circle at center, ${b}, #030309 75%)`;
+    field.style.backgroundColor = "#080814";
+    field.style.backgroundImage =
+      `radial-gradient(circle at 50% 42%, ${b} 0%, ${a} 26%, #080814 58%, #030309 84%)`;
 
-  codeEl.textContent =
-    `hue ${Math.round(h)}° · dream ${d} · shimmer ${s} · afterglow ${g}`;
-}
+    codeEl.textContent =
+      `hue ${Math.round(h)}° · dream ${Math.round(d)} · shimmer ${Math.round(s)} · afterglow ${Math.round(g)}`;
+  }
 
-function invent() {
-  strange.value = Math.random() * 360;
-  dream.value = 40 + Math.random() * 60;
-  shimmer.value = 35 + Math.random() * 65;
-  afterglow.value = 35 + Math.random() * 65;
-  breathing.value = 4 + Math.random() * 14;
+  function invent() {
+    strange.value = String(Math.floor(Math.random() * 361));
+    dream.value = String(Math.floor(40 + Math.random() * 61));
+    shimmer.value = String(Math.floor(35 + Math.random() * 66));
+    afterglow.value = String(Math.floor(35 + Math.random() * 66));
+    breathing.value = String(Math.floor(4 + Math.random() * 15));
 
-  nameEl.textContent = colorName();
+    nameEl.textContent = colorName();
+    render();
+  }
+
+  [strange, dream, shimmer, afterglow, breathing]
+    .forEach(el => el.addEventListener("input", render));
+
+  inventButton.addEventListener("click", invent);
+
+  /* Draw immediately, even if the randomizer is never tapped. */
   render();
-}
-
-[strange, dream, shimmer, afterglow, breathing]
-  .forEach(el => el.addEventListener("input", render));
-
-document.querySelector("#invent").addEventListener("click", invent);
-
-invent();
+})();
 </script>
-
 </body>
 </html>
