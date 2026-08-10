@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chromabloom — Invent a Color</title>
+
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: system-ui, sans-serif;
+    color: white;
+    background: #05050a;
+    overflow-x: hidden;
+  }
+
+  #field {
+    position: fixed;
+    inset: 0;
+    transition: background 1.4s ease;
+  }
+
+  #field::before,
+  #field::after {
+    content: "";
+    position: absolute;
+    width: 70vmax;
+    height: 70vmax;
+    border-radius: 50%;
+    filter: blur(70px);
+    mix-blend-mode: screen;
+    opacity: .65;
+    animation: drift 14s ease-in-out infinite alternate;
+  }
+
+  #field::before {
+    left: -20vmax;
+    top: -20vmax;
+    background: var(--a);
+  }
+
+  #field::after {
+    right: -20vmax;
+    bottom: -20vmax;
+    background: var(--b);
+    animation-duration: 18s;
+  }
+
+  .bloom {
+    position: fixed;
+    left: 50%;
+    top: 45%;
+    width: min(60vw, 520px);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 38% 34%,
+        rgba(255,255,255,.9),
+        var(--core) 14%,
+        var(--a) 42%,
+        transparent 70%);
+    filter:
+      saturate(var(--sat))
+      contrast(var(--contrast))
+      blur(var(--blur));
+    box-shadow:
+      0 0 100px var(--a),
+      0 0 220px var(--b);
+    animation: breathe var(--speed) ease-in-out infinite alternate;
+  }
+
+  .panel {
+    position: relative;
+    z-index: 5;
+    width: min(92%, 520px);
+    margin: 0 auto;
+    padding-top: 65vh;
+    padding-bottom: 60px;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(36px, 8vw, 70px);
+    letter-spacing: -.05em;
+  }
+
+  .subtitle {
+    opacity: .72;
+    margin: 8px 0 25px;
+  }
+
+  button {
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 999px;
+    padding: 15px 25px;
+    font-size: 17px;
+    color: white;
+    background: rgba(255,255,255,.12);
+    backdrop-filter: blur(18px);
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: rgba(255,255,255,.2);
+  }
+
+  .controls {
+    margin-top: 25px;
+    padding: 22px;
+    border-radius: 24px;
+    background: rgba(10,10,20,.45);
+    backdrop-filter: blur(24px);
+    text-align: left;
+  }
+
+  label {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    align-items: center;
+    gap: 12px;
+    margin: 13px 0;
+    font-size: 14px;
+  }
+
+  input[type="range"] {
+    width: 100%;
+  }
+
+  #name {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  #code {
+    font-family: monospace;
+    opacity: .65;
+    margin-top: 4px;
+  }
+
+  @keyframes breathe {
+    from {
+      transform: translate(-50%, -50%) scale(.88) rotate(-4deg);
+    }
+    to {
+      transform: translate(-50%, -50%) scale(1.12) rotate(4deg);
+    }
+  }
+
+  @keyframes drift {
+    from { transform: translate(-8%, -5%) scale(.9); }
+    to   { transform: translate(12%, 10%) scale(1.2); }
+  }
+</style>
+</head>
+
+<body>
+
+<div id="field"></div>
+<div class="bloom"></div>
+
+<div class="panel">
+  <h1>Chromabloom</h1>
+  <div class="subtitle">A tiny machine for colors that almost shouldn't exist.</div>
+
+  <button id="invent">Invent a Color</button>
+
+  <div id="name">Carrie's First Color</div>
+  <div id="code"></div>
+
+  <div class="controls">
+    <label>
+      Strange
+      <input id="strange" type="range" min="0" max="360" value="220">
+    </label>
+
+    <label>
+      Dream
+      <input id="dream" type="range" min="0" max="100" value="78">
+    </label>
+
+    <label>
+      Shimmer
+      <input id="shimmer" type="range" min="0" max="100" value="70">
+    </label>
+
+    <label>
+      Afterglow
+      <input id="afterglow" type="range" min="0" max="100" value="65">
+    </label>
+
+    <label>
+      Breathing
+      <input id="breathing" type="range" min="3" max="20" value="9">
+    </label>
+  </div>
+</div>
+
+<script>
+const root = document.documentElement;
+
+const strange = document.querySelector("#strange");
+const dream = document.querySelector("#dream");
+const shimmer = document.querySelector("#shimmer");
+const afterglow = document.querySelector("#afterglow");
+const breathing = document.querySelector("#breathing");
+const nameEl = document.querySelector("#name");
+const codeEl = document.querySelector("#code");
+
+const prefixes = [
+  "Velvet", "Ghost", "Electric", "Moon", "Impossible",
+  "Quiet", "Nebula", "Secret", "Glass", "Dream"
+];
+
+const suffixes = [
+  "Bloom", "Violet", "Ember", "Mist", "Pulse",
+  "Lumen", "Echo", "Halo", "Flare", "Pearl"
+];
+
+function colorName() {
+  const a = prefixes[Math.floor(Math.random() * prefixes.length)];
+  const b = suffixes[Math.floor(Math.random() * suffixes.length)];
+  return `${a} ${b}`;
+}
+
+function render() {
+  const h = Number(strange.value);
+  const d = Number(dream.value);
+  const s = Number(shimmer.value);
+  const g = Number(afterglow.value);
+  const t = Number(breathing.value);
+
+  const h2 = (h + 115 + d * .9) % 360;
+  const h3 = (h + 220 - s * .6) % 360;
+
+  const a = `oklch(${55 + d*.22}% ${0.12 + s*.0023} ${h})`;
+  const b = `oklch(${45 + g*.3}% ${0.10 + d*.002} ${h2})`;
+  const core = `oklch(${75 + g*.18}% ${0.05 + s*.0018} ${h3})`;
+
+  root.style.setProperty("--a", a);
+  root.style.setProperty("--b", b);
+  root.style.setProperty("--core", core);
+  root.style.setProperty("--sat", `${1 + s/45}`);
+  root.style.setProperty("--contrast", `${1 + d/180}`);
+  root.style.setProperty("--blur", `${Math.max(0, 9 - g/14)}px`);
+  root.style.setProperty("--speed", `${23 - t}s`);
+
+  document.querySelector("#field").style.background =
+    `radial-gradient(circle at center, ${b}, #030309 75%)`;
+
+  codeEl.textContent =
+    `hue ${Math.round(h)}° · dream ${d} · shimmer ${s} · afterglow ${g}`;
+}
+
+function invent() {
+  strange.value = Math.random() * 360;
+  dream.value = 40 + Math.random() * 60;
+  shimmer.value = 35 + Math.random() * 65;
+  afterglow.value = 35 + Math.random() * 65;
+  breathing.value = 4 + Math.random() * 14;
+
+  nameEl.textContent = colorName();
+  render();
+}
+
+[strange, dream, shimmer, afterglow, breathing]
+  .forEach(el => el.addEventListener("input", render));
+
+document.querySelector("#invent").addEventListener("click", invent);
+
+invent();
+</script>
+
+</body>
+</html>
