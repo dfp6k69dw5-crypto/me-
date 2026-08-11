@@ -1,0 +1,23 @@
+ltiplicity:5,theoremGate:0,vacuumKill:.36,fm:.38,fmPhase:.22,verdier:.28,gerbe:.83,xy:.58,yz:-.22,zx:.48,memory:.14,lightCross:.81,lightPhase:.52,darkFold:.61,gamma:1.35,branches:18},
+'Codim Fold':{genus:6,rank:5,centerOrder:2,dimN:5,functorMix:.51,nilpotent:.91,expPhase:.44,centerPersist:.38,componentMix:.27,multiplicity:2,theoremGate:1,vacuumKill:.89,fm:.46,fmPhase:.48,verdier:.55,gerbe:.24,xy:.69,yz:.54,zx:-.43,memory:.09,lightCross:.9,lightPhase:.43,darkFold:.92,gamma:1.58,branches:8},
+'Vacuum Scalar':{genus:4,rank:2,centerOrder:4,dimN:2,functorMix:.74,nilpotent:.38,expPhase:.12,centerPersist:.45,componentMix:.34,multiplicity:6,theoremGate:1,vacuumKill:1,fm:.29,fmPhase:.16,verdier:.31,gerbe:.19,xy:.22,yz:.18,zx:.26,memory:.05,lightCross:.59,lightPhase:.74,darkFold:.48,gamma:1.42,branches:10},
+'Rank Exponential':{genus:3,rank:11,centerOrder:3,dimN:2,functorMix:.61,nilpotent:.27,expPhase:.88,centerPersist:.49,componentMix:.46,multiplicity:2,theoremGate:1,vacuumKill:.71,fm:.67,fmPhase:.39,verdier:.52,gerbe:.41,xy:.33,yz:.37,zx:.29,memory:.16,lightCross:.35,lightPhase:.95,darkFold:.29,gamma:.92,branches:15}
+};
+var controls=[
+['core','genus','Genus g',2,8,1,'codimension term'],['core','rank','Rank r',1,12,1,'exp^⊠r forcing'],['core','dimN','dim n(P)',1,10,1,'codimension margin'],['core','functorMix','L_G coupling',0,1,.01,'automorphic ↔ spectral'],['core','nilpotent','Nilpotent support',0,1,.01,'fold / contraction'],['core','expPhase','Exponential phase',0,1,.01,'rank forcing phase'],
+['center','centerOrder','|Z_G|',1,12,1,'component phases'],['center','componentMix','Component mix',0,1,.01,'center characters'],['center','centerPersist','Center memory',0,1,.01,'phase persistence'],['center','multiplicity','Pre-proof multiplicity',1,6,1,'branch pressure'],['center','theoremGate','Multiplicity-one gate',0,1,1,'nα = 1'],['center','vacuumKill','Vacuum rigidity',0,1,.01,'nontrivial branch suppression'],
+['fm','fm','2-FM strength',0,1,.01,'dual-pair recurrence'],['fm','fmPhase','FM phase',0,1,.01,'pairing phase'],['fm','verdier','Verdier duality',0,1,.01,'dual orientation'],['fm','gerbe','Gerbe twist',0,1,.01,'gerbe pairing'],
+['cross','xy','XY',-1,1,.01,'x·y'],['cross','yz','YZ',-1,1,.01,'y·z'],['cross','zx','ZX',-1,1,.01,'z·x'],['cross','memory','State memory',0,.6,.01,'recurrence memory'],
+['light','lightCross','Cross-term light',0,1,.01,'exp(-λ|xy+yz+zx|)'],['light','lightPhase','Phase light',0,1,.01,'cosine phase intensity'],['light','darkFold','Dark folding',0,1,.01,'fold-dependent darkness'],['light','gamma','Contrast γ',.45,2.5,.01,'state intensity gamma'],
+['rendering','quality','Points',20000,180000,5000,'progressive samples'],['rendering','burn','Burn-in',200,2200,100,'discard transient'],['rendering','point','Point body',.35,1.8,.05,'raster only'],['rendering','fill','Frame fill',.72,.98,.01,'camera only'],['rendering','branches','Seed branches',2,24,1,'component/rank samples']
+];
+var quickKeys=[['xy','XY'],['yz','YZ'],['zx','ZX'],['fm','2-FM'],['functorMix','L_G mix'],['nilpotent','Fold'],['lightPhase','Light'],['darkFold','Dark']];
+var cv=$('cv'),ctx=cv.getContext('2d',{alpha:false}),W=0,H=0,acc=null,img=null,camera=null;
+function codim(){return P.dimN*(2*P.genus-3)-2}
+function effectiveMultiplicity(){return P.theoremGate?1:Math.max(1,Math.round(P.multiplicity))}
+function branchCount(){return Math.max(2,Math.round(P.branches))}
+function resize(){var d=Math.min(1.65,window.devicePixelRatio||1),r=cv.getBoundingClientRect(),nw=Math.max(320,Math.floor(r.width*d)),nh=Math.max(360,Math.floor(r.height*d));if(nw!==W||nh!==H){W=nw;H=nh;cv.width=W;cv.height=H;acc=new Float32Array(W*H);img=ctx.createImageData(W,H);camera=null}}
+function stateStepper(branch,seedOverride){
+ var R=rng(hash32((seedOverride==null?seed:seedOverride)+branch*2654435761)),q=Math.max(1,Math.round(P.centerOrder)),rank=Math.max(1,Math.round(P.rank));
+ var comp=branch%q,strand=branch%rank,mult=branch%effectiveMultiplicity(),zPhase=TAU*comp/q,rPhase=TAU*strand/rank,mPhase=TAU*mult/effectiveMultiplicity();
+ var x=(R()*2-1)*.22+Math.cos(z
