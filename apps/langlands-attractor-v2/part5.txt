@@ -1,0 +1,25 @@
+one.toLocaleString()+' points';await new Promise(function(res){requestAnimationFrame(res)})}
+ $('stat').textContent='ready';$('mathstat').textContent='g'+P.genus+' · r'+P.rank+' · |Z|'+P.centerOrder+' · Δ'+codim();$('debug').textContent=presetName+' · multiplicity '+effectiveMultiplicity()+' · FM '+P.fm.toFixed(2)+' · XY/YZ/ZX '+P.xy.toFixed(2)+'/'+P.yz.toFixed(2)+'/'+P.zx.toFixed(2);
+}
+function fmt(k,v){return ['genus','rank','centerOrder','dimN','multiplicity','theoremGate','quality','burn','branches'].indexOf(k)>=0?Math.round(v):(+v).toFixed(2)}
+var controlEls={};
+function registerSlider(host,k,label,min,max,step,route,prefix){var d=document.createElement('div');d.className='ctl';var id=(prefix||'s')+'_'+k;d.innerHTML='<div class="ctop"><span>'+label+'</span><span id="v_'+id+'"></span></div><div class="route">'+route+'</div><input id="'+id+'" type="range" min="'+min+'" max="'+max+'" step="'+step+'">';host.appendChild(d);var s=$(id),v=$('v_'+id);if(!controlEls[k])controlEls[k]=[];controlEls[k].push([s,v]);s.value=P[k];v.textContent=fmt(k,P[k]);s.addEventListener('input',function(){P[k]=+s.value;presetName='Custom';activePreset=null;syncKey(k);scheduleRender()});s.addEventListener('change',function(){render(false)})}
+function makeControls(){controls.forEach(function(c){registerSlider($(c[0]),c[1],c[2],c[3],c[4],c[5],c[6],'s')});quickKeys.forEach(function(q){var spec=null;for(var i=0;i<controls.length;i++)if(controls[i][1]===q[0]){spec=controls[i];break}if(spec)registerSlider($('quick'),q[0],q[1],spec[3],spec[4],spec[5],spec[6],'q')})}
+function syncKey(k){var a=controlEls[k]||[];for(var i=0;i<a.length;i++){a[i][0].value=P[k];a[i][1].textContent=fmt(k,P[k])}}
+function syncAll(){Object.keys(P).forEach(syncKey);$('mathstat').textContent='g'+P.genus+' · r'+P.rank+' · |Z|'+P.centerOrder+' · Δ'+codim();var buttons=document.querySelectorAll('#presets button');for(var i=0;i<buttons.length;i++)buttons[i].classList.toggle('active',activePreset&&buttons[i].dataset.name===activePreset)}
+function makePresets(){var host=$('presets');Object.keys(PRESETS).forEach(function(name){var b=document.createElement('button');b.textContent=name;b.dataset.name=name;b.onclick=function(){restoreP(PRESETS[name]);activePreset=name;presetName=name;seed=hash32(seed+name.length*7919);syncAll();render(false)};host.appendChild(b)});syncAll()}
+function scheduleRender(){clearTimeout(timer);timer=setTimeout(function(){render(true)},110)}
+$('focus').onclick=function(){document.body.classList.toggle('full');$('focus').textContent=document.body.classList.contains('full')?'Controls':'Focus';setTimeout(function(){render(true)},90)};
+$('random').onclick=randomVisible;$('mutate').onclick=mutateSlightly;$('rerender').onclick=function(){render(false)};$('reset').onclick=function(){var src=activePreset&&PRESETS[activePreset]?PRESETS[activePreset]:PRESETS['Multiplicity One'];restoreP(src);activePreset=activePreset||'Multiplicity One';presetName=activePreset;syncAll();render(false)};
+$('newSeed').onclick=function(){seed=hash32(seed+Date.now());presetName='New seed';render(false)};$('save').onclick=function(){var a=document.createElement('a');a.download='langlands-attractor.png';a.href=cv.toDataURL('image/png');a.click()};
+window.addEventListener('resize',function(){clearTimeout(timer);timer=setTimeout(function(){render(true)},180)});
+window.addEventListener('error',function(e){$('stat').textContent='error';$('debug').textContent='JavaScript error: '+(e.message||'unknown')});
+window.addEventListener('unhandledrejection',function(e){$('stat').textContent='error';$('debug').textContent='Engine error: '+String(e.reason||e)});
+makeControls();makePresets();resize();
+var testMode=location.search.indexOf('test=1')>=0;if(testMode){P.quality=8000;P.burn=250;P.branches=5;syncAll()}
+setTimeout(function(){render(false)},30);
+window.__LANG={P:P,render:render,stateStepper:stateStepper,measureCandidate:measureCandidate,randomVisible:randomVisible,mutateSlightly:mutateSlightly,codim:codim,effectiveMultiplicity:effectiveMultiplicity};
+})();
+</script>
+</body>
+</html>
