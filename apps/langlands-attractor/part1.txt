@@ -1,0 +1,59 @@
+iv>
+    </div>
+    <div class="sec">
+      <div class="head"><b>Regimes</b><span class="note">derived presets</span></div>
+      <div class="row" id="presets"></div>
+      <div class="actions" style="margin-top:8px"><button id="mutate">Mutate math</button><button id="seedBtn">New seed</button><button id="rerender">Render</button><button id="save">Save PNG</button></div>
+    </div>
+
+    <details open><summary>Core Langlands structure</summary><div class="inside"><div class="grid" id="core"></div></div></details>
+    <details><summary>Center + multiplicity</summary><div class="inside"><div class="grid" id="center"></div></div></details>
+    <details><summary>2-Fourier–Mukai coupling</summary><div class="inside"><div class="grid" id="fm"></div></div></details>
+    <details><summary>XY · YZ · ZX cross terms</summary><div class="inside"><div class="grid" id="cross"></div></div></details>
+    <details><summary>Light / dark equation</summary><div class="inside"><div class="grid" id="light"></div></div></details>
+    <details><summary>Rendering</summary><div class="inside"><div class="grid" id="rendering"></div></div></details>
+    <details><summary>Math mapping</summary><div class="inside">
+      <div class="mathbox"><b>Paper → engine conversion</b><br>
+      L<sub>G</sub> duality → coupled automorphic/spectral coordinate pairs.<br>
+      π₀(LS<sup>irred</sup>) ≃ (Z<sub>G</sub>)∨ → discrete center phases / component seeds.<br>
+      A<sub>G,irred</sub>|α ≃ ⊕ L<sub>P</sub><sup>⊕ nP,α</sup> → weighted branch family.<br>
+      multiplicity one nα = 1 → optional theorem gate collapses each component to one surviving branch.<br>
+      sum*(exp) ≃ exp<sup>⊠r</sup> → rank-r phase product that drives oscillatory forcing.<br>
+      2 ≤ dim(n(P))(2g−3) → codimension pressure; increasing margin strengthens contraction away from reducible-like excursions.<br>
+      2-Fourier–Mukai → dual-pair rotation/mixing inside the recurrence, not a post-render spin.<br>
+      brightness is I(x,y,z,w), so light and dark are state variables made visible, not a color filter.</div>
+    </div></details>
+    <div class="sec"><div class="status" id="debug">ready</div></div>
+  </div>
+</div>
+<script>
+(()=>{'use strict';
+const TAU=Math.PI*2, $=id=>document.getElementById(id), clamp=(x,a,b)=>Math.max(a,Math.min(b,x)), soft=(x,l=3.5)=>l*Math.tanh(x/l);
+let seed=240909856, token=0, timer=0, presetName='Multiplicity One';
+const P={
+  genus:2, rank:4, centerOrder:3, dimN:2, functorMix:.58, nilpotent:.44, expPhase:.31,
+  centerPersist:.54, componentMix:.42, multiplicity:3, theoremGate:1, vacuumKill:.78,
+  fm:.62, fmPhase:.24, verdier:.36, gerbe:.28,
+  xy:.38, yz:.27, zx:.34, memory:.12,
+  lightCross:.72, lightPhase:.66, darkFold:.52, gamma:1.25,
+  quality:90000, burn:1200, point:.72, fill:.92, branches:9
+};
+const controls=[
+  ['core','genus','Genus g',2,8,1,'2 ≤ dim(n(P))(2g−3)'],
+  ['core','rank','Semisimple rank r',1,12,1,'sum*(exp) ≃ exp^⊠r'],
+  ['core','dimN','dim n(P)',1,10,1,'codim margin = dim(n(P))(2g−3)−2'],
+  ['core','functorMix','L_G coupling',0,1,.01,'automorphic ↔ spectral pair coupling'],
+  ['core','nilpotent','Nilpotent support',0,1,.01,'IndCoh_Nilp → state contraction/folding'],
+  ['core','expPhase','Exponential phase',0,1,.01,'rank-r exponential forcing'],
+
+  ['center','centerOrder','|Z_G|',1,12,1,'π₀(LS^irred) ≃ (Z_G)^∨'],
+  ['center','componentMix','Component mixing',0,1,.01,'center characters seed discrete phases'],
+  ['center','centerPersist','Center memory',0,1,.01,'line-bundle / center phase persistence'],
+  ['center','multiplicity','Pre-proof multiplicity',1,6,1,'A_G,irred ≃ ⊕ L_P^⊕n'],
+  ['center','theoremGate','Multiplicity-one gate',0,1,1,'n_α = 1 when gate = 1'],
+  ['center','vacuumKill','Vacuum rigidity',0,1,.01,'Hom(Poinc, P_Z·Poinc)=0 suppression'],
+
+  ['fm','fm','2-FM strength',0,1,.01,'dual-pair mixing in recurrence'],
+  ['fm','fmPhase','FM phase',0,1,.01,'gerbe pairing phase'],
+  ['fm','verdier','Verdier duality',0,1,.01,'dual orientation / conjugate phase'],
+  ['fm','ger
