@@ -17,4 +17,53 @@ const detailHeading=[...document.querySelectorAll('.section h2')].find(h=>h.text
 const densityEl=document.getElementById('density');densityEl.min='1500';densityEl.max='32000';
 if(!qs.has('fast')){params.density=7000;densityEl.value=7000;document.getElementById('densityV').textContent='7K';rebuild();}
 captureBase();applyDynamics();applySculpt();
+
+/* Strong-response detail renderer.
+   The original controls were technically connected, but most only nudged alpha or spacing,
+   which made 0→100 look nearly unchanged on a phone. Each slider below now controls several
+   visible dimensions at once while staying an appearance-only layer. */
+const detailGain=v=>v<=0?0:Math.pow(clamp(v,0,1),.72);
+
+drawParticles=function(map){
+  const g=detailGain(params.particles);if(!g)return;ctx.save();ctx.globalCompositeOperation='screen';
+  const target=160+Math.round(760*g),stride=Math.max(4,Math.floor(records.length/target)),cloud=2+Math.round(6*g);
+  for(let i=0;i<records.length;i+=stride){let r=records[i],c=map(r.x,r.y),unc=1-r.D[0],spread=(2+22*g)*(.45+1.25*unc),ang=(i*.618+seed)*2.1,co=Math.cos(ang),si=Math.sin(ang);
+    for(let k=0;k<cloud;k++){let rr=spread*(.18+.14*k),a=ang+k*2.399+i*.0017,dx=Math.cos(a)*rr*(1+.8*(1-r.D[2])),dy=Math.sin(a)*rr*(.45+.3*g),alpha=.018+.12*g*(.45+.55*unc);ctx.fillStyle='rgba(205,220,231,'+alpha+')';ctx.beginPath();ctx.arc(c[0]+dx*co-dy*si,c[1]+dx*si+dy*co,.45+1.15*g+(k===0?.35:0),0,TAU);ctx.fill();}
+  }ctx.restore();
+};
+
+drawBraids=function(map){
+  const g=detailGain(params.braids);if(!g)return;ctx.save();ctx.globalCompositeOperation='screen';
+  const count=1+Math.round(4*g),target=900+Math.round(1600*g),stride=Math.max(1,Math.floor(records.length/target)),paths=Array.from({length:count},()=>[]);
+  for(let i=2;i<records.length-2;i+=stride){let r=records[i],p=map(r.x,r.y),pa=map(records[i-2].x,records[i-2].y),pb=map(records[i+2].x,records[i+2].y),dx=pb[0]-pa[0],dy=pb[1]-pa[1],ll=Math.hypot(dx,dy)||1,nx=-dy/ll,ny=dx/ll;
+    for(let b=0;b<count;b++){let zi=(b*7)%36,z=r.Z[zi]+.7*r.Z[(zi+2)%36],wave=Math.sin(i*.017+b*1.7+seed*.13)*4*g,off=z*(3+24*g)+wave;paths[b].push([p[0]+nx*off,p[1]+ny*off]);}}
+  for(let b=0;b<count;b++){ctx.strokeStyle='rgba('+(218+b*5)+','+(224+b*4)+','+(234-b*2)+','+(.04+.20*g)+')';ctx.lineWidth=.55+1.45*g+.08*b;ctx.beginPath();paths[b].forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();}
+  ctx.restore();
+};
+
+drawMemory=function(map){
+  const g=detailGain(params.memory);if(!g)return;ctx.save();ctx.globalCompositeOperation='screen';
+  const first=Math.max(0,6-Math.round(5*g));
+  for(let k=first;k<FIB.length;k++){let lag=FIB[k]*(7+Math.round(14*(1-g))),weight=Math.pow((FIBW[k]||.01)/FIBW[0],.28),alpha=.025+.19*g*weight;ctx.strokeStyle='rgba(225,211,181,'+alpha+')';ctx.lineWidth=.45+1.05*g*weight;ctx.beginPath();let started=false,step=Math.max(5,Math.floor(records.length/(550+1350*g)));
+    for(let i=lag;i<records.length;i+=step){let a=records[i],b=records[i-lag],mix=.35+.3*Math.sin(i*.009+k),p=map(a.x*(1-mix)+b.x*mix,a.y*(1-mix)+b.y*mix);if(!started){ctx.moveTo(p[0],p[1]);started=true}else ctx.lineTo(p[0],p[1]);}ctx.stroke();}
+  ctx.restore();
+};
+
+drawTissue=function(map){
+  const g=detailGain(params.tissue);if(!g)return;ctx.save();ctx.globalCompositeOperation='screen';
+  const target=8+Math.round(34*g),stride=Math.max(95,Math.floor(records.length/target)),edgeCount=2+Math.round(24*g),triStep=Math.max(1,6-Math.round(5*g));
+  for(let n=0;n<records.length;n+=stride){let r=records[n],anchors=Array.from({length:10},(_,i)=>anchorFor(r,i,map)),edges=[];for(let i=0;i<10;i++)for(let j=i+1;j<10;j++){let w=Math.abs(BASE_A[i][j])+Math.abs(BASE_A[j][i]);edges.push([w,i,j]);}edges.sort((a,b)=>b[0]-a[0]);ctx.strokeStyle='rgba(224,229,232,'+(.025+.27*g)+')';ctx.lineWidth=.45+1.15*g;for(let e=0;e<Math.min(edgeCount,edges.length);e++){let [,i,j]=edges[e];ctx.beginPath();ctx.moveTo(...anchors[i]);ctx.lineTo(...anchors[j]);ctx.stroke();}
+    ctx.fillStyle='rgba(208,217,222,'+(.008+.11*g)+')';for(let q=0;q<TRIADS.length;q+=triStep){let t=TRIADS[q],strength=Math.abs(t.w*Math.tanh(r.U[t.j])*Math.tanh(r.U[t.k]));if(strength<.0015*(1-g))continue;ctx.beginPath();ctx.moveTo(...anchors[t.i]);ctx.lineTo(...anchors[t.j]);ctx.lineTo(...anchors[t.k]);ctx.closePath();ctx.fill();}}
+  ctx.restore();
+};
+
+drawGhosts=function(map){
+  const g=detailGain(params.ghosts);if(!g)return;ctx.save();ctx.globalCompositeOperation='screen';
+  const target=80+Math.round(620*g),stride=Math.max(5,Math.floor(records.length/target)),threshold=.05*(1-g);ctx.strokeStyle='rgba(245,198,180,'+(.035+.30*g)+')';ctx.fillStyle='rgba(255,205,185,'+(.06+.34*g)+')';ctx.lineWidth=.45+1.25*g;
+  for(let i=0;i<records.length;i+=stride){let r=records[i];if(Math.abs(r.rawResidual)<threshold)continue;let raw=map(r.rx,r.ry),corr=map(r.x,r.y),dx=raw[0]-corr[0],dy=raw[1]-corr[1],amp=1+7*g,gx=corr[0]+dx*amp,gy=corr[1]+dy*amp;ctx.beginPath();ctx.moveTo(corr[0],corr[1]);ctx.lineTo(gx,gy);ctx.stroke();ctx.beginPath();ctx.arc(gx,gy,.7+1.8*g,0,TAU);ctx.fill();}
+  ctx.restore();
+};
+
+const detailSection=detailHeading&&detailHeading.parentElement;if(detailSection&&!detailSection.querySelector('.detailResponseNote')){let note=document.createElement('div');note.className='micro detailResponseNote';note.textContent='These now have a deliberately wide visual range: 0 removes the layer; 100 makes that structure strongly visible.';detailSection.appendChild(note);}
+render();
 window.__OMEF_SCULPT__={sculpt,dyn,resculpt,rebuildSculpt,captureBase};
