@@ -1,0 +1,33 @@
+=branch%rawM,zPhase=TAU*comp/q,rPhase=TAU*strand/rank,mPhase=TAU*mraw/rawM;
+ var x=(R()*2-1)*.19+Math.cos(zPhase)*.07,y=(R()*2-1)*.19+Math.sin(rPhase)*.07,z=(R()*2-1)*.16,w=(R()*2-1)*.16,px=x,py=y,pz=z,pw=w,t=0;
+ function crossShape(u,a){var lin=u/(1+.12*Math.abs(u)),cub=(u*u*u)/(1+u*u);return a*(1.08*lin+.19*cub)}
+ return function(){
+  t++;var pressure=codimPressure(),phi=TAU*P.fmPhase+zPhase*P.gerbe+rPhase*P.verdier+.23*Math.sin(t*.004+mPhase),mixAng=phi*(.25+1.15*P.fm),c=Math.cos(mixAng),s=Math.sin(mixAng);
+  var X=c*x-s*z,Z=s*x+c*z,Y=c*y-s*w,WW=s*y+c*w,xy=X*Y,yz=Y*Z,zx=Z*X,ang=Math.atan2(Y,X),sector=Math.sin(q*ang+zPhase+P.componentMix*WW),sector2=Math.cos(q*ang-zPhase+P.gerbe*Z);
+  var E=.52*Math.sin(rank*(X+.31*WW)+TAU*P.expPhase+rPhase)+.31*Math.cos((rank+1)*(Y-.27*Z)-phi)+.17*Math.sin((rank*.5+1)*(X-Y+Z)+mPhase);
+  var multStress=(rawM-1)/5*(P.theoremGate?.38:1),a=1.28+.62*P.functorMix+.045*rank+.11*multStress,b=1.47+.48*P.verdier+.012*Math.max(0,codim())+.09*multStress;
+  var nx=Math.sin(a*Y+.72*P.fm*Z+phi)+(-.18+.51*P.functorMix)*Math.cos((a+.12*rank)*X-rPhase)+crossShape(xy,P.xy)+.29*E+.24*P.componentMix*sector+.11*multStress*Math.sin(Z*rank+mPhase);
+  var ny=Math.sin(b*X-.67*P.fm*WW-phi*.73)+(1.0+.42*P.functorMix)*Math.cos((b+.08*rank)*Y+zPhase)+crossShape(yz,P.yz)-.23*E+.24*P.componentMix*sector2+.11*multStress*Math.cos(WW*rank-mPhase);
+  var nz=soft(P.centerPersist*Z+crossShape(zx,1.16*P.zx)+P.nilpotent*(X*Y-Z)*.62+.51*P.componentMix*sector+.21*P.gerbe*Math.sin(q*WW+zPhase),4.6);
+  var nw=soft((.31+.61*(1-P.nilpotent))*WW+P.fm*(X*WW-Y*Z)*.38+.42*P.gerbe*Math.cos(rank*Z+rPhase)+P.verdier*E*.61+.17*multStress*Math.sin(mPhase+X),4.6);
+  var norm=Math.sqrt(nx*nx+ny*ny+nz*nz+nw*nw),excess=Math.max(0,norm-(2.25-.45*P.nilpotent)),contract=1/(1+pressure*P.nilpotent*excess*.11);nx*=contract;ny*=contract;nz*=contract;nw*=contract;
+  if(P.theoremGate&&mraw!==0){var kill=1-.58*P.vacuumKill;nx*=.94+.06*kill;ny*=.94+.06*kill;nz*=kill;nw*=kill}
+  /* Duality-manifold binding: the dual pair, rank and center constrain the 4-D orbit onto resonant lower-dimensional structure before projection. */
+  var th=Math.atan2(ny,nx),rrn=Math.hypot(nx,ny),bind=.07+.31*P.functorMix+.24*P.fm,targetR=.78+.26*Math.sin(rank*th+TAU*P.expPhase)+.17*P.componentMix*sector2;
+  var rs=1+bind*.46*(targetR-rrn)/(rrn+.32);nx*=rs;ny*=rs;
+  var zT=(.48+.34*P.gerbe)*Math.sin(rank*th+phi)+.24*sector,wT=(.46+.34*P.verdier)*Math.cos(q*th-phi)+.23*sector2;
+  nz=(1-bind*.42)*nz+bind*.42*zT;nw=(1-bind*.38)*nw+bind*.38*wT;
+  var tw=.17*P.fm*nz+.11*P.gerbe*nw,tc=Math.cos(tw),ts=Math.sin(tw),rx=tc*nx-ts*ny,ry=ts*nx+tc*ny;nx=rx;ny=ry;
+  nx=soft(nx+2.25*P.memory*(x-px),5.4);ny=soft(ny+2.25*P.memory*(y-py),5.4);nz=soft(nz+1.8*P.memory*(z-pz),4.8);nw=soft(nw+1.8*P.memory*(w-pw),4.8);
+  px=x;py=y;pz=z;pw=w;x=nx;y=ny;z=nz;w=nw;
+  var cross=Math.abs(x*y+y*z+z*x),phaseLight=Math.abs(Math.cos(rank*w+zPhase+phi)),fold=Math.abs(z*w)+P.nilpotent*Math.abs(x-y)*.22;
+  var I=(.16+.84*Math.pow(phaseLight,.28+1.55*P.lightPhase))*Math.exp(-P.lightCross*.44*cross)*Math.exp(-P.darkFold*.92*fold);I=clamp(Math.pow(clamp(I,0,1),P.gamma),.006,1);
+  var theta=P.fm*(w*.84+z*.37)+P.gerbe*zPhase*.78,cc=Math.cos(theta),ss=Math.sin(theta),rad=.08+.12*P.componentMix*(.4+Math.abs(z));
+  var qx=cc*x-ss*y+.41*P.functorMix*z+.18*E+.23*P.zx*(z*x)/(1+.18*Math.abs(z*x))+rad*Math.cos(zPhase)+.06*sector;
+  var qy=ss*x+cc*y+.35*P.verdier*w-.16*E+.21*P.xy*(x*y)/(1+.18*Math.abs(x*y))+rad*Math.sin(zPhase)+.06*sector2;
+  return[qx,qy,I,x,y,z,w];
+ }
+}
+function structureMeasure(seedTry,fast){
+ var B=Math.min(branchCount(),fast?4:8),burn=fast?160:Math.min(P.burn,650),steps=fast?520:1050,pts=[],valid=0,sumI=0,minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9,turn=0,turnN=0,b,i,p,prev=null,prev2=null;
+ for(b=0;b<B;b++){var st=stateStepper(b,seedTry);prev=prev2=null;for(i=0;i<burn+steps;i++){p=st();if(i<burn)continue;if(!Number.isFinite(p[0])||!Number.isFinite(p[1]))continue;valid++;sumI+=p[2];minX=Math.min(minX,p[0]);maxX=Math.max(maxX,p[0]);minY=Math.min(minY,p[1]);maxY=Math.max(maxY,p[1]);pts.push([p[0],p[1]]);if(prev2&&prev){var ax=prev[0]-prev2[0],ay=prev[1]-prev2[1],bx=p[0]-prev[0],by=p[1]-prev[1],la=Math.hypot(ax,ay),lb
