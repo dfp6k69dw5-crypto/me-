@@ -1,0 +1,59 @@
+/q, rPhase=TAU*strand/rank, mPhase=TAU*mult/effectiveMultiplicity();
+  let x=(R()*2-1)*.22+Math.cos(zPhase)*.08,y=(R()*2-1)*.22+Math.sin(rPhase)*.08,z=(R()*2-1)*.18,w=(R()*2-1)*.18;
+  let px=x,py=y,pz=z,pw=w,t=0;
+  return function step(){
+    t++;
+    const margin=codim(), pressure=Math.tanh(Math.max(0,margin)/8);
+    const phi=TAU*P.fmPhase + zPhase*P.gerbe + rPhase*P.verdier + .17*Math.sin(t*.003 + mPhase);
+    const c=Math.cos(phi*P.fm), s=Math.sin(phi*P.fm);
+    // 2-Fourier–Mukai conversion: the dual pair mixing lives in the recurrence itself.
+    const X=c*x-s*z, Z=s*x+c*z, Y=c*y-s*w, WW=s*y+c*w;
+    const xy=X*Y, yz=Y*Z, zx=Z*X;
+    const sat=u=>u/(1+Math.abs(u));
+    // rank-r external tensor-product phase: a bounded stand-in for exp^{⊠r} forcing.
+    let E=0;
+    const rr=Math.min(12,rank);
+    for(let k=0;k<rr;k++) E += Math.sin((k+1)*(X+WW)*.27 + TAU*P.expPhase + k*rPhase) * Math.cos((k+1)*(Y-Z)*.19 - phi);
+    E/=rr;
+    const multStress=(Math.max(1,P.multiplicity)-1)/5*(1-.65*P.theoremGate);
+    const a=1.35+.48*P.functorMix+.06*rank+.09*multStress, b=1.6+.32*P.verdier+.025*margin+.07*multStress;
+    let nx=Math.sin(a*Y + .55*P.fm*Z + phi) + (-.24+.42*P.functorMix)*Math.cos(a*X-rPhase) + 1.35*P.xy*sat(2.2*xy) + .18*E + .08*multStress*Math.sin(Z*rank+mPhase);
+    let ny=Math.sin(b*X - .48*P.fm*WW - phi*.7) + (1.02+.34*P.functorMix)*Math.cos(b*Y+zPhase) + 1.35*P.yz*sat(2.2*yz) - .14*E + .07*multStress*Math.cos(WW*rank-mPhase);
+    let nz=Math.tanh(P.centerPersist*Z + 1.5*P.zx*sat(2.4*zx) + P.nilpotent*(X*Y-Z)*.44 + P.componentMix*Math.sin(WW*rank+zPhase));
+    let nw=Math.tanh((.38+.52*(1-P.nilpotent))*WW + P.fm*(X*WW-Y*Z)*.22 + P.gerbe*Math.cos(rank*Z+rPhase) + P.verdier*E*.48);
+    // codimension pressure suppresses reducible-like large excursions rather than merely scaling the final picture.
+    const norm=Math.sqrt(nx*nx+ny*ny+nz*nz+nw*nw), contract=1/(1+pressure*P.nilpotent*Math.max(0,norm-1.8)*.24);
+    nx*=contract;ny*=contract;nz*=contract;nw*=contract;
+    // vacuum rigidity suppresses nontrivial center/multiplicity branches when theorem gate is enforced.
+    if(P.theoremGate && (comp!==0 || mult!==0)){
+      const kill=1-P.vacuumKill*.11;
+      nz*=kill;nw*=kill;
+    }
+    nx=soft(nx+1.8*P.memory*(x-px),3.2); ny=soft(ny+1.8*P.memory*(y-py),3.2); nz=soft(nz+1.5*P.memory*(z-pz),2.4); nw=soft(nw+1.5*P.memory*(w-pw),2.4);
+    px=x;py=y;pz=z;pw=w;x=nx;y=ny;z=nz;w=nw;
+    const cross=Math.abs(x*y+y*z+z*x), phaseLight=Math.abs(Math.cos(rank*w+zPhase+phi));
+    const fold=Math.abs(z*w)+P.nilpotent*Math.abs(x-y)*.25;
+    let I=(.22+.78*Math.pow(phaseLight,.35+1.5*P.lightPhase))*Math.exp(-P.lightCross*.62*cross)*Math.exp(-P.darkFold*1.15*fold);
+    I=clamp(Math.pow(clamp(I,0,1),P.gamma),.01,1);
+    // projection also uses dual variables but no arbitrary post-render rotation.
+    const theta=P.fm*(w*.72+z*.28)+P.gerbe*zPhase*.6;
+    const cc=Math.cos(theta),ss=Math.sin(theta);
+    const qx=cc*x-ss*y + .34*P.functorMix*z + .12*E + .16*P.zx*sat(z*x);
+    const qy=ss*x+cc*y + .28*P.verdier*w - .1*E + .14*P.xy*sat(x*y);
+    return [qx,qy,I,x,y,z,w];
+  }
+}
+function sampleBounds(){
+  const B=branchCount(), pts=[];let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
+  for(let b=0;b<B;b++){
+    const st=stateStepper(b);for(let i=0;i<P.burn+1500;i++){const p=st();if(i<P.burn)continue;if(Number.isFinite(p[0])&&Number.isFinite(p[1])){pts.push(p);minX=Math.min(minX,p[0]);maxX=Math.max(maxX,p[0]);minY=Math.min(minY,p[1]);maxY=Math.max(maxY,p[1])}}
+  }
+  if(!pts.length||!(maxX>minX)||!(maxY>minY))return {cx:0,cy:0,s:Math.min(W,H)*.18};
+  const span=Math.max(maxX-minX,maxY-minY,1e-3);return {cx:(minX+maxX)/2,cy:(minY+maxY)/2,s:Math.min(W,H)*P.fill/span};
+}
+function addPoint(x,y,w){
+  const ix=(W*.5+(x-camera.cx)*camera.s)|0, iy=(H*.5-(y-camera.cy)*camera.s)|0;if(ix<1||iy<1||ix>=W-1||iy>=H-1)return;
+  const r=P.point, a=w*(.65+.35*r);
+  const i=iy*W+ix;acc[i]+=a;
+  if(r>.8){const s=.22*a;acc[i-1]+=s;acc[i+1]+=s;acc[i-W]+=s;acc[i+W]+=s}
+  if(r>1.35){const s=.09*a;acc[i-W-1]+=
