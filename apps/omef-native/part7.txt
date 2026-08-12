@@ -45,7 +45,7 @@ void main(){
    Z=.34*sin(PI*u*folds+.55*c[4])*cos(PI*v*(1.0+.8*memory))+.16*memory*sin(3.0*v+c[9]);
    float n=(h3*2.0-1.0)*thickness;X+=n*cos(t);Y+=n*sin(t);Z+=(h5*2.0-1.0)*thickness*.55;
  }else if(mode==1){
-   float u=pow(h1,.72),fork=(h3<.5?-1.0:1.0),fork2=(h5<.5?-1.0:1.0);float a=TAU*(branch+.5)/bc+.16*c[int(mod(branch,10.0))];
+   float u=pow(h1,.72),fork=(h3<.5?-1.0:1.0),fork2=(h5<.5?-1.0:1.0);float a=TAU*(branch+.5)/bc+.08*(c[0]*cos(TAU*branch/bc)+c[1]*sin(TAU*branch/bc));
    float split1=max(0.0,u-.34),split2=max(0.0,u-.68);a+=fork*split1*(.55+1.35*tear)+fork2*split2*(.22+.72*blocks);
    float rr=.06+.92*u;float bend=.20*interact*sin(4.0*u+c[3])+.16*spill*sin(7.0*u+c[7]);
    X=rr*cos(a+bend);Y=rr*sin(a+bend);Z=1.48*(u-.5)+.20*sin(2.0*a+4.0*u)+.10*c[9];
@@ -60,7 +60,7 @@ void main(){
    X=rr*cos(p*t);Y=rr*sin(p*t);Z=.42*sin(k*t+.35*c[5]);
    float ta=TAU*h2,tube=thickness*(1.2+.7*memory);float nx=cos(p*t)*cos(k*t),ny=sin(p*t)*cos(k*t),nz=sin(k*t);X+=tube*(cos(ta)*nx-.55*sin(ta)*sin(p*t));Y+=tube*(cos(ta)*ny+.55*sin(ta)*cos(p*t));Z+=tube*cos(ta)*nz+tube*.7*sin(ta);
  }else{
-   float a=TAU*(branch+.5)/bc+.18*c[int(mod(branch+3.0,10.0))],cr=.58+.30*hidden+.12*sin(branch*PHI);float lt=TAU*h1*(1.0+floor(1.0+3.0*factor));float lr=.10+.16*(.35+micro)*(.45+.55*h3);
+   float a=TAU*(branch+.5)/bc+.09*(c[3]*cos(TAU*branch/bc)+c[6]*sin(TAU*branch/bc)),cr=.58+.30*hidden+.12*sin(branch*PHI);float lt=TAU*h1*(1.0+floor(1.0+3.0*factor));float lr=.10+.16*(.35+micro)*(.45+.55*h3);
    X=cr*cos(a)+lr*cos(lt+a*.7);Y=cr*sin(a)+lr*sin(lt-a*.4);Z=.38*sin(a*PHI)+.22*sin(lt*(1.0+.5*interact)+c[8]);
    X+=(h2*2.0-1.0)*thickness;Y+=(h5*2.0-1.0)*thickness;Z+=(h3*2.0-1.0)*thickness;
  }
