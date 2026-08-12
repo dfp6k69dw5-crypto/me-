@@ -1,0 +1,31 @@
+FINAL SIMULATOR GATES
+
+Browser/runtime
+- Exact final HTML loaded in headless Chromium with zero JavaScript page errors.
+- Real-time hidden-UI run reached approximately 50–60 fps in the headless desktop test after warm-up.
+
+Coupled fluid + ambient simulation
+- 5 simulated minutes at a conservative 8 fluid steps/second.
+- State remained finite.
+- Sampled state signatures: 100% unique.
+- Dye mass stayed visible and bounded in sampled states.
+- Safety rescue: 0.
+- Non-finite resets: 0.
+- Safety limiter intervened only on brief high-density excursions.
+
+Mode behavior
+- Manual parameter drift: 0.0.
+- Auto produced substantial parameter movement.
+- Hybrid accepted manual mouse drawing.
+- Auto blocked accidental mouse drawing.
+- UI hid after idle and reappeared on mouse movement.
+
+Long morph test
+- 2 hours of accelerated morph/emitter trajectory.
+- 240 sampled signatures; 100% unique.
+- All 9 rare-event families occurred.
+- No fixed loop or repeated sampled state was detected.
+
+Event differentiation
+- Vortex bloom, shear passage, plume rise/fall, calm basin, fine filament, and duality fold were run from common initial conditions.
+- All produced measurably different fluid-state signatures.
