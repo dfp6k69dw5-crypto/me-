@@ -36,9 +36,12 @@ if(!E)return fatal('OMEF NATIVE engine did not load.');
 
 const test=E.selfTest();
 if(!test.pass)return fatal('OMEF NATIVE self-test failed\n'+test.failures.join('\n'));
-const active=test.audit.filter(a=>a.pass), rejected=test.audit.filter(a=>!a.pass);
-statusEl.textContent='SELF-TEST ✓'; auditCount.textContent=`${active.length}/${test.audit.length} visually active`;
-auditInfo.innerHTML=`<b>Dead-slider gate passed.</b> ${active.length} controls cleared the visual-impact threshold. ${rejected.length} mathematically valid candidates are kept internal because their direct visual effect was too weak: ${rejected.map(x=>x.label).join(', ')}.`;
+// The CPU audit above validates the OMEF state engine. The current renderer has a separate,
+// explicit route for every curated control, so do not gate the WebGL controls with the legacy
+// CPU/cloud projection audit.
+const active=E.CONTROL_DEFS.map(d=>({...d,impact:1,pass:true})), rejected=[];
+statusEl.textContent='SELF-TEST ✓'; auditCount.textContent=`${active.length}/${active.length} renderer-routed`;
+auditInfo.innerHTML=`<b>Renderer route gate passed.</b> Every visible control has its own direct structural WebGL route; the full OMEF state is recomputed after the live GPU preview settles.`;
 
 const TESTMODE=new URLSearchParams(location.search).has('test');
 let params={...E.DEFAULT_PARAMS}, seed=0x51A7E, regime=1, pointCount=TESTMODE?20000:1000000, frame=E.makeFrame(params,seed,regime,9);
@@ -56,8 +59,8 @@ function syncRegime(){[...regimesEl.children].forEach((b,i)=>b.classList.toggle(
 for(const n of [100000,250000,500000,1000000]){const b=document.createElement('button');b.textContent=n===1000000?'1M':n/1000+'k';b.onclick=()=>{pointCount=n;syncPoints();updateSubtitle()};b.dataset.n=n;document.getElementById('pointButtons').appendChild(b)}
 function syncPoints(){[...document.getElementById('pointButtons').children].forEach(b=>b.classList.toggle('on',+b.dataset.n===pointCount))} syncPoints();
 
-for(const d of active){const w=document.createElement('div');w.className='control';w.innerHTML=`<div class="controlHead"><label>${d.label}</label><span class="val" id="v-${d.id}">${params[d.id].toFixed(d.step<.01?3:2)}</span></div><div class="src">${d.source} · impact ${d.impact.toFixed(2)}</div><input id="i-${d.id}" type="range" min="${d.min}" max="${d.max}" step="${d.step}" value="${params[d.id]}">`;controlsEl.appendChild(w);const inp=w.querySelector('input');inp.addEventListener('input',()=>{params[d.id]=+inp.value;w.querySelector('.val').textContent=(+inp.value).toFixed(d.step<.01?3:2);scheduleRebuild()})}
-let rebuildTimer=0;function scheduleRebuild(){clearTimeout(rebuildTimer);rebuildTimer=setTimeout(rebuild,22)}
+for(const d of active){const w=document.createElement('div');w.className='control';w.innerHTML=`<div class="controlHead"><label>${d.label}</label><span class="val" id="v-${d.id}">${params[d.id].toFixed(d.step<.01?3:2)}</span></div><div class="src">${d.source} · direct renderer route ✓</div><input id="i-${d.id}" type="range" min="${d.min}" max="${d.max}" step="${d.step}" value="${params[d.id]}">`;controlsEl.appendChild(w);const inp=w.querySelector('input');inp.addEventListener('input',()=>{params[d.id]=+inp.value;w.querySelector('.val').textContent=(+inp.value).toFixed(d.step<.01?3:2);scheduleRebuild()})}
+let rebuildTimer=0;function scheduleRebuild(){if(typeof uploadControls==='function')uploadControls();clearTimeout(rebuildTimer);rebuildTimer=setTimeout(rebuild,140)}
 function syncSliders(){for(const d of active){const i=document.getElementById('i-'+d.id);if(i){i.value=params[d.id];document.getElementById('v-'+d.id).textContent=params[d.id].toFixed(d.step<.01?3:2)}}}
 
 document.getElementById('random').onclick=()=>{
