@@ -129,8 +129,10 @@ jobs:
           PY
       - name: Install browser test dependency
         run: |
-          python -m pip install --disable-pip-version-check -q selenium
+          python -m pip install --disable-pip-version-check -q selenium pillow
           (google-chrome --version || chromium --version || chromium-browser --version)
+      - name: Exercise OMEF Native sliders in mobile Chrome
+        run: python scripts/omef_native_slider_smoke.py
       - name: Exercise OMEF Total-State Attractor in mobile Chrome
         run: python scripts/omef_attractor_classic_smoke.py
       - name: Exercise Botanical Harmonograph in mobile Chrome
