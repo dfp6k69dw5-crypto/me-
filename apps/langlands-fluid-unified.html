@@ -14,13 +14,17 @@
   try{
     const parts=[];
     for(let i=0;i<6;i++){
-      const r=await fetch(`langlands-fluid-unified-payload/part${i}.txt?v=49`,{cache:'no-store'});
+      const r=await fetch(`langlands-fluid-unified-payload/part${i}.txt?v=50`,{cache:'no-store'});
       if(!r.ok)throw new Error(`payload ${i} failed`);
       parts.push((await r.text()).trim());
     }
     if(!('DecompressionStream' in window))throw new Error('Please update your browser.');
     const bytes=Uint8Array.from(atob(parts.join('')),c=>c.charCodeAt(0));
-    const html=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    let html=await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    const oldMobile="if(DEVICE.mobile){D.emitterCount=2;D.wild=.46;D.morphSpeed=.28;D.eventStrength=.36;D.changeRate=.36;D.flowMemory=.75;}";
+    const fullMobile="if(DEVICE.mobile){D.emitterCount=3;D.wild=.52;D.morphSpeed=.32;D.eventStrength=.42;D.changeRate=.37;D.flowMemory=.74;}";
+    if(!html.includes(oldMobile))throw new Error('v50 mobile-power patch target missing');
+    html=html.replace("const BUILD_VERSION='unified-v49';","const BUILD_VERSION='unified-v50';").replace(oldMobile,fullMobile);
     document.open();document.write(html);document.close();
   }catch(e){
     document.getElementById('boot').textContent='Unable to start: '+e.message;
