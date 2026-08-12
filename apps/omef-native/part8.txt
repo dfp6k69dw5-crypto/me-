@@ -17,7 +17,7 @@ document.getElementById('toggle').onclick=()=>setControlsOpen(!drawer.classList.
 if(doneBtn)doneBtn.addEventListener('click',()=>setControlsOpen(false));
 
 function resize(){const dpr=Math.min(2,devicePixelRatio||1),box=canvas.getBoundingClientRect(),cw=Math.max(2,box.width||innerWidth),ch=Math.max(2,box.height||innerHeight),w=Math.max(2,Math.floor(cw*dpr)),h=Math.max(2,Math.floor(ch*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h)}gl.uniform1f(loc.uAspect,cw/ch);gl.uniform1f(loc.uPointSize,Math.max(1,dpr*.72))}
-addEventListener('resize',resize,{passive:true});if(window.visualViewport)visualViewport.addEventListener('resize',resize,{passive:true});resize();uploadFrame();updateMetrics();updateSubtitle();
+addEventListener('resize',resize,{passive:true});if(window.visualViewport)window.visualViewport.addEventListener('resize',resize,{passive:true});resize();uploadFrame();updateMetrics();updateSubtitle();
 
 gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.disable(gl.DEPTH_TEST);
 function render(ms){resize();if(!drag)rotY+=auto*Math.min(40,ms-(render.last||ms));render.last=ms;gl.clearColor(.012,.016,.02,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(prog);gl.uniform1f(loc.uTime,ms*.00007);gl.uniform1f(loc.uRotX,rotX);gl.uniform1f(loc.uRotY,rotY);gl.uniform1f(loc.uZoom,zoom);gl.drawArrays(gl.POINTS,0,pointCount);if(!TESTMODE)requestAnimationFrame(render);else statusEl.textContent='SELF-TEST ✓ · RENDER ✓'}requestAnimationFrame(render);
