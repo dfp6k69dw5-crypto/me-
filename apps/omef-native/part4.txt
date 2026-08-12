@@ -1,0 +1,96 @@
+    const co=Math.cos(angle),si=Math.sin(angle); rot[i]=co*A[i]-si*A[j]; rot[j]=si*A[i]+co*A[j];
+  }
+  const denom=1+c*norm(s.U)*norm(s.U);
+  let pred=rot.map((x,i)=>x/denom + .07*reg.drift[i]);
+
+  // Structural shocks, revision risk and governance correction.
+  const shock=Array.from({length:N},(_,i)=>p.shockEnergy*reg.shock*(rnd()+rnd()+rnd()-1.5)*(.10+.06*sigmaMean));
+  s.releaseSurprise=.82*s.releaseSurprise + .18*(rnd()*2-1)*p.revisionRisk;
+  s.revisionDiag=Array.from({length:N},(_,i)=>.86*(s.revisionDiag?.[i]||0)+.14*p.revisionRisk*Math.abs(s.releaseSurprise)*(1+.12*i));
+  const gov=Array.from({length:N},(_,i)=>-.13*p.stabilityBrake*(lap.cRisk+rankRisk+humility)*Math.tanh(pred[i])-.08*p.revisionRisk*s.revisionDiag[i]*Math.sign(pred[i]||1));
+
+  // Observer correction retention rho_n gated by instability and confidence.
+  const rho0=.08+.84*sigmoid(-1.1*instability-1.2*sigmaMean-.8*residualRisk);
+  const rho=clamp(rho0*sigmoid(.8)*confidence,0,.92);
+  for(let i=0;i<N;i++){
+    const innovation=s.U[i]-pred[i]; s.L[i]=rho*s.L[i]+.22*innovation;
+    pred[i]+=rho*s.L[i]+shock[i]+gov[i];
+  }
+
+  // Accounting projection: enforce a soft zero-sum macro identity via lambda_A-like strength.
+  const acctResidual=pred[0]+pred[3]-pred[2]-pred[8];
+  const kA=.06+.23*(p.accountingConstraint/(1+p.accountingConstraint));
+  pred[0]-=kA*acctResidual*.25; pred[3]-=kA*acctResidual*.25; pred[2]+=kA*acctResidual*.25; pred[8]+=kA*acctResidual*.25;
+
+  // Fibonacci hidden-strain memory.
+  let hmem=0; for(let k=0;k<FIB13.length;k++)hmem+=FIB13[k]*(s.hHistory[s.hHistory.length-1-k]??s.U[9]);
+  const hNew=.74*hmem*p.fibonacciMemory + p.hiddenStrain*(.20*pred[4]+.18*pred[2]+.16*pred[7]-.12*pred[1]+.08*mean(market)) + shock[9];
+  pred[9]=mix(pred[9],hNew,.62);
+
+  // Regime-dependent log volatility.
+  for(let i=0;i<N;i++){
+    const mu=Math.log(.055+.022*(s.regime+1)+.035*Math.abs(pred[i]));
+    s.s[i]=mu+.91*(s.s[i]-mu)+p.volatility*.06*(rnd()*2-1)+.035*p.revisionRisk*Math.abs(s.releaseSurprise);
+    s.sigma[i]=Math.exp(clamp(s.s[i],-5,1));
+  }
+
+  // Zero-safe shadow/reference update.
+  const D=norm(s.Ustar.map((x,i)=>x-s.U[i]));
+  const Z=Math.exp(-(D*D)/(.18+.24*p.hiddenStrain));
+  const deltaDir=s.Ustar.map((x,i)=>(x-s.U[i])/(D+1e-8));
+  const b0=pred.map((x,i)=>x-s.U[i]+.16*shock[i]+.08*(rot[i]-s.U[i])); const bn=norm(b0)||1;
+  const zeta=b0.map((x,i)=>(x+(i===9?1e-4:0))/(bn+1e-4));
+  const omega=deltaDir.map((x,i)=>(1-Z)*x+Z*zeta[i]); const on=norm(omega)||1;
+  s.Ustar=pred.map((x,i)=>x+.05*omega[i]/on);
+
+  // Final organ state with finite clamps only as numerical guard.
+  s.U=pred.map(x=>clamp(x,-4.5,4.5));
+  s.hHistory.push(s.U[9]); if(s.hHistory.length>13)s.hHistory.shift();
+  s.history.push(s.U.slice()); if(s.history.length>21)s.history.shift();
+
+  traj=trajectoryDiagnostics(s.history,p.rankGuard);
+  W=computeMarketWeights(s.U,[mean(s.sigma),p.shockEnergy,norm(s.U),p.revisionRisk,instability,humility,p.rankGuard,p.blockGranularity],.2,lap.cRisk,s.theta,p);
+  lap=laplacianDiagnostics(W,p.harmonicDiffusion);
+  const blocks=selectBlocks(s.U,W,lap.L,p); s.blocks=blocks.ids; s.blockCount=blocks.count;
+
+  const pd=particleDiagnostics(s,s.U,p,rnd,s.blocks);
+  s.microMoments=pd.moments;
+  s.F=computeFactors(s,s.U,pd.moments,rnd);
+  const obs=computeObservationDiagnostics(s,s.U,s.F,s.sigma,p); s.obsPrev=obs.Y.slice(); s.benchmarkAdvantage=obs.advantage;
+  // Forecast calibration/tail layer: use synthetic coverage pressure, then fold into augmented humility.
+  const qY=(residualRisk*residualRisk)/(.12+sigmaMean*sigmaMean*s.tauCal);
+  const inside=qY<2.7?1:0; s.coverage=.94*s.coverage+.06*inside;
+  s.tailRisk=.94*s.tailRisk+.06*Math.max(qY-2.7,0);
+  s.tauCal=clamp(s.tauCal*Math.exp(.035*(.80-s.coverage)+.04*pd.dpf+.025*humility+.025*s.tailRisk),.45,3.5);
+  s.nuCal=clamp(4+26/(1+Math.exp(-2.0+2.4*s.tailRisk)),4,30);
+  humility=humility + .22*Math.abs(.8-s.coverage)+.18*s.tailRisk+.20*pd.dpf+.10*Math.max(-obs.advantage,0)/(1+Math.abs(obs.advantage));
+  confidence=Math.exp(-humility*p.humilityPressure*.65);
+
+  // Adaptive theta update slowed by confidence and particle degeneracy.
+  const eta=.015*confidence/(1+2*pd.dpf);
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++)if(i!==j){
+    s.theta[i][j]=clamp(.992*s.theta[i][j]+eta*(s.U[i]-pred[i])*Math.tanh(s.U[j])-.004*Math.max(instability,0)*s.theta[i][j],-.9,.9);
+  }
+
+  // Numerical Jacobian proxy of bounded interaction map for spectral margin.
+  const J=Array.from({length:N},()=>Array(N).fill(0));
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    const base=(i===j?1:0)/denom; const coupling=i===j?0:.18*p.interaction*W[i][j]*(1-Math.tanh(s.U[j])**2);
+    J[i][j]=base+coupling-.02*p.stabilityBrake*(i===j?1:0);
+  }
+  const spectralRadius=spectralRadiusApprox(J), deltaSpec=1-spectralRadius;
+  const finalRankRisk=Math.max(.055*p.rankGuard-traj.psi,0);
+  const os=computeObservabilitySpillover(J,W);
+  const complexity=computeComplexity(W,s.theta,s.blockCount,traj.eff,4);
+  const regimeProbs=computeRegimeProbabilities(s.U,s.F,[mean(s.sigma),p.shockEnergy,norm(s.U),p.revisionRisk,humility],s.regime);
+  const regimeEntropy=-regimeProbs.reduce((a,x)=>a+(x>0?x*Math.log(x):0),0)/Math.log(4);
+  const microSkew=mean(pd.moments.map(m=>Math.abs(m[2]))), microKurt=mean(pd.moments.map(m=>Math.abs(m[3]-3)));
+  const factorEnergy=norm(s.F);
+
+  s.step++;
+  s.frame={
+    U:s.U.slice(), W, cycles:cyc.slice(), blocks:s.blocks.slice(), blockCount:s.blockCount, regime:s.regime,
+    deltaM, sigma:s.sigma.slice(), humility, confidence, neff:pd.neff, dpf:pd.dpf, tauCal:s.tauCal, nuCal:s.nuCal,
+    spectralRadius, deltaSpec, lambda2:lap.lambda2, kcon:lap.kcon, cRisk:lap.cRisk, psi:traj.psi, effectiveRank:traj.eff,
+    rankRisk:finalRankRisk, hidden:s.U[9], releaseSurprise:s.releaseSurprise, microMoments:pd.moments.map(v=>v.slice()), F:s.F.slice(), blockDpf:pd.blockDpf.slice(),
+    obsScore:obs.score, benchmarkAdvantage:obs.advantage, observability:os.observability, observabilityRank:os.rank, spillover:os.spillover, complexity:complexity.raw, complexityNorm:complexity.normalized, regimeProbs, regimeEntropy, microSkew, microKurt, factorEnergy,

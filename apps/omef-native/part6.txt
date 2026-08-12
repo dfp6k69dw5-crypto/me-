@@ -1,0 +1,64 @@
+  const occupied=bins.reduce((n,x)=>n+(x>0),0); const span=Math.min(maxX-minX,maxY-minY); const v=s2/count-(s/count)**2;
+  return {pass:finite&&span>.35&&occupied>=3&&v>1e-5, finite,span,occupied,variance:v};
+}
+
+function selfTest(){
+  const failures=[];
+  // Invariants over multiple seeds/regimes.
+  for(let seed=1;seed<=5;seed++)for(let regime=0;regime<4;regime++){
+    let s=createState(0x1234*seed,regime); for(let k=0;k<10;k++)s=stepState(s,DEFAULT_PARAMS);
+    if(!s.U.every(Number.isFinite))failures.push(`non-finite U seed ${seed} regime ${regime}`);
+    for(let i=0;i<N;i++){const rs=s.frame.W[i].reduce((a,b)=>a+b,0); if(Math.abs(rs-1)>1e-8)failures.push(`W row sum ${i}`); if(Math.abs(s.frame.W[i][i])>1e-12)failures.push(`W diagonal ${i}`);}
+    const seen=new Set(s.blocks); if(s.blocks.length!==N||[...seen].some(g=>g<0||g>=s.blockCount))failures.push('block partition invalid');
+    if(!(s.frame.neff>=1&&s.frame.neff<=P+1e-6))failures.push('ESS out of range');
+    if(!(s.frame.confidence>0&&s.frame.confidence<=1.000001))failures.push('confidence out of range');
+    const q=quality(s.frame,512); if(!q.pass)failures.push(`quality seed ${seed} regime ${regime}`);
+  }
+  const audit=auditControls(424242);
+  const visible=audit.filter(a=>a.pass);
+  if(visible.length<8) failures.push(`too few visually meaningful controls: ${visible.length}`);
+  if(visible.some(a=>!Number.isFinite(a.impact)||a.impact<.115)) failures.push('visible control audit invariant failed');
+  return {pass:failures.length===0, failures, audit, visibleControls:visible.map(a=>a.id), sourceBlocks:SOURCE_MAP.length};
+}
+
+function activeControls(seed=424242){ return auditControls(seed).filter(a=>a.pass); }
+
+root.OMEFNative=Object.freeze({N,P,PHI,SOURCE_MAP,REGIMES,CONTROL_DEFS,DEFAULT_PARAMS,createState,stepState,makeFrame,samplePoint,visualSignature,signatureDistance,auditControls,activeControls,quality,selfTest,clamp});
+})(typeof window!=='undefined'?window:globalThis);
+
+</script>
+<script>
+(()=>{'use strict';
+const E=window.OMEFNative, canvas=document.getElementById('gl'), statusEl=document.getElementById('status'), drawer=document.getElementById('drawer'), controlsEl=document.getElementById('controls'), regimesEl=document.getElementById('regimes'), auditInfo=document.getElementById('auditInfo'), auditCount=document.getElementById('auditCount'), metricsEl=document.getElementById('metrics');
+const fatal=(msg)=>{document.getElementById('fatal').style.display='grid';document.getElementById('fatal').textContent=msg;statusEl.textContent='FAILED';statusEl.classList.add('bad')};
+window.addEventListener('error',e=>fatal('OMEF NATIVE runtime error\n'+(e.error?.stack||e.message)));
+if(!E)return fatal('OMEF NATIVE engine did not load.');
+
+const test=E.selfTest();
+if(!test.pass)return fatal('OMEF NATIVE self-test failed\n'+test.failures.join('\n'));
+const active=test.audit.filter(a=>a.pass), rejected=test.audit.filter(a=>!a.pass);
+statusEl.textContent='SELF-TEST ✓'; auditCount.textContent=`${active.length}/${test.audit.length} visually active`;
+auditInfo.innerHTML=`<b>Dead-slider gate passed.</b> ${active.length} controls cleared the visual-impact threshold. ${rejected.length} mathematically valid candidates are kept internal because their direct visual effect was too weak: ${rejected.map(x=>x.label).join(', ')}.`;
+
+const TESTMODE=new URLSearchParams(location.search).has('test');
+let params={...E.DEFAULT_PARAMS}, seed=0x51A7E, regime=1, pointCount=TESTMODE?20000:1000000, frame=E.makeFrame(params,seed,regime,9);
+let rotX=-.22,rotY=.34,zoom=1.05,drag=false,lastX=0,lastY=0,auto=.000065;
+const activeById=Object.fromEntries(active.map(x=>[x.id,x]));
+
+function qualityAccept(p,s,r){const f=E.makeFrame(p,s,r,9);return E.quality(f,700).pass?f:null}
+function rebuild(){frame=E.makeFrame(params,seed,regime,9);uploadFrame();updateMetrics();updateSubtitle()}
+function updateSubtitle(){document.getElementById('subtitle').textContent=`${E.REGIMES[regime].name} · ${frame.blockCount} blocks · ${pointCount.toLocaleString()} points · not an attractor`}
+function updateMetrics(){metricsEl.innerHTML=`<span>δspec ${frame.deltaSpec.toFixed(3)}</span><span>λ₂ ${frame.lambda2.toFixed(3)}</span><span>rank ${frame.effectiveRank}/10</span><span>ESS ${Math.round(frame.neff)}</span><span>DPF ${frame.dpf.toFixed(3)}</span><span>conf ${frame.confidence.toFixed(3)}</span><span>τcal ${frame.tauCal.toFixed(2)}</span><span>νcal ${frame.nuCal.toFixed(1)}</span><span>obs ${frame.observabilityRank}/10</span><span>spill ${frame.spillover.toFixed(2)}</span>`}
+
+for(let r=0;r<E.REGIMES.length;r++){const b=document.createElement('button');b.textContent=['Expansion','Inflation','Credit','Recession'][r];b.dataset.r=r;b.onclick=()=>{regime=r;seed=(seed+17)>>>0;rebuild();syncRegime()};regimesEl.appendChild(b)}
+function syncRegime(){[...regimesEl.children].forEach((b,i)=>b.classList.toggle('on',i===regime))} syncRegime();
+
+for(const n of [100000,250000,500000,1000000]){const b=document.createElement('button');b.textContent=n===1000000?'1M':n/1000+'k';b.onclick=()=>{pointCount=n;syncPoints();updateSubtitle()};b.dataset.n=n;document.getElementById('pointButtons').appendChild(b)}
+function syncPoints(){[...document.getElementById('pointButtons').children].forEach(b=>b.classList.toggle('on',+b.dataset.n===pointCount))} syncPoints();
+
+for(const d of active){const w=document.createElement('div');w.className='control';w.innerHTML=`<div class="controlHead"><label>${d.label}</label><span class="val" id="v-${d.id}">${params[d.id].toFixed(d.step<.01?3:2)}</span></div><div class="src">${d.source} · impact ${d.impact.toFixed(2)}</div><input id="i-${d.id}" type="range" min="${d.min}" max="${d.max}" step="${d.step}" value="${params[d.id]}">`;controlsEl.appendChild(w);const inp=w.querySelector('input');inp.addEventListener('input',()=>{params[d.id]=+inp.value;w.querySelector('.val').textContent=(+inp.value).toFixed(d.step<.01?3:2);scheduleRebuild()})}
+let rebuildTimer=0;function scheduleRebuild(){clearTimeout(rebuildTimer);rebuildTimer=setTimeout(rebuild,22)}
+function syncSliders(){for(const d of active){const i=document.getElementById('i-'+d.id);if(i){i.value=params[d.id];document.getElementById('v-'+d.id).textContent=params[d.id].toFixed(d.step<.01?3:2)}}}
+
+document.getElementById('random').onclick=()=>{
+  const old={...params}; for(let attempt=0;attempt<36;attempt++){

@@ -1,0 +1,109 @@
+  ][state.regime];
+  const F=Array(3).fill(0);for(let i=0;i<3;i++){for(let j=0;j<3;j++)F[i]+=phi[i][j]*(state.F?.[j]||0);F[i]+=.16*raw[i]+.025*(rnd()*2-1);}return F;
+}
+
+function computeRegimeProbabilities(U,F,market,cur){
+  const logits=[];
+  for(let r=0;r<4;r++){
+    let z=(r===cur?.regime?.index?0.2:0); const drift=REGIMES[r].drift;
+    for(let i=0;i<N;i++)z+=.11*drift[i]*U[i]; z+=.12*(r-1.5)*F[(r+1)%3]+.06*market[r%market.length]; if(r===cur)z+=.28;
+    logits.push(z);
+  }
+  return softmax(logits);
+}
+
+function computeObservationDiagnostics(state,U,F,sigma,p){
+  const Y=[.62*U[0]+.28*U[8]-.18*U[4], .55*U[3]-.22*U[2]+.18*F[0], .58*U[6]+.22*U[7], .42*U[8]-.32*U[4]+.18*F[2], .38*U[0]-.28*U[2]-.22*U[7]+.16*F[1]];
+  const pred=state.obsPrev||Y.map(()=>0), resid=Y.map((x,i)=>x-pred[i]);
+  let score=0; for(let i=0;i<Y.length;i++){const v=.08+sigma[i]*sigma[i]*p.volatility+p.revisionRisk*.03;score+=-.5*(resid[i]*resid[i]/v+Math.log(v));}
+  const b=[
+    -.55*Math.abs(Y[0]-pred[0]), -.45*Math.abs(U[0]+U[6]), -.50*Math.abs(U[5]), -.48*Math.abs(U[6]-pred[2]),
+    -.42*Math.abs(U[4]+U[7]), -.46*Math.abs(Y[3]), -.44*Math.abs(Y[4])
+  ];
+  const advantage=score-Math.max(...b); return {Y,pred,resid,score,bench:b,advantage};
+}
+
+function computeObservabilitySpillover(J,W){
+  const H=Array.from({length:5},(_,r)=>Array.from({length:N},(_,c)=>c===r*2?1:(c===(r*2+1)%N?.32:0)));
+  let Pwr=Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>i===j?1:0)); const rows=[];
+  for(let k=0;k<3;k++){
+    for(const hr of H){const row=Array(N).fill(0);for(let j=0;j<N;j++)for(let a=0;a<N;a++)row[j]+=hr[a]*Pwr[a][j];rows.push(row);}
+    const nxt=Array.from({length:N},()=>Array(N).fill(0));for(let i=0;i<N;i++)for(let j=0;j<N;j++)for(let a=0;a<N;a++)nxt[i][j]+=Pwr[i][a]*J[a][j];Pwr=nxt;
+  }
+  const G=Array.from({length:N},()=>Array(N).fill(0));for(const row of rows)for(let i=0;i<N;i++)for(let j=0;j<N;j++)G[i][j]+=row[i]*row[j];
+  const ev=jacobiEigenSymmetric(G,80,false).values;const mx=Math.max(...ev.map(Math.abs),1e-9);const rank=ev.reduce((n,x)=>n+(Math.abs(x)/mx>1e-5?1:0),0);
+  let off=0,tot=0;for(let i=0;i<N;i++)for(let j=0;j<N;j++){const e=W[i][j]*W[i][j];tot+=e;if(i!==j)off+=e;}return {rank,observability:rank/N,spillover:tot?off/tot:0};
+}
+
+function computeComplexity(W,theta,blockCount,rank,regimeCount=4){
+  let a=0,w=0;for(let i=0;i<N;i++)for(let j=0;j<N;j++)if(i!==j){if(Math.abs(theta[i][j])>.06)a++;if(W[i][j]>.04)w++;}
+  const raw=a + Math.round(.35*a*N) + 3*regimeCount + rank + 36 + 13 + 3 + 8 + w + 8 + blockCount;
+  return {raw,normalized:clamp(raw/520,0,1.5)};
+}
+
+function stepState(prev, params={}, opts={}){
+  const p={...DEFAULT_PARAMS,...params};
+  const s={...prev, U:prev.U.slice(), Ustar:prev.Ustar.slice(), L:prev.L.slice(), s:prev.s.slice(), sigma:prev.sigma.slice(), theta:prev.theta.map(r=>r.slice()), zS:prev.zS.map(v=>v.slice()), zL:prev.zL.map(v=>v.slice()), history:prev.history.map(v=>v.slice()), hHistory:prev.hHistory.slice(), F:(prev.F||[0,0,0]).slice(), obsPrev:(prev.obsPrev||[0,0,0,0,0]).slice(), microMoments:(prev.microMoments||Array.from({length:N},()=>[0,1,0,3])).map(v=>v.slice())};
+  const rnd=mulberry32((s.seed + 0x9e3779b9*(s.step+1))>>>0);
+  const reg=REGIMES[s.regime];
+
+  const dist=norm(s.Ustar.map((x,i)=>x-s.U[i]));
+  const instability=Math.log(Math.sqrt(dist*dist+1e-6)/.18+1);
+  const market=[mean(s.sigma),p.shockEnergy,dist,p.revisionRisk,instability,p.humilityPressure,p.rankGuard,p.blockGranularity];
+
+  // Initial W for diagnostics.
+  let W=computeMarketWeights(s.U,market,.25,0,s.theta,p);
+  let lap=laplacianDiagnostics(W,p.harmonicDiffusion);
+  let traj=trajectoryDiagnostics(s.history,p.rankGuard);
+
+  const cRisk=lap.cRisk;
+  const rankRisk=Math.max(.08*p.rankGuard-traj.psi,0);
+  const residualRisk=.20+Math.abs(mean(s.U))+.22*p.revisionRisk;
+  const accountingRisk=Math.abs(s.U[0]+s.U[3]-s.U[2]-s.U[8])*.22/p.accountingConstraint;
+  const humInputs=[residualRisk/(1+residualRisk),accountingRisk/(1+accountingRisk),Math.max(-.2,0),rankRisk/(.2+rankRisk),mean(s.sigma)/(1+mean(s.sigma)),p.revisionRisk/(1+p.revisionRisk),.12, .18];
+  const hWeights=softmax(humInputs.map((x,i)=>(.4+.11*i)*x*p.humilityPressure));
+  let humility=hWeights.reduce((a,w,i)=>a+w*humInputs[i],0)*p.humilityPressure;
+  let confidence=Math.exp(-humility);
+
+  // Recompute market weights with risk/humility-informed market vector.
+  market[5]=humility; W=computeMarketWeights(s.U,market,.25,cRisk,s.theta,p); lap=laplacianDiagnostics(W,p.harmonicDiffusion);
+
+  const deltaM=Array(N).fill(0);
+  for(let i=0;i<N;i++){let z=0;for(let j=0;j<N;j++)z+=W[i][j]*s.U[j];deltaM[i]=z-s.U[i];}
+
+  // Golden-cycle oscillator update. Long/short ratio is phi with explicit detune control.
+  const ratio=PHI*Math.exp(p.cycleDetune*.55);
+  const cyc=Array(N).fill(0); const periodsS=[18,21,24,27,30,33,36,42,48];
+  for(let i=0;i<9;i++){
+    const Ts=periodsS[i], Tl=Ts*ratio, rhoS=.94, rhoL=.975;
+    const aS=TAU/Ts, aL=TAU/Tl;
+    let [x,y]=s.zS[i], [u,v]=s.zL[i];
+    s.zS[i]=[rhoS*(Math.cos(aS)*x-Math.sin(aS)*y),rhoS*(Math.sin(aS)*x+Math.cos(aS)*y)];
+    s.zL[i]=[rhoL*(Math.cos(aL)*u-Math.sin(aL)*v),rhoL*(Math.sin(aL)*u+Math.cos(aL)*v)];
+    cyc[i]=p.cycleDrive*(s.zS[i][0]+s.zL[i][0]);
+  }
+
+  // Pairwise + low-rank higher-order interaction field A_i.
+  const A=Array(N).fill(0), WMforce=Array(N).fill(0);
+  for(let i=0;i<N;i++){
+    for(let j=0;j<N;j++)if(i!==j) WMforce[i]+=W[i][j]*Math.tanh(s.U[j]-s.U[i]);
+    let pair=0, quad=0;
+    for(let j=0;j<N;j++)if(i!==j){
+      const aij=.75*Math.tanh(s.theta[i][j]+.55*p.marketCoupling*(W[i][j]-.1));
+      pair+=aij*Math.tanh(s.U[j]);
+      const k=(j*3+i+1)%N;
+      const q=.055*W[i][j]*W[i][k]*(1+.6*Math.sin((i+1)*(j+1)));
+      quad+=q*Math.tanh(s.U[j])*Math.tanh(s.U[k]);
+    }
+    A[i]=s.U[i]+p.interaction*(.24*pair+.65*quad)+.32*p.marketCoupling*WMforce[i]+.18*cyc[i]+.08*reg.drift[i];
+  }
+
+  // Adaptive damping c_n from instability, covariance, cross-pressure, connectivity, humility, rank collapse.
+  const sigmaMean=mean(s.sigma), dMnorm=norm(deltaM);
+  const brakeRisk=.55*Math.max(instability,0)+.45*sigmaMean+.30*dMnorm+.55*lap.cRisk+.55*humility+.65*rankRisk;
+  const c=.12*(1+p.stabilityBrake*brakeRisk);
+
+  // Five 2D block rotations D_Theta, then bounded transition.
+  const rot=Array(N).fill(0);
+  for(let b=0;b<5;b++){
+    const i=2*b,j=i+1; const angle=.08*reg.twist + .16*p.cycleDrive*Math.tanh(cyc[i]-cyc[j]) + .11*p.marketCoupling*(W[i][j]-W[j][i]);

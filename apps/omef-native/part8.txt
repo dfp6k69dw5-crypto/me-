@@ -1,0 +1,13 @@
+function resize(){const dpr=Math.min(2,devicePixelRatio||1),w=Math.max(2,Math.floor(innerWidth*dpr)),h=Math.max(2,Math.floor(innerHeight*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;gl.viewport(0,0,w,h)}gl.uniform1f(loc.uAspect,w/h);gl.uniform1f(loc.uPointSize,Math.max(1,dpr*.72))}
+addEventListener('resize',resize,{passive:true});resize();uploadFrame();updateMetrics();updateSubtitle();
+
+gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.disable(gl.DEPTH_TEST);
+function render(ms){resize();if(!drag)rotY+=auto*Math.min(40,ms-(render.last||ms));render.last=ms;gl.clearColor(.012,.016,.02,1);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(prog);gl.uniform1f(loc.uTime,ms*.00007);gl.uniform1f(loc.uRotX,rotX);gl.uniform1f(loc.uRotY,rotY);gl.uniform1f(loc.uZoom,zoom);gl.drawArrays(gl.POINTS,0,pointCount);if(!TESTMODE)requestAnimationFrame(render);else statusEl.textContent='SELF-TEST ✓ · RENDER ✓'}requestAnimationFrame(render);
+
+canvas.addEventListener('pointerdown',e=>{drag=true;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(!drag)return;rotY+=(e.clientX-lastX)*.007;rotX+=(e.clientY-lastY)*.007;lastX=e.clientX;lastY=e.clientY});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=E.clamp(zoom*Math.exp(-e.deltaY*.001),.45,2.4)},{passive:false});
+let touches=new Map(),pinch0=0,zoom0=zoom;canvas.addEventListener('pointerdown',e=>{touches.set(e.pointerId,[e.clientX,e.clientY]);if(touches.size===2){const a=[...touches.values()];pinch0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);zoom0=zoom}});canvas.addEventListener('pointermove',e=>{if(touches.has(e.pointerId)){touches.set(e.pointerId,[e.clientX,e.clientY]);if(touches.size===2){const a=[...touches.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(pinch0>5)zoom=E.clamp(zoom0*d/pinch0,.45,2.4)}}});const unt=e=>touches.delete(e.pointerId);canvas.addEventListener('pointerup',unt);canvas.addEventListener('pointercancel',unt);
+window.__OMEF_NATIVE_READY__=true;window.__OMEF_NATIVE_TEST__=test;
+})();
+</script>
+</body>
+</html>
