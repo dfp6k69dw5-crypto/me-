@@ -26,7 +26,7 @@ void main(){
  float h1=h(id,11u),h2=h(id,29u),h3=h(id,47u),h4=h(id,83u),h5=h(id,109u);
  float t=TAU*h1,q=h2*2.0-1.0;
  float cg=uCtrl[0],ig=uCtrl[1],cyg=uCtrl[2],det=(uCtrl[3]*2.0-1.0),memg=uCtrl[4],hidg=uCtrl[5],volg=uCtrl[6],shockg=uCtrl[7],brakeg=uCtrl[8],harmg=uCtrl[9],humg=uCtrl[10],divg=uCtrl[11],acctg=uCtrl[12],blockg=uCtrl[13],revg=uCtrl[14],rankg=uCtrl[15];
- float bcFrame=clamp(floor(uBlockCount+.5),2.0,9.0),bcDirect=2.0+floor(1.0+7.0*blockg),bc=clamp(mix(bcFrame,bcDirect,.78),2.0,9.0),branch=floor(h4*bc);
+ float bcFrame=clamp(floor(uBlockCount+.5),2.0,9.0),bcDirect=2.0+7.0*blockg,bc=clamp(mix(bcFrame,bcDirect,.78),2.0,9.0),branch=floor(h4*bc);
  float d[10];float c[10];
  for(int i=0;i<10;i++){float fi=float(i);float phase=.31*fi+.37*uCycle[i]+.18*uBlock[i]+det*(.18+.03*fi)+uTime*(.03+.004*fi);float harm=sin((1.0+.17*fi)*t+phase)+.42*cos((2.0+.11*fi)*t*(1.0+.18*det)+q*(fi+1.0));d[i]=harm+.56*uU[i]+.24*uCycle[i];}
  for(int i=0;i<10;i++){float a=0.0;for(int j=0;j<10;j++)a+=uW[i*10+j]*tanh(d[j]);c[i]=mix(d[i],a,clamp(.12+.74*cg,0.0,.94));}
@@ -38,35 +38,47 @@ void main(){
  float sSplit=.18+1.08*volg+.82*hidg+.78*revg+.18*diagEntropy+(uRegime>2.5?.42:0.0);
  int mode=0;float best=sSheet;if(sBranch>best){best=sBranch;mode=1;}if(sShell>best){best=sShell;mode=2;}if(sKnot>best){best=sKnot;mode=3;}if(sSplit>best){best=sSplit;mode=4;}
  float X=0.0,Y=0.0,Z=0.0;
- float strandCount=2.0+floor(8.0*divg),strand=floor(h5*strandCount),strandPhase=TAU*(strand+.5)/strandCount;
- float thickness=.004+.058*volg+.026*divg+.010*diagMicro;
+ float strandCount=2.0+8.0*divg,strand=floor(h5*strandCount),strandPhase=TAU*(strand+.5)/strandCount;
+ float thickness=.004+.072*volg+.040*divg+.010*diagMicro;
  if(mode==0){
    float u=h1*2.0-1.0,v=h2*2.0-1.0,folds=2.0+floor(2.0+7.0*cyg+3.0*ig+2.0*diagComplex);
-   X=1.12*u+.20*cg*sin(PI*v*(1.0+2.0*acctg))+.08*c[0]+.05*c[6]*v;
+   X=1.12*u+.24*cg*sin(PI*v*(1.0+2.0*acctg))+.08*c[0]+.05*c[6]*v;
    Y=.70*v+.22*ig*sin(PI*u*(2.0+3.0*ig)+det*1.8)+.06*c[2];
-   Z=(.18+.42*memg)*sin(PI*u*folds+det*PI)*cos(PI*v*(1.0+2.5*harmg))+.18*hidg*sin(3.0*v+1.5*det)+.05*c[4];
+   Z=(.18+.42*memg)*sin(PI*u*folds+det*PI)*cos(PI*v*(1.0+3.4*harmg))+.18*hidg*sin(3.0*v+1.5*det)+.05*c[4];
  }else if(mode==1){
    float u=pow(h1,.72),fork=(h3<.5?-1.0:1.0),fork2=(h5<.5?-1.0:1.0),a=TAU*(branch+.5)/bc+.32*cg*sin(TAU*branch/bc+det);
-   float split1=max(0.0,u-.28),split2=max(0.0,u-.62);a+=fork*split1*(.45+2.10*shockg)+fork2*split2*(.20+1.20*blockg);
+   float split1=max(0.0,u-.28),split2=max(0.0,u-.62);a+=fork*split1*(.45+2.55*shockg)+fork2*split2*(.20+1.35*blockg);
    float rr=.05+.95*u,bend=.42*ig*sin(4.0*u+det)+(.20+.18*diagSpill)*memg*sin(7.0*u+c[7]);
    X=rr*cos(a+bend);Y=rr*sin(a+bend);Z=1.40*(u-.5)+.30*cyg*sin(2.0*a+5.0*u)+.08*c[9];
  }else if(mode==2){
    float theta=t+det*1.10,phi=acos(clamp(2.0*h2-1.0,-1.0,1.0)),lobes=2.0+floor(2.0+8.0*cyg+3.0*ig);
-   float R=.82+.22*sin(lobes*theta+det*PI)*sin(phi*(1.0+2.5*memg))+.14*hidg*cos((2.0+4.0*harmg)*phi)+.06*c[4];
+   float R=.82+.22*sin(lobes*theta+det*PI)*sin(phi*(1.0+2.5*memg))+.18*hidg*cos((2.0+5.5*harmg)*phi)+.06*c[4];
    X=R*sin(phi)*cos(theta);Y=R*sin(phi)*sin(theta);Z=R*cos(phi);
  }else if(mode==3){
    float p=2.0+floor(1.0+3.0*cg),k=3.0+floor(2.0+7.0*ig+4.0*cyg),rr=.60+.24*cos(k*t+det*PI+.16*c[2]);
    X=rr*cos(p*t);Y=rr*sin(p*t);Z=(.25+.55*memg)*sin(k*t+.50*hidg+.20*c[5]);
  }else{
-   float a=TAU*(branch+.5)/bc+det*.70,cr=.42+.60*hidg+.12*sin(branch*PHI),loops=1.0+floor(1.0+5.0*ig+4.0*revg),lt=TAU*h1*loops,lr=.08+.28*divg+.06*diagFactor;
+   float a=TAU*(branch+.5)/bc+det*.70,cr=.42+.60*hidg+.12*sin(branch*PHI),loops=1.0+floor(1.0+5.0*ig+4.0*revg),lt=TAU*h1*loops,lr=.08+.34*divg+.06*diagFactor;
    X=cr*cos(a)+lr*cos(lt+a*.70);Y=cr*sin(a)+lr*sin(lt-a*.40);Z=.32*sin(a*PHI)+(.12+.32*revg)*sin(lt*(1.0+.80*ig)+.15*c[8]);
  }
  float strandR=thickness*(h3*2.0-1.0);X+=strandR*cos(strandPhase);Y+=strandR*sin(strandPhase);Z+=strandR*.35*sin(strandPhase*2.0);
  float grp=(h5>.5?1.0:-1.0);X+=grp*(.05+.38*revg)*sin(t*.5+det);Z+=grp*.25*revg;
- X*=1.15-.35*acctg;Y+=.25*acctg*sign(sin(t*2.0))*abs(X);
+
+ // Continuous structural carriers: same strategy used in the 384-gene repair.
+ // These live inside geometry (not post-processing) and prevent threshold dead zones.
+ float shockWave=shockg*(.16*sin((2.2+3.8*shockg)*t+branch*.61)+.12*q*cos(5.0*t+det));
+ X+=shockWave;Y+=shockg*.14*sin(3.7*t+q*1.8);Z+=shockg*.20*q*cos(2.4*t+branch*.37);
+ float harmWave=harmg*(.18*sin((1.0+2.8*harmg)*t+Y*2.1)+.13*cos(PHI*t+X*1.7));
+ X+=harmWave;Y+=harmg*.16*cos((1.4+2.2*harmg)*t+Z*1.9);Z+=harmg*.14*sin(PHI*t*1.7+q);
+ float blockPhase=TAU*blockg;
+ X+=blockg*.18*sin(t*(1.4+.36*bc)+branch*.73+blockPhase);Y+=blockg*.15*cos(t*(1.1+.24*bc)-branch*.51-blockPhase);Z+=blockg*.13*q*sin(2.2*t+blockPhase);
+ float divPhase=TAU*divg;
+ X+=divg*.14*cos((2.0+4.0*divg)*t+strandPhase+divPhase);Y+=divg*.14*sin((2.3+3.5*divg)*t-strandPhase);Z+=divg*.11*q*cos(3.1*t+divPhase);
+ X*=1.20-.45*acctg;Y+=.36*acctg*sign(sin(t*2.0))*abs(X);Z+=.11*acctg*sin(4.3*t+q*2.0);
+
  float twist=(.12+.75*cg)*Z+det*.35+.08*c[6],ca=cos(twist),sa=sin(twist),xx=ca*X-sa*Y,yy=sa*X+ca*Y;X=xx;Y=yy;
  X+=.08*ig*sin(Y*(2.0+3.0*ig)+c[3]);Y+=.08*ig*sin(Z*(2.0+2.0*cyg)+c[4]);Z+=.10*cyg*sin(X*(1.5+3.0*cyg)+c[8]);
- if(h4>.82){float kick=(.08+.55*shockg+.12*diagTear)*(h4-.82)/.18;X+=kick*sign(sin(t*bc+det));Z+=kick*sin((4.0+4.0*shockg)*t+c[9]);}
+ if(h4>.82){float kick=(.08+.72*shockg+.12*diagTear)*(h4-.82)/.18;X+=kick*sign(sin(t*bc+det));Z+=kick*sin((4.0+4.0*shockg)*t+c[9]);}
  float pinch=1.0/(1.0+(1.50*humg+.20*uShape[10])*abs(Z));X*=pinch;Y*=pinch;
  float damp=1.0/(1.0+(.15+1.00*brakeg)*(X*X+Y*Y+Z*Z));X*=damp;Y*=damp;Z*=damp;
  Z*=.18+1.45*rankg;
