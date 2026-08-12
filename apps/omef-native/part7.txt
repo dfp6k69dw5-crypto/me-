@@ -15,7 +15,7 @@ const gl=canvas.getContext('webgl2',{alpha:false,antialias:false,depth:false,pre
 if(!gl)return fatal('WebGL 2 is required for the million-point renderer.');
 const vs=`#version 300 es
 precision highp float;precision highp int;
-uniform float uU[10];uniform float uCycle[10];uniform float uBlock[10];uniform float uW[100];uniform float uShape[21];uniform float uBlockCount;uniform float uRegime;uniform float uTime;uniform float uRotX;uniform float uRotY;uniform float uZoom;uniform float uAspect;uniform float uPointSize;
+uniform float uU[10];uniform float uCycle[10];uniform float uBlock[10];uniform float uW[100];uniform float uShape[21];uniform float uCtrl[16];uniform float uBlockCount;uniform float uRegime;uniform float uTime;uniform float uRotX;uniform float uRotY;uniform float uZoom;uniform float uAspect;uniform float uPointSize;
 out float vA;out float vD;
 const float PI=3.141592653589793;const float TAU=6.283185307179586;const float PHI=1.618033988749895;
 uint hashU(uint x){x^=x>>16;x*=0x7feb352du;x^=x>>15;x*=0x846ca68bu;x^=x>>16;return x;}
@@ -25,49 +25,51 @@ void main(){
  int id=gl_VertexID;
  float h1=h(id,11u),h2=h(id,29u),h3=h(id,47u),h4=h(id,83u),h5=h(id,109u);
  float t=TAU*h1,q=h2*2.0-1.0;
- float bc=clamp(floor(uBlockCount+.5),2.0,9.0),branch=floor(h4*bc);
+ float cg=uCtrl[0],ig=uCtrl[1],cyg=uCtrl[2],det=(uCtrl[3]*2.0-1.0),memg=uCtrl[4],hidg=uCtrl[5],volg=uCtrl[6],shockg=uCtrl[7],brakeg=uCtrl[8],harmg=uCtrl[9],humg=uCtrl[10],divg=uCtrl[11],acctg=uCtrl[12],blockg=uCtrl[13],revg=uCtrl[14],rankg=uCtrl[15];
+ float bcFrame=clamp(floor(uBlockCount+.5),2.0,9.0),bcDirect=2.0+floor(1.0+7.0*blockg),bc=clamp(mix(bcFrame,bcDirect,.78),2.0,9.0),branch=floor(h4*bc);
  float d[10];float c[10];
- for(int i=0;i<10;i++){float fi=float(i);float phase=.31*fi+.37*uCycle[i]+.18*uBlock[i]+uTime*(.03+.004*fi);float harm=sin((1.0+.17*fi)*t+phase)+.42*cos((2.0+.11*fi)*t*(1.0+.08*uShape[3])+q*(fi+1.0));d[i]=harm+.56*uU[i]+.24*uCycle[i];}
- for(int i=0;i<10;i++){float a=0.0;for(int j=0;j<10;j++)a+=uW[i*10+j]*tanh(d[j]);c[i]=mix(d[i],a,clamp(uShape[0]*.36,0.0,.90));}
- float coupling=sat(uShape[0]/2.8),interact=sat(uShape[1]/2.5),cycle=sat(uShape[2]/2.6),memory=sat(uShape[4]/1.8),hidden=sat(uShape[5]/2.7),spread=sat(uShape[6]/2.8),tear=sat(uShape[7]/2.8),brake=sat(uShape[8]/2.6),connect=sat(uShape[9]/2.8),humility=sat(uShape[10]/2.4),blocks=sat(uShape[11]/2.7),account=sat(uShape[12]/2.8),rank=sat(uShape[13]/2.8),micro=sat(uShape[14]/2.7),factor=sat(uShape[15]/2.7),spill=sat(uShape[16]/2.8),observe=sat(uShape[17]/2.8),bench=sat(uShape[18]/2.6),complexity=sat(uShape[19]/2.8),entropy=sat(uShape[20]);
- float sSheet=.80+.70*connect+.40*observe+.22*account-.42*tear+(uRegime<.5?.72:0.0);
- float sBranch=.28+.82*blocks+.72*tear+.42*spill+.22*complexity+(uRegime>1.5&&uRegime<2.5?.78:0.0);
- float sShell=.30+.86*cycle+.38*connect+.28*account-.25*spread+(uRegime>.5&&uRegime<1.5?.66:0.0);
- float sKnot=.24+.74*interact+.58*memory+.34*factor+.28*coupling+(uRegime<.5?.24:0.0);
- float sSplit=.18+.86*spread+.58*hidden+.46*entropy+.30*bench+(uRegime>2.5?.82:0.0);
+ for(int i=0;i<10;i++){float fi=float(i);float phase=.31*fi+.37*uCycle[i]+.18*uBlock[i]+det*(.18+.03*fi)+uTime*(.03+.004*fi);float harm=sin((1.0+.17*fi)*t+phase)+.42*cos((2.0+.11*fi)*t*(1.0+.18*det)+q*(fi+1.0));d[i]=harm+.56*uU[i]+.24*uCycle[i];}
+ for(int i=0;i<10;i++){float a=0.0;for(int j=0;j<10;j++)a+=uW[i*10+j]*tanh(d[j]);c[i]=mix(d[i],a,clamp(.12+.74*cg,0.0,.94));}
+ float diagSpread=sat(uShape[6]/1.8),diagTear=sat(uShape[7]/2.0),diagConnect=sat(uShape[9]/2.2),diagMicro=sat(uShape[14]/1.8),diagFactor=sat(uShape[15]/1.8),diagSpill=sat(uShape[16]/1.5),diagObs=sat(uShape[17]/1.2),diagBench=sat(uShape[18]/1.6),diagComplex=sat(uShape[19]/1.5),diagEntropy=sat(uShape[20]);
+ float sSheet=.62+1.12*harmg+.56*acctg+.22*diagObs-.72*shockg+(uRegime<.5?.34:0.0);
+ float sBranch=.28+1.08*blockg+1.02*shockg+.48*divg+.20*diagSpill+(uRegime>1.5&&uRegime<2.5?.40:0.0);
+ float sShell=.25+1.18*cyg+.50*harmg+.16*diagConnect-.48*volg+(uRegime>.5&&uRegime<1.5?.36:0.0);
+ float sKnot=.22+1.00*ig+.78*memg+.56*cg+.14*diagFactor+(uRegime<.5?.16:0.0);
+ float sSplit=.18+1.08*volg+.82*hidg+.78*revg+.18*diagEntropy+(uRegime>2.5?.42:0.0);
  int mode=0;float best=sSheet;if(sBranch>best){best=sBranch;mode=1;}if(sShell>best){best=sShell;mode=2;}if(sKnot>best){best=sKnot;mode=3;}if(sSplit>best){best=sSplit;mode=4;}
  float X=0.0,Y=0.0,Z=0.0;
- float thickness=.008+.026*spread+.020*(1.0-observe)+.012*micro;
+ float strandCount=2.0+floor(8.0*divg),strand=floor(h5*strandCount),strandPhase=TAU*(strand+.5)/strandCount;
+ float thickness=.004+.058*volg+.026*divg+.010*diagMicro;
  if(mode==0){
-   float u=h1*2.0-1.0,v=h2*2.0-1.0;float folds=1.0+floor(1.0+3.0*cycle+2.0*complexity);
-   X=1.10*u+.10*c[0]+.06*c[6]*v;
-   Y=.76*v+.12*sin(PI*u*(2.0+2.0*interact)+c[2]);
-   Z=.34*sin(PI*u*folds+.55*c[4])*cos(PI*v*(1.0+.8*memory))+.16*memory*sin(3.0*v+c[9]);
-   float n=(h3*2.0-1.0)*thickness;X+=n*cos(t);Y+=n*sin(t);Z+=(h5*2.0-1.0)*thickness*.55;
+   float u=h1*2.0-1.0,v=h2*2.0-1.0,folds=2.0+floor(2.0+7.0*cyg+3.0*ig+2.0*diagComplex);
+   X=1.12*u+.20*cg*sin(PI*v*(1.0+2.0*acctg))+.08*c[0]+.05*c[6]*v;
+   Y=.70*v+.22*ig*sin(PI*u*(2.0+3.0*ig)+det*1.8)+.06*c[2];
+   Z=(.18+.42*memg)*sin(PI*u*folds+det*PI)*cos(PI*v*(1.0+2.5*harmg))+.18*hidg*sin(3.0*v+1.5*det)+.05*c[4];
  }else if(mode==1){
-   float u=pow(h1,.72),fork=(h3<.5?-1.0:1.0),fork2=(h5<.5?-1.0:1.0);float a=TAU*(branch+.5)/bc+.08*(c[0]*cos(TAU*branch/bc)+c[1]*sin(TAU*branch/bc));
-   float split1=max(0.0,u-.34),split2=max(0.0,u-.68);a+=fork*split1*(.55+1.35*tear)+fork2*split2*(.22+.72*blocks);
-   float rr=.06+.92*u;float bend=.20*interact*sin(4.0*u+c[3])+.16*spill*sin(7.0*u+c[7]);
-   X=rr*cos(a+bend);Y=rr*sin(a+bend);Z=1.48*(u-.5)+.20*sin(2.0*a+4.0*u)+.10*c[9];
-   float tubeA=TAU*h2,tube=thickness*(.45+.9*h5);X+=tube*cos(tubeA);Y+=tube*sin(tubeA);Z+=tube*.55*sin(tubeA*2.0);
+   float u=pow(h1,.72),fork=(h3<.5?-1.0:1.0),fork2=(h5<.5?-1.0:1.0),a=TAU*(branch+.5)/bc+.32*cg*sin(TAU*branch/bc+det);
+   float split1=max(0.0,u-.28),split2=max(0.0,u-.62);a+=fork*split1*(.45+2.10*shockg)+fork2*split2*(.20+1.20*blockg);
+   float rr=.05+.95*u,bend=.42*ig*sin(4.0*u+det)+(.20+.18*diagSpill)*memg*sin(7.0*u+c[7]);
+   X=rr*cos(a+bend);Y=rr*sin(a+bend);Z=1.40*(u-.5)+.30*cyg*sin(2.0*a+5.0*u)+.08*c[9];
  }else if(mode==2){
-   float theta=t,phi=acos(clamp(2.0*h2-1.0,-1.0,1.0));float lobes=2.0+floor(1.0+4.0*cycle+2.0*interact);
-   float R=.88+.13*sin(lobes*theta+.65*c[1])*sin(phi*(1.0+2.0*memory))+.09*c[4]+.05*hidden*cos(3.0*phi);
+   float theta=t+det*1.10,phi=acos(clamp(2.0*h2-1.0,-1.0,1.0)),lobes=2.0+floor(2.0+8.0*cyg+3.0*ig);
+   float R=.82+.22*sin(lobes*theta+det*PI)*sin(phi*(1.0+2.5*memg))+.14*hidg*cos((2.0+4.0*harmg)*phi)+.06*c[4];
    X=R*sin(phi)*cos(theta);Y=R*sin(phi)*sin(theta);Z=R*cos(phi);
-   float n=(h3*2.0-1.0)*thickness;X+=n*sin(phi)*cos(theta);Y+=n*sin(phi)*sin(theta);Z+=n*cos(phi);
  }else if(mode==3){
-   float p=2.0+floor(mod(uBlockCount,3.0)),k=3.0+floor(1.0+3.0*complexity+2.0*cycle);float rr=.66+.19*cos(k*t+.28*c[2]);
-   X=rr*cos(p*t);Y=rr*sin(p*t);Z=.42*sin(k*t+.35*c[5]);
-   float ta=TAU*h2,tube=thickness*(1.2+.7*memory);float nx=cos(p*t)*cos(k*t),ny=sin(p*t)*cos(k*t),nz=sin(k*t);X+=tube*(cos(ta)*nx-.55*sin(ta)*sin(p*t));Y+=tube*(cos(ta)*ny+.55*sin(ta)*cos(p*t));Z+=tube*cos(ta)*nz+tube*.7*sin(ta);
+   float p=2.0+floor(1.0+3.0*cg),k=3.0+floor(2.0+7.0*ig+4.0*cyg),rr=.60+.24*cos(k*t+det*PI+.16*c[2]);
+   X=rr*cos(p*t);Y=rr*sin(p*t);Z=(.25+.55*memg)*sin(k*t+.50*hidg+.20*c[5]);
  }else{
-   float a=TAU*(branch+.5)/bc+.09*(c[3]*cos(TAU*branch/bc)+c[6]*sin(TAU*branch/bc)),cr=.58+.30*hidden+.12*sin(branch*PHI);float lt=TAU*h1*(1.0+floor(1.0+3.0*factor));float lr=.10+.16*(.35+micro)*(.45+.55*h3);
-   X=cr*cos(a)+lr*cos(lt+a*.7);Y=cr*sin(a)+lr*sin(lt-a*.4);Z=.38*sin(a*PHI)+.22*sin(lt*(1.0+.5*interact)+c[8]);
-   X+=(h2*2.0-1.0)*thickness;Y+=(h5*2.0-1.0)*thickness;Z+=(h3*2.0-1.0)*thickness;
+   float a=TAU*(branch+.5)/bc+det*.70,cr=.42+.60*hidg+.12*sin(branch*PHI),loops=1.0+floor(1.0+5.0*ig+4.0*revg),lt=TAU*h1*loops,lr=.08+.28*divg+.06*diagFactor;
+   X=cr*cos(a)+lr*cos(lt+a*.70);Y=cr*sin(a)+lr*sin(lt-a*.40);Z=.32*sin(a*PHI)+(.12+.32*revg)*sin(lt*(1.0+.80*ig)+.15*c[8]);
  }
- float twist=.10+.34*coupling+.22*memory;float ang=twist*Z+.10*uRegime+.08*c[6];float ca=cos(ang),sa=sin(ang),xx=ca*X-sa*Y,yy=sa*X+ca*Y;X=xx;Y=yy;
- X+=.075*coupling*(c[0]-c[5])+.045*interact*sin(Y*2.6+c[3]);Y+=.075*coupling*(c[1]-c[6])+.045*interact*sin(Z*2.4+c[4]);Z+=.065*cycle*(c[2]-c[7])+.040*memory*sin(X*2.2+c[8]);
- if(h4>.86){float kick=(.04+.24*tear+.10*bench)*(h4-.86)/.14;X+=kick*sign(sin(t*bc+c[0]));Z+=kick*sin(5.0*t+c[9]);}
- float damp=1.0/(1.0+.10*brake*(X*X+Y*Y+Z*Z)+.06*humility);X*=damp;Y*=damp;Z*=damp;
+ float strandR=thickness*(h3*2.0-1.0);X+=strandR*cos(strandPhase);Y+=strandR*sin(strandPhase);Z+=strandR*.35*sin(strandPhase*2.0);
+ float grp=(h5>.5?1.0:-1.0);X+=grp*(.05+.38*revg)*sin(t*.5+det);Z+=grp*.25*revg;
+ X*=1.15-.35*acctg;Y+=.25*acctg*sign(sin(t*2.0))*abs(X);
+ float twist=(.12+.75*cg)*Z+det*.35+.08*c[6],ca=cos(twist),sa=sin(twist),xx=ca*X-sa*Y,yy=sa*X+ca*Y;X=xx;Y=yy;
+ X+=.08*ig*sin(Y*(2.0+3.0*ig)+c[3]);Y+=.08*ig*sin(Z*(2.0+2.0*cyg)+c[4]);Z+=.10*cyg*sin(X*(1.5+3.0*cyg)+c[8]);
+ if(h4>.82){float kick=(.08+.55*shockg+.12*diagTear)*(h4-.82)/.18;X+=kick*sign(sin(t*bc+det));Z+=kick*sin((4.0+4.0*shockg)*t+c[9]);}
+ float pinch=1.0/(1.0+(1.50*humg+.20*uShape[10])*abs(Z));X*=pinch;Y*=pinch;
+ float damp=1.0/(1.0+(.15+1.00*brakeg)*(X*X+Y*Y+Z*Z));X*=damp;Y*=damp;Z*=damp;
+ Z*=.18+1.45*rankg;
  float cx=cos(uRotX),sx=sin(uRotX),cy=cos(uRotY),sy=sin(uRotY);float y1=cx*Y-sx*Z,z1=sx*Y+cx*Z,x2=cy*X+sy*z1,z2=-sy*X+cy*z1;X=x2;Y=y1;Z=z2;
  float persp=1.0/(1.62+.13*Z);vec2 pos=vec2(X/uAspect,Y)*uZoom*persp;gl_Position=vec4(pos,0.0,1.0);gl_PointSize=uPointSize;vD=Z;vA=.055+.10*sat(.70-.16*Z)+.025*(1.0-abs(q));
 }
@@ -76,6 +78,9 @@ const fs=`#version 300 es
 precision mediump float;in float vA;in float vD;out vec4 outColor;void main(){vec2 p=gl_PointCoord-.5;float m=1.0-smoothstep(.24,.51,length(p));float lum=.72+.22*clamp(.5-vD*.15,0.0,1.0);outColor=vec4(vec3(lum),vA*m);}`;
 function shader(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s}
 const prog=gl.createProgram();gl.attachShader(prog,shader(gl.VERTEX_SHADER,vs));gl.attachShader(prog,shader(gl.FRAGMENT_SHADER,fs));gl.linkProgram(prog);if(!gl.getProgramParameter(prog,gl.LINK_STATUS))return fatal(gl.getProgramInfoLog(prog));gl.useProgram(prog);const vao=gl.createVertexArray();gl.bindVertexArray(vao);
-const loc={};for(const n of ['uU','uCycle','uBlock','uW','uShape','uBlockCount','uRegime','uTime','uRotX','uRotY','uZoom','uAspect','uPointSize'])loc[n]=gl.getUniformLocation(prog,n+(['uU','uCycle','uBlock','uW','uShape'].includes(n)?'[0]':''));
+const loc={};for(const n of ['uU','uCycle','uBlock','uW','uShape','uCtrl','uBlockCount','uRegime','uTime','uRotX','uRotY','uZoom','uAspect','uPointSize'])loc[n]=gl.getUniformLocation(prog,n+(['uU','uCycle','uBlock','uW','uShape','uCtrl'].includes(n)?'[0]':''));
 const shapeKeys=['coupling','interaction','cycle','detune','memory','hidden','spread','tear','brake','connectivity','humility','blocks','accounting','rank','micro','factor','spillover','observability','benchmark','complexity','regimeEntropy'];
-function uploadFrame(){if(!frame)return;gl.useProgram(prog);gl.uniform1fv(loc.uU,new Float32Array(frame.U));gl.uniform1fv(loc.uCycle,new Float32Array(frame.cycles));gl.uniform1fv(loc.uBlock,new Float32Array(frame.blocks));gl.uniform1fv(loc.uW,new Float32Array(frame.W.flat()));gl.uniform1fv(loc.uShape,new Float32Array(shapeKeys.map(k=>frame.shape[k])));gl.uniform1f(loc.uBlockCount,frame.blockCount);gl.uniform1f(loc.uRegime,frame.regime)}
+const ctrlKeys=['marketCoupling','interaction','cycleDrive','cycleDetune','fibonacciMemory','hiddenStrain','volatility','shockEnergy','stabilityBrake','harmonicDiffusion','humilityPressure','particleDiversity','accountingConstraint','blockGranularity','revisionRisk','rankGuard'];
+const ctrlDefs=Object.fromEntries(E.CONTROL_DEFS.map(d=>[d.id,d]));
+function uploadControls(){if(!gl||!loc.uCtrl)return;const vals=ctrlKeys.map(id=>{const d=ctrlDefs[id],v=params[id];return E.clamp((v-d.min)/(d.max-d.min),0,1)});gl.useProgram(prog);gl.uniform1fv(loc.uCtrl,new Float32Array(vals))}
+function uploadFrame(){if(!frame)return;gl.useProgram(prog);gl.uniform1fv(loc.uU,new Float32Array(frame.U));gl.uniform1fv(loc.uCycle,new Float32Array(frame.cycles));gl.uniform1fv(loc.uBlock,new Float32Array(frame.blocks));gl.uniform1fv(loc.uW,new Float32Array(frame.W.flat()));gl.uniform1fv(loc.uShape,new Float32Array(shapeKeys.map(k=>frame.shape[k])));gl.uniform1f(loc.uBlockCount,frame.blockCount);gl.uniform1f(loc.uRegime,frame.regime);uploadControls()}
