@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OMEF One-Seed Calculator</title>
+<style>
+html,body{margin:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Mono",Menlo,monospace}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center}
+main{width:min(92vw,680px);padding:28px 18px 48px}
+h1{font-size:26px;font-weight:600;margin:0 0 28px}
+.label{font-size:12px;opacity:.65;margin:18px 0 8px;letter-spacing:.08em}
+input{width:100%;box-sizing:border-box;background:#111;color:#fff;border:1px solid #555;border-radius:12px;padding:16px;font-size:36px;outline:none}
+button{width:100%;margin-top:14px;padding:16px;border:0;border-radius:12px;font:inherit;font-size:18px;font-weight:700;background:#fff;color:#000}
+.out{margin-top:30px;border-top:1px solid #333;padding-top:24px}
+#answer{font-size:48px;line-height:1.05;word-break:break-word}
+#status{margin-top:12px;font-size:13px;opacity:.65}
+.formula{margin-top:28px;font-size:14px;opacity:.7;line-height:1.6}
+.bad{color:#ffb3b3}
+</style>
+</head>
+<body>
+<main>
+<h1>OMEF One-Seed Calculator</h1>
+<div class="label">SEED IN</div>
+<input id="seed" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" value="0.5">
+<button id="compute" type="button">COMPUTE</button>
+<section class="out">
+<div class="label">ONE NUMBER OUT</div>
+<div id="answer">0.1950183470867495</div>
+<div id="status" class="bad">JavaScript has not started.</div>
+</section>
+<div class="formula">Ω(x) = x cos(x) / (1 + 10x³)</div>
+</main>
+<script>
+(function(){
+"use strict";
+var seed=document.getElementById("seed");
+var button=document.getElementById("compute");
+var answer=document.getElementById("answer");
+var status=document.getElementById("status");
+function parseSeed(text){var t=String(text).trim().replace(",", ".");if(t===""||t==="."||t==="-"||t==="+")return NaN;return Number(t);}
+function omega(x){var denominator=1+10*x*x*x;if(!Number.isFinite(x)||!Number.isFinite(denominator)||Math.abs(denominator)<1e-14)return NaN;return (x*Math.cos(x))/denominator;}
+function formatNumber(x){if(!Number.isFinite(x))return "UNDEFINED";if(Object.is(x,-0))x=0;return String(Number(x.toPrecision(16)));}
+function compute(){var x=parseSeed(seed.value);var y=omega(x);answer.textContent=formatNumber(y);if(!Number.isFinite(x)){status.textContent="Enter a valid number.";status.className="bad";}else if(!Number.isFinite(y)){status.textContent="This seed makes the denominator zero or invalid.";status.className="bad";}else{status.textContent="Computed from seed "+x;status.className="";}}
+button.addEventListener("click",compute);
+seed.addEventListener("input",compute);
+seed.addEventListener("keydown",function(e){if(e.key==="Enter")compute();});
+var test=omega(0.5);
+if(Math.abs(test-0.1950183470867495)<1e-15){status.textContent="Ready — self-test passed.";status.className="";}else{status.textContent="Self-test failed.";status.className="bad";}
+compute();
+})();
+</script>
+</body>
+</html>
