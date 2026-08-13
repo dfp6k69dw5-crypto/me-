@@ -27,7 +27,8 @@
   const parts=await Promise.all(files.map(async f=>{const r=await fetch(root+f,{cache:'no-store'});if(!r.ok)throw new Error('Engine payload failed to load: '+f);return r.text()}));
   const b64=parts.join('').replace(/\s+/g,'');
   const bin=atob(b64),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
-  const code=new TextDecoder('utf-8').decode(bytes)+'\n//# sourceURL=omef26-engine.js';
+  let code=new TextDecoder('utf-8').decode(bytes);
+  code=code.replace(/\b(?:let|const)\b/g,'var')+'\n//# sourceURL=omef26-engine.js';
   const oldError=window.onerror;
   window.onerror=function(message,source,line,col,error){fail('Engine parse/runtime error: '+message+(line?' · line '+line:''));window.onerror=oldError;return true};
   const s=document.createElement('script');s.type='text/javascript';s.text=code;document.body.appendChild(s);
