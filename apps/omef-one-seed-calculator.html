@@ -2,54 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>OMEF One-Seed Calculator</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OMEF 26-Page One-Seed Calculator</title>
 <style>
-html,body{margin:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Mono",Menlo,monospace}
-body{min-height:100vh;display:flex;align-items:center;justify-content:center}
-main{width:min(92vw,680px);padding:28px 18px 48px}
-h1{font-size:26px;font-weight:600;margin:0 0 28px}
-.label{font-size:12px;opacity:.65;margin:18px 0 8px;letter-spacing:.08em}
-input{width:100%;box-sizing:border-box;background:#111;color:#fff;border:1px solid #555;border-radius:12px;padding:16px;font-size:36px;outline:none}
-button{width:100%;margin-top:14px;padding:16px;border:0;border-radius:12px;font:inherit;font-size:18px;font-weight:700;background:#fff;color:#000}
-.out{margin-top:30px;border-top:1px solid #333;padding-top:24px}
-#answer{font-size:48px;line-height:1.05;word-break:break-word}
-#status{margin-top:12px;font-size:13px;opacity:.65}
-.formula{margin-top:28px;font-size:14px;opacity:.7;line-height:1.6}
-.bad{color:#ffb3b3}
+:root{color-scheme:dark}*{box-sizing:border-box}html,body{margin:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Mono",Menlo,Consolas,monospace}body{min-height:100vh;display:flex;justify-content:center}main{width:min(94vw,760px);padding:32px 18px 56px}h1{font-size:clamp(22px,5vw,34px);font-weight:650;margin:0 0 8px}.sub{font-size:12px;line-height:1.5;opacity:.55;margin-bottom:26px}.label{font-size:11px;letter-spacing:.12em;opacity:.58;margin:16px 0 8px}input{width:100%;background:#0b0b0b;color:#fff;border:1px solid #555;border-radius:13px;padding:16px 17px;font:inherit;font-size:clamp(30px,8vw,52px);outline:none}input:focus{border-color:#aaa}button{width:100%;margin-top:13px;border:0;border-radius:12px;padding:15px 16px;background:#fff;color:#000;font:inherit;font-weight:750;font-size:17px}.out{margin-top:31px;padding-top:25px;border-top:1px solid #333}#answer{font-size:clamp(36px,10vw,68px);line-height:1.04;overflow-wrap:anywhere}.status{margin-top:10px;font-size:12px;opacity:.6}.bad{color:#ffb0b0;opacity:1}.good{color:#c9ffc9}details{margin-top:28px;border-top:1px solid #222;padding-top:18px}summary{cursor:pointer;font-size:13px;opacity:.7}.audit{margin-top:14px;font-size:12px;line-height:1.55;opacity:.7;white-space:pre-wrap}.note{margin-top:22px;font-size:11px;line-height:1.55;opacity:.42}
 </style>
 </head>
-<body>
-<main>
-<h1>OMEF One-Seed Calculator</h1>
+<body><main>
+<h1>OMEF — Whole-Sheet Scalar Engine</h1>
+<div class="sub">One seed in → deterministic 26-page OMEF scalarization → one number out.</div>
 <div class="label">SEED IN</div>
-<input id="seed" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" value="0.5">
+<input id="seed" type="text" inputmode="decimal" autocomplete="off" value="0.5" aria-label="Seed number">
 <button id="compute" type="button">COMPUTE</button>
-<section class="out">
-<div class="label">ONE NUMBER OUT</div>
-<div id="answer">0.1950183470867495</div>
-<div id="status" class="bad">JavaScript has not started.</div>
-</section>
-<div class="formula">Ω(x) = x cos(x) / (1 + 10x³)</div>
+<section class="out"><div class="label">ONE NUMBER OUT</div><div id="answer">—</div><div id="status" class="status">Loading 26-page engine…</div></section>
+<details><summary>Audit — show what participated</summary><div id="audit" class="audit"></div></details>
+<div class="note">The formula sheet does not specify numerical values for every free coefficient, history, observation, matrix, or stochastic draw. This experiment uses one reproducible seed-expansion rule to instantiate those missing numerical inputs, preserves type constraints, executes the sheet's computational modules in order, and reduces to one scalar only at the end.</div>
 </main>
 <script>
-(function(){
-"use strict";
-var seed=document.getElementById("seed");
-var button=document.getElementById("compute");
-var answer=document.getElementById("answer");
-var status=document.getElementById("status");
-function parseSeed(text){var t=String(text).trim().replace(",", ".");if(t===""||t==="."||t==="-"||t==="+")return NaN;return Number(t);}
-function omega(x){var denominator=1+10*x*x*x;if(!Number.isFinite(x)||!Number.isFinite(denominator)||Math.abs(denominator)<1e-14)return NaN;return (x*Math.cos(x))/denominator;}
-function formatNumber(x){if(!Number.isFinite(x))return "UNDEFINED";if(Object.is(x,-0))x=0;return String(Number(x.toPrecision(16)));}
-function compute(){var x=parseSeed(seed.value);var y=omega(x);answer.textContent=formatNumber(y);if(!Number.isFinite(x)){status.textContent="Enter a valid number.";status.className="bad";}else if(!Number.isFinite(y)){status.textContent="This seed makes the denominator zero or invalid.";status.className="bad";}else{status.textContent="Computed from seed "+x;status.className="";}}
-button.addEventListener("click",compute);
-seed.addEventListener("input",compute);
-seed.addEventListener("keydown",function(e){if(e.key==="Enter")compute();});
-var test=omega(0.5);
-if(Math.abs(test-0.1950183470867495)<1e-15){status.textContent="Ready — self-test passed.";status.className="";}else{status.textContent="Self-test failed.";status.className="bad";}
-compute();
-})();
+(async()=>{try{
+ const files=['omef26/b1.txt','omef26/b2.txt','omef26/b3.txt','omef26/b4.txt','omef26/b5.txt','omef26/b6.txt'];
+ const parts=await Promise.all(files.map(async f=>{const r=await fetch(f+'?v=20260813a',{cache:'no-store'});if(!r.ok)throw new Error('Engine payload failed to load: '+f);return r.text()}));
+ const b64=parts.join('').replace(/\s+/g,'');
+ const bin=atob(b64), bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+ const code=new TextDecoder('utf-8').decode(bytes);
+ new Function(code)();
+}catch(e){document.getElementById('answer').textContent='UNDEFINED';const s=document.getElementById('status');s.textContent=e.message||'Engine failed to load.';s.className='status bad';}})();
 </script>
-</body>
-</html>
+</body></html>
