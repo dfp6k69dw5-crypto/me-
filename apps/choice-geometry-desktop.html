@@ -1,1 +1,121 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Choice Geometry Desktop 4K</title><style>html,body{margin:0;height:100%;overflow:hidden;background:#030507;color:#eef3f8;font-family:Segoe UI,Arial,sans-serif}.bar{height:46px;display:flex;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid #202936;background:#070b11}.name{font-weight:700;margin-right:auto}.sub{font-size:11px;color:#8794a6}.bar button{height:30px;border:1px solid #2b3544;border-radius:8px;background:#101720;color:#eef3f8;font-weight:700;padding:0 10px;cursor:pointer}.bar button.primary{background:#eef3f8;color:#07101a}.frame{width:100%;height:calc(100% - 47px);border:0;display:block;background:#030507}</style></head><body><div class="bar"><div><div class="name">Choice Geometry — Desktop 4K</div><div class="sub" id="status">loading engine…</div></div><button class="primary" id="ultra">RENDER 4K</button><button id="save">SAVE 4K PNG</button><button id="mobile">MOBILE VERSION</button></div><iframe class="frame" id="app" src="choice-geometry-mobile.html"></iframe><script>const f=document.getElementById('app'),status=document.getElementById('status');let ready=false,timer=0;function enhance(){let w,d,c;try{w=f.contentWindow;d=f.contentDocument;c=d&&d.getElementById('field')}catch(e){return false}if(!w||!d||!c||typeof w.paint!=='function')return false;if(ready)return true;ready=true;c.width=c.height=2048;c.style.maxWidth='none';const style=d.createElement('style');style.textContent='.app{max-width:1600px!important}.stage{min-height:min(88vh,1200px)!important}.sub{display:block!important}.panel{width:340px}';d.head.appendChild(style);const sub=d.querySelector('.sub');if(sub)sub.textContent='DESKTOP 4K · 4096px SUPERSAMPLED FINAL RENDER';const note=d.querySelector('.note');if(note)note.textContent='Desktop mode: controls stay responsive, then the field automatically refines to a 4096px supersampled render on a 2048px display canvas.';const render=()=>{clearTimeout(timer);timer=setTimeout(()=>{if(!ready)return;status.textContent='rendering 4096px field…';requestAnimationFrame(()=>{w.paint(4096,0.73,'desktop 4K');status.textContent='4096px supersampled · 2048px display'})},420)};d.querySelectorAll('input').forEach(x=>{x.addEventListener('input',render);x.addEventListener('change',render)});d.querySelectorAll('button').forEach(x=>x.addEventListener('click',()=>{clearTimeout(timer);timer=setTimeout(render,350)}));document.getElementById('ultra').onclick=()=>{clearTimeout(timer);status.textContent='rendering 4096px field…';requestAnimationFrame(()=>{w.paint(4096,0.73,'desktop 4K');status.textContent='4096px supersampled · 2048px display'})};document.getElementById('save').onclick=()=>{status.textContent='creating 4096px PNG…';const ow=c.width,oh=c.height;c.width=c.height=4096;w.paint(4096,0.73,'export 4K');c.toBlob(b=>{if(b){const a=document.createElement('a'),u=URL.createObjectURL(b);a.href=u;a.download='choice-geometry-4096.png';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)}c.width=ow;c.height=oh;w.paint(4096,0.73,'desktop 4K');status.textContent='4096px PNG saved'},'image/png')};document.getElementById('mobile').onclick=()=>location.href='choice-geometry-mobile.html';setTimeout(()=>document.getElementById('ultra').click(),250);return true}const poll=setInterval(()=>{if(enhance())clearInterval(poll)},120);f.addEventListener('load',()=>{ready=false;setTimeout(enhance,100)});</script></body></html>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Choice Geometry Desktop</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#030507;color:#eef3f8;font-family:Segoe UI,Arial,sans-serif}
+.bar{height:46px;display:flex;align-items:center;gap:8px;padding:0 10px;border-bottom:1px solid #202936;background:#070b11}
+.name{font-weight:700;margin-right:auto}.sub{font-size:11px;color:#8794a6}
+.bar button{height:30px;border:1px solid #2b3544;border-radius:8px;background:#101720;color:#eef3f8;font-weight:700;padding:0 10px;cursor:pointer}
+.bar button.primary{background:#eef3f8;color:#07101a}
+.frame{width:100%;height:calc(100% - 47px);border:0;display:block;background:#030507}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div><div class="name">Choice Geometry — Desktop HQ</div><div class="sub" id="status">loading engine…</div></div>
+  <button class="primary" id="hq">RENDER 2K</button>
+  <button id="save">SAVE 4K PNG</button>
+  <button id="mobile">MOBILE VERSION</button>
+</div>
+<iframe class="frame" id="app" src="choice-geometry-mobile.html"></iframe>
+<script>
+'use strict';
+const f=document.getElementById('app');
+const status=document.getElementById('status');
+let ready=false;
+let settleTimer=0;
+let adaptiveSide=768;
+
+function phaseNow(w){
+  try{return Number(w.eval('state.phase'))||0.73}catch(e){return 0.73}
+}
+function motionNow(w){
+  try{return !!w.eval('state.motion')}catch(e){return false}
+}
+function adaptiveHQ(w){
+  if(motionNow(w))return;
+  clearTimeout(settleTimer);
+  settleTimer=setTimeout(()=>{
+    if(!ready||motionNow(w))return;
+    const side=adaptiveSide;
+    const phase=phaseNow(w);
+    status.textContent=`refining ${side}px…`;
+    requestAnimationFrame(()=>{
+      const t0=performance.now();
+      w.paint(side,phase,'desktop refined');
+      const ms=performance.now()-t0;
+      if(ms<700&&adaptiveSide<1280)adaptiveSide=Math.min(1280,adaptiveSide+128);
+      else if(ms>1800&&adaptiveSide>640)adaptiveSide=Math.max(640,adaptiveSide-128);
+      status.textContent=`smooth ${side}px · ${Math.round(ms)} ms · next ${adaptiveSide}px`;
+    });
+  },320);
+}
+function render2K(w){
+  if(motionNow(w)){status.textContent='stop DRIFT before a 2K still render';return}
+  const phase=phaseNow(w);
+  status.textContent='rendering 2048px…';
+  requestAnimationFrame(()=>{
+    const t0=performance.now();
+    w.paint(2048,phase,'desktop 2K');
+    status.textContent=`2048px render · ${Math.round(performance.now()-t0)} ms`;
+  });
+}
+function save4K(w,d,c){
+  if(motionNow(w)){status.textContent='stop DRIFT before saving 4K';return}
+  const phase=phaseNow(w);
+  const ow=c.width,oh=c.height;
+  status.textContent='creating 4096px PNG…';
+  requestAnimationFrame(()=>{
+    const t0=performance.now();
+    c.width=c.height=4096;
+    w.paint(4096,phase,'export 4K');
+    c.toBlob(blob=>{
+      if(blob){
+        const a=document.createElement('a');
+        const url=URL.createObjectURL(blob);
+        a.href=url;a.download='choice-geometry-4096.png';a.click();
+        setTimeout(()=>URL.revokeObjectURL(url),1500);
+      }
+      c.width=ow;c.height=oh;
+      w.paint(adaptiveSide,phase,'desktop refined');
+      status.textContent=`4K PNG complete · ${Math.round(performance.now()-t0)} ms`;
+    },'image/png');
+  });
+}
+function enhance(){
+  let w,d,c;
+  try{w=f.contentWindow;d=f.contentDocument;c=d&&d.getElementById('field')}catch(e){return false}
+  if(!w||!d||!c||typeof w.paint!=='function')return false;
+  if(ready)return true;
+  ready=true;
+
+  c.width=c.height=1600;
+  try{w.eval("ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high'")}catch(e){}
+
+  const style=d.createElement('style');
+  style.textContent='.app{max-width:1600px!important}.stage{min-height:min(88vh,1200px)!important}.sub{display:block!important}.panel{width:340px}';
+  d.head.appendChild(style);
+  const sub=d.querySelector('.sub');
+  if(sub)sub.textContent='DESKTOP HQ · ADAPTIVE SMOOTH RENDER · 4K EXPORT ON DEMAND';
+  const note=d.querySelector('.note');
+  if(note)note.textContent='Desktop mode stays responsive while you move controls. When you release a slider it performs one adaptive high-quality refinement. 2K and 4K are manual so they cannot repeatedly freeze the interface.';
+
+  d.querySelectorAll('input').forEach(x=>x.addEventListener('change',()=>adaptiveHQ(w)));
+  d.querySelectorAll('#regimes button,#alts button,#palettes button').forEach(x=>x.addEventListener('click',()=>adaptiveHQ(w)));
+  d.getElementById('art')?.addEventListener('click',()=>adaptiveHQ(w));
+
+  document.getElementById('hq').onclick=()=>render2K(w);
+  document.getElementById('save').onclick=()=>save4K(w,d,c);
+  document.getElementById('mobile').onclick=()=>location.href='choice-geometry-mobile.html';
+
+  status.textContent='ready · adaptive HQ starts at 768px';
+  return true;
+}
+const poll=setInterval(()=>{if(enhance())clearInterval(poll)},120);
+f.addEventListener('load',()=>{ready=false;clearTimeout(settleTimer);setTimeout(enhance,100)});
+</script>
+</body>
+</html>
