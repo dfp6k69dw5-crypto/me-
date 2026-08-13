@@ -19,14 +19,20 @@
 <div class="note">The formula sheet does not specify numerical values for every free coefficient, history, observation, matrix, or stochastic draw. This experiment uses one reproducible seed-expansion rule to instantiate those missing numerical inputs, preserves type constraints, executes the sheet's computational modules in order, and reduces to one scalar only at the end.</div>
 </main>
 <script>
-(async()=>{try{
- const root='https://raw.githubusercontent.com/maaronfanberg-lab/me-/e59ad40c663c84679de58a30238c9d8ff0049024/apps/omef26/';
- const files=['b1.txt','b2.txt','b3.txt','b4.txt','b5.txt','b6.txt'];
- const parts=await Promise.all(files.map(async f=>{const r=await fetch(root+f,{cache:'no-store'});if(!r.ok)throw new Error('Engine payload failed to load: '+f);return r.text()}));
- const b64=parts.join('').replace(/\s+/g,'');
- const bin=atob(b64),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
- const code=new TextDecoder('utf-8').decode(bytes);
- new Function(code)();
-}catch(e){document.getElementById('answer').textContent='UNDEFINED';const s=document.getElementById('status');s.textContent=e.message||'Engine failed to load.';s.className='status bad';}})();
+(async()=>{const status=document.getElementById('status'),answer=document.getElementById('answer');
+ const fail=(m)=>{answer.textContent='UNDEFINED';status.textContent=m||'Engine failed to load.';status.className='status bad'};
+ try{
+  const root='https://raw.githubusercontent.com/maaronfanberg-lab/me-/e59ad40c663c84679de58a30238c9d8ff0049024/apps/omef26/';
+  const files=['b1.txt','b2.txt','b3.txt','b4.txt','b5.txt','b6.txt'];
+  const parts=await Promise.all(files.map(async f=>{const r=await fetch(root+f,{cache:'no-store'});if(!r.ok)throw new Error('Engine payload failed to load: '+f);return r.text()}));
+  const b64=parts.join('').replace(/\s+/g,'');
+  const bin=atob(b64),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  const code=new TextDecoder('utf-8').decode(bytes)+'\n//# sourceURL=omef26-engine.js';
+  const oldError=window.onerror;
+  window.onerror=function(message,source,line,col,error){fail('Engine parse/runtime error: '+message+(line?' · line '+line:''));window.onerror=oldError;return true};
+  const s=document.createElement('script');s.type='text/javascript';s.text=code;document.body.appendChild(s);
+  setTimeout(()=>{window.onerror=oldError;if(status.textContent==='Loading 26-page engine…')fail('Engine loaded but did not start.')},500);
+ }catch(e){fail(e.message||'Engine failed to load.');}
+})();
 </script>
 </body></html>
