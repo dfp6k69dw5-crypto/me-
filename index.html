@@ -1,12 +1,242 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#090b12"><title>Alex + Sarah — Project Home</title>
-<style>:root{--bg:#090b12;--panel:#111622;--line:#283247;--text:#eef2fb;--muted:#98a4bb;--accent:#d6c48a;--live:#91e1cf}*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 600px at 15% 0,#17223a 0,transparent 58%),var(--bg);color:var(--text);font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{width:min(980px,92vw);margin:0 auto;padding:44px 0 80px}header{padding:20px 2px 30px}h1{font-size:clamp(38px,9vw,76px);line-height:.94;letter-spacing:-.055em;margin:0 0 15px}header p{color:var(--muted);font-size:17px;line-height:1.55;max-width:680px;margin:0}.eyebrow{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}.card{display:flex;flex-direction:column;min-height:190px;padding:20px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));text-decoration:none;color:inherit}.tag{font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--live)}h2{font-size:24px;letter-spacing:-.025em;margin:14px 0 8px}.card p{color:var(--muted);line-height:1.48;margin:0 0 22px}.open{margin-top:auto;font:700 12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent)}footer{color:#68758d;font-size:12px;padding:30px 2px}</style>
-</head><body><main class="wrap"><header><div class="eyebrow">Project home · refreshed</div><h1>Alex + Sarah<br>Experiments</h1><p>One place to open the instruments, mathematical organisms, visual experiments and useful little machines we keep making.</p></header><section class="grid">
-<a class="card" href="apps/resonator.html?v=20260809-anticrackle1"><span class="tag">Audio / physics / OMEF space</span><h2>Resonator</h2><p>The evolving masses-and-springs instrument, now with a smoothed OMEF spatial field and an automatic iPhone-safe audio mode to reduce crackling.</p><span class="open">OPEN</span></a>
-<a class="card" href="apps/harmonograph-mobile.html?v=20260807c"><span class="tag">Math / drawing</span><h2>Harmonograph</h2><p>Interactive mathematical drawing system with an iPhone-responsive control layer.</p><span class="open">OPEN</span></a>
-<a class="card" href="apps/attractor-lab.html?v=20260808-classic-restored"><span class="tag">Chaos / classic math art</span><h2>Attractor Lab</h2><p>The restored Safari-safe cabinet of Clifford, De Jong, Hopalong, Lorenz, Rössler, Aizawa and other strange attractors. OMEF Hybrid is one attractor in the collection.</p><span class="open">OPEN CLASSIC LAB</span></a>
-<a class="card" href="apps/omef-exclusive.html?v=20260809-1million"><span class="tag">OMEF / exclusive / 1,000,000 points</span><h2>OMEF EXCLUSIVE</h2><p>The dedicated autonomous OMEF-A attractor: no outside attractor formulas, signed-log deep controls, delayed self-feedback through Pair, Regime and Projection, and rendering up to one million points.</p><span class="open">OPEN OMEF EXCLUSIVE</span></a>
-<a class="card" href="apps/omef-full.html?v=20260807c"><span class="tag">123-D / sculptable organism</span><h2>OMEF FULL</h2><p>The full OMEF architecture folded into a 123-dimensional visual organism, now with strong topology lenses, sculpting controls, and live controls that change the underlying dynamics.</p><span class="open">OPEN</span></a>
-</section><footer>This page is the launcher. Versioned links prevent an old iPhone cache from silently serving an earlier build.</footer></main></body></html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b12">
+<title>Alex + Sarah — Project Home</title>
+<style>
+:root{
+  --bg:#090b12;--panel:#111622;--panel2:#0d121c;--line:#283247;
+  --text:#eef2fb;--muted:#98a4bb;--accent:#d6c48a;--live:#91e1cf;--warn:#f2c98f
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  margin:0;color:var(--text);font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(900px 620px at 12% -5%,#17233c 0,transparent 58%),
+    radial-gradient(700px 520px at 105% 20%,#151d30 0,transparent 60%),
+    var(--bg);
+  min-height:100svh
+}
+button,input{font:inherit}
+.wrap{width:min(1080px,93vw);margin:0 auto;padding:38px 0 84px}
+header{padding:12px 2px 26px}
+.eyebrow{font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+h1{font-size:clamp(40px,9vw,78px);line-height:.92;letter-spacing:-.055em;margin:0 0 16px}
+.lede{color:var(--muted);font-size:17px;line-height:1.55;max-width:740px;margin:0}
+.topline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px}
+.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:8px 11px;color:var(--muted);background:rgba(255,255,255,.025);font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 12px rgba(145,225,207,.55)}
+section{margin-top:28px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:0 2px 12px}
+.section-head h2{font-size:23px;letter-spacing:-.025em;margin:0}
+.section-head p{margin:0;color:var(--muted);font-size:12px;text-align:right}
+.updates{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.update{
+  min-height:108px;padding:15px 16px;border:1px solid var(--line);border-radius:15px;
+  background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012))
+}
+.update .when{color:var(--live);font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase}
+.update .msg{margin-top:9px;line-height:1.4;font-size:14px}
+.update .sha{margin-top:10px;color:#69778f;font:10px ui-monospace,SFMono-Regular,Menlo,monospace}
+.tools{display:flex;gap:10px;margin:0 0 12px;position:sticky;top:8px;z-index:5}
+.search{
+  width:100%;appearance:none;border:1px solid var(--line);background:rgba(13,18,28,.92);backdrop-filter:blur(12px);
+  color:var(--text);border-radius:14px;padding:13px 14px;outline:none
+}
+.search:focus{border-color:#596b8d}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:11px}
+.card{
+  display:flex;flex-direction:column;min-height:178px;padding:18px;border:1px solid var(--line);border-radius:18px;
+  background:linear-gradient(145deg,rgba(255,255,255,.052),rgba(255,255,255,.016));text-decoration:none;color:inherit;
+  -webkit-tap-highlight-color:transparent;transition:transform .12s ease,border-color .12s ease,background .12s ease
+}
+.card:active{transform:scale(.985)}
+@media (hover:hover){.card:hover{transform:translateY(-2px);border-color:#43516d;background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.022))}}
+.tag{font:700 10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--live)}
+.card h3{font-size:22px;letter-spacing:-.025em;margin:13px 0 7px}
+.card p{color:var(--muted);line-height:1.42;margin:0 0 18px;font-size:13px;word-break:break-word}
+.open{margin-top:auto;font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent);letter-spacing:.04em}
+.status{padding:20px;border:1px dashed var(--line);border-radius:15px;color:var(--muted);line-height:1.5}
+.hidden{display:none!important}
+footer{color:#647087;font-size:12px;line-height:1.55;padding:34px 2px 0}
+.small{font-size:11px;color:#647087}
+@media(max-width:560px){
+ .wrap{width:min(94vw,1080px);padding-top:24px}
+ .section-head{align-items:start;flex-direction:column;gap:4px}.section-head p{text-align:left}
+ .grid{grid-template-columns:1fr}.card{min-height:150px}
+ .updates{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header>
+  <div class="eyebrow">Project home · automatic launcher</div>
+  <h1>Alex + Sarah<br>Experiments</h1>
+  <p class="lede">The front door for everything we build. New runnable apps are discovered from the repository automatically, and updated files open with their current GitHub version so an old iPhone cache cannot quietly win.</p>
+  <div class="topline">
+    <span class="pill"><span class="dot"></span><span id="repoState">checking repository</span></span>
+    <span class="pill" id="countPill">loading apps</span>
+  </div>
+</header>
+
+<section>
+  <div class="section-head">
+    <h2>Recent updates</h2>
+    <p>Latest changes inside <code>apps/</code></p>
+  </div>
+  <div id="updates" class="updates">
+    <div class="status">Loading recent work…</div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Everything runnable</h2>
+    <p>Every HTML app currently in the repository</p>
+  </div>
+  <div class="tools">
+    <input id="search" class="search" type="search" inputmode="search" autocomplete="off" placeholder="Find an app…">
+  </div>
+  <div id="apps" class="grid">
+    <div class="status">Discovering apps…</div>
+  </div>
+</section>
+
+<footer>
+  This launcher reads the public repository directly. Every HTML file under <code>apps/</code> is included—even nested projects and older variants—so nothing silently disappears from the home page.
+  <div class="small" id="footState"></div>
+</footer>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  const OWNER="maaronfanberg-lab", REPO="me-", BRANCH="main";
+  const API=`https://api.github.com/repos/${OWNER}/${REPO}`;
+  const appsEl=document.getElementById("apps");
+  const updatesEl=document.getElementById("updates");
+  const searchEl=document.getElementById("search");
+  const repoState=document.getElementById("repoState");
+  const countPill=document.getElementById("countPill");
+  const footState=document.getElementById("footState");
+
+  const FEATURED=[
+    "apps/choice-geometry.html",
+    "apps/resonator.html",
+    "apps/harmonograph-mobile.html",
+    "apps/attractor-lab.html",
+    "apps/omef-exclusive.html",
+    "apps/omef-full.html"
+  ];
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+  }
+  function titleFor(path){
+    let s=path.replace(/^apps\//,"").replace(/\/index\.html$/i,"").replace(/\.html$/i,"");
+    s=s.split("/").map(part=>part.replace(/[-_]+/g," ")).join(" · ");
+    return s.replace(/\bomef\b/gi,"OMEF").replace(/\biphone\b/gi,"iPhone")
+      .replace(/\b\w/g,ch=>ch.toUpperCase()).replace(/\bOmef\b/g,"OMEF").replace(/\bIphone\b/g,"iPhone");
+  }
+  function typeFor(path){
+    const p=path.toLowerCase();
+    if(p.includes("resonator")||p.includes("audio")) return "audio / instrument";
+    if(p.includes("flower")||p.includes("botanical")||p.includes("growth")) return "botanical / generative";
+    if(p.includes("omef")) return "OMEF / mathematical";
+    if(p.includes("attractor")) return "chaos / attractor";
+    if(p.includes("harmonograph")) return "math / drawing";
+    if(p.includes("choice")) return "probability / geometry";
+    if(p.includes("macro")||p.includes("focus")) return "camera / utility";
+    return "experiment";
+  }
+  function descriptionFor(path){
+    const clean=path.replace(/^apps\//,"");
+    if(path==="apps/choice-geometry.html") return "Choice Geometry: competing probability fields turned into a touch-first visual instrument.";
+    if(path==="apps/resonator.html") return "Masses, springs, air and spatialization: the evolving Resonator instrument.";
+    if(path==="apps/harmonograph-mobile.html") return "Interactive mathematical drawing system tuned for mobile use.";
+    if(path==="apps/attractor-lab.html") return "The main strange-attractor laboratory.";
+    if(path==="apps/omef-exclusive.html") return "Dedicated autonomous OMEF visual dynamics.";
+    if(path==="apps/omef-full.html") return "The larger sculptable OMEF visual organism.";
+    return clean;
+  }
+  function appSort(a,b){
+    const ai=FEATURED.indexOf(a.path), bi=FEATURED.indexOf(b.path);
+    if(ai>=0||bi>=0){
+      if(ai<0) return 1;
+      if(bi<0) return -1;
+      return ai-bi;
+    }
+    return a.path.localeCompare(b.path);
+  }
+  function card(app){
+    const href=encodeURI(app.path)+(app.sha?`?v=${app.sha.slice(0,12)}`:"");
+    return `<a class="card" data-search="${escapeHtml((app.path+" "+titleFor(app.path)).toLowerCase())}" href="${href}">
+      <span class="tag">${escapeHtml(typeFor(app.path))}</span>
+      <h3>${escapeHtml(titleFor(app.path))}</h3>
+      <p>${escapeHtml(descriptionFor(app.path))}</p>
+      <span class="open">OPEN CURRENT FILE</span>
+    </a>`;
+  }
+  async function getJSON(url){
+    const r=await fetch(url,{headers:{"Accept":"application/vnd.github+json"},cache:"no-store"});
+    if(!r.ok) throw new Error(`GitHub ${r.status}`);
+    return r.json();
+  }
+  async function loadApps(){
+    try{
+      const data=await getJSON(`${API}/git/trees/${BRANCH}?recursive=1`);
+      const apps=(data.tree||[])
+        .filter(x=>x.type==="blob" && /^apps\/.+\.html$/i.test(x.path))
+        .map(x=>({path:x.path,sha:x.sha}))
+        .sort(appSort);
+      appsEl.innerHTML=apps.length?apps.map(card).join(""):`<div class="status">No HTML apps found.</div>`;
+      repoState.textContent="repository live";
+      countPill.textContent=`${apps.length} runnable files`;
+      footState.textContent=` Repository tree ${String(data.sha||"").slice(0,12)}.`;
+      searchEl.addEventListener("input",()=>{
+        const q=searchEl.value.trim().toLowerCase();
+        appsEl.querySelectorAll(".card").forEach(el=>el.classList.toggle("hidden",q&&!el.dataset.search.includes(q)));
+      });
+    }catch(err){
+      repoState.textContent="repository lookup unavailable";
+      countPill.textContent="launcher fallback";
+      appsEl.innerHTML=`<div class="status">GitHub's live app index could not be reached right now. Refresh this page to retry. Existing direct app links still work.</div>`;
+      footState.textContent=` ${err.message||err}`;
+    }
+  }
+  function relativeTime(iso){
+    const ms=Date.now()-new Date(iso).getTime();
+    const min=Math.max(1,Math.floor(ms/60000));
+    if(min<60) return `${min}m ago`;
+    const hr=Math.floor(min/60); if(hr<24) return `${hr}h ago`;
+    const d=Math.floor(hr/24); if(d<30) return `${d}d ago`;
+    return new Date(iso).toLocaleDateString();
+  }
+  async function loadUpdates(){
+    try{
+      const commits=await getJSON(`${API}/commits?sha=${BRANCH}&path=apps&per_page=8`);
+      if(!commits.length){updatesEl.innerHTML=`<div class="status">No recent app commits found.</div>`;return;}
+      updatesEl.innerHTML=commits.map(c=>{
+        const msg=((c.commit&&c.commit.message)||"Update").split("\n")[0];
+        const when=c.commit&&c.commit.author&&c.commit.author.date;
+        const sha=c.sha||"";
+        return `<div class="update">
+          <div class="when">${escapeHtml(when?relativeTime(when):"recent")}</div>
+          <div class="msg">${escapeHtml(msg)}</div>
+          <div class="sha">${escapeHtml(sha.slice(0,10))}</div>
+        </div>`;
+      }).join("");
+    }catch(err){
+      updatesEl.innerHTML=`<div class="status">Recent-update feed is temporarily unavailable. The app launcher below will still load independently.</div>`;
+    }
+  }
+  loadApps();
+  loadUpdates();
+})();
+</script>
+</body>
+</html>
