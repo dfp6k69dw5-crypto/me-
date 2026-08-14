@@ -1,0 +1,69 @@
+name: Supercomputer Cluster
+
+on:
+  workflow_dispatch:
+    inputs:
+      workload:
+        description: Compute engine
+        required: true
+        default: montecarlo
+        type: choice
+        options:
+          - montecarlo
+          - primes
+          - hashstorm
+      scale:
+        description: Intensity per node (1-20)
+        required: true
+        default: '5'
+        type: choice
+        options: ['1','2','3','4','5','6','8','10','12','15','20']
+
+permissions:
+  contents: write
+
+jobs:
+  compute:
+    name: Node ${{ matrix.worker }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        worker: [0,1,2,3,4,5,6,7,8,9,10,11]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run compute shard
+        env:
+          WORKER_ID: ${{ matrix.worker }}
+          WORKER_COUNT: '12'
+          WORKLOAD: ${{ inputs.workload }}
+          SCALE: ${{ inputs.scale }}
+        run: python3 scripts/cluster_worker.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cluster-part-${{ matrix.worker }}
+          path: cluster_parts/*.json
+          retention-days: 1
+
+  aggregate:
+    name: Combine 12 nodes
+    needs: compute
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cluster-part-*
+          path: cluster_parts
+          merge-multiple: true
+      - name: Aggregate cluster result
+        run: python3 scripts/aggregate_cluster.py
+      - name: Publish latest result
+        run: |
+          git config user.name "supercomputer-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git pull --rebase origin main
+          git add cluster/latest.json
+          git commit -m "Publish supercomputer result" || exit 0
+          git push origin HEAD:main
