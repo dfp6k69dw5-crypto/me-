@@ -21,7 +21,9 @@
  text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
- // Keep the original repo gesture system; only reverse vertical orbit direction.
+ // Mobile orbit: preserve the original screen-space rotation, reverse vertical direction,
+ // and make a full-width horizontal swipe approximately one complete 360-degree orbit.
+ text=text.replace("camRotate(1,(e.clientX-drag.x)*0.008);","camRotate(1,(e.clientX-drag.x)*0.017);");
  text=text.replace("camRotate(0,(e.clientY-drag.y)*0.008);","camRotate(0,-(e.clientY-drag.y)*0.008);");
  document.open();document.write(text);document.close();
 }catch(e){
