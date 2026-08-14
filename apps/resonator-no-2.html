@@ -46,6 +46,33 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
   const js=d.createElement('script');js.textContent=`(function(){
    const cv=document.getElementById('view');if(!cv||window.__r2)return;window.__r2=true;
    state.tool='orbit';state.spin=false;state.r2Zoom=1;state.r2PanX=0;state.r2PanY=0;
+
+   /* Restore the original steel gas-vessel / propane-tank body. */
+   try{
+    if(!SHAPES.Tank){
+     SHAPES.Tank={min:5,max:9,def:7,note:'A large empty steel gas vessel: hemispherical caps on a cylindrical barrel. Its lowest shell modes cluster into slowly beating pairs, and the steel rings for a long time.',make(C){
+      const P=[],F=[],S=[],R=0.24,H=0.26,A=4,K=2,rings=[];
+      const ring=(x,r)=>{const ids=[];for(let j=0;j<C;j++){const th=2*Math.PI*j/C;ids.push(P.length);P.push([x,r*Math.cos(th),r*Math.sin(th)]);F.push(0)}rings.push(ids);return ids};
+      const poleL=P.length;P.push([-(H+R),0,0]);F.push(0);
+      for(let k=1;k<=K;k++){const phi=(k/(K+1))*(Math.PI/2);ring(-H-R*Math.cos(phi),R*Math.sin(phi))}
+      for(let a=0;a<A;a++)ring(-H+2*H*a/(A-1),R);
+      for(let k=K;k>=1;k--){const phi=(k/(K+1))*(Math.PI/2);ring(H+R*Math.cos(phi),R*Math.sin(phi))}
+      const poleR=P.length;P.push([H+R,0,0]);F.push(0);
+      const link=(a,b)=>{if(a!==b)S.push([a,b])};
+      for(const ids of rings)for(let j=0;j<C;j++)link(ids[j],ids[(j+1)%C]);
+      for(let r=0;r<rings.length-1;r++){const a=rings[r],b=rings[r+1];for(let j=0;j<C;j++){link(a[j],b[j]);link(a[j],b[(j+1)%C])}}
+      for(let j=0;j<C;j++){link(poleL,rings[0][j]);link(poleR,rings[rings.length-1][j])}
+      const mid=rings[Math.floor(rings.length/2)];return{P,F,S,axis:1,mic:mid[0],hit:rings[K][Math.floor(C/2)],needSub:0.0004}
+     }};
+     const shapesEl=document.getElementById('shapes');
+     if(shapesEl&&!Array.from(shapesEl.children).some(b=>b.textContent==='Tank')){
+      const b=document.createElement('button');b.className='chip';b.textContent='Tank';b.setAttribute('aria-pressed','false');
+      b.onclick=()=>{state.shape='Tank';const S=SHAPES.Tank;state.n=S.def;val.size=(S.def-S.min)/(S.max-S.min);syncKnob('size');Array.from(shapesEl.children).forEach(c=>c.setAttribute('aria-pressed',c.textContent==='Tank'));buildShape(true)};
+      shapesEl.appendChild(b);
+     }
+    }
+   }catch(e){console.warn('Tank restore failed',e)}
+
    const oldProject=project;
    project=function(x,y,z){const q=oldProject(x,y,z);const cx=W/2,cy=H*.46;return[cx+(q[0]-cx)*state.r2Zoom+state.r2PanX,cy+(q[1]-cy)*state.r2Zoom+state.r2PanY,q[2]]};
    function orbit(){state.tool='orbit';state.sel=-1;document.querySelectorAll('#tools .tool').forEach(b=>b.setAttribute('aria-pressed','false'))}orbit();
