@@ -8,11 +8,11 @@
 <style>
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
 #host{position:fixed;inset:0;width:100%;height:100%;border:0;background:#080D1A}
-#status{position:fixed;left:8px;top:4px;z-index:20;color:#33415e;font:8px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;pointer-events:none}
+#status{display:none!important}
 </style>
 </head>
 <body>
-<div id="status">NO. 2 · DIRECT OBJECT</div>
+<div id="status"></div>
 <iframe id="host" src="resonator.html?v=20260814e" allow="microphone; autoplay"></iframe>
 <script>
 (()=>{
@@ -31,6 +31,9 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
    html,body{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;overscroll-behavior:none!important}
    #app{height:100dvh!important;padding-bottom:0!important}
 
+   /* Remove all top diagnostic/brand/status text. */
+   #readout,#brand,#level{display:none!important}
+
    /* PLAY is the default: the object owns the screen. */
    #stage{flex:1 1 auto!important;min-height:0!important}
    #view{cursor:grab!important}
@@ -43,9 +46,6 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
    #tools [data-tool="orbit"],#tools [data-tool="move"],#tools [data-tool="link"],#tools [data-tool="pin"],#home,#undo,#redo{display:none!important}
    #tools .tool{min-width:72px!important;width:auto!important;padding:10px 13px!important;min-height:42px!important;border-radius:21px!important;font-size:10px!important;background:rgba(10,17,32,.72)!important;backdrop-filter:blur(12px)!important}
    #tools .tool[aria-pressed="true"]{background:#132538!important}
-   #readout{left:12px!important;top:10px!important;max-width:58vw!important;font-size:9px!important;line-height:1.45!important}
-   #brand{right:12px!important;top:10px!important;font-size:11px!important}
-   #level{right:12px!important;top:30px!important;font-size:9px!important}
 
    #r2dock{position:fixed;right:10px;top:74px;z-index:10000;display:flex;flex-direction:column;gap:7px;align-items:flex-end;pointer-events:auto}
    #r2dock button{appearance:none;border:1px solid rgba(118,133,170,.55);background:rgba(8,13,26,.76);color:#c6d2ec;font:700 9px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;padding:0 12px;height:38px;border-radius:19px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
@@ -98,8 +98,6 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
      const deck=d.getElementById('deck'); if(deck)deck.classList.remove('shut');
    };
 
-   /* Put behavior inside the iframe's own script realm so it can use the engine's
-      camera/state bindings directly instead of guessing from outside. */
    const js=d.createElement('script');
    js.textContent=`
    (function(){
@@ -108,7 +106,6 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
      state.tool='orbit'; state.spin=false;
      state.r2Zoom=1; state.r2PanX=0; state.r2PanY=0;
 
-     // Zoom and pan are camera/view properties only; physics is untouched.
      project=function(x,y,z){
        const M=state.M;
        const X=M[0]*x+M[1]*y+M[2]*z;
@@ -124,8 +121,6 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
      }
      orbitUI();
 
-     // Strike and mic are momentary placement tools: tap one, place it, then the
-     // object automatically returns to direct manipulation.
      cv.addEventListener('pointerup',()=>{
        if(state.tool==='strike'||state.tool==='mic')setTimeout(orbitUI,0);
      });
@@ -160,8 +155,6 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
        }lastTap=now;}
      },true);
 
-     // Two fingers act like grabbing a freely suspended object: distance zooms,
-     // midpoint translates it, and finger angle rolls it around the viewing axis.
      let multi=null;
      const measure=t=>{
        const a=t[0],b=t[1],dx=b.clientX-a.clientX,dy=b.clientY-a.clientY;
@@ -186,11 +179,9 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
    d.body.appendChild(js);
    reset.onclick=()=>{try{w.r2Reset&&w.r2Reset();}catch(e){}};
 
-   // Keep the keyboard collapsed unless explicitly opened by the new KEYS control.
    const deck=d.getElementById('deck');if(deck)deck.classList.add('shut');
    const handle=d.getElementById('handle');if(handle)handle.setAttribute('aria-expanded','false');
 
-   document.getElementById('status').textContent='NO. 2 · DIRECT OBJECT ACTIVE';
    setTimeout(()=>w.dispatchEvent(new Event('resize')),60);
  }
  frame.addEventListener('load',()=>{patched=false;setTimeout(patch,100);setTimeout(patch,500);});
