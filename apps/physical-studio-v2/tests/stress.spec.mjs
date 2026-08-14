@@ -10,7 +10,7 @@ test('QA-STRESS survives repeated camera and tool interactions without runtime f
   await page.waitForFunction(()=>!!window.__PS_QA__);
   const canvas=page.locator('canvas').first();await expect(canvas).toBeVisible({timeout:10000});await page.waitForTimeout(400);
   const box=await canvas.boundingBox();expect(box).toBeTruthy();
-  const drag=async(dx,dy)=>{const sx=box.x+box.width*.5,sy=box.y+box.height*.52;await page.mouse.move(sx,sy);await page.mouse.down();await page.mouse.move(sx+dx,sy+dy,{steps:5});await page.mouse.up();};
+  const drag=async(dx,dy)=>{const sx=box.x+box.width*.5,sy=box.y+box.height*.52;await canvas.dispatchEvent('pointerdown',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx,clientY:sy,buttons:1});for(let i=1;i<=5;i++)await canvas.dispatchEvent('pointermove',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx+dx*i/5,clientY:sy+dy*i/5,buttons:1});await canvas.dispatchEvent('pointerup',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx+dx,clientY:sy+dy,buttons:0});};
   for(let i=0;i<30;i++){
     const angle=i*.63;await drag(Math.cos(angle)*75,Math.sin(angle)*75);
     if(i%10===0){for(const name of ['select','body','anchor','spring','exciter','mic']){const b=page.locator(`[data-tool="${name}"]`);if(await b.count())await b.click();}const sel=page.locator('[data-tool="select"]');if(await sel.count())await sel.click();}
