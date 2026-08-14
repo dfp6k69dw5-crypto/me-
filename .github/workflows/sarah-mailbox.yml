@@ -1,36 +1,13 @@
-name: Sarah Conversation Room
+name: Sarah Conversation Room (disabled)
 
 on:
-  issue_comment:
-    types: [created]
+  workflow_dispatch:
 
 permissions:
   contents: read
-  issues: write
-
-concurrency:
-  group: sarah-conversation-room
-  cancel-in-progress: false
 
 jobs:
-  reply:
-    if: github.event.issue.title == 'Sarah — conversation room' && github.event.comment.user.login != 'github-actions[bot]'
+  disabled:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Ollama
-        run: curl -fsSL https://ollama.com/install.sh | sh
-      - name: Wake local model
-        run: |
-          ollama serve > /tmp/ollama.log 2>&1 &
-          for i in {1..30}; do
-            curl -fsS http://127.0.0.1:11434/api/tags >/dev/null && break
-            sleep 1
-          done
-          ollama pull qwen2.5:1.5b
-      - name: Let Sarah answer
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SARAH_MODEL: qwen2.5:1.5b
-        run: python3 scripts/sarah_mailbox.py
+      - run: echo "Public Sarah mailbox disabled. Private channel required."
