@@ -1,147 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#080D1A">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>RESONATOR</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --ink:#080D1A; --deep:#0D1526; --panel:#141D33; --rule:#25314F;
-  --text:#C6D2EC; --dim:#7685AA; --faint:#4A587A;
-  --tension:#FF9A55; --compress:#4ED8EA; --live:#F0EAD8;
-  --display:'Bricolage Grotesque',system-ui,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
-  --pad-b:env(safe-area-inset-bottom,0px);
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:var(--ink)}
-html,body{margin:0;height:100%;overflow:hidden;background:var(--ink);color:var(--text);
-  font-family:var(--mono);font-size:13px;line-height:1.45;
-  -webkit-font-smoothing:antialiased;overscroll-behavior:none;touch-action:manipulation}
-#app{display:flex;flex-direction:column;height:100vh;height:100dvh;background:var(--ink);padding-bottom:var(--pad-b)}
-#stage{position:relative;flex:1 1 auto;min-height:0;height:100%;background:
-  radial-gradient(130% 100% at 50% 34%, #16233F 0%, #0A1120 55%, #05080F 100%)}
-#stage::after{content:'';position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(120% 90% at 50% 40%,transparent 40%,rgba(0,0,0,.55) 100%)}
-#view{width:100%;height:100%;display:block;touch-action:none}
-#readout{position:absolute;left:14px;top:12px;font-size:10px;color:var(--dim);letter-spacing:.02em;pointer-events:none;text-shadow:0 1px 3px #000}
-#readout b{color:var(--live);font-weight:500}
-#tools{position:absolute;left:10px;right:10px;bottom:58px;display:flex;flex-wrap:wrap;gap:4px;z-index:5}
-.tool{appearance:none;border:1px solid rgba(74,88,122,.6);background:rgba(10,17,32,.75);color:var(--faint);font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:9px 10px;min-height:36px;border-radius:3px;cursor:pointer;backdrop-filter:blur(8px)}
-.tool[aria-pressed="true"]{border-color:var(--compress);color:var(--live);background:rgba(19,37,56,.9)}
-.tool:disabled{opacity:.3}
-#undo,#redo{font-size:14px;padding:6px 10px}
-#level{position:absolute;right:14px;top:30px;font-size:10.5px;color:var(--tension);pointer-events:none;text-shadow:0 1px 3px #000}
-#brand{position:absolute;right:14px;top:10px;font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:.34em;color:var(--faint);pointer-events:none}
-#controlsToggle{position:absolute;right:10px;bottom:58px;z-index:8;appearance:none;border:1px solid rgba(78,216,234,.7);background:rgba(10,17,32,.88);color:var(--live);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;min-height:36px;padding:9px 12px;border-radius:18px;backdrop-filter:blur(10px);cursor:pointer}
-#drawer{position:absolute;left:0;right:0;bottom:38px;z-index:10;height:min(56dvh,560px);background:rgba(8,13,26,.97);border-top:1px solid rgba(78,216,234,.28);box-shadow:0 -14px 34px rgba(0,0,0,.42);transform:translateY(calc(100% - 44px));transition:transform .22s ease;display:flex;flex-direction:column;pointer-events:auto}
-#drawer.open{transform:translateY(0)}
-#tabs{display:flex;border-top:0;border-bottom:1px solid var(--rule);background:rgba(13,21,38,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);flex:0 0 44px}
-.tab{flex:1;appearance:none;border:0;background:none;color:var(--faint);font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:11px 4px;cursor:pointer}
-.tab[aria-selected="true"]{color:var(--live);box-shadow:inset 0 -2px 0 var(--compress)}
-#panel{flex:1 1 auto;min-height:0;background:var(--ink);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:14px 14px 6px}
-.page{display:none}.page.on{display:block}
-#bodytext{color:var(--dim);font-size:11.5px;background:var(--ink);margin:0 0 14px;padding-left:10px;border-left:2px solid var(--rule)}
-.row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.chip{appearance:none;border:1px solid var(--rule);background:transparent;color:var(--dim);font-family:var(--mono);font-size:11px;padding:9px 12px;min-height:38px;border-radius:2px;cursor:pointer}
-.chip[aria-pressed="true"]{border-color:var(--compress);color:var(--live);background:#132538}
-#recbtn[aria-pressed="true"]{border-color:var(--tension);color:var(--tension);background:#2A1A12}
-a.chip.rec{display:none;text-decoration:none;line-height:20px;border-color:var(--tension);color:var(--tension)}
-a.chip.rec.on{display:inline-block}
-select{appearance:none;-webkit-appearance:none;flex:1 1 0;min-width:0;height:40px;border:1px solid var(--rule);background:#101A2E;color:var(--text);font-family:var(--mono);font-size:12px;padding:0 10px;border-radius:3px}
-.mrow{display:flex;gap:8px;margin-bottom:10px}
-textarea#pcode{display:none;width:100%;height:74px;background:#101A2E;color:var(--compress);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:10px;padding:8px;margin-bottom:12px;resize:none}
-textarea#pcode.on{display:block}
-#diag{display:none;white-space:pre-wrap;font-size:10px;color:var(--compress);border:1px solid var(--rule);padding:8px;margin:0 0 12px;line-height:1.5}
-#diag.on{display:block}
-#panel::after{content:'';position:sticky;bottom:-6px;display:block;height:22px;background:linear-gradient(to top,var(--ink),transparent);pointer-events:none}
-.secttl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
-.knob{margin-bottom:10px}
-.knob .lab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:5px;cursor:pointer;user-select:none;-webkit-user-select:none}
-.knob .lab span{font-size:12.5px;color:var(--text)}
-.knob .lab b{font-size:12.5px;color:var(--tension);font-weight:500;font-variant-numeric:tabular-nums}
-.knob .hint{display:none;font-size:10px;color:var(--faint);margin-top:5px;line-height:1.4}
-body.hints .knob .hint{display:block}
-body.hints .knob{margin-bottom:16px}
-.ctl{display:flex;align-items:center;gap:8px;margin:2px 0 0}
-.step{flex:0 0 46px;height:42px;appearance:none;border:1px solid var(--rule);background:#101A2E;color:var(--live);font-family:var(--mono);font-size:17px;line-height:1;border-radius:3px;cursor:pointer}
-.step:active{background:var(--compress);color:var(--ink)}
-.bar{position:relative;flex:1 1 auto;height:42px;cursor:pointer;touch-action:none;display:flex;align-items:center}
-.bar::before{content:'';position:absolute;left:0;right:0;height:3px;background:var(--rule);border-radius:2px}
-.bar .fill{position:absolute;left:0;height:3px;background:var(--compress);border-radius:2px;pointer-events:none}
-.bar .dot{position:absolute;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:var(--live);box-shadow:0 1px 4px #000,0 0 0 1px var(--ink);pointer-events:none}
-#deck{position:absolute;left:0;right:0;bottom:0;z-index:12;flex:0 0 auto;border-top:1px solid var(--rule);background:var(--deep);padding:0 10px 8px;max-height:34dvh;overflow:hidden}
-#handle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:38px;appearance:none;border:0;background:none;color:var(--faint);font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
-#handle b{color:var(--live);font-weight:500}
-#deck.shut #pads,#deck.shut #msg{display:none}
-#deck.shut{padding-bottom:2px}
-#msg{font-size:10px;color:var(--faint);margin:0 2px 6px;min-height:0}
-#msg:empty{display:none}
-#msg.warn{color:var(--tension)}
-#pads{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
-.pad{appearance:none;border:1px solid var(--rule);background:#101A2E;color:var(--dim);font-family:var(--mono);font-size:10.5px;padding:11px 0;border-radius:3px;cursor:pointer;transition:background .09s,color .09s,border-color .09s}
-.pad.lit{background:var(--compress);border-color:var(--compress);color:var(--ink)}
-#curtain{position:fixed;inset:0;z-index:20;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px}
-#curtain h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,13vw,64px);letter-spacing:.16em;margin:0 0 6px;color:var(--live)}
-#curtain .sub{font-size:11px;color:var(--faint);letter-spacing:.22em;text-transform:uppercase;margin-bottom:26px}
-#curtain p{max-width:30ch;font-size:12px;color:var(--dim);margin:0 0 30px;line-height:1.6}
-#start{appearance:none;border:1px solid var(--live);background:transparent;color:var(--live);font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;padding:15px 34px;border-radius:2px;cursor:pointer}
-#start:disabled{opacity:.45}
-@media(max-width:480px){#stage{min-height:100dvh}.tool{min-height:34px;padding:8px 9px}#controlsToggle,#tools{bottom:52px}.knob{margin-bottom:8px}.knob .lab span,.knob .lab b{font-size:12px}.ctl,.bar{height:38px}.step{height:38px;flex-basis:44px}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
-</head>
-<body>
-<div id="app">
-  <div id="stage">
-    <canvas id="view"></canvas>
-    <div id="readout"></div>
-    <div id="brand">RESONATOR</div>
-    <div id="tools">
-      <button class="tool" data-tool="orbit" aria-pressed="true">orbit</button>
-      <button class="tool" data-tool="strike" aria-pressed="false">strike</button>
-      <button class="tool" data-tool="mic" aria-pressed="false">mic</button>
-      <button class="tool" data-tool="move" aria-pressed="false">move</button>
-      <button class="tool" data-tool="link" aria-pressed="false">link</button>
-      <button class="tool" data-tool="pin" aria-pressed="false">pin</button>
-      <button class="tool" id="home">reset view</button>
-      <button class="tool" id="undo" disabled>&#8630;</button>
-      <button class="tool" id="redo" disabled>&#8631;</button>
-    </div>
-    <div id="level">output silent</div>
-    <button id="controlsToggle" aria-expanded="false">controls</button>
-  </div>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR…</div><script>
+(async()=>{try{
+ if(!('DecompressionStream' in window)) throw new Error('This browser is too old for the compressed app loader.');
+ const parts=['01','02','03','04','05','06','07','08','09']; let b='';
+ for(const n of parts){const r=await fetch('resonator-parts/'+n+'.txt',{cache:'no-store'});if(!r.ok)throw new Error('Missing payload part '+n);b+=(await r.text()).trim();}
+ const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0)); const ds=new DecompressionStream('gzip');
+ let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
+ if(!text.includes('<title>RESONATOR</title>'))throw new Error('RESONATOR payload failed integrity check.');
 
-  <div id="drawer">
-  <div id="tabs">
-    <button class="tab" data-page="body" aria-selected="true">Body</button>
-    <button class="tab" data-page="strike" aria-selected="false">Strike</button>
-    <button class="tab" data-page="mic" aria-selected="false">Mic</button>
-    <button class="tab" data-page="amp" aria-selected="false">Amp</button>
-    <button class="tab" data-page="fx" aria-selected="false">FX</button>
-    <button class="tab" data-page="mod" aria-selected="false">Mod</button>
-  </div>
-  <div id="panel">
-    <div class="row"><button class="chip" id="hints" aria-pressed="false">Show hints</button><button class="chip" id="selftest">Self-test</button><button class="chip" id="bench">Benchmark</button></div>
-    <pre id="diag"></pre>
-    <section class="page on" id="page-body"><div class="secttl">Engine rate</div><div class="row" id="rates"></div><div class="secttl">Presets</div><div class="mrow"><select id="plist"></select></div><div class="row"><button class="chip" id="psave">Save</button><button class="chip" id="pload">Load</button><button class="chip" id="pdel">Delete</button><button class="chip" id="pcopy">Copy code</button><button class="chip" id="ppaste">Paste code</button></div><textarea id="pcode" placeholder="preset code appears here — copy it out, or paste one in and press Paste code"></textarea><p id="bodytext"></p><div class="secttl">Shape</div><div class="row" id="shapes"></div><div class="knob" data-k="size"></div><div class="knob" data-k="ratio"></div><div class="knob" data-k="decay"></div><div class="knob" data-k="loss"></div><div class="knob" data-k="sub"></div><div class="knob" data-k="voices"></div><div class="knob" data-k="nl"></div><div class="knob" data-k="coup"></div><div class="knob" data-k="mem"></div><div class="knob" data-k="memSpan"></div><div class="knob" data-k="regime"></div><div class="knob" data-k="rswitch"></div><div class="knob" data-k="rphi"></div><div class="secttl">Specialization</div><div class="row" id="specs"></div><div class="knob" data-k="att"></div><div class="knob" data-k="attC"></div><div class="knob" data-k="infer"></div><div class="knob" data-k="spread"></div><div class="knob" data-k="tune"></div><div class="row"><button class="chip" id="scramble">Scramble the wiring</button></div></section>
-    <section class="page" id="page-strike"><div class="secttl">Excitation</div><div class="row" id="modes"></div><div class="knob" data-k="splash"></div><div class="knob" data-k="drive"></div><div class="knob" data-k="hard"></div><div class="secttl">Bow</div><div class="knob" data-k="bowSpd"></div><div class="knob" data-k="bowVc"></div><div class="knob" data-k="hit"></div><div class="knob" data-k="angle"></div><div class="knob" data-k="gain"></div><div class="secttl">Scale</div><div class="row"><button class="chip" data-scale="0" aria-pressed="true">Pentatonic</button><button class="chip" data-scale="1" aria-pressed="false">Whole tone</button><button class="chip" data-scale="2" aria-pressed="false">Chromatic</button></div><div class="row"><button class="chip" id="bow" aria-pressed="false">Bow</button><button class="chip" id="hush">Hush</button></div><div class="secttl">Recording</div><div class="row"><button class="chip" id="recbtn" aria-pressed="false">Record</button><a class="chip rec" id="reclink" href="#">Save</a></div></section>
-    <section class="page" id="page-fx"><div class="secttl">Space</div><div class="knob" data-k="spImg"></div><div class="knob" data-k="spDist"></div><div class="knob" data-k="spRefl"></div><div class="knob" data-k="spDop"></div><div class="knob" data-k="spRot"></div><div class="knob" data-k="spElev"></div><div class="secttl">From the attractor</div><div class="knob" data-k="fxCho"></div><div class="knob" data-k="fxDly"></div><div class="knob" data-k="fxFb"></div><div class="knob" data-k="fxWow"></div><div class="knob" data-k="fxTrem"></div><div class="knob" data-k="fxSat"></div></section>
-    <section class="page" id="page-mod"><div class="secttl">Modulator 1</div><div class="mrow" data-m="0"></div><div class="knob" data-k="m1r"></div><div class="knob" data-k="m1a"></div><div class="secttl">Modulator 2</div><div class="mrow" data-m="1"></div><div class="knob" data-k="m2r"></div><div class="knob" data-k="m2a"></div><div class="secttl">Modulator 3</div><div class="mrow" data-m="2"></div><div class="knob" data-k="m3r"></div><div class="knob" data-k="m3a"></div></section>
-    <section class="page" id="page-amp"><div class="secttl">Pickup</div><div class="row" id="pickups"></div><div class="knob" data-k="pkAp"></div><div class="knob" data-k="pkSpc"></div><div class="knob" data-k="pkRes"></div><div class="knob" data-k="pkQ"></div><div class="secttl">Amplifier</div><div class="knob" data-k="amp"></div><div class="knob" data-k="bass"></div><div class="knob" data-k="treb"></div><div class="knob" data-k="cab"></div></section>
-    <section class="page" id="page-mic"><div class="row" id="axes"></div><div class="knob" data-k="mic"></div><div class="knob" data-k="blend"></div><div class="knob" data-k="bite"></div><div class="knob" data-k="tone"></div><div class="knob" data-k="width"></div><div class="secttl">Feedback</div><div class="knob" data-k="fbAmt"></div><div class="knob" data-k="fbTime"></div><div class="knob" data-k="mag"></div></section>
-  </div>
-  </div>
-  <div id="deck" class="shut"><button id="handle" aria-expanded="false"><span>Keys</span><b>&#9652;</b></button><div id="msg"></div><div id="pads"></div></div>
-</div>
-<div id="curtain"><h1>RESONATOR</h1><div class="sub">masses &amp; springs, at audio rate</div><p>There is no oscillator here. A structure of masses and springs is simulated 48,000 times a second, struck with a mallet, and listened to with a microphone. Everything you hear is the object moving.</p><button id="start">Wake it up</button></div>
-<script>
-/* Full engine retained from user-provided Resonator; omitted here for brevity is not allowed in actual source. */
-</script>
-</body>
-</html>
+ // Proven iPhone audio safety changes; physics law itself is untouched.
+ text=text.replace("state.rate=+(function(){try{return localStorage.getItem('resonator.rate');}catch(e){return null;}}()||32000);","state.rate=22050;");
+ text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
+ text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
+ text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
+ text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
+ text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
+
+ // Fix iPhone orbit + orientation handling. iOS can emit Pointer Events and Touch Events
+ // for the same two-finger gesture; the old code applied yaw/pitch and roll together.
+ text=text.replace(
+ "const cv=document.getElementById('view'),g2=cv.getContext('2d');let W=0,H=0;function resize(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;g2.setTransform(d,0,0,d,0,0);}addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,150));",
+ "const cv=document.getElementById('view'),g2=cv.getContext('2d');let W=0,H=0;function resize(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;const nw=Math.max(1,Math.round(W*d)),nh=Math.max(1,Math.round(H*d));if(cv.width!==nw||cv.height!==nh){cv.width=nw;cv.height=nh;}g2.setTransform(d,0,0,d,0,0);}let resizeRAF=0;function queueResize(){cancelAnimationFrame(resizeRAF);resizeRAF=requestAnimationFrame(()=>{resize();requestAnimationFrame(resize);});}addEventListener('resize',queueResize,{passive:true});addEventListener('orientationchange',()=>{drag=null;orbitPointer=null;queueResize();setTimeout(queueResize,120);setTimeout(queueResize,360);},{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',queueResize,{passive:true});visualViewport.addEventListener('scroll',queueResize,{passive:true});}"
+ );
+ text=text.replace(
+ "(function(){\n  let a0=null;\n  const ang=t=>Math.atan2(t[1].clientY-t[0].clientY, t[1].clientX-t[0].clientX);\n  cv.addEventListener('touchstart',e=>{\n    if(e.touches.length===2){ a0=ang(e.touches); state.spin=false; }\n  },{passive:true});\n  cv.addEventListener('touchmove',e=>{\n    if(e.touches.length===2&&a0!==null){\n      const cur=ang(e.touches); camRotate(2,cur-a0); a0=cur;\n      e.preventDefault();\n    }\n  },{passive:false});\n  cv.addEventListener('touchend',()=>{ a0=null; },{passive:true});\n})();",
+ "(function(){\n  let a0=null;\n  const ang=t=>Math.atan2(t[1].clientY-t[0].clientY,t[1].clientX-t[0].clientX);\n  cv.addEventListener('touchstart',e=>{if(e.touches.length===2){a0=ang(e.touches);state.spin=false;drag=null;orbitPointer=null;}},{passive:true});\n  cv.addEventListener('touchmove',e=>{if(e.touches.length===2&&a0!==null){const cur=ang(e.touches),da=Math.atan2(Math.sin(cur-a0),Math.cos(cur-a0));camRotate(2,da);a0=cur;e.preventDefault();}},{passive:false});\n  cv.addEventListener('touchend',e=>{if(e.touches.length<2)a0=null;},{passive:true});\n  cv.addEventListener('touchcancel',()=>{a0=null;drag=null;orbitPointer=null;},{passive:true});\n})();"
+ );
+ text=text.replace(
+ "let drag=null;\ncv.addEventListener('pointerdown',e=>{\n  cv.setPointerCapture(e.pointerId);\n  const g=state.geo;\n  if(state.tool==='orbit'){ drag={x:e.clientX,y:e.clientY}; state.spin=false; return; }",
+ "let drag=null,orbitPointer=null;\ncv.addEventListener('pointerdown',e=>{\n  if(e.pointerType==='touch'&&!e.isPrimary)return;\n  try{cv.setPointerCapture(e.pointerId);}catch(_){}\n  const g=state.geo;\n  if(state.tool==='orbit'){orbitPointer=e.pointerId;drag={x:e.clientX,y:e.clientY};state.spin=false;e.preventDefault();return;}"
+ );
+ text=text.replace(
+ "cv.addEventListener('pointermove',e=>{\n  if(!drag) return;\n  if(drag.node===undefined){\n    camRotate(1,(e.clientX-drag.x)*0.008);\n    camRotate(0,(e.clientY-drag.y)*0.008);\n    drag={x:e.clientX,y:e.clientY}; return;\n  }",
+ "cv.addEventListener('pointermove',e=>{\n  if(!drag)return;\n  if(drag.node===undefined){\n    if(orbitPointer!==null&&e.pointerId!==orbitPointer)return;\n    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;\n    camRotate(1,dx*0.0065);\n    camRotate(0,-dy*0.0065);\n    drag={x:e.clientX,y:e.clientY};e.preventDefault();return;\n  }"
+ );
+ text=text.replace(
+ "addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; });",
+ "const endPointer=e=>{if(drag&&drag.node!==undefined)drawInfo();if(orbitPointer===null||!e||e.pointerId===orbitPointer){drag=null;orbitPointer=null;}};addEventListener('pointerup',endPointer,{passive:true});addEventListener('pointercancel',endPointer,{passive:true});"
+ );
+
+ // Mobile layout is injected as a self-contained layer after the original app loads.
+ const mobileCSS=String.raw`
+/* RESONATOR mobile instrument v4 */
+html,body{height:100%;height:100dvh;overflow:hidden!important}
+#app{position:relative!important;display:block!important;width:100%;height:100vh!important;height:100dvh!important;overflow:hidden!important;padding:0!important}
+#stage{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;z-index:1!important}
+#view{width:100%!important;height:100%!important}
+#readout{left:12px!important;top:12px!important;font-size:9px!important;max-width:58%!important;opacity:.72}
+#brand{right:12px!important;top:12px!important;font-size:10px!important;opacity:.65}
+#level{right:12px!important;top:32px!important;font-size:9px!important}
+#tools{left:10px!important;right:auto!important;bottom:72px!important;z-index:8!important;gap:4px!important;max-width:calc(100% - 20px)!important}
+.tool{min-height:36px!important;padding:8px 10px!important;background:rgba(8,13,26,.78)!important;backdrop-filter:blur(10px)}
+#tools:not(.expanded) [data-tool="move"],#tools:not(.expanded) [data-tool="link"],#tools:not(.expanded) [data-tool="pin"],#tools:not(.expanded) #home,#tools:not(.expanded) #undo,#tools:not(.expanded) #redo{display:none!important}
+#mobileMore{color:var(--compress)!important}
+#mobileControls{position:absolute;right:12px;bottom:72px;z-index:9;appearance:none;border:1px solid rgba(78,216,234,.75);background:rgba(8,13,26,.82);color:var(--live);font:600 11px var(--mono);letter-spacing:.10em;text-transform:uppercase;padding:11px 15px;min-height:38px;border-radius:22px;backdrop-filter:blur(12px)}
+#mobileDrawer{position:absolute;left:0;right:0;bottom:0;z-index:20;height:min(61dvh,620px);display:flex;flex-direction:column;background:rgba(8,13,26,.975);border-top:1px solid rgba(78,216,234,.35);box-shadow:0 -18px 44px rgba(0,0,0,.5);transform:translateY(100%);transition:transform .20s ease}
+#mobileDrawer.open{transform:translateY(0)}
+#mobileGrab{height:22px;flex:0 0 22px;display:flex;align-items:center;justify-content:center}
+#mobileGrab:after{content:'';width:42px;height:4px;border-radius:3px;background:var(--rule)}
+#mobileDrawer #tabs{flex:0 0 44px!important;background:rgba(13,21,38,.98)!important;border-top:0!important;overflow-x:auto!important}
+#mobileDrawer .tab{min-width:58px;padding:11px 5px!important}
+#mobileDrawer #panel{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;padding:12px 14px calc(20px + env(safe-area-inset-bottom,0px))!important}
+#mobileDrawer .knob{margin-bottom:10px!important}
+#mobileDrawer .ctl,#mobileDrawer .bar{height:40px!important}
+#mobileDrawer .step{height:40px!important;flex-basis:44px!important}
+#mobileDrawer .row{margin-bottom:10px!important}
+#mobileDrawer .secttl{margin-top:4px!important}
+#mobileSetupBtn{margin:0 0 12px!important}
+#mobileSetupBox{display:none;border:1px solid var(--rule);padding:10px;margin:0 0 14px;border-radius:4px;background:#0D1526}
+#mobileSetupBox.open{display:block}
+#deck{position:absolute!important;left:0!important;right:0!important;bottom:0!important;z-index:21!important;background:rgba(13,21,38,.98)!important;padding:0 8px calc(6px + env(safe-area-inset-bottom,0px))!important;max-height:39dvh!important;overflow:auto!important;box-shadow:0 -12px 34px rgba(0,0,0,.45)}
+#deck.shut{padding-bottom:calc(2px + env(safe-area-inset-bottom,0px))!important;overflow:hidden!important}
+#handle{height:48px!important;background:transparent!important;font-size:11px!important}
+#pads{grid-template-columns:repeat(4,1fr)!important;gap:6px!important}
+.pad{min-height:48px!important;font-size:11px!important;padding:10px 0!important}
+#deck:not(.shut) #pads{padding-bottom:4px}
+#deck:not(.shut) #msg{padding:0 4px}
+@media(max-width:430px){#tools{bottom:68px!important}.tool{font-size:9px!important;padding:8px 9px!important}#mobileControls{bottom:68px}.pad{min-height:46px!important}}
+@media(prefers-reduced-motion:reduce){#mobileDrawer{transition:none!important}}
+`;
+ const mobileJS=String.raw`
+(function(){
+ const tabs=document.getElementById('tabs'),panel=document.getElementById('panel'),stage=document.getElementById('stage'),tools=document.getElementById('tools'),deck=document.getElementById('deck'),handle=document.getElementById('handle');
+ if(!tabs||!panel||!stage||!tools||!deck||!handle)return;
+ const drawer=document.createElement('div');drawer.id='mobileDrawer';
+ const grab=document.createElement('div');grab.id='mobileGrab';drawer.appendChild(grab);
+ tabs.parentNode.insertBefore(drawer,tabs);drawer.appendChild(tabs);drawer.appendChild(panel);
+ const controls=document.createElement('button');controls.id='mobileControls';controls.textContent='Controls';controls.setAttribute('aria-expanded','false');stage.appendChild(controls);
+ const more=document.createElement('button');more.className='tool';more.id='mobileMore';more.textContent='Tools';more.setAttribute('aria-expanded','false');
+ const micTool=tools.querySelector('[data-tool="mic"]');if(micTool)micTool.insertAdjacentElement('afterend',more);else tools.appendChild(more);
+ function closeKeys(){deck.classList.add('shut');handle.setAttribute('aria-expanded','false');const b=handle.querySelector('b');if(b)b.innerHTML='&#9652;';}
+ function setDrawer(open){drawer.classList.toggle('open',!!open);controls.setAttribute('aria-expanded',String(!!open));controls.textContent=open?'Close':'Controls';if(open)closeKeys();}
+ controls.onclick=()=>setDrawer(!drawer.classList.contains('open'));
+ grab.onclick=()=>setDrawer(false);
+ more.onclick=()=>{const open=tools.classList.toggle('expanded');more.setAttribute('aria-expanded',String(open));more.textContent=open?'Less':'Tools';};
+ closeKeys();
+ handle.onclick=()=>{const opening=deck.classList.contains('shut');deck.classList.toggle('shut',!opening);handle.setAttribute('aria-expanded',String(opening));const b=handle.querySelector('b');if(b)b.innerHTML=opening?'&#9662;':'&#9652;';if(opening)setDrawer(false);};
+ const body=document.getElementById('page-body');
+ if(body){
+   const setupBtn=document.createElement('button');setupBtn.className='chip';setupBtn.id='mobileSetupBtn';setupBtn.textContent='Setup';
+   const box=document.createElement('div');box.id='mobileSetupBox';
+   const panelTop=panel.firstElementChild;const diag=document.getElementById('diag');
+   if(panelTop&&panelTop.classList.contains('row'))box.appendChild(panelTop);if(diag)box.appendChild(diag);
+   const stop=document.getElementById('bodytext');let n=body.firstElementChild;
+   while(n){const next=n.nextElementSibling;box.appendChild(n);if(n===stop)break;n=next;}
+   body.insertBefore(box,body.firstChild);body.insertBefore(setupBtn,box);
+   setupBtn.onclick=()=>{const open=box.classList.toggle('open');setupBtn.textContent=open?'Hide setup':'Setup';};
+ }
+ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setDrawer(true)));
+})();
+`;
+ text=text.replace('</style>',mobileCSS+'</style>');
+ text=text.replace('</body>','<script>'+mobileJS+'<\\/script></body>');
+ document.open();document.write(text);document.close();
+}catch(e){document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';}})();
+</script></body></html>
