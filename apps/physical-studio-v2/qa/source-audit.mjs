@@ -12,7 +12,7 @@ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
 const worklet=fs.readFileSync(path.join(root,'physics-worklet.js'),'utf8');
 
 if(!html.includes('three@0.180.0'))fail('QA-BOOT-011','Three.js version is not pinned',html.match(/three@[^/\"]+/)?.[0]||'none','three@0.180.0');
-if(!html.includes('OrbitControls'))fail('QA-CAM-010','OrbitControls import missing','missing','present');
+if(!app.includes("OrbitControls } from 'three/addons/controls/OrbitControls.js'"))fail('QA-CAM-010','OrbitControls import missing','missing','present in app.js');
 if(!app.includes('THREE.TOUCH.ROTATE'))fail('QA-CAM-011','One-finger touch orbit mapping missing','missing','THREE.TOUCH.ROTATE');
 if(!app.includes('THREE.TOUCH.DOLLY_PAN'))fail('QA-CAM-012','Two-finger dolly/pan mapping missing','missing','THREE.TOUCH.DOLLY_PAN');
 if(!app.includes("audioWorklet.addModule('./physics-worklet.js"))fail('QA-AUD-010','App does not load expected physics worklet','missing','physics-worklet.js');
