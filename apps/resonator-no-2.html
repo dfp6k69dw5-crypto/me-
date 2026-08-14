@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR NO. 2</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR · instrument view…</div><script>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR NO. 2</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR NO. 2 · repaired mobile layout…</div><script>
 (async()=>{try{
  if(!('DecompressionStream' in window)) throw new Error('This browser is too old for the compressed app loader.');
  const parts=['01','02','03','04','05','06','07','08','09']; let b='';
@@ -16,38 +16,47 @@
  text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
  text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
  text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
- text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }"); text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
- const mobile=`<style id="mobile3">
+ text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
+ text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
+ const mobile=`<style id="res2mobile">
  @media(max-width:700px){
-  html,body{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;background:#080D1A!important;overscroll-behavior:none!important}
-  body{margin:0!important;padding:0!important}
-  button,[role=button]{touch-action:manipulation;min-height:42px!important}
-  canvas{touch-action:none!important}
-  p{display:none!important}
-  .m3-hidden{display:none!important}
-  .m3-tabs{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:9996!important;background:#0d1526!important;border-top:1px solid #273654!important;padding-bottom:max(6px,env(safe-area-inset-bottom))!important}
-  .m3-keys{position:fixed!important;left:10px!important;right:10px!important;bottom:70px!important;z-index:9997!important;max-height:36vh!important;overflow:auto!important;background:#0d1526!important;border:1px solid #31415f!important;border-radius:14px!important;padding:10px!important;box-shadow:0 12px 40px #0008!important}
-  #m3keybtn{position:fixed;right:12px;bottom:76px;z-index:9999;border:1px solid #3a4a68;background:#101a2e;color:#dbe2f3;border-radius:14px;padding:10px 14px;font:14px ui-monospace,monospace}
+  html,body{height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}
+  #app{height:100dvh!important;min-height:0!important;padding-bottom:env(safe-area-inset-bottom,0px)!important}
+  #stage{flex:0 0 43dvh!important;min-height:280px!important;max-height:46dvh!important}
+  #view{width:100%!important;height:100%!important}
+  #tools{left:12px!important;right:12px!important;bottom:10px!important;display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:8px!important;flex-wrap:nowrap!important}
+  #tools .tool{min-height:48px!important;font-size:12px!important;padding:8px 4px!important}
+  #tools [data-tool="move"],#tools [data-tool="link"],#tools [data-tool="pin"],#home,#undo,#redo{display:none!important}
+  #brand{top:10px!important;right:12px!important}
+  #tabs{flex:0 0 auto!important;position:relative!important;z-index:5!important}
+  .tab{padding:12px 2px!important;font-size:10px!important}
+  #panel{display:block!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;padding:14px 14px 80px!important}
+  #panel>.row:first-child{display:none!important}
+  .page.on{display:block!important}
+  #deck{flex:0 0 auto!important;z-index:40!important;padding:0 10px 4px!important}
+  #deck.shut{padding-bottom:2px!important}
+  #handle{height:38px!important;font-size:11px!important}
+  #deck:not(.shut){position:fixed!important;left:0!important;right:0!important;bottom:0!important;max-height:46dvh!important;overflow-y:auto!important;background:#0D1526!important;border-top:1px solid #4ED8EA!important;padding:0 10px calc(12px + env(safe-area-inset-bottom,0px))!important;box-shadow:0 -20px 55px #000b!important}
+  #deck:not(.shut) #pads{grid-template-columns:repeat(4,1fr)!important;gap:8px!important}
+  #deck:not(.shut) .pad{min-height:52px!important;font-size:12px!important}
+  .knob{margin-bottom:12px!important}
+  .knob .lab span,.knob .lab b{font-size:13px!important}
+  .step,.bar{height:46px!important}
  }
  </style><script>(function(){
- let keyPanel=null,keyBtn=null;
- const txt=e=>(e.textContent||'').replace(/\s+/g,' ').trim();
- function blockFor(el){let p=el;for(let i=0;i<5&&p&&p.parentElement;i++,p=p.parentElement){const r=p.getBoundingClientRect();if(r.width>innerWidth*.75&&r.height>35&&r.height<innerHeight*.5)return p;}return el;}
- function killLabel(label){for(const e of document.querySelectorAll('body *')){if(txt(e)===label){const b=blockFor(e);b.classList.add('m3-hidden');return;}}}
- function findKeys(){for(const e of document.querySelectorAll('body *')){const t=txt(e);if(/^KEYS\s*[▲▼△▽]?$/.test(t)){let p=e.parentElement;for(let i=0;i<5&&p;i++,p=p.parentElement){const s=txt(p);if(/E3/.test(s)&&/G5/.test(s)){return p;}}}}return null;}
- function makeKeyBtn(){if(keyBtn)return;keyBtn=document.createElement('button');keyBtn.id='m3keybtn';keyBtn.textContent='KEYS';keyBtn.onclick=()=>{if(!keyPanel)return;const h=keyPanel.classList.toggle('m3-hidden');keyBtn.textContent=h?'KEYS':'CLOSE KEYS';};document.body.appendChild(keyBtn);}
- function simplify(){if(innerWidth>700)return;
-  ['ENGINE RATE','PRESETS','Show hints','Self-test','Benchmark','(nothing saved yet)'].forEach(killLabel);
-  for(const e of document.querySelectorAll('body *')){const t=txt(e);if(t.startsWith('Buffered engine')||t.includes('pads respond about a third')||t.includes('circumference while hoop stiffness'))blockFor(e).classList.add('m3-hidden');}
-  const canv=[...document.querySelectorAll('canvas')].sort((a,b)=>(b.clientWidth*b.clientHeight)-(a.clientWidth*a.clientHeight))[0];if(canv){canv.style.width='100vw';canv.style.maxWidth='100vw';canv.style.height='52vh';canv.style.objectFit='contain';canv.style.display='block';}
-  const tabs=[...document.querySelectorAll('body *')].filter(e=>/^(BODY|STRIKE|MIC|AMP|FX|MOD)$/.test(txt(e)));if(tabs.length>=6){let p=tabs[0].parentElement;for(let i=0;i<4&&p;i++,p=p.parentElement){const s=txt(p);if(s.includes('BODY')&&s.includes('MOD')){p.classList.add('m3-tabs');break;}}}
-  keyPanel=findKeys();if(keyPanel){keyPanel.classList.add('m3-keys','m3-hidden');makeKeyBtn();}
+ function setup(){
+   const deck=document.getElementById('deck'),handle=document.getElementById('handle');
+   if(deck){deck.classList.add('shut');}
+   if(handle){handle.setAttribute('aria-expanded','false');const b=handle.querySelector('b');if(b)b.innerHTML='&#9652;';}
+   const bodyTab=document.querySelector('.tab[data-page="body"]');if(bodyTab)bodyTab.click();
  }
- addEventListener('load',()=>setTimeout(simplify,120));addEventListener('resize',simplify);new MutationObserver(()=>simplify()).observe(document.documentElement,{childList:true,subtree:true});setTimeout(simplify,350);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,0),{once:true});else setTimeout(setup,0);
+ setTimeout(setup,250);
  })();<\/script>`;
  text=text.replace('</head>',mobile+'</head>');
- text=text.replace('</body>','<div style="position:fixed;right:6px;top:4px;z-index:9999;font:8px ui-monospace,monospace;color:#34415f;pointer-events:none">MOBILE 3 · '+fixes+'</div></body>');
+ text=text.replace('<title>RESONATOR</title>','<title>RESONATOR NO. 2</title>');
+ text=text.replace('</body>','<div style="position:fixed;right:5px;top:3px;z-index:9999;font:7px ui-monospace,monospace;color:#26334c;pointer-events:none">R2 · '+fixes+'</div></body>');
  document.open();document.write(text);document.close();
-}catch(e){console.error(e);document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';}
+}catch(e){console.error(e);document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR NO. 2 could not load</h2><p>'+String(e.message||e)+'</p></div>';}
 })();
 </script></body></html>
