@@ -1,62 +1,69 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR NO. 2</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR NO. 2 · repaired mobile layout…</div><script>
-(async()=>{try{
- if(!('DecompressionStream' in window)) throw new Error('This browser is too old for the compressed app loader.');
- const parts=['01','02','03','04','05','06','07','08','09']; let b='';
- for(const n of parts){const r=await fetch('resonator-parts/'+n+'.txt',{cache:'no-store'});if(!r.ok)throw new Error('Missing payload part '+n);b+=(await r.text()).trim();}
- const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0)); const ds=new DecompressionStream('gzip');
- let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
- if(!text.includes('<title>RESONATOR</title>')) throw new Error('RESONATOR payload failed integrity check.');
- let fixes=0; const rep=(a,b)=>{if(text.includes(a)){text=text.replace(a,b);fixes++;return true;}return false;};
- if(/this\.hp1\s*=\s*0\s*;\s*this\.lp1\s*=\s*0\s*;/.test(text)){text=text.replace(/this\.hp1\s*=\s*0\s*;\s*this\.lp1\s*=\s*0\s*;/,"this.hp1=0; this.lp1=0; this.lp1c=0; this.lp1d=0; this.body=0;");fixes++;}
- rep("fx(o){","fx(oL,oR=oL){"); rep("let l=o, r=o;","let l=oL, r=oR;");
- rep("this.dl[this.di]=Math.max(-3,Math.min(3,o+l*fb));\n    this.dr[this.di]=Math.max(-3,Math.min(3,o+r*fb));","this.dl[this.di]=Math.max(-3,Math.min(3,oL+l*fb));\n    this.dr[this.di]=Math.max(-3,Math.min(3,oR+r*fb));");
- rep("state.disp=d.P.subarray(0,N*3);state.spd=d.P.subarray(N*3);\n     state.retBuf=d.P; state.peak=d.pk; state.ranOnce=true; drawLevel();","if(!state.disp || state.disp.length!==N*3) state.disp=new Float32Array(N*3);\n     if(!state.spd || state.spd.length!==N) state.spd=new Float32Array(N);\n     state.disp.set(d.P.subarray(0,N*3)); state.spd.set(d.P.subarray(N*3,N*4));\n     try{node.port.postMessage({t:'ret',P:d.P},[d.P.buffer]);}catch(e){} state.retBuf=null; state.peak=d.pk; state.ranOnce=true; drawLevel();");
- rep(" if(state.retBuf){try{node.port.postMessage({t:'ret',P:state.retBuf},[state.retBuf.buffer]);}catch(e){}state.retBuf=null;}\n","");
- text=text.replace("state.rate=+(function(){try{return localStorage.getItem('resonator.rate');}catch(e){return null;}}()||32000);","state.rate=22050;");
- text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
- text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
- text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
- text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
- text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
- const mobile=`<style id="res2mobile">
- @media(max-width:700px){
-  html,body{height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}
-  #app{height:100dvh!important;min-height:0!important;padding-bottom:env(safe-area-inset-bottom,0px)!important}
-  #stage{flex:0 0 43dvh!important;min-height:280px!important;max-height:46dvh!important}
-  #view{width:100%!important;height:100%!important}
-  #tools{left:12px!important;right:12px!important;bottom:10px!important;display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:8px!important;flex-wrap:nowrap!important}
-  #tools .tool{min-height:48px!important;font-size:12px!important;padding:8px 4px!important}
-  #tools [data-tool="move"],#tools [data-tool="link"],#tools [data-tool="pin"],#home,#undo,#redo{display:none!important}
-  #brand{top:10px!important;right:12px!important}
-  #tabs{flex:0 0 auto!important;position:relative!important;z-index:5!important}
-  .tab{padding:12px 2px!important;font-size:10px!important}
-  #panel{display:block!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;padding:14px 14px 80px!important}
-  #panel>.row:first-child{display:none!important}
-  .page.on{display:block!important}
-  #deck{flex:0 0 auto!important;z-index:40!important;padding:0 10px 4px!important}
-  #deck.shut{padding-bottom:2px!important}
-  #handle{height:38px!important;font-size:11px!important}
-  #deck:not(.shut){position:fixed!important;left:0!important;right:0!important;bottom:0!important;max-height:46dvh!important;overflow-y:auto!important;background:#0D1526!important;border-top:1px solid #4ED8EA!important;padding:0 10px calc(12px + env(safe-area-inset-bottom,0px))!important;box-shadow:0 -20px 55px #000b!important}
-  #deck:not(.shut) #pads{grid-template-columns:repeat(4,1fr)!important;gap:8px!important}
-  #deck:not(.shut) .pad{min-height:52px!important;font-size:12px!important}
-  .knob{margin-bottom:12px!important}
-  .knob .lab span,.knob .lab b{font-size:13px!important}
-  .step,.bar{height:46px!important}
- }
- </style><script>(function(){
- function setup(){
-   const deck=document.getElementById('deck'),handle=document.getElementById('handle');
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#080D1A">
+<title>RESONATOR NO. 2</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080D1A}
+#host{position:fixed;inset:0;width:100%;height:100%;border:0;background:#080D1A}
+#status{position:fixed;left:10px;top:max(6px,env(safe-area-inset-top));z-index:20;color:#65728f;font:9px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="status">NO. 2 · DIRECT MOBILE LAYOUT</div>
+<iframe id="host" src="resonator.html?v=20260814d" allow="microphone; autoplay"></iframe>
+<script>
+(()=>{
+ const frame=document.getElementById('host');
+ function patch(){
+   let d;
+   try{d=frame.contentDocument||frame.contentWindow.document;}catch(e){return;}
+   if(!d||!d.head||!d.body)return;
+   if(d.getElementById('res2-direct-layout'))return;
+   const s=d.createElement('style');
+   s.id='res2-direct-layout';
+   s.textContent=`
+   @media (max-width:700px){
+     html,body{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;overscroll-behavior:none!important}
+     #app{height:100dvh!important;padding-bottom:0!important}
+     #stage{flex:0 0 46vh!important;min-height:260px!important}
+     #tools{left:12px!important;right:12px!important;bottom:10px!important;gap:6px!important;flex-wrap:nowrap!important}
+     #tools [data-tool="move"],#tools [data-tool="link"],#tools [data-tool="pin"],#home,#undo,#redo{display:none!important}
+     #tools .tool{flex:1 1 0!important;min-width:0!important;padding:10px 4px!important;font-size:10px!important}
+     #tabs{flex:0 0 46px!important}
+     .tab{padding:12px 2px!important;font-size:9px!important}
+     #panel{display:block!important;flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;padding:12px 14px 70px!important;-webkit-overflow-scrolling:touch!important}
+     #deck{flex:0 0 34px!important;padding:0 10px 2px!important;z-index:50!important}
+     #deck.shut #pads,#deck.shut #msg{display:none!important}
+     #deck.shut{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;max-height:none!important;overflow:hidden!important;box-shadow:none!important}
+     #deck:not(.shut){position:fixed!important;left:8px!important;right:8px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;max-height:43vh!important;overflow:auto!important;background:#0D1526!important;border:1px solid #25314F!important;border-radius:12px!important;padding:0 10px 10px!important;box-shadow:0 16px 50px rgba(0,0,0,.7)!important}
+     #handle{height:34px!important;position:sticky!important;top:0!important;background:#0D1526!important;z-index:2!important}
+     #pads{grid-template-columns:repeat(6,1fr)!important;gap:5px!important}
+     .pad{padding:10px 0!important}
+     #bodytext{font-size:10.5px!important;margin-bottom:10px!important}
+     .knob{margin-bottom:9px!important}
+     .knob .lab{margin-bottom:3px!important}
+     .knob .hint{display:none!important}
+     #panel .row:first-child{display:none!important}
+     #readout{top:10px!important;left:12px!important;font-size:9px!important;max-width:55vw!important}
+     #brand{top:9px!important;right:10px!important;font-size:11px!important}
+     #level{top:28px!important;right:10px!important;font-size:9px!important}
+   }
+   `;
+   d.head.appendChild(s);
+   const deck=d.getElementById('deck');
+   const handle=d.getElementById('handle');
    if(deck){deck.classList.add('shut');}
-   if(handle){handle.setAttribute('aria-expanded','false');const b=handle.querySelector('b');if(b)b.innerHTML='&#9652;';}
-   const bodyTab=document.querySelector('.tab[data-page="body"]');if(bodyTab)bodyTab.click();
+   if(handle){handle.setAttribute('aria-expanded','false');}
+   const status=document.getElementById('status');
+   if(status)status.textContent='NO. 2 · LAYOUT ACTIVE';
  }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,0),{once:true});else setTimeout(setup,0);
- setTimeout(setup,250);
- })();<\/script>`;
- text=text.replace('</head>',mobile+'</head>');
- text=text.replace('<title>RESONATOR</title>','<title>RESONATOR NO. 2</title>');
- text=text.replace('</body>','<div style="position:fixed;right:5px;top:3px;z-index:9999;font:7px ui-monospace,monospace;color:#26334c;pointer-events:none">R2 · '+fixes+'</div></body>');
- document.open();document.write(text);document.close();
-}catch(e){console.error(e);document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR NO. 2 could not load</h2><p>'+String(e.message||e)+'</p></div>';}
+ frame.addEventListener('load',()=>{patch();setTimeout(patch,250);setTimeout(patch,1000);});
+ const timer=setInterval(patch,500);
+ setTimeout(()=>clearInterval(timer),10000);
 })();
-</script></body></html>
+</script>
+</body>
+</html>
