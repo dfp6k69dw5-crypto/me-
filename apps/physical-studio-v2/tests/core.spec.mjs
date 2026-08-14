@@ -15,12 +15,13 @@ async function qaSnapshot(page){
 }
 
 async function drag(page,dx,dy){
-  const {box}=await canvasBox(page);
+  const {canvas,box}=await canvasBox(page);
   const sx=box.x+box.width*.5, sy=box.y+box.height*.52;
-  await page.mouse.move(sx,sy);
-  await page.mouse.down();
-  await page.mouse.move(sx+dx,sy+dy,{steps:12});
-  await page.mouse.up();
+  await canvas.dispatchEvent('pointerdown',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx,clientY:sy,buttons:1});
+  for(let i=1;i<=8;i++){
+    await canvas.dispatchEvent('pointermove',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx+dx*i/8,clientY:sy+dy*i/8,buttons:1});
+  }
+  await canvas.dispatchEvent('pointerup',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx+dx,clientY:sy+dy,buttons:0});
   await page.waitForTimeout(180);
 }
 
