@@ -23,8 +23,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: apps/physical-studio-v2/package-lock.json
       - name: Install QA dependencies
         run: npm install
       - name: Install Playwright browsers
