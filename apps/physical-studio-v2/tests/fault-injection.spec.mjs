@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 async function loadQA(page){
   await page.goto('index.html?qa=1',{waitUntil:'domcontentloaded'});
-  await page.waitForFunction(()=>!!window.__PHYSICAL_STUDIO_QA__,null,{timeout:10000});
+  await page.waitForFunction(()=>!!window.__PS_QA__,null,{timeout:10000});
 }
 
 function uiOverflowDetector(){
@@ -33,7 +33,7 @@ test('QA-HARNESS catches missing renderer canvas',async({page})=>{
 
 test('QA-HARNESS catches invalid spring reference',async({page})=>{
   await loadQA(page);
-  const good=await page.evaluate(()=>window.__PHYSICAL_STUDIO_QA__.snapshot());
+  const good=await page.evaluate(()=>window.__PS_QA__.snapshot());
   expect(modelIntegrity(good)).toBe(true);
   const broken=structuredClone(good);
   broken.model.springs[0].a=999999;
@@ -42,7 +42,7 @@ test('QA-HARNESS catches invalid spring reference',async({page})=>{
 
 test('QA-HARNESS catches non-finite physics state',async({page})=>{
   await loadQA(page);
-  const state=await page.evaluate(()=>window.__PHYSICAL_STUDIO_QA__.snapshot());
+  const state=await page.evaluate(()=>window.__PS_QA__.snapshot());
   const finite=s=>s.model.bodies.every(b=>b.p.every(Number.isFinite));
   expect(finite(state)).toBe(true);
   state.model.bodies[0].p[0]=NaN;
@@ -51,11 +51,11 @@ test('QA-HARNESS catches non-finite physics state',async({page})=>{
 
 test('QA interface can deliberately perturb and restore model',async({page})=>{
   await loadQA(page);
-  const before=await page.evaluate(()=>window.__PHYSICAL_STUDIO_QA__.exportModel());
-  await page.evaluate(m=>{const x=structuredClone(m);x.bodies[1].p[1]+=0.75;window.__PHYSICAL_STUDIO_QA__.importModel(x)},before);
-  const changed=await page.evaluate(()=>window.__PHYSICAL_STUDIO_QA__.exportModel());
+  const before=await page.evaluate(()=>window.__PS_QA__.exportModel());
+  await page.evaluate(m=>{const x=structuredClone(m);x.bodies[1].p[1]+=0.75;window.__PS_QA__.importModel(x)},before);
+  const changed=await page.evaluate(()=>window.__PS_QA__.exportModel());
   expect(changed.bodies[1].p[1]).not.toBe(before.bodies[1].p[1]);
-  await page.evaluate(m=>window.__PHYSICAL_STUDIO_QA__.importModel(m),before);
-  const restored=await page.evaluate(()=>window.__PHYSICAL_STUDIO_QA__.exportModel());
+  await page.evaluate(m=>window.__PS_QA__.importModel(m),before);
+  const restored=await page.evaluate(()=>window.__PS_QA__.exportModel());
   expect(restored).toEqual(before);
 });
