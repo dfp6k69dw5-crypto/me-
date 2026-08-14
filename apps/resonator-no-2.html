@@ -1,39 +1,48 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR NO. 2</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR NO. 2 · repaired engine…</div><script>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR NO. 2</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR · easy mobile layout…</div><script>
 (async()=>{try{
  if(!('DecompressionStream' in window)) throw new Error('This browser is too old for the compressed app loader.');
- const parts=['01','02','03','04','05','06','07','08','09'];
- let b='';
+ const parts=['01','02','03','04','05','06','07','08','09']; let b='';
  for(const n of parts){const r=await fetch('resonator-parts/'+n+'.txt',{cache:'no-store'});if(!r.ok)throw new Error('Missing payload part '+n);b+=(await r.text()).trim();}
  const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
- const ds=new DecompressionStream('gzip');
- let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
+ const ds=new DecompressionStream('gzip'); let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
  if(!text.includes('<title>RESONATOR</title>')) throw new Error('RESONATOR payload failed integrity check.');
- let fixes=0,misses=0;
- const rep=(a,b)=>{if(text.includes(a)){text=text.replace(a,b);fixes++;return true;}misses++;console.warn('Optional repair signature not found',misses);return false;};
- // Cabinet state: flexible form first, exact fallback second.
- if(/this\.hp1\s*=\s*0\s*;\s*this\.lp1\s*=\s*0\s*;/.test(text)){
-   text=text.replace(/this\.hp1\s*=\s*0\s*;\s*this\.lp1\s*=\s*0\s*;/,"this.hp1=0; this.lp1=0; this.lp1c=0; this.lp1d=0; this.body=0;"); fixes++;
- }
- // Stereo-aware FX patches. They are optional so an older/newer payload still opens.
- rep("fx(o){","fx(oL,oR=oL){");
- rep("let l=o, r=o;","let l=oL, r=oR;");
+ let fixes=0; const rep=(a,b)=>{if(text.includes(a)){text=text.replace(a,b);fixes++;return true;}return false;};
+ if(/this\.hp1\s*=\s*0\s*;\s*this\.lp1\s*=\s*0\s*;/.test(text)){text=text.replace(/this\.hp1\s*=\s*0\s*;\s*this\.lp1\s*=\s*0\s*;/,"this.hp1=0; this.lp1=0; this.lp1c=0; this.lp1d=0; this.body=0;");fixes++;}
+ rep("fx(o){","fx(oL,oR=oL){"); rep("let l=o, r=o;","let l=oL, r=oR;");
  rep("this.dl[this.di]=Math.max(-3,Math.min(3,o+l*fb));\n    this.dr[this.di]=Math.max(-3,Math.min(3,o+r*fb));","this.dl[this.di]=Math.max(-3,Math.min(3,oL+l*fb));\n    this.dr[this.di]=Math.max(-3,Math.min(3,oR+r*fb));");
- rep("const ao=o<0?-o:o; if(ao>this.peak) this.peak=ao;\n      if(R&&this.width>0){","const ao=o<0?-o:o; if(ao>this.peak) this.peak=ao;\n      let ll=o, rr=o;\n      if(R&&this.width>0){");
- rep("L[k]=o*(1-0.5*w)+o2*(0.5*w); R[k]=o2*(1-0.5*w)+o*(0.5*w);\n      } else if(this.fxLive()||this.spLive()){\n        let ll=o, rr=o;\n        if(this.fxLive()){ const f=this.fx(o); ll=f[0]; rr=f[1]; }\n        if(this.spLive()){ const s=this.spatial((ll+rr)*0.5, mi); ll=s[0]; rr=s[1]; }\n        L[k]=Math.max(-1.2,Math.min(1.2,ll)); if(R) R[k]=Math.max(-1.2,Math.min(1.2,rr));\n      } else { L[k]=o; if(R) R[k]=o; }","ll=o*(1-0.5*w)+o2*(0.5*w); rr=o2*(1-0.5*w)+o*(0.5*w);\n      }\n      if(this.fxLive()){ const f=this.fx(ll,rr); ll=f[0]; rr=f[1]; }\n      if(this.spLive()){ const mid=(ll+rr)*0.5, side=(ll-rr)*0.5; const sp=this.spatial(mid,mi); ll=sp[0]+side; rr=sp[1]-side; }\n      L[k]=Math.max(-1.2,Math.min(1.2,ll)); if(R) R[k]=Math.max(-1.2,Math.min(1.2,rr));");
- // Buffer-pool repair, also optional across payload revisions.
- rep("state.disp=d.P.subarray(0,N*3);state.spd=d.P.subarray(N*3);\n     state.retBuf=d.P; state.peak=d.pk; state.ranOnce=true; drawLevel();","if(!state.disp || state.disp.length!==N*3) state.disp=new Float32Array(N*3);\n     if(!state.spd || state.spd.length!==N) state.spd=new Float32Array(N);\n     state.disp.set(d.P.subarray(0,N*3));\n     state.spd.set(d.P.subarray(N*3,N*4));\n     try{node.port.postMessage({t:'ret',P:d.P},[d.P.buffer]);}catch(e){}\n     state.retBuf=null; state.peak=d.pk; state.ranOnce=true; drawLevel();");
+ rep("state.disp=d.P.subarray(0,N*3);state.spd=d.P.subarray(N*3);\n     state.retBuf=d.P; state.peak=d.pk; state.ranOnce=true; drawLevel();","if(!state.disp || state.disp.length!==N*3) state.disp=new Float32Array(N*3);\n     if(!state.spd || state.spd.length!==N) state.spd=new Float32Array(N);\n     state.disp.set(d.P.subarray(0,N*3)); state.spd.set(d.P.subarray(N*3,N*4));\n     try{node.port.postMessage({t:'ret',P:d.P},[d.P.buffer]);}catch(e){} state.retBuf=null; state.peak=d.pk; state.ranOnce=true; drawLevel();");
  rep(" if(state.retBuf){try{node.port.postMessage({t:'ret',P:state.retBuf},[state.retBuf.buffer]);}catch(e){}state.retBuf=null;}\n","");
- // Preserve the iPhone-safe settings used by Resonator No. 1.
  text=text.replace("state.rate=+(function(){try{return localStorage.getItem('resonator.rate');}catch(e){return null;}}()||32000);","state.rate=22050;");
  text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
  text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
  text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
- text=text.replace('<title>RESONATOR</title>','<title>RESONATOR NO. 2</title>');
- // Stamp the loaded app so we can tell No. 2 apart without risking its engine.
- text=text.replace('</body>','<div style="position:fixed;right:8px;bottom:4px;z-index:9999;font:9px ui-monospace,monospace;color:#4A587A;pointer-events:none">NO. 2 · '+fixes+' repairs</div></body>');
+ text=text.replace('<title>RESONATOR</title>','<title>RESONATOR</title>');
+ const easy=`<style id="easy-mobile">
+ @media(max-width:700px){
+  html,body{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;overscroll-behavior:none!important}
+  body{padding:0!important;margin:0!important}
+  button,[role=button]{min-height:44px!important;touch-action:manipulation}
+  canvas{touch-action:none!important}
+  p{display:none!important}
+  input[type=range]{min-height:38px!important}
+ }
+ </style><script>(function(){
+  function easy(){if(innerWidth>700)return;
+   const all=[...document.querySelectorAll('body *')];
+   for(const e of all){const t=(e.textContent||'').trim(); if(!t)continue;
+    if(t.startsWith('Buffered engine')||t.includes('pads respond about a third')||t.includes('circumference while hoop stiffness')){e.style.display='none';}
+   }
+   const canv=[...document.querySelectorAll('canvas')].sort((a,b)=>(b.clientWidth*b.clientHeight)-(a.clientWidth*a.clientHeight))[0];
+   if(canv){canv.style.maxWidth='100vw';canv.style.width='100%';canv.style.height='auto';}
+   document.documentElement.style.setProperty('--easy-mobile','1');
+  }
+  addEventListener('load',()=>setTimeout(easy,80)); addEventListener('resize',easy); setTimeout(easy,250);
+ })();<\/script>`;
+ text=text.replace('</head>',easy+'</head>');
+ text=text.replace('</body>','<div style="position:fixed;right:8px;bottom:4px;z-index:9999;font:9px ui-monospace,monospace;color:#4A587A;pointer-events:none">EASY MOBILE · '+fixes+' repairs</div></body>');
  document.open();document.write(text);document.close();
-}catch(e){console.error(e);document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR NO. 2 could not load</h2><p>'+String(e.message||e)+'</p></div>';}
+}catch(e){console.error(e);document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';}
 })();
 </script></body></html>
