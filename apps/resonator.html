@@ -6,13 +6,89 @@
  const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0)); const ds=new DecompressionStream('gzip');
  let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
  if(!text.includes('<title>RESONATOR</title>'))throw new Error('RESONATOR payload failed integrity check.');
- // Keep the proven iPhone audio safety changes only. UI redesign will be applied after the base app is restored reliably.
+
+ // Proven iPhone audio safety changes; physics law itself is untouched.
  text=text.replace("state.rate=+(function(){try{return localStorage.getItem('resonator.rate');}catch(e){return null;}}()||32000);","state.rate=22050;");
  text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
  text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
  text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
+
+ // Mobile layout is injected as a self-contained layer after the original app loads.
+ const mobileCSS=String.raw`
+/* RESONATOR mobile instrument v4 */
+html,body{height:100%;height:100dvh;overflow:hidden!important}
+#app{position:relative!important;display:block!important;width:100%;height:100vh!important;height:100dvh!important;overflow:hidden!important;padding:0!important}
+#stage{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;z-index:1!important}
+#view{width:100%!important;height:100%!important}
+#readout{left:12px!important;top:12px!important;font-size:9px!important;max-width:58%!important;opacity:.72}
+#brand{right:12px!important;top:12px!important;font-size:10px!important;opacity:.65}
+#level{right:12px!important;top:32px!important;font-size:9px!important}
+#tools{left:10px!important;right:auto!important;bottom:72px!important;z-index:8!important;gap:4px!important;max-width:calc(100% - 20px)!important}
+.tool{min-height:36px!important;padding:8px 10px!important;background:rgba(8,13,26,.78)!important;backdrop-filter:blur(10px)}
+#tools:not(.expanded) [data-tool="move"],#tools:not(.expanded) [data-tool="link"],#tools:not(.expanded) [data-tool="pin"],#tools:not(.expanded) #home,#tools:not(.expanded) #undo,#tools:not(.expanded) #redo{display:none!important}
+#mobileMore{color:var(--compress)!important}
+#mobileControls{position:absolute;right:12px;bottom:72px;z-index:9;appearance:none;border:1px solid rgba(78,216,234,.75);background:rgba(8,13,26,.82);color:var(--live);font:600 11px var(--mono);letter-spacing:.10em;text-transform:uppercase;padding:11px 15px;min-height:38px;border-radius:22px;backdrop-filter:blur(12px)}
+#mobileDrawer{position:absolute;left:0;right:0;bottom:0;z-index:20;height:min(61dvh,620px);display:flex;flex-direction:column;background:rgba(8,13,26,.975);border-top:1px solid rgba(78,216,234,.35);box-shadow:0 -18px 44px rgba(0,0,0,.5);transform:translateY(100%);transition:transform .20s ease}
+#mobileDrawer.open{transform:translateY(0)}
+#mobileGrab{height:22px;flex:0 0 22px;display:flex;align-items:center;justify-content:center}
+#mobileGrab:after{content:'';width:42px;height:4px;border-radius:3px;background:var(--rule)}
+#mobileDrawer #tabs{flex:0 0 44px!important;background:rgba(13,21,38,.98)!important;border-top:0!important;overflow-x:auto!important}
+#mobileDrawer .tab{min-width:58px;padding:11px 5px!important}
+#mobileDrawer #panel{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;padding:12px 14px calc(20px + env(safe-area-inset-bottom,0px))!important}
+#mobileDrawer .knob{margin-bottom:10px!important}
+#mobileDrawer .ctl,#mobileDrawer .bar{height:40px!important}
+#mobileDrawer .step{height:40px!important;flex-basis:44px!important}
+#mobileDrawer .row{margin-bottom:10px!important}
+#mobileDrawer .secttl{margin-top:4px!important}
+#mobileSetupBtn{margin:0 0 12px!important}
+#mobileSetupBox{display:none;border:1px solid var(--rule);padding:10px;margin:0 0 14px;border-radius:4px;background:#0D1526}
+#mobileSetupBox.open{display:block}
+#deck{position:absolute!important;left:0!important;right:0!important;bottom:0!important;z-index:21!important;background:rgba(13,21,38,.98)!important;padding:0 8px calc(6px + env(safe-area-inset-bottom,0px))!important;max-height:39dvh!important;overflow:auto!important;box-shadow:0 -12px 34px rgba(0,0,0,.45)}
+#deck.shut{padding-bottom:calc(2px + env(safe-area-inset-bottom,0px))!important;overflow:hidden!important}
+#handle{height:48px!important;background:transparent!important;font-size:11px!important}
+#pads{grid-template-columns:repeat(4,1fr)!important;gap:6px!important}
+.pad{min-height:48px!important;font-size:11px!important;padding:10px 0!important}
+#deck:not(.shut) #pads{padding-bottom:4px}
+#deck:not(.shut) #msg{padding:0 4px}
+@media(max-width:430px){#tools{bottom:68px!important}.tool{font-size:9px!important;padding:8px 9px!important}#mobileControls{bottom:68px}.pad{min-height:46px!important}}
+@media(prefers-reduced-motion:reduce){#mobileDrawer{transition:none!important}}
+`;
+ const mobileJS=String.raw`
+(function(){
+ const tabs=document.getElementById('tabs'),panel=document.getElementById('panel'),stage=document.getElementById('stage'),tools=document.getElementById('tools'),deck=document.getElementById('deck'),handle=document.getElementById('handle');
+ if(!tabs||!panel||!stage||!tools||!deck||!handle)return;
+ const drawer=document.createElement('div');drawer.id='mobileDrawer';
+ const grab=document.createElement('div');grab.id='mobileGrab';drawer.appendChild(grab);
+ tabs.parentNode.insertBefore(drawer,tabs);drawer.appendChild(tabs);drawer.appendChild(panel);
+ const controls=document.createElement('button');controls.id='mobileControls';controls.textContent='Controls';controls.setAttribute('aria-expanded','false');stage.appendChild(controls);
+ const more=document.createElement('button');more.className='tool';more.id='mobileMore';more.textContent='Tools';more.setAttribute('aria-expanded','false');
+ const micTool=tools.querySelector('[data-tool="mic"]');if(micTool)micTool.insertAdjacentElement('afterend',more);else tools.appendChild(more);
+ function closeKeys(){deck.classList.add('shut');handle.setAttribute('aria-expanded','false');const b=handle.querySelector('b');if(b)b.innerHTML='&#9652;';}
+ function setDrawer(open){drawer.classList.toggle('open',!!open);controls.setAttribute('aria-expanded',String(!!open));controls.textContent=open?'Close':'Controls';if(open)closeKeys();}
+ controls.onclick=()=>setDrawer(!drawer.classList.contains('open'));
+ grab.onclick=()=>setDrawer(false);
+ more.onclick=()=>{const open=tools.classList.toggle('expanded');more.setAttribute('aria-expanded',String(open));more.textContent=open?'Less':'Tools';};
+ closeKeys();
+ handle.onclick=()=>{const opening=deck.classList.contains('shut');deck.classList.toggle('shut',!opening);handle.setAttribute('aria-expanded',String(opening));const b=handle.querySelector('b');if(b)b.innerHTML=opening?'&#9662;':'&#9652;';if(opening)setDrawer(false);};
+ // Put diagnostics/rate/presets behind Setup so Body opens directly on the sound-shaping controls.
+ const body=document.getElementById('page-body');
+ if(body){
+   const setupBtn=document.createElement('button');setupBtn.className='chip';setupBtn.id='mobileSetupBtn';setupBtn.textContent='Setup';
+   const box=document.createElement('div');box.id='mobileSetupBox';
+   const panelTop=panel.firstElementChild;const diag=document.getElementById('diag');
+   if(panelTop&&panelTop.classList.contains('row'))box.appendChild(panelTop);if(diag)box.appendChild(diag);
+   const stop=document.getElementById('bodytext');let n=body.firstElementChild;
+   while(n){const next=n.nextElementSibling;box.appendChild(n);if(n===stop)break;n=next;}
+   body.insertBefore(box,body.firstChild);body.insertBefore(setupBtn,box);
+   setupBtn.onclick=()=>{const open=box.classList.toggle('open');setupBtn.textContent=open?'Hide setup':'Setup';};
+ }
+ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setDrawer(true)));
+})();
+`;
+ text=text.replace('</style>',mobileCSS+'</style>');
+ text=text.replace('</body>','<script>'+mobileJS+'<\\/script></body>');
  document.open();document.write(text);document.close();
 }catch(e){document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';}})();
 </script></body></html>
