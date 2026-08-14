@@ -15,8 +15,9 @@
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
 
- // Fix iPhone orbit + orientation handling. iOS can emit Pointer Events and Touch Events
- // for the same two-finger gesture; the old code applied yaw/pitch and roll together.
+ // Fix iPhone orbit + orientation handling. One-finger vertical drag is intentionally
+ // screen-visible: the body tilts in the same direction as the finger rather than
+ // disappearing into an axial twist when the current shape is rod-like.
  text=text.replace(
  "const cv=document.getElementById('view'),g2=cv.getContext('2d');let W=0,H=0;function resize(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;g2.setTransform(d,0,0,d,0,0);}addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,150));",
  "const cv=document.getElementById('view'),g2=cv.getContext('2d');let W=0,H=0;function resize(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;const nw=Math.max(1,Math.round(W*d)),nh=Math.max(1,Math.round(H*d));if(cv.width!==nw||cv.height!==nh){cv.width=nw;cv.height=nh;}g2.setTransform(d,0,0,d,0,0);}let resizeRAF=0;function queueResize(){cancelAnimationFrame(resizeRAF);resizeRAF=requestAnimationFrame(()=>{resize();requestAnimationFrame(resize);});}addEventListener('resize',queueResize,{passive:true});addEventListener('orientationchange',()=>{drag=null;orbitPointer=null;queueResize();setTimeout(queueResize,120);setTimeout(queueResize,360);},{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',queueResize,{passive:true});visualViewport.addEventListener('scroll',queueResize,{passive:true});}"
@@ -31,7 +32,7 @@
  );
  text=text.replace(
  "cv.addEventListener('pointermove',e=>{\n  if(!drag) return;\n  if(drag.node===undefined){\n    camRotate(1,(e.clientX-drag.x)*0.008);\n    camRotate(0,(e.clientY-drag.y)*0.008);\n    drag={x:e.clientX,y:e.clientY}; return;\n  }",
- "cv.addEventListener('pointermove',e=>{\n  if(!drag)return;\n  if(drag.node===undefined){\n    if(orbitPointer!==null&&e.pointerId!==orbitPointer)return;\n    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;\n    camRotate(1,dx*0.0065);\n    camRotate(0,-dy*0.0065);\n    drag={x:e.clientX,y:e.clientY};e.preventDefault();return;\n  }"
+ "cv.addEventListener('pointermove',e=>{\n  if(!drag)return;\n  if(drag.node===undefined){\n    if(orbitPointer!==null&&e.pointerId!==orbitPointer)return;\n    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;\n    camRotate(1,dx*0.0065);\n    camRotate(2,dy*0.0065);\n    drag={x:e.clientX,y:e.clientY};e.preventDefault();return;\n  }"
  );
  text=text.replace(
  "addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; });",
