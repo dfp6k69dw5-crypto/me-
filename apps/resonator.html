@@ -1,117 +1,30 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR…</div><script>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR · OMEF spatial field…</div><script>
 (async()=>{try{
  if(!('DecompressionStream' in window)) throw new Error('This browser is too old for the compressed app loader.');
- const parts=['01','02','03','04','05','06','07','08','09']; let b='';
- for(const n of parts){const r=await fetch('resonator-parts/'+n+'.txt',{cache:'no-store'});if(!r.ok)throw new Error('Missing payload part '+n);b+=(await r.text()).trim();}
- const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0)); const ds=new DecompressionStream('gzip');
+ const parts=['01','02','03','04','05','06','07','08','09'];
+ let b='';
+ for(const n of parts){
+   const r=await fetch('resonator-parts/'+n+'.txt',{cache:'no-store'});
+   if(!r.ok) throw new Error('Missing payload part '+n);
+   b+=(await r.text()).trim();
+ }
+ const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
+ const ds=new DecompressionStream('gzip');
  let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
- if(!text.includes('<title>RESONATOR</title>'))throw new Error('RESONATOR payload failed integrity check.');
-
- // Proven iPhone audio safety changes; physics law itself is untouched.
+ if(!text.includes('<title>RESONATOR</title>')||!text.includes('Spatial field')) throw new Error('RESONATOR payload failed integrity check.');
+ // iPhone safe mode: favor uninterrupted audio over maximum visual/oversampling load.
+ // The physical model is unchanged; only the requested engine rate, oversampling ceiling,
+ // renderer cost and buffered-fallback safety margin are reduced.
  text=text.replace("state.rate=+(function(){try{return localStorage.getItem('resonator.rate');}catch(e){return null;}}()||32000);","state.rate=22050;");
  text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
  text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
  text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
-
- // Fix iPhone orbit + orientation handling. One-finger vertical drag is intentionally
- // screen-visible: the body tilts in the same direction as the finger rather than
- // disappearing into an axial twist when the current shape is rod-like.
- text=text.replace(
- "const cv=document.getElementById('view'),g2=cv.getContext('2d');let W=0,H=0;function resize(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;g2.setTransform(d,0,0,d,0,0);}addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,150));",
- "const cv=document.getElementById('view'),g2=cv.getContext('2d');let W=0,H=0;function resize(){const r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;const nw=Math.max(1,Math.round(W*d)),nh=Math.max(1,Math.round(H*d));if(cv.width!==nw||cv.height!==nh){cv.width=nw;cv.height=nh;}g2.setTransform(d,0,0,d,0,0);}let resizeRAF=0;function queueResize(){cancelAnimationFrame(resizeRAF);resizeRAF=requestAnimationFrame(()=>{resize();requestAnimationFrame(resize);});}addEventListener('resize',queueResize,{passive:true});addEventListener('orientationchange',()=>{drag=null;orbitPointer=null;queueResize();setTimeout(queueResize,120);setTimeout(queueResize,360);},{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',queueResize,{passive:true});visualViewport.addEventListener('scroll',queueResize,{passive:true});}"
- );
- text=text.replace(
- "(function(){\n  let a0=null;\n  const ang=t=>Math.atan2(t[1].clientY-t[0].clientY, t[1].clientX-t[0].clientX);\n  cv.addEventListener('touchstart',e=>{\n    if(e.touches.length===2){ a0=ang(e.touches); state.spin=false; }\n  },{passive:true});\n  cv.addEventListener('touchmove',e=>{\n    if(e.touches.length===2&&a0!==null){\n      const cur=ang(e.touches); camRotate(2,cur-a0); a0=cur;\n      e.preventDefault();\n    }\n  },{passive:false});\n  cv.addEventListener('touchend',()=>{ a0=null; },{passive:true});\n})();",
- "(function(){\n  let a0=null;\n  const ang=t=>Math.atan2(t[1].clientY-t[0].clientY,t[1].clientX-t[0].clientX);\n  cv.addEventListener('touchstart',e=>{if(e.touches.length===2){a0=ang(e.touches);state.spin=false;drag=null;orbitPointer=null;}},{passive:true});\n  cv.addEventListener('touchmove',e=>{if(e.touches.length===2&&a0!==null){const cur=ang(e.touches),da=Math.atan2(Math.sin(cur-a0),Math.cos(cur-a0));camRotate(2,da);a0=cur;e.preventDefault();}},{passive:false});\n  cv.addEventListener('touchend',e=>{if(e.touches.length<2)a0=null;},{passive:true});\n  cv.addEventListener('touchcancel',()=>{a0=null;drag=null;orbitPointer=null;},{passive:true});\n})();"
- );
- text=text.replace(
- "let drag=null;\ncv.addEventListener('pointerdown',e=>{\n  cv.setPointerCapture(e.pointerId);\n  const g=state.geo;\n  if(state.tool==='orbit'){ drag={x:e.clientX,y:e.clientY}; state.spin=false; return; }",
- "let drag=null,orbitPointer=null;\ncv.addEventListener('pointerdown',e=>{\n  if(e.pointerType==='touch'&&!e.isPrimary)return;\n  try{cv.setPointerCapture(e.pointerId);}catch(_){}\n  const g=state.geo;\n  if(state.tool==='orbit'){orbitPointer=e.pointerId;drag={x:e.clientX,y:e.clientY};state.spin=false;e.preventDefault();return;}"
- );
- text=text.replace(
- "cv.addEventListener('pointermove',e=>{\n  if(!drag) return;\n  if(drag.node===undefined){\n    camRotate(1,(e.clientX-drag.x)*0.008);\n    camRotate(0,(e.clientY-drag.y)*0.008);\n    drag={x:e.clientX,y:e.clientY}; return;\n  }",
- "cv.addEventListener('pointermove',e=>{\n  if(!drag)return;\n  if(drag.node===undefined){\n    if(orbitPointer!==null&&e.pointerId!==orbitPointer)return;\n    const dx=e.clientX-drag.x,dy=e.clientY-drag.y;\n    camRotate(1,dx*0.0065);\n    camRotate(2,dy*0.0065);\n    drag={x:e.clientX,y:e.clientY};e.preventDefault();return;\n  }"
- );
- text=text.replace(
- "addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; });",
- "const endPointer=e=>{if(drag&&drag.node!==undefined)drawInfo();if(orbitPointer===null||!e||e.pointerId===orbitPointer){drag=null;orbitPointer=null;}};addEventListener('pointerup',endPointer,{passive:true});addEventListener('pointercancel',endPointer,{passive:true});"
- );
-
- // Mobile layout is injected as a self-contained layer after the original app loads.
- const mobileCSS=String.raw`
-/* RESONATOR mobile instrument v4 */
-html,body{height:100%;height:100dvh;overflow:hidden!important}
-#app{position:relative!important;display:block!important;width:100%;height:100vh!important;height:100dvh!important;overflow:hidden!important;padding:0!important}
-#stage{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;z-index:1!important}
-#view{width:100%!important;height:100%!important}
-#readout{left:12px!important;top:12px!important;font-size:9px!important;max-width:58%!important;opacity:.72}
-#brand{right:12px!important;top:12px!important;font-size:10px!important;opacity:.65}
-#level{right:12px!important;top:32px!important;font-size:9px!important}
-#tools{left:10px!important;right:auto!important;bottom:72px!important;z-index:8!important;gap:4px!important;max-width:calc(100% - 20px)!important}
-.tool{min-height:36px!important;padding:8px 10px!important;background:rgba(8,13,26,.78)!important;backdrop-filter:blur(10px)}
-#tools:not(.expanded) [data-tool="move"],#tools:not(.expanded) [data-tool="link"],#tools:not(.expanded) [data-tool="pin"],#tools:not(.expanded) #home,#tools:not(.expanded) #undo,#tools:not(.expanded) #redo{display:none!important}
-#mobileMore{color:var(--compress)!important}
-#mobileControls{position:absolute;right:12px;bottom:72px;z-index:9;appearance:none;border:1px solid rgba(78,216,234,.75);background:rgba(8,13,26,.82);color:var(--live);font:600 11px var(--mono);letter-spacing:.10em;text-transform:uppercase;padding:11px 15px;min-height:38px;border-radius:22px;backdrop-filter:blur(12px)}
-#mobileDrawer{position:absolute;left:0;right:0;bottom:0;z-index:20;height:min(61dvh,620px);display:flex;flex-direction:column;background:rgba(8,13,26,.975);border-top:1px solid rgba(78,216,234,.35);box-shadow:0 -18px 44px rgba(0,0,0,.5);transform:translateY(100%);transition:transform .20s ease}
-#mobileDrawer.open{transform:translateY(0)}
-#mobileGrab{height:22px;flex:0 0 22px;display:flex;align-items:center;justify-content:center}
-#mobileGrab:after{content:'';width:42px;height:4px;border-radius:3px;background:var(--rule)}
-#mobileDrawer #tabs{flex:0 0 44px!important;background:rgba(13,21,38,.98)!important;border-top:0!important;overflow-x:auto!important}
-#mobileDrawer .tab{min-width:58px;padding:11px 5px!important}
-#mobileDrawer #panel{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;padding:12px 14px calc(20px + env(safe-area-inset-bottom,0px))!important}
-#mobileDrawer .knob{margin-bottom:10px!important}
-#mobileDrawer .ctl,#mobileDrawer .bar{height:40px!important}
-#mobileDrawer .step{height:40px!important;flex-basis:44px!important}
-#mobileDrawer .row{margin-bottom:10px!important}
-#mobileDrawer .secttl{margin-top:4px!important}
-#mobileSetupBtn{margin:0 0 12px!important}
-#mobileSetupBox{display:none;border:1px solid var(--rule);padding:10px;margin:0 0 14px;border-radius:4px;background:#0D1526}
-#mobileSetupBox.open{display:block}
-#deck{position:absolute!important;left:0!important;right:0!important;bottom:0!important;z-index:21!important;background:rgba(13,21,38,.98)!important;padding:0 8px calc(6px + env(safe-area-inset-bottom,0px))!important;max-height:39dvh!important;overflow:auto!important;box-shadow:0 -12px 34px rgba(0,0,0,.45)}
-#deck.shut{padding-bottom:calc(2px + env(safe-area-inset-bottom,0px))!important;overflow:hidden!important}
-#handle{height:48px!important;background:transparent!important;font-size:11px!important}
-#pads{grid-template-columns:repeat(4,1fr)!important;gap:6px!important}
-.pad{min-height:48px!important;font-size:11px!important;padding:10px 0!important}
-#deck:not(.shut) #pads{padding-bottom:4px}
-#deck:not(.shut) #msg{padding:0 4px}
-@media(max-width:430px){#tools{bottom:68px!important}.tool{font-size:9px!important;padding:8px 9px!important}#mobileControls{bottom:68px}.pad{min-height:46px!important}}
-@media(prefers-reduced-motion:reduce){#mobileDrawer{transition:none!important}}
-`;
- const mobileJS=String.raw`
-(function(){
- const tabs=document.getElementById('tabs'),panel=document.getElementById('panel'),stage=document.getElementById('stage'),tools=document.getElementById('tools'),deck=document.getElementById('deck'),handle=document.getElementById('handle');
- if(!tabs||!panel||!stage||!tools||!deck||!handle)return;
- const drawer=document.createElement('div');drawer.id='mobileDrawer';
- const grab=document.createElement('div');grab.id='mobileGrab';drawer.appendChild(grab);
- tabs.parentNode.insertBefore(drawer,tabs);drawer.appendChild(tabs);drawer.appendChild(panel);
- const controls=document.createElement('button');controls.id='mobileControls';controls.textContent='Controls';controls.setAttribute('aria-expanded','false');stage.appendChild(controls);
- const more=document.createElement('button');more.className='tool';more.id='mobileMore';more.textContent='Tools';more.setAttribute('aria-expanded','false');
- const micTool=tools.querySelector('[data-tool="mic"]');if(micTool)micTool.insertAdjacentElement('afterend',more);else tools.appendChild(more);
- function closeKeys(){deck.classList.add('shut');handle.setAttribute('aria-expanded','false');const b=handle.querySelector('b');if(b)b.innerHTML='&#9652;';}
- function setDrawer(open){drawer.classList.toggle('open',!!open);controls.setAttribute('aria-expanded',String(!!open));controls.textContent=open?'Close':'Controls';if(open)closeKeys();}
- controls.onclick=()=>setDrawer(!drawer.classList.contains('open'));
- grab.onclick=()=>setDrawer(false);
- more.onclick=()=>{const open=tools.classList.toggle('expanded');more.setAttribute('aria-expanded',String(open));more.textContent=open?'Less':'Tools';};
- closeKeys();
- handle.onclick=()=>{const opening=deck.classList.contains('shut');deck.classList.toggle('shut',!opening);handle.setAttribute('aria-expanded',String(opening));const b=handle.querySelector('b');if(b)b.innerHTML=opening?'&#9662;':'&#9652;';if(opening)setDrawer(false);};
- const body=document.getElementById('page-body');
- if(body){
-   const setupBtn=document.createElement('button');setupBtn.className='chip';setupBtn.id='mobileSetupBtn';setupBtn.textContent='Setup';
-   const box=document.createElement('div');box.id='mobileSetupBox';
-   const panelTop=panel.firstElementChild;const diag=document.getElementById('diag');
-   if(panelTop&&panelTop.classList.contains('row'))box.appendChild(panelTop);if(diag)box.appendChild(diag);
-   const stop=document.getElementById('bodytext');let n=body.firstElementChild;
-   while(n){const next=n.nextElementSibling;box.appendChild(n);if(n===stop)break;n=next;}
-   body.insertBefore(box,body.firstChild);body.insertBefore(setupBtn,box);
-   setupBtn.onclick=()=>{const open=box.classList.toggle('open');setupBtn.textContent=open?'Hide setup':'Setup';};
- }
- document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setDrawer(true)));
-})();
-`;
- text=text.replace('</style>',mobileCSS+'</style>');
- text=text.replace('</body>','<script>'+mobileJS+'<\\/script></body>');
+ // Keep the original repo gesture system; only reverse vertical orbit direction.
+ text=text.replace("camRotate(0,(e.clientY-drag.y)*0.008);","camRotate(0,-(e.clientY-drag.y)*0.008);");
  document.open();document.write(text);document.close();
-}catch(e){document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';}})();
+}catch(e){
+ document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';
+}})();
 </script></body></html>
