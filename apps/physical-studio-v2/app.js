@@ -50,3 +50,18 @@ window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camer
 history.push(JSON.stringify(exportModel()));
 let last=performance.now();function animate(now){requestAnimationFrame(animate);const elapsed=Math.min(.05,(now-last)/1000);last=now;const steps=Math.max(1,Math.min(4,Math.round(elapsed/(sim.dt*sim.substeps))));for(let i=0;i<steps;i++)stepPhysics();springs.forEach(updateSpringGeo);controls.update();renderer.render(scene,camera)}requestAnimationFrame(animate);
 statusEl.textContent='3D physical workspace';
+
+const qaEnabled=[...new URLSearchParams(location.search).keys()].some(k=>k.startsWith('qa'));
+if(qaEnabled){
+  const finite=()=>bodies.every(b=>[...b.position.toArray(),...b.userData.vel.toArray(),b.userData.mass,b.userData.damping].every(Number.isFinite))&&springs.every(s=>[s.userData.a,s.userData.b,s.userData.stiffness,s.userData.damping,s.userData.rest].every(Number.isFinite));
+  window.__PS_QA__={
+    snapshot:()=>({model:structuredClone(exportModel()),camera:{position:camera.position.toArray(),target:controls.target.toArray(),zoom:camera.zoom},renderer:{memory:{...renderer.info.memory},render:{...renderer.info.render}},paused,finite:finite()}),
+    exportModel:()=>structuredClone(exportModel()),
+    importModel:m=>{importModel(structuredClone(m));return structuredClone(exportModel())},
+    step:n=>{const was=paused;paused=false;for(let i=0;i<Math.max(1,n|0);i++)stepPhysics();paused=was;springs.forEach(updateSpringGeo);return finite()},
+    hit:(index=1,amount=1)=>{const b=bodies[index];if(b&&!b.userData.anchor){b.userData.vel.y+=amount;return true}return false},
+    setBody:(index,patch={})=>{const b=bodies[index];if(!b)return false;if(patch.mass!=null)b.userData.mass=patch.mass;if(patch.damping!=null)b.userData.damping=patch.damping;if(Array.isArray(patch.position)){b.position.fromArray(patch.position);b.userData.rest.copy(b.position)}return true},
+    reset:()=>{importModel(JSON.parse(history[0]));return finite()},
+    validate:()=>({finite:finite(),invalidSprings:springs.filter(s=>!bodies[s.userData.a]||!bodies[s.userData.b]).map(s=>s.userData.index),anchors:bodies.filter(b=>b.userData.anchor).map(b=>({index:b.userData.index,p:b.position.toArray(),rest:b.userData.rest.toArray()}))})
+  };
+}
