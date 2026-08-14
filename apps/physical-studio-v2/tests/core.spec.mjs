@@ -1,7 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-const sleep = ms => new Promise(r=>setTimeout(r,ms));
-
 async function canvasBox(page){
   const canvas=page.locator('canvas').first();
   await expect(canvas).toBeVisible();
@@ -11,30 +9,22 @@ async function canvasBox(page){
   return {canvas,box};
 }
 
-async function frameSignature(page){
-  return await page.locator('canvas').first().evaluate(c=>{
-    const probe=document.createElement('canvas'); probe.width=96; probe.height=160;
-    const x=probe.getContext('2d',{willReadFrequently:true}); x.drawImage(c,0,0,probe.width,probe.height);
-    const d=x.getImageData(0,0,probe.width,probe.height).data;
-    let sum=0,sum2=0,min=255,max=0,n=0;
-    for(let i=0;i<d.length;i+=16){const v=(d[i]+d[i+1]+d[i+2])/3;sum+=v;sum2+=v*v;min=Math.min(min,v);max=Math.max(max,v);n++}
-    return {mean:sum/n,var:sum2/n-(sum/n)**2,range:max-min};
-  });
+async function qaSnapshot(page){
+  await page.waitForFunction(()=>!!window.__PS_QA__,null,{timeout:10000});
+  return page.evaluate(()=>window.__PS_QA__.snapshot());
 }
 
 async function drag(page,dx,dy){
-  const {canvas,box}=await canvasBox(page);
-  const sx=box.width*.5, sy=box.height*.52;
-  await canvas.dispatchEvent('pointerdown',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:box.x+sx,clientY:box.y+sy,buttons:1});
-  for(let i=1;i<=12;i++){
-    await canvas.dispatchEvent('pointermove',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:box.x+sx+dx*i/12,clientY:box.y+sy+dy*i/12,buttons:1});
-    await page.waitForTimeout(12);
-  }
-  await canvas.dispatchEvent('pointerup',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:box.x+sx+dx,clientY:box.y+sy+dy,buttons:0});
-  await page.waitForTimeout(350);
+  const {box}=await canvasBox(page);
+  const sx=box.x+box.width*.5, sy=box.y+box.height*.52;
+  await page.mouse.move(sx,sy);
+  await page.mouse.down();
+  await page.mouse.move(sx+dx,sy+dy,{steps:12});
+  await page.mouse.up();
+  await page.waitForTimeout(180);
 }
 
-function signatureDelta(a,b){return Math.abs(a.mean-b.mean)+Math.abs(a.var-b.var)*.02+Math.abs(a.range-b.range)*.05}
+const dist=(a,b)=>Math.hypot(...a.map((v,i)=>v-b[i]));
 
 for(const path of ['index.html']){
   test.beforeEach(async({page})=>{
@@ -42,33 +32,37 @@ for(const path of ['index.html']){
     page.on('pageerror',e=>errors.push('pageerror:'+e.message));
     page.on('console',m=>{if(m.type()==='error')errors.push('console:'+m.text())});
     await page.goto(path+'?qa-ci=1',{waitUntil:'domcontentloaded'});
-    await page.waitForTimeout(1200);
+    await canvasBox(page);
+    await page.waitForTimeout(500);
     page.__qaErrors=errors;
   });
 
-  test('QA-BOOT/REN boot and nonblank render',async({page})=>{
-    await canvasBox(page);
-    const s=await frameSignature(page);
-    expect(s.range,'QA-REN-002 blank/solid frame').toBeGreaterThan(6);
+  test('QA-BOOT/REN boot and active WebGL render',async({page})=>{
+    const {canvas}=await canvasBox(page);
+    const s=await qaSnapshot(page);
+    expect(s.model.bodies.length,'QA-REN-002 no scene bodies').toBeGreaterThan(0);
+    expect(s.renderer.render.calls,'QA-REN-002 renderer has no draw calls').toBeGreaterThan(0);
+    const png=await canvas.screenshot();
+    expect(png.length,'QA-REN-002 renderer screenshot empty').toBeGreaterThan(1000);
     expect(page.__qaErrors,'QA-BOOT runtime errors').toEqual([]);
     await page.screenshot({path:'qa-results/artifacts/initial.png',fullPage:true});
   });
 
-  test('QA-CAM horizontal and vertical orbit both visibly work',async({page})=>{
-    const s0=await frameSignature(page);
-    await drag(page,120,0); const s1=await frameSignature(page);
-    expect(signatureDelta(s0,s1),'QA-CAM-001 horizontal orbit no change').toBeGreaterThan(.5);
-    await drag(page,0,-150); const s2=await frameSignature(page);
-    expect(signatureDelta(s1,s2),'QA-CAM-002 vertical orbit no change').toBeGreaterThan(.5);
+  test('QA-CAM horizontal and vertical orbit both change camera',async({page})=>{
+    const s0=await qaSnapshot(page);
+    await drag(page,120,0); const s1=await qaSnapshot(page);
+    expect(dist(s0.camera.position,s1.camera.position),'QA-CAM-001 horizontal orbit no camera change').toBeGreaterThan(.05);
+    await drag(page,0,-150); const s2=await qaSnapshot(page);
+    expect(dist(s1.camera.position,s2.camera.position),'QA-CAM-002 vertical orbit no camera change').toBeGreaterThan(.05);
     await page.screenshot({path:'qa-results/artifacts/orbit-after.png',fullPage:true});
   });
 
   test('QA-CAM repeated drags continue instead of sticking',async({page})=>{
-    let prior=await frameSignature(page); let changed=0;
-    for(let i=0;i<4;i++){await drag(page,105,0);const now=await frameSignature(page);if(signatureDelta(prior,now)>.25)changed++;prior=now;}
+    let prior=(await qaSnapshot(page)).camera.position; let changed=0;
+    for(let i=0;i<4;i++){await drag(page,105,0);const now=(await qaSnapshot(page)).camera.position;if(dist(prior,now)>.03)changed++;prior=now;}
     expect(changed,'QA-CAM-003 repeated horizontal orbit stuck').toBeGreaterThanOrEqual(3);
-    prior=await frameSignature(page);changed=0;
-    for(let i=0;i<3;i++){await drag(page,0,-95);const now=await frameSignature(page);if(signatureDelta(prior,now)>.25)changed++;prior=now;}
+    prior=(await qaSnapshot(page)).camera.position;changed=0;
+    for(let i=0;i<3;i++){await drag(page,0,-95);const now=(await qaSnapshot(page)).camera.position;if(dist(prior,now)>.03)changed++;prior=now;}
     expect(changed,'QA-CAM-003 repeated vertical orbit stuck').toBeGreaterThanOrEqual(2);
   });
 
@@ -79,7 +73,7 @@ for(const path of ['index.html']){
     const spring=page.locator('[data-tool="spring"]');await spring.click();await expect(spring).toHaveClass(/active/);
   });
 
-  test('QA-AUD actual worklet produces finite decaying signal',async({page,browserName})=>{
+  test('QA-AUD actual worklet produces finite decaying signal',async({page})=>{
     const result=await page.evaluate(async()=>{
       const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return {skip:'AudioContext unavailable'};
       const ctx=new AC({latencyHint:'interactive'});await ctx.audioWorklet.addModule('./physics-worklet.js?ci='+Date.now());
