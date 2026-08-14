@@ -1,41 +1,18 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR · mobile instrument shell…</div><script>
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>RESONATOR</title><style>html,body{margin:0;background:#080D1A;color:#F0EAD8;font:14px system-ui;height:100%}body{display:grid;place-items:center}.s{opacity:.72}</style></head><body><div class="s">Loading RESONATOR…</div><script>
 (async()=>{try{
  if(!('DecompressionStream' in window)) throw new Error('This browser is too old for the compressed app loader.');
- const parts=['01','02','03','04','05','06','07','08','09'];
- let b='';
- for(const n of parts){
-   const r=await fetch('resonator-parts/'+n+'.txt',{cache:'no-store'});
-   if(!r.ok) throw new Error('Missing payload part '+n);
-   b+=(await r.text()).trim();
- }
- const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
- const ds=new DecompressionStream('gzip');
+ const parts=['01','02','03','04','05','06','07','08','09']; let b='';
+ for(const n of parts){const r=await fetch('resonator-parts/'+n+'.txt',{cache:'no-store'});if(!r.ok)throw new Error('Missing payload part '+n);b+=(await r.text()).trim();}
+ const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0)); const ds=new DecompressionStream('gzip');
  let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
- if(!text.includes('<title>RESONATOR</title>')) throw new Error('RESONATOR payload failed integrity check.');
- const rep=(from,to,label)=>{if(!text.includes(from))throw new Error('UI patch failed: '+label);text=text.replace(from,to);};
-
- // iPhone safe mode: preserve the existing physical model, reduce only rendering/oversampling pressure.
+ if(!text.includes('<title>RESONATOR</title>'))throw new Error('RESONATOR payload failed integrity check.');
+ // Keep the proven iPhone audio safety changes only. UI redesign will be applied after the base app is restored reliably.
  text=text.replace("state.rate=+(function(){try{return localStorage.getItem('resonator.rate');}catch(e){return null;}}()||32000);","state.rate=22050;");
  text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
  text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
  text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
-
- // Mobile-first shell: the instrument stays visible; controls are a bottom drawer.
- const shellCSS=`\n/* mobile instrument shell v3 */\n#app{position:relative;overflow:hidden}\n#stage{flex:1 1 auto!important;min-height:0!important;height:100%!important}\n#tools{left:10px!important;right:auto!important;bottom:56px!important;max-width:calc(100% - 20px);z-index:5}\n#tools:not(.expanded) [data-tool=\"move\"],#tools:not(.expanded) [data-tool=\"link\"],#tools:not(.expanded) [data-tool=\"pin\"],#tools:not(.expanded) #home,#tools:not(.expanded) #undo,#tools:not(.expanded) #redo{display:none}\n#toolMore{color:var(--compress)}\n#controlsToggle{position:absolute;right:10px;bottom:56px;z-index:8;appearance:none;border:1px solid rgba(78,216,234,.7);background:rgba(10,17,32,.88);color:var(--live);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;min-height:36px;padding:9px 12px;border-radius:18px;backdrop-filter:blur(10px);cursor:pointer}\n#drawer{position:absolute;left:0;right:0;bottom:38px;z-index:10;height:min(56dvh,560px);background:rgba(8,13,26,.97);border-top:1px solid rgba(78,216,234,.28);box-shadow:0 -14px 34px rgba(0,0,0,.42);transform:translateY(calc(100% - 44px));transition:transform .22s ease;display:flex;flex-direction:column;pointer-events:auto}\n#drawer.open{transform:translateY(0)}\n#tabs{flex:0 0 44px;border-top:0!important;background:rgba(13,21,38,.96)}\n.tab{padding:12px 4px}\n#panel{flex:1 1 auto;min-height:0;padding:12px 14px calc(18px + env(safe-area-inset-bottom,0px))}\n#deck{position:absolute;left:0;right:0;bottom:0;z-index:12;padding:0 8px 6px;max-height:34dvh;overflow:hidden;box-shadow:0 -8px 24px rgba(0,0,0,.3)}\n#handle{height:38px;background:rgba(13,21,38,.96)}\n#pads{grid-template-columns:repeat(6,minmax(48px,1fr));gap:5px}\n.pad{min-height:42px;padding:9px 0}\n#deck:not(.shut){overflow:auto}\n#readout{top:10px;left:12px;max-width:58%;font-size:9.5px}\n#brand{top:10px;right:12px;font-size:11px}\n#level{top:30px;right:12px;font-size:9.5px}\n@media(max-width:480px){#stage{min-height:100dvh}.tool{min-height:34px;padding:8px 9px}#controlsToggle,#tools{bottom:52px}.knob{margin-bottom:8px}.knob .lab span,.knob .lab b{font-size:12px}.ctl,.bar{height:38px}.step{height:38px;flex-basis:44px}}\n`;
- rep('@media (prefers-reduced-motion:reduce){*{transition:none!important}}',shellCSS+'@media (prefers-reduced-motion:reduce){*{transition:none!important}}','css');
- rep('  <div id="tabs">','  <div id="drawer">\n  <div id="tabs">','drawer open');
- rep('  </div>\n\n  <div id="deck">','  </div>\n  </div>\n\n  <div id="deck" class="shut">','drawer close');
- rep('    <div id="level">output silent</div>\n  </div>','    <div id="level">output silent</div>\n    <button id="controlsToggle" aria-expanded="false">controls</button>\n  </div>','controls button');
- rep('      <button class="tool" data-tool="mic" aria-pressed="false">mic</button>','      <button class="tool" data-tool="mic" aria-pressed="false">mic</button>\n      <button class="tool" id="toolMore" aria-expanded="false">tools</button>','tools button');
- rep('<button id="handle" aria-expanded="true"><span>Keys</span><b>&#9662;</b></button>','<button id="handle" aria-expanded="false"><span>Keys</span><b>&#9652;</b></button>','keys collapsed');
- const uiJS=`const drawerEl=document.getElementById('drawer'),controlsToggle=document.getElementById('controlsToggle');\nfunction setDrawer(open){drawerEl.classList.toggle('open',!!open);controlsToggle.setAttribute('aria-expanded',String(!!open));controlsToggle.textContent=open?'close':'controls';if(open){const d=document.getElementById('deck');if(d)d.classList.add('shut');}}\ncontrolsToggle.onclick=()=>setDrawer(!drawerEl.classList.contains('open'));\ndocument.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setDrawer(true)));\nconst toolsEl=document.getElementById('tools'),toolMore=document.getElementById('toolMore');\ntoolMore.onclick=()=>{const open=toolsEl.classList.toggle('expanded');toolMore.setAttribute('aria-expanded',String(open));toolMore.textContent=open?'less':'tools';};\n`;
- rep("const deckEl=document.getElementById('deck'),handleEl=document.getElementById('handle');",uiJS+"const deckEl=document.getElementById('deck'),handleEl=document.getElementById('handle');",'drawer js');
- rep("handleEl.onclick=()=>{const shut=deckEl.classList.toggle('shut');\n handleEl.setAttribute('aria-expanded',String(!shut));\n handleEl.querySelector('b').innerHTML=shut?'&#9652;':'&#9662;';};","handleEl.onclick=()=>{const shut=deckEl.classList.toggle('shut');\n if(!shut)setDrawer(false);\n handleEl.setAttribute('aria-expanded',String(!shut));\n handleEl.querySelector('b').innerHTML=shut?'&#9652;':'&#9662;';};",'keys js');
-
  document.open();document.write(text);document.close();
-}catch(e){
- document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';
-}})();
+}catch(e){document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';}})();
 </script></body></html>
