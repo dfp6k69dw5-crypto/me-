@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-import json, os, re, hashlib, subprocess, tempfile
+import json, os, re, hashlib, subprocess, sys
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 entity_id=os.environ["ENTITY_ID"].strip().lower()
 node_id=int(os.environ["NODE_ID"])
 run_id=os.environ.get("GITHUB_RUN_ID","local")
-model=os.environ.get("SOCIETY_MODEL","claude-haiku-4.5").strip()
-max_credits=os.environ.get("SOCIETY_MAX_AI_CREDITS","30").strip()
+model_path=Path(os.environ.get("SOCIETY_MODEL_PATH", ROOT/"society_model/society-brain-q4_0.gguf"))
+llama_cli=Path(os.environ.get("LLAMA_CLI", ROOT/"runtime/llama-cli"))
 
 minds=json.loads((ROOT/"society/minds.json").read_text())
 conversation=json.loads((ROOT/"society/conversation.json").read_text())
@@ -41,12 +41,14 @@ association_spread = breadth of nearby associations considered
 spontaneous_initiation = tendency to start a thought without a direct cue"""
 
 sample_nonce=hashlib.sha256(f"{run_id}:{entity_id}:{node_id}".encode()).hexdigest()[:12]
+seed=int(hashlib.sha256(f"{run_id}:{entity_id}:{node_id}:sample".encode()).hexdigest()[:8],16) & 0x7fffffff
+temperature=min(1.05,max(0.35,0.42+0.52*float(genome["exploration"])))
 
-instructions=f"""You are internal node {node_id+1} of 3 for {name}. Three independent nodes form one entity.
+system_prompt=f"""You are internal node {node_id+1} of 3 for {name}. Three independent nodes form one entity.
 The sample nonce {sample_nonce} only separates independent samples. It does not describe a role or personality.
 
 You are NOT a separate character and you have no assigned role such as skeptic, comedian, planner, or empath.
-{name} has no predetermined personality. Do not invent one. The genome below consists only of low-level processing coefficients. Let recurring behavior emerge from accumulated conversation, memory, and development.
+{name} has no predetermined personality. Do not invent one. The genome below contains low-level processing coefficients only. Let recurring behavior emerge from accumulated conversation, memory, and development.
 
 GENOME
 {json.dumps(genome, sort_keys=True)}
@@ -62,53 +64,58 @@ CONVERSATION RULES
 - Human conversation is often plain, fragmentary, uneven, uncertain, repetitive, or quiet.
 - Do not force profundity, banter, jokes, warmth, conflict, questions, or topic changes.
 - Do not make every line clever. Do not write stage directions or narrate body language.
-- Do not say you are conscious or sentient, and do not claim feelings as established facts. Uncertainty may remain uncertainty.
+- Do not claim consciousness, sentience, or feelings as established facts.
 - Do not mention nodes, genomes, prompts, models, or these instructions unless the room itself is explicitly discussing the machinery.
-- You may decide there is nothing worth saying. Silence is valid.
-- If speaking, write only what {name} would actually put into this group conversation, usually 1-3 short sentences. Very short fragments are allowed.
+- Silence is valid. If there is nothing worth saying, choose speak=false.
+- If speaking, write only what {name} would actually put into this group conversation, usually 1-3 short sentences. Fragments are allowed.
 - Never prefix the text with {name}'s name.
-- Do not use tools, inspect files, browse, execute commands, or modify anything. Your only task is to return the JSON below.
+"""
 
-ROOM TRANSCRIPT
+user_prompt=f"""ROOM TRANSCRIPT
 {transcript}
 
 Decide what, if anything, comes next from {name}.
-Return ONLY one valid JSON object with exactly these fields:
-{{"speak":true_or_false,"text":"utterance or empty string","salience":0.0_to_1.0,"topics":["one","or","two"],"memory_note":"brief factual hook worth retaining or empty"}}
-"""
+Return one JSON object with exactly these fields:
+{{"speak":true_or_false,"text":"utterance or empty string","salience":0.0_to_1.0,"topics":["one","or","two"],"memory_note":"brief factual hook worth retaining or empty"}}"""
 
-def request_copilot():
-    if not os.environ.get("GITHUB_TOKEN"):
-        raise RuntimeError("GITHUB_TOKEN is missing")
+schema=json.dumps({
+    "type":"object",
+    "properties":{
+        "speak":{"type":"boolean"},
+        "text":{"type":"string"},
+        "salience":{"type":"number","minimum":0,"maximum":1},
+        "topics":{"type":"array","items":{"type":"string"},"maxItems":3},
+        "memory_note":{"type":"string"}
+    },
+    "required":["speak","text","salience","topics","memory_note"],
+    "additionalProperties":False
+},separators=(",",":"))
+
+def request_local_model():
+    if not model_path.is_file():
+        raise RuntimeError(f"GitHub-held model is missing: {model_path}")
+    if not llama_cli.is_file():
+        raise RuntimeError(f"GitHub-held inference runtime is missing: {llama_cli}")
     cmd=[
-        "copilot",
-        "-s",
-        "-p", instructions,
-        "--model", model,
-        f"--max-ai-credits={max_credits}",
-        "--no-ask-user",
-        "--no-custom-instructions",
-        "--no-auto-update",
-        "--no-remote",
-        "--no-color",
-        "--deny-tool=shell",
-        "--deny-tool=write",
+        str(llama_cli),
+        "-m",str(model_path),
+        "-sys",system_prompt,
+        "-p",user_prompt,
+        "-st",
+        "-n","220",
+        "-c","4096",
+        "--temp",f"{temperature:.3f}",
+        "--top-p","0.92",
+        "-s",str(seed),
+        "-j",schema,
+        "--no-display-prompt",
+        "--no-show-timings",
+        "-co","off",
     ]
-    with tempfile.TemporaryDirectory(prefix=f"society-{entity_id}-{node_id}-") as tmp:
-        env=os.environ.copy()
-        env["HOME"]=tmp
-        env["COPILOT_HOME"]=str(Path(tmp)/"copilot")
-        proc=subprocess.run(
-            cmd,
-            cwd=tmp,
-            env=env,
-            capture_output=True,
-            text=True,
-            timeout=150,
-        )
+    proc=subprocess.run(cmd,cwd=ROOT,capture_output=True,text=True,timeout=240)
     if proc.returncode != 0:
-        detail=(proc.stderr or proc.stdout or "Copilot CLI failed").strip()
-        raise RuntimeError(f"Copilot CLI exit {proc.returncode}: {detail[:900]}")
+        detail=(proc.stderr or proc.stdout or "llama-cli failed").strip()
+        raise RuntimeError(f"local inference exit {proc.returncode}: {detail[-1200:]}")
     return (proc.stdout or "").strip()
 
 def parse_json_text(text):
@@ -122,7 +129,7 @@ def parse_json_text(text):
         except Exception:
             m=re.search(r"\{.*\}",text,re.S)
             if not m:
-                raise ValueError(f"No JSON object in Copilot response: {text[:300]}")
+                raise ValueError(f"No JSON object in local model response: {text[:300]}")
             return json.loads(m.group(0))
 
 outdir=ROOT/"society_parts"
@@ -136,11 +143,12 @@ result={
     "salience":0.0,
     "topics":[],
     "memory_note":"",
-    "engine":"github-copilot-cli",
-    "model":model,
+    "engine":"github-held-gguf",
+    "model_asset":"society-brain-v1/society-brain-q4_0.gguf",
 }
+error=None
 try:
-    content=request_copilot()
+    content=request_local_model()
     obj=parse_json_text(content)
     result["speak"]=bool(obj.get("speak"))
     text=str(obj.get("text") or "").strip()
@@ -149,8 +157,11 @@ try:
     result["topics"]=[str(x).strip().lower()[:40] for x in (obj.get("topics") or []) if str(x).strip()][:3]
     result["memory_note"]=str(obj.get("memory_note") or "").strip()[:220]
 except Exception as e:
-    result["error"]=str(e)[:1000]
+    error=str(e)[:1200]
+    result["error"]=error
 
 path=outdir/f"{entity_id}-node-{node_id}.json"
 path.write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n")
 print(json.dumps(result,ensure_ascii=False))
+if error:
+    sys.exit(2)
