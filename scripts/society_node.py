@@ -48,12 +48,12 @@ def request_local_model():
          "-sys",system_prompt,"-p",user_prompt,
          "-n","24","-c","1024","-t","4","--no-warmup",
          "--temp",f"{temperature:.3f}","--top-p","0.92","-s",str(seed),
-         "--simple-io","--no-display-prompt","--log-disable"]
+         "--simple-io","--no-display-prompt","--log-verbosity","0"]
     proc=subprocess.run(cmd,cwd=ROOT,capture_output=True,text=True,timeout=90)
     if proc.returncode!=0:
         detail=(proc.stderr or proc.stdout or "llama-completion failed").strip()
         raise RuntimeError(f"local inference exit {proc.returncode}: {detail[-900:]}")
-    return (proc.stdout or "").strip()
+    return (proc.stdout or proc.stderr or "").strip()
 
 def clean_generation(raw):
     text=(raw or "").replace("\r","")
