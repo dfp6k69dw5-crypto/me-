@@ -24,7 +24,7 @@ from mcp.server import MCPServer
 REPO_ROOT = Path(os.environ.get("CLAUDE_PROJECT_DIR", Path(__file__).resolve().parent)).resolve()
 WORKER_SCRIPT = REPO_ROOT / "scripts" / "cluster_worker.py"
 AGGREGATE_SCRIPT = REPO_ROOT / "scripts" / "aggregate_cluster.py"
-RUN_DIR = REPO_ROOT / ".simulator_runs"
+RUN_DIR = Path(os.environ.get("SIMULATOR_RUN_DIR", str(REPO_ROOT / ".simulator_runs"))).resolve()
 VALID_WORKLOADS = {"montecarlo", "primes", "hashstorm"}
 
 mcp = MCPServer(
