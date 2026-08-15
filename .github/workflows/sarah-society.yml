@@ -22,7 +22,7 @@ on:
 
 permissions:
   contents: write
-  models: read
+  copilot-requests: write
 
 concurrency:
   group: sarah-society-world
@@ -35,7 +35,7 @@ jobs:
       entity: ${{ steps.pick.outputs.entity }}
       resting: ${{ steps.pick.outputs.resting }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - id: pick
         name: Choose who is active
         env:
@@ -52,13 +52,19 @@ jobs:
       matrix:
         node: [0, 1, 2]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install GitHub Copilot CLI
+        run: npm install -g @github/copilot
       - name: Node ${{ matrix.node }} thinks
         env:
           ENTITY_ID: ${{ needs.select.outputs.entity }}
           NODE_ID: ${{ matrix.node }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SOCIETY_MODEL: openai/gpt-4o-mini
+          SOCIETY_MODEL: claude-haiku-4.5
+          SOCIETY_MAX_AI_CREDITS: '5'
         run: python3 scripts/society_node.py
       - uses: actions/upload-artifact@v4
         with:
@@ -71,7 +77,9 @@ jobs:
     if: needs.select.outputs.entity != 'rest' && always() && needs.nodes.result != 'cancelled'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
           pattern: society-${{ needs.select.outputs.entity }}-node-*
@@ -85,7 +93,7 @@ jobs:
         run: |
           git config user.name "sarah-society"
           git config user.email "actions@users.noreply.github.com"
-          git pull --rebase origin main
           git add society
           git commit -m "Society turn: ${{ needs.select.outputs.entity }}" || exit 0
+          git pull --rebase origin main
           git push origin HEAD:main
