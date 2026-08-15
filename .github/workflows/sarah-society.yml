@@ -16,6 +16,9 @@ on:
           - jules
   schedule:
     - cron: '17,47 * * * *'
+  push:
+    paths:
+      - '.github/workflows/sarah-society.yml'
 
 permissions:
   contents: write
