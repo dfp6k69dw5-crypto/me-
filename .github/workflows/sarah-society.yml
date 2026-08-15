@@ -26,7 +26,7 @@ permissions:
 
 concurrency:
   group: sarah-society-world
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   select:
@@ -41,30 +41,26 @@ jobs:
           FORCED_ENTITY: ${{ github.event_name == 'push' && 'sarah' || github.event.inputs.entity || 'auto' }}
         run: python3 scripts/society_select.py
 
-  think:
+  nodes:
     needs: select
     if: needs.select.outputs.entity != 'rest'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        node: [0, 1, 2]
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Load the brain from this GitHub repository
+      - name: Load GitHub-held brain and runtime
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          gh release view society-brain-v1 --repo "$GITHUB_REPOSITORY" >/dev/null
           mkdir -p society_model runtime
-          gh release download society-brain-v1 \
-            --repo "$GITHUB_REPOSITORY" \
-            --pattern 'society-brain-q4_0.gguf' \
-            --dir society_model
-          gh release download society-brain-v1 \
-            --repo "$GITHUB_REPOSITORY" \
-            --pattern 'llama-runtime-linux-x64.tar.gz' \
-            --dir runtime
+          gh release view society-brain-v1 --repo "$GITHUB_REPOSITORY" >/dev/null
+          gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'society-brain-q4_0.gguf' --dir society_model
+          gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'llama-runtime-linux-x64.tar.gz' --dir runtime
           tar -xzf runtime/llama-runtime-linux-x64.tar.gz -C runtime
           cli="$(find runtime -type f -name 'llama-cli' | head -n 1)"
           test -n "$cli"
@@ -72,31 +68,35 @@ jobs:
           echo "LLAMA_CLI=$GITHUB_WORKSPACE/$cli" >> "$GITHUB_ENV"
           echo "LD_LIBRARY_PATH=$GITHUB_WORKSPACE/$(dirname "$cli")" >> "$GITHUB_ENV"
           echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  society_model/society-brain-q4_0.gguf' | sha256sum -c -
-
-      - name: Three independent nodes think
+      - name: Node ${{ matrix.node }} thinks locally
         env:
           ENTITY_ID: ${{ needs.select.outputs.entity }}
+          NODE_ID: ${{ matrix.node }}
           SOCIETY_MODEL_PATH: ${{ github.workspace }}/society_model/society-brain-q4_0.gguf
-        run: |
-          set +e
-          pids=()
-          for n in 0 1 2; do
-            (NODE_ID="$n" python3 scripts/society_node.py) >"node-$n.log" 2>&1 &
-            pids+=("$!")
-          done
-          status=0
-          for n in 0 1 2; do
-            if ! wait "${pids[$n]}"; then status=1; fi
-            echo "===== node $n ====="
-            cat "node-$n.log"
-          done
-          exit "$status"
+        run: python3 scripts/society_node.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: society-${{ needs.select.outputs.entity }}-node-${{ matrix.node }}
+          path: society_parts/*.json
+          retention-days: 1
 
+  commit-turn:
+    needs: [select, nodes]
+    if: needs.select.outputs.entity != 'rest'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: society-${{ needs.select.outputs.entity }}-node-*
+          path: society_parts
+          merge-multiple: true
       - name: Resolve three nodes into one entity turn
         env:
           ENTITY_ID: ${{ needs.select.outputs.entity }}
         run: python3 scripts/society_commit.py
-
       - name: Commit the continuing world
         run: |
           git config user.name "sarah-society"
