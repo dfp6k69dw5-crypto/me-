@@ -15,14 +15,33 @@ os.environ.setdefault("SIMULATOR_RUN_DIR", "/tmp/alex-repo-simulator-runs")
 
 from mcp_server import mcp
 
-# Passing a non-local host prevents the SDK from installing a localhost-only
-# Host allowlist. The service exposes no private network resources; its only
-# capability is executing the simulator bundled in this repository.
-app = mcp.streamable_http_app(
+_mcp_app = mcp.streamable_http_app(
     host="0.0.0.0",
     stateless_http=True,
     json_response=True,
 )
+
+
+async def app(scope, receive, send):
+    """ASGI wrapper that adds a normal GET health endpoint beside MCP."""
+    if (
+        scope.get("type") == "http"
+        and scope.get("method") == "GET"
+        and scope.get("path") == "/health"
+    ):
+        body = b'{"status":"ok","service":"alex-repo-simulator-mcp"}'
+        await send({
+            "type": "http.response.start",
+            "status": 200,
+            "headers": [
+                (b"content-type", b"application/json"),
+                (b"content-length", str(len(body)).encode("ascii")),
+            ],
+        })
+        await send({"type": "http.response.body", "body": body})
+        return
+    await _mcp_app(scope, receive, send)
+
 
 if __name__ == "__main__":
     mcp.run(
