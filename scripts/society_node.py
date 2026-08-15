@@ -7,7 +7,7 @@ entity_id=os.environ["ENTITY_ID"].strip().lower()
 node_id=int(os.environ["NODE_ID"])
 run_id=os.environ.get("GITHUB_RUN_ID","local")
 model_path=Path(os.environ.get("SOCIETY_MODEL_PATH", ROOT/"society_model/society-brain-q4_0.gguf"))
-llama_cli=Path(os.environ.get("LLAMA_CLI", ROOT/"runtime/llama-cli"))
+completion_bin=Path(os.environ.get("LLAMA_COMPLETION", ROOT/"runtime/llama-completion"))
 
 minds=json.loads((ROOT/"society/minds.json").read_text())
 conversation=json.loads((ROOT/"society/conversation.json").read_text())
@@ -40,35 +40,27 @@ Associations: {topic_text}
 Retained experience:
 {memory_text}"""
 user_prompt=f"Recent room:\n{transcript}\n\nWhat does {name} say next?"
-full_prompt=(f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
-             f"<|im_start|>user\n{user_prompt}<|im_end|>\n"
-             f"<|im_start|>assistant\n")
 
 def request_local_model():
     if not model_path.is_file(): raise RuntimeError(f"GitHub-held model missing: {model_path}")
-    if not llama_cli.is_file(): raise RuntimeError(f"GitHub-held runtime missing: {llama_cli}")
-    cmd=[str(llama_cli),"-m",str(model_path),"-p",full_prompt,"-no-cnv",
+    if not completion_bin.is_file(): raise RuntimeError(f"GitHub-held completion runtime missing: {completion_bin}")
+    cmd=[str(completion_bin),"-m",str(model_path),"--jinja","--single-turn",
+         "-sys",system_prompt,"-p",user_prompt,
          "-n","24","-c","1024","-t","4","--no-warmup",
          "--temp",f"{temperature:.3f}","--top-p","0.92","-s",str(seed),
-         "--no-display-prompt","--no-show-timings","-co","off"]
+         "--simple-io","--no-display-prompt","--no-show-timings","--log-disable"]
     proc=subprocess.run(cmd,cwd=ROOT,capture_output=True,text=True,timeout=90)
     if proc.returncode!=0:
-        detail=(proc.stderr or proc.stdout or "llama-cli failed").strip()
+        detail=(proc.stderr or proc.stdout or "llama-completion failed").strip()
         raise RuntimeError(f"local inference exit {proc.returncode}: {detail[-900:]}")
     return (proc.stdout or "").strip()
 
 def clean_generation(raw):
     text=(raw or "").replace("\r","")
     text=re.sub(r"\x1b\[[0-9;?]*[A-Za-z]","",text)
-    if "<|im_start|>assistant" in text: text=text.rsplit("<|im_start|>assistant",1)[-1]
-    text=text.replace("<|im_end|>","").strip()
-    kept=[]; skip=("Loading model","build      :","model      :","ftype      :","modalities :","llama_","ggml_","main:")
-    for line in text.splitlines():
-        s=line.strip()
-        if not s or s.startswith(skip) or s in {"Exiting...","available commands:"}: continue
-        if set(s)<=set("▄█▀ "): continue
-        kept.append(s)
-    text=" ".join(kept).strip()
+    for marker in ("<|im_end|>","<|eot_id|>","<|end_of_text|>"):
+        if marker in text: text=text.split(marker,1)[0]
+    text=text.strip()
     text=re.sub(rf"^(?:assistant\s*[:>-]?\s*|{re.escape(name)}\s*[:>-]\s*)","",text,flags=re.I).strip()
     if len(text)>260: text=text[:260].rsplit(" ",1)[0].rstrip()+"…"
     return text
