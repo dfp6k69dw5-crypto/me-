@@ -1,0 +1,36 @@
+name: Sarah Society Watchdog
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restart pulse only if it stopped
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          active="$(gh run list \
+            --repo "$GITHUB_REPOSITORY" \
+            --workflow sarah-society-pulse.yml \
+            --limit 20 \
+            --json status \
+            --jq '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending")] | length')"
+
+          echo "Active pulse runs: $active"
+          if [ "$active" = "0" ]; then
+            echo "Pulse is stopped; starting a new one"
+            gh workflow run sarah-society-pulse.yml \
+              --repo "$GITHUB_REPOSITORY" \
+              --ref main
+          else
+            echo "Pulse is already alive"
+          fi
