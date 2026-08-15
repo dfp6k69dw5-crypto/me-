@@ -8,6 +8,7 @@ entity_id=os.environ["ENTITY_ID"].strip().lower()
 minds_path=ROOT/"society/minds.json"
 state_path=ROOT/"society/state.json"
 conv_path=ROOT/"society/conversation.json"
+live_path=ROOT/"society/live.json"
 
 minds=json.loads(minds_path.read_text())
 state=json.loads(state_path.read_text())
@@ -145,5 +146,15 @@ conversation=conversation[-360:]
 minds_path.write_text(json.dumps(minds,indent=2,ensure_ascii=False)+"\n")
 state_path.write_text(json.dumps(state,indent=2,ensure_ascii=False)+"\n")
 conv_path.write_text(json.dumps(conversation,indent=2,ensure_ascii=False)+"\n")
+
+# One atomic viewer payload. The Room polls this single GitHub file instead of
+# depending on several CDN/API requests that can fail independently on mobile.
+live={
+    "generated_at":stamp,
+    "minds":minds,
+    "state":state,
+    "conversation":conversation,
+}
+live_path.write_text(json.dumps(live,indent=2,ensure_ascii=False)+"\n")
 
 print(f"{name}: {'spoke' if chosen else 'silent'} ({votes}/3 valid nodes voted to speak)")
