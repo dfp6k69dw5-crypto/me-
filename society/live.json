@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T16:42:19.950822Z",
+  "generated_at": "2026-08-15T16:43:27.507705Z",
   "minds": {
     "schema": 1,
     "created": "2026-08-15",
@@ -37,7 +37,7 @@
             "mara": 0.0873,
             "jules": 0.0873
           },
-          "recent_activation": 0.692
+          "recent_activation": 0.671
         },
         "memory": [
           {
@@ -80,17 +80,22 @@
           "spontaneous_initiation": 0.235
         },
         "development": {
-          "turns": 1,
-          "spoken": 1,
+          "turns": 2,
+          "spoken": 2,
           "silences": 0,
-          "response_length_ema": 15,
+          "response_length_ema": 14.28,
           "topic_weights": {
             "trying": 0.1217,
             "finish": 0.1217,
-            "homework": 0.1217
+            "homework": 0.1217,
+            "jules": 0.11,
+            "feeling": 0.11,
+            "study": 0.11
           },
-          "relationships": {},
-          "recent_activation": 0.54
+          "relationships": {
+            "sarah": 0.108
+          },
+          "recent_activation": 0.669
         },
         "memory": [
           {
@@ -103,6 +108,17 @@
               "homework"
             ],
             "responded_to": null
+          },
+          {
+            "at": "2026-08-15T16:43:27.507705Z",
+            "kind": "room_turn",
+            "text": "Jules, how are you feeling about your study schedule?",
+            "topics": [
+              "jules",
+              "feeling",
+              "study"
+            ],
+            "responded_to": "sarah"
           }
         ]
       },
@@ -128,7 +144,7 @@
           "response_length_ema": 0,
           "topic_weights": {},
           "relationships": {},
-          "recent_activation": 0.317
+          "recent_activation": 0.307
         },
         "memory": []
       },
@@ -160,7 +176,7 @@
           "relationships": {
             "sarah": 0.0829
           },
-          "recent_activation": 0.537
+          "recent_activation": 0.521
         },
         "memory": [
           {
@@ -180,10 +196,10 @@
   },
   "state": {
     "schema": 1,
-    "last_run": "2026-08-15T16:42:19.950822Z",
-    "last_speaker": "sarah",
-    "attempts": 7,
-    "messages": 4,
+    "last_run": "2026-08-15T16:43:27.507705Z",
+    "last_speaker": "mara",
+    "attempts": 8,
+    "messages": 5,
     "silent_turns": 0,
     "note": "Conversation state is committed by the Sarah Society GitHub Action."
   },
@@ -228,6 +244,17 @@
       "text": "Mara: I was feeling a bit overwhelmed with the new study schedule. How can I make the most of it?",
       "node_agreement": {
         "spoke": 2,
+        "total": 3,
+        "chosen_node": 2
+      }
+    },
+    {
+      "id": "20260815T164327-mara",
+      "at": "2026-08-15T16:43:27.507705Z",
+      "speaker": "mara",
+      "text": "Jules, how are you feeling about your study schedule?",
+      "node_agreement": {
+        "spoke": 3,
         "total": 3,
         "chosen_node": 2
       }
