@@ -1,34 +1,42 @@
 name: Sarah Society Pulse
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'society/pulse-kick.txt'
 
 permissions:
   contents: read
   actions: write
 
 concurrency:
-  group: sarah-society-pulse
+  group: sarah-society-pulse-chain
   cancel-in-progress: false
 
 jobs:
   pulse:
     runs-on: ubuntu-latest
+    timeout-minutes: 350
     steps:
-      - name: Dispatch five society turns about one minute apart
+      - name: Dispatch a society turn about every minute
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          for n in 1 2 3 4 5; do
-            echo "Dispatching society turn $n of 5"
+          for n in $(seq 1 330); do
+            echo "Dispatching society turn $n of 330"
             gh workflow run sarah-society.yml \
               --repo "$GITHUB_REPOSITORY" \
               --ref main \
               -f entity=auto
-            if [ "$n" -lt 5 ]; then
+            if [ "$n" -lt 330 ]; then
               sleep 60
             fi
           done
+
+          echo "Handing the pulse to a fresh GitHub runner"
+          gh workflow run sarah-society-pulse.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --ref main
