@@ -35,10 +35,11 @@ button,.btn{border:1px solid var(--l);background:var(--p);color:var(--t);border-
 <div id="sheet" class="sheet"><section class="panel"><h2 id="mindName"></h2><div class="sub">These are processing coefficients and learned traces, not a predefined personality.</div><div class="card"><b>GENOME</b><div id="genes"></div></div><div class="card"><b>EMERGENT DEVELOPMENT</b><div id="development"></div></div><div class="card"><b>RECENT MEMORY</b><div id="memory"></div></div><button id="close" class="close">Close</button></section></div>
 <script>
 const $=s=>document.querySelector(s);
+const RAW="https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/society/";
 let minds=null,lastSignature="";
 function esc(s){return String(s??"")}
 function timeLabel(s){try{return new Date(s).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})}catch{return ""}}
-async function getJSON(path){const r=await fetch(path+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error(r.status);return r.json()}
+async function getJSON(file){const r=await fetch(RAW+file+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error(r.status);return r.json()}
 function renderPeople(){
   const box=$("#people");box.innerHTML="";
   for(const [id,m] of Object.entries(minds.entities)){
@@ -63,7 +64,7 @@ function openMind(id){
 $("#close").onclick=()=>$("#sheet").classList.remove("open");
 async function refresh(){
   try{
-    const [ms,conv,state]=await Promise.all([getJSON("../society/minds.json"),getJSON("../society/conversation.json"),getJSON("../society/state.json")]);
+    const [ms,conv,state]=await Promise.all([getJSON("minds.json"),getJSON("conversation.json"),getJSON("state.json")]);
     minds=ms;renderPeople();
     const sig=conv.map(x=>x.id).join("|");
     if(sig!==lastSignature || !$("#chat").children.length){
