@@ -16,6 +16,9 @@ on:
           - jules
   schedule:
     - cron: '17,47 * * * *'
+  push:
+    paths:
+      - '.github/workflows/sarah-society.yml'
 
 permissions:
   contents: write
@@ -34,7 +37,7 @@ jobs:
       - id: pick
         name: Choose who is active
         env:
-          FORCED_ENTITY: ${{ github.event.inputs.entity || 'auto' }}
+          FORCED_ENTITY: ${{ github.event_name == 'push' && 'sarah' || github.event.inputs.entity || 'auto' }}
         run: python3 scripts/society_select.py
 
   think:
