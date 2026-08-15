@@ -3,6 +3,8 @@ name: Deploy project home to GitHub Pages
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'society/**'
   workflow_dispatch:
 
 permissions:
