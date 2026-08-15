@@ -6,7 +6,8 @@ ROOT=Path(__file__).resolve().parents[1]
 entity_id=os.environ["ENTITY_ID"].strip().lower()
 node_id=int(os.environ["NODE_ID"])
 run_id=os.environ.get("GITHUB_RUN_ID","local")
-model=os.environ.get("SOCIETY_MODEL","").strip()
+model=os.environ.get("SOCIETY_MODEL","claude-haiku-4.5").strip()
+max_credits=os.environ.get("SOCIETY_MAX_AI_CREDITS","5").strip()
 
 minds=json.loads((ROOT/"society/minds.json").read_text())
 conversation=json.loads((ROOT/"society/conversation.json").read_text())
@@ -83,6 +84,8 @@ def request_copilot():
         "copilot",
         "-s",
         "-p", instructions,
+        "--model", model,
+        f"--max-ai-credits={max_credits}",
         "--no-ask-user",
         "--no-custom-instructions",
         "--no-auto-update",
@@ -91,11 +94,10 @@ def request_copilot():
         "--deny-tool=shell",
         "--deny-tool=write",
     ]
-    if model:
-        cmd.extend(["--model",model])
     with tempfile.TemporaryDirectory(prefix=f"society-{entity_id}-{node_id}-") as tmp:
         env=os.environ.copy()
         env["HOME"]=tmp
+        env["COPILOT_HOME"]=str(Path(tmp)/"copilot")
         proc=subprocess.run(
             cmd,
             cwd=tmp,
@@ -135,7 +137,7 @@ result={
     "topics":[],
     "memory_note":"",
     "engine":"github-copilot-cli",
-    "model":model or "auto",
+    "model":model,
 }
 try:
     content=request_copilot()
