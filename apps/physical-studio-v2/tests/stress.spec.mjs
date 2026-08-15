@@ -10,10 +10,25 @@ test('QA-STRESS survives repeated camera and tool interactions without runtime f
   await page.waitForFunction(()=>!!window.__PS_QA__);
   const canvas=page.locator('canvas').first();await expect(canvas).toBeVisible({timeout:10000});await page.waitForTimeout(400);
   const box=await canvas.boundingBox();expect(box).toBeTruthy();
-  const drag=async(dx,dy)=>{const sx=box.x+box.width*.5,sy=box.y+box.height*.52;await canvas.dispatchEvent('pointerdown',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx,clientY:sy,buttons:1});for(let i=1;i<=5;i++)await canvas.dispatchEvent('pointermove',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx+dx*i/5,clientY:sy+dy*i/5,buttons:1});await canvas.dispatchEvent('pointerup',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx+dx,clientY:sy+dy,buttons:0});};
+  const drag=async(dx,dy)=>{
+    const sx=box.x+box.width*.5,sy=box.y+box.height*.52;
+    await page.evaluate(({sx,sy,dx,dy})=>{
+      const canvas=document.querySelector('canvas');
+      if(!canvas)throw new Error('QA-STRESS canvas disappeared');
+      const fire=(type,x,y,buttons)=>canvas.dispatchEvent(new PointerEvent(type,{pointerId:1,pointerType:'touch',isPrimary:true,clientX:x,clientY:y,buttons,bubbles:true,cancelable:true}));
+      fire('pointerdown',sx,sy,1);
+      for(let i=1;i<=5;i++)fire('pointermove',sx+dx*i/5,sy+dy*i/5,1);
+      fire('pointerup',sx+dx,sy+dy,0);
+    },{sx,sy,dx,dy});
+  };
   for(let i=0;i<30;i++){
     const angle=i*.63;await drag(Math.cos(angle)*75,Math.sin(angle)*75);
-    if(i%10===0){for(const name of ['select','body','anchor','spring','exciter','mic']){const b=page.locator(`[data-tool="${name}"]`);if(await b.count())await b.click();}const sel=page.locator('[data-tool="select"]');if(await sel.count())await sel.click();}
+    if(i%10===0){
+      await page.evaluate(()=>{
+        for(const name of ['select','body','anchor','spring','exciter','mic'])document.querySelector(`[data-tool="${name}"]`)?.click();
+        document.querySelector('[data-tool="select"]')?.click();
+      });
+    }
   }
   await page.waitForTimeout(300);
   const state=await page.evaluate(()=>({snapshot:window.__PS_QA__.snapshot(),validation:window.__PS_QA__.validate()}));
