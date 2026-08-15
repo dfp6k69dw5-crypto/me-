@@ -147,6 +147,7 @@ result={
     "model_asset":"society-brain-v1/society-brain-q4_0.gguf",
 }
 error=None
+content=""
 try:
     content=request_local_model()
     obj=parse_json_text(content)
@@ -159,6 +160,8 @@ try:
 except Exception as e:
     error=str(e)[:1200]
     result["error"]=error
+    if content:
+        result["raw_response"]=content[:1200]
 
 path=outdir/f"{entity_id}-node-{node_id}.json"
 path.write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n")
