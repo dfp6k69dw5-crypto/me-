@@ -19,15 +19,33 @@
         "spontaneous_initiation": 0.429
       },
       "development": {
-        "turns": 0,
-        "spoken": 0,
+        "turns": 1,
+        "spoken": 1,
         "silences": 0,
-        "response_length_ema": 0,
-        "topic_weights": {},
-        "relationships": {},
-        "recent_activation": 0.456
+        "response_length_ema": 20,
+        "topic_weights": {
+          "suggestion": 0.1741,
+          "need": 0.1741,
+          "help": 0.1741
+        },
+        "relationships": {
+          "mara": 0.0873
+        },
+        "recent_activation": 0.608
       },
-      "memory": []
+      "memory": [
+        {
+          "at": "2026-08-15T16:39:18.144815Z",
+          "kind": "room_turn",
+          "text": "Hmm, I have a suggestion too. If you need any help with your homework, I could suggest a few strategies.",
+          "topics": [
+            "suggestion",
+            "need",
+            "help"
+          ],
+          "responded_to": "mara"
+        }
+      ]
     },
     "mara": {
       "name": "Mara",
@@ -55,7 +73,7 @@
           "homework": 0.1217
         },
         "relationships": {},
-        "recent_activation": 0.61
+        "recent_activation": 0.592
       },
       "memory": [
         {
@@ -93,7 +111,7 @@
         "response_length_ema": 0,
         "topic_weights": {},
         "relationships": {},
-        "recent_activation": 0.404
+        "recent_activation": 0.392
       },
       "memory": []
     },
@@ -119,7 +137,7 @@
         "response_length_ema": 0,
         "topic_weights": {},
         "relationships": {},
-        "recent_activation": 0.404
+        "recent_activation": 0.392
       },
       "memory": []
     }
