@@ -6,6 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 entity_id=os.environ["ENTITY_ID"].strip().lower()
 node_id=int(os.environ["NODE_ID"])
 run_id=os.environ.get("GITHUB_RUN_ID","local")
+force_inference=os.environ.get("SOCIETY_FORCE_INFERENCE","") == "1"
 model_path=Path(os.environ.get("SOCIETY_MODEL_PATH", ROOT/"society_model/society-brain-q4_0.gguf"))
 completion_bin=Path(os.environ.get("LLAMA_COMPLETION", ROOT/"runtime/llama-completion"))
 
@@ -32,7 +33,7 @@ activation=float(d.get("recent_activation",0.5) or 0.5)
 drive=0.53+0.22*g["spontaneous_initiation"]-0.20*g["inhibition"]+0.08*activation
 if recent: drive+=0.10*g["social_salience"]+0.05*g["attention_persistence"]
 drive=max(0.18,min(0.90,drive))
-wants_to_speak=rng.random()<drive
+wants_to_speak=force_inference or (rng.random()<drive)
 temperature=max(0.38,min(1.02,0.43+0.50*g["exploration"]+0.06*g["association_spread"]))
 
 system_prompt=f"""You contribute one possible next utterance for {name}, a continuing participant in a shared room. {name} has no assigned personality; let style emerge from history. Speak like an ordinary participant, not an assistant. Be natural and brief. Fragments or uncertainty are fine. Do not force humor, wisdom, warmth, conflict, questions, or cleverness. Output only what {name} says, with no name label.
@@ -80,7 +81,7 @@ def novelty(text):
 
 outdir=ROOT/"society_parts"; outdir.mkdir(exist_ok=True)
 result={"entity":entity_id,"name":name,"node":node_id,"speak":False,"text":"","salience":0.0,"topics":[],"memory_note":"",
-        "engine":"github-held-gguf","model_asset":"society-brain-v1/society-brain-q4_0.gguf","speech_drive":round(drive,4)}
+        "engine":"github-held-gguf","model_asset":"society-brain-v1/society-brain-q4_0.gguf","speech_drive":round(drive,4),"forced_test":force_inference}
 error=None; raw=""
 try:
     if wants_to_speak:
