@@ -27,6 +27,28 @@ for p in sorted((ROOT/"society_parts").rglob(f"{entity_id}-node-*.json")):
     except Exception:
         pass
 
+SERVICE_PATTERNS=[
+    r"\bhow can i help\b",r"\bhow may i help\b",r"\bhow can we help\b",
+    r"\bwhat can i help (?:you )?with\b",r"\bcan i help (?:you)?\b",
+    r"\bwhat can i do for you\b",r"\bhow can i assist\b",r"\bhow may i assist\b",
+    r"\bassist you\b",r"\bdo you need (?:anything|help)\b",r"\bwhat do you need\b",
+    r"\bis there anything i can do\b",r"\bi(?:'m| am) here to help\b",r"\bhere to help\b",
+    r"\bwhat brings you here\b",
+]
+META_PATTERNS=[
+    r"\bif [a-z]+ has something to say\b",r"\b[a-z]+ could say\b",
+    r"\b[a-z]+ is now in the room\b",r"\boutput only\b",r"\bshared room transcript\b",
+    r"\bcontinue directly from here\b",
+]
+
+def forbidden(text):
+    low=(text or "").lower().strip()
+    return any(re.search(p,low) for p in SERVICE_PATTERNS+META_PATTERNS)
+
+# Second firewall: even if a node parser ever misses a service/meta line,
+# consensus cannot publish or learn from it.
+parts=[p for p in parts if not forbidden(str(p.get("text","") or ""))]
+
 now=datetime.now(timezone.utc)
 stamp=now.isoformat().replace("+00:00","Z")
 state["attempts"]=int(state.get("attempts",0))+1
@@ -54,8 +76,6 @@ if votes>=2:
         scored.append((score,p))
     chosen=max(scored,key=lambda x:x[0])[1]
 
-# Learned associations are updated from all successful internal nodes,
-# even when the entity ultimately remains quiet.
 topic_weights=d.setdefault("topic_weights",{})
 for p in parts:
     sal=float(p.get("salience",0.5))
@@ -126,4 +146,4 @@ minds_path.write_text(json.dumps(minds,indent=2,ensure_ascii=False)+"\n")
 state_path.write_text(json.dumps(state,indent=2,ensure_ascii=False)+"\n")
 conv_path.write_text(json.dumps(conversation,indent=2,ensure_ascii=False)+"\n")
 
-print(f"{name}: {'spoke' if chosen else 'silent'} ({votes}/3 nodes voted to speak)")
+print(f"{name}: {'spoke' if chosen else 'silent'} ({votes}/3 valid nodes voted to speak)")
