@@ -64,7 +64,7 @@ jobs:
           NODE_ID: ${{ matrix.node }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SOCIETY_MODEL: claude-haiku-4.5
-          SOCIETY_MAX_AI_CREDITS: '5'
+          SOCIETY_MAX_AI_CREDITS: '30'
         run: python3 scripts/society_node.py
       - uses: actions/upload-artifact@v4
         with:
