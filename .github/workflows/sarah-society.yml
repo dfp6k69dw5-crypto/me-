@@ -16,13 +16,9 @@ on:
           - jules
   schedule:
     - cron: '17,47 * * * *'
-  push:
-    paths:
-      - '.github/workflows/sarah-society.yml'
 
 permissions:
   contents: write
-  copilot-requests: write
 
 concurrency:
   group: sarah-society-world
@@ -33,7 +29,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       entity: ${{ steps.pick.outputs.entity }}
-      resting: ${{ steps.pick.outputs.resting }}
     steps:
       - uses: actions/checkout@v6
       - id: pick
@@ -42,53 +37,60 @@ jobs:
           FORCED_ENTITY: ${{ github.event.inputs.entity || 'auto' }}
         run: python3 scripts/society_select.py
 
-  nodes:
+  think:
     needs: select
     if: needs.select.outputs.entity != 'rest'
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      max-parallel: 3
-      matrix:
-        node: [0, 1, 2]
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Install GitHub Copilot CLI
-        run: npm install -g @github/copilot
-      - name: Node ${{ matrix.node }} thinks
-        env:
-          ENTITY_ID: ${{ needs.select.outputs.entity }}
-          NODE_ID: ${{ matrix.node }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SOCIETY_MODEL: claude-haiku-4.5
-          SOCIETY_MAX_AI_CREDITS: '30'
-        run: python3 scripts/society_node.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: society-${{ needs.select.outputs.entity }}-node-${{ matrix.node }}
-          path: society_parts/*.json
-          retention-days: 1
-
-  commit-turn:
-    needs: [select, nodes]
-    if: needs.select.outputs.entity != 'rest' && always() && needs.nodes.result != 'cancelled'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: society-${{ needs.select.outputs.entity }}-node-*
-          path: society_parts
-          merge-multiple: true
+
+      - name: Load the brain from this GitHub repository
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh release view society-brain-v1 --repo "$GITHUB_REPOSITORY" >/dev/null
+          mkdir -p society_model runtime
+          gh release download society-brain-v1 \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern 'society-brain-q4_0.gguf' \
+            --dir society_model
+          gh release download society-brain-v1 \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern 'llama-runtime-linux-x64.tar.gz' \
+            --dir runtime
+          tar -xzf runtime/llama-runtime-linux-x64.tar.gz -C runtime
+          chmod +x runtime/llama-cli
+          echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  society_model/society-brain-q4_0.gguf' | sha256sum -c -
+
+      - name: Three independent nodes think
+        env:
+          ENTITY_ID: ${{ needs.select.outputs.entity }}
+          SOCIETY_MODEL_PATH: ${{ github.workspace }}/society_model/society-brain-q4_0.gguf
+          LLAMA_CLI: ${{ github.workspace }}/runtime/llama-cli
+          LD_LIBRARY_PATH: ${{ github.workspace }}/runtime
+        run: |
+          set +e
+          pids=()
+          for n in 0 1 2; do
+            (NODE_ID="$n" python3 scripts/society_node.py) >"node-$n.log" 2>&1 &
+            pids+=("$!")
+          done
+          status=0
+          for n in 0 1 2; do
+            if ! wait "${pids[$n]}"; then status=1; fi
+            echo "===== node $n ====="
+            cat "node-$n.log"
+          done
+          exit "$status"
+
       - name: Resolve three nodes into one entity turn
         env:
           ENTITY_ID: ${{ needs.select.outputs.entity }}
         run: python3 scripts/society_commit.py
+
       - name: Commit the continuing world
         run: |
           git config user.name "sarah-society"
