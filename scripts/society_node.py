@@ -29,7 +29,6 @@ seed=int(hashlib.sha256(f"{run_id}:{entity_id}:{node_id}".encode()).hexdigest()[
 rng=random.Random(seed)
 activation=float(d.get("recent_activation",0.5) or 0.5)
 
-# Genes act underneath language rather than being translated into a personality.
 drive=0.53+0.22*g["spontaneous_initiation"]-0.20*g["inhibition"]+0.08*activation
 if recent: drive+=0.10*g["social_salience"]+0.05*g["attention_persistence"]
 drive=max(0.18,min(0.90,drive))
@@ -49,7 +48,7 @@ def request_local_model():
          "-sys",system_prompt,"-p",user_prompt,
          "-n","24","-c","1024","-t","4","--no-warmup",
          "--temp",f"{temperature:.3f}","--top-p","0.92","-s",str(seed),
-         "--simple-io","--no-display-prompt","--no-show-timings","--log-disable"]
+         "--simple-io","--no-display-prompt","--log-disable"]
     proc=subprocess.run(cmd,cwd=ROOT,capture_output=True,text=True,timeout=90)
     if proc.returncode!=0:
         detail=(proc.stderr or proc.stdout or "llama-completion failed").strip()
