@@ -17,6 +17,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: sarah-society-world-main
@@ -99,3 +100,10 @@ jobs:
           git commit -m "Society turn: ${{ needs.select.outputs.entity }}" || exit 0
           git pull --rebase origin main
           git push origin HEAD:main
+      - name: Publish the updated Room feed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run pages.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --ref main
