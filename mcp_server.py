@@ -19,7 +19,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server import MCPServer
 
 REPO_ROOT = Path(os.environ.get("CLAUDE_PROJECT_DIR", Path(__file__).resolve().parent)).resolve()
 WORKER_SCRIPT = REPO_ROOT / "scripts" / "cluster_worker.py"
@@ -27,7 +27,7 @@ AGGREGATE_SCRIPT = REPO_ROOT / "scripts" / "aggregate_cluster.py"
 RUN_DIR = REPO_ROOT / ".simulator_runs"
 VALID_WORKLOADS = {"montecarlo", "primes", "hashstorm"}
 
-mcp = FastMCP(
+mcp = MCPServer(
     "Alex Repo Simulator",
     instructions=(
         "Use these tools to run and inspect the repository's cluster simulator. "
