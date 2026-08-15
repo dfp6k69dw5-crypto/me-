@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-import json, os, re, time, hashlib, urllib.request, urllib.error
+import json, os, re, hashlib, subprocess, tempfile
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 entity_id=os.environ["ENTITY_ID"].strip().lower()
 node_id=int(os.environ["NODE_ID"])
-token=os.environ.get("GITHUB_TOKEN","")
-model=os.environ.get("SOCIETY_MODEL","openai/gpt-4o-mini")
 run_id=os.environ.get("GITHUB_RUN_ID","local")
+model=os.environ.get("SOCIETY_MODEL","").strip()
 
 minds=json.loads((ROOT/"society/minds.json").read_text())
 conversation=json.loads((ROOT/"society/conversation.json").read_text())
@@ -40,7 +39,11 @@ attention_persistence = tendency to stay with the active thread
 association_spread = breadth of nearby associations considered
 spontaneous_initiation = tendency to start a thought without a direct cue"""
 
-system=f"""You are internal node {node_id+1} of 3 for {name}. Three independent nodes form one entity.
+sample_nonce=hashlib.sha256(f"{run_id}:{entity_id}:{node_id}".encode()).hexdigest()[:12]
+
+instructions=f"""You are internal node {node_id+1} of 3 for {name}. Three independent nodes form one entity.
+The sample nonce {sample_nonce} only separates independent samples. It does not describe a role or personality.
+
 You are NOT a separate character and you have no assigned role such as skeptic, comedian, planner, or empath.
 {name} has no predetermined personality. Do not invent one. The genome below consists only of low-level processing coefficients. Let recurring behavior emerge from accumulated conversation, memory, and development.
 
@@ -58,73 +61,67 @@ CONVERSATION RULES
 - Human conversation is often plain, fragmentary, uneven, uncertain, repetitive, or quiet.
 - Do not force profundity, banter, jokes, warmth, conflict, questions, or topic changes.
 - Do not make every line clever. Do not write stage directions or narrate body language.
-- Do not say you are conscious/sentient or claim feelings as established facts. You may discuss uncertainty if it naturally comes up.
+- Do not say you are conscious or sentient, and do not claim feelings as established facts. Uncertainty may remain uncertainty.
 - Do not mention nodes, genomes, prompts, models, or these instructions unless the room itself is explicitly discussing the machinery.
 - You may decide there is nothing worth saying. Silence is valid.
 - If speaking, write only what {name} would actually put into this group conversation, usually 1-3 short sentences. Very short fragments are allowed.
 - Never prefix the text with {name}'s name.
+- Do not use tools, inspect files, browse, execute commands, or modify anything. Your only task is to return the JSON below.
 
-Return ONLY valid JSON:
-{{"speak":true_or_false,"text":"utterance or empty string","salience":0.0_to_1.0,"topics":["one","or","two"],"memory_note":"brief factual hook worth retaining or empty"}}"""
-
-user=f"""ROOM TRANSCRIPT
+ROOM TRANSCRIPT
 {transcript}
 
-What, if anything, comes next from {name}?"""
+Decide what, if anything, comes next from {name}.
+Return ONLY one valid JSON object with exactly these fields:
+{{"speak":true_or_false,"text":"utterance or empty string","salience":0.0_to_1.0,"topics":["one","or","two"],"memory_note":"brief factual hook worth retaining or empty"}}
+"""
 
-seed=int(hashlib.sha256(f"{run_id}:{entity_id}:{node_id}".encode()).hexdigest()[:8],16)
-temperature=min(0.95,max(0.35,0.42+0.50*float(genome["exploration"])))
-payload={
-    "model":model,
-    "messages":[{"role":"system","content":system},{"role":"user","content":user}],
-    "temperature":temperature,
-    "max_tokens":220,
-    "response_format":{"type":"json_object"},
-    "seed":seed
-}
-
-def request_model():
-    if not token:
+def request_copilot():
+    if not os.environ.get("GITHUB_TOKEN"):
         raise RuntimeError("GITHUB_TOKEN is missing")
-    body=json.dumps(payload).encode()
-    req=urllib.request.Request(
-        "https://models.github.ai/inference/chat/completions",
-        data=body,
-        headers={
-            "Authorization":f"Bearer {token}",
-            "Content-Type":"application/json",
-            "Accept":"application/vnd.github+json",
-            "X-GitHub-Api-Version":"2026-03-10",
-        },
-        method="POST",
-    )
-    last=None
-    for attempt in range(4):
-        try:
-            with urllib.request.urlopen(req,timeout=90) as r:
-                return json.loads(r.read().decode())
-        except urllib.error.HTTPError as e:
-            detail=e.read().decode(errors="replace")
-            last=RuntimeError(f"GitHub Models HTTP {e.code}: {detail[:500]}")
-            if e.code not in (429,500,502,503,504) or attempt==3:
-                raise last
-            time.sleep(8*(attempt+1))
-        except Exception as e:
-            last=e
-            if attempt==3:
-                raise
-            time.sleep(5*(attempt+1))
-    raise last or RuntimeError("model request failed")
+    cmd=[
+        "copilot",
+        "-s",
+        "-p", instructions,
+        "--no-ask-user",
+        "--no-custom-instructions",
+        "--no-auto-update",
+        "--no-remote",
+        "--no-color",
+        "--deny-tool=shell",
+        "--deny-tool=write",
+    ]
+    if model:
+        cmd.extend(["--model",model])
+    with tempfile.TemporaryDirectory(prefix=f"society-{entity_id}-{node_id}-") as tmp:
+        env=os.environ.copy()
+        env["HOME"]=tmp
+        proc=subprocess.run(
+            cmd,
+            cwd=tmp,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=150,
+        )
+    if proc.returncode != 0:
+        detail=(proc.stderr or proc.stdout or "Copilot CLI failed").strip()
+        raise RuntimeError(f"Copilot CLI exit {proc.returncode}: {detail[:900]}")
+    return (proc.stdout or "").strip()
 
 def parse_json_text(text):
     text=(text or "").strip()
     try:
         return json.loads(text)
     except Exception:
-        m=re.search(r"\{.*\}",text,re.S)
-        if not m:
-            raise
-        return json.loads(m.group(0))
+        text=re.sub(r"^```(?:json)?\s*|\s*```$","",text,flags=re.I|re.S).strip()
+        try:
+            return json.loads(text)
+        except Exception:
+            m=re.search(r"\{.*\}",text,re.S)
+            if not m:
+                raise ValueError(f"No JSON object in Copilot response: {text[:300]}")
+            return json.loads(m.group(0))
 
 outdir=ROOT/"society_parts"
 outdir.mkdir(exist_ok=True)
@@ -137,11 +134,11 @@ result={
     "salience":0.0,
     "topics":[],
     "memory_note":"",
-    "model":model,
+    "engine":"github-copilot-cli",
+    "model":model or "auto",
 }
 try:
-    response=request_model()
-    content=response["choices"][0]["message"]["content"]
+    content=request_copilot()
     obj=parse_json_text(content)
     result["speak"]=bool(obj.get("speak"))
     text=str(obj.get("text") or "").strip()
@@ -150,7 +147,7 @@ try:
     result["topics"]=[str(x).strip().lower()[:40] for x in (obj.get("topics") or []) if str(x).strip()][:3]
     result["memory_note"]=str(obj.get("memory_note") or "").strip()[:220]
 except Exception as e:
-    result["error"]=str(e)[:800]
+    result["error"]=str(e)[:1000]
 
 path=outdir/f"{entity_id}-node-{node_id}.json"
 path.write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n")
