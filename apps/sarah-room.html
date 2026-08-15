@@ -36,10 +36,23 @@ button,.btn{border:1px solid var(--l);background:var(--p);color:var(--t);border-
 <script>
 const $=s=>document.querySelector(s);
 const RAW="https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/society/";
+const LIVE_CONVERSATION="https://api.github.com/repos/maaronfanberg-lab/me-/contents/society/conversation.json";
 let minds=null,lastSignature="";
 function esc(s){return String(s??"")}
 function timeLabel(s){try{return new Date(s).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})}catch{return ""}}
-async function getJSON(file){const r=await fetch(RAW+file+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error(r.status);return r.json()}
+async function getRawJSON(file){const r=await fetch(RAW+file+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error(r.status);return r.json()}
+function decodeGitHubContent(b64){
+  const bin=atob(String(b64||"").replace(/\s/g,""));
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes)
+}
+async function getLiveConversation(){
+  const r=await fetch(LIVE_CONVERSATION+"?ref=main&_="+Date.now(),{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});
+  if(!r.ok)throw new Error(r.status);
+  const meta=await r.json();
+  return JSON.parse(decodeGitHubContent(meta.content))
+}
 function renderPeople(){
   const box=$("#people");box.innerHTML="";
   for(const [id,m] of Object.entries(minds.entities)){
@@ -64,7 +77,7 @@ function openMind(id){
 $("#close").onclick=()=>$("#sheet").classList.remove("open");
 async function refresh(){
   try{
-    const [ms,conv,state]=await Promise.all([getJSON("minds.json"),getJSON("conversation.json"),getJSON("state.json")]);
+    const [ms,conv,state]=await Promise.all([getRawJSON("minds.json"),getLiveConversation(),getRawJSON("state.json")]);
     minds=ms;renderPeople();
     const sig=conv.map(x=>x.id).join("|");
     if(sig!==lastSignature || !$("#chat").children.length){
@@ -84,7 +97,7 @@ async function refresh(){
     $("#status").textContent=state.last_run?"live":"ready";
   }catch(e){$("#status").textContent="offline"}
 }
-refresh();setInterval(refresh,15000);
+refresh();setInterval(refresh,65000);
 </script>
 </body>
 </html>
