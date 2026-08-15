@@ -1,0 +1,88 @@
+name: Sarah Society
+
+on:
+  workflow_dispatch:
+    inputs:
+      entity:
+        description: Who gets the next three-node turn?
+        required: true
+        default: auto
+        type: choice
+        options:
+          - auto
+          - sarah
+          - mara
+          - owen
+          - jules
+  schedule:
+    - cron: '17,47 * * * *'
+
+permissions:
+  contents: write
+  models: read
+
+concurrency:
+  group: sarah-society-world
+  cancel-in-progress: false
+
+jobs:
+  select:
+    runs-on: ubuntu-latest
+    outputs:
+      entity: ${{ steps.pick.outputs.entity }}
+      resting: ${{ steps.pick.outputs.resting }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: pick
+        name: Choose who is active
+        env:
+          FORCED_ENTITY: ${{ github.event.inputs.entity || 'auto' }}
+        run: python3 scripts/society_select.py
+
+  nodes:
+    needs: select
+    if: needs.select.outputs.entity != 'rest'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        node: [0, 1, 2]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Node ${{ matrix.node }} thinks
+        env:
+          ENTITY_ID: ${{ needs.select.outputs.entity }}
+          NODE_ID: ${{ matrix.node }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOCIETY_MODEL: openai/gpt-4o-mini
+        run: python3 scripts/society_node.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: society-${{ needs.select.outputs.entity }}-node-${{ matrix.node }}
+          path: society_parts/*.json
+          retention-days: 1
+
+  commit-turn:
+    needs: [select, nodes]
+    if: needs.select.outputs.entity != 'rest' && always() && needs.nodes.result != 'cancelled'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: society-${{ needs.select.outputs.entity }}-node-*
+          path: society_parts
+          merge-multiple: true
+      - name: Resolve three nodes into one entity turn
+        env:
+          ENTITY_ID: ${{ needs.select.outputs.entity }}
+        run: python3 scripts/society_commit.py
+      - name: Commit the continuing world
+        run: |
+          git config user.name "sarah-society"
+          git config user.email "actions@users.noreply.github.com"
+          git pull --rebase origin main
+          git add society
+          git commit -m "Society turn: ${{ needs.select.outputs.entity }}" || exit 0
+          git push origin HEAD:main
