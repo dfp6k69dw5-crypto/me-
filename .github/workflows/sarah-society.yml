@@ -15,18 +15,14 @@ on:
           - owen
           - jules
   schedule:
-    - cron: '17,47 * * * *'
-  push:
-    paths:
-      - '.github/workflows/sarah-society.yml'
-      - 'scripts/society_node.py'
+    - cron: '*/5 * * * *'
 
 permissions:
   contents: write
 
 concurrency:
   group: sarah-society-world
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   select:
@@ -38,7 +34,7 @@ jobs:
       - id: pick
         name: Choose who is active
         env:
-          FORCED_ENTITY: ${{ github.event_name == 'push' && 'sarah' || github.event.inputs.entity || 'auto' }}
+          FORCED_ENTITY: ${{ github.event.inputs.entity || 'auto' }}
         run: python3 scripts/society_select.py
 
   nodes:
@@ -73,7 +69,6 @@ jobs:
           ENTITY_ID: ${{ needs.select.outputs.entity }}
           NODE_ID: ${{ matrix.node }}
           SOCIETY_MODEL_PATH: ${{ github.workspace }}/society_model/society-brain-q4_0.gguf
-          SOCIETY_FORCE_INFERENCE: ${{ github.event_name == 'push' && '1' || '0' }}
         run: python3 scripts/society_node.py
       - uses: actions/upload-artifact@v4
         with:
