@@ -7,7 +7,7 @@ entity_id=os.environ["ENTITY_ID"].strip().lower()
 node_id=int(os.environ["NODE_ID"])
 run_id=os.environ.get("GITHUB_RUN_ID","local")
 model=os.environ.get("SOCIETY_MODEL","claude-haiku-4.5").strip()
-max_credits=os.environ.get("SOCIETY_MAX_AI_CREDITS","5").strip()
+max_credits=os.environ.get("SOCIETY_MAX_AI_CREDITS","30").strip()
 
 minds=json.loads((ROOT/"society/minds.json").read_text())
 conversation=json.loads((ROOT/"society/conversation.json").read_text())
