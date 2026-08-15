@@ -1,0 +1,34 @@
+name: Sarah Society Pulse
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: sarah-society-pulse
+  cancel-in-progress: false
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch five society turns about one minute apart
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          for n in 1 2 3 4 5; do
+            echo "Dispatching society turn $n of 5"
+            gh workflow run sarah-society.yml \
+              --repo "$GITHUB_REPOSITORY" \
+              --ref main \
+              -f entity=auto
+            if [ "$n" -lt 5 ]; then
+              sleep 60
+            fi
+          done
