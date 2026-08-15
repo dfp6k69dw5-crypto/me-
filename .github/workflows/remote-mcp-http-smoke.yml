@@ -37,12 +37,14 @@ jobs:
 
           async def main():
               async with Client('http://127.0.0.1:8765/mcp') as client:
-                  tools = await client.list_tools()
-                  names = {t.name for t in tools}
+                  tools_result = await client.list_tools()
+                  names = {t.name for t in tools_result.tools}
                   assert 'simulator_info' in names, names
                   assert 'run_simulation' in names, names
                   result = await client.call_tool('run_simulation', {'workload':'montecarlo','scale':1,'workers':2})
-                  print(result)
+                  assert not result.is_error, result
+                  assert result.structured_content['workload'] == 'montecarlo', result.structured_content
+                  print(result.structured_content['result'])
           asyncio.run(main())
           PY
       - name: Server log on failure
