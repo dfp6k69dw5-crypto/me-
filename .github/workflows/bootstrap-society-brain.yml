@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: bootstrap-society-brain
+  cancel-in-progress: true
+
 jobs:
   bootstrap:
     runs-on: ubuntu-latest
@@ -33,17 +37,13 @@ jobs:
             --output society-brain-q4_0.gguf
           echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  society-brain-q4_0.gguf' | sha256sum -c -
 
-      - name: Build a pinned local inference runtime
+      - name: Copy the inference runtime from GitHub
         if: steps.existing.outputs.exists != 'true'
         run: |
-          git clone --filter=blob:none https://github.com/ggml-org/llama.cpp.git llama.cpp
-          git -C llama.cpp checkout adb55e5148dc93bcdca7212a2d1df3ccc422959a
-          cmake -S llama.cpp -B llama-build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DLLAMA_CURL=OFF \
-            -DGGML_NATIVE=OFF
-          cmake --build llama-build --target llama-cli -j 2
-          tar -C llama-build/bin -czf llama-runtime-linux-x64.tar.gz .
+          curl --fail --location --retry 4 --retry-delay 5 \
+            'https://github.com/ggml-org/llama.cpp/releases/download/b10441/llama-b10441-bin-ubuntu-x64.tar.gz' \
+            --output llama-runtime-linux-x64.tar.gz
+          echo '360a5bfab5b8fe562c52e060a998a052f5fc7d98a0448b035c2eedbb6acfbd94  llama-runtime-linux-x64.tar.gz' | sha256sum -c -
 
       - name: Store the brain and runtime in this GitHub repository
         if: steps.existing.outputs.exists != 'true'
@@ -57,9 +57,10 @@ jobs:
           Model: Qwen2.5-0.5B-Instruct GGUF q4_0
           Model SHA256: 7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed
           Model license: Apache-2.0
-          Runtime: llama.cpp pinned at adb55e5148dc93bcdca7212a2d1df3ccc422959a
+          Runtime: llama.cpp Ubuntu x64 release b10441
+          Runtime SHA256: 360a5bfab5b8fe562c52e060a998a052f5fc7d98a0448b035c2eedbb6acfbd94
 
-          Ordinary society runs load these assets from this GitHub repository only.
+          Ordinary society runs load both assets from this GitHub repository only.
           EOF
           gh release create "$TAG" \
             society-brain-q4_0.gguf \
