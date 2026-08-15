@@ -15,13 +15,16 @@ async function qaSnapshot(page){
 }
 
 async function drag(page,dx,dy){
-  const {canvas,box}=await canvasBox(page);
+  const {box}=await canvasBox(page);
   const sx=box.x+box.width*.5, sy=box.y+box.height*.52;
-  await canvas.dispatchEvent('pointerdown',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx,clientY:sy,buttons:1});
-  for(let i=1;i<=8;i++){
-    await canvas.dispatchEvent('pointermove',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx+dx*i/8,clientY:sy+dy*i/8,buttons:1});
-  }
-  await canvas.dispatchEvent('pointerup',{pointerId:1,pointerType:'touch',isPrimary:true,clientX:sx+dx,clientY:sy+dy,buttons:0});
+  await page.evaluate(({sx,sy,dx,dy})=>{
+    const canvas=document.querySelector('canvas');
+    if(!canvas)throw new Error('QA-CAM canvas disappeared');
+    const fire=(type,x,y,buttons)=>canvas.dispatchEvent(new PointerEvent(type,{pointerId:1,pointerType:'touch',isPrimary:true,clientX:x,clientY:y,buttons,bubbles:true,cancelable:true}));
+    fire('pointerdown',sx,sy,1);
+    for(let i=1;i<=8;i++)fire('pointermove',sx+dx*i/8,sy+dy*i/8,1);
+    fire('pointerup',sx+dx,sy+dy,0);
+  },{sx,sy,dx,dy});
   await page.waitForTimeout(180);
 }
 
