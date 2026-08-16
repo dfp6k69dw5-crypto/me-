@@ -4,14 +4,30 @@
  const parts=['01','02','03','04','05','06','07','08a','08b','09'];
  let b='';
  for(const n of parts){
-   const r=await fetch('resonator-parts/'+n+'.txt?v=20260815c',{cache:'no-store'});
+   const r=await fetch('resonator-parts/'+n+'.txt?v=20260816a',{cache:'no-store'});
    if(!r.ok) throw new Error('Missing payload part '+n);
    b+=(await r.text()).trim();
  }
  const raw=Uint8Array.from(atob(b),c=>c.charCodeAt(0));
  const ds=new DecompressionStream('gzip');
- const text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
+ let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
  if(!text.includes('<title>RESONATOR</title>')) throw new Error('RESONATOR payload failed integrity check.');
+
+ // Preserve the proven iPhone-safe audio behavior when the payload still contains the older defaults.
+ text=text.replace("state.rate=+(function(){try{return localStorage.getItem('resonator.rate');}catch(e){return null;}}()||32000);","state.rate=22050;");
+ text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
+ text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
+ text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
+ text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
+ text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
+
+ // Preserve the continuous mobile orbit behavior if the payload still has the older gesture constants.
+ text=text.replace("camRotate(1,(e.clientX-drag.x)*0.008);","camRotate(1,(e.clientX-drag.x)*0.017);");
+ text=text.replace("camRotate(0,(e.clientY-drag.y)*0.008);","camRotate(0,-(e.clientY-drag.y)*0.008);");
+ if(!text.includes("addEventListener('pointercancel',()=>{drag=null;});")){
+   text=text.replace("addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; });","addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; }); addEventListener('pointercancel',()=>{drag=null;});");
+ }
+
  document.open();document.write(text);document.close();
 }catch(e){
  document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';
