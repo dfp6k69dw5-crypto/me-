@@ -1,0 +1,40 @@
+name: Fan flower speed holdout
+
+on:
+  push:
+    branches:
+      - experiment/fan-flower-speed-holdout
+    paths:
+      - experiments/fan_flower_speed_holdout.py
+      - .github/workflows/fan-flower-speed-holdout.yml
+
+permissions:
+  contents: read
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install analysis dependencies
+        run: python -m pip install --disable-pip-version-check numpy pandas scikit-learn tabulate
+
+      - name: Run held-out-speed experiment
+        run: python experiments/fan_flower_speed_holdout.py
+
+      - name: Upload experiment results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fan-flower-speed-holdout-results
+          path: fan_flower_results/
+          if-no-files-found: warn
+          retention-days: 7
