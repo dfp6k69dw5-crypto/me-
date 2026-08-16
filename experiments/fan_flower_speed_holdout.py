@@ -130,7 +130,7 @@ def main():
 
     train_sample_mask = df.pctid <= TRAIN_MAX_SPEED
     sample_mu = df.loc[train_sample_mask, ["x", "y", "z"]].mean().to_numpy(dtype=float)
-    sample_sd = df.loc[train_sample_mask, ["x", "y", "z"]].std(ddof=0).to_numpy(dtype=float)
+    sample_sd = df.loc[train_sample_mask, ["x", "y", "z"]].std(ddof=0).to_numpy(dtype=float).copy()
     sample_sd[sample_sd < 1e-12] = 1.0
     print("TRAIN-ONLY AXIS MU", sample_mu.tolist())
     print("TRAIN-ONLY AXIS SD", sample_sd.tolist())
