@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#070912">
+<title>Pattern Microscope — Node Universe</title>
+<link rel="stylesheet" href="curiosity-engine-v7.css?v=1">
+</head>
+<body>
+<div class="app">
+<header class="chrome">
+  <div class="toprow">
+    <div class="brand"><div class="eyebrow">cross-domain structural search</div><h1>Pattern Microscope</h1></div>
+    <button class="btn" id="fitBtn">Fit</button><button class="btn" id="resetBtn">Reset</button>
+  </div>
+  <div class="inputrow"><div class="inputbox"><textarea id="seedInput" placeholder="Type a language, paste text, numbers, or an equation"></textarea><button class="primary" id="addBtn">Analyze + Add</button></div></div>
+  <div class="actions"><button class="btn" id="wanderBtn">Auto-Wander: off</button><button class="btn" id="compareBtn">Compare A ↔ B</button><button class="btn" id="weirdBtn">Weirdest match</button></div>
+  <div class="pairbar" id="pairbar">A: <b>none</b> · B: <b>none</b> — tap a node to choose what to compare.</div>
+</header>
+<main class="workspace" id="workspace">
+  <canvas id="canvas"></canvas>
+  <div class="empty" id="empty"><div class="emptyInner"><b>Start with anything.</b>Add a language, equation, number sequence, paragraph, or other pattern. The universe begins empty and grows from what you give it.</div></div>
+  <div class="nodeCard" id="nodeCard"><div class="nodeHead"><div><span class="tag" id="nodeTag"></span><h2 id="nodeTitle"></h2><p id="nodeDesc"></p></div><button class="close" id="closeNode">×</button></div><div class="nodeButtons"><button class="btn" id="setA">Set A</button><button class="btn" id="setB">Set B</button><button class="btn" id="transformBtn">Transform</button></div></div>
+  <div class="toast" id="toast"></div>
+  <div class="hud"><span id="statusText">Ready</span> · <span id="countText">0 nodes</span> · zoom <span id="zoomText">1.0×</span></div>
+  <div class="legend"><span class="sw" style="background:#78e5dd"></span>seed <span class="sw" style="background:#b7a0ff"></span>transform <span class="sw" style="background:#dbc98b"></span>feature</div>
+</main>
+</div>
+<section class="reader" id="reader" aria-hidden="true">
+  <div class="readerHead"><strong>Structural relationship</strong><button class="readerClose" id="readerClose">Close</button></div>
+  <div class="readerBody" id="readerBody"></div>
+</section>
+<script src="curiosity-engine-v7-1.js?v=1"></script>
+<script src="curiosity-engine-v7-2.js?v=1"></script>
+<script src="curiosity-engine-v7-3.js?v=1"></script>
+<script src="curiosity-engine-v7-4.js?v=1"></script>
+<script src="curiosity-engine-v7-5.js?v=1"></script>
+<script src="curiosity-engine-v7-6.js?v=1"></script>
+</body>
+</html>
