@@ -34,7 +34,7 @@ Output only the spoken line, without a name label or quotation marks."""
 base_prompt=f"Recent room speech:\n{transcript}\n\n{name}:"
 
 SERVICE=[r"\bhow can i help\b",r"\bhow may i help\b",r"\bwhat can i do for you\b",r"\bhow can i assist\b",r"\bdo you need (?:anything|help)\b",r"\bwhat do you need\b",r"\bhere to help\b",r"\bwhat (?:specific )?tasks or goals\b",r"\bfor (?:your|our) next meeting\b"]
-META=[r"\bif [a-z]+ has something to say\b",r"\b[a-z]+ could say\b",r"\b[a-z]+ is now in the room\b",r"\boutput only\b",r"\brecent room speech\b",r"\bcontinue directly from here\b",r"\bprevious candidate\b",r"\bprevious (?:response|conversation) was (?:too )?(?:generic|repetitive)\b",r"\btoo generic or repetitive\b",r"\bgenuinely different peer remark\b",r"\bgrounded in the room\b",r"\bservice/task question\b",r"\bproduce a genuinely different\b",r"\bgenerate a fresh, thought-provoking statement\b"]
+META=[r"\bif [a-z]+ has something to say\b",r"\b[a-z]+ could say\b",r"\b[a-z]+ is now in the room\b",r"\boutput only\b",r"\brecent room speech\b",r"\bcontinue directly from here\b",r"\bprevious candidate\b",r"\bprevious (?:response|conversation) was (?:too )?(?:generic|repetitive)\b",r"\btoo generic or repetitive\b",r"\bgenuinely different peer remark\b",r"\bgrounded in the room\b",r"\bservice/task question\b",r"\bproduce a genuinely different\b",r"\bgenerate a fresh, thought-provoking statement\b",r"\btry another natural line\b",r"\bdiffer substantially from the first attempt\b",r"\bcontinue the peers'? current exchange\b"]
 def tokens(t): return set(re.findall(r"[a-z0-9']+",(t or "").lower()))
 def jac(a,b):
     a,b=tokens(a),tokens(b)
@@ -53,11 +53,13 @@ def forbidden_reason(text):
     sim=max_recent_similarity(text)
     if sim>=0.62:return f"near-repeat-{sim:.2f}"
     return ""
-def request_local_model(local_seed,attempt):
+def request_local_model(local_seed):
+    # Important isolation boundary: retry/control information is NEVER appended to
+    # the model-visible prompt. A retry is simply a fresh stochastic sample from
+    # the exact same entity/world prompt with a different seed.
     if not model_path.is_file():raise RuntimeError(f"GitHub-held model missing: {model_path}")
     if not completion_bin.is_file():raise RuntimeError(f"GitHub-held completion runtime missing: {completion_bin}")
-    retry="" if attempt==0 else "\nTry another natural line. It must differ substantially from the first attempt and continue the peers' current exchange."
-    cmd=[str(completion_bin),"-m",str(model_path),"--jinja","--single-turn","-sys",system_prompt,"-p",base_prompt+retry,"-n",str(max_tokens),"-c","1024","-t","4","--no-warmup","--temp",f"{temperature:.3f}","--top-p","0.93","-s",str(local_seed),"--simple-io","--no-display-prompt","--log-verbosity","0"]
+    cmd=[str(completion_bin),"-m",str(model_path),"--jinja","--single-turn","-sys",system_prompt,"-p",base_prompt,"-n",str(max_tokens),"-c","1024","-t","4","--no-warmup","--temp",f"{temperature:.3f}","--top-p","0.93","-s",str(local_seed),"--simple-io","--no-display-prompt","--log-verbosity","0"]
     proc=subprocess.run(cmd,cwd=ROOT,capture_output=True,text=True,timeout=90)
     if proc.returncode!=0:
         detail=(proc.stderr or proc.stdout or "llama-completion failed").strip();raise RuntimeError(f"local inference exit {proc.returncode}: {detail[-900:]}")
@@ -90,7 +92,7 @@ try:
     if wants_to_speak:
         text=""
         for attempt in range(4):
-            candidate=clean_generation(request_local_model((seed+attempt*104729)&0x7fffffff,attempt))
+            candidate=clean_generation(request_local_model((seed+attempt*104729)&0x7fffffff))
             if not candidate:rejected.append("empty");continue
             reason=forbidden_reason(candidate)
             if reason:rejected.append(reason);continue
