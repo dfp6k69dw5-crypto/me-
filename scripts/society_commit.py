@@ -19,6 +19,7 @@ for p in sorted((ROOT/"society_parts").rglob(f"{entity_id}-node-*.json")):
 
 SERVICE=[r"\bhow can i help\b",r"\bhow may i help\b",r"\bwhat can i do for you\b",r"\bhow can i assist\b",r"\bdo you need (?:anything|help)\b",r"\bwhat do you need\b",r"\bhere to help\b",r"\bwhat (?:specific )?tasks or goals\b",r"\bfor (?:your|our) next meeting\b"]
 FACILITATOR=[r"\bare you looking for\b",r"\bwhat (?:would|do) you like to (?:talk about|discuss|explore|do)\b",r"\bwhat do we want to do\b",r"\bwhat should we do\b",r"\bwhat (?:specific )?topic\b",r"\btopic to (?:explore|discuss|talk about)\b",r"\banything (?:you'd|you would) like to (?:talk about|discuss|explore|do)\b"]
+FUTURE_SHARED=[r"\bwe(?:'ll| will)\s+(?:meet|meet up|get together|see each other|hang out)\b",r"\b(?:our|the)\s+next\s+(?:meeting|session|get-together)\b",r"\bsee you\s+(?:next|again|later)\b"]
 META=[r"\bif [a-z]+ has something to say\b",r"\b[a-z]+ could say\b",r"\boutput only\b",r"\brecent room speech\b",r"\bprevious candidate\b",r"\btoo generic or repetitive\b",r"\btry another natural line\b",r"\bdiffer substantially from the first attempt\b",r"\bselected earlier memories\b",r"\bpersistent adult background\b",r"\bcognitive move\b"]
 STOP={"that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","make","making","start","starting","try","trying","work","working","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes"}
 name_words={w.lower() for v in minds["entities"].values() for w in re.findall(r"[A-Za-z]+",v["name"])}
@@ -43,14 +44,12 @@ def meaningful_topic(topic):
 
 def core_forbidden(text):
     low=(text or "").lower().strip()
-    return (not low) or bool(speaker_label_re.search(text or "")) or any(re.search(p,low) for p in SERVICE+FACILITATOR+META)
+    return (not low) or bool(speaker_label_re.search(text or "")) or any(re.search(p,low) for p in SERVICE+FACILITATOR+FUTURE_SHARED+META)
 def exact_recent(text):
     n=norm(text)
     return bool(n) and any(n==norm(m.get("text","")) for m in conversation[-14:])
 def recent_similarity(text): return max((jac(text,m.get("text","")) for m in conversation[-10:]),default=0.0)
 
-# Measure whether the recent room has collapsed around a small repeated vocabulary.
-# These words are used only as a temporary rejection signal; they never supply a new topic.
 window=conversation[-12:]; flat=[w for m in window for w in set(content_tokens(m.get("text","")))]; counts=Counter(flat)
 if flat:
     repeated=sum(c-1 for c in counts.values() if c>1); room_fatigue=max(0.0,min(1.0,repeated/max(4,len(window)*1.6)))
@@ -58,7 +57,6 @@ else: room_fatigue=0.0
 rut_words={w for w,c in counts.most_common(10) if c>=2}
 def rut_overlap(text): return len(set(content_tokens(text)) & rut_words)
 
-# Natural short pauses remain possible, but the room cannot drift into hours of silence.
 HARD_SILENCE=3
 silent_before=max(0,int(state.get("silent_turns",0) or 0)); silence_pressure=max(0.0,min(1.0,silent_before/HARD_SILENCE)); hard_continuation=silent_before>=HARD_SILENCE
 repeat_limit=max(.46,min(.80,.64-.10*room_fatigue+.16*silence_pressure))
@@ -92,8 +90,6 @@ if votes>=required_votes:
         scored.append((score,p))
     chosen=max(scored,key=lambda x:x[0])[1]
 
-# Hard fallback after three silent room turns. Even here, malformed transcript echoes and
-# facilitator language are never published.
 if hard_continuation and not chosen:
     emergency=[]
     for p in raw_parts:
@@ -117,8 +113,6 @@ if chosen:
     d["spoken"]=int(d.get("spoken",0))+1; n=len(text.split()); old=float(d.get("response_length_ema",0) or 0); d["response_length_ema"]=round(n if old==0 else .88*old+.12*n,3); d["recent_activation"]=round(min(1,.72*float(d.get("recent_activation",.5))+.28),3)
     modes=d.setdefault("cognitive_modes",{"continue":0,"associate":0,"jump":0}); modes[mode]=int(modes.get(mode,0))+1
 
-    # Real forgetting: all learned topics decay every spoken turn. Immediate reuse builds
-    # short-lived fatigue, which suppresses a cue for a while without deleting the memory.
     tw=d.setdefault("topic_weights",{}); tf=d.setdefault("topic_fatigue",{})
     clean_tw={}
     for k,v in tw.items():
