@@ -37,7 +37,7 @@ jobs:
       - name: Keep all 12 cognitive nodes hot and publish every beat
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ROOM_RELAY_URL: ${{ vars.ROOM_RELAY_URL }}
+          ROOM_RELAY_URL: https://room-live-mirror.dfp6k69dw5.workers.dev
         run: |
           set -uo pipefail
           git config user.name "the-room"
