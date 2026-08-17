@@ -14,12 +14,10 @@ silence_pressure=max(0.0,min(1.0,(silent_streak-SOFT_SILENCE+1)/max(1,HARD_SILEN
 entity=minds["entities"][entity_id]; name=entity["name"]; g=entity["genome"]; d=entity.get("development",{})
 names={k:v["name"] for k,v in minds["entities"].items()}; peer_names=", ".join(v["name"] for k,v in minds["entities"].items() if k!=entity_id)
 
-# IQ is machinery-side cognitive capacity, not personality and not model-visible as a score.
 cognition_path=ROOT/"society/cognition.json"
 cognition=json.loads(cognition_path.read_text()) if cognition_path.is_file() else {"entities":{}}
 iq=int((cognition.get("entities",{}).get(entity_id,{}) or {}).get("iq",100)); iq=max(100,min(136,iq)); iq_scale=(iq-100)/36.0
 
-# Persistent adult background is lived context, never a personality instruction.
 profiles_path=ROOT/"society/human_profiles.json"
 profiles=json.loads(profiles_path.read_text()) if profiles_path.is_file() else {"entities":{}}
 profile=(profiles.get("entities",{}).get(entity_id,{}) or {})
@@ -28,10 +26,8 @@ human_context=f"{name} is {age} years old. Socioeconomic context: {ses}. {resour
 
 seed=int(hashlib.sha256(f"{run_id}:{entity_id}:{node_id}".encode()).hexdigest()[:8],16)&0x7fffffff; rng=random.Random(seed)
 
-# Conversation-language words are never treated as learned ideas. This prevents phrases
-# like "let's", names, or generic dialogue scaffolding from becoming pseudo-topics.
 STOP={
-    "that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","yours","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","done","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","wanted","make","making","made","start","starting","started","try","trying","tried","work","working","works","worked","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes","today","tonight","tomorrow","yesterday"
+    "that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","yours","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","done","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","wanted","make","making","made","start","starting","started","try","trying","tried","work","working","works","worked","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes","today","tonight","tomorrow","yesterday","different","together","fresh","interesting"
 }
 NAME_WORDS={w.lower() for v in names.values() for w in re.findall(r"[A-Za-z]+",v)}
 QUARANTINED_CUES={"previous","candidate","generic","repetitive","grounded","produce","generate","attempt","instruction"}|NAME_WORDS|STOP
@@ -51,8 +47,6 @@ def jac(a,b):
     if not a or not b:return 0.0
     return len(a&b)/len(a|b)
 
-# Detect a rut without naming a replacement subject. Repeated content words raise fatigue,
-# and the most repeated words become temporary avoidance signals only.
 fatigue_window=conversation[-12:]
 recent_content=[content_tokens(m.get("text","")) for m in fatigue_window]
 flat=[w for row in recent_content for w in set(row)]
@@ -65,8 +59,6 @@ if stored_fatigue:
     topic_fatigue=max(topic_fatigue,min(1.0,sum(sorted((float(v) for v in stored_fatigue.values()),reverse=True)[:3])/3.0))
 rut_words={w for w,c in counts.most_common(10) if c>=2}
 
-# Each node independently chooses a cognitive move. The genome changes probabilities,
-# not topics. Fatigue pushes outward.
 continue_w=max(.05, .78 + .55*g["attention_persistence"] + .32*g["imitation"] - .80*g["exploration"] - .95*topic_fatigue)
 associate_w=max(.05, .24 + .95*g["association_spread"] + .28*g["exploration"] + .72*topic_fatigue)
 jump_w=max(.03, .06 + .50*g["exploration"] + .52*g["novelty_weight"] - .18*g["attention_persistence"] + .88*topic_fatigue)
@@ -75,8 +67,6 @@ if r<weights[0]: cognitive_mode="continue"
 elif r<weights[0]+weights[1]: cognitive_mode="associate"
 else: cognitive_mode="jump"
 
-# Deep-rut jumps get no recent transcript at all. The local model was able to parrot a
-# three-turn context even when told to jump, so true detachment requires an empty local view.
 base_recent=7+int(round(3*iq_scale))
 if cognitive_mode=="jump": mode_recent=0 if topic_fatigue>=.58 else 1
 elif cognitive_mode=="associate": mode_recent=2 if topic_fatigue>=.72 else max(4,base_recent-2)
@@ -85,7 +75,6 @@ recent=[] if mode_recent==0 else conversation[-mode_recent:]
 last_text=str(recent[-1].get("text","") if recent else "")
 transcript="\n".join(f'{names.get(m.get("speaker"),m.get("speaker","?"))}: {m.get("text","")}' for m in recent)
 
-# Learned associations are sampled rather than repeatedly injecting the strongest ones.
 raw_weighted=[]
 for k,v in (d.get("topic_weights") or {}).items():
     key=str(k).lower().strip()
@@ -180,7 +169,9 @@ def forbidden_reason(text):
         if re.search(pat,low):return "prompt-echo"
     for m in recent:
         if " ".join(low.split())==" ".join(str(m.get("text","")).lower().split()) and low:return "exact-repeat"
-    overlap=len(set(content_tokens(text)) & rut_words)
+    semantic_content=content_tokens(text)
+    if cognitive_mode in {"jump","associate"} and not semantic_content:return "empty-lateral-content"
+    overlap=len(set(semantic_content) & rut_words)
     if topic_fatigue>=.72:
         if cognitive_mode=="jump" and overlap>0:return "jump-rut-overlap"
         if cognitive_mode=="associate" and overlap>=2:return "associate-rut-overlap"
@@ -231,10 +222,10 @@ try:
             candidate=clean_generation(request_local_model((seed+attempt*104729)&0x7fffffff))
             if not candidate:rejected.append("empty");continue
             sim=max_recent_similarity(candidate)
-            if natural_candidate(candidate) and sim<emergency_sim:
-                emergency=candidate; emergency_sim=sim
             reason=forbidden_reason(candidate)
             if reason:rejected.append(reason);continue
+            if natural_candidate(candidate) and sim<emergency_sim:
+                emergency=candidate; emergency_sim=sim
             text=candidate;break
         if text:
             nov=novelty(text); result["speak"]=True; result["text"]=text; result["topics"]=infer_topics(text); result["novelty"]=round(nov,4)
