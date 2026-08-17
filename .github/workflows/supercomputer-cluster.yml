@@ -31,7 +31,7 @@ concurrency:
 
 jobs:
   prepare:
-    name: Validate shared job
+    name: Resolve and validate shared job
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'issues' &&
@@ -49,7 +49,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
       - id: request
-        name: Validate and normalize request
+        name: Validate request and build semantic packet
         env:
           EVENT_NAME: ${{ github.event_name }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
@@ -61,6 +61,7 @@ jobs:
   compute:
     name: Node ${{ matrix.worker }}
     needs: prepare
+    continue-on-error: true
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -80,13 +81,15 @@ jobs:
           CLUSTER_REQUEST_B64: ${{ needs.prepare.outputs.request_b64 }}
         run: python3 scripts/cluster_worker.py
       - uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: cluster-part-${{ matrix.worker }}
           path: cluster_parts/*.json
           retention-days: 1
 
   aggregate:
-    name: Combine 12 nodes
+    name: Combine available nodes
+    if: ${{ always() && needs.prepare.result == 'success' }}
     needs: [prepare, compute]
     runs-on: ubuntu-latest
     steps:
@@ -147,5 +150,5 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           JOB_ID: ${{ needs.prepare.outputs.job_id }}
         run: |
-          gh issue comment "$ISSUE_NUMBER" --body "Shared Supercomputer job \`$JOB_ID\` completed across 12 nodes. The requesting app can now read its published result."
+          gh issue comment "$ISSUE_NUMBER" --body "Shared Supercomputer job \`$JOB_ID\` completed. The published result records how many of the 12 nodes participated."
           gh issue close "$ISSUE_NUMBER" --reason completed
