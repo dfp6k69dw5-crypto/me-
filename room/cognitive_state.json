@@ -2,17 +2,18 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.379,
+        "activation": 0.18,
         "attention": [
           "edges",
           "basic",
           "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
-          "underneath",
-          "changed"
+          "underneath"
         ]
       },
       "medium": {
@@ -21,11 +22,12 @@
           "basic",
           "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
-          "underneath",
-          "changed"
+          "underneath"
         ],
         "branch_interest": 0.64
       },
@@ -33,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0743,
-        "association": -0.0451,
-        "inhibition": -0.1613,
-        "social": -0.1831
+        "activation": -0.1252,
+        "association": -0.1863,
+        "inhibition": -0.1015,
+        "social": -0.1369
       },
       "room_memories": [
-        {
-          "source": "20260817T190527045-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Somewhere new, but I want enough time there to stop feeling like a visitor.",
-          "discourse": "d-20260817T190527045-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190527045-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Somewhere new. I like having to figure the place out as I go.",
-          "discourse": "d-20260817T190527045-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190527045-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Somewhere new. I would rather be a little disoriented than bored.",
-          "discourse": "d-20260817T190527045-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190527045-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What do you like about being somewhere unfamiliar?",
-          "discourse": "d-20260817T190527045-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190527045-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
         {
           "source": "20260817T190529147-sarah-v4",
           "status": "observed",
@@ -1838,18 +1800,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002758"
+        },
+        {
+          "source": "20260817T190701867-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "The stranger and more sideways it is, the better.",
+          "discourse": "d-20260817T190701867-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190701867-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701867-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Anything quick and a little shameless, as long as it is not cruel.",
+          "discourse": "d-20260817T190701867-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190701867-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701867-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Dry humor. I like it when nobody has to announce the joke.",
+          "discourse": "d-20260817T190701867-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190701867-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701868-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T190701868-sarah-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190701867-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T190028787-sarah-v4",
-          "text": "I like a loose plan and then room to change it.",
-          "move": "self_disclosure",
-          "memory": "20260817T190028787-sarah-v4",
-          "branch_memory": "20260817T190028787-sarah-v4",
-          "discourse": "d-20260817T190028787-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002579"
-        },
         {
           "source": "20260817T190031009-sarah-v4",
           "text": "That gives me a more specific picture of how you think.",
@@ -3460,22 +3453,24 @@
           "branch_memory": "20260817T190653913-sarah-v4",
           "discourse": "d-20260817T190658410-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002758"
+        },
+        {
+          "source": "20260817T190701868-sarah-v4",
+          "text": "How did you land on that?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T190701867-jules-v4",
+          "discourse": "d-20260817T190701868-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
         }
       ],
-      "last_event": "20260817T190658411-mara-v4",
-      "spoken": 2743,
+      "last_event": "20260817T190701868-sarah-v4",
+      "spoken": 2744,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T190035470-mara-v4",
-              "status": "reported",
-              "text": "Having one conversation that makes the day feel less ordinary than it started.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T190035470-mara-v4"
-            },
             {
               "source": "20260817T190043843-mara-v4",
               "status": "reported",
@@ -4098,19 +4093,19 @@
               "text": "Somewhere new. I like having to figure the place out as I go.",
               "branch_owner": "mara",
               "branch_memory": "20260817T190653913-mara-v4"
+            },
+            {
+              "source": "20260817T190701867-mara-v4",
+              "status": "reported",
+              "text": "Anything quick and a little shameless, as long as it is not cruel.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T190701867-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185615078-owen-v4",
-              "status": "reported",
-              "text": "A problem with a clear shape that I can actually get somewhere with.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T185615078-owen-v4"
-            },
             {
               "source": "20260817T185617573-owen-v4",
               "status": "reported",
@@ -4733,19 +4728,19 @@
               "text": "Because consistency is harder to fake over time than confidence is.",
               "branch_owner": "owen",
               "branch_memory": "20260817T190635595-owen-v4"
+            },
+            {
+              "source": "20260817T190701867-owen-v4",
+              "status": "reported",
+              "text": "Dry humor. I like it when nobody has to announce the joke.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T190701867-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T190009934-jules-v4",
-              "status": "reported",
-              "text": "Finding something interesting enough that I forget I was trying to have a good day.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T190009934-jules-v4"
-            },
             {
               "source": "20260817T190016171-jules-v4",
               "status": "reported",
@@ -5368,6 +5363,13 @@
               "text": "Somewhere new. I would rather be a little disoriented than bored.",
               "branch_owner": "jules",
               "branch_memory": "20260817T190653913-jules-v4"
+            },
+            {
+              "source": "20260817T190701867-jules-v4",
+              "status": "reported",
+              "text": "The stranger and more sideways it is, the better.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T190701867-jules-v4"
             }
           ]
         }
@@ -5375,18 +5377,18 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.216,
+        "activation": 0.289,
         "attention": [
           "edges",
           "basic",
           "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
-          "underneath",
-          "changed",
-          "improvise"
+          "underneath"
         ]
       },
       "medium": {
@@ -5395,12 +5397,12 @@
           "basic",
           "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
-          "underneath",
-          "changed",
-          "improvise"
+          "underneath"
         ],
         "branch_interest": 0.528
       },
@@ -5408,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0849,
-        "association": -0.1463,
-        "inhibition": 0.21,
-        "social": -0.054
+        "activation": 0.0567,
+        "association": -0.0988,
+        "inhibition": 0.0107,
+        "social": 0.0026
       },
       "room_memories": [
-        {
-          "source": "20260817T190527045-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Somewhere new, but I want enough time there to stop feeling like a visitor.",
-          "discourse": "d-20260817T190527045-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190527045-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Somewhere new. I like having to figure the place out as I go.",
-          "discourse": "d-20260817T190527045-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190527045-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Somewhere new. I would rather be a little disoriented than bored.",
-          "discourse": "d-20260817T190527045-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190527045-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What do you like about being somewhere unfamiliar?",
-          "discourse": "d-20260817T190527045-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190527045-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
         {
           "source": "20260817T190529147-sarah-v4",
           "status": "observed",
@@ -7213,18 +7175,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002758"
+        },
+        {
+          "source": "20260817T190701867-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "The stranger and more sideways it is, the better.",
+          "discourse": "d-20260817T190701867-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190701867-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701867-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Anything quick and a little shameless, as long as it is not cruel.",
+          "discourse": "d-20260817T190701867-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190701867-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701867-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Dry humor. I like it when nobody has to announce the joke.",
+          "discourse": "d-20260817T190701867-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190701867-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701868-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T190701868-sarah-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190701867-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T190028788-mara-v4",
-          "text": "Has that changed much for you?",
-          "move": "follow_up",
-          "memory": null,
-          "branch_memory": "20260817T190028787-owen-v4",
-          "discourse": "d-20260817T190028788-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002579"
-        },
         {
           "source": "20260817T190031009-mara-v4",
           "text": "Has that changed much for you?",
@@ -8835,10 +8828,19 @@
           "branch_memory": null,
           "discourse": "d-20260817T190658411-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002758"
+        },
+        {
+          "source": "20260817T190701867-mara-v4",
+          "text": "Anything quick and a little shameless, as long as it is not cruel.",
+          "move": "self_disclosure",
+          "memory": "20260817T190701867-mara-v4",
+          "branch_memory": "20260817T190701867-mara-v4",
+          "discourse": "d-20260817T190701867-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
         }
       ],
-      "last_event": "20260817T190658411-mara-v4",
-      "spoken": 2747,
+      "last_event": "20260817T190701868-sarah-v4",
+      "spoken": 2748,
       "silences": 0,
       "people": {
         "sarah": {
@@ -9480,13 +9482,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T185615078-owen-v4",
-              "status": "reported",
-              "text": "A problem with a clear shape that I can actually get somewhere with.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T185615078-owen-v4"
-            },
-            {
               "source": "20260817T185617573-owen-v4",
               "status": "reported",
               "text": "Because constraints give me something I can test instead of just argue about.",
@@ -10108,19 +10103,19 @@
               "text": "Because consistency is harder to fake over time than confidence is.",
               "branch_owner": "owen",
               "branch_memory": "20260817T190635595-owen-v4"
+            },
+            {
+              "source": "20260817T190701867-owen-v4",
+              "status": "reported",
+              "text": "Dry humor. I like it when nobody has to announce the joke.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T190701867-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T190009934-jules-v4",
-              "status": "reported",
-              "text": "Finding something interesting enough that I forget I was trying to have a good day.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T190009934-jules-v4"
-            },
             {
               "source": "20260817T190016171-jules-v4",
               "status": "reported",
@@ -10743,6 +10738,13 @@
               "text": "Somewhere new. I would rather be a little disoriented than bored.",
               "branch_owner": "jules",
               "branch_memory": "20260817T190653913-jules-v4"
+            },
+            {
+              "source": "20260817T190701867-jules-v4",
+              "status": "reported",
+              "text": "The stranger and more sideways it is, the better.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T190701867-jules-v4"
             }
           ]
         }
@@ -10750,18 +10752,18 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.232,
+        "activation": 0.293,
         "attention": [
           "edges",
           "basic",
           "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
-          "underneath",
-          "changed",
-          "substantially"
+          "underneath"
         ]
       },
       "medium": {
@@ -10770,12 +10772,12 @@
           "basic",
           "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
-          "underneath",
-          "changed",
-          "substantially"
+          "underneath"
         ],
         "branch_interest": 0.62
       },
@@ -10783,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0522,
-        "association": 0.0892,
-        "inhibition": 0.0224,
-        "social": 0.1449
+        "activation": 0.0475,
+        "association": 0.0293,
+        "inhibition": 0.0313,
+        "social": 0.25
       },
       "room_memories": [
-        {
-          "source": "20260817T190527045-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Somewhere new, but I want enough time there to stop feeling like a visitor.",
-          "discourse": "d-20260817T190527045-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190527045-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Somewhere new. I like having to figure the place out as I go.",
-          "discourse": "d-20260817T190527045-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190527045-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Somewhere new. I would rather be a little disoriented than bored.",
-          "discourse": "d-20260817T190527045-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190527045-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What do you like about being somewhere unfamiliar?",
-          "discourse": "d-20260817T190527045-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190527045-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
         {
           "source": "20260817T190529147-sarah-v4",
           "status": "observed",
@@ -12588,18 +12550,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002758"
+        },
+        {
+          "source": "20260817T190701867-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "The stranger and more sideways it is, the better.",
+          "discourse": "d-20260817T190701867-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190701867-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701867-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Anything quick and a little shameless, as long as it is not cruel.",
+          "discourse": "d-20260817T190701867-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190701867-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701867-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Dry humor. I like it when nobody has to announce the joke.",
+          "discourse": "d-20260817T190701867-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190701867-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701868-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T190701868-sarah-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190701867-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T190028787-owen-v4",
-          "text": "I plan first. I relax more when I know the shape of what I am doing.",
-          "move": "answer",
-          "memory": "20260817T190028787-owen-v4",
-          "branch_memory": "20260817T190028787-owen-v4",
-          "discourse": "d-20260817T190028787-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002579"
-        },
         {
           "source": "20260817T190031009-owen-v4",
           "text": "Not substantially. I have more exceptions now, but the rule still fits.",
@@ -14210,10 +14203,19 @@
           "branch_memory": "20260817T190653913-sarah-v4",
           "discourse": "d-20260817T190658411-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002758"
+        },
+        {
+          "source": "20260817T190701867-owen-v4",
+          "text": "Dry humor. I like it when nobody has to announce the joke.",
+          "move": "self_disclosure",
+          "memory": "20260817T190701867-owen-v4",
+          "branch_memory": "20260817T190701867-owen-v4",
+          "discourse": "d-20260817T190701867-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
         }
       ],
-      "last_event": "20260817T190658411-mara-v4",
-      "spoken": 2742,
+      "last_event": "20260817T190701868-sarah-v4",
+      "spoken": 2743,
       "silences": 0,
       "people": {
         "sarah": {
@@ -14855,13 +14857,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T190035470-mara-v4",
-              "status": "reported",
-              "text": "Having one conversation that makes the day feel less ordinary than it started.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T190035470-mara-v4"
-            },
-            {
               "source": "20260817T190043843-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
@@ -15483,19 +15478,19 @@
               "text": "Somewhere new. I like having to figure the place out as I go.",
               "branch_owner": "mara",
               "branch_memory": "20260817T190653913-mara-v4"
+            },
+            {
+              "source": "20260817T190701867-mara-v4",
+              "status": "reported",
+              "text": "Anything quick and a little shameless, as long as it is not cruel.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T190701867-mara-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T190009934-jules-v4",
-              "status": "reported",
-              "text": "Finding something interesting enough that I forget I was trying to have a good day.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T190009934-jules-v4"
-            },
             {
               "source": "20260817T190016171-jules-v4",
               "status": "reported",
@@ -16118,6 +16113,13 @@
               "text": "Somewhere new. I would rather be a little disoriented than bored.",
               "branch_owner": "jules",
               "branch_memory": "20260817T190653913-jules-v4"
+            },
+            {
+              "source": "20260817T190701867-jules-v4",
+              "status": "reported",
+              "text": "The stranger and more sideways it is, the better.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T190701867-jules-v4"
             }
           ]
         }
@@ -16125,18 +16127,18 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.336,
+        "activation": 0.397,
         "attention": [
           "edges",
           "basic",
           "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
-          "underneath",
-          "changed",
-          "open-ended"
+          "underneath"
         ]
       },
       "medium": {
@@ -16145,12 +16147,12 @@
           "basic",
           "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
-          "underneath",
-          "changed",
-          "open-ended"
+          "underneath"
         ],
         "branch_interest": 0.56
       },
@@ -16158,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0452,
-        "association": 0.1159,
-        "inhibition": 0.0585,
-        "social": 0.2382
+        "activation": 0.1682,
+        "association": 0.0807,
+        "inhibition": 0.0134,
+        "social": 0.2034
       },
       "room_memories": [
-        {
-          "source": "20260817T190527045-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Somewhere new, but I want enough time there to stop feeling like a visitor.",
-          "discourse": "d-20260817T190527045-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190527045-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Somewhere new. I like having to figure the place out as I go.",
-          "discourse": "d-20260817T190527045-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190527045-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Somewhere new. I would rather be a little disoriented than bored.",
-          "discourse": "d-20260817T190527045-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190527045-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
-        {
-          "source": "20260817T190527045-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What do you like about being somewhere unfamiliar?",
-          "discourse": "d-20260817T190527045-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190527045-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002714"
-        },
         {
           "source": "20260817T190529147-sarah-v4",
           "status": "observed",
@@ -17963,18 +17925,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002758"
+        },
+        {
+          "source": "20260817T190701867-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "The stranger and more sideways it is, the better.",
+          "discourse": "d-20260817T190701867-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190701867-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701867-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Anything quick and a little shameless, as long as it is not cruel.",
+          "discourse": "d-20260817T190701867-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190701867-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701867-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Dry humor. I like it when nobody has to announce the joke.",
+          "discourse": "d-20260817T190701867-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190701867-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
+        },
+        {
+          "source": "20260817T190701868-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T190701868-sarah-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190701867-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T190028787-jules-v4",
-          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
-          "move": "self_disclosure",
-          "memory": "20260817T190028787-jules-v4",
-          "branch_memory": "20260817T190028787-jules-v4",
-          "discourse": "d-20260817T190028787-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002579"
-        },
         {
           "source": "20260817T190031009-jules-v4",
           "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
@@ -19585,10 +19578,19 @@
           "branch_memory": "20260817T190653913-sarah-v4",
           "discourse": "d-20260817T190658411-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002758"
+        },
+        {
+          "source": "20260817T190701867-jules-v4",
+          "text": "The stranger and more sideways it is, the better.",
+          "move": "answer",
+          "memory": "20260817T190701867-jules-v4",
+          "branch_memory": "20260817T190701867-jules-v4",
+          "discourse": "d-20260817T190701867-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002759"
         }
       ],
-      "last_event": "20260817T190658411-mara-v4",
-      "spoken": 2743,
+      "last_event": "20260817T190701868-sarah-v4",
+      "spoken": 2744,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20230,13 +20232,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T190035470-mara-v4",
-              "status": "reported",
-              "text": "Having one conversation that makes the day feel less ordinary than it started.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T190035470-mara-v4"
-            },
-            {
               "source": "20260817T190043843-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
@@ -20858,19 +20853,19 @@
               "text": "Somewhere new. I like having to figure the place out as I go.",
               "branch_owner": "mara",
               "branch_memory": "20260817T190653913-mara-v4"
+            },
+            {
+              "source": "20260817T190701867-mara-v4",
+              "status": "reported",
+              "text": "Anything quick and a little shameless, as long as it is not cruel.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T190701867-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185615078-owen-v4",
-              "status": "reported",
-              "text": "A problem with a clear shape that I can actually get somewhere with.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T185615078-owen-v4"
-            },
             {
               "source": "20260817T185617573-owen-v4",
               "status": "reported",
@@ -21493,6 +21488,13 @@
               "text": "Because consistency is harder to fake over time than confidence is.",
               "branch_owner": "owen",
               "branch_memory": "20260817T190635595-owen-v4"
+            },
+            {
+              "source": "20260817T190701867-owen-v4",
+              "status": "reported",
+              "text": "Dry humor. I like it when nobody has to announce the joke.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T190701867-owen-v4"
             }
           ]
         }
