@@ -21,6 +21,7 @@ SERVICE=[r"\bhow can i help\b",r"\bhow may i help\b",r"\bwhat can i do for you\b
 META=[r"\bif [a-z]+ has something to say\b",r"\b[a-z]+ could say\b",r"\boutput only\b",r"\brecent room speech\b",r"\bprevious candidate\b",r"\btoo generic or repetitive\b",r"\btry another natural line\b",r"\bdiffer substantially from the first attempt\b",r"\bselected earlier memories\b",r"\bpersistent adult background\b",r"\bcognitive move\b"]
 STOP={"that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","make","making","start","starting","try","trying","work","working","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes"}
 name_words={w.lower() for v in minds["entities"].values() for w in re.findall(r"[A-Za-z]+",v["name"])}
+speaker_label_re=re.compile(r"(?im)(?:^|\n)\s*(?:"+"|".join(re.escape(v["name"]) for v in minds["entities"].values())+r")\s*:")
 
 def toks(t): return set(re.findall(r"[a-z0-9']+",(t or "").lower()))
 def jac(a,b):
@@ -41,29 +42,38 @@ def meaningful_topic(topic):
 
 def core_forbidden(text):
     low=(text or "").lower().strip()
-    return (not low) or any(re.search(p,low) for p in SERVICE+META)
+    return (not low) or bool(speaker_label_re.search(text or "")) or any(re.search(p,low) for p in SERVICE+META)
 def exact_recent(text):
     n=norm(text)
     return bool(n) and any(n==norm(m.get("text","")) for m in conversation[-14:])
 def recent_similarity(text): return max((jac(text,m.get("text","")) for m in conversation[-10:]),default=0.0)
 
-# Approximate topic concentration in the recent room. This is not a topic selector; it
-# only measures whether the room is circling the same language/concepts too tightly.
-window=conversation[-12:]; flat=[w for m in window for w in set(content_tokens(m.get("text","")))]
+# Measure whether the recent room has collapsed around a small repeated vocabulary.
+# These words are used only as a temporary rejection signal; they never supply a new topic.
+window=conversation[-12:]; flat=[w for m in window for w in set(content_tokens(m.get("text","")))]; counts=Counter(flat)
 if flat:
-    counts=Counter(flat); repeated=sum(c-1 for c in counts.values() if c>1); room_fatigue=max(0.0,min(1.0,repeated/max(4,len(window)*1.6)))
+    repeated=sum(c-1 for c in counts.values() if c>1); room_fatigue=max(0.0,min(1.0,repeated/max(4,len(window)*1.6)))
 else: room_fatigue=0.0
+rut_words={w for w,c in counts.most_common(10) if c>=2}
+def rut_overlap(text): return len(set(content_tokens(text)) & rut_words)
 
 # Natural short pauses remain possible, but the room cannot drift into hours of silence.
 HARD_SILENCE=3
 silent_before=max(0,int(state.get("silent_turns",0) or 0)); silence_pressure=max(0.0,min(1.0,silent_before/HARD_SILENCE)); hard_continuation=silent_before>=HARD_SILENCE
 repeat_limit=max(.46,min(.80,.64-.10*room_fatigue+.16*silence_pressure))
 
-def forbidden(text):
+def forbidden(text,mode="continue"):
     if core_forbidden(text) or exact_recent(text): return True
+    overlap=rut_overlap(text)
+    if room_fatigue>=.72:
+        if mode=="jump" and overlap>0: return True
+        if mode=="associate" and overlap>=2: return True
     return recent_similarity(text)>=repeat_limit
 
-parts=[p for p in raw_parts if not forbidden(str(p.get("text","") or ""))]
+parts=[]
+for p in raw_parts:
+    text=str(p.get("text","") or ""); mode=str(p.get("cognitive_mode","continue"))
+    if not forbidden(text,mode): parts.append(p)
 now=datetime.now(timezone.utc); stamp=now.isoformat().replace("+00:00","Z")
 state["attempts"]=int(state.get("attempts",0))+1; state["last_run"]=stamp; d["turns"]=int(d.get("turns",0))+1
 speakers=[p for p in parts if p.get("speak") and str(p.get("text","")).strip()]; votes=len(speakers); chosen=None; emergency_used=False
@@ -74,23 +84,27 @@ if votes>=required_votes:
     for p in speakers:
         text=p["text"]; recent_sim=recent_similarity(text); novelty=float(p.get("novelty",max(0,1-recent_sim))); relevance=min(1.0,3.0*jac(text,last_text)) if last_text else 0.5
         others=[q for q in speakers if q is not p]; diversity=1.0-(sum(jac(text,q["text"]) for q in others)/len(others) if others else 0.0); sal=float(p.get("salience",0.5)); mode=str(p.get("cognitive_mode","continue"))
-        # Relevance matters when a thread is healthy. As the room becomes repetitive,
-        # relevance loses power and independent/lateral candidates gain power.
         relevance_w=.28*(1.0-room_fatigue); diversity_w=.15+.18*room_fatigue; novelty_w=.32+.10*room_fatigue
-        mode_bonus=room_fatigue*({"continue":-.05,"associate":.08,"jump":.13}.get(mode,0.0))
-        score=novelty_w*novelty+.22*sal+relevance_w*relevance+diversity_w*diversity+mode_bonus
+        mode_bonus=room_fatigue*({"continue":-.05,"associate":.08,"jump":.16}.get(mode,0.0))
+        rut_penalty=room_fatigue*.10*rut_overlap(text)
+        score=novelty_w*novelty+.22*sal+relevance_w*relevance+diversity_w*diversity+mode_bonus-rut_penalty
         scored.append((score,p))
     chosen=max(scored,key=lambda x:x[0])[1]
 
-# Hard fallback after three silent room turns: use the least repetitive generated line.
+# Hard fallback after three silent room turns. Even here, malformed transcript echoes are
+# never published, and a jump/association that escaped the current rut is preferred.
 if hard_continuation and not chosen:
     emergency=[]
     for p in raw_parts:
-        e=p.get("emergency_candidate") or {}; text=str(e.get("text","") or "").strip()
+        e=p.get("emergency_candidate") or {}; text=str(e.get("text","") or "").strip(); mode=str(e.get("cognitive_mode") or p.get("cognitive_mode","continue"))
         if not text or core_forbidden(text): continue
-        sim=recent_similarity(text); emergency.append((sim,p,e))
+        overlap=rut_overlap(text)
+        if room_fatigue>=.72 and ((mode=="jump" and overlap>0) or (mode=="associate" and overlap>=2)): continue
+        sim=recent_similarity(text)
+        mode_cost={"jump":-.16,"associate":-.05,"continue":.10}.get(mode,0.0)*room_fatigue
+        emergency.append((sim+.11*overlap+mode_cost,p,e))
     if emergency:
-        sim,p,e=min(emergency,key=lambda x:x[0])
+        _,p,e=min(emergency,key=lambda x:x[0]); sim=recent_similarity(str(e.get("text","") or ""))
         chosen={"node":p.get("node",0),"text":e.get("text",""),"topics":e.get("topics") or [],"novelty":float(e.get("novelty",max(0,1-sim))),"salience":0.45,"cognitive_mode":e.get("cognitive_mode") or p.get("cognitive_mode","continue")}; emergency_used=True
 
 if chosen:
@@ -141,7 +155,6 @@ else:
 for eid,other in minds["entities"].items():
     if eid!=entity_id:
         od=other.setdefault("development",{}); od["recent_activation"]=round(max(0,.97*float(od.get("recent_activation",.5))),3)
-        # Fatigue is short-lived for minds not currently speaking too.
         if od.get("topic_fatigue"):
             od["topic_fatigue"]={k:round(float(v)*.88,4) for k,v in od["topic_fatigue"].items() if float(v)*.88>.025}
 conversation=conversation[-360:]
