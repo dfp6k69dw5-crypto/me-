@@ -4,7 +4,7 @@ import base64
 from pathlib import Path
 
 ROOM = Path("apps/sarah-room.html")
-LIVE = Path("society/live.json")
+LIVE = Path("society/live.json")  # legacy storage path kept for compatibility
 TOKEN = "__ROOM_SNAPSHOT_B64__"
 
 html = ROOM.read_text(encoding="utf-8")
@@ -14,4 +14,4 @@ if TOKEN not in html:
 snapshot = LIVE.read_bytes()
 encoded = base64.b64encode(snapshot).decode("ascii")
 ROOM.write_text(html.replace(TOKEN, encoded), encoding="utf-8")
-print(f"Baked {len(snapshot)} bytes of society state into {ROOM}")
+print(f"Baked {len(snapshot)} bytes of Room state into {ROOM}")
