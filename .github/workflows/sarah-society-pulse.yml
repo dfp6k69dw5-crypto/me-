@@ -24,35 +24,81 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
 
-          # Keep one Room beat in flight at a time. As soon as it finishes,
-          # dispatch the next one. This avoids flooding the concurrency queue
-          # with one-minute dispatches that GitHub then cancels/replaces.
+          # One Room beat at a time. A successful beat is followed immediately
+          # by the next. GitHub 429/5xx errors are treated as temporary pressure,
+          # never as a reason for the conversation to die.
           stop_at=$((SECONDS + 19800))
+          api_backoff=15
+          last_cooled_failure=""
+
           while [ "$SECONDS" -lt "$stop_at" ]; do
-            active="$(gh run list \
+            runs="$(gh run list \
               --repo "$GITHUB_REPOSITORY" \
               --workflow sarah-society.yml \
-              --limit 20 \
-              --json status \
-              --jq '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending" or .status == "waiting")] | length')"
+              --limit 1 \
+              --json databaseId,status,conclusion 2>/tmp/room-gh-error)"
+            rc=$?
 
-            if [ "$active" = "0" ]; then
-              echo "Room is free; dispatching the next conversational beat"
-              gh workflow run sarah-society.yml \
-                --repo "$GITHUB_REPOSITORY" \
-                --ref main \
-                -f entity=auto
-              # Give the newly dispatched run time to appear in the Actions API.
+            if [ "$rc" -ne 0 ]; then
+              echo "GitHub Actions API is temporarily unavailable; retrying in ${api_backoff}s"
+              cat /tmp/room-gh-error || true
+              sleep "$api_backoff"
+              api_backoff=$((api_backoff * 2))
+              [ "$api_backoff" -gt 120 ] && api_backoff=120
+              continue
+            fi
+
+            api_backoff=15
+            latest_id="$(printf '%s' "$runs" | jq -r '.[0].databaseId // empty')"
+            latest_status="$(printf '%s' "$runs" | jq -r '.[0].status // "none"')"
+            latest_conclusion="$(printf '%s' "$runs" | jq -r '.[0].conclusion // ""')"
+
+            case "$latest_status" in
+              in_progress|queued|pending|waiting|requested)
+                echo "Room beat $latest_id is still running; checking again shortly"
+                sleep 8
+                continue
+                ;;
+            esac
+
+            # If GitHub itself caused a beat to fail (runner/action download/etc.),
+            # give the platform room to recover once before retrying.
+            if [ -n "$latest_id" ] && [ "$latest_conclusion" != "success" ] && [ "$latest_id" != "$last_cooled_failure" ]; then
+              echo "Room beat $latest_id ended '$latest_conclusion'; cooling down for 90s before retry"
+              last_cooled_failure="$latest_id"
+              sleep 90
+              continue
+            fi
+
+            echo "Room is free; dispatching the next conversational beat"
+            if gh workflow run sarah-society.yml \
+              --repo "$GITHUB_REPOSITORY" \
+              --ref main \
+              -f entity=auto; then
+              # Give the new run enough time to become visible in the Actions API.
               sleep 12
             else
-              echo "Room beat still running; checking again shortly"
-              sleep 8
+              echo "GitHub refused the dispatch temporarily; backing off for ${api_backoff}s"
+              sleep "$api_backoff"
+              api_backoff=$((api_backoff * 2))
+              [ "$api_backoff" -gt 120 ] && api_backoff=120
             fi
           done
 
           echo "Handing The Room pulse to a fresh GitHub runner"
-          gh workflow run sarah-society-pulse.yml \
-            --repo "$GITHUB_REPOSITORY" \
-            --ref main
+          for attempt in 1 2 3 4 5; do
+            if gh workflow run sarah-society-pulse.yml \
+              --repo "$GITHUB_REPOSITORY" \
+              --ref main; then
+              exit 0
+            fi
+            echo "Pulse handoff attempt $attempt failed; retrying in 30s"
+            sleep 30
+          done
+
+          # The 5-minute watchdog is the final safety net if GitHub rejects
+          # every handoff attempt during an outage.
+          echo "Pulse handoff unavailable; watchdog will restart the chain"
+          exit 0
