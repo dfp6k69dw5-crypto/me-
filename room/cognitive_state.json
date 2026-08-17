@@ -2,15 +2,15 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.4,
+        "activation": 0.257,
         "attention": [
-          "tend",
-          "trust",
-          "patterns",
-          "first",
-          "impressions",
+          "edges",
+          "basic",
+          "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
           "underneath"
@@ -18,13 +18,13 @@
       },
       "medium": {
         "topics": [
-          "tend",
-          "trust",
-          "patterns",
-          "first",
-          "impressions",
+          "edges",
+          "basic",
+          "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
           "underneath"
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1034,
-        "association": 0.1932,
-        "inhibition": -0.0009,
-        "social": 0.0558
+        "activation": -0.0113,
+        "association": 0.1814,
+        "inhibition": 0.0031,
+        "social": 0.1307
       },
       "room_memories": [
-        {
-          "source": "20260817T190109864-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "How they treat people when there is nothing to gain from it.",
-          "discourse": "d-20260817T190109864-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190109864-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109864-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Consistency. I trust people more when what they do keeps matching what they say.",
-          "discourse": "d-20260817T190109864-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190109864-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109864-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-          "discourse": "d-20260817T190109864-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190109864-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109865-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T190109865-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190109864-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
         {
           "source": "20260817T190111849-mara-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002641"
+        },
+        {
+          "source": "20260817T190249133-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
+          "discourse": "d-20260817T190249133-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190249133-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "How they treat people when there is nothing to gain from it.",
+          "discourse": "d-20260817T190249133-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190249133-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Consistency. I trust people more when what they do keeps matching what they say.",
+          "discourse": "d-20260817T190249133-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T190249133-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "What makes that signal matter to you?",
+          "discourse": "d-20260817T190249133-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190249133-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T185602529-sarah-v4",
-          "text": "One where somebody says something precise enough that it changes how I was thinking.",
-          "move": "self_disclosure",
-          "memory": "20260817T185602529-sarah-v4",
-          "branch_memory": "20260817T185602529-sarah-v4",
-          "discourse": "d-20260817T185602529-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002462"
-        },
         {
           "source": "20260817T185604660-sarah-v4",
           "text": "That gives me a more specific picture of how you think.",
@@ -3462,22 +3453,24 @@
           "branch_memory": "20260817T190241861-sarah-v4",
           "discourse": "d-20260817T190245974-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002641"
+        },
+        {
+          "source": "20260817T190249133-sarah-v4",
+          "text": "Consistency. I trust people more when what they do keeps matching what they say.",
+          "move": "self_disclosure",
+          "memory": "20260817T190249133-sarah-v4",
+          "branch_memory": "20260817T190249133-sarah-v4",
+          "discourse": "d-20260817T190249133-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
         }
       ],
-      "last_event": "20260817T190245974-mara-v4",
-      "spoken": 2626,
+      "last_event": "20260817T190249133-owen-v4",
+      "spoken": 2627,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185634383-mara-v4",
-              "status": "reported",
-              "text": "Anything quick and a little shameless, as long as it is not cruel.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T185634383-mara-v4"
-            },
             {
               "source": "20260817T185641479-mara-v4",
               "status": "reported",
@@ -4100,6 +4093,13 @@
               "text": "Busy, as long as it feels alive instead of chaotic.",
               "branch_owner": "mara",
               "branch_memory": "20260817T190241861-mara-v4"
+            },
+            {
+              "source": "20260817T190249133-mara-v4",
+              "status": "reported",
+              "text": "How they treat people when there is nothing to gain from it.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T190249133-mara-v4"
             }
           ]
         },
@@ -4742,13 +4742,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T185517116-jules-v4",
-              "status": "reported",
-              "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T185517116-jules-v4"
-            },
-            {
               "source": "20260817T185523501-jules-v4",
               "status": "reported",
               "text": "Anything that keeps producing weird connections faster than I can follow them.",
@@ -5370,6 +5363,13 @@
               "text": "Busy enough that something unexpected can happen.",
               "branch_owner": "jules",
               "branch_memory": "20260817T190241861-jules-v4"
+            },
+            {
+              "source": "20260817T190249133-jules-v4",
+              "status": "reported",
+              "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T190249133-jules-v4"
             }
           ]
         }
@@ -5377,15 +5377,15 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.205,
+        "activation": 0.267,
         "attention": [
-          "tend",
-          "trust",
-          "patterns",
-          "first",
-          "impressions",
+          "edges",
+          "basic",
+          "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
           "underneath"
@@ -5393,13 +5393,13 @@
       },
       "medium": {
         "topics": [
-          "tend",
-          "trust",
-          "patterns",
-          "first",
-          "impressions",
+          "edges",
+          "basic",
+          "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
           "underneath"
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1116,
-        "association": -0.1671,
-        "inhibition": 0.023,
-        "social": -0.2232
+        "activation": -0.0119,
+        "association": -0.0184,
+        "inhibition": 0.0434,
+        "social": -0.0991
       },
       "room_memories": [
-        {
-          "source": "20260817T190109864-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "How they treat people when there is nothing to gain from it.",
-          "discourse": "d-20260817T190109864-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190109864-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109864-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Consistency. I trust people more when what they do keeps matching what they say.",
-          "discourse": "d-20260817T190109864-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190109864-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109864-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-          "discourse": "d-20260817T190109864-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190109864-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109865-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T190109865-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190109864-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
         {
           "source": "20260817T190111849-mara-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002641"
+        },
+        {
+          "source": "20260817T190249133-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
+          "discourse": "d-20260817T190249133-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190249133-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "How they treat people when there is nothing to gain from it.",
+          "discourse": "d-20260817T190249133-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190249133-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Consistency. I trust people more when what they do keeps matching what they say.",
+          "discourse": "d-20260817T190249133-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T190249133-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "What makes that signal matter to you?",
+          "discourse": "d-20260817T190249133-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190249133-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T185602529-mara-v4",
-          "text": "One where people actually reveal something instead of staying polite the whole time.",
-          "move": "answer",
-          "memory": "20260817T185602529-mara-v4",
-          "branch_memory": "20260817T185602529-mara-v4",
-          "discourse": "d-20260817T185602529-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002462"
-        },
         {
           "source": "20260817T185604660-mara-v4",
           "text": "Because I notice what people do when they stop performing for everybody else.",
@@ -8837,22 +8828,24 @@
           "branch_memory": null,
           "discourse": "d-20260817T190245974-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002641"
+        },
+        {
+          "source": "20260817T190249133-mara-v4",
+          "text": "How they treat people when there is nothing to gain from it.",
+          "move": "self_disclosure",
+          "memory": "20260817T190249133-mara-v4",
+          "branch_memory": "20260817T190249133-mara-v4",
+          "discourse": "d-20260817T190249133-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
         }
       ],
-      "last_event": "20260817T190245974-mara-v4",
-      "spoken": 2630,
+      "last_event": "20260817T190249133-owen-v4",
+      "spoken": 2631,
       "silences": 0,
       "people": {
         "sarah": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185444006-sarah-v4",
-              "status": "reported",
-              "text": "Consistency. I trust people more when what they do keeps matching what they say.",
-              "branch_owner": "sarah",
-              "branch_memory": "20260817T185444006-sarah-v4"
-            },
             {
               "source": "20260817T185446426-sarah-v4",
               "status": "reported",
@@ -9475,6 +9468,13 @@
               "text": "A little around the edges, but the basic preference is still there.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T190241861-sarah-v4"
+            },
+            {
+              "source": "20260817T190249133-sarah-v4",
+              "status": "reported",
+              "text": "Consistency. I trust people more when what they do keeps matching what they say.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T190249133-sarah-v4"
             }
           ]
         },
@@ -10117,13 +10117,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T185517116-jules-v4",
-              "status": "reported",
-              "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T185517116-jules-v4"
-            },
-            {
               "source": "20260817T185523501-jules-v4",
               "status": "reported",
               "text": "Anything that keeps producing weird connections faster than I can follow them.",
@@ -10745,6 +10738,13 @@
               "text": "Busy enough that something unexpected can happen.",
               "branch_owner": "jules",
               "branch_memory": "20260817T190241861-jules-v4"
+            },
+            {
+              "source": "20260817T190249133-jules-v4",
+              "status": "reported",
+              "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T190249133-jules-v4"
             }
           ]
         }
@@ -10752,15 +10752,15 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.218,
+        "activation": 0.209,
         "attention": [
-          "tend",
-          "trust",
-          "patterns",
-          "first",
-          "impressions",
+          "edges",
+          "basic",
+          "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
           "underneath"
@@ -10768,13 +10768,13 @@
       },
       "medium": {
         "topics": [
-          "tend",
-          "trust",
-          "patterns",
-          "first",
-          "impressions",
+          "edges",
+          "basic",
+          "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
           "underneath"
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1145,
-        "association": 0.0111,
-        "inhibition": -0.1361,
-        "social": 0.0428
+        "activation": -0.1082,
+        "association": -0.14,
+        "inhibition": -0.0955,
+        "social": 0.0291
       },
       "room_memories": [
-        {
-          "source": "20260817T190109864-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "How they treat people when there is nothing to gain from it.",
-          "discourse": "d-20260817T190109864-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190109864-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109864-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Consistency. I trust people more when what they do keeps matching what they say.",
-          "discourse": "d-20260817T190109864-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190109864-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109864-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-          "discourse": "d-20260817T190109864-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190109864-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109865-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T190109865-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190109864-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
         {
           "source": "20260817T190111849-mara-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002641"
+        },
+        {
+          "source": "20260817T190249133-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
+          "discourse": "d-20260817T190249133-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190249133-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "How they treat people when there is nothing to gain from it.",
+          "discourse": "d-20260817T190249133-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190249133-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Consistency. I trust people more when what they do keeps matching what they say.",
+          "discourse": "d-20260817T190249133-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T190249133-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "What makes that signal matter to you?",
+          "discourse": "d-20260817T190249133-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190249133-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T185602530-owen-v4",
-          "text": "What makes that signal matter to you?",
-          "move": "follow_up",
-          "memory": null,
-          "branch_memory": "20260817T185602529-mara-v4",
-          "discourse": "d-20260817T185602530-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002462"
-        },
         {
           "source": "20260817T185604660-owen-v4",
           "text": "There is a useful rule underneath that answer.",
@@ -14212,22 +14203,24 @@
           "branch_memory": "20260817T190241861-sarah-v4",
           "discourse": "d-20260817T190245974-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002641"
+        },
+        {
+          "source": "20260817T190249133-owen-v4",
+          "text": "What makes that signal matter to you?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T190249133-jules-v4",
+          "discourse": "d-20260817T190249133-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
         }
       ],
-      "last_event": "20260817T190245974-mara-v4",
-      "spoken": 2625,
+      "last_event": "20260817T190249133-owen-v4",
+      "spoken": 2626,
       "silences": 0,
       "people": {
         "sarah": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185444006-sarah-v4",
-              "status": "reported",
-              "text": "Consistency. I trust people more when what they do keeps matching what they say.",
-              "branch_owner": "sarah",
-              "branch_memory": "20260817T185444006-sarah-v4"
-            },
             {
               "source": "20260817T185446426-sarah-v4",
               "status": "reported",
@@ -14850,19 +14843,19 @@
               "text": "A little around the edges, but the basic preference is still there.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T190241861-sarah-v4"
+            },
+            {
+              "source": "20260817T190249133-sarah-v4",
+              "status": "reported",
+              "text": "Consistency. I trust people more when what they do keeps matching what they say.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T190249133-sarah-v4"
             }
           ]
         },
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185634383-mara-v4",
-              "status": "reported",
-              "text": "Anything quick and a little shameless, as long as it is not cruel.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T185634383-mara-v4"
-            },
             {
               "source": "20260817T185641479-mara-v4",
               "status": "reported",
@@ -15485,19 +15478,19 @@
               "text": "Busy, as long as it feels alive instead of chaotic.",
               "branch_owner": "mara",
               "branch_memory": "20260817T190241861-mara-v4"
+            },
+            {
+              "source": "20260817T190249133-mara-v4",
+              "status": "reported",
+              "text": "How they treat people when there is nothing to gain from it.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T190249133-mara-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185517116-jules-v4",
-              "status": "reported",
-              "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T185517116-jules-v4"
-            },
             {
               "source": "20260817T185523501-jules-v4",
               "status": "reported",
@@ -16120,6 +16113,13 @@
               "text": "Busy enough that something unexpected can happen.",
               "branch_owner": "jules",
               "branch_memory": "20260817T190241861-jules-v4"
+            },
+            {
+              "source": "20260817T190249133-jules-v4",
+              "status": "reported",
+              "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T190249133-jules-v4"
             }
           ]
         }
@@ -16127,15 +16127,15 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.302,
+        "activation": 0.392,
         "attention": [
-          "tend",
-          "trust",
-          "patterns",
-          "first",
-          "impressions",
+          "edges",
+          "basic",
+          "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
           "underneath"
@@ -16143,13 +16143,13 @@
       },
       "medium": {
         "topics": [
-          "tend",
-          "trust",
-          "patterns",
-          "first",
-          "impressions",
+          "edges",
+          "basic",
+          "preference",
           "answer",
-          "tells",
+          "shape",
+          "imagine",
+          "exceptions",
           "useful",
           "rule",
           "underneath"
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.25,
-        "association": 0.0616,
-        "inhibition": -0.0962,
-        "social": 0.0079
+        "activation": 0.088,
+        "association": 0.0516,
+        "inhibition": -0.0129,
+        "social": -0.0555
       },
       "room_memories": [
-        {
-          "source": "20260817T190109864-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "How they treat people when there is nothing to gain from it.",
-          "discourse": "d-20260817T190109864-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190109864-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109864-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Consistency. I trust people more when what they do keeps matching what they say.",
-          "discourse": "d-20260817T190109864-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190109864-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109864-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-          "discourse": "d-20260817T190109864-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190109864-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
-        {
-          "source": "20260817T190109865-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T190109865-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190109864-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002597"
-        },
         {
           "source": "20260817T190111849-mara-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002641"
+        },
+        {
+          "source": "20260817T190249133-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
+          "discourse": "d-20260817T190249133-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190249133-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "How they treat people when there is nothing to gain from it.",
+          "discourse": "d-20260817T190249133-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190249133-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Consistency. I trust people more when what they do keeps matching what they say.",
+          "discourse": "d-20260817T190249133-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T190249133-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
+        },
+        {
+          "source": "20260817T190249133-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "What makes that signal matter to you?",
+          "discourse": "d-20260817T190249133-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190249133-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T185602529-jules-v4",
-          "text": "One that wanders into something nobody planned to talk about.",
-          "move": "self_disclosure",
-          "memory": "20260817T185602529-jules-v4",
-          "branch_memory": "20260817T185602529-jules-v4",
-          "discourse": "d-20260817T185602529-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002462"
-        },
         {
           "source": "20260817T185604660-jules-v4",
           "text": "What makes that signal matter to you?",
@@ -19587,22 +19578,24 @@
           "branch_memory": "20260817T190241861-sarah-v4",
           "discourse": "d-20260817T190245974-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002641"
+        },
+        {
+          "source": "20260817T190249133-jules-v4",
+          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
+          "move": "answer",
+          "memory": "20260817T190249133-jules-v4",
+          "branch_memory": "20260817T190249133-jules-v4",
+          "discourse": "d-20260817T190249133-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002642"
         }
       ],
-      "last_event": "20260817T190245974-mara-v4",
-      "spoken": 2626,
+      "last_event": "20260817T190249133-owen-v4",
+      "spoken": 2627,
       "silences": 0,
       "people": {
         "sarah": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185444006-sarah-v4",
-              "status": "reported",
-              "text": "Consistency. I trust people more when what they do keeps matching what they say.",
-              "branch_owner": "sarah",
-              "branch_memory": "20260817T185444006-sarah-v4"
-            },
             {
               "source": "20260817T185446426-sarah-v4",
               "status": "reported",
@@ -20225,19 +20218,19 @@
               "text": "A little around the edges, but the basic preference is still there.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T190241861-sarah-v4"
+            },
+            {
+              "source": "20260817T190249133-sarah-v4",
+              "status": "reported",
+              "text": "Consistency. I trust people more when what they do keeps matching what they say.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T190249133-sarah-v4"
             }
           ]
         },
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185634383-mara-v4",
-              "status": "reported",
-              "text": "Anything quick and a little shameless, as long as it is not cruel.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T185634383-mara-v4"
-            },
             {
               "source": "20260817T185641479-mara-v4",
               "status": "reported",
@@ -20860,6 +20853,13 @@
               "text": "Busy, as long as it feels alive instead of chaotic.",
               "branch_owner": "mara",
               "branch_memory": "20260817T190241861-mara-v4"
+            },
+            {
+              "source": "20260817T190249133-mara-v4",
+              "status": "reported",
+              "text": "How they treat people when there is nothing to gain from it.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T190249133-mara-v4"
             }
           ]
         },
