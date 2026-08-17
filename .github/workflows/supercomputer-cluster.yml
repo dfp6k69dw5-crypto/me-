@@ -1,10 +1,10 @@
-name: Supercomputer Cluster
+name: Shared Supercomputer Cluster
 
 on:
   workflow_dispatch:
     inputs:
       workload:
-        description: Compute engine
+        description: Manual compute engine
         required: true
         default: montecarlo
         type: choice
@@ -18,13 +18,49 @@ on:
         default: '5'
         type: choice
         options: ['1','2','3','4','5','6','8','10','12','15','20']
+  issues:
+    types: [opened]
 
 permissions:
   contents: write
+  issues: write
+
+concurrency:
+  group: shared-supercomputer
+  cancel-in-progress: false
 
 jobs:
+  prepare:
+    name: Validate shared job
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issues' &&
+       github.event.issue.user.login == github.repository_owner &&
+       startsWith(github.event.issue.title, '[cluster-job]'))
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.request.outputs.mode }}
+      workload: ${{ steps.request.outputs.workload }}
+      scale: ${{ steps.request.outputs.scale }}
+      job_id: ${{ steps.request.outputs.job_id }}
+      request_b64: ${{ steps.request.outputs.request_b64 }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - id: request
+        name: Validate and normalize request
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          CLUSTER_REQUEST: ${{ github.event.issue.body }}
+          MANUAL_WORKLOAD: ${{ inputs.workload }}
+          MANUAL_SCALE: ${{ inputs.scale }}
+        run: python3 scripts/cluster_request.py >> "$GITHUB_OUTPUT"
+
   compute:
     name: Node ${{ matrix.worker }}
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -33,12 +69,15 @@ jobs:
         worker: [0,1,2,3,4,5,6,7,8,9,10,11]
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Run compute shard
         env:
           WORKER_ID: ${{ matrix.worker }}
           WORKER_COUNT: '12'
-          WORKLOAD: ${{ inputs.workload }}
-          SCALE: ${{ inputs.scale }}
+          WORKLOAD: ${{ needs.prepare.outputs.workload }}
+          SCALE: ${{ needs.prepare.outputs.scale }}
+          CLUSTER_REQUEST_B64: ${{ needs.prepare.outputs.request_b64 }}
         run: python3 scripts/cluster_worker.py
       - uses: actions/upload-artifact@v4
         with:
@@ -48,10 +87,13 @@ jobs:
 
   aggregate:
     name: Combine 12 nodes
-    needs: compute
+    needs: [prepare, compute]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
           pattern: cluster-part-*
@@ -59,11 +101,21 @@ jobs:
           merge-multiple: true
       - name: Aggregate cluster result
         run: python3 scripts/aggregate_cluster.py
-      - name: Publish latest result
+      - name: Publish latest and job-specific result
         run: |
           git config user.name "supercomputer-bot"
           git config user.email "actions@users.noreply.github.com"
           git pull --rebase origin main
-          git add cluster/latest.json
-          git commit -m "Publish supercomputer result" || exit 0
+          git add cluster/latest.json cluster/jobs 2>/dev/null || git add cluster/latest.json
+          git commit -m "Publish shared supercomputer result" || exit 0
           git push origin HEAD:main
+      - name: Close completed queue issue
+        if: github.event_name == 'issues'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          JOB_ID: ${{ needs.prepare.outputs.job_id }}
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --body "Shared Supercomputer job \`$JOB_ID\` completed across 12 nodes. The requesting app can now read its published result."
+          gh issue close "$ISSUE_NUMBER" --reason completed
