@@ -60,7 +60,8 @@ jobs:
             server_bin=$(find .room_model/runtime -type f -name 'llama-server' | head -1)
             if [ -n "$server_bin" ]; then
               chmod +x "$server_bin"
-              "$server_bin" -m .room_model/society-brain-q4_0.gguf --host 127.0.0.1 --port 18080 -c 8192 -np 4 >.room_model/server.log 2>&1 &
+              env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION -u ROOM_NODE_PROMPT \
+                "$server_bin" -m .room_model/society-brain-q4_0.gguf --host 127.0.0.1 --port 18080 -c 8192 -np 4 >.room_model/server.log 2>&1 &
               model_pid=$!
               for attempt in $(seq 1 120); do
                 if curl -fsS http://127.0.0.1:18080/health >/dev/null 2>&1; then
