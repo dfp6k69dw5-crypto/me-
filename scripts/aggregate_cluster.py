@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import glob, json, os, re, time
 
+EXPECTED_WORKERS=12
 parts=[]
 for p in sorted(glob.glob('cluster_parts/worker-*.json')):
     with open(p) as f: parts.append(json.load(f))
@@ -10,6 +11,9 @@ summary={
   'generated_at': int(time.time()),
   'workload': workload,
   'workers': len(parts),
+  'expected_workers': EXPECTED_WORKERS,
+  'missing_workers': max(0,EXPECTED_WORKERS-len(parts)),
+  'degraded': len(parts)<EXPECTED_WORKERS,
   'scale': parts[0]['scale'],
   'total_units': sum(p.get('units',0) for p in parts),
   'slowest_worker_seconds': max(p.get('elapsed',0) for p in parts),
@@ -27,11 +31,10 @@ elif workload=='hashstorm':
     summary['result']={'combined_digest':'-'.join(p['result']['digest'][:12] for p in parts)}
 elif workload=='shared_job':
     job_id=parts[0].get('job_id') or ''
-    if not re.fullmatch(r'[a-z0-9][a-z0-9._-]{5,80}', job_id):
-        raise SystemExit('invalid shared job id in worker results')
+    if not re.fullmatch(r'[a-z0-9][a-z0-9._-]{5,80}', job_id): raise SystemExit('invalid shared job id in worker results')
     project=parts[0].get('project');task=parts[0].get('task')
-    if project!='discovery' or task!='conceptual_bridge':
-        raise SystemExit('unsupported shared aggregate handler')
+    if project!='discovery' or task!='conceptual_bridge': raise SystemExit('unsupported shared aggregate handler')
+    if len(parts)<3: raise SystemExit('too few compute nodes returned a Discovery result')
     grouped={}
     for p in parts:
         r=p.get('result') or {}; path=r.get('path') or {}; pair=tuple(r.get('pair') or [])
@@ -49,6 +52,7 @@ elif workload=='shared_job':
     result={
         'status':'complete','job_id':job_id,'project':project,'task':task,'terms':terms,
         'pairs':pairs,'successful_workers':sum(1 for p in parts if ((p.get('result') or {}).get('path') or {}).get('edges')),
+        'participating_workers':len(parts),'expected_workers':EXPECTED_WORKERS,
     }
     summary['job_id']=job_id;summary['project']=project;summary['task']=task;summary['result']=result
     os.makedirs('cluster/jobs',exist_ok=True)
