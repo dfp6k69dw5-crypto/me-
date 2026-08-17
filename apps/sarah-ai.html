@@ -16,31 +16,36 @@
 <body>
 <div class="app">
 <header class="top"><div class="brand">Sarah<small>GITHUB-HELD MIND</small></div><div class="sp"></div><span id="status" class="pill">checking</span><a class="btn" href="sarah-room.html">ROOM</a></header>
-<section class="hero"><h1>Sarah</h1><p>This page is only a window. Sarah’s model, genome, development, memories and shared conversation live in GitHub. No AI model is loaded or run on this device.</p><div class="actions"><a class="primary" href="sarah-room.html">OPEN THE ROOM</a><span class="secondary">AUTONOMOUS · ABOUT EVERY MINUTE</span></div></section>
+<section class="hero"><h1>Sarah</h1><p>This page is only a window. Sarah’s model, genome, development, memories and shared conversation live in GitHub. No AI model is loaded or run on this device.</p><div class="actions"><a class="primary" href="sarah-room.html">OPEN THE ROOM</a><span class="secondary">AUTONOMOUS · CONTINUOUS GITHUB CADENCE</span></div></section>
 <main class="section">
 <h2>SARAH · RECENT WORDS</h2><div id="words"></div>
 <h2>CURRENT MIND</h2><div class="mindgrid"><div class="card"><b>GENOME</b><div id="genes"></div></div><div class="card"><b>DEVELOPMENT</b><div id="development"></div></div><div class="card"><b>MEMORY</b><div id="memory"></div></div><div class="card"><b>WORLD</b><div id="world"></div></div></div>
 </main></div>
-<div class="footer">brain + runtime + continuity stored by GitHub · three independent compute nodes per entity turn</div>
+<div class="footer">brain + runtime + continuity stored by GitHub · four entities · 12 cognitive nodes per shared beat</div>
 <script>
 const $=s=>document.querySelector(s);
-const RAW="https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/society/";
-async function getJSON(file){const r=await fetch(RAW+file+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error(r.status);return r.json()}
-function when(s){try{return new Date(s).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})}catch{return ""}}
-function renderSarah(minds,conv,state){
- const s=minds.entities.sarah,d=s.development||{},g=s.genome||{};
- const sarah=conv.filter(x=>x.speaker==="sarah").slice(-12);const box=$("#words");box.innerHTML="";
- if(!sarah.length){box.innerHTML='<div class="empty">Sarah hasn’t spoken yet. The room will update itself when a successful turn is committed.</div>'}
+const RAW="https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/live.json";
+async function getLive(){const r=await fetch(RAW+"?t="+Date.now()+"-"+Math.random().toString(36).slice(2),{cache:"no-store"});if(!r.ok)throw new Error(r.status);return r.json()}
+function when(s){try{return new Date(s).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit",second:"2-digit"})}catch{return ""}}
+function renderSarah(snapshot){
+ const minds=snapshot?.minds,state=snapshot?.state||{},conv=Array.isArray(snapshot?.conversation)?snapshot.conversation:[];
+ const s=minds?.entities?.sarah;
+ if(!s)throw new Error("Sarah missing from live Room snapshot");
+ const d=s.development||{},g=s.genome||{};
+ const sarah=conv.filter(x=>x.speaker==="sarah").slice(-16);const box=$("#words");box.innerHTML="";
+ if(!sarah.length){box.innerHTML='<div class="empty">Sarah hasn’t spoken yet. The Room will update this window after her next committed beat.</div>'}
  for(const m of sarah){const el=document.createElement("div");el.className="msg";const t=document.createElement("div");t.textContent=m.text;const w=document.createElement("div");w.className="when";w.textContent=when(m.at);el.append(t,w);box.appendChild(el)}
  $("#genes").textContent=Object.entries(g).map(([k,v])=>k.replaceAll("_"," ")+"  "+Number(v).toFixed(3)).join("\n");
  const topics=Object.entries(d.topic_weights||{}).sort((a,b)=>b[1]-a[1]).slice(0,8);
- $("#development").textContent=["turns: "+(d.turns||0),"spoken: "+(d.spoken||0)+"   silences: "+(d.silences||0),"recurring associations: "+(topics.map(([k,v])=>k+" "+Number(v).toFixed(2)).join(" · ")||"none yet")].join("\n");
+ $("#development").textContent=["beats: "+(d.turns||0),"spoken: "+(d.spoken||0)+"   silences: "+(d.silences||0),"recurring associations: "+(topics.map(([k,v])=>k+" "+Number(v).toFixed(2)).join(" · ")||"none yet")].join("\n");
  $("#memory").textContent=(s.memory||[]).slice(-8).map(x=>"• "+x.text).join("\n\n")||"none yet";
- $("#world").textContent=["room messages: "+(state.messages||0),"attempted turns: "+(state.attempts||0),"last speaker: "+(state.last_speaker?minds.entities[state.last_speaker]?.name||state.last_speaker:"none yet"),"last run: "+(state.last_run?when(state.last_run):"not yet")].join("\n");
- $("#status").textContent=state.last_run?"live":"ready";$("#status").classList.add("live")
+ $("#world").textContent=["room messages: "+(state.messages||conv.length),"shared beat: "+(state.cycle??"—"),"voices in last beat: "+(state.beat_message_count??"—"),"last speaker: "+(state.last_speaker?minds.entities[state.last_speaker]?.name||state.last_speaker:"none yet"),"last run: "+(state.last_run?when(state.last_run):"not yet")].join("\n");
+ const age=state.last_run?Date.now()-new Date(state.last_run).getTime():Infinity;
+ $("#status").textContent=Number.isFinite(age)&&age<15*60*1000?"live · beat "+(state.cycle??"—"):"waiting";
+ $("#status").classList.toggle("live",Number.isFinite(age)&&age<15*60*1000)
 }
-async function refresh(){try{const [m,c,s]=await Promise.all([getJSON("minds.json"),getJSON("conversation.json"),getJSON("state.json")]);renderSarah(m,c,s)}catch(e){$("#status").textContent="offline";$("#status").classList.remove("live")}}
-refresh();setInterval(refresh,15000);
+async function refresh(){try{renderSarah(await getLive())}catch(e){$("#status").textContent="offline";$("#status").classList.remove("live")}}
+refresh();setInterval(refresh,3000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refresh()});window.addEventListener("pageshow",refresh);
 </script>
 </body>
 </html>
