@@ -3,8 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
-import subprocess
-from pathlib import Path
+import urllib.request
 
 LEAK_MARKERS = (
     "system prompt", "developer message", "hidden prompt", "chain of thought",
@@ -13,7 +12,7 @@ LEAK_MARKERS = (
 
 
 def enabled(role: str) -> bool:
-    return bool(os.environ.get("ROOM_NODE_PROMPT", "").strip() and os.environ.get("ROOM_MODEL_CLI", "").strip() and os.environ.get("ROOM_MODEL_PATH", "").strip())
+    return bool(os.environ.get("ROOM_NODE_PROMPT", "").strip() and os.environ.get("ROOM_MODEL_URL", "").strip())
 
 
 def _extract_json(text: str):
@@ -43,26 +42,16 @@ def run(role: str, payload: dict, timeout: int = 20):
     if not enabled(role):
         return None
     prompt = os.environ["ROOM_NODE_PROMPT"].strip()
-    cli = Path(os.environ["ROOM_MODEL_CLI"])
-    model = Path(os.environ["ROOM_MODEL_PATH"])
-    if not cli.exists() or not model.exists():
+    combined = prompt + "\nINPUT_JSON\n" + json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\nOUTPUT_JSON_ONLY\n"
+    body = json.dumps({"prompt": combined, "n_predict": 220, "temperature": 0.35, "cache_prompt": False}).encode()
+    req = urllib.request.Request(os.environ["ROOM_MODEL_URL"], data=body, headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            data = json.loads(resp.read().decode("utf-8", "replace"))
+    except Exception:
         return None
-    user_data = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
-    combined = prompt + "\nINPUT_JSON\n" + user_data + "\nOUTPUT_JSON_ONLY\n"
-    child_env = {k: v for k, v in os.environ.items() if k != "ROOM_NODE_PROMPT" and not k.startswith("ROOM_PROMPT_")}
-    proc = subprocess.run(
-        [str(cli), "-m", str(model), "-n", "220", "--temp", "0.35", "-p", combined],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        text=True,
-        timeout=timeout,
-        check=False,
-        env=child_env,
-    )
-    if proc.returncode != 0:
-        return None
-    out = proc.stdout[-12000:]
-    if _looks_like_leak(out):
+    out = str(data.get("content", ""))
+    if not out or _looks_like_leak(out):
         return None
     try:
         return _extract_json(out)
