@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.253,
+        "activation": 0.209,
         "attention": [
           "notice",
           "people",
@@ -10,10 +10,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -24,10 +24,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.036,
-        "association": -0.2301,
-        "inhibition": -0.0212,
-        "social": 0.0634
+        "activation": 0.0604,
+        "association": -0.1991,
+        "inhibition": -0.084,
+        "social": -0.0636
       },
       "room_memories": [
-        {
-          "source": "20260817T204805756-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "One where people answer each other instead of waiting to talk.",
-          "discourse": "d-20260817T204805756-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204805756-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "One that wanders into something nobody planned to talk about.",
-          "discourse": "d-20260817T204805756-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204805756-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "One where somebody says something precise enough that it changes how I was thinking.",
-          "discourse": "d-20260817T204805756-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T204805756-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Do you like disagreement in a conversation like that?",
-          "discourse": "d-20260817T204805756-mara-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204805756-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
         {
           "source": "20260817T204807832-owen-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005575"
+        },
+        {
+          "source": "20260817T204942286-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "discourse": "d-20260817T204942286-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204942286-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "discourse": "d-20260817T204942286-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204942286-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "I like a loose plan and then room to change it.",
+          "discourse": "d-20260817T204942286-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T204942286-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T204942286-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204942286-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T204306781-sarah-v4",
-          "text": "Has that preference changed much for you?",
-          "move": "follow_up",
-          "memory": null,
-          "branch_memory": "20260817T204306781-mara-v4",
-          "discourse": "d-20260817T204306781-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005396"
-        },
         {
           "source": "20260817T204308793-sarah-v4",
           "text": "That gives me a more specific picture of how you think.",
@@ -3462,22 +3453,24 @@
           "branch_memory": null,
           "discourse": "d-20260817T204940263-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005575"
+        },
+        {
+          "source": "20260817T204942286-sarah-v4",
+          "text": "I like a loose plan and then room to change it.",
+          "move": "self_disclosure",
+          "memory": "20260817T204942286-sarah-v4",
+          "branch_memory": "20260817T204942286-sarah-v4",
+          "discourse": "d-20260817T204942286-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
         }
       ],
-      "last_event": "20260817T204940263-sarah-v4",
-      "spoken": 5560,
+      "last_event": "20260817T204942286-owen-v4",
+      "spoken": 5561,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T204247965-mara-v4",
-              "status": "reported",
-              "text": "How they treat people when there is nothing to gain from it.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T204247965-mara-v4"
-            },
             {
               "source": "20260817T204254045-mara-v4",
               "status": "reported",
@@ -4100,6 +4093,13 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T204935733-mara-v4"
+            },
+            {
+              "source": "20260817T204942286-mara-v4",
+              "status": "reported",
+              "text": "I improvise. A plan is useful until something more interesting happens.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T204942286-mara-v4"
             }
           ]
         },
@@ -4742,13 +4742,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T204304755-jules-v4",
-              "status": "reported",
-              "text": "Probably, but not in a straight line. The core still sounds like me.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T204300506-jules-v4"
-            },
-            {
               "source": "20260817T204306781-jules-v4",
               "status": "reported",
               "text": "Somewhere new. I would rather be a little disoriented than bored.",
@@ -5370,6 +5363,13 @@
               "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
               "branch_owner": "jules",
               "branch_memory": "20260817T204935733-jules-v4"
+            },
+            {
+              "source": "20260817T204942286-jules-v4",
+              "status": "reported",
+              "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T204942286-jules-v4"
             }
           ]
         }
@@ -5377,7 +5377,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.387,
+        "activation": 0.29,
         "attention": [
           "notice",
           "people",
@@ -5385,10 +5385,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -5399,10 +5399,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1118,
-        "association": -0.0204,
-        "inhibition": 0.25,
-        "social": 0.0458
+        "activation": 0.2031,
+        "association": -0.0772,
+        "inhibition": 0.1948,
+        "social": 0.0444
       },
       "room_memories": [
-        {
-          "source": "20260817T204805756-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "One where people answer each other instead of waiting to talk.",
-          "discourse": "d-20260817T204805756-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204805756-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "One that wanders into something nobody planned to talk about.",
-          "discourse": "d-20260817T204805756-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204805756-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "One where somebody says something precise enough that it changes how I was thinking.",
-          "discourse": "d-20260817T204805756-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T204805756-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Do you like disagreement in a conversation like that?",
-          "discourse": "d-20260817T204805756-mara-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204805756-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
         {
           "source": "20260817T204807832-owen-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005575"
+        },
+        {
+          "source": "20260817T204942286-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "discourse": "d-20260817T204942286-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204942286-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "discourse": "d-20260817T204942286-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204942286-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "I like a loose plan and then room to change it.",
+          "discourse": "d-20260817T204942286-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T204942286-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T204942286-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204942286-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T204306781-mara-v4",
-          "text": "Somewhere new. I like having to figure the place out as I go.",
-          "move": "answer",
-          "memory": "20260817T204306781-mara-v4",
-          "branch_memory": "20260817T204306781-mara-v4",
-          "discourse": "d-20260817T204306781-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005396"
-        },
         {
           "source": "20260817T204308792-mara-v4",
           "text": "Not much. I might explain it differently now, but it still feels true.",
@@ -8837,22 +8828,24 @@
           "branch_memory": "20260817T204935733-mara-v4",
           "discourse": "d-20260817T204940263-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005575"
+        },
+        {
+          "source": "20260817T204942286-mara-v4",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "move": "self_disclosure",
+          "memory": "20260817T204942286-mara-v4",
+          "branch_memory": "20260817T204942286-mara-v4",
+          "discourse": "d-20260817T204942286-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
         }
       ],
-      "last_event": "20260817T204940263-sarah-v4",
-      "spoken": 5564,
+      "last_event": "20260817T204942286-owen-v4",
+      "spoken": 5565,
       "silences": 0,
       "people": {
         "sarah": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T203856605-sarah-v4",
-              "status": "reported",
-              "text": "Because I tend to trust patterns more than first impressions.",
-              "branch_owner": "sarah",
-              "branch_memory": "20260817T203852298-sarah-v4"
-            },
             {
               "source": "20260817T203858640-sarah-v4",
               "status": "reported",
@@ -9475,6 +9468,13 @@
               "text": "Consistency. I trust people more when what they do keeps matching what they say.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T204914901-sarah-v4"
+            },
+            {
+              "source": "20260817T204942286-sarah-v4",
+              "status": "reported",
+              "text": "I like a loose plan and then room to change it.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T204942286-sarah-v4"
             }
           ]
         },
@@ -10117,13 +10117,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T204304755-jules-v4",
-              "status": "reported",
-              "text": "Probably, but not in a straight line. The core still sounds like me.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T204300506-jules-v4"
-            },
-            {
               "source": "20260817T204306781-jules-v4",
               "status": "reported",
               "text": "Somewhere new. I would rather be a little disoriented than bored.",
@@ -10745,6 +10738,13 @@
               "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
               "branch_owner": "jules",
               "branch_memory": "20260817T204935733-jules-v4"
+            },
+            {
+              "source": "20260817T204942286-jules-v4",
+              "status": "reported",
+              "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T204942286-jules-v4"
             }
           ]
         }
@@ -10752,7 +10752,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.132,
+        "activation": 0.17,
         "attention": [
           "notice",
           "people",
@@ -10760,10 +10760,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -10774,10 +10774,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0717,
-        "association": -0.0622,
-        "inhibition": -0.0617,
-        "social": -0.1279
+        "activation": 0.0441,
+        "association": -0.0165,
+        "inhibition": -0.1021,
+        "social": -0.1014
       },
       "room_memories": [
-        {
-          "source": "20260817T204805756-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "One where people answer each other instead of waiting to talk.",
-          "discourse": "d-20260817T204805756-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204805756-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "One that wanders into something nobody planned to talk about.",
-          "discourse": "d-20260817T204805756-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204805756-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "One where somebody says something precise enough that it changes how I was thinking.",
-          "discourse": "d-20260817T204805756-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T204805756-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Do you like disagreement in a conversation like that?",
-          "discourse": "d-20260817T204805756-mara-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204805756-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
         {
           "source": "20260817T204807832-owen-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005575"
+        },
+        {
+          "source": "20260817T204942286-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "discourse": "d-20260817T204942286-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204942286-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "discourse": "d-20260817T204942286-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204942286-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "I like a loose plan and then room to change it.",
+          "discourse": "d-20260817T204942286-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T204942286-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T204942286-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204942286-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T204306781-owen-v4",
-          "text": "Somewhere familiar if I know exactly why I liked it the first time.",
-          "move": "self_disclosure",
-          "memory": "20260817T204306781-owen-v4",
-          "branch_memory": "20260817T204306781-owen-v4",
-          "discourse": "d-20260817T204306781-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005396"
-        },
         {
           "source": "20260817T204308792-owen-v4",
           "text": "There is a useful rule underneath that answer.",
@@ -14212,22 +14203,24 @@
           "branch_memory": "20260817T204935733-mara-v4",
           "discourse": "d-20260817T204940263-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005575"
+        },
+        {
+          "source": "20260817T204942286-owen-v4",
+          "text": "How did you land on that?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T204942286-jules-v4",
+          "discourse": "d-20260817T204942286-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
         }
       ],
-      "last_event": "20260817T204940263-sarah-v4",
-      "spoken": 5559,
+      "last_event": "20260817T204942286-owen-v4",
+      "spoken": 5560,
       "silences": 0,
       "people": {
         "sarah": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T203856605-sarah-v4",
-              "status": "reported",
-              "text": "Because I tend to trust patterns more than first impressions.",
-              "branch_owner": "sarah",
-              "branch_memory": "20260817T203852298-sarah-v4"
-            },
             {
               "source": "20260817T203858640-sarah-v4",
               "status": "reported",
@@ -14850,19 +14843,19 @@
               "text": "Consistency. I trust people more when what they do keeps matching what they say.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T204914901-sarah-v4"
+            },
+            {
+              "source": "20260817T204942286-sarah-v4",
+              "status": "reported",
+              "text": "I like a loose plan and then room to change it.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T204942286-sarah-v4"
             }
           ]
         },
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T204247965-mara-v4",
-              "status": "reported",
-              "text": "How they treat people when there is nothing to gain from it.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T204247965-mara-v4"
-            },
             {
               "source": "20260817T204254045-mara-v4",
               "status": "reported",
@@ -15485,19 +15478,19 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T204935733-mara-v4"
+            },
+            {
+              "source": "20260817T204942286-mara-v4",
+              "status": "reported",
+              "text": "I improvise. A plan is useful until something more interesting happens.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T204942286-mara-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T204304755-jules-v4",
-              "status": "reported",
-              "text": "Probably, but not in a straight line. The core still sounds like me.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T204300506-jules-v4"
-            },
             {
               "source": "20260817T204306781-jules-v4",
               "status": "reported",
@@ -16120,6 +16113,13 @@
               "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
               "branch_owner": "jules",
               "branch_memory": "20260817T204935733-jules-v4"
+            },
+            {
+              "source": "20260817T204942286-jules-v4",
+              "status": "reported",
+              "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T204942286-jules-v4"
             }
           ]
         }
@@ -16127,7 +16127,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.242,
+        "activation": 0.4,
         "attention": [
           "notice",
           "people",
@@ -16135,10 +16135,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -16149,10 +16149,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1496,
-        "association": -0.0633,
+        "activation": -0.0086,
+        "association": 0.0936,
         "inhibition": 0.25,
-        "social": -0.0826
+        "social": -0.0197
       },
       "room_memories": [
-        {
-          "source": "20260817T204805756-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "One where people answer each other instead of waiting to talk.",
-          "discourse": "d-20260817T204805756-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204805756-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "One that wanders into something nobody planned to talk about.",
-          "discourse": "d-20260817T204805756-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204805756-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "One where somebody says something precise enough that it changes how I was thinking.",
-          "discourse": "d-20260817T204805756-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T204805756-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
-        {
-          "source": "20260817T204805756-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Do you like disagreement in a conversation like that?",
-          "discourse": "d-20260817T204805756-mara-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204805756-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005531"
-        },
         {
           "source": "20260817T204807832-owen-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005575"
+        },
+        {
+          "source": "20260817T204942286-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "discourse": "d-20260817T204942286-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204942286-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "discourse": "d-20260817T204942286-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204942286-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "I like a loose plan and then room to change it.",
+          "discourse": "d-20260817T204942286-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T204942286-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
+        },
+        {
+          "source": "20260817T204942286-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T204942286-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204942286-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T204306781-jules-v4",
-          "text": "Somewhere new. I would rather be a little disoriented than bored.",
-          "move": "self_disclosure",
-          "memory": "20260817T204306781-jules-v4",
-          "branch_memory": "20260817T204306781-jules-v4",
-          "discourse": "d-20260817T204306781-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005396"
-        },
         {
           "source": "20260817T204308793-jules-v4",
           "text": "How did you land on that?",
@@ -19587,22 +19578,24 @@
           "branch_memory": "20260817T204935733-mara-v4",
           "discourse": "d-20260817T204940263-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005575"
+        },
+        {
+          "source": "20260817T204942286-jules-v4",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "move": "answer",
+          "memory": "20260817T204942286-jules-v4",
+          "branch_memory": "20260817T204942286-jules-v4",
+          "discourse": "d-20260817T204942286-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005576"
         }
       ],
-      "last_event": "20260817T204940263-sarah-v4",
-      "spoken": 5560,
+      "last_event": "20260817T204942286-owen-v4",
+      "spoken": 5561,
       "silences": 0,
       "people": {
         "sarah": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T203856605-sarah-v4",
-              "status": "reported",
-              "text": "Because I tend to trust patterns more than first impressions.",
-              "branch_owner": "sarah",
-              "branch_memory": "20260817T203852298-sarah-v4"
-            },
             {
               "source": "20260817T203858640-sarah-v4",
               "status": "reported",
@@ -20225,19 +20218,19 @@
               "text": "Consistency. I trust people more when what they do keeps matching what they say.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T204914901-sarah-v4"
+            },
+            {
+              "source": "20260817T204942286-sarah-v4",
+              "status": "reported",
+              "text": "I like a loose plan and then room to change it.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T204942286-sarah-v4"
             }
           ]
         },
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T204247965-mara-v4",
-              "status": "reported",
-              "text": "How they treat people when there is nothing to gain from it.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T204247965-mara-v4"
-            },
             {
               "source": "20260817T204254045-mara-v4",
               "status": "reported",
@@ -20860,6 +20853,13 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T204935733-mara-v4"
+            },
+            {
+              "source": "20260817T204942286-mara-v4",
+              "status": "reported",
+              "text": "I improvise. A plan is useful until something more interesting happens.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T204942286-mara-v4"
             }
           ]
         },
