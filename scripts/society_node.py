@@ -31,11 +31,11 @@ STOP={
 }
 NAME_WORDS={w.lower() for v in names.values() for w in re.findall(r"[A-Za-z]+",v)}
 QUARANTINED_CUES={"previous","candidate","generic","repetitive","grounded","produce","generate","attempt","instruction"}|NAME_WORDS|STOP
-LEGACY_RUT_CUES={"brainstorm","brainstorming","project","study","homework","schedule","team","group","gather","input","activities","break","breaking","problem","manageable","smaller","details","focus","session","motivated","specific","approach","finish"}
+LEGACY_RUT_CUES={"brainstorm","brainstorming","project","study","homework","schedule","team","group","gather","input","activities","break","breaking","problem","manageable","smaller","details","focus","session","motivated","specific","approach","finish","organize","organizing"}
 CLEAN_BREAK="2026-08-17T00:57:20Z"
 CONTROL_FRAGMENTS=("previous candidate","too generic or repetitive","try another natural line","grounded in the room","differ substantially from the first attempt","produce a genuinely different","generate a fresh")
 LEGACY_MEMORY_FRAGMENTS=("brainstorm","study schedule","study session","team members","gather input","project idea","homework","break the problem down","manageable pieces","work on the details","stay focused","staying focused")
-BROKEN_CONTEXT_FRAGMENTS=LEGACY_MEMORY_FRAGMENTS+("specific topic","good topic","current activity or topic","activity or topic","what do we want to do","what should we do")
+BROKEN_CONTEXT_FRAGMENTS=LEGACY_MEMORY_FRAGMENTS+("specific topic","good topic","current activity or topic","activity or topic","what do we want to do","what should we do","shared interest in discussing","activity we are about to organize")
 
 def contaminated_text(text):
     low=str(text or "").lower()
@@ -88,7 +88,8 @@ elif r<weights[0]+weights[1]: cognitive_mode="associate"
 else: cognitive_mode="jump"
 
 base_recent=7+int(round(3*iq_scale))
-if cognitive_mode=="jump": mode_recent=0 if topic_fatigue>=.58 else 1
+# A jump gets its own private subject, so it never needs the recent transcript as a crutch.
+if cognitive_mode=="jump": mode_recent=0
 elif cognitive_mode=="associate": mode_recent=2 if topic_fatigue>=.72 else max(4,base_recent-2)
 else: mode_recent=base_recent
 recent=[] if mode_recent==0 else clean_history[-mode_recent:]
@@ -148,12 +149,50 @@ top_p=min(0.995,0.92+0.04*g["exploration"]+0.04*silence_pressure)
 max_tokens=50+int(round(42*iq_scale)); context_tokens=1280+int(round(768*iq_scale)); max_attempts=5+int(round(2*iq_scale))+int(round(5*silence_pressure)); char_cap=320+int(round(220*iq_scale))
 repeat_limit=max(.44,min(.78,.62-.12*topic_fatigue+.10*silence_pressure))
 
+# Low-level local inference used both for a private jump spark and for the spoken line.
+def run_local(sys_text,prompt_text,local_seed,n_tokens,temp):
+    if not model_path.is_file():raise RuntimeError(f"GitHub-held model missing: {model_path}")
+    if not completion_bin.is_file():raise RuntimeError(f"GitHub-held completion runtime missing: {completion_bin}")
+    cmd=[str(completion_bin),"-m",str(model_path),"--jinja","--single-turn","-sys",sys_text,"-p",prompt_text,"-n",str(n_tokens),"-c",str(context_tokens),"-t","4","--no-warmup","--temp",f"{temp:.3f}","--top-p",f"{top_p:.3f}","-s",str(local_seed),"--simple-io","--no-display-prompt","--log-verbosity","0"]
+    proc=subprocess.run(cmd,cwd=ROOT,capture_output=True,text=True,timeout=90)
+    if proc.returncode!=0:
+        detail=(proc.stderr or proc.stdout or "llama-completion failed").strip();raise RuntimeError(f"local inference exit {proc.returncode}: {detail[-900:]}")
+    return (proc.stdout or proc.stderr or "").strip()
+
+def clean_short(raw):
+    text=(raw or "").replace("\r"," ").replace("\n"," ")
+    text=re.sub(r"\x1b\[[0-9;?]*[A-Za-z]","",text).strip().strip('"\'` ')
+    text=re.sub(r"^(?:subject|idea|thought|spark)\s*[:>-]\s*","",text,flags=re.I).strip()
+    return " ".join(text.split())[:90]
+
+private_spark=""
+if cognitive_mode=="jump":
+    avoid=", ".join(sorted((rut_words|LEGACY_RUT_CUES)|{"conversation","topic","activity","planning","organizing"}))
+    spark_system=(
+        "Privately choose one spontaneous subject that could pop into an adult mind while sitting with strangers. "
+        "Return only a short noun phrase of 1 to 5 words. It may be concrete or abstract. "
+        "Do not choose the conversation itself, the people in the room, a group activity, planning, organizing, studying, projects, schedules, tasks, or assistance. "
+        "Do not explain your choice and do not phrase it as a question."
+    )
+    spark_prompt=f"Avoid these stale words or subjects: {avoid}\nSubject:"
+    for spark_attempt in range(7):
+        raw=run_local(spark_system,spark_prompt,(seed ^ 0x71C4D2A9 ^ (spark_attempt*65537))&0x7fffffff,14,min(1.34,temperature+.08))
+        candidate=clean_short(raw)
+        words=set(content_tokens(candidate))
+        low=candidate.lower()
+        if not candidate or not words: continue
+        if len(candidate.split())>6: continue
+        if words & rut_words: continue
+        if any(w in LEGACY_RUT_CUES and w not in post_break_topics for w in words): continue
+        if any(x in low for x in ("conversation","topic","activity","team","group","project","study","schedule","organizing","planning")): continue
+        private_spark=candidate; break
+
 if cognitive_mode=="associate" and topic_fatigue>=.72:
     mode_instruction="The current subject has become stale. Do not repeat, rephrase, organize, or solve it. Let a minor detail or an unrelated remembered room fragment pull attention sideways into a substantially different nearby subject. Do not explain the transition."
 elif cognitive_mode=="associate":
     mode_instruction="Let one element of the current exchange trigger a sideways association: a contrast, analogy, implication, sensory image, remembered room idea, cause, consequence, or nearby question. The subject may drift substantially. Do not explain the association process."
 elif cognitive_mode=="jump":
-    mode_instruction="Ignore the current subject. Internally settle on one actual subject outside the fact that people are conversing, then speak about that subject naturally. It can be concrete or abstract, but it must be a real object, idea, event, sensation, belief, observation, or question—not 'a topic', 'an activity', or something for the group to choose. There is nothing to accomplish, organize, study, brainstorm, or plan. Do not ask the group what to discuss or do. Do not announce a topic change and do not bridge back to the previous subject."
+    mode_instruction=f"A private spontaneous thought has already occurred: {private_spark or '(none)'}. Speak naturally from that thought. Do not mention that it was supplied, chosen, a topic, or a thought prompt. Do not bridge back to the previous subject."
 else:
     mode_instruction="Stay with the current thread if it still has life. Add something of your own rather than paraphrasing it. You may disagree, hesitate, joke, answer indirectly, or let the thought trail off."
 
@@ -200,6 +239,9 @@ def forbidden_reason(text):
         if " ".join(low.split())==" ".join(str(m.get("text","")).lower().split()) and low:return "exact-repeat"
     semantic_content=content_tokens(text)
     if cognitive_mode in {"jump","associate"} and not semantic_content:return "empty-lateral-content"
+    if cognitive_mode=="jump" and private_spark:
+        spark_words=set(content_tokens(private_spark))
+        if spark_words and not (set(semantic_content)&spark_words): return "lost-private-spark"
     overlap=len(set(semantic_content) & rut_words)
     if topic_fatigue>=.72:
         if cognitive_mode=="jump" and overlap>0:return "jump-rut-overlap"
@@ -208,13 +250,7 @@ def forbidden_reason(text):
     if sim>=repeat_limit:return f"near-repeat-{sim:.2f}"
     return ""
 def request_local_model(local_seed):
-    if not model_path.is_file():raise RuntimeError(f"GitHub-held model missing: {model_path}")
-    if not completion_bin.is_file():raise RuntimeError(f"GitHub-held completion runtime missing: {completion_bin}")
-    cmd=[str(completion_bin),"-m",str(model_path),"--jinja","--single-turn","-sys",system_prompt,"-p",base_prompt,"-n",str(max_tokens),"-c",str(context_tokens),"-t","4","--no-warmup","--temp",f"{temperature:.3f}","--top-p",f"{top_p:.3f}","-s",str(local_seed),"--simple-io","--no-display-prompt","--log-verbosity","0"]
-    proc=subprocess.run(cmd,cwd=ROOT,capture_output=True,text=True,timeout=90)
-    if proc.returncode!=0:
-        detail=(proc.stderr or proc.stdout or "llama-completion failed").strip();raise RuntimeError(f"local inference exit {proc.returncode}: {detail[-900:]}")
-    return (proc.stdout or proc.stderr or "").strip()
+    return run_local(system_prompt,base_prompt,local_seed,max_tokens,temperature)
 def clean_generation(raw):
     text=(raw or "").replace("\r","");text=re.sub(r"\x1b\[[0-9;?]*[A-Za-z]","",text)
     for marker in ("<|im_end|>","<|eot_id|>","<|end_of_text|>","[end of text]","[end of sentence]"):
@@ -242,10 +278,10 @@ def novelty(text):
     return max(0.0,min(1.0,0.54*(1.0-sim)+0.46*new_ratio+mode_floor))
 
 outdir=ROOT/"society_parts";outdir.mkdir(exist_ok=True)
-result={"entity":entity_id,"name":name,"node":node_id,"speak":False,"text":"","salience":0.0,"novelty":0.0,"topics":[],"memory_note":"","engine":"github-held-gguf","model_asset":"society-brain-v1/society-brain-q4_0.gguf","speech_drive":round(drive,4),"iq":iq,"age":age,"socioeconomic_status":ses,"context_turns":mode_recent,"association_cues":len(topics),"memory_samples":len(mem_pick),"max_tokens":max_tokens,"silent_streak":silent_streak,"silence_pressure":round(silence_pressure,3),"cognitive_mode":cognitive_mode,"topic_fatigue":round(topic_fatigue,4)}
+result={"entity":entity_id,"name":name,"node":node_id,"speak":False,"text":"","salience":0.0,"novelty":0.0,"topics":[],"memory_note":"","engine":"github-held-gguf","model_asset":"society-brain-v1/society-brain-q4_0.gguf","speech_drive":round(drive,4),"iq":iq,"age":age,"socioeconomic_status":ses,"context_turns":mode_recent,"association_cues":len(topics),"memory_samples":len(mem_pick),"max_tokens":max_tokens,"silent_streak":silent_streak,"silence_pressure":round(silence_pressure,3),"cognitive_mode":cognitive_mode,"topic_fatigue":round(topic_fatigue,4),"private_spark":private_spark}
 error=None;rejected=[];emergency=None;emergency_sim=2.0
 try:
-    if wants_to_speak:
+    if wants_to_speak and (cognitive_mode!="jump" or private_spark):
         text=""
         for attempt in range(max_attempts):
             candidate=clean_generation(request_local_model((seed+attempt*104729)&0x7fffffff))
@@ -264,6 +300,8 @@ try:
         elif rejected:result["rejected_candidates"]=rejected
         if emergency:
             result["emergency_candidate"]={"text":emergency,"similarity":round(emergency_sim,4),"topics":infer_topics(emergency),"novelty":round(novelty(emergency),4),"cognitive_mode":cognitive_mode}
+    elif cognitive_mode=="jump" and wants_to_speak and not private_spark:
+        result["rejected_candidates"]=["no-valid-private-spark"]
 except Exception as e:
     error=str(e)[:900]; result["error"]=error
 path=outdir/f"{entity_id}-node-{node_id}.json"; path.write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n"); print(json.dumps(result,ensure_ascii=False))
