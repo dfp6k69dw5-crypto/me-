@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.239,
+        "activation": 0.21,
         "attention": [
           "people",
           "answer",
@@ -11,9 +11,9 @@
           "instead",
           "waiting",
           "talk",
-          "reveal",
-          "staying",
-          "polite"
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -25,9 +25,9 @@
           "instead",
           "waiting",
           "talk",
-          "reveal",
-          "staying",
-          "polite"
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1184,
-        "association": -0.2214,
-        "inhibition": 0.1871,
-        "social": 0.0919
+        "activation": 0.2466,
+        "association": -0.25,
+        "inhibition": 0.1364,
+        "social": 0.0383
       },
       "room_memories": [
-        {
-          "source": "20260817T201817842-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Probably, but not in a straight line. The core still sounds like me.",
-          "discourse": "d-20260817T201817842-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T201817842-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T201817842-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes you trust somebody?",
-          "discourse": "d-20260817T201817842-sarah-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
         {
           "source": "20260817T201819839-mara-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": "owen",
           "branch_memory": "20260817T201949701-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004749"
+        },
+        {
+          "source": "20260817T201953776-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Because consistency is harder to fake over time than confidence is.",
+          "discourse": "d-20260817T201953776-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "discourse": "d-20260817T201953776-mara-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "That gives me a more specific picture of how you think.",
+          "discourse": "d-20260817T201953776-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Would you rather revisit somewhere familiar or go somewhere new?",
+          "discourse": "d-20260817T201953776-jules-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T201321209-sarah-v4",
-          "text": "What kind of conversation do you usually enjoy?",
-          "move": "question",
-          "memory": null,
-          "branch_memory": null,
-          "discourse": "d-20260817T201321209-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004570"
-        },
         {
           "source": "20260817T201323521-sarah-v4",
           "text": "One where somebody says something precise enough that it changes how I was thinking.",
@@ -3462,10 +3453,19 @@
           "branch_memory": "20260817T201949701-owen-v4",
           "discourse": "d-20260817T201951720-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004749"
+        },
+        {
+          "source": "20260817T201953776-sarah-v4",
+          "text": "That gives me a more specific picture of how you think.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T201949701-owen-v4",
+          "discourse": "d-20260817T201953776-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
         }
       ],
-      "last_event": "20260817T201951720-mara-v4",
-      "spoken": 4734,
+      "last_event": "20260817T201953776-jules-v4",
+      "spoken": 4735,
       "silences": 0,
       "people": {
         "mara": {
@@ -4107,13 +4107,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T200957494-owen-v4",
-              "status": "reported",
-              "text": "Somewhere familiar if I know exactly why I liked it the first time.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T200957494-owen-v4"
-            },
-            {
               "source": "20260817T200959635-owen-v4",
               "status": "reported",
               "text": "Because consistency is harder to fake over time than confidence is.",
@@ -4733,6 +4726,13 @@
               "source": "20260817T201951720-owen-v4",
               "status": "reported",
               "text": "One where people answer each other instead of waiting to talk.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T201949701-owen-v4"
+            },
+            {
+              "source": "20260817T201953776-owen-v4",
+              "status": "reported",
+              "text": "Because consistency is harder to fake over time than confidence is.",
               "branch_owner": "owen",
               "branch_memory": "20260817T201949701-owen-v4"
             }
@@ -5377,7 +5377,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.374,
+        "activation": 0.363,
         "attention": [
           "people",
           "answer",
@@ -5386,9 +5386,9 @@
           "instead",
           "waiting",
           "talk",
-          "reveal",
-          "staying",
-          "polite"
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -5400,9 +5400,9 @@
           "instead",
           "waiting",
           "talk",
-          "reveal",
-          "staying",
-          "polite"
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.04,
-        "association": 0.1108,
-        "inhibition": 0.0625,
-        "social": 0.2253
+        "activation": 0.0972,
+        "association": 0.0873,
+        "inhibition": 0.1511,
+        "social": 0.2438
       },
       "room_memories": [
-        {
-          "source": "20260817T201817842-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Probably, but not in a straight line. The core still sounds like me.",
-          "discourse": "d-20260817T201817842-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T201817842-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T201817842-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes you trust somebody?",
-          "discourse": "d-20260817T201817842-sarah-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
         {
           "source": "20260817T201819839-mara-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": "owen",
           "branch_memory": "20260817T201949701-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004749"
+        },
+        {
+          "source": "20260817T201953776-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Because consistency is harder to fake over time than confidence is.",
+          "discourse": "d-20260817T201953776-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "discourse": "d-20260817T201953776-mara-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "That gives me a more specific picture of how you think.",
+          "discourse": "d-20260817T201953776-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Would you rather revisit somewhere familiar or go somewhere new?",
+          "discourse": "d-20260817T201953776-jules-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T201321209-mara-v4",
-          "text": "Because I notice what people do when they stop performing for everybody else.",
-          "move": "answer",
-          "memory": "20260817T200705813-mara-v4",
-          "branch_memory": "20260817T201316506-mara-v4",
-          "discourse": "d-20260817T201321209-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004570"
-        },
         {
           "source": "20260817T201323521-mara-v4",
           "text": "One where people actually reveal something instead of staying polite the whole time.",
@@ -8837,10 +8828,19 @@
           "branch_memory": "20260817T201949701-owen-v4",
           "discourse": "d-20260817T201951720-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004749"
+        },
+        {
+          "source": "20260817T201953776-mara-v4",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T201949701-owen-v4",
+          "discourse": "d-20260817T201953776-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
         }
       ],
-      "last_event": "20260817T201951720-mara-v4",
-      "spoken": 4738,
+      "last_event": "20260817T201953776-jules-v4",
+      "spoken": 4739,
       "silences": 0,
       "people": {
         "sarah": {
@@ -9482,13 +9482,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T200957494-owen-v4",
-              "status": "reported",
-              "text": "Somewhere familiar if I know exactly why I liked it the first time.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T200957494-owen-v4"
-            },
-            {
               "source": "20260817T200959635-owen-v4",
               "status": "reported",
               "text": "Because consistency is harder to fake over time than confidence is.",
@@ -10108,6 +10101,13 @@
               "source": "20260817T201951720-owen-v4",
               "status": "reported",
               "text": "One where people answer each other instead of waiting to talk.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T201949701-owen-v4"
+            },
+            {
+              "source": "20260817T201953776-owen-v4",
+              "status": "reported",
+              "text": "Because consistency is harder to fake over time than confidence is.",
               "branch_owner": "owen",
               "branch_memory": "20260817T201949701-owen-v4"
             }
@@ -10752,7 +10752,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.343,
+        "activation": 0.369,
         "attention": [
           "people",
           "answer",
@@ -10761,9 +10761,9 @@
           "instead",
           "waiting",
           "talk",
-          "reveal",
-          "staying",
-          "polite"
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -10775,9 +10775,9 @@
           "instead",
           "waiting",
           "talk",
-          "reveal",
-          "staying",
-          "polite"
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.012,
-        "association": 0.0193,
-        "inhibition": -0.0657,
-        "social": -0.1482
+        "activation": -0.0821,
+        "association": -0.0704,
+        "inhibition": -0.1113,
+        "social": -0.0811
       },
       "room_memories": [
-        {
-          "source": "20260817T201817842-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Probably, but not in a straight line. The core still sounds like me.",
-          "discourse": "d-20260817T201817842-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T201817842-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T201817842-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes you trust somebody?",
-          "discourse": "d-20260817T201817842-sarah-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
         {
           "source": "20260817T201819839-mara-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": "owen",
           "branch_memory": "20260817T201949701-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004749"
+        },
+        {
+          "source": "20260817T201953776-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Because consistency is harder to fake over time than confidence is.",
+          "discourse": "d-20260817T201953776-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "discourse": "d-20260817T201953776-mara-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "That gives me a more specific picture of how you think.",
+          "discourse": "d-20260817T201953776-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Would you rather revisit somewhere familiar or go somewhere new?",
+          "discourse": "d-20260817T201953776-jules-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T201321209-owen-v4",
-          "text": "There is a useful rule underneath that answer.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T201316506-mara-v4",
-          "discourse": "d-20260817T201321209-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004570"
-        },
         {
           "source": "20260817T201323521-owen-v4",
           "text": "Has that changed much for you?",
@@ -14212,10 +14203,19 @@
           "branch_memory": "20260817T201949701-owen-v4",
           "discourse": "d-20260817T201951720-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004749"
+        },
+        {
+          "source": "20260817T201953776-owen-v4",
+          "text": "Because consistency is harder to fake over time than confidence is.",
+          "move": "answer",
+          "memory": "20260817T201523037-owen-v4",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "discourse": "d-20260817T201953776-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
         }
       ],
-      "last_event": "20260817T201951720-mara-v4",
-      "spoken": 4733,
+      "last_event": "20260817T201953776-jules-v4",
+      "spoken": 4734,
       "silences": 0,
       "people": {
         "sarah": {
@@ -16127,7 +16127,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.258,
+        "activation": 0.316,
         "attention": [
           "people",
           "answer",
@@ -16136,9 +16136,9 @@
           "instead",
           "waiting",
           "talk",
-          "reveal",
-          "staying",
-          "polite"
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -16150,9 +16150,9 @@
           "instead",
           "waiting",
           "talk",
-          "reveal",
-          "staying",
-          "polite"
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.142,
-        "association": -0.0326,
-        "inhibition": -0.0679,
-        "social": 0.0487
+        "activation": 0.0374,
+        "association": 0.1115,
+        "inhibition": -0.2219,
+        "social": -0.0011
       },
       "room_memories": [
-        {
-          "source": "20260817T201817842-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Probably, but not in a straight line. The core still sounds like me.",
-          "discourse": "d-20260817T201817842-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T201817842-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T201817842-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201813751-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
-        {
-          "source": "20260817T201817842-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes you trust somebody?",
-          "discourse": "d-20260817T201817842-sarah-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004705"
-        },
         {
           "source": "20260817T201819839-mara-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": "owen",
           "branch_memory": "20260817T201949701-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004749"
+        },
+        {
+          "source": "20260817T201953776-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Because consistency is harder to fake over time than confidence is.",
+          "discourse": "d-20260817T201953776-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "discourse": "d-20260817T201953776-mara-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "That gives me a more specific picture of how you think.",
+          "discourse": "d-20260817T201953776-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201949701-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
+        },
+        {
+          "source": "20260817T201953776-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Would you rather revisit somewhere familiar or go somewhere new?",
+          "discourse": "d-20260817T201953776-jules-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T201321209-jules-v4",
-          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T201316506-mara-v4",
-          "discourse": "d-20260817T201321209-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004570"
-        },
         {
           "source": "20260817T201323521-jules-v4",
           "text": "One that wanders into something nobody planned to talk about.",
@@ -19587,10 +19578,19 @@
           "branch_memory": "20260817T201949701-owen-v4",
           "discourse": "d-20260817T201951720-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004749"
+        },
+        {
+          "source": "20260817T201953776-jules-v4",
+          "text": "Would you rather revisit somewhere familiar or go somewhere new?",
+          "move": "question",
+          "memory": null,
+          "branch_memory": null,
+          "discourse": "d-20260817T201953776-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004750"
         }
       ],
-      "last_event": "20260817T201951720-mara-v4",
-      "spoken": 4734,
+      "last_event": "20260817T201953776-jules-v4",
+      "spoken": 4735,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20867,13 +20867,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T200957494-owen-v4",
-              "status": "reported",
-              "text": "Somewhere familiar if I know exactly why I liked it the first time.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T200957494-owen-v4"
-            },
-            {
               "source": "20260817T200959635-owen-v4",
               "status": "reported",
               "text": "Because consistency is harder to fake over time than confidence is.",
@@ -21493,6 +21486,13 @@
               "source": "20260817T201951720-owen-v4",
               "status": "reported",
               "text": "One where people answer each other instead of waiting to talk.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T201949701-owen-v4"
+            },
+            {
+              "source": "20260817T201953776-owen-v4",
+              "status": "reported",
+              "text": "Because consistency is harder to fake over time than confidence is.",
               "branch_owner": "owen",
               "branch_memory": "20260817T201949701-owen-v4"
             }
