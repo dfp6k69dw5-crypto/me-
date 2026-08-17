@@ -1,0 +1,149 @@
+name: Room private model diagnostic
+
+on:
+  push:
+    paths:
+      - '.github/workflows/room-private-model-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ROOM_PROMPT_PERCEPTION: ${{ secrets.ROOM_PROMPT_PERCEPTION }}
+      ROOM_PROMPT_DELIBERATION: ${{ secrets.ROOM_PROMPT_DELIBERATION }}
+      ROOM_PROMPT_EXPRESSION: ${{ secrets.ROOM_PROMPT_EXPRESSION }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Test private model without exposing prompts
+        run: |
+          set -u
+          git config user.name "the-room-diagnostic"
+          git config user.email "actions@users.noreply.github.com"
+          mkdir -p room .room_model/runtime
+
+          perception_present=false
+          deliberation_present=false
+          expression_present=false
+          [ -n "${ROOM_PROMPT_PERCEPTION:-}" ] && perception_present=true
+          [ -n "${ROOM_PROMPT_DELIBERATION:-}" ] && deliberation_present=true
+          [ -n "${ROOM_PROMPT_EXPRESSION:-}" ] && expression_present=true
+
+          download_ok=false
+          hashes_ok=false
+          server_ready=false
+          perception_status=not_tested
+          deliberation_status=not_tested
+          expression_status=not_tested
+
+          if $perception_present && $deliberation_present && $expression_present; then
+            if gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'society-brain-q4_0.gguf' --dir .room_model && \
+               gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'llama-runtime-linux-x64.tar.gz' --dir .room_model; then
+              download_ok=true
+            fi
+          fi
+
+          if $download_ok; then
+            if echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  .room_model/society-brain-q4_0.gguf' | sha256sum -c - >/dev/null 2>&1 && \
+               echo '360a5bfab5b8fe562c52e060a998a052f5fc7d98a0448b035c2eedbb6acfbd94  .room_model/llama-runtime-linux-x64.tar.gz' | sha256sum -c - >/dev/null 2>&1; then
+              hashes_ok=true
+            fi
+          fi
+
+          model_pid=""
+          if $hashes_ok; then
+            tar -xzf .room_model/llama-runtime-linux-x64.tar.gz -C .room_model/runtime
+            server_bin=$(find .room_model/runtime -type f -name 'llama-server' | head -1)
+            if [ -n "${server_bin:-}" ]; then
+              chmod +x "$server_bin"
+              env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION -u ROOM_NODE_PROMPT \
+                "$server_bin" -m .room_model/society-brain-q4_0.gguf --host 127.0.0.1 --port 18080 -c 8192 -np 4 >.room_model/server.log 2>&1 &
+              model_pid=$!
+              for attempt in $(seq 1 120); do
+                if curl -fsS http://127.0.0.1:18080/health >/dev/null 2>&1; then
+                  server_ready=true
+                  break
+                fi
+                if ! kill -0 "$model_pid" 2>/dev/null; then break; fi
+                sleep 1
+              done
+            fi
+          fi
+
+          test_role() {
+            role="$1"
+            prompt="$2"
+            if ! $server_ready; then
+              printf '%s' server_unavailable
+              return
+            fi
+            if env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
+              ROOM_NODE_PROMPT="$prompt" ROOM_MODEL_URL='http://127.0.0.1:18080/completion' ROLE="$role" \
+              python3 - <<'PY' >/dev/null 2>&1
+import os
+from scripts.room_private_model import run
+role=os.environ['ROLE']
+base={
+  'entity':'sarah',
+  'profile':{},
+  'event':{'speaker':'mara','text':'I changed my mind after a counterexample.','cognition':{'target':'sarah'}},
+  'context':[],
+  'topic':{'id':'diagnostic','root':'belief','current_facet':'evidence','facets':['evidence','counterexample']},
+  'partner':'mara',
+  'relationship':{'trust':0.1,'direct_familiarity':0.2},
+  'mandatory_speech':True,
+}
+if role=='comprehension':
+    payload=base
+elif role=='thought':
+    payload={**base,'social_observation':{'participation':'DIRECT_ADDRESSEE','relationship_events':[]}}
+else:
+    payload={**base,'social_observation':{'participation':'DIRECT_ADDRESSEE','relationship_events':[]},'deliberation':{'action':'DEEPEN','preferred_partner':'mara','topic_facet':'evidence','mandatory_speech':True}}
+run(role,payload,timeout=30)
+PY
+            then
+              printf '%s' accepted
+            else
+              printf '%s' rejected
+            fi
+          }
+
+          if $perception_present; then perception_status=$(test_role comprehension "$ROOM_PROMPT_PERCEPTION"); else perception_status=missing_secret; fi
+          if $deliberation_present; then deliberation_status=$(test_role thought "$ROOM_PROMPT_DELIBERATION"); else deliberation_status=missing_secret; fi
+          if $expression_present; then expression_status=$(test_role expression "$ROOM_PROMPT_EXPRESSION"); else expression_status=missing_secret; fi
+
+          [ -n "$model_pid" ] && kill "$model_pid" 2>/dev/null || true
+
+          python3 - <<PY
+import json
+status={
+  'perception_secret_present': $perception_present,
+  'deliberation_secret_present': $deliberation_present,
+  'expression_secret_present': $expression_present,
+  'download_ok': $download_ok,
+  'hashes_ok': $hashes_ok,
+  'server_ready': $server_ready,
+  'perception_status': '$perception_status',
+  'deliberation_status': '$deliberation_status',
+  'expression_status': '$expression_status',
+}
+open('room/private-model-diagnostic.json','w').write(json.dumps(status,indent=2)+'\n')
+PY
+
+          git add room/private-model-diagnostic.json
+          git commit -m "Record private model diagnostic" || true
+          for attempt in 1 2 3 4; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main || true
+            git rebase origin/main || { git rebase --abort || true; }
+            sleep "$attempt"
+          done
+          exit 1
