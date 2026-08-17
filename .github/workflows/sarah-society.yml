@@ -17,6 +17,7 @@ on:
 permissions:
   contents: write
   actions: write
+  id-token: write
 
 concurrency:
   group: the-room-world-main
@@ -36,6 +37,7 @@ jobs:
       - name: Keep all 12 cognitive nodes hot and publish every beat
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ROOM_RELAY_URL: ${{ vars.ROOM_RELAY_URL }}
         run: |
           set -uo pipefail
           git config user.name "the-room"
@@ -43,6 +45,38 @@ jobs:
 
           stop_at=$((SECONDS + 19800))
           beat_seq=0
+          relay_token=""
+          relay_token_refresh_at=0
+
+          publish_relay() {
+            [ -n "${ROOM_RELAY_URL:-}" ] || return 0
+
+            now=$(date +%s)
+            if [ -z "$relay_token" ] || [ "$now" -ge "$relay_token_refresh_at" ]; then
+              token_json=$(curl -fsS \
+                -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+                "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror") || {
+                  echo "Cloudflare relay token unavailable; Room continues normally"
+                  return 0
+                }
+              relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("value", ""))')
+              if [ -z "$relay_token" ]; then
+                echo "Cloudflare relay token was empty; Room continues normally"
+                return 0
+              fi
+              relay_token_refresh_at=$((now + 240))
+            fi
+
+            if ! curl -fsS \
+              -X POST \
+              -H "Authorization: Bearer ${relay_token}" \
+              -H "Content-Type: application/json" \
+              --data-binary @room/feed.json \
+              "${ROOM_RELAY_URL%/}/api/ingest" >/dev/null; then
+              echo "Cloudflare relay unavailable; Room continues normally"
+            fi
+            return 0
+          }
 
           run_beat() {
             beat_seq=$((beat_seq + 1))
@@ -102,6 +136,7 @@ jobs:
             for attempt in 1 2 3 4; do
               if git push origin HEAD:main; then
                 pushed=1
+                publish_relay
                 break
               fi
 
