@@ -69,12 +69,12 @@ jobs:
           echo "LLAMA_COMPLETION=$GITHUB_WORKSPACE/$completion" >> "$GITHUB_ENV"
           echo "LD_LIBRARY_PATH=$GITHUB_WORKSPACE/$(dirname "$completion")" >> "$GITHUB_ENV"
           echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  society_model/society-brain-q4_0.gguf' | sha256sum -c -
-      - name: Node ${{ matrix.node }} thinks locally
+      - name: Node ${{ matrix.node }} thinks locally behind prompt guard
         env:
           ENTITY_ID: ${{ needs.select.outputs.entity }}
           NODE_ID: ${{ matrix.node }}
           SOCIETY_MODEL_PATH: ${{ github.workspace }}/society_model/society-brain-q4_0.gguf
-        run: python3 scripts/society_node.py
+        run: python3 scripts/society_node_guard.py
       - uses: actions/upload-artifact@v4
         with:
           name: room-${{ needs.select.outputs.entity }}-node-${{ matrix.node }}
@@ -95,10 +95,10 @@ jobs:
           pattern: room-${{ needs.select.outputs.entity }}-node-*
           path: society_parts
           merge-multiple: true
-      - name: Resolve three nodes into one turn
+      - name: Resolve three nodes behind commit prompt guard
         env:
           ENTITY_ID: ${{ needs.select.outputs.entity }}
-        run: python3 scripts/society_commit.py
+        run: python3 scripts/society_commit_guard.py
       - name: Commit the continuing room
         run: |
           git config user.name "the-room"
