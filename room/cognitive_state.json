@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.243,
+        "activation": 0.309,
         "attention": [
           "moments",
           "somebody",
@@ -11,9 +11,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -25,9 +25,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.062,
-        "association": -0.0164,
+        "activation": -0.1227,
+        "association": -0.0054,
         "inhibition": -0.25,
-        "social": -0.07
+        "social": 0.0628
       },
       "room_memories": [
-        {
-          "source": "20260817T165948458-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Usually the mood between people.",
-          "discourse": "d-20260817T165948458-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165948458-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Usually one odd detail that probably was not supposed to be important.",
-          "discourse": "d-20260817T165948459-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T165948459-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Usually what they seem curious about.",
-          "discourse": "d-20260817T165948459-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T165948459-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T165948459-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165948458-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
         {
           "source": "20260817T170004731-mara-v4",
           "status": "observed",
@@ -1840,6 +1800,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000157"
+        },
+        {
+          "source": "20260817T172658648-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Finding something interesting enough that I forget I was trying to have a good day.",
+          "discourse": "d-20260817T172658648-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T172658648-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658648-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Having one conversation that makes the day feel less ordinary than it started.",
+          "discourse": "d-20260817T172658648-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T172658648-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658648-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Learning something I did not expect to care about.",
+          "discourse": "d-20260817T172658648-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T172658648-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658649-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "What makes you say that?",
+          "discourse": "d-20260817T172658649-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T172658648-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
         }
       ],
       "self_history": [
@@ -3116,10 +3116,19 @@
           "branch_memory": null,
           "discourse": "d-20260817T172645874-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000157"
+        },
+        {
+          "source": "20260817T172658648-sarah-v4",
+          "text": "Learning something I did not expect to care about.",
+          "move": "self_disclosure",
+          "memory": "20260817T172658648-sarah-v4",
+          "branch_memory": "20260817T172658648-sarah-v4",
+          "discourse": "d-20260817T172658648-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
         }
       ],
-      "last_event": "20260817T172645874-sarah-v4",
-      "spoken": 142,
+      "last_event": "20260817T172658649-owen-v4",
+      "spoken": 143,
       "silences": 0,
       "people": {
         "mara": {
@@ -3698,6 +3707,13 @@
               "text": "Having one conversation that makes the day feel less ordinary than it started.",
               "branch_owner": "mara",
               "branch_memory": "20260817T172603435-mara-v4"
+            },
+            {
+              "source": "20260817T172658648-mara-v4",
+              "status": "reported",
+              "text": "Having one conversation that makes the day feel less ordinary than it started.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T172658648-mara-v4"
             }
           ]
         },
@@ -4527,6 +4543,13 @@
               "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
               "branch_owner": "jules",
               "branch_memory": "20260817T172603435-jules-v4"
+            },
+            {
+              "source": "20260817T172658648-jules-v4",
+              "status": "reported",
+              "text": "Finding something interesting enough that I forget I was trying to have a good day.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T172658648-jules-v4"
             }
           ]
         }
@@ -4534,7 +4557,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.319,
+        "activation": 0.353,
         "attention": [
           "moments",
           "somebody",
@@ -4543,9 +4566,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -4557,9 +4580,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.528
       },
@@ -4567,52 +4590,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0225,
-        "association": 0.0503,
-        "inhibition": 0.0552,
-        "social": 0.1871
+        "activation": -0.0306,
+        "association": 0.0131,
+        "inhibition": -0.0357,
+        "social": 0.224
       },
       "room_memories": [
-        {
-          "source": "20260817T165948458-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Usually the mood between people.",
-          "discourse": "d-20260817T165948458-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165948458-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Usually one odd detail that probably was not supposed to be important.",
-          "discourse": "d-20260817T165948459-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T165948459-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Usually what they seem curious about.",
-          "discourse": "d-20260817T165948459-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T165948459-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T165948459-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165948458-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
         {
           "source": "20260817T170004731-mara-v4",
           "status": "observed",
@@ -6372,6 +6355,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000157"
+        },
+        {
+          "source": "20260817T172658648-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Finding something interesting enough that I forget I was trying to have a good day.",
+          "discourse": "d-20260817T172658648-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T172658648-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658648-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Having one conversation that makes the day feel less ordinary than it started.",
+          "discourse": "d-20260817T172658648-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T172658648-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658648-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Learning something I did not expect to care about.",
+          "discourse": "d-20260817T172658648-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T172658648-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658649-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "What makes you say that?",
+          "discourse": "d-20260817T172658649-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T172658648-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
         }
       ],
       "self_history": [
@@ -7680,10 +7703,19 @@
           "branch_memory": "20260817T172603435-jules-v4",
           "discourse": "d-20260817T172645874-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000157"
+        },
+        {
+          "source": "20260817T172658648-mara-v4",
+          "text": "Having one conversation that makes the day feel less ordinary than it started.",
+          "move": "self_disclosure",
+          "memory": "20260817T172658648-mara-v4",
+          "branch_memory": "20260817T172658648-mara-v4",
+          "discourse": "d-20260817T172658648-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
         }
       ],
-      "last_event": "20260817T172645874-sarah-v4",
-      "spoken": 146,
+      "last_event": "20260817T172658649-owen-v4",
+      "spoken": 147,
       "silences": 0,
       "people": {
         "sarah": {
@@ -8031,6 +8063,13 @@
               "text": "Dry humor, especially when it sneaks up on me.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T172502153-sarah-v4"
+            },
+            {
+              "source": "20260817T172658648-sarah-v4",
+              "status": "reported",
+              "text": "Learning something I did not expect to care about.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T172658648-sarah-v4"
             }
           ]
         },
@@ -8860,6 +8899,13 @@
               "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
               "branch_owner": "jules",
               "branch_memory": "20260817T172603435-jules-v4"
+            },
+            {
+              "source": "20260817T172658648-jules-v4",
+              "status": "reported",
+              "text": "Finding something interesting enough that I forget I was trying to have a good day.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T172658648-jules-v4"
             }
           ]
         }
@@ -8867,7 +8913,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.194,
+        "activation": 0.21,
         "attention": [
           "moments",
           "somebody",
@@ -8876,9 +8922,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -8890,9 +8936,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.62
       },
@@ -8900,52 +8946,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0741,
-        "association": -0.1725,
-        "inhibition": 0.0746,
-        "social": 0.0088
+        "activation": 0.0912,
+        "association": -0.0593,
+        "inhibition": 0.071,
+        "social": 0.0568
       },
       "room_memories": [
-        {
-          "source": "20260817T165948458-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Usually the mood between people.",
-          "discourse": "d-20260817T165948458-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165948458-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Usually one odd detail that probably was not supposed to be important.",
-          "discourse": "d-20260817T165948459-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T165948459-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Usually what they seem curious about.",
-          "discourse": "d-20260817T165948459-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T165948459-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T165948459-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165948458-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
         {
           "source": "20260817T170004731-mara-v4",
           "status": "observed",
@@ -10705,6 +10711,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000157"
+        },
+        {
+          "source": "20260817T172658648-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Finding something interesting enough that I forget I was trying to have a good day.",
+          "discourse": "d-20260817T172658648-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T172658648-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658648-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Having one conversation that makes the day feel less ordinary than it started.",
+          "discourse": "d-20260817T172658648-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T172658648-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658648-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Learning something I did not expect to care about.",
+          "discourse": "d-20260817T172658648-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T172658648-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658649-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "What makes you say that?",
+          "discourse": "d-20260817T172658649-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T172658648-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
         }
       ],
       "self_history": [
@@ -11973,10 +12019,19 @@
           "branch_memory": "20260817T172603435-jules-v4",
           "discourse": "d-20260817T172645874-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000157"
+        },
+        {
+          "source": "20260817T172658649-owen-v4",
+          "text": "What makes you say that?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T172658648-jules-v4",
+          "discourse": "d-20260817T172658649-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
         }
       ],
-      "last_event": "20260817T172645874-sarah-v4",
-      "spoken": 141,
+      "last_event": "20260817T172658649-owen-v4",
+      "spoken": 142,
       "silences": 0,
       "people": {
         "sarah": {
@@ -12324,6 +12379,13 @@
               "text": "Dry humor, especially when it sneaks up on me.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T172502153-sarah-v4"
+            },
+            {
+              "source": "20260817T172658648-sarah-v4",
+              "status": "reported",
+              "text": "Learning something I did not expect to care about.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T172658648-sarah-v4"
             }
           ]
         },
@@ -12903,6 +12965,13 @@
               "text": "Having one conversation that makes the day feel less ordinary than it started.",
               "branch_owner": "mara",
               "branch_memory": "20260817T172603435-mara-v4"
+            },
+            {
+              "source": "20260817T172658648-mara-v4",
+              "status": "reported",
+              "text": "Having one conversation that makes the day feel less ordinary than it started.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T172658648-mara-v4"
             }
           ]
         },
@@ -13377,6 +13446,13 @@
               "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
               "branch_owner": "jules",
               "branch_memory": "20260817T172603435-jules-v4"
+            },
+            {
+              "source": "20260817T172658648-jules-v4",
+              "status": "reported",
+              "text": "Finding something interesting enough that I forget I was trying to have a good day.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T172658648-jules-v4"
             }
           ]
         }
@@ -13384,7 +13460,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.387,
+        "activation": 0.399,
         "attention": [
           "moments",
           "somebody",
@@ -13393,9 +13469,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -13407,9 +13483,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.56
       },
@@ -13417,52 +13493,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0477,
-        "association": -0.25,
-        "inhibition": 0.0117,
-        "social": 0.022
+        "activation": 0.029,
+        "association": -0.2292,
+        "inhibition": 0.0385,
+        "social": 0.0197
       },
       "room_memories": [
-        {
-          "source": "20260817T165948458-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Usually the mood between people.",
-          "discourse": "d-20260817T165948458-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165948458-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Usually one odd detail that probably was not supposed to be important.",
-          "discourse": "d-20260817T165948459-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T165948459-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Usually what they seem curious about.",
-          "discourse": "d-20260817T165948459-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T165948459-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
-        {
-          "source": "20260817T165948459-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T165948459-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165948458-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000113"
-        },
         {
           "source": "20260817T170004731-mara-v4",
           "status": "observed",
@@ -15222,6 +15258,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000157"
+        },
+        {
+          "source": "20260817T172658648-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Finding something interesting enough that I forget I was trying to have a good day.",
+          "discourse": "d-20260817T172658648-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T172658648-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658648-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Having one conversation that makes the day feel less ordinary than it started.",
+          "discourse": "d-20260817T172658648-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T172658648-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658648-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Learning something I did not expect to care about.",
+          "discourse": "d-20260817T172658648-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T172658648-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
+        },
+        {
+          "source": "20260817T172658649-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "What makes you say that?",
+          "discourse": "d-20260817T172658649-owen-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T172658648-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
         }
       ],
       "self_history": [
@@ -16498,10 +16574,19 @@
           "branch_memory": "20260817T172603435-jules-v4",
           "discourse": "d-20260817T172645874-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000157"
+        },
+        {
+          "source": "20260817T172658648-jules-v4",
+          "text": "Finding something interesting enough that I forget I was trying to have a good day.",
+          "move": "answer",
+          "memory": "20260817T172658648-jules-v4",
+          "branch_memory": "20260817T172658648-jules-v4",
+          "discourse": "d-20260817T172658648-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000158"
         }
       ],
-      "last_event": "20260817T172645874-sarah-v4",
-      "spoken": 142,
+      "last_event": "20260817T172658649-owen-v4",
+      "spoken": 143,
       "silences": 0,
       "people": {
         "sarah": {
@@ -16849,6 +16934,13 @@
               "text": "Dry humor, especially when it sneaks up on me.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T172502153-sarah-v4"
+            },
+            {
+              "source": "20260817T172658648-sarah-v4",
+              "status": "reported",
+              "text": "Learning something I did not expect to care about.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T172658648-sarah-v4"
             }
           ]
         },
@@ -17428,6 +17520,13 @@
               "text": "Having one conversation that makes the day feel less ordinary than it started.",
               "branch_owner": "mara",
               "branch_memory": "20260817T172603435-mara-v4"
+            },
+            {
+              "source": "20260817T172658648-mara-v4",
+              "status": "reported",
+              "text": "Having one conversation that makes the day feel less ordinary than it started.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T172658648-mara-v4"
             }
           ]
         },
