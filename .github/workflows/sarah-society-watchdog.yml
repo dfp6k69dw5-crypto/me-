@@ -1,4 +1,4 @@
-name: Sarah Society Watchdog
+name: The Room Watchdog
 
 on:
   schedule:
@@ -13,7 +13,7 @@ jobs:
   watchdog:
     runs-on: ubuntu-latest
     steps:
-      - name: Restart pulse only if it stopped
+      - name: Restart The Room pulse only if it stopped
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -25,12 +25,12 @@ jobs:
             --json status \
             --jq '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending")] | length')"
 
-          echo "Active pulse runs: $active"
+          echo "Active Room pulse runs: $active"
           if [ "$active" = "0" ]; then
-            echo "Pulse is stopped; starting a new one"
+            echo "The Room pulse is stopped; starting a new one"
             gh workflow run sarah-society-pulse.yml \
               --repo "$GITHUB_REPOSITORY" \
               --ref main
           else
-            echo "Pulse is already alive"
+            echo "The Room pulse is already alive"
           fi
