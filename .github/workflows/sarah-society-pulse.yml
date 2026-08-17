@@ -1,4 +1,4 @@
-name: Sarah Society Pulse
+name: The Room Pulse
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: sarah-society-pulse-chain
+  group: the-room-pulse-chain
   cancel-in-progress: false
 
 jobs:
@@ -20,13 +20,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
-      - name: Dispatch a society turn about every minute
+      - name: Give The Room a turn about every minute
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           for n in $(seq 1 330); do
-            echo "Dispatching society turn $n of 330"
+            echo "Dispatching room turn $n of 330"
             gh workflow run sarah-society.yml \
               --repo "$GITHUB_REPOSITORY" \
               --ref main \
@@ -36,7 +36,7 @@ jobs:
             fi
           done
 
-          echo "Handing the pulse to a fresh GitHub runner"
+          echo "Handing The Room pulse to a fresh GitHub runner"
           gh workflow run sarah-society-pulse.yml \
             --repo "$GITHUB_REPOSITORY" \
             --ref main
