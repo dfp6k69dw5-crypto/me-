@@ -32,6 +32,7 @@ footer{color:#6f7a8b;font-size:11px;line-height:1.5;margin-top:20px}@media(max-w
 <div id="people" class="people"></div>
 <div class="controls"><button id="addPerson">+ Add person</button><button id="example">Example</button></div>
 <div class="hint">Use a birth year when a name is ambiguous, for example <b>Charles Darwin 1809</b>. This version uses Wikidata father/mother records, so it works best for documented public or historical people.</div>
+<div class="hint"><b>Public job notice:</b> the names you enter are included in a public GitHub issue. Do not use this version for private relatives or confidential family information.</div>
 <div class="depth"><span>Ancestor search depth</span><input id="depth" type="range" min="2" max="10" value="8"><span id="depthValue" class="depthValue">8 generations</span></div>
 <div class="controls"><button id="compare" class="primary">Compare on 12-node Supercomputer</button></div>
 </section>
@@ -89,7 +90,7 @@ compareBtn.onclick=()=>{
   const url='https://github.com/'+OWNER+'/'+REPO+'/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body);
   localStorage.setItem('genealogyPending',JSON.stringify({id,names:n,started:Date.now()}));
   resultPanel.style.display='none';compareBtn.disabled=true;jobEl.textContent=id;
-  showStatus('Submit the GitHub job','GitHub is opening with the private compute request prefilled. Tap “Submit new issue,” then come back here; this page will watch for the result.');
+  showStatus('Submit the GitHub job','GitHub is opening with the cluster request prefilled. The issue is public. Tap “Submit new issue,” then come back here; this page will watch for the result.');
   window.open(url,'_blank');startPolling(id);
 };
 
