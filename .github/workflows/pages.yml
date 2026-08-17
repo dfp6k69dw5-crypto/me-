@@ -22,7 +22,6 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout newest main
@@ -39,6 +38,22 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: .
-      - name: Deploy
+      - name: Deploy attempt 1
+        id: deploy1
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      - name: Brief retry pause 1
+        if: steps.deploy1.outcome == 'failure'
+        run: sleep 5
+      - name: Deploy attempt 2
+        id: deploy2
+        if: steps.deploy1.outcome == 'failure'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      - name: Brief retry pause 2
+        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        run: sleep 10
+      - name: Deploy attempt 3
         id: deployment
+        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
         uses: actions/deploy-pages@v4
