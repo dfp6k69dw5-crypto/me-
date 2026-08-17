@@ -34,46 +34,39 @@ body{background:radial-gradient(900px 600px at 10% -15%,#1a2130 0,transparent 58
     <div class="sp"></div>
     <button id="status" class="btn retry" type="button">loading</button>
     <a class="btn hideSmall" href="sarah-ai.html">SARAH</a>
-    <span class="btn">LIVE FEED · 3s</span>
+    <span class="btn">LIVE FEED · 1s</span>
   </header>
   <div id="people" class="people"></div>
   <main id="chat" class="chat"><div class="empty">Loading the Room…</div></main>
 </div>
-
 <div class="meta">12 compute nodes · 48 overlapping processes · all four contribute once per conversational beat</div>
-
 <div id="sheet" class="sheet">
   <section class="panel">
-    <h2 id="mindName"></h2>
-    <div class="sub">Psychological profile plus learned state and post-reboot memory.</div>
+    <h2 id="mindName"></h2><div class="sub">Psychological profile plus learned state and post-reboot memory.</div>
     <div class="card"><b>PSYCHOLOGICAL PROFILE</b><div id="genes"></div></div>
     <div class="card"><b>EMERGENT DEVELOPMENT</b><div id="development"></div></div>
     <div class="card"><b>RECENT MEMORY</b><div id="memory"></div></div>
     <button id="close" class="close">Close</button>
   </section>
 </div>
-
 <script>
 const BAKED_B64="__ROOM_SNAPSHOT_B64__";
-const RAW="https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/live.json";
-const LOCAL="../room/live.json";
-const $=s=>document.querySelector(s);
-let minds=null,lastSignature="",haveSnapshot=false,lastFetchAt=0,lastFetchOK=false,refreshing=false;
-
+const FEED_RAW="https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/feed.json",FEED_LOCAL="../room/feed.json";
+const FULL_RAW="https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/live.json",FULL_LOCAL="../room/live.json";
+const $=s=>document.querySelector(s);let minds=null,lastSignature="",haveSnapshot=false,lastFetchAt=0,lastFetchOK=false,refreshing=false,lastFullAttempt=0;
 function decodeBaked(){try{if(!BAKED_B64||BAKED_B64.startsWith("__ROOM_"))return null;const bytes=Uint8Array.from(atob(BAKED_B64),c=>c.charCodeAt(0));return JSON.parse(new TextDecoder().decode(bytes))}catch{return null}}
 function timeLabel(s){try{return new Date(s).toLocaleString([],{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",second:"2-digit"})}catch{return""}}
 async function fetchJson(url){const sep=url.includes("?")?"&":"?";const r=await fetch(url+sep+"fresh="+Date.now()+"-"+Math.random().toString(36).slice(2),{cache:"no-store"});if(!r.ok)throw new Error(String(r.status));return r.json()}
-async function getSnapshot(){try{return await fetchJson(RAW)}catch{return await fetchJson(LOCAL)}}
-
+async function getFull(){try{return await fetchJson(FULL_RAW)}catch{return await fetchJson(FULL_LOCAL)}}
+function acceptFeed(s){if(!s?.minds?.entities||!Array.isArray(s.conversation))throw new Error("bad feed");const t=new Date(s.generated_at||s?.state?.last_run||0).getTime();if(!Number.isFinite(t)||Date.now()-t>15000)throw new Error("stale feed");return s}
+async function getFeed(){try{return acceptFeed(await fetchJson(FEED_RAW))}catch{return acceptFeed(await fetchJson(FEED_LOCAL))}}
 function setStatus(s){const st=$("#status");st.classList.remove("live","retry");if(!haveSnapshot){st.textContent="loading";st.classList.add("retry");return}const beat=s?.state?.cycle??"—",voices=s?.state?.beat_message_count??0,age=Math.max(0,Date.now()-lastFetchAt);if(lastFetchOK&&age<12000){st.textContent="beat "+beat+" · "+voices+" voices";st.classList.add("live")}else{st.textContent="tap to refresh";st.classList.add("retry")}}
 function renderPeople(){const box=$("#people");box.innerHTML="";if(!minds?.entities)return;for(const[id,m]of Object.entries(minds.entities)){const b=document.createElement("button");b.className="person";b.innerHTML="<b>"+m.name+"</b> 3 nodes · 12 processes";b.onclick=()=>openMind(id);box.appendChild(b)}}
 function openMind(id){const m=minds.entities[id],g=m.genome,d=m.development||{};$("#mindName").textContent=m.name;$("#genes").textContent=Object.entries(g).map(([k,v])=>k.replaceAll("_"," ")+"  "+Number(v).toFixed(3)).join("\n");const topics=Object.entries(d.topic_weights||{}).slice(0,12),rel=Object.entries(d.relationships||{}).sort((a,b)=>b[1]-a[1]);$("#development").textContent=["beats: "+(d.turns||0)+"   spoken: "+(d.spoken||0),"current associations: "+(topics.map(([k])=>k).join(" · ")||"none yet"),"familiarity: "+(rel.map(([k,v])=>(minds.entities[k]?.name||k)+" "+Number(v).toFixed(2)).join(" · ")||"none yet")].join("\n");$("#memory").textContent=(m.memory||[]).slice(-12).map(x=>"• "+x.text).join("\n\n")||"none yet";$("#sheet").classList.add("open")}
-$("#close").onclick=()=>$("#sheet").classList.remove("open");$("#status").onclick=()=>refresh();
-
+$("#close").onclick=()=>$("#sheet").classList.remove("open");$("#status").onclick=()=>refresh(true);
 function render(s,fromFetch=false){if(!s?.minds)return;const nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-180;minds=s.minds;if(fromFetch){lastFetchOK=true;lastFetchAt=Date.now()}renderPeople();const conv=Array.isArray(s.conversation)?s.conversation:[],sig=conv.map(x=>x.id).join("|");if(sig!==lastSignature||!haveSnapshot){lastSignature=sig;const chat=$("#chat");chat.innerHTML="";if(!conv.length)chat.innerHTML='<div class="empty">The Room is active.<br>No one has spoken yet.</div>';let lastBeat=null;for(const m of conv){const beat=m.beat_id||"legacy";if(beat!==lastBeat){const count=conv.filter(x=>(x.beat_id||"legacy")===beat).length,label=document.createElement("div"),cycle=(beat.match(/(\d{6})$/)||[])[1];label.className="beat";label.textContent=(cycle?"BEAT "+Number(cycle):"EARLIER")+" · "+count+" VOICE"+(count===1?"":"S");chat.appendChild(label);lastBeat=beat}const d=document.createElement("div");d.className="msg";d.innerHTML='<div class="who"></div><div class="text"></div><div class="when"></div>';d.querySelector(".who").textContent=minds.entities[m.speaker]?.name||m.speaker;d.querySelector(".text").textContent=m.text;d.querySelector(".when").textContent=timeLabel(m.at);chat.appendChild(d)}if(nearBottom||!haveSnapshot)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:haveSnapshot?"smooth":"auto"}),30)}haveSnapshot=true;setStatus(s)}
-async function refresh(){if(refreshing)return;refreshing=true;try{render(await getSnapshot(),true)}catch{lastFetchOK=false;setStatus(null)}finally{refreshing=false}}
-
-const baked=decodeBaked();if(baked)render(baked,false);refresh();setInterval(refresh,3000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refresh()});window.addEventListener("pageshow",()=>refresh());
+async function refresh(forceFull=false){if(refreshing)return;refreshing=true;try{let s;if(forceFull){lastFullAttempt=Date.now();s=await getFull()}else{try{s=await getFeed()}catch{if(!haveSnapshot||Date.now()-lastFullAttempt>=3000){lastFullAttempt=Date.now();s=await getFull()}else{return}}render(s,true)}catch{lastFetchOK=false;setStatus(null)}finally{refreshing=false}}
+const baked=decodeBaked();if(baked)render(baked,false);refresh(true);setInterval(()=>refresh(false),1000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refresh(false)});window.addEventListener("pageshow",()=>refresh(false));
 </script>
 </body>
 </html>
