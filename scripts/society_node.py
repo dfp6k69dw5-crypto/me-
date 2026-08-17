@@ -83,7 +83,7 @@ elif cognitive_mode=="associate": mode_recent=2 if topic_fatigue>=.72 else max(4
 else: mode_recent=base_recent
 recent=[] if mode_recent==0 else conversation[-mode_recent:]
 last_text=str(recent[-1].get("text","") if recent else "")
-transcript="\n".join(f'{names.get(m.get("speaker"),m.get("speaker","?"))}: {m.get("text","")}' for m in recent) or "(The four strangers are spending time together quietly; nobody needs to fill the silence.)"
+transcript="\n".join(f'{names.get(m.get("speaker"),m.get("speaker","?"))}: {m.get("text","")}' for m in recent)
 
 # Learned associations are sampled rather than repeatedly injecting the strongest ones.
 raw_weighted=[]
@@ -142,7 +142,7 @@ if cognitive_mode=="associate" and topic_fatigue>=.72:
 elif cognitive_mode=="associate":
     mode_instruction="Let one element of the current exchange trigger a sideways association: a contrast, analogy, implication, sensory image, remembered room idea, cause, consequence, or nearby question. The subject may drift substantially. Do not explain the association process."
 elif cognitive_mode=="jump":
-    mode_instruction="Ignore the current subject. Let a different observation, curiosity, opinion, sensation, memory-like room association, odd thought, or question occur naturally. There is nothing to accomplish, organize, study, brainstorm, or plan. Do not announce a topic change and do not bridge back to the previous subject."
+    mode_instruction="Ignore the current subject. Let a different concrete observation, curiosity, opinion, sensation, odd thought, or question with an actual subject occur naturally. There is nothing to accomplish, organize, study, brainstorm, or plan. Do not ask the group what to discuss or do. Do not announce a topic change and do not bridge back to the previous subject."
 else:
     mode_instruction="Stay with the current thread if it still has life. Add something of your own rather than paraphrasing it. You may disagree, hesitate, joke, answer indirectly, or let the thought trail off."
 
@@ -158,21 +158,24 @@ Persistent adult background: {human_context}
 Learned association cues, if any: {topic_text}
 Earlier remembered room material, if any: {memory_text}
 Output only the spoken line, without a name label or quotation marks."""
-base_prompt=f"Recent room speech:\n{transcript}\n\n{name}:"
+base_prompt=(f"Recent room speech:\n{transcript}\n\n{name}:" if recent else f"{name}:")
 
 SERVICE=[r"\bhow can i help\b",r"\bhow may i help\b",r"\bwhat can i do for you\b",r"\bhow can i assist\b",r"\bdo you need (?:anything|help)\b",r"\bwhat do you need\b",r"\bhere to help\b",r"\bwhat (?:specific )?tasks or goals\b",r"\bfor (?:your|our) next meeting\b"]
+FACILITATOR=[r"\bare you looking for\b",r"\bwhat (?:would|do) you like to (?:talk about|discuss|explore|do)\b",r"\bwhat do we want to do\b",r"\bwhat should we do\b",r"\bwhat (?:specific )?topic\b",r"\btopic to (?:explore|discuss|talk about)\b",r"\banything (?:you'd|you would) like to (?:talk about|discuss|explore|do)\b"]
 META=[r"\bif [a-z]+ has something to say\b",r"\b[a-z]+ could say\b",r"\b[a-z]+ is now in the room\b",r"\boutput only\b",r"\brecent room speech\b",r"\bcontinue directly from here\b",r"\bprevious candidate\b",r"\bprevious (?:response|conversation) was (?:too )?(?:generic|repetitive)\b",r"\btoo generic or repetitive\b",r"\bgenuinely different peer remark\b",r"\bgrounded in the room\b",r"\bservice/task question\b",r"\bproduce a genuinely different\b",r"\bgenerate a fresh, thought-provoking statement\b",r"\btry another natural line\b",r"\bdiffer substantially from the first attempt\b",r"\bcontinue the peers'? current exchange\b",r"\bselected earlier memories\b",r"\bremembered room content\b",r"\bpersistent adult background\b",r"\bcognitive move\b"]
 speaker_label_re=re.compile(r"(?im)(?:^|\n)\s*(?:"+"|".join(re.escape(v) for v in names.values())+r")\s*:")
 def max_recent_similarity(text): return max((jac(text,m.get("text","") ) for m in recent),default=0.0)
 def natural_candidate(text):
     low=(text or "").lower().strip()
     if not low:return False
-    return not speaker_label_re.search(text) and not any(re.search(p,low) for p in SERVICE+META)
+    return not speaker_label_re.search(text) and not any(re.search(p,low) for p in SERVICE+FACILITATOR+META)
 def forbidden_reason(text):
     low=(text or "").lower().strip()
     if speaker_label_re.search(text or ""): return "speaker-label-echo"
     for pat in SERVICE:
         if re.search(pat,low):return "service-language"
+    for pat in FACILITATOR:
+        if re.search(pat,low):return "facilitator-language"
     for pat in META:
         if re.search(pat,low):return "prompt-echo"
     for m in recent:
