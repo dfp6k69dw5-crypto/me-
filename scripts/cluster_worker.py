@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
-import json, math, os, random, sys, time, hashlib
+import base64, hashlib, json, math, os, random, time
+from discovery_cluster import worker_result as discovery_worker_result
 
 worker = int(os.getenv('WORKER_ID','0'))
-workers = int(os.getenv('WORKER_COUNT','8'))
+workers = int(os.getenv('WORKER_COUNT','12'))
 workload = os.getenv('WORKLOAD','montecarlo')
 scale = max(1, min(20, int(os.getenv('SCALE','5'))))
 started = time.time()
+request = None
 
-if workload == 'montecarlo':
+if workload == 'shared_job':
+    raw = os.getenv('CLUSTER_REQUEST_B64','')
+    if not raw:
+        raise SystemExit('shared_job requires CLUSTER_REQUEST_B64')
+    request = json.loads(base64.b64decode(raw).decode('utf-8'))
+    if request.get('project') == 'discovery' and request.get('task') == 'conceptual_bridge':
+        result = discovery_worker_result(request, worker)
+        units = int(result.get('units',0))
+    else:
+        raise SystemExit('unsupported shared job handler')
+elif workload == 'montecarlo':
     n = scale * 1_000_000
     rng = random.Random(9173 + worker * 104729)
     inside = 0
@@ -36,8 +48,7 @@ elif workload == 'primes':
     units = width
 elif workload == 'hashstorm':
     n = scale * 500_000
-    seed = f'cluster-{worker}'.encode()
-    h = seed
+    h = f'cluster-{worker}'.encode()
     for i in range(n):
         h = hashlib.sha256(h + i.to_bytes(8,'little')).digest()
     result = {'iterations': n, 'digest': h.hex()}
@@ -51,6 +62,9 @@ out = {
     'workers': workers,
     'workload': workload,
     'scale': scale,
+    'job_id': (request or {}).get('job_id'),
+    'project': (request or {}).get('project'),
+    'task': (request or {}).get('task'),
     'units': units,
     'elapsed': elapsed,
     'rate': units / elapsed if elapsed else 0,
@@ -58,5 +72,5 @@ out = {
 }
 os.makedirs('cluster_parts', exist_ok=True)
 with open(f'cluster_parts/worker-{worker:02d}.json','w') as f:
-    json.dump(out, f, indent=2)
-print(json.dumps(out))
+    json.dump(out, f, indent=2, ensure_ascii=False)
+print(json.dumps(out, ensure_ascii=False))
