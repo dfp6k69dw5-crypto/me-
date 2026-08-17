@@ -1,0 +1,22 @@
+name: Room cognition architecture smoke
+
+on:
+  pull_request:
+    paths:
+      - 'room/**'
+      - 'scripts/room_cognition_v2.py'
+      - '.github/workflows/sarah-society.yml'
+      - '.github/workflows/room-architecture-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  architecture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate 12-node / 48-process Room architecture
+        run: |
+          python3 -m py_compile scripts/room_cognition_v2.py
+          python3 scripts/room_cognition_v2.py selftest

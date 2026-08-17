@@ -4,16 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       entity:
-        description: Who gets the next three-node turn?
+        description: Legacy pulse compatibility; ignored because all four entities process every cycle
         required: true
         default: auto
         type: choice
-        options:
-          - auto
-          - sarah
-          - mara
-          - owen
-          - jules
+        options: [auto, sarah, mara, owen, jules]
 
 permissions:
   contents: write
@@ -26,64 +21,83 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  select:
-    runs-on: ubuntu-latest
-    outputs:
-      entity: ${{ steps.pick.outputs.entity }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: main
-      - id: pick
-        name: Choose who is active
-        env:
-          FORCED_ENTITY: ${{ github.event.inputs.entity || 'auto' }}
-        run: python3 scripts/society_select.py
-
-  nodes:
-    needs: select
-    if: needs.select.outputs.entity != 'rest'
+  sense:
+    name: Sense node ${{ matrix.node }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 3
+      max-parallel: 12
       matrix:
-        node: [0, 1, 2]
+        node: [0,1,2,3,4,5,6,7,8,9,10,11]
     steps:
       - uses: actions/checkout@v6
         with:
           ref: main
-      - name: Load GitHub-held mind and runtime
+      - name: Run four cognitive tasks
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          mkdir -p society_model runtime
-          gh release view society-brain-v1 --repo "$GITHUB_REPOSITORY" >/dev/null
-          gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'society-brain-q4_0.gguf' --dir society_model
-          gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'llama-runtime-linux-x64.tar.gz' --dir runtime
-          tar -xzf runtime/llama-runtime-linux-x64.tar.gz -C runtime
-          completion="$(find runtime -type f -name 'llama-completion' | head -n 1)"
-          test -n "$completion"
-          chmod +x "$completion"
-          echo "LLAMA_COMPLETION=$GITHUB_WORKSPACE/$completion" >> "$GITHUB_ENV"
-          echo "LD_LIBRARY_PATH=$GITHUB_WORKSPACE/$(dirname "$completion")" >> "$GITHUB_ENV"
-          echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  society_model/society-brain-q4_0.gguf' | sha256sum -c -
-      - name: Node ${{ matrix.node }} thinks locally behind prompt guard
-        env:
-          ENTITY_ID: ${{ needs.select.outputs.entity }}
-          NODE_ID: ${{ matrix.node }}
-          SOCIETY_MODEL_PATH: ${{ github.workspace }}/society_model/society-brain-q4_0.gguf
-        run: python3 scripts/society_node_guard.py
+          ROOM_NODE_ID: ${{ matrix.node }}
+          ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
+        run: python3 scripts/room_cognition_v2.py node --phase sense
       - uses: actions/upload-artifact@v4
         with:
-          name: room-${{ needs.select.outputs.entity }}-node-${{ matrix.node }}
-          path: society_parts/*.json
+          name: room-sense-${{ matrix.node }}
+          path: room_parts/sense-*.json
           retention-days: 1
 
-  commit-turn:
-    needs: [select, nodes]
-    if: needs.select.outputs.entity != 'rest'
+  bus:
+    name: Broadcast 12-node cognitive bus
+    needs: sense
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: room-sense-*
+          path: room_parts
+          merge-multiple: true
+      - name: Route public and entity-private state
+        env:
+          ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
+        run: python3 scripts/room_cognition_v2.py bus
+      - uses: actions/upload-artifact@v4
+        with:
+          name: room-cognitive-bus
+          path: room_work/bus-sense.json
+          retention-days: 1
+
+  recurrent:
+    name: Recurrent node ${{ matrix.node }}
+    needs: bus
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        node: [0,1,2,3,4,5,6,7,8,9,10,11]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/download-artifact@v4
+        with:
+          name: room-cognitive-bus
+          path: room_work
+      - name: Reprocess after all-node communication
+        env:
+          ROOM_NODE_ID: ${{ matrix.node }}
+          ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
+        run: python3 scripts/room_cognition_v2.py node --phase recurrent --bus room_work/bus-sense.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: room-recurrent-${{ matrix.node }}
+          path: room_parts/recurrent-*.json
+          retention-days: 1
+
+  commit-room:
+    name: Integrate cognition and serialize expression
+    needs: recurrent
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -92,25 +106,26 @@ jobs:
           fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
-          pattern: room-${{ needs.select.outputs.entity }}-node-*
-          path: society_parts
+          pattern: room-recurrent-*
+          path: room_parts
           merge-multiple: true
-      - name: Resolve three nodes behind commit prompt guard
+      - name: Commit one expression or genuine silence — no voting
         env:
-          ENTITY_ID: ${{ needs.select.outputs.entity }}
-        run: python3 scripts/society_commit_guard.py
-      - name: Commit the continuing room
+          ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
+        run: python3 scripts/room_cognition_v2.py commit
+      - name: Commit continuing Room
         run: |
+          set -euo pipefail
           git config user.name "the-room"
           git config user.email "actions@users.noreply.github.com"
-          git add society
-          git commit -m "Room turn: ${{ needs.select.outputs.entity }}" || true
+          git add room society/live.json
+          git commit -m "Room cognition v2 cycle" || true
           git pull --rebase origin main
           git push origin HEAD:main
 
   publish-room:
-    needs: commit-turn
-    if: needs.commit-turn.result == 'success'
+    needs: commit-room
+    if: needs.commit-room.result == 'success'
     concurrency:
       group: pages
       cancel-in-progress: true
@@ -119,7 +134,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout newest room
+      - name: Checkout newest Room
         uses: actions/checkout@v6
         with:
           ref: main
