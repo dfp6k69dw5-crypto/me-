@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Out-of-model guard against system/prompt text entering The Room."""
+"""Out-of-model guard against system/prompt or assistant-role text entering The Room."""
 import re
 
 # These are implementation-language fingerprints, not forbidden conversation topics.
@@ -49,6 +49,22 @@ HARD_FRAGMENTS = [
     "rebuilt era interaction",
 ]
 
+# Strong traces of the model reverting to its underlying assistant/service role.
+# These are behavior signatures, not banned discussion subjects.
+ASSISTANT_ROLE_PATTERNS = [
+    r"\bi need you to provide\b.*\b(?:question|questions|information|details)\b",
+    r"\bprovide (?:me )?the specific questions\b",
+    r"\bi cannot provide (?:a )?conversation\b",
+    r"\bi (?:am|'m) only able to assist\b",
+    r"\bonly able to assist with\b",
+    r"\bhow can i assist\b",
+    r"\bhow can i help\b",
+    r"\bwhat can i do for you\b",
+    r"\bas an ai\b",
+    r"\bas a language model\b",
+    r"\bi (?:cannot|can't) (?:help|assist) with that\b",
+]
+
 
 def _words(text):
     return set(re.findall(r"[a-z0-9']+", str(text or "").lower()))
@@ -62,7 +78,7 @@ FINGERPRINT_WORDS = [_words(x) for x in PROMPT_FINGERPRINTS]
 
 
 def prompt_leak_reason(text):
-    """Return a reason string if text resembles hidden engine instructions."""
+    """Return a reason string if text resembles hidden engine or assistant-role text."""
     low = str(text or "").lower()
     norm = _norm(text)
     if not norm:
@@ -71,6 +87,10 @@ def prompt_leak_reason(text):
     for frag in HARD_FRAGMENTS:
         if frag in low:
             return f"hard-fragment:{frag}"
+
+    for pattern in ASSISTANT_ROLE_PATTERNS:
+        if re.search(pattern, low, flags=re.S):
+            return f"assistant-role:{pattern[:42]}"
 
     # The exact failure seen in Jules: several premise clauses copied together.
     premise_hits = sum(1 for frag in (
