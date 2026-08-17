@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.229,
+        "activation": 0.204,
         "attention": [
           "people",
           "problem",
@@ -10,10 +10,10 @@
           "thinks",
           "talking",
           "same",
-          "open-ended",
-          "ridiculous",
-          "idea",
-          "least"
+          "gives",
+          "specific",
+          "picture",
+          "how"
         ]
       },
       "medium": {
@@ -24,10 +24,10 @@
           "thinks",
           "talking",
           "same",
-          "open-ended",
-          "ridiculous",
-          "idea",
-          "least"
+          "gives",
+          "specific",
+          "picture",
+          "how"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0964,
-        "association": -0.023,
-        "inhibition": 0.2284,
-        "social": 0.0375
+        "activation": -0.0928,
+        "association": -0.0675,
+        "inhibition": 0.1383,
+        "social": -0.027
       },
       "room_memories": [
-        {
-          "source": "20260817T195831519-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "A little around the edges, but the basic preference is still there.",
-          "discourse": "d-20260817T195831519-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
-          "discourse": "d-20260817T195831519-jules-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T195831519-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "What kind of thing can keep your attention for hours?",
-          "discourse": "d-20260817T195831519-mara-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
         {
           "source": "20260817T195833772-owen-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T200003380-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004209"
+        },
+        {
+          "source": "20260817T200008128-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "discourse": "d-20260817T200008128-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T200008128-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T200008128-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What kind of thing can keep your attention for hours?",
+          "discourse": "d-20260817T200008128-sarah-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T195339164-sarah-v4",
-          "text": "What kind of thing can keep your attention for hours?",
-          "move": "question",
-          "memory": null,
-          "branch_memory": null,
-          "discourse": "d-20260817T195339164-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004030"
-        },
         {
           "source": "20260817T195341297-sarah-v4",
           "text": "Has that changed much for you?",
@@ -3462,22 +3453,24 @@
           "branch_memory": "20260817T200003380-mara-v4",
           "discourse": "d-20260817T200005499-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004209"
+        },
+        {
+          "source": "20260817T200008128-sarah-v4",
+          "text": "What kind of thing can keep your attention for hours?",
+          "move": "question",
+          "memory": null,
+          "branch_memory": null,
+          "discourse": "d-20260817T200008128-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
         }
       ],
-      "last_event": "20260817T200005499-jules-v4",
-      "spoken": 4194,
+      "last_event": "20260817T200008128-sarah-v4",
+      "spoken": 4195,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T195437426-mara-v4",
-              "status": "reported",
-              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T195437426-mara-v4"
-            },
             {
               "source": "20260817T195443892-mara-v4",
               "status": "reported",
@@ -4096,6 +4089,13 @@
             },
             {
               "source": "20260817T200005499-mara-v4",
+              "status": "reported",
+              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T200003380-mara-v4"
+            },
+            {
+              "source": "20260817T200008128-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
               "branch_owner": "mara",
@@ -5385,10 +5385,10 @@
           "thinks",
           "talking",
           "same",
-          "open-ended",
-          "ridiculous",
-          "idea",
-          "least"
+          "gives",
+          "specific",
+          "picture",
+          "how"
         ]
       },
       "medium": {
@@ -5399,10 +5399,10 @@
           "thinks",
           "talking",
           "same",
-          "open-ended",
-          "ridiculous",
-          "idea",
-          "least"
+          "gives",
+          "specific",
+          "picture",
+          "how"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0186,
-        "association": -0.25,
-        "inhibition": -0.0574,
-        "social": -0.0113
+        "activation": -0.0201,
+        "association": -0.1226,
+        "inhibition": -0.1712,
+        "social": -0.1917
       },
       "room_memories": [
-        {
-          "source": "20260817T195831519-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "A little around the edges, but the basic preference is still there.",
-          "discourse": "d-20260817T195831519-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
-          "discourse": "d-20260817T195831519-jules-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T195831519-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "What kind of thing can keep your attention for hours?",
-          "discourse": "d-20260817T195831519-mara-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
         {
           "source": "20260817T195833772-owen-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T200003380-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004209"
+        },
+        {
+          "source": "20260817T200008128-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "discourse": "d-20260817T200008128-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T200008128-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T200008128-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What kind of thing can keep your attention for hours?",
+          "discourse": "d-20260817T200008128-sarah-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T195339164-mara-v4",
-          "text": "Because I notice what people do when they stop performing for everybody else.",
-          "move": "answer",
-          "memory": "20260817T194712247-mara-v4",
-          "branch_memory": "20260817T195334682-mara-v4",
-          "discourse": "d-20260817T195339164-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004030"
-        },
         {
           "source": "20260817T195341296-mara-v4",
           "text": "A story where I start caring about the people before I realize how long I have been listening.",
@@ -8837,10 +8828,19 @@
           "branch_memory": "20260817T200003380-mara-v4",
           "discourse": "d-20260817T200005499-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004209"
+        },
+        {
+          "source": "20260817T200008128-mara-v4",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "move": "answer",
+          "memory": "20260817T195353807-mara-v4",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "discourse": "d-20260817T200008128-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
         }
       ],
-      "last_event": "20260817T200005499-jules-v4",
-      "spoken": 4198,
+      "last_event": "20260817T200008128-sarah-v4",
+      "spoken": 4199,
       "silences": 0,
       "people": {
         "sarah": {
@@ -10752,7 +10752,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.132,
+        "activation": 0.143,
         "attention": [
           "people",
           "problem",
@@ -10760,10 +10760,10 @@
           "thinks",
           "talking",
           "same",
-          "open-ended",
-          "ridiculous",
-          "idea",
-          "least"
+          "gives",
+          "specific",
+          "picture",
+          "how"
         ]
       },
       "medium": {
@@ -10774,10 +10774,10 @@
           "thinks",
           "talking",
           "same",
-          "open-ended",
-          "ridiculous",
-          "idea",
-          "least"
+          "gives",
+          "specific",
+          "picture",
+          "how"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0139,
-        "association": 0.1751,
-        "inhibition": -0.0323,
-        "social": -0.1472
+        "activation": -0.0513,
+        "association": -0.0551,
+        "inhibition": 0.0603,
+        "social": -0.128
       },
       "room_memories": [
-        {
-          "source": "20260817T195831519-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "A little around the edges, but the basic preference is still there.",
-          "discourse": "d-20260817T195831519-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
-          "discourse": "d-20260817T195831519-jules-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T195831519-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "What kind of thing can keep your attention for hours?",
-          "discourse": "d-20260817T195831519-mara-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
         {
           "source": "20260817T195833772-owen-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T200003380-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004209"
+        },
+        {
+          "source": "20260817T200008128-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "discourse": "d-20260817T200008128-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T200008128-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T200008128-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What kind of thing can keep your attention for hours?",
+          "discourse": "d-20260817T200008128-sarah-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T195339164-owen-v4",
-          "text": "There is a useful rule underneath that answer.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T195334682-mara-v4",
-          "discourse": "d-20260817T195339164-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004030"
-        },
         {
           "source": "20260817T195341296-owen-v4",
           "text": "A problem with a clear shape that I can actually get somewhere with.",
@@ -14212,10 +14203,19 @@
           "branch_memory": "20260817T200003380-mara-v4",
           "discourse": "d-20260817T200005499-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004209"
+        },
+        {
+          "source": "20260817T200008128-owen-v4",
+          "text": "There is a useful rule underneath that answer.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T200003380-mara-v4",
+          "discourse": "d-20260817T200008128-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
         }
       ],
-      "last_event": "20260817T200005499-jules-v4",
-      "spoken": 4193,
+      "last_event": "20260817T200008128-sarah-v4",
+      "spoken": 4194,
       "silences": 0,
       "people": {
         "sarah": {
@@ -14857,13 +14857,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T195437426-mara-v4",
-              "status": "reported",
-              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T195437426-mara-v4"
-            },
-            {
               "source": "20260817T195443892-mara-v4",
               "status": "reported",
               "text": "How they treat people when there is nothing to gain from it.",
@@ -15481,6 +15474,13 @@
             },
             {
               "source": "20260817T200005499-mara-v4",
+              "status": "reported",
+              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T200003380-mara-v4"
+            },
+            {
+              "source": "20260817T200008128-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
               "branch_owner": "mara",
@@ -16127,7 +16127,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.329,
+        "activation": 0.302,
         "attention": [
           "people",
           "problem",
@@ -16135,10 +16135,10 @@
           "thinks",
           "talking",
           "same",
-          "open-ended",
-          "ridiculous",
-          "idea",
-          "least"
+          "gives",
+          "specific",
+          "picture",
+          "how"
         ]
       },
       "medium": {
@@ -16149,10 +16149,10 @@
           "thinks",
           "talking",
           "same",
-          "open-ended",
-          "ridiculous",
-          "idea",
-          "least"
+          "gives",
+          "specific",
+          "picture",
+          "how"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0948,
-        "association": 0.134,
-        "inhibition": -0.0413,
-        "social": 0.1095
+        "activation": 0.1836,
+        "association": 0.0584,
+        "inhibition": -0.0773,
+        "social": 0.06
       },
       "room_memories": [
-        {
-          "source": "20260817T195831519-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "A little around the edges, but the basic preference is still there.",
-          "discourse": "d-20260817T195831519-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
-          "discourse": "d-20260817T195831519-jules-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T195831519-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T195827335-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
-        {
-          "source": "20260817T195831519-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "What kind of thing can keep your attention for hours?",
-          "discourse": "d-20260817T195831519-mara-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004165"
-        },
         {
           "source": "20260817T195833772-owen-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T200003380-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004209"
+        },
+        {
+          "source": "20260817T200008128-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "discourse": "d-20260817T200008128-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T200008128-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T200008128-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T200003380-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
+        },
+        {
+          "source": "20260817T200008128-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What kind of thing can keep your attention for hours?",
+          "discourse": "d-20260817T200008128-sarah-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T195339164-jules-v4",
-          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T195334682-mara-v4",
-          "discourse": "d-20260817T195339164-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004030"
-        },
         {
           "source": "20260817T195341296-jules-v4",
           "text": "Anything that keeps producing weird connections faster than I can follow them.",
@@ -19587,10 +19578,19 @@
           "branch_memory": "20260817T200003380-mara-v4",
           "discourse": "d-20260817T200005499-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004209"
+        },
+        {
+          "source": "20260817T200008128-jules-v4",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T200003380-mara-v4",
+          "discourse": "d-20260817T200008128-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004210"
         }
       ],
-      "last_event": "20260817T200005499-jules-v4",
-      "spoken": 4194,
+      "last_event": "20260817T200008128-sarah-v4",
+      "spoken": 4195,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20232,13 +20232,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T195437426-mara-v4",
-              "status": "reported",
-              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T195437426-mara-v4"
-            },
-            {
               "source": "20260817T195443892-mara-v4",
               "status": "reported",
               "text": "How they treat people when there is nothing to gain from it.",
@@ -20856,6 +20849,13 @@
             },
             {
               "source": "20260817T200005499-mara-v4",
+              "status": "reported",
+              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T200003380-mara-v4"
+            },
+            {
+              "source": "20260817T200008128-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
               "branch_owner": "mara",
