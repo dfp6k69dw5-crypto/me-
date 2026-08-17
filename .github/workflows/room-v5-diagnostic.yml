@@ -8,7 +8,7 @@ on:
 permissions:
   contents: read
 
-# exact sequential perception -> deliberation -> expression diagnostic
+# exact sequential perception -> deliberation -> expression diagnostic, schema v3
 jobs:
   diagnostic:
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
           assert s['beat_message_count']==4
           assert set(s['beat_contributors'])=={'sarah','mara','owen','jules'}
           t=s['topic_episode']
-          assert t.get('semantic_schema')==2
+          assert t.get('semantic_schema')==3
           assert t.get('root')
           assert t.get('current_facet')
           assert t.get('current_facet') in t.get('facets',[]) or t.get('current_facet')==t.get('root')
