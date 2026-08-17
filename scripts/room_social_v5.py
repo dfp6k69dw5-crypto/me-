@@ -18,8 +18,8 @@ def words(text):
 
 def rel_template(legacy=.02):
  legacy=clamp(legacy)
- return {'social_model':2,'legacy_familiarity':legacy,'exposure':min(.75,.05+.70*legacy),'direct_familiarity':.08,'trust':.10,'predictability':.12,'reciprocity':.08,'warmth':.12,'respect':.12,'disclosure_depth':0.,'tension':0.,'direct_turns':0,'observed_turns':0,'repair_attempts':0,'repair_successes':0,'last_direct_cycle':None,'shared_references':[],'events':[],'reports':[]}
-def rescale_v1_relationship(r):
+ return {'social_model':3,'legacy_familiarity':legacy,'exposure':min(.75,.05+.70*legacy),'direct_familiarity':.08,'trust':.10,'predictability':.12,'reciprocity':.08,'warmth':.12,'respect':.12,'disclosure_depth':0.,'tension':0.,'direct_turns':0,'observed_turns':0,'repair_attempts':0,'repair_successes':0,'last_direct_cycle':None,'shared_references':[],'events':[],'reports':[]}
+def rescale_legacy_relationship(r):
  dt=max(0,int(r.get('direct_turns',0))); obs=max(0,int(r.get('observed_turns',0)))
  r['direct_familiarity']=min(.72,.08+.00125*dt)
  r['reciprocity']=min(.64,.08+.00105*dt)
@@ -28,7 +28,7 @@ def rescale_v1_relationship(r):
  r['respect']=min(.56,.12+.00055*dt)
  r['exposure']=min(1.,max(float(r.get('exposure',0)),.05+.001*obs))
  r['trust']=min(.35,max(.10,float(r.get('trust',.10))))
- r['social_model']=2
+ r['social_model']=3
  return r
 def migrate_minds(M):
  M=M or {'entities':{}}; ents=M.setdefault('entities',{})
@@ -40,19 +40,19 @@ def migrate_minds(M):
    if 'trust' not in old or 'direct_familiarity' not in old:
     new=rel_template(old.get('familiarity',.02)); new['reports']=list(old.get('reports',[]))[-90:]; people[o]=new
    else:
-    for k,v in rel_template(old.get('legacy_familiarity',old.get('familiarity',.02))).items(): old.setdefault(k,v)
-    if int(old.get('social_model',1))<2: rescale_v1_relationship(old)
+    old_model=int(old.get('social_model',1))
+    defaults=rel_template(old.get('legacy_familiarity',old.get('familiarity',.02)))
+    for k,v in defaults.items(): old.setdefault(k,v)
+    if old_model<3: rescale_legacy_relationship(old)
     old['events']=list(old.get('events',[]))[-160:]; old['shared_references']=list(old.get('shared_references',[]))[-60:]; old['reports']=list(old.get('reports',[]))[-90:]
  return M
 
 def topic_template(c=0):
- return {'semantic_schema':2,'id':f'topic-{c:06d}','root':None,'current_facet':None,'facets':[],'visited_facets':[],'facet_index':0,'unresolved':[],'examples':[],'disagreements':[],'shared_references':[],'participants':list(ORDER),'turns':0,'low_novelty_beats':0,'recent_terms':[],'last_shift_cycle':c,'status':'forming'}
+ return {'semantic_schema':3,'id':f'topic-{c:06d}','root':None,'current_facet':None,'facets':[],'visited_facets':[],'facet_index':0,'unresolved':[],'examples':[],'disagreements':[],'shared_references':[],'participants':list(ORDER),'turns':0,'low_novelty_beats':0,'recent_terms':[],'last_shift_cycle':c,'status':'forming'}
 def migrate_state(S):
  S=S or {}; cycle=int(S.get('cycle',0)); old=S.get('topic_episode')
- if not old or int(old.get('semantic_schema',1))<2:
-  t=topic_template(cycle)
-  if old and old.get('current_facet'): t['shared_references']=[old['current_facet']]
-  S['topic_episode']=t
+ if not old or int(old.get('semantic_schema',1))<3:
+  S['topic_episode']=topic_template(cycle)
   return S
  t=S['topic_episode']
  for k,v in topic_template(cycle).items(): t.setdefault(k,v)
@@ -109,13 +109,14 @@ def _declared_terms(m):
    if x and x not in out: out.append(x)
   return out
  return words((m or {}).get('text',''))
-def topic_terms_from_messages(ms,limit=12):
+def topic_terms_from_messages(ms,limit=12,episode_id=None):
  c=Counter(); rec=[]
- for m in ms[-16:]:
+ for m in ms[-32:]:
+  if episode_id and ((m.get('cognition') or {}).get('topic_episode')!=episode_id): continue
   ws=_declared_terms(m); rec.extend(ws); c.update(ws)
  return sorted(c,key=lambda w:(-c[w],-max(i for i,x in enumerate(rec) if x==w),w))[:limit] if rec else []
 def update_topic(t,ms,cycle):
- t=t or topic_template(cycle); terms=topic_terms_from_messages(ms); previous=set(t.get('recent_terms',[])); novel=[w for w in terms if w not in previous]
+ t=t or topic_template(cycle); terms=topic_terms_from_messages(ms,episode_id=t.get('id')); previous=set(t.get('recent_terms',[])); novel=[w for w in terms if w not in previous]
  if t.get('root') is None and terms:
   t['root']=terms[0]; rest=[x for x in terms[1:] if x!=terms[0]]; t['facets']=list(dict.fromkeys(rest)); t['current_facet']=t['facets'][0] if t['facets'] else t['root']; t['visited_facets']=[t['current_facet']]; t['status']='active'; t['last_shift_cycle']=cycle
  else:
@@ -159,7 +160,7 @@ def randomish(e,o,cycle):
  return (n%1000)/10000.0
 def relationship_view(M,e,o):
  r=M['entities'][e]['people'][o]; return {k:r.get(k) for k in REL_KEYS}|{'direct_turns':r.get('direct_turns',0),'repair_successes':r.get('repair_successes',0),'shared_references':list(r.get('shared_references',[]))[-8:]}
-def deepest_available_detail(t,ms): return (t or {}).get('current_facet') or (topic_terms_from_messages(ms) or ['detail'])[0]
+def deepest_available_detail(t,ms): return (t or {}).get('current_facet') or (topic_terms_from_messages(ms,episode_id=(t or {}).get('id')) or ['detail'])[0]
 def plan_actions(order,qtarget,M,t,cycle):
  roles=['answer','deepen','compare','callback']; plans={}; used=set()
  for i,e in enumerate(order):
