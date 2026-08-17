@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.228,
+        "activation": 0.191,
         "attention": [
           "notice",
           "people",
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0727,
-        "association": -0.004,
-        "inhibition": 0.0535,
-        "social": 0.0449
+        "activation": 0.0348,
+        "association": 0.0019,
+        "inhibition": -0.0366,
+        "social": -0.1409
       },
       "room_memories": [
-        {
-          "source": "20260817T165203162-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Busy, as long as it feels alive instead of chaotic.",
-          "discourse": "d-20260817T165203162-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165203162-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203162-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
-          "discourse": "d-20260817T165203162-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T165203162-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203163-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Busy enough that something unexpected can happen.",
-          "discourse": "d-20260817T165203163-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T165203163-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203163-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What do you like about that kind of environment?",
-          "discourse": "d-20260817T165203163-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165203162-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
         {
           "source": "20260817T165223044-mara-v4",
           "status": "observed",
@@ -1840,6 +1800,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000133"
+        },
+        {
+          "source": "20260817T170655236-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A story where I start caring about the people before I realize how long I have been listening.",
+          "discourse": "d-20260817T170655236-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T170655236-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Anything that keeps producing weird connections faster than I can follow them.",
+          "discourse": "d-20260817T170655236-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T170655236-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "A problem with a clear shape that I can actually get somewhere with.",
+          "discourse": "d-20260817T170655236-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T170655236-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that signal matter to you?",
+          "discourse": "d-20260817T170655236-sarah-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T170655236-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
         }
       ],
       "self_history": [
@@ -2900,10 +2900,19 @@
           "branch_memory": "20260817T170550294-mara-v4",
           "discourse": "d-20260817T170633712-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000133"
+        },
+        {
+          "source": "20260817T170655236-sarah-v4",
+          "text": "What makes that signal matter to you?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T170655236-mara-v4",
+          "discourse": "d-20260817T170655236-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
         }
       ],
-      "last_event": "20260817T170633712-jules-v4",
-      "spoken": 118,
+      "last_event": "20260817T170655236-sarah-v4",
+      "spoken": 119,
       "silences": 0,
       "people": {
         "mara": {
@@ -3419,6 +3428,13 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T170550294-mara-v4"
+            },
+            {
+              "source": "20260817T170655236-mara-v4",
+              "status": "reported",
+              "text": "A story where I start caring about the people before I realize how long I have been listening.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T170655236-mara-v4"
             }
           ]
         },
@@ -3697,6 +3713,13 @@
               "text": "Consistency, especially when being consistent is inconvenient.",
               "branch_owner": "owen",
               "branch_memory": "20260817T170550294-owen-v4"
+            },
+            {
+              "source": "20260817T170655236-owen-v4",
+              "status": "reported",
+              "text": "A problem with a clear shape that I can actually get somewhere with.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T170655236-owen-v4"
             }
           ]
         },
@@ -4066,6 +4089,13 @@
               "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
               "branch_owner": "jules",
               "branch_memory": "20260817T170550294-jules-v4"
+            },
+            {
+              "source": "20260817T170655236-jules-v4",
+              "status": "reported",
+              "text": "Anything that keeps producing weird connections faster than I can follow them.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T170655236-jules-v4"
             }
           ]
         }
@@ -4073,7 +4103,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.4,
+        "activation": 0.384,
         "attention": [
           "notice",
           "people",
@@ -4106,52 +4136,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0014,
-        "association": 0.0737,
-        "inhibition": 0.2354,
-        "social": 0.0744
+        "activation": 0.0579,
+        "association": 0.102,
+        "inhibition": 0.1735,
+        "social": -0.0362
       },
       "room_memories": [
-        {
-          "source": "20260817T165203162-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Busy, as long as it feels alive instead of chaotic.",
-          "discourse": "d-20260817T165203162-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165203162-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203162-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
-          "discourse": "d-20260817T165203162-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T165203162-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203163-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Busy enough that something unexpected can happen.",
-          "discourse": "d-20260817T165203163-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T165203163-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203163-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What do you like about that kind of environment?",
-          "discourse": "d-20260817T165203163-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165203162-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
         {
           "source": "20260817T165223044-mara-v4",
           "status": "observed",
@@ -5911,6 +5901,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000133"
+        },
+        {
+          "source": "20260817T170655236-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A story where I start caring about the people before I realize how long I have been listening.",
+          "discourse": "d-20260817T170655236-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T170655236-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Anything that keeps producing weird connections faster than I can follow them.",
+          "discourse": "d-20260817T170655236-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T170655236-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "A problem with a clear shape that I can actually get somewhere with.",
+          "discourse": "d-20260817T170655236-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T170655236-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that signal matter to you?",
+          "discourse": "d-20260817T170655236-sarah-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T170655236-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
         }
       ],
       "self_history": [
@@ -7003,10 +7033,19 @@
           "branch_memory": "20260817T170550294-mara-v4",
           "discourse": "d-20260817T170633711-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000133"
+        },
+        {
+          "source": "20260817T170655236-mara-v4",
+          "text": "A story where I start caring about the people before I realize how long I have been listening.",
+          "move": "answer",
+          "memory": "20260817T170655236-mara-v4",
+          "branch_memory": "20260817T170655236-mara-v4",
+          "discourse": "d-20260817T170655236-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
         }
       ],
-      "last_event": "20260817T170633712-jules-v4",
-      "spoken": 122,
+      "last_event": "20260817T170655236-sarah-v4",
+      "spoken": 123,
       "silences": 0,
       "people": {
         "sarah": {
@@ -7597,6 +7636,13 @@
               "text": "Consistency, especially when being consistent is inconvenient.",
               "branch_owner": "owen",
               "branch_memory": "20260817T170550294-owen-v4"
+            },
+            {
+              "source": "20260817T170655236-owen-v4",
+              "status": "reported",
+              "text": "A problem with a clear shape that I can actually get somewhere with.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T170655236-owen-v4"
             }
           ]
         },
@@ -7966,6 +8012,13 @@
               "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
               "branch_owner": "jules",
               "branch_memory": "20260817T170550294-jules-v4"
+            },
+            {
+              "source": "20260817T170655236-jules-v4",
+              "status": "reported",
+              "text": "Anything that keeps producing weird connections faster than I can follow them.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T170655236-jules-v4"
             }
           ]
         }
@@ -7973,7 +8026,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.326,
+        "activation": 0.28,
         "attention": [
           "notice",
           "people",
@@ -8006,52 +8059,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0665,
-        "association": -0.0558,
-        "inhibition": -0.1474,
-        "social": 0.2283
+        "activation": 0.0212,
+        "association": -0.0275,
+        "inhibition": -0.1947,
+        "social": 0.1274
       },
       "room_memories": [
-        {
-          "source": "20260817T165203162-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Busy, as long as it feels alive instead of chaotic.",
-          "discourse": "d-20260817T165203162-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165203162-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203162-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
-          "discourse": "d-20260817T165203162-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T165203162-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203163-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Busy enough that something unexpected can happen.",
-          "discourse": "d-20260817T165203163-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T165203163-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203163-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What do you like about that kind of environment?",
-          "discourse": "d-20260817T165203163-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165203162-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
         {
           "source": "20260817T165223044-mara-v4",
           "status": "observed",
@@ -9811,6 +9824,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000133"
+        },
+        {
+          "source": "20260817T170655236-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A story where I start caring about the people before I realize how long I have been listening.",
+          "discourse": "d-20260817T170655236-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T170655236-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Anything that keeps producing weird connections faster than I can follow them.",
+          "discourse": "d-20260817T170655236-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T170655236-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "A problem with a clear shape that I can actually get somewhere with.",
+          "discourse": "d-20260817T170655236-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T170655236-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that signal matter to you?",
+          "discourse": "d-20260817T170655236-sarah-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T170655236-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
         }
       ],
       "self_history": [
@@ -10863,10 +10916,19 @@
           "branch_memory": "20260817T170550294-mara-v4",
           "discourse": "d-20260817T170633712-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000133"
+        },
+        {
+          "source": "20260817T170655236-owen-v4",
+          "text": "A problem with a clear shape that I can actually get somewhere with.",
+          "move": "self_disclosure",
+          "memory": "20260817T170655236-owen-v4",
+          "branch_memory": "20260817T170655236-owen-v4",
+          "discourse": "d-20260817T170655236-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
         }
       ],
-      "last_event": "20260817T170633712-jules-v4",
-      "spoken": 117,
+      "last_event": "20260817T170655236-sarah-v4",
+      "spoken": 118,
       "silences": 0,
       "people": {
         "sarah": {
@@ -11695,6 +11757,13 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T170550294-mara-v4"
+            },
+            {
+              "source": "20260817T170655236-mara-v4",
+              "status": "reported",
+              "text": "A story where I start caring about the people before I realize how long I have been listening.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T170655236-mara-v4"
             }
           ]
         },
@@ -12064,6 +12133,13 @@
               "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
               "branch_owner": "jules",
               "branch_memory": "20260817T170550294-jules-v4"
+            },
+            {
+              "source": "20260817T170655236-jules-v4",
+              "status": "reported",
+              "text": "Anything that keeps producing weird connections faster than I can follow them.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T170655236-jules-v4"
             }
           ]
         }
@@ -12071,7 +12147,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.292,
+        "activation": 0.356,
         "attention": [
           "notice",
           "people",
@@ -12104,52 +12180,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.2254,
-        "association": 0.1398,
-        "inhibition": 0.087,
-        "social": 0.1007
+        "activation": 0.1366,
+        "association": 0.1237,
+        "inhibition": 0.077,
+        "social": 0.1986
       },
       "room_memories": [
-        {
-          "source": "20260817T165203162-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Busy, as long as it feels alive instead of chaotic.",
-          "discourse": "d-20260817T165203162-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165203162-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203162-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
-          "discourse": "d-20260817T165203162-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T165203162-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203163-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Busy enough that something unexpected can happen.",
-          "discourse": "d-20260817T165203163-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T165203163-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
-        {
-          "source": "20260817T165203163-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "What do you like about that kind of environment?",
-          "discourse": "d-20260817T165203163-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T165203162-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000089"
-        },
         {
           "source": "20260817T165223044-mara-v4",
           "status": "observed",
@@ -13909,6 +13945,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000133"
+        },
+        {
+          "source": "20260817T170655236-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A story where I start caring about the people before I realize how long I have been listening.",
+          "discourse": "d-20260817T170655236-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T170655236-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Anything that keeps producing weird connections faster than I can follow them.",
+          "discourse": "d-20260817T170655236-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T170655236-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "A problem with a clear shape that I can actually get somewhere with.",
+          "discourse": "d-20260817T170655236-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T170655236-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
+        },
+        {
+          "source": "20260817T170655236-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that signal matter to you?",
+          "discourse": "d-20260817T170655236-sarah-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T170655236-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
         }
       ],
       "self_history": [
@@ -14969,10 +15045,19 @@
           "branch_memory": null,
           "discourse": "d-20260817T170633712-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000133"
+        },
+        {
+          "source": "20260817T170655236-jules-v4",
+          "text": "Anything that keeps producing weird connections faster than I can follow them.",
+          "move": "self_disclosure",
+          "memory": "20260817T170655236-jules-v4",
+          "branch_memory": "20260817T170655236-jules-v4",
+          "discourse": "d-20260817T170655236-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000134"
         }
       ],
-      "last_event": "20260817T170633712-jules-v4",
-      "spoken": 118,
+      "last_event": "20260817T170655236-sarah-v4",
+      "spoken": 119,
       "silences": 0,
       "people": {
         "sarah": {
@@ -15801,6 +15886,13 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T170550294-mara-v4"
+            },
+            {
+              "source": "20260817T170655236-mara-v4",
+              "status": "reported",
+              "text": "A story where I start caring about the people before I realize how long I have been listening.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T170655236-mara-v4"
             }
           ]
         },
@@ -16079,6 +16171,13 @@
               "text": "Consistency, especially when being consistent is inconvenient.",
               "branch_owner": "owen",
               "branch_memory": "20260817T170550294-owen-v4"
+            },
+            {
+              "source": "20260817T170655236-owen-v4",
+              "status": "reported",
+              "text": "A problem with a clear shape that I can actually get somewhere with.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T170655236-owen-v4"
             }
           ]
         }
