@@ -23,7 +23,7 @@ Starting evidence includes:
 - Laurenceau, Barrett & Pietromonaco (1998), JPSP, doi:10.1037/0022-3514.74.5.1238 — disclosure, perceived responsiveness, and intimacy.
 - Aron et al. (1997), PSPB, doi:10.1177/0146167297234003 — gradual reciprocal disclosure and closeness.
 - Huang et al. (2017), JPSP, doi:10.1037/pspi0000097, considered together with later reanalysis/correction literature — follow-up questions can signal responsiveness but should not be equated mechanically with listening.
-- llama.cpp official server documentation — one local model server supports `/health`, `/completion`, and parallel decoding, allowing private node prompts to stay in runtime secrets rather than the public repository.
+- llama.cpp official server documentation — one local model server supports local completion and parallel decode, allowing private node prompts to stay in runtime secrets rather than the public repository.
 
 ## Findings supporting the change
 
@@ -40,11 +40,11 @@ Starting evidence includes:
 
 ## Competing explanations and limitations
 
-The repetitive v4 output is partly caused by deterministic canned language, not only by its social model. A better relationship model alone cannot guarantee natural language. The local Qwen2.5-0.5B model may also be too small to produce consistently strong multi-party conversation, so deterministic validation/fallback remains necessary.
+The repetitive v4 output was partly caused by deterministic canned language, not only by its social model. A better relationship model alone cannot guarantee natural language. The optional local Qwen2.5-0.5B model may also be too small to produce consistently strong multi-party conversation, so deterministic validation/fallback remains necessary.
 
 Research on dyads does not transfer perfectly to four simultaneous entities. The Room's mandatory all-four speech is also unlike ordinary human conversation. v5 therefore treats the research as mechanism guidance rather than claiming the Room is a literal model of human interaction.
 
-The numerical deltas in `room_social_v5.py` are conservative engineering heuristics chosen to make unsupported trust growth difficult. They are not empirical constants. Post-change measurements must determine whether they need revision.
+The numerical update rates in `room_social_v5.py` are conservative engineering heuristics chosen to make unsupported trust growth difficult. They are not empirical constants. Live validation already showed that the first linear update rates were too fast, so schema v3 replaced them with slower, diminishing updates and a one-time rescale based on observed direct-turn counts.
 
 ## 10-level gate
 
@@ -55,28 +55,41 @@ The numerical deltas in `room_social_v5.py` are conservative engineering heurist
 5. Mechanism evidence: PASS — state separation, directed history, grounding, topic episodes, repair/callback mechanisms.
 6. Competing explanations: PASS — language-generation limitations explicitly retained as a separate cause.
 7. Replication/correction/limitations: PASS WITH CAUTION — question-asking reanalysis/correction and context limits noted.
-8. Context transfer: PASS WITH CAUTION — four-person mandatory speech differs from studied dyads; validation is required.
+8. Context transfer: PASS WITH CAUTION — four-person mandatory speech differs from studied dyads; live validation is required.
 9. Implementation mapping: PASS — implemented in `room_social_v5.py`, `room_engine_v5.py`, `room_private_model.py`, and the Room workflow.
-10. Post-change validation: PENDING DEPLOYMENT.
+10. Post-change validation: PASS FOR DETERMINISTIC V5 CORE; PRIVATE-PROMPT MODE PENDING SECRET ACTIVATION.
 
 ## Implementation mapping
 
 - Nodes 0/3/6/9: social perception / grounding role. Optional private prompt is supplied only at runtime.
 - Nodes 1/4/7/10: private topic/relationship deliberation role. Optional private prompt is supplied only at runtime.
 - Nodes 2/5/8/11: expression role. Optional private prompt is supplied only at runtime.
+- Private cognition is sequential: perception → deliberation → expression.
 - All 12 nodes remain active; all four entities remain mandatory public contributors per beat.
 - Relationship reducer is deterministic. The model does not directly set trust numbers.
-- New directed relationship dimensions: exposure, direct familiarity, trust, predictability, reciprocity, warmth, respect, disclosure depth, tension, direct-turn count, repair attempts/successes, and shared references.
-- Legacy `familiarity` is retained only as `legacy_familiarity` for audit/migration and is not converted into high trust.
-- Topic episodes persist across beats and shift only after sustained low novelty. The current four-low-novelty-beat threshold is a testable heuristic, not a research constant.
-- Exact repeated text is rejected by fallback generation.
-- Prompt-leak markers and long verbatim overlap with the node's private prompt are rejected before model output is accepted.
+- Directed relationship dimensions: exposure, direct familiarity, trust, predictability, reciprocity, warmth, respect, disclosure depth, tension, direct-turn count, repair attempts/successes, and shared references.
+- Legacy `familiarity` is retained only for migration/audit and is not converted into high trust.
+- Topic schema v3 assigns explicit semantic roots/facets and only accepts topic terms from messages belonging to the current episode ID.
+- Topic episodes persist across beats and move through unvisited facets before bridging to a new topic.
+- Exact/near-exact repeated text is penalized by novelty scoring in deterministic fallback generation.
+- Prompt-leak markers and long verbatim overlap with the node's private prompt are rejected before local-model output is accepted.
 
 ## Privacy architecture
 
-The public repository contains no private node prompt text. The workflow references three encrypted GitHub Actions secret names: `ROOM_PROMPT_PERCEPTION`, `ROOM_PROMPT_DELIBERATION`, and `ROOM_PROMPT_EXPRESSION`. At runtime, the parent shell selects the prompt for a node by role, removes all three secret variables from the node process environment, and supplies only `ROOM_NODE_PROMPT` to that one process. The local model is served only on runner-local `127.0.0.1`.
+The public repository contains no private node prompt text. The workflow references three encrypted GitHub Actions secret names: `ROOM_PROMPT_PERCEPTION`, `ROOM_PROMPT_DELIBERATION`, and `ROOM_PROMPT_EXPRESSION`.
 
-If the three secrets are absent, v5 remains functional using deterministic research-informed cognition. No prompt text is invented or exposed as a fallback.
+At runtime:
+
+1. the parent workflow chooses the appropriate secret by node role;
+2. the node subprocess has all three repository secret variables removed;
+3. only that node's single prompt is passed as `ROOM_NODE_PROMPT`;
+4. the local `llama-server` process is launched with all prompt-secret variables removed from its environment;
+5. the server listens only on runner-local `127.0.0.1`;
+6. public expression is leak-checked before acceptance.
+
+If the three secrets are absent, v5 remains functional using deterministic research-informed cognition. No private prompt text is stored in or reconstructed from the public repository.
+
+The installed GitHub connector available during this deployment does not expose repository Actions-secret creation/update. Therefore the private prompt values have not been installed by this deployment and the prompt-driven local-model mode must not be described as active yet.
 
 ## Pre-change baseline
 
@@ -87,21 +100,60 @@ If the three secrets are absent, v5 remains functional using deterministic resea
 - Generic starter/follow-up repertoire: small and repeatedly reused.
 - Pair-specific callbacks: structurally weak.
 
-## Validation criteria
+## Live defects found during validation
 
-After deployment:
+The research gate caught several implementation defects before final acceptance:
 
-- every beat must contain exactly Sarah, Mara, Owen and Jules once;
-- overheard messages must change exposure but not direct familiarity or trust;
-- ordinary direct chatter must not increase trust;
-- directed pair states must be capable of diverging;
-- active topic episodes should persist across multiple beats and accumulate narrower facets before bridging;
-- exact sentence repetition should fall;
-- callbacks should refer to actual stored partner history only;
-- relationship dimensions must remain bounded and auditable;
-- public output must not expose hidden prompts or private runtime instructions;
-- Cloudflare feed delivery must continue uninterrupted.
+1. **Glue-word topic root** — initial topic extraction allowed words such as `how` to become roots. Stop-word/semantic handling was tightened.
+2. **Topic recency crash** — the frequency counter could contain a term missing from the truncated recency list. Counter/recency input was made consistent.
+3. **Anti-repeat feedback loop** — duplicate detection replaced repeated text with another fixed repeated question. Fallback generation was changed to novelty-score multiple move forms.
+4. **Surface-language contamination** — conversational scaffold words such as `rule`, `case`, and `coming` entered topic state. Topic terms were separated from public wording.
+5. **Cross-episode contamination** — the first semantic episode inherited terms from the previous episode because aggregation looked at the last messages globally. Schema v3 now filters by `topic_episode` ID.
+6. **Relationship saturation** — first-pass linear direct-familiarity/reciprocity increments pushed some pair values to 1.0 too quickly. Schema v3 uses slower diminishing updates and rescaled existing values from direct-turn counts.
+7. **Migration-marker ordering bug** — `social_model` was inserted before the rescale test, preventing the intended one-time rescale. Schema v3 records the old model version before applying defaults.
+8. **Parallel private-prompt path** — the initial implementation gave expression nodes no access to deliberation results. The workflow and engine now execute perception → deliberation → expression sequentially.
+9. **Model-server secret inheritance** — the runner-local model server initially inherited the parent workflow secret environment. The server is now launched with every prompt-secret variable explicitly removed.
 
-## Post-change result
+## Validation criteria and result
 
-Pending live deployment and observation.
+### Mandatory speech
+
+PASS. Live state continued to publish exactly four contributors per beat: Sarah, Mara, Owen, and Jules, with the same boot ID and preserved conversation/memory history.
+
+### Exposure versus relationship development
+
+PASS in self-test and live reducer behavior. Overhearing updates exposure without automatically increasing direct familiarity or trust. Ordinary direct chatter does not raise trust.
+
+### Directed relationship differentiation
+
+PASS. After schema-v3 rescale, published pair states are no longer uniformly saturated and differ substantially by direction and direct-turn history. Trust remained at its conservative baseline where no qualifying interpersonal-risk/repair event had occurred.
+
+### Topic depth and isolation
+
+PASS. Schema-v3 live state produced bounded semantic episodes such as `memory → cue → detail → distortion` and `routine → reliability → effort → exception`. Facets are restricted to the active episode rather than absorbing words from prior-topic surface language.
+
+### Four-person continuity
+
+PASS. All four entities continue to contribute exactly once per beat throughout v5.
+
+### Private node pipeline
+
+PASS structurally and in isolated full-pipeline diagnostics. Nodes execute perception → deliberation → expression, and expression receives the prior two stages when private prompts are configured.
+
+### Deterministic fallback
+
+PASS for structural continuity and substantially improved novelty relative to v4. It remains an intentionally limited fallback and is not a substitute for activating the private prompt-driven local model.
+
+### Prompt secrecy
+
+PASS structurally. Prompt text is absent from the public repository; node processes receive only one role prompt; the local model server receives none; output is leak-checked. Runtime activation remains pending because the three encrypted Actions-secret values have not yet been installed.
+
+### Cloudflare delivery
+
+The GitHub workflow retains the OIDC-protected Cloudflare relay and continues producing `room/feed.json`. Direct external Worker fetching was unavailable from the validation environment at the final check, so external relay confirmation remains a separate operational check rather than being inferred as proven here.
+
+## Post-change status
+
+The research-informed deterministic v5 core is live and validated. Mandatory four-speaker output, memory continuity, directed relationship state, slow-learning relationship dynamics, semantic topic episodes, facet progression, sequential cognition architecture, and privacy boundaries are implemented.
+
+Remaining activation step: securely install the three private prompt values as GitHub Actions repository secrets. Until that occurs, the deterministic research-informed fallback is the active language-generation path.
