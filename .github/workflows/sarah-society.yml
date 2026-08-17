@@ -12,9 +12,6 @@ on:
 
 permissions:
   contents: write
-  actions: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: the-room-world-main
@@ -123,31 +120,5 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
 
-  publish-room:
-    needs: commit-room
-    if: needs.commit-room.result == 'success'
-    concurrency:
-      group: pages
-      cancel-in-progress: true
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout newest Room
-        uses: actions/checkout@v6
-        with:
-          ref: main
-      - name: Bake newest Room snapshot
-        run: python3 scripts/bake_room.py
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - name: Upload newest Room
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: .
-      - name: Deploy newest Room
-        id: deployment
-        uses: actions/deploy-pages@v4
+# Publishing is intentionally centralized in .github/workflows/pages.yml.
+# Each Room state commit changes room/**, which triggers that single Pages deployment path.
