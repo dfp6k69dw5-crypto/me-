@@ -27,7 +27,7 @@ human_context=f"{name} is {age} years old. Socioeconomic context: {ses}. {resour
 seed=int(hashlib.sha256(f"{run_id}:{entity_id}:{node_id}".encode()).hexdigest()[:8],16)&0x7fffffff; rng=random.Random(seed)
 
 STOP={
-    "that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","yours","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","done","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","wanted","make","making","made","start","starting","started","try","trying","tried","work","working","works","worked","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes","today","tonight","tomorrow","yesterday","different","together","fresh","interesting","how's","going","everything"
+    "that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","yours","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","done","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","wanted","make","making","made","start","starting","started","try","trying","tried","work","working","works","worked","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes","today","tonight","tomorrow","yesterday","different","together","fresh","interesting","how's","going","everything","topic","topics","activity","activities","current","pick","picking","choose","choosing"
 }
 NAME_WORDS={w.lower() for v in names.values() for w in re.findall(r"[A-Za-z]+",v)}
 QUARANTINED_CUES={"previous","candidate","generic","repetitive","grounded","produce","generate","attempt","instruction"}|NAME_WORDS|STOP
@@ -133,7 +133,7 @@ if cognitive_mode=="associate" and topic_fatigue>=.72:
 elif cognitive_mode=="associate":
     mode_instruction="Let one element of the current exchange trigger a sideways association: a contrast, analogy, implication, sensory image, remembered room idea, cause, consequence, or nearby question. The subject may drift substantially. Do not explain the association process."
 elif cognitive_mode=="jump":
-    mode_instruction="Ignore the current subject. Let a different concrete observation, curiosity, opinion, sensation, odd thought, or question with an actual subject occur naturally. There is nothing to accomplish, organize, study, brainstorm, or plan. Do not ask the group what to discuss or do. Do not announce a topic change and do not bridge back to the previous subject."
+    mode_instruction="Ignore the current subject. Internally settle on one actual subject outside the fact that people are conversing, then speak about that subject naturally. It can be concrete or abstract, but it must be a real object, idea, event, sensation, belief, observation, or question—not 'a topic', 'an activity', or something for the group to choose. There is nothing to accomplish, organize, study, brainstorm, or plan. Do not ask the group what to discuss or do. Do not announce a topic change and do not bridge back to the previous subject."
 else:
     mode_instruction="Stay with the current thread if it still has life. Add something of your own rather than paraphrasing it. You may disagree, hesitate, joke, answer indirectly, or let the thought trail off."
 
@@ -153,6 +153,7 @@ base_prompt=(f"Recent room speech:\n{transcript}\n\n{name}:" if recent else f"{n
 
 SERVICE=[r"\bhow can i help\b",r"\bhow may i help\b",r"\bwhat can i do for you\b",r"\bhow can i assist\b",r"\bdo you need (?:anything|help)\b",r"\bwhat do you need\b",r"\bhere to help\b",r"\bwhat (?:specific )?tasks or goals\b",r"\bfor (?:your|our) next meeting\b"]
 FACILITATOR=[r"\bare you looking for\b",r"\bwhat (?:would|do) you like to (?:talk about|discuss|explore|do)\b",r"\bwhat do we want to do\b",r"\bwhat should we do\b",r"\bwhat (?:specific )?topic\b",r"\btopic to (?:explore|discuss|talk about)\b",r"\banything (?:you'd|you would) like to (?:talk about|discuss|explore|do)\b"]
+META_TOPIC=[r"\b(?:pick|choose|find|finding|need|looking for|come up with)\s+(?:a\s+)?(?:good\s+|new\s+|different\s+|specific\s+)?topic\b",r"\b(?:current|main)\s+(?:activity|topic)\b",r"\b(?:activity|topic)\s+(?:or|and)\s+(?:activity|topic)\b",r"\b(?:activity|topic)\s+(?:of|in|for)\s+(?:the|this|our)\s+(?:room|conversation|evening)\b",r"\bwhat (?:is|are) (?:the )?(?:room|we) (?:doing|discussing|talking about)\b"]
 ROLE_CONTRADICTION=[r"\bteam members?\b",r"\b(?:the|our|this) team\b",r"\bgather input\b",r"\bbrainstorming session\b",r"\bstudy schedule\b",r"\bnext step\b"]
 META=[r"\bif [a-z]+ has something to say\b",r"\b[a-z]+ could say\b",r"\b[a-z]+ is now in the room\b",r"\boutput only\b",r"\brecent room speech\b",r"\bcontinue directly from here\b",r"\bprevious candidate\b",r"\bprevious (?:response|conversation) was (?:too )?(?:generic|repetitive)\b",r"\btoo generic or repetitive\b",r"\bgenuinely different peer remark\b",r"\bgrounded in the room\b",r"\bservice/task question\b",r"\bproduce a genuinely different\b",r"\bgenerate a fresh, thought-provoking statement\b",r"\btry another natural line\b",r"\bdiffer substantially from the first attempt\b",r"\bcontinue the peers'? current exchange\b",r"\bselected earlier memories\b",r"\bremembered room content\b",r"\bpersistent adult background\b",r"\bcognitive move\b"]
 speaker_label_re=re.compile(r"(?im)(?:^|\n)\s*(?:"+"|".join(re.escape(v) for v in names.values())+r")\s*:")
@@ -160,7 +161,7 @@ def max_recent_similarity(text): return max((jac(text,m.get("text","") ) for m i
 def natural_candidate(text):
     low=(text or "").lower().strip()
     if not low:return False
-    return not speaker_label_re.search(text) and not any(re.search(p,low) for p in SERVICE+FACILITATOR+ROLE_CONTRADICTION+META)
+    return not speaker_label_re.search(text) and not any(re.search(p,low) for p in SERVICE+FACILITATOR+META_TOPIC+ROLE_CONTRADICTION+META)
 def forbidden_reason(text):
     low=(text or "").lower().strip()
     if not recent and re.match(r"^(?:me too|same here|same|i agree|exactly|yeah[,!]|right[,!])\b",low): return "contextless-agreement"
@@ -169,6 +170,8 @@ def forbidden_reason(text):
         if re.search(pat,low):return "service-language"
     for pat in FACILITATOR:
         if re.search(pat,low):return "facilitator-language"
+    for pat in META_TOPIC:
+        if re.search(pat,low):return "meta-topic"
     for pat in ROLE_CONTRADICTION:
         if re.search(pat,low):return "role-contradiction"
     for pat in META:
