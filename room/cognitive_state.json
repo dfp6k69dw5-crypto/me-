@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.28,
+        "activation": 0.225,
         "attention": [
           "having",
           "conversation",
@@ -11,9 +11,9 @@
           "feel",
           "less",
           "ordinary",
-          "finding",
-          "enough",
-          "forget"
+          "gives",
+          "specific",
+          "picture"
         ]
       },
       "medium": {
@@ -25,9 +25,9 @@
           "feel",
           "less",
           "ordinary",
-          "finding",
-          "enough",
-          "forget"
+          "gives",
+          "specific",
+          "picture"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1674,
-        "association": -0.1778,
-        "inhibition": 0.1165,
-        "social": 0.1479
+        "activation": 0.25,
+        "association": -0.1914,
+        "inhibition": 0.056,
+        "social": 0.0177
       },
       "room_memories": [
-        {
-          "source": "20260817T212743231-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Because I tend to trust patterns more than first impressions.",
-          "discourse": "d-20260817T212743231-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T212743231-mara-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T212743231-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "What kind of thing can keep your attention for hours?",
-          "discourse": "d-20260817T212743231-jules-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
         {
           "source": "20260817T212745598-owen-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T212940930-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006531"
+        },
+        {
+          "source": "20260817T212945487-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Because I notice what people do when they stop performing for everybody else.",
+          "discourse": "d-20260817T212945487-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945487-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T212945487-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945488-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T212945488-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945488-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes a day feel worthwhile to you?",
+          "discourse": "d-20260817T212945488-sarah-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T212217702-sarah-v4",
-          "text": "That gives me a more specific picture of how you think.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T212212330-jules-v4",
-          "discourse": "d-20260817T212217702-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006352"
-        },
         {
           "source": "20260817T212220023-sarah-v4",
           "text": "The kind where the evidence is messy but there is a pattern hiding in it.",
@@ -3462,22 +3453,24 @@
           "branch_memory": "20260817T212940930-mara-v4",
           "discourse": "d-20260817T212943278-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006531"
+        },
+        {
+          "source": "20260817T212945488-sarah-v4",
+          "text": "What makes a day feel worthwhile to you?",
+          "move": "question",
+          "memory": null,
+          "branch_memory": null,
+          "discourse": "d-20260817T212945488-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
         }
       ],
-      "last_event": "20260817T212943278-jules-v4",
-      "spoken": 6516,
+      "last_event": "20260817T212945488-sarah-v4",
+      "spoken": 6517,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T212329922-mara-v4",
-              "status": "reported",
-              "text": "Because I notice what people do when they stop performing for everybody else.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T212327444-mara-v4"
-            },
             {
               "source": "20260817T212332247-mara-v4",
               "status": "reported",
@@ -4098,6 +4091,13 @@
               "source": "20260817T212943278-mara-v4",
               "status": "reported",
               "text": "Having one conversation that makes the day feel less ordinary than it started.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T212940930-mara-v4"
+            },
+            {
+              "source": "20260817T212945487-mara-v4",
+              "status": "reported",
+              "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T212940930-mara-v4"
             }
@@ -5377,7 +5377,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.392,
+        "activation": 0.4,
         "attention": [
           "having",
           "conversation",
@@ -5386,9 +5386,9 @@
           "feel",
           "less",
           "ordinary",
-          "finding",
-          "enough",
-          "forget"
+          "gives",
+          "specific",
+          "picture"
         ]
       },
       "medium": {
@@ -5400,9 +5400,9 @@
           "feel",
           "less",
           "ordinary",
-          "finding",
-          "enough",
-          "forget"
+          "gives",
+          "specific",
+          "picture"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.2234,
-        "association": 0.0987,
-        "inhibition": -0.0928,
-        "social": 0.0919
+        "activation": -0.1999,
+        "association": 0.0613,
+        "inhibition": -0.0056,
+        "social": 0.1406
       },
       "room_memories": [
-        {
-          "source": "20260817T212743231-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Because I tend to trust patterns more than first impressions.",
-          "discourse": "d-20260817T212743231-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T212743231-mara-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T212743231-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "What kind of thing can keep your attention for hours?",
-          "discourse": "d-20260817T212743231-jules-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
         {
           "source": "20260817T212745598-owen-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T212940930-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006531"
+        },
+        {
+          "source": "20260817T212945487-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Because I notice what people do when they stop performing for everybody else.",
+          "discourse": "d-20260817T212945487-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945487-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T212945487-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945488-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T212945488-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945488-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes a day feel worthwhile to you?",
+          "discourse": "d-20260817T212945488-sarah-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T212217702-mara-v4",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T212212330-jules-v4",
-          "discourse": "d-20260817T212217702-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006352"
-        },
         {
           "source": "20260817T212220023-mara-v4",
           "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
@@ -8837,10 +8828,19 @@
           "branch_memory": "20260817T212940930-mara-v4",
           "discourse": "d-20260817T212943278-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006531"
+        },
+        {
+          "source": "20260817T212945487-mara-v4",
+          "text": "Because I notice what people do when they stop performing for everybody else.",
+          "move": "answer",
+          "memory": "20260817T212458839-mara-v4",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "discourse": "d-20260817T212945487-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
         }
       ],
-      "last_event": "20260817T212943278-jules-v4",
-      "spoken": 6520,
+      "last_event": "20260817T212945488-sarah-v4",
+      "spoken": 6521,
       "silences": 0,
       "people": {
         "sarah": {
@@ -10752,7 +10752,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.181,
+        "activation": 0.134,
         "attention": [
           "having",
           "conversation",
@@ -10761,9 +10761,9 @@
           "feel",
           "less",
           "ordinary",
-          "finding",
-          "enough",
-          "forget"
+          "gives",
+          "specific",
+          "picture"
         ]
       },
       "medium": {
@@ -10775,9 +10775,9 @@
           "feel",
           "less",
           "ordinary",
-          "finding",
-          "enough",
-          "forget"
+          "gives",
+          "specific",
+          "picture"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0703,
-        "association": 0.1748,
-        "inhibition": 0.0523,
-        "social": -0.0755
+        "activation": 0.0427,
+        "association": 0.0834,
+        "inhibition": 0.0253,
+        "social": -0.1294
       },
       "room_memories": [
-        {
-          "source": "20260817T212743231-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Because I tend to trust patterns more than first impressions.",
-          "discourse": "d-20260817T212743231-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T212743231-mara-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T212743231-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "What kind of thing can keep your attention for hours?",
-          "discourse": "d-20260817T212743231-jules-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
         {
           "source": "20260817T212745598-owen-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T212940930-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006531"
+        },
+        {
+          "source": "20260817T212945487-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Because I notice what people do when they stop performing for everybody else.",
+          "discourse": "d-20260817T212945487-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945487-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T212945487-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945488-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T212945488-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945488-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes a day feel worthwhile to you?",
+          "discourse": "d-20260817T212945488-sarah-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T212217703-owen-v4",
-          "text": "What sort of problem do you actually enjoy solving?",
-          "move": "question",
-          "memory": null,
-          "branch_memory": null,
-          "discourse": "d-20260817T212217703-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006352"
-        },
         {
           "source": "20260817T212220023-owen-v4",
           "text": "What makes that kind of problem satisfying?",
@@ -14212,10 +14203,19 @@
           "branch_memory": "20260817T212940930-mara-v4",
           "discourse": "d-20260817T212943278-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006531"
+        },
+        {
+          "source": "20260817T212945488-owen-v4",
+          "text": "There is a useful rule underneath that answer.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T212940930-mara-v4",
+          "discourse": "d-20260817T212945488-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
         }
       ],
-      "last_event": "20260817T212943278-jules-v4",
-      "spoken": 6515,
+      "last_event": "20260817T212945488-sarah-v4",
+      "spoken": 6516,
       "silences": 0,
       "people": {
         "sarah": {
@@ -14857,13 +14857,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T212329922-mara-v4",
-              "status": "reported",
-              "text": "Because I notice what people do when they stop performing for everybody else.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T212327444-mara-v4"
-            },
-            {
               "source": "20260817T212332247-mara-v4",
               "status": "reported",
               "text": "Not much. I might explain it differently now, but it still feels true.",
@@ -15483,6 +15476,13 @@
               "source": "20260817T212943278-mara-v4",
               "status": "reported",
               "text": "Having one conversation that makes the day feel less ordinary than it started.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T212940930-mara-v4"
+            },
+            {
+              "source": "20260817T212945487-mara-v4",
+              "status": "reported",
+              "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T212940930-mara-v4"
             }
@@ -16127,7 +16127,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.315,
+        "activation": 0.314,
         "attention": [
           "having",
           "conversation",
@@ -16136,9 +16136,9 @@
           "feel",
           "less",
           "ordinary",
-          "finding",
-          "enough",
-          "forget"
+          "gives",
+          "specific",
+          "picture"
         ]
       },
       "medium": {
@@ -16150,9 +16150,9 @@
           "feel",
           "less",
           "ordinary",
-          "finding",
-          "enough",
-          "forget"
+          "gives",
+          "specific",
+          "picture"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.2326,
-        "association": 0.2309,
-        "inhibition": 0.1429,
-        "social": 0.152
+        "activation": 0.1123,
+        "association": 0.0529,
+        "inhibition": 0.0706,
+        "social": 0.1913
       },
       "room_memories": [
-        {
-          "source": "20260817T212743231-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Because I tend to trust patterns more than first impressions.",
-          "discourse": "d-20260817T212743231-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T212743231-mara-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T212743231-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T212738708-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
-        {
-          "source": "20260817T212743231-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "What kind of thing can keep your attention for hours?",
-          "discourse": "d-20260817T212743231-jules-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006487"
-        },
         {
           "source": "20260817T212745598-owen-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T212940930-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006531"
+        },
+        {
+          "source": "20260817T212945487-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Because I notice what people do when they stop performing for everybody else.",
+          "discourse": "d-20260817T212945487-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945487-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T212945487-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945488-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T212945488-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T212940930-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
+        },
+        {
+          "source": "20260817T212945488-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes a day feel worthwhile to you?",
+          "discourse": "d-20260817T212945488-sarah-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T212217702-jules-v4",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "move": "answer",
-          "memory": "20260817T211455912-jules-v4",
-          "branch_memory": "20260817T212212330-jules-v4",
-          "discourse": "d-20260817T212217702-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006352"
-        },
         {
           "source": "20260817T212220023-jules-v4",
           "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
@@ -19587,10 +19578,19 @@
           "branch_memory": "20260817T212940930-mara-v4",
           "discourse": "d-20260817T212943278-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006531"
+        },
+        {
+          "source": "20260817T212945487-jules-v4",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T212940930-mara-v4",
+          "discourse": "d-20260817T212945487-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-006532"
         }
       ],
-      "last_event": "20260817T212943278-jules-v4",
-      "spoken": 6516,
+      "last_event": "20260817T212945488-sarah-v4",
+      "spoken": 6517,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20232,13 +20232,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T212329922-mara-v4",
-              "status": "reported",
-              "text": "Because I notice what people do when they stop performing for everybody else.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T212327444-mara-v4"
-            },
-            {
               "source": "20260817T212332247-mara-v4",
               "status": "reported",
               "text": "Not much. I might explain it differently now, but it still feels true.",
@@ -20858,6 +20851,13 @@
               "source": "20260817T212943278-mara-v4",
               "status": "reported",
               "text": "Having one conversation that makes the day feel less ordinary than it started.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T212940930-mara-v4"
+            },
+            {
+              "source": "20260817T212945487-mara-v4",
+              "status": "reported",
+              "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T212940930-mara-v4"
             }
