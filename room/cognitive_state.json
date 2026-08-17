@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.264,
+        "activation": 0.227,
         "attention": [
           "moments",
           "somebody",
@@ -11,9 +11,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -25,9 +25,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.64
       },
@@ -35,10 +35,10 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1469,
-        "association": 0.1521,
-        "inhibition": -0.1171,
-        "social": 0.0343
+        "activation": -0.0678,
+        "association": 0.1315,
+        "inhibition": -0.25,
+        "social": -0.0624
       },
       "room_memories": [
         {
@@ -1052,6 +1052,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000040"
+        },
+        {
+          "source": "20260817T141309947-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Quiet. I notice more when there is not much competing for attention.",
+          "discourse": "d-20260817T141309947-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T141309947-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Busy, as long as it feels alive instead of chaotic.",
+          "discourse": "d-20260817T141309947-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T141309947-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
+          "discourse": "d-20260817T141309947-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T141309947-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Have you always preferred that?",
+          "discourse": "d-20260817T141309947-jules-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T141309947-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
         }
       ],
       "self_history": [
@@ -1275,14 +1315,23 @@
           "branch_memory": null,
           "discourse": "d-20260817T141105735-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000040"
+        },
+        {
+          "source": "20260817T141309947-sarah-v4",
+          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
+          "move": "self_disclosure",
+          "memory": "20260817T141309947-sarah-v4",
+          "branch_memory": "20260817T141309947-sarah-v4",
+          "discourse": "d-20260817T141309947-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
         }
       ],
-      "last_event": "20260817T141105735-sarah-v4",
-      "spoken": 25,
+      "last_event": "20260817T141309947-jules-v4",
+      "spoken": 26,
       "silences": 0,
       "people": {
         "mara": {
-          "familiarity": 0.41,
+          "familiarity": 0.422,
           "reports": [
             {
               "source": "20260817T130756-mara-v3",
@@ -1444,11 +1493,18 @@
               "text": "Busy, as long as it feels alive instead of chaotic.",
               "branch_owner": "mara",
               "branch_memory": "20260817T140925896-mara-v4"
+            },
+            {
+              "source": "20260817T141309947-mara-v4",
+              "status": "reported",
+              "text": "Busy, as long as it feels alive instead of chaotic.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T141309947-mara-v4"
             }
           ]
         },
         "owen": {
-          "familiarity": 0.326,
+          "familiarity": 0.338,
           "reports": [
             {
               "source": "20260817T131350-owen-v3",
@@ -1470,11 +1526,18 @@
               "text": "What I remember is Getting one useful thing done and having some quiet afterward.",
               "branch_owner": "owen",
               "branch_memory": "20260817T131350-owen-v3"
+            },
+            {
+              "source": "20260817T141309947-owen-v4",
+              "status": "reported",
+              "text": "Quiet. I notice more when there is not much competing for attention.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T141309947-owen-v4"
             }
           ]
         },
         "jules": {
-          "familiarity": 0.344,
+          "familiarity": 0.356,
           "reports": [
             {
               "source": "20260817T131108-jules-v3",
@@ -1594,7 +1657,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.309,
+        "activation": 0.317,
         "attention": [
           "moments",
           "somebody",
@@ -1603,9 +1666,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -1617,9 +1680,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.528
       },
@@ -1627,10 +1690,10 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0889,
-        "association": -0.082,
-        "inhibition": 0.0335,
-        "social": 0.0906
+        "activation": -0.0919,
+        "association": -0.207,
+        "inhibition": 0.0116,
+        "social": 0.0903
       },
       "room_memories": [
         {
@@ -2644,6 +2707,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000040"
+        },
+        {
+          "source": "20260817T141309947-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Quiet. I notice more when there is not much competing for attention.",
+          "discourse": "d-20260817T141309947-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T141309947-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Busy, as long as it feels alive instead of chaotic.",
+          "discourse": "d-20260817T141309947-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T141309947-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
+          "discourse": "d-20260817T141309947-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T141309947-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Have you always preferred that?",
+          "discourse": "d-20260817T141309947-jules-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T141309947-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
         }
       ],
       "self_history": [
@@ -2899,14 +3002,23 @@
           "branch_memory": "20260817T140925896-jules-v4",
           "discourse": "d-20260817T141105735-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000040"
+        },
+        {
+          "source": "20260817T141309947-mara-v4",
+          "text": "Busy, as long as it feels alive instead of chaotic.",
+          "move": "self_disclosure",
+          "memory": "20260817T141309947-mara-v4",
+          "branch_memory": "20260817T141309947-mara-v4",
+          "discourse": "d-20260817T141309947-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
         }
       ],
-      "last_event": "20260817T141105735-sarah-v4",
-      "spoken": 29,
+      "last_event": "20260817T141309947-jules-v4",
+      "spoken": 30,
       "silences": 0,
       "people": {
         "sarah": {
-          "familiarity": 0.344,
+          "familiarity": 0.356,
           "reports": [
             {
               "source": "20260817T130922-sarah-v3",
@@ -2984,11 +3096,18 @@
               "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T140925896-sarah-v4"
+            },
+            {
+              "source": "20260817T141309947-sarah-v4",
+              "status": "reported",
+              "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T141309947-sarah-v4"
             }
           ]
         },
         "owen": {
-          "familiarity": 0.326,
+          "familiarity": 0.338,
           "reports": [
             {
               "source": "20260817T131350-owen-v3",
@@ -3010,11 +3129,18 @@
               "text": "What I remember is Getting one useful thing done and having some quiet afterward.",
               "branch_owner": "owen",
               "branch_memory": "20260817T131350-owen-v3"
+            },
+            {
+              "source": "20260817T141309947-owen-v4",
+              "status": "reported",
+              "text": "Quiet. I notice more when there is not much competing for attention.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T141309947-owen-v4"
             }
           ]
         },
         "jules": {
-          "familiarity": 0.344,
+          "familiarity": 0.356,
           "reports": [
             {
               "source": "20260817T131108-jules-v3",
@@ -3134,7 +3260,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.209,
+        "activation": 0.4,
         "attention": [
           "moments",
           "somebody",
@@ -3143,9 +3269,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -3157,9 +3283,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.62
       },
@@ -3167,10 +3293,10 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1274,
-        "association": 0.1702,
-        "inhibition": 0.085,
-        "social": 0.1312
+        "activation": -0.1811,
+        "association": 0.0971,
+        "inhibition": 0.077,
+        "social": 0.1117
       },
       "room_memories": [
         {
@@ -4184,6 +4310,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000040"
+        },
+        {
+          "source": "20260817T141309947-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Quiet. I notice more when there is not much competing for attention.",
+          "discourse": "d-20260817T141309947-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T141309947-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Busy, as long as it feels alive instead of chaotic.",
+          "discourse": "d-20260817T141309947-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T141309947-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
+          "discourse": "d-20260817T141309947-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T141309947-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Have you always preferred that?",
+          "discourse": "d-20260817T141309947-jules-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T141309947-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
         }
       ],
       "self_history": [
@@ -4399,14 +4565,23 @@
           "branch_memory": "20260817T140925896-jules-v4",
           "discourse": "d-20260817T141105735-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000040"
+        },
+        {
+          "source": "20260817T141309947-owen-v4",
+          "text": "Quiet. I notice more when there is not much competing for attention.",
+          "move": "answer",
+          "memory": "20260817T141309947-owen-v4",
+          "branch_memory": "20260817T141309947-owen-v4",
+          "discourse": "d-20260817T141309947-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
         }
       ],
-      "last_event": "20260817T141105735-sarah-v4",
-      "spoken": 24,
+      "last_event": "20260817T141309947-jules-v4",
+      "spoken": 25,
       "silences": 0,
       "people": {
         "sarah": {
-          "familiarity": 0.344,
+          "familiarity": 0.356,
           "reports": [
             {
               "source": "20260817T130922-sarah-v3",
@@ -4484,11 +4659,18 @@
               "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T140925896-sarah-v4"
+            },
+            {
+              "source": "20260817T141309947-sarah-v4",
+              "status": "reported",
+              "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T141309947-sarah-v4"
             }
           ]
         },
         "mara": {
-          "familiarity": 0.41,
+          "familiarity": 0.422,
           "reports": [
             {
               "source": "20260817T130756-mara-v3",
@@ -4650,11 +4832,18 @@
               "text": "Busy, as long as it feels alive instead of chaotic.",
               "branch_owner": "mara",
               "branch_memory": "20260817T140925896-mara-v4"
+            },
+            {
+              "source": "20260817T141309947-mara-v4",
+              "status": "reported",
+              "text": "Busy, as long as it feels alive instead of chaotic.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T141309947-mara-v4"
             }
           ]
         },
         "jules": {
-          "familiarity": 0.344,
+          "familiarity": 0.356,
           "reports": [
             {
               "source": "20260817T131108-jules-v3",
@@ -4774,7 +4963,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.391,
+        "activation": 0.197,
         "attention": [
           "moments",
           "somebody",
@@ -4783,9 +4972,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -4797,9 +4986,9 @@
           "normal",
           "usually",
           "tell",
-          "gives",
-          "specific",
-          "picture"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.56
       },
@@ -4807,10 +4996,10 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0549,
-        "association": 0.146,
-        "inhibition": -0.0158,
-        "social": -0.0051
+        "activation": -0.0643,
+        "association": 0.0853,
+        "inhibition": 0.1185,
+        "social": -0.1252
       },
       "room_memories": [
         {
@@ -5824,6 +6013,46 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000040"
+        },
+        {
+          "source": "20260817T141309947-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Quiet. I notice more when there is not much competing for attention.",
+          "discourse": "d-20260817T141309947-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T141309947-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Busy, as long as it feels alive instead of chaotic.",
+          "discourse": "d-20260817T141309947-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T141309947-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
+          "discourse": "d-20260817T141309947-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T141309947-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
+        },
+        {
+          "source": "20260817T141309947-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Have you always preferred that?",
+          "discourse": "d-20260817T141309947-jules-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T141309947-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
         }
       ],
       "self_history": [
@@ -6047,14 +6276,23 @@
           "branch_memory": "20260817T140925896-jules-v4",
           "discourse": "d-20260817T141105735-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000040"
+        },
+        {
+          "source": "20260817T141309947-jules-v4",
+          "text": "Have you always preferred that?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T141309947-owen-v4",
+          "discourse": "d-20260817T141309947-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000041"
         }
       ],
-      "last_event": "20260817T141105735-sarah-v4",
-      "spoken": 25,
+      "last_event": "20260817T141309947-jules-v4",
+      "spoken": 26,
       "silences": 0,
       "people": {
         "sarah": {
-          "familiarity": 0.344,
+          "familiarity": 0.356,
           "reports": [
             {
               "source": "20260817T130922-sarah-v3",
@@ -6132,11 +6370,18 @@
               "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
               "branch_owner": "sarah",
               "branch_memory": "20260817T140925896-sarah-v4"
+            },
+            {
+              "source": "20260817T141309947-sarah-v4",
+              "status": "reported",
+              "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T141309947-sarah-v4"
             }
           ]
         },
         "mara": {
-          "familiarity": 0.41,
+          "familiarity": 0.422,
           "reports": [
             {
               "source": "20260817T130756-mara-v3",
@@ -6298,11 +6543,18 @@
               "text": "Busy, as long as it feels alive instead of chaotic.",
               "branch_owner": "mara",
               "branch_memory": "20260817T140925896-mara-v4"
+            },
+            {
+              "source": "20260817T141309947-mara-v4",
+              "status": "reported",
+              "text": "Busy, as long as it feels alive instead of chaotic.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T141309947-mara-v4"
             }
           ]
         },
         "owen": {
-          "familiarity": 0.326,
+          "familiarity": 0.338,
           "reports": [
             {
               "source": "20260817T131350-owen-v3",
@@ -6324,6 +6576,13 @@
               "text": "What I remember is Getting one useful thing done and having some quiet afterward.",
               "branch_owner": "owen",
               "branch_memory": "20260817T131350-owen-v3"
+            },
+            {
+              "source": "20260817T141309947-owen-v4",
+              "status": "reported",
+              "text": "Quiet. I notice more when there is not much competing for attention.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T141309947-owen-v4"
             }
           ]
         }
