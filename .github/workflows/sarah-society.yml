@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: the-room-world-main
@@ -19,69 +20,124 @@ concurrency:
 
 jobs:
   beat:
-    name: 12-node shared cognitive beat
+    name: continuous 12-node shared cognition
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
 
-      - name: Run all 12 cognitive nodes in parallel
+      - name: Keep all 12 cognitive nodes hot and publish every beat
         env:
-          ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
-          rm -rf room_parts room_work
-          mkdir -p room_parts room_work
-
-          echo "Launching 12 sense nodes inside one GitHub runner"
-          pids=()
-          for n in $(seq 0 11); do
-            (
-              export ROOM_NODE_ID="$n"
-              python3 scripts/room_engine.py node --phase sense
-            ) &
-            pids+=("$!")
-          done
-          failed=0
-          for pid in "${pids[@]}"; do
-            wait "$pid" || failed=1
-          done
-          [ "$failed" -eq 0 ] || { echo "A sense node failed"; exit 1; }
-
-          echo "Broadcasting shared cognitive bus"
-          python3 scripts/room_engine.py bus
-
-          echo "Launching 12 recurrent nodes inside one GitHub runner"
-          pids=()
-          for n in $(seq 0 11); do
-            (
-              export ROOM_NODE_ID="$n"
-              python3 scripts/room_engine.py node --phase recurrent --bus room_work/bus-sense.json
-            ) &
-            pids+=("$!")
-          done
-          failed=0
-          for pid in "${pids[@]}"; do
-            wait "$pid" || failed=1
-          done
-          [ "$failed" -eq 0 ] || { echo "A recurrent node failed"; exit 1; }
-
-          echo "Integrating four independent entity contributions"
-          python3 scripts/room_engine.py commit
-
-      - name: Commit continuing Room
-        run: |
-          set -euo pipefail
+          set -uo pipefail
           git config user.name "the-room"
           git config user.email "actions@users.noreply.github.com"
-          git add room society/live.json
-          if git diff --cached --quiet; then
-            echo "No Room state change to commit"
-            exit 0
-          fi
-          git commit -m "Room cognition v4 shared beat"
-          git pull --rebase origin main
-          git push origin HEAD:main
+
+          # Stay on one warm runner for almost the full GitHub-hosted job window.
+          # The old architecture paid runner startup + checkout for every beat.
+          stop_at=$((SECONDS + 19800))
+          beat_seq=0
+
+          run_beat() {
+            beat_seq=$((beat_seq + 1))
+            export ROOM_CYCLE_KEY="${GITHUB_RUN_ID}:${GITHUB_RUN_ATTEMPT}:${beat_seq}"
+            rm -rf room_parts room_work
+            mkdir -p room_parts room_work
+
+            pids=()
+            for n in $(seq 0 11); do
+              (
+                export ROOM_NODE_ID="$n"
+                python3 scripts/room_engine.py node --phase sense
+              ) &
+              pids+=("$!")
+            done
+            failed=0
+            for pid in "${pids[@]}"; do
+              wait "$pid" || failed=1
+            done
+            [ "$failed" -eq 0 ] || return 1
+
+            python3 scripts/room_engine.py bus || return 1
+
+            pids=()
+            for n in $(seq 0 11); do
+              (
+                export ROOM_NODE_ID="$n"
+                python3 scripts/room_engine.py node --phase recurrent --bus room_work/bus-sense.json
+              ) &
+              pids+=("$!")
+            done
+            failed=0
+            for pid in "${pids[@]}"; do
+              wait "$pid" || failed=1
+            done
+            [ "$failed" -eq 0 ] || return 1
+
+            python3 scripts/room_engine.py commit || return 1
+            return 0
+          }
+
+          while [ "$SECONDS" -lt "$stop_at" ]; do
+            if ! run_beat; then
+              echo "A Room beat failed internally; retrying on the same warm runner"
+              sleep 3
+              continue
+            fi
+
+            git add room society/live.json
+            if git diff --cached --quiet; then
+              sleep 1
+              continue
+            fi
+
+            git commit -m "Room cognition v4 shared beat"
+
+            pushed=0
+            for attempt in 1 2 3 4; do
+              if git push origin HEAD:main; then
+                pushed=1
+                break
+              fi
+
+              echo "Push attempt $attempt collided with a newer main; rebasing"
+              if ! git fetch origin main; then
+                sleep $((attempt * 2))
+                continue
+              fi
+              if ! git rebase origin/main; then
+                git rebase --abort || true
+                echo "Could not rebase cleanly; leaving the state intact and retrying shortly"
+                break
+              fi
+              sleep 1
+            done
+
+            if [ "$pushed" -eq 0 ]; then
+              echo "Beat is locally committed but not published yet; cooling briefly"
+              sleep 8
+            else
+              # Two seconds plus cognition + push gives a several-times-faster
+              # cadence without hammering GitHub with zero-delay pushes.
+              sleep 2
+            fi
+          done
+
+          echo "Warm Room runner is handing itself to a fresh runner"
+          for attempt in 1 2 3 4 5; do
+            if gh workflow run sarah-society.yml \
+              --repo "$GITHUB_REPOSITORY" \
+              --ref main \
+              -f entity=auto; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+
+          # The watchdog/pulse chain remains a safety net if GitHub rejects
+          # every direct handoff during a temporary platform outage.
+          exit 0
