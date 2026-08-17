@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import base64, json, os, re, sys
 from discovery_cluster import key as concept_key, resolve_root_facets
+from genealogy_cluster import build_public_ancestry
 
 JOB_RE = re.compile(r'^[a-z0-9][a-z0-9._-]{5,80}$')
 KEY_RE = re.compile(r'^([a-z0-9_]+)\s*:\s*(.+?)\s*$')
-ALLOWED = {('discovery','conceptual_bridge')}
+ALLOWED = {('discovery','conceptual_bridge'),('genealogy','relatedness')}
 
 
 def parse_issue_request(body: str):
@@ -23,29 +24,46 @@ def parse_issue_request(body: str):
     except Exception as e:
         raise ValueError('invalid payload_b64') from e
     if not isinstance(payload, dict): raise ValueError('payload must be an object')
-    terms = payload.get('terms')
-    if not isinstance(terms, list) or not (2 <= len(terms) <= 4): raise ValueError('discovery job requires 2-4 terms')
-    cleaned = []
-    for term in terms:
-        if not isinstance(term, str): raise ValueError('terms must be strings')
-        t = ' '.join(term.split()).strip()
-        if not (1 <= len(t) <= 100): raise ValueError('term length out of range')
-        cleaned.append(t)
-    payload['terms'] = cleaned
-    payload['max_depth'] = max(3, min(7, int(payload.get('max_depth', 6))))
 
-    # Meaning is resolved once here, then the same provenance-bearing packet is
-    # broadcast to all 12 workers. Workers diversify the search, not the entity sense.
-    facets = {}
-    for term in cleaned:
-        rows = resolve_root_facets(term, 20)
-        facets[concept_key(term)] = rows
-        labels = ', '.join(x.get('label','') for x in rows[:8]) or '(none)'
-        print(f'RESOLVED {term}: {labels}', file=sys.stderr)
-    payload['root_facets'] = facets
+    if project=='discovery':
+        terms = payload.get('terms')
+        if not isinstance(terms, list) or not (2 <= len(terms) <= 4): raise ValueError('discovery job requires 2-4 terms')
+        cleaned = []
+        for term in terms:
+            if not isinstance(term, str): raise ValueError('terms must be strings')
+            t = ' '.join(term.split()).strip()
+            if not (1 <= len(t) <= 100): raise ValueError('term length out of range')
+            cleaned.append(t)
+        payload['terms'] = cleaned
+        payload['max_depth'] = max(3, min(7, int(payload.get('max_depth', 6))))
+
+        facets = {}
+        for term in cleaned:
+            rows = resolve_root_facets(term, 20)
+            facets[concept_key(term)] = rows
+            labels = ', '.join(x.get('label','') for x in rows[:8]) or '(none)'
+            print(f'RESOLVED {term}: {labels}', file=sys.stderr)
+        payload['root_facets'] = facets
+
+    elif project=='genealogy':
+        names=payload.get('names')
+        if not isinstance(names,list) or not (2<=len(names)<=6): raise ValueError('genealogy job requires 2-6 people')
+        cleaned=[]
+        for name in names:
+            if not isinstance(name,str):raise ValueError('genealogy names must be strings')
+            n=' '.join(name.split()).strip()
+            if not (2<=len(n)<=120):raise ValueError('genealogy name length out of range')
+            cleaned.append(n)
+        generations=max(2,min(10,int(payload.get('max_generations',8))))
+        graph=build_public_ancestry(cleaned,generations)
+        payload=graph
+        for p in graph['targets']:
+            by=f" ({p['birth_year']})" if p.get('birth_year') else ''
+            print(f"RESOLVED {p['query']}: {p['label']}{by} [{p['id']}]",file=sys.stderr)
+        print(f"GENEALOGY GRAPH: {graph['graph_nodes']} people, {graph['graph_edges']} parent edges, {generations} generations",file=sys.stderr)
 
     return {
-        'schema': 2,
+        'schema': 3,
         'job_id': job_id,
         'project': project,
         'task': task,

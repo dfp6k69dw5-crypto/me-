@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import base64, hashlib, json, math, os, random, time
 from discovery_cluster import worker_result as discovery_worker_result
+from genealogy_cluster import worker_result as genealogy_worker_result
 
 worker = int(os.getenv('WORKER_ID','0'))
 workers = int(os.getenv('WORKER_COUNT','12'))
@@ -14,8 +15,12 @@ if workload == 'shared_job':
     if not raw:
         raise SystemExit('shared_job requires CLUSTER_REQUEST_B64')
     request = json.loads(base64.b64decode(raw).decode('utf-8'))
-    if request.get('project') == 'discovery' and request.get('task') == 'conceptual_bridge':
+    project=request.get('project');task=request.get('task')
+    if project == 'discovery' and task == 'conceptual_bridge':
         result = discovery_worker_result(request, worker)
+        units = int(result.get('units',0))
+    elif project == 'genealogy' and task == 'relatedness':
+        result = genealogy_worker_result(request, worker)
         units = int(result.get('units',0))
     else:
         raise SystemExit('unsupported shared job handler')
