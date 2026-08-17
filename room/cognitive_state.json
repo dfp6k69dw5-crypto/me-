@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.236,
+        "activation": 0.266,
         "attention": [
           "notice",
           "people",
@@ -10,10 +10,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -24,10 +24,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.2175,
-        "association": -0.0782,
-        "inhibition": -0.0542,
-        "social": 0.0178
+        "activation": 0.1321,
+        "association": 0.04,
+        "inhibition": 0.0944,
+        "social": 0.0816
       },
       "room_memories": [
-        {
-          "source": "20260817T201242316-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
-          "discourse": "d-20260817T201242316-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T201242316-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242316-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
-          "discourse": "d-20260817T201242316-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201242316-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242316-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-          "discourse": "d-20260817T201242316-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T201242316-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242317-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes that kind of problem satisfying?",
-          "discourse": "d-20260817T201242317-sarah-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T201242316-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
         {
           "source": "20260817T201244536-owen-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004597"
+        },
+        {
+          "source": "20260817T201420824-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Somewhere familiar if I know exactly why I liked it the first time.",
+          "discourse": "d-20260817T201420824-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201420824-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420824-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Somewhere new. I like having to figure the place out as I go.",
+          "discourse": "d-20260817T201420824-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T201420824-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420824-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Somewhere new. I would rather be a little disoriented than bored.",
+          "discourse": "d-20260817T201420824-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T201420824-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420825-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that preference changed much for you?",
+          "discourse": "d-20260817T201420825-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201420824-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T200746749-sarah-v4",
-          "text": "Has that preference changed much for you?",
-          "move": "follow_up",
-          "memory": null,
-          "branch_memory": "20260817T200746749-owen-v4",
-          "discourse": "d-20260817T200746749-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004418"
-        },
         {
           "source": "20260817T200748803-sarah-v4",
           "text": "That gives me a more specific picture of how you think.",
@@ -3462,22 +3453,24 @@
           "branch_memory": null,
           "discourse": "d-20260817T201418723-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004597"
+        },
+        {
+          "source": "20260817T201420825-sarah-v4",
+          "text": "Has that preference changed much for you?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T201420824-owen-v4",
+          "discourse": "d-20260817T201420825-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
         }
       ],
-      "last_event": "20260817T201418723-sarah-v4",
-      "spoken": 4582,
+      "last_event": "20260817T201420825-sarah-v4",
+      "spoken": 4583,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T200718286-mara-v4",
-              "status": "reported",
-              "text": "Having one conversation that makes the day feel less ordinary than it started.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T200718286-mara-v4"
-            },
             {
               "source": "20260817T200724488-mara-v4",
               "status": "reported",
@@ -4100,19 +4093,19 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T201414597-mara-v4"
+            },
+            {
+              "source": "20260817T201420824-mara-v4",
+              "status": "reported",
+              "text": "Somewhere new. I like having to figure the place out as I go.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T201420824-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T200643062-owen-v4",
-              "status": "reported",
-              "text": "Because constraints give me something I can test instead of just argue about.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T200641002-owen-v4"
-            },
             {
               "source": "20260817T200648133-owen-v4",
               "status": "reported",
@@ -4735,19 +4728,19 @@
               "text": "Not substantially. I have more exceptions now, but the rule still fits.",
               "branch_owner": "owen",
               "branch_memory": "20260817T201408276-owen-v4"
+            },
+            {
+              "source": "20260817T201420824-owen-v4",
+              "status": "reported",
+              "text": "Somewhere familiar if I know exactly why I liked it the first time.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T201420824-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T200626281-jules-v4",
-              "status": "reported",
-              "text": "Probably, but not in a straight line. The core still sounds like me.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T200621216-jules-v4"
-            },
             {
               "source": "20260817T200628251-jules-v4",
               "status": "reported",
@@ -5370,6 +5363,13 @@
               "text": "Somewhere new. I would rather be a little disoriented than bored.",
               "branch_owner": "jules",
               "branch_memory": "20260817T201414597-jules-v4"
+            },
+            {
+              "source": "20260817T201420824-jules-v4",
+              "status": "reported",
+              "text": "Somewhere new. I would rather be a little disoriented than bored.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T201420824-jules-v4"
             }
           ]
         }
@@ -5377,7 +5377,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.394,
+        "activation": 0.336,
         "attention": [
           "notice",
           "people",
@@ -5385,10 +5385,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -5399,10 +5399,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1505,
-        "association": 0.0303,
-        "inhibition": -0.2468,
-        "social": -0.0442
+        "activation": -0.135,
+        "association": 0.0952,
+        "inhibition": -0.157,
+        "social": 0.0144
       },
       "room_memories": [
-        {
-          "source": "20260817T201242316-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
-          "discourse": "d-20260817T201242316-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T201242316-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242316-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
-          "discourse": "d-20260817T201242316-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201242316-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242316-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-          "discourse": "d-20260817T201242316-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T201242316-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242317-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes that kind of problem satisfying?",
-          "discourse": "d-20260817T201242317-sarah-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T201242316-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
         {
           "source": "20260817T201244536-owen-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004597"
+        },
+        {
+          "source": "20260817T201420824-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Somewhere familiar if I know exactly why I liked it the first time.",
+          "discourse": "d-20260817T201420824-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201420824-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420824-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Somewhere new. I like having to figure the place out as I go.",
+          "discourse": "d-20260817T201420824-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T201420824-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420824-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Somewhere new. I would rather be a little disoriented than bored.",
+          "discourse": "d-20260817T201420824-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T201420824-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420825-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that preference changed much for you?",
+          "discourse": "d-20260817T201420825-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201420824-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T200746749-mara-v4",
-          "text": "Usually the mood between people.",
-          "move": "self_disclosure",
-          "memory": "20260817T200746749-mara-v4",
-          "branch_memory": "20260817T200746749-mara-v4",
-          "discourse": "d-20260817T200746749-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004418"
-        },
         {
           "source": "20260817T200748803-mara-v4",
           "text": "That is the kind of answer that actually tells me something about you.",
@@ -8837,10 +8828,19 @@
           "branch_memory": "20260817T201414597-mara-v4",
           "discourse": "d-20260817T201418722-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004597"
+        },
+        {
+          "source": "20260817T201420824-mara-v4",
+          "text": "Somewhere new. I like having to figure the place out as I go.",
+          "move": "self_disclosure",
+          "memory": "20260817T201420824-mara-v4",
+          "branch_memory": "20260817T201420824-mara-v4",
+          "discourse": "d-20260817T201420824-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
         }
       ],
-      "last_event": "20260817T201418723-sarah-v4",
-      "spoken": 4586,
+      "last_event": "20260817T201420825-sarah-v4",
+      "spoken": 4587,
       "silences": 0,
       "people": {
         "sarah": {
@@ -9482,13 +9482,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T200643062-owen-v4",
-              "status": "reported",
-              "text": "Because constraints give me something I can test instead of just argue about.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T200641002-owen-v4"
-            },
-            {
               "source": "20260817T200648133-owen-v4",
               "status": "reported",
               "text": "Because constraints give me something I can test instead of just argue about.",
@@ -10110,19 +10103,19 @@
               "text": "Not substantially. I have more exceptions now, but the rule still fits.",
               "branch_owner": "owen",
               "branch_memory": "20260817T201408276-owen-v4"
+            },
+            {
+              "source": "20260817T201420824-owen-v4",
+              "status": "reported",
+              "text": "Somewhere familiar if I know exactly why I liked it the first time.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T201420824-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T200626281-jules-v4",
-              "status": "reported",
-              "text": "Probably, but not in a straight line. The core still sounds like me.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T200621216-jules-v4"
-            },
             {
               "source": "20260817T200628251-jules-v4",
               "status": "reported",
@@ -10745,6 +10738,13 @@
               "text": "Somewhere new. I would rather be a little disoriented than bored.",
               "branch_owner": "jules",
               "branch_memory": "20260817T201414597-jules-v4"
+            },
+            {
+              "source": "20260817T201420824-jules-v4",
+              "status": "reported",
+              "text": "Somewhere new. I would rather be a little disoriented than bored.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T201420824-jules-v4"
             }
           ]
         }
@@ -10752,7 +10752,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.211,
+        "activation": 0.398,
         "attention": [
           "notice",
           "people",
@@ -10760,10 +10760,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -10774,10 +10774,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0936,
-        "association": 0.0133,
-        "inhibition": 0.0057,
-        "social": 0.033
+        "activation": -0.0788,
+        "association": 0.0405,
+        "inhibition": -0.0688,
+        "social": 0.0838
       },
       "room_memories": [
-        {
-          "source": "20260817T201242316-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
-          "discourse": "d-20260817T201242316-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T201242316-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242316-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
-          "discourse": "d-20260817T201242316-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201242316-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242316-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-          "discourse": "d-20260817T201242316-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T201242316-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242317-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes that kind of problem satisfying?",
-          "discourse": "d-20260817T201242317-sarah-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T201242316-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
         {
           "source": "20260817T201244536-owen-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004597"
+        },
+        {
+          "source": "20260817T201420824-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Somewhere familiar if I know exactly why I liked it the first time.",
+          "discourse": "d-20260817T201420824-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201420824-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420824-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Somewhere new. I like having to figure the place out as I go.",
+          "discourse": "d-20260817T201420824-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T201420824-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420824-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Somewhere new. I would rather be a little disoriented than bored.",
+          "discourse": "d-20260817T201420824-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T201420824-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420825-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that preference changed much for you?",
+          "discourse": "d-20260817T201420825-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201420824-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T200746749-owen-v4",
-          "text": "Usually what is out of place or does not quite add up.",
-          "move": "answer",
-          "memory": "20260817T200746749-owen-v4",
-          "branch_memory": "20260817T200746749-owen-v4",
-          "discourse": "d-20260817T200746749-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004418"
-        },
         {
           "source": "20260817T200748803-owen-v4",
           "text": "Not substantially. I have more exceptions now, but the rule still fits.",
@@ -14212,10 +14203,19 @@
           "branch_memory": "20260817T201414597-mara-v4",
           "discourse": "d-20260817T201418722-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004597"
+        },
+        {
+          "source": "20260817T201420824-owen-v4",
+          "text": "Somewhere familiar if I know exactly why I liked it the first time.",
+          "move": "answer",
+          "memory": "20260817T201420824-owen-v4",
+          "branch_memory": "20260817T201420824-owen-v4",
+          "discourse": "d-20260817T201420824-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
         }
       ],
-      "last_event": "20260817T201418723-sarah-v4",
-      "spoken": 4581,
+      "last_event": "20260817T201420825-sarah-v4",
+      "spoken": 4582,
       "silences": 0,
       "people": {
         "sarah": {
@@ -14857,13 +14857,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T200718286-mara-v4",
-              "status": "reported",
-              "text": "Having one conversation that makes the day feel less ordinary than it started.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T200718286-mara-v4"
-            },
-            {
               "source": "20260817T200724488-mara-v4",
               "status": "reported",
               "text": "Busy, as long as it feels alive instead of chaotic.",
@@ -15485,19 +15478,19 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T201414597-mara-v4"
+            },
+            {
+              "source": "20260817T201420824-mara-v4",
+              "status": "reported",
+              "text": "Somewhere new. I like having to figure the place out as I go.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T201420824-mara-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T200626281-jules-v4",
-              "status": "reported",
-              "text": "Probably, but not in a straight line. The core still sounds like me.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T200621216-jules-v4"
-            },
             {
               "source": "20260817T200628251-jules-v4",
               "status": "reported",
@@ -16120,6 +16113,13 @@
               "text": "Somewhere new. I would rather be a little disoriented than bored.",
               "branch_owner": "jules",
               "branch_memory": "20260817T201414597-jules-v4"
+            },
+            {
+              "source": "20260817T201420824-jules-v4",
+              "status": "reported",
+              "text": "Somewhere new. I would rather be a little disoriented than bored.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T201420824-jules-v4"
             }
           ]
         }
@@ -16127,7 +16127,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.241,
+        "activation": 0.253,
         "attention": [
           "notice",
           "people",
@@ -16135,10 +16135,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -16149,10 +16149,10 @@
           "performing",
           "everybody",
           "else",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.25,
-        "association": 0.1156,
-        "inhibition": -0.0447,
-        "social": -0.1082
+        "activation": -0.1968,
+        "association": 0.246,
+        "inhibition": 0.0107,
+        "social": -0.0801
       },
       "room_memories": [
-        {
-          "source": "20260817T201242316-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
-          "discourse": "d-20260817T201242316-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T201242316-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242316-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
-          "discourse": "d-20260817T201242316-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T201242316-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242316-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-          "discourse": "d-20260817T201242316-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T201242316-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
-        {
-          "source": "20260817T201242317-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes that kind of problem satisfying?",
-          "discourse": "d-20260817T201242317-sarah-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T201242316-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004553"
-        },
         {
           "source": "20260817T201244536-owen-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004597"
+        },
+        {
+          "source": "20260817T201420824-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Somewhere familiar if I know exactly why I liked it the first time.",
+          "discourse": "d-20260817T201420824-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201420824-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420824-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Somewhere new. I like having to figure the place out as I go.",
+          "discourse": "d-20260817T201420824-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T201420824-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420824-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Somewhere new. I would rather be a little disoriented than bored.",
+          "discourse": "d-20260817T201420824-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T201420824-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
+        },
+        {
+          "source": "20260817T201420825-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that preference changed much for you?",
+          "discourse": "d-20260817T201420825-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T201420824-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T200746749-jules-v4",
-          "text": "Usually one odd detail that probably was not supposed to be important.",
-          "move": "self_disclosure",
-          "memory": "20260817T200746749-jules-v4",
-          "branch_memory": "20260817T200746749-jules-v4",
-          "discourse": "d-20260817T200746749-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004418"
-        },
         {
           "source": "20260817T200748803-jules-v4",
           "text": "What makes you say that?",
@@ -19587,10 +19578,19 @@
           "branch_memory": "20260817T201414597-mara-v4",
           "discourse": "d-20260817T201418722-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004597"
+        },
+        {
+          "source": "20260817T201420824-jules-v4",
+          "text": "Somewhere new. I would rather be a little disoriented than bored.",
+          "move": "self_disclosure",
+          "memory": "20260817T201420824-jules-v4",
+          "branch_memory": "20260817T201420824-jules-v4",
+          "discourse": "d-20260817T201420824-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004598"
         }
       ],
-      "last_event": "20260817T201418723-sarah-v4",
-      "spoken": 4582,
+      "last_event": "20260817T201420825-sarah-v4",
+      "spoken": 4583,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20232,13 +20232,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T200718286-mara-v4",
-              "status": "reported",
-              "text": "Having one conversation that makes the day feel less ordinary than it started.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T200718286-mara-v4"
-            },
-            {
               "source": "20260817T200724488-mara-v4",
               "status": "reported",
               "text": "Busy, as long as it feels alive instead of chaotic.",
@@ -20860,19 +20853,19 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T201414597-mara-v4"
+            },
+            {
+              "source": "20260817T201420824-mara-v4",
+              "status": "reported",
+              "text": "Somewhere new. I like having to figure the place out as I go.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T201420824-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T200643062-owen-v4",
-              "status": "reported",
-              "text": "Because constraints give me something I can test instead of just argue about.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T200641002-owen-v4"
-            },
             {
               "source": "20260817T200648133-owen-v4",
               "status": "reported",
@@ -21495,6 +21488,13 @@
               "text": "Not substantially. I have more exceptions now, but the rule still fits.",
               "branch_owner": "owen",
               "branch_memory": "20260817T201408276-owen-v4"
+            },
+            {
+              "source": "20260817T201420824-owen-v4",
+              "status": "reported",
+              "text": "Somewhere familiar if I know exactly why I liked it the first time.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T201420824-owen-v4"
             }
           ]
         }
