@@ -1,0 +1,114 @@
+name: Room private model probe
+
+on:
+  push:
+    paths:
+      - 'society/private-model-probe.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ROOM_PROMPT_PERCEPTION: ${{ secrets.ROOM_PROMPT_PERCEPTION }}
+      ROOM_PROMPT_DELIBERATION: ${{ secrets.ROOM_PROMPT_DELIBERATION }}
+      ROOM_PROMPT_EXPRESSION: ${{ secrets.ROOM_PROMPT_EXPRESSION }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Probe local private model safely
+        run: |
+          set -u
+          git config user.name "the-room-probe"
+          git config user.email "actions@users.noreply.github.com"
+          mkdir -p room .room_model/runtime
+
+          pp=false; pd=false; pe=false
+          [ -n "${ROOM_PROMPT_PERCEPTION:-}" ] && pp=true
+          [ -n "${ROOM_PROMPT_DELIBERATION:-}" ] && pd=true
+          [ -n "${ROOM_PROMPT_EXPRESSION:-}" ] && pe=true
+          download=false; hashes=false; ready=false
+          ps=not_tested; ds=not_tested; es=not_tested
+
+          if $pp && $pd && $pe; then
+            if gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'society-brain-q4_0.gguf' --dir .room_model && \
+               gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'llama-runtime-linux-x64.tar.gz' --dir .room_model; then
+              download=true
+            fi
+          fi
+
+          if $download && \
+             echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  .room_model/society-brain-q4_0.gguf' | sha256sum -c - >/dev/null 2>&1 && \
+             echo '360a5bfab5b8fe562c52e060a998a052f5fc7d98a0448b035c2eedbb6acfbd94  .room_model/llama-runtime-linux-x64.tar.gz' | sha256sum -c - >/dev/null 2>&1; then
+            hashes=true
+          fi
+
+          pid=""
+          if $hashes; then
+            tar -xzf .room_model/llama-runtime-linux-x64.tar.gz -C .room_model/runtime
+            bin=$(find .room_model/runtime -type f -name llama-server | head -1)
+            if [ -n "${bin:-}" ]; then
+              chmod +x "$bin"
+              env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION -u ROOM_NODE_PROMPT \
+                "$bin" -m .room_model/society-brain-q4_0.gguf --host 127.0.0.1 --port 18080 -c 8192 -np 4 >.room_model/server.log 2>&1 &
+              pid=$!
+              for i in $(seq 1 120); do
+                if curl -fsS http://127.0.0.1:18080/health >/dev/null 2>&1; then ready=true; break; fi
+                kill -0 "$pid" 2>/dev/null || break
+                sleep 1
+              done
+            fi
+          fi
+
+          probe_role() {
+            role="$1"; prompt="$2"
+            if ! $ready; then echo server_unavailable; return; fi
+            if env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
+              ROOM_NODE_PROMPT="$prompt" ROOM_MODEL_URL='http://127.0.0.1:18080/completion' ROLE="$role" \
+              python3 - <<'PY' >/dev/null 2>&1
+import os
+from scripts.room_private_model import run
+r=os.environ['ROLE']
+b={'entity':'sarah','profile':{},'event':{'speaker':'mara','text':'One counterexample changed my view.','cognition':{'target':'sarah'}},'context':[],'topic':{'id':'probe','root':'belief','current_facet':'evidence','facets':['evidence','counterexample']},'partner':'mara','relationship':{'trust':0.1,'direct_familiarity':0.2},'mandatory_speech':True}
+if r=='comprehension': p=b
+elif r=='thought': p={**b,'social_observation':{'participation':'DIRECT_ADDRESSEE','relationship_events':[]}}
+else: p={**b,'social_observation':{'participation':'DIRECT_ADDRESSEE','relationship_events':[]},'deliberation':{'action':'DEEPEN','preferred_partner':'mara','topic_facet':'evidence','mandatory_speech':True}}
+run(r,p,timeout=30)
+PY
+            then echo accepted; else echo rejected; fi
+          }
+
+          if $pp; then ps=$(probe_role comprehension "$ROOM_PROMPT_PERCEPTION"); else ps=missing_secret; fi
+          if $pd; then ds=$(probe_role thought "$ROOM_PROMPT_DELIBERATION"); else ds=missing_secret; fi
+          if $pe; then es=$(probe_role expression "$ROOM_PROMPT_EXPRESSION"); else es=missing_secret; fi
+          [ -n "$pid" ] && kill "$pid" 2>/dev/null || true
+
+          cat > room/private-model-diagnostic.json <<EOF
+          {
+            "perception_secret_present": $pp,
+            "deliberation_secret_present": $pd,
+            "expression_secret_present": $pe,
+            "download_ok": $download,
+            "hashes_ok": $hashes,
+            "server_ready": $ready,
+            "perception_status": "$ps",
+            "deliberation_status": "$ds",
+            "expression_status": "$es"
+          }
+          EOF
+
+          git add room/private-model-diagnostic.json
+          git commit -m "Record private model probe"
+          for n in 1 2 3 4; do
+            git push origin HEAD:main && exit 0
+            git fetch origin main || true
+            git rebase origin/main || { git rebase --abort || true; }
+            sleep "$n"
+          done
+          exit 1
