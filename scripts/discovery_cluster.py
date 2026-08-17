@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-import hashlib, json, random, re, time, urllib.parse, urllib.request
+import hashlib, json, random, re, signal, time, urllib.parse, urllib.request
 
-UA='Things-Universe-Shared-Cluster/3.0 (+https://github.com/maaronfanberg-lab/me-)'
+UA='Things-Universe-Shared-Cluster/3.1 (+https://github.com/maaronfanberg-lab/me-)'
 GENERIC={'thing','things','object','objects','entity','entities','concept','concepts','system','systems','process','processes','subject','subjects','topic','topics','stuff','something','phenomenon','phenomena','category','categories','item','items','property','properties','type','types','kind','kinds'}
 DROP_CAT=re.compile(r'\b(wikipedia|articles|pages|templates|stubs?|lists?|by year|by country|births|deaths|works by|albums by|songs by|films by|people from|members of)\b',re.I)
+LITERARY={'children\'s literature','picture book','literature','book','narrative','text'}
+INCOMPATIBLE_WITH_LITERARY={'music','film','album','song','go-go','video game','game'}
 
 LENSES=[
  ('language',{'language','meaning','word','symbol','communication','story','narrative','literature','text'}),
@@ -204,13 +206,12 @@ def merge_edges(groups):
 
 def resolve_root_facets(term,limit=20):
     """Resolve one input meaning once. This packet is broadcast to all 12 workers."""
-    rows=merge_edges([atlas(term),conceptnet(term,32),wikidata_root(term),wikipedia_root(term)])
+    wiki=wikipedia_root(term);wd=wikidata_root(term);cn=conceptnet(term,32);rows=merge_edges([atlas(term),wiki,wd,cn])
+    wiki_keys={e['k'] for e in wiki}
+    if len(wiki_keys & LITERARY)>=2:
+        rows=[e for e in rows if e['k'] not in INCOMPATIBLE_WITH_LITERARY]
     rows.sort(key=lambda e:e.get('score',0),reverse=True)
-    clean=[]
-    for e in rows:
-        clean.append({k:e[k] for k in ('k','label','rel','rev','score','source')})
-        if len(clean)>=limit:break
-    return clean
+    return [{k:e[k] for k in ('k','label','rel','rev','score','source')} for e in rows[:limit]]
 
 
 def lens_score(e,lens_words,depth,jitter=0):
@@ -223,10 +224,12 @@ def lens_score(e,lens_words,depth,jitter=0):
     return s+jitter
 
 
-def expand_search(term,lens_words,rng,cache):
-    ck=(key(term),tuple(sorted(lens_words)))
+def expand_search(term,lens_words,rng,cache,allow_network):
+    ck=(key(term),tuple(sorted(lens_words)),bool(allow_network))
     if ck in cache:return cache[ck]
-    rows=merge_edges([atlas(term),conceptnet(term,36)])
+    groups=[atlas(term)]
+    if allow_network:groups.append(conceptnet(term,28))
+    rows=merge_edges(groups)
     for e in rows:e['_j']=rng.uniform(-5,5)
     rows.sort(key=lambda e:lens_score(e,lens_words,0,e['_j']),reverse=True);cache[ck]=rows;return rows
 
@@ -241,8 +244,7 @@ def seed_side(term,facets,labels,lens_words,rng):
         if nk not in own or score>own[nk]['score']:
             own[nk]={'parent':root,'edge':e,'score':score,'depth':1};front.append(nk)
     if not front:
-        fallback=merge_edges([atlas(term),conceptnet(term,20)])[:10]
-        for e in fallback:
+        for e in atlas(term)[:10]:
             nk=e['k'];labels.setdefault(nk,e['label']);score=lens_score(e,lens_words,1,rng.uniform(-3,3));own[nk]={'parent':root,'edge':e,'score':score,'depth':1};front.append(nk)
     return own,list(dict.fromkeys(front))
 
@@ -279,11 +281,11 @@ def consider_meets(meets,left,right,labels,best,max_depth,lens_name,expanded):
     return best
 
 
-def grow(front,own,other,labels,lens_words,rng,cache,beam,branch,deadline,budget):
+def grow(front,own,other,labels,lens_words,rng,cache,beam,branch,allow_network,deadline,budget):
     next_scores={};meets=[];expanded=0
     for cur in sorted(front,key=lambda k:own[k]['score'],reverse=True)[:beam]:
         if time.monotonic()>=deadline or expanded>=budget:break
-        rec=own[cur];rows=expand_search(labels.get(cur,cur),lens_words,rng,cache)[:branch];expanded+=1
+        rec=own[cur];rows=expand_search(labels.get(cur,cur),lens_words,rng,cache,allow_network)[:branch];expanded+=1
         for e in rows:
             nk=e['k'];labels.setdefault(nk,e['label']);nd=rec['depth']+1;ns=rec['score']+lens_score(e,lens_words,nd,e.get('_j',0));old=own.get(nk)
             if old is None or ns>old['score']:
@@ -292,24 +294,39 @@ def grow(front,own,other,labels,lens_words,rng,cache,beam,branch,deadline,budget
     return [k for k,_ in sorted(next_scores.items(),key=lambda kv:kv[1],reverse=True)],meets,expanded
 
 
-def search_pair(a,b,worker,max_depth=6,root_facets=None):
-    lens_name,lens_words=LENSES[worker%len(LENSES)];seed=int(hashlib.sha256((key(a)+'|'+key(b)+'|'+str(worker)).encode()).hexdigest()[:12],16);rng=random.Random(seed);cache={};ka,kb=key(a),key(b);labels={ka:cap(a),kb:cap(b)}
-    if ka==kb:return {'from':a,'to':b,'edges':[],'score':10000,'lens':lens_name,'expanded':0}
+def run_search(a,b,worker,max_depth,root_facets,allow_network,seconds,budget):
+    lens_name,lens_words=LENSES[worker%len(LENSES)];seed=int(hashlib.sha256((key(a)+'|'+key(b)+'|'+str(worker)+'|'+str(allow_network)).encode()).hexdigest()[:12],16);rng=random.Random(seed);cache={};ka,kb=key(a),key(b);labels={ka:cap(a),kb:cap(b)}
     packet=root_facets or {};left,fl=seed_side(a,packet.get(ka),labels,lens_words,rng);right,fr=seed_side(b,packet.get(kb),labels,lens_words,rng)
     best=consider_meets(set(left)&set(right),left,right,labels,None,max_depth,lens_name,0);expanded=0
     if best and len(best['edges'])<=3:return {'from':a,'to':b,**best}
-    deadline=time.monotonic()+32.0;budget=24;beam=6+(worker%3);branch=12+(worker%4)*2
+    deadline=time.monotonic()+seconds;beam=6+(worker%3);branch=12+(worker%4)*2
     while (fl or fr) and expanded<budget and time.monotonic()<deadline:
         if fl:
-            fl,meets,z=grow(fl,left,right,labels,lens_words,rng,cache,beam,branch,deadline,budget-expanded);expanded+=z
+            fl,meets,z=grow(fl,left,right,labels,lens_words,rng,cache,beam,branch,allow_network,deadline,budget-expanded);expanded+=z
             best=consider_meets(meets,left,right,labels,best,max_depth,lens_name,expanded)
             if best and len(best['edges'])<=4:break
         if fr and expanded<budget and time.monotonic()<deadline:
-            fr,meets,z=grow(fr,right,left,labels,lens_words,rng,cache,beam,branch,deadline,budget-expanded);expanded+=z
+            fr,meets,z=grow(fr,right,left,labels,lens_words,rng,cache,beam,branch,allow_network,deadline,budget-expanded);expanded+=z
             best=consider_meets(meets,left,right,labels,best,max_depth,lens_name,expanded)
             if best and len(best['edges'])<=4:break
     if best:return {'from':a,'to':b,**best,'expanded':expanded}
     return {'from':a,'to':b,'edges':[],'score':-9999,'lens':lens_name,'expanded':expanded}
+
+
+def search_pair(a,b,worker,max_depth=6,root_facets=None):
+    if key(a)==key(b):return {'from':a,'to':b,'edges':[],'score':10000,'lens':LENSES[worker%len(LENSES)][0],'expanded':0}
+    local=run_search(a,b,worker,max_depth,root_facets,False,2.0,40)
+    if local.get('edges'):
+        local['mode']='local-first';return local
+    old_handler=signal.getsignal(signal.SIGALRM)
+    def timeout_handler(_sig,_frame):raise TimeoutError('bounded external search expired')
+    try:
+        signal.signal(signal.SIGALRM,timeout_handler);signal.alarm(24)
+        remote=run_search(a,b,worker,max_depth,root_facets,True,20.0,12);remote['mode']='bounded-external';return remote
+    except TimeoutError:
+        local['mode']='external-timeout';return local
+    finally:
+        signal.alarm(0);signal.signal(signal.SIGALRM,old_handler)
 
 
 def worker_result(request,worker):
