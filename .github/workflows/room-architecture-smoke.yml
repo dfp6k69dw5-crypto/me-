@@ -5,6 +5,9 @@ on:
     paths:
       - 'room/**'
       - 'scripts/room_engine.py'
+      - 'scripts/room_engine_v5.py'
+      - 'scripts/room_social_v5.py'
+      - 'scripts/room_private_model.py'
       - '.github/workflows/sarah-society.yml'
       - '.github/workflows/pages.yml'
       - '.github/workflows/room-architecture-smoke.yml'
@@ -17,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Validate 12-node / 48-process Room architecture
+      - name: Validate research-informed 12-node / 48-process Room architecture
         run: |
-          python3 -m py_compile scripts/room_engine.py
-          python3 scripts/room_engine.py selftest
+          python3 -m py_compile scripts/room_engine_v5.py scripts/room_social_v5.py scripts/room_private_model.py
+          python3 scripts/room_engine_v5.py selftest
