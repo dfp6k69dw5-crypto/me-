@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T13:07:56.570065Z",
+  "generated_at": "2026-08-17T13:09:22.547965Z",
   "architecture_version": "room-cognition-v3",
   "boot_id": "room-reboot-2026-08-17T13:06Z",
   "minds": {
@@ -49,23 +49,30 @@
           "attention_persistence": 0.72
         },
         "development": {
-          "turns": 1,
-          "spoken": 0,
+          "turns": 2,
+          "spoken": 1,
           "silences": 0,
           "response_length_ema": 0,
           "topic_weights": {
-            "work": 1,
-            "places": 1,
-            "home": 1
+            "conversation": 1,
+            "usually": 1,
+            "enjoy": 1,
+            "movies": 1,
+            "noise": 1,
+            "nature": 1
           },
           "relationships": {
-            "mara": 0.02,
+            "mara": 0.038,
             "owen": 0.02,
             "jules": 0.02
           },
           "lifetime_memory_count": 0
         },
-        "memory": []
+        "memory": [
+          {
+            "text": "What kind of conversation do you usually enjoy?"
+          }
+        ]
       },
       "mara": {
         "name": "Mara",
@@ -111,14 +118,17 @@
           "attention_persistence": 0.53
         },
         "development": {
-          "turns": 1,
+          "turns": 2,
           "spoken": 1,
           "silences": 0,
           "response_length_ema": 0,
           "topic_weights": {
-            "stories": 1,
-            "technology": 1,
-            "weather": 1
+            "conversation": 1,
+            "usually": 1,
+            "enjoy": 1,
+            "routine": 1,
+            "travel": 1,
+            "technology": 1
           },
           "relationships": {
             "sarah": 0.02,
@@ -127,7 +137,11 @@
           },
           "lifetime_memory_count": 0
         },
-        "memory": []
+        "memory": [
+          {
+            "text": "What kind of conversation do you usually enjoy?"
+          }
+        ]
       },
       "owen": {
         "name": "Owen",
@@ -173,23 +187,30 @@
           "attention_persistence": 0.86
         },
         "development": {
-          "turns": 1,
+          "turns": 2,
           "spoken": 0,
           "silences": 0,
           "response_length_ema": 0,
           "topic_weights": {
-            "places": 1,
-            "risk": 1,
-            "nature": 1
+            "conversation": 1,
+            "usually": 1,
+            "enjoy": 1,
+            "nature": 1,
+            "travel": 1,
+            "learning": 1
           },
           "relationships": {
             "sarah": 0.02,
-            "mara": 0.02,
+            "mara": 0.038,
             "jules": 0.02
           },
           "lifetime_memory_count": 0
         },
-        "memory": []
+        "memory": [
+          {
+            "text": "What kind of conversation do you usually enjoy?"
+          }
+        ]
       },
       "jules": {
         "name": "Jules",
@@ -235,23 +256,30 @@
           "attention_persistence": 0.47
         },
         "development": {
-          "turns": 1,
+          "turns": 2,
           "spoken": 0,
           "silences": 0,
           "response_length_ema": 0,
           "topic_weights": {
-            "curiosity": 1,
-            "food": 1,
-            "places": 1
+            "conversation": 1,
+            "usually": 1,
+            "enjoy": 1,
+            "technology": 1,
+            "noise": 1,
+            "luck": 1
           },
           "relationships": {
             "sarah": 0.02,
-            "mara": 0.02,
+            "mara": 0.038,
             "owen": 0.02
           },
           "lifetime_memory_count": 0
         },
-        "memory": []
+        "memory": [
+          {
+            "text": "What kind of conversation do you usually enjoy?"
+          }
+        ]
       }
     }
   },
@@ -364,12 +392,12 @@
   "state": {
     "version": "room-cognition-v3",
     "boot_id": "room-reboot-2026-08-17T13:06Z",
-    "cycle": 1,
+    "cycle": 2,
     "silence_cycles": 0,
-    "last_speaker": "mara",
-    "last_run": "2026-08-17T13:07:56.570065Z",
-    "messages": 1,
-    "last_public_event": "20260817T130756-mara-v3",
+    "last_speaker": "sarah",
+    "last_run": "2026-08-17T13:09:22.547965Z",
+    "messages": 2,
+    "last_public_event": "20260817T130922-sarah-v3",
     "note": "4 separate entities; 12 nodes x 4 tasks = 48 processes; public bus; private entity state; no voting; no preloaded memories"
   },
   "conversation": [
@@ -397,6 +425,31 @@
       "discourse_id": "d-20260817T130756-mara-v3",
       "parent_discourse_id": null,
       "derived_from": null
+    },
+    {
+      "id": "20260817T130922-sarah-v3",
+      "at": "2026-08-17T13:09:22.547965Z",
+      "speaker": "sarah",
+      "text": "One that wanders into something nobody planned to talk about.",
+      "runtime": "room-cognition-v3",
+      "boot_id": "room-reboot-2026-08-17T13:06Z",
+      "cognition": {
+        "move_type": "answer",
+        "target": "mara",
+        "memory_provenance": "20260817T130922-sarah-v3",
+        "branch_owner": "sarah",
+        "branch_memory": "20260817T130922-sarah-v3",
+        "externalization": "trait",
+        "compute_nodes": [
+          1,
+          2,
+          3
+        ],
+        "processes": 12
+      },
+      "discourse_id": "d-20260817T130922-sarah-v3",
+      "parent_discourse_id": "d-20260817T130756-mara-v3",
+      "derived_from": null
     }
   ],
   "discourse": {
@@ -412,6 +465,18 @@
         "branch_memory": null,
         "text": "What kind of conversation do you usually enjoy?",
         "at": "2026-08-17T13:07:56.570065Z"
+      },
+      {
+        "id": "d-20260817T130922-sarah-v3",
+        "speaker": "sarah",
+        "parent": "d-20260817T130756-mara-v3",
+        "derived_from": null,
+        "move": "answer",
+        "target": "mara",
+        "branch_owner": "sarah",
+        "branch_memory": "20260817T130922-sarah-v3",
+        "text": "One that wanders into something nobody planned to talk about.",
+        "at": "2026-08-17T13:09:22.547965Z"
       }
     ],
     "roots": [
