@@ -34,7 +34,7 @@ jobs:
         env:
           ROOM_NODE_ID: ${{ matrix.node }}
           ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
-        run: python3 scripts/room_cognition_v2.py node --phase sense
+        run: python3 scripts/room_engine.py node --phase sense
       - uses: actions/upload-artifact@v4
         with:
           name: room-sense-${{ matrix.node }}
@@ -57,7 +57,7 @@ jobs:
       - name: Route public and entity-private state
         env:
           ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
-        run: python3 scripts/room_cognition_v2.py bus
+        run: python3 scripts/room_engine.py bus
       - uses: actions/upload-artifact@v4
         with:
           name: room-cognitive-bus
@@ -85,7 +85,7 @@ jobs:
         env:
           ROOM_NODE_ID: ${{ matrix.node }}
           ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
-        run: python3 scripts/room_cognition_v2.py node --phase recurrent --bus room_work/bus-sense.json
+        run: python3 scripts/room_engine.py node --phase recurrent --bus room_work/bus-sense.json
       - uses: actions/upload-artifact@v4
         with:
           name: room-recurrent-${{ matrix.node }}
@@ -109,16 +109,15 @@ jobs:
       - name: Commit one expression or genuine silence — no voting
         env:
           ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
-        run: python3 scripts/room_cognition_v2.py commit
+        run: python3 scripts/room_engine.py commit
       - name: Commit continuing Room
         run: |
           set -euo pipefail
           git config user.name "the-room"
           git config user.email "actions@users.noreply.github.com"
           git add room society/live.json
-          git commit -m "Room cognition v2 cycle" || true
+          git commit -m "Room cognition v3 cycle" || true
           git pull --rebase origin main
           git push origin HEAD:main
 
-# Publishing is intentionally centralized in .github/workflows/pages.yml.
-# Each Room state commit changes room/**, which triggers that single Pages deployment path.
+# GitHub Pages is published by pages.yml after this workflow completes successfully.
