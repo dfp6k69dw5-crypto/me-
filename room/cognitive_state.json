@@ -2,24 +2,20 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.4,
+        "activation": 0.116,
         "attention": [
-          "conversation",
-          "usually",
-          "enjoy",
-          "movies",
-          "noise",
-          "nature"
+          "wanders",
+          "nobody",
+          "planned",
+          "talk"
         ]
       },
       "medium": {
         "topics": [
-          "conversation",
-          "usually",
-          "enjoy",
-          "movies",
-          "noise",
-          "nature"
+          "wanders",
+          "nobody",
+          "planned",
+          "talk"
         ],
         "branch_interest": 0.64
       },
@@ -27,10 +23,10 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1067,
-        "association": 0.0315,
-        "inhibition": 0.1104,
-        "social": 0.0209
+        "activation": -0.0122,
+        "association": -0.0432,
+        "inhibition": 0.0572,
+        "social": -0.0009
       },
       "room_memories": [
         {
@@ -41,6 +37,15 @@
           "discourse": "d-20260817T130756-mara-v3",
           "branch_owner": null,
           "branch_memory": null
+        },
+        {
+          "source": "20260817T130922-sarah-v3",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "One that wanders into something nobody planned to talk about.",
+          "discourse": "d-20260817T130922-sarah-v3",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T130922-sarah-v3"
         }
       ],
       "self_history": [
@@ -53,7 +58,7 @@
           "discourse": "d-20260817T130922-sarah-v3"
         }
       ],
-      "last_event": "20260817T130756-mara-v3",
+      "last_event": "20260817T130922-sarah-v3",
       "spoken": 1,
       "silences": 0,
       "people": {
@@ -81,24 +86,26 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.137,
+        "activation": 0.221,
         "attention": [
-          "conversation",
-          "usually",
-          "enjoy",
-          "routine",
-          "travel",
-          "technology"
+          "wanders",
+          "nobody",
+          "planned",
+          "talk",
+          "quiet",
+          "noise",
+          "places"
         ]
       },
       "medium": {
         "topics": [
-          "conversation",
-          "usually",
-          "enjoy",
-          "routine",
-          "travel",
-          "technology"
+          "wanders",
+          "nobody",
+          "planned",
+          "talk",
+          "quiet",
+          "noise",
+          "places"
         ],
         "branch_interest": 0.528
       },
@@ -106,10 +113,10 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.171,
-        "association": 0.0468,
-        "inhibition": -0.0693,
-        "social": -0.1231
+        "activation": -0.0099,
+        "association": 0.1264,
+        "inhibition": -0.0409,
+        "social": -0.1406
       },
       "room_memories": [
         {
@@ -120,6 +127,15 @@
           "discourse": "d-20260817T130756-mara-v3",
           "branch_owner": null,
           "branch_memory": null
+        },
+        {
+          "source": "20260817T130922-sarah-v3",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "One that wanders into something nobody planned to talk about.",
+          "discourse": "d-20260817T130922-sarah-v3",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T130922-sarah-v3"
         }
       ],
       "self_history": [
@@ -132,13 +148,21 @@
           "discourse": "d-20260817T130756-mara-v3"
         }
       ],
-      "last_event": "20260817T130756-mara-v3",
+      "last_event": "20260817T130922-sarah-v3",
       "spoken": 1,
       "silences": 0,
       "people": {
         "sarah": {
-          "familiarity": 0.02,
-          "reports": []
+          "familiarity": 0.038,
+          "reports": [
+            {
+              "source": "20260817T130922-sarah-v3",
+              "status": "reported",
+              "text": "One that wanders into something nobody planned to talk about.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T130922-sarah-v3"
+            }
+          ]
         },
         "owen": {
           "familiarity": 0.02,
@@ -152,24 +176,26 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.147,
+        "activation": 0.138,
         "attention": [
-          "conversation",
-          "usually",
-          "enjoy",
-          "nature",
-          "travel",
-          "learning"
+          "wanders",
+          "nobody",
+          "planned",
+          "talk",
+          "learning",
+          "games",
+          "habits"
         ]
       },
       "medium": {
         "topics": [
-          "conversation",
-          "usually",
-          "enjoy",
-          "nature",
-          "travel",
-          "learning"
+          "wanders",
+          "nobody",
+          "planned",
+          "talk",
+          "learning",
+          "games",
+          "habits"
         ],
         "branch_interest": 0.62
       },
@@ -177,10 +203,10 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.02,
-        "association": -0.0864,
-        "inhibition": 0.0856,
-        "social": -0.0829
+        "activation": -0.0921,
+        "association": 0.0458,
+        "inhibition": 0.0216,
+        "social": -0.0669
       },
       "room_memories": [
         {
@@ -191,16 +217,33 @@
           "discourse": "d-20260817T130756-mara-v3",
           "branch_owner": null,
           "branch_memory": null
+        },
+        {
+          "source": "20260817T130922-sarah-v3",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "One that wanders into something nobody planned to talk about.",
+          "discourse": "d-20260817T130922-sarah-v3",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T130922-sarah-v3"
         }
       ],
       "self_history": [],
-      "last_event": "20260817T130756-mara-v3",
+      "last_event": "20260817T130922-sarah-v3",
       "spoken": 0,
       "silences": 0,
       "people": {
         "sarah": {
-          "familiarity": 0.02,
-          "reports": []
+          "familiarity": 0.038,
+          "reports": [
+            {
+              "source": "20260817T130922-sarah-v3",
+              "status": "reported",
+              "text": "One that wanders into something nobody planned to talk about.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T130922-sarah-v3"
+            }
+          ]
         },
         "mara": {
           "familiarity": 0.038,
@@ -222,24 +265,26 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.277,
+        "activation": 0.29,
         "attention": [
-          "conversation",
-          "usually",
-          "enjoy",
-          "technology",
-          "noise",
-          "luck"
+          "wanders",
+          "nobody",
+          "planned",
+          "talk",
+          "games",
+          "quiet",
+          "attention"
         ]
       },
       "medium": {
         "topics": [
-          "conversation",
-          "usually",
-          "enjoy",
-          "technology",
-          "noise",
-          "luck"
+          "wanders",
+          "nobody",
+          "planned",
+          "talk",
+          "games",
+          "quiet",
+          "attention"
         ],
         "branch_interest": 0.56
       },
@@ -247,10 +292,10 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1354,
-        "association": -0.0202,
-        "inhibition": 0.0209,
-        "social": 0.0526
+        "activation": 0.1612,
+        "association": -0.0532,
+        "inhibition": 0.0305,
+        "social": 0.0872
       },
       "room_memories": [
         {
@@ -261,16 +306,42 @@
           "discourse": "d-20260817T130756-mara-v3",
           "branch_owner": null,
           "branch_memory": null
+        },
+        {
+          "source": "20260817T130922-sarah-v3",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "One that wanders into something nobody planned to talk about.",
+          "discourse": "d-20260817T130922-sarah-v3",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T130922-sarah-v3"
         }
       ],
-      "self_history": [],
-      "last_event": "20260817T130756-mara-v3",
-      "spoken": 0,
+      "self_history": [
+        {
+          "source": "20260817T131108-jules-v3",
+          "text": "What makes a day feel worthwhile to you?",
+          "move": "question",
+          "memory": null,
+          "branch_memory": "20260817T130922-sarah-v3",
+          "discourse": "d-20260817T131108-jules-v3"
+        }
+      ],
+      "last_event": "20260817T130922-sarah-v3",
+      "spoken": 1,
       "silences": 0,
       "people": {
         "sarah": {
-          "familiarity": 0.02,
-          "reports": []
+          "familiarity": 0.038,
+          "reports": [
+            {
+              "source": "20260817T130922-sarah-v3",
+              "status": "reported",
+              "text": "One that wanders into something nobody planned to talk about.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T130922-sarah-v3"
+            }
+          ]
         },
         "mara": {
           "familiarity": 0.038,
