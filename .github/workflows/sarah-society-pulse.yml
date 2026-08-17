@@ -32,13 +32,14 @@ jobs:
           stop_at=$((SECONDS + 19800))
           api_backoff=15
           last_cooled_failure=""
+          queued_timeout=90
 
           while [ "$SECONDS" -lt "$stop_at" ]; do
             runs="$(gh run list \
               --repo "$GITHUB_REPOSITORY" \
               --workflow sarah-society.yml \
               --limit 1 \
-              --json databaseId,status,conclusion 2>/tmp/room-gh-error)"
+              --json databaseId,status,conclusion,createdAt 2>/tmp/room-gh-error)"
             rc=$?
 
             if [ "$rc" -ne 0 ]; then
@@ -54,11 +55,34 @@ jobs:
             latest_id="$(printf '%s' "$runs" | jq -r '.[0].databaseId // empty')"
             latest_status="$(printf '%s' "$runs" | jq -r '.[0].status // "none"')"
             latest_conclusion="$(printf '%s' "$runs" | jq -r '.[0].conclusion // ""')"
+            latest_created="$(printf '%s' "$runs" | jq -r '.[0].createdAt // empty')"
 
             case "$latest_status" in
-              in_progress|queued|pending|waiting|requested)
-                echo "Room beat $latest_id is still running; checking again shortly"
+              in_progress)
+                echo "Room beat $latest_id is running; checking again shortly"
                 sleep 8
+                continue
+                ;;
+              queued|pending|waiting|requested)
+                now_epoch="$(date -u +%s)"
+                created_epoch="$(date -u -d "$latest_created" +%s 2>/dev/null || echo "$now_epoch")"
+                queued_age=$((now_epoch - created_epoch))
+
+                if [ "$queued_age" -ge "$queued_timeout" ]; then
+                  echo "Room beat $latest_id has been '$latest_status' for ${queued_age}s; replacing the stuck run"
+                  if gh run cancel "$latest_id" --repo "$GITHUB_REPOSITORY"; then
+                    last_cooled_failure="$latest_id"
+                    sleep 8
+                  else
+                    echo "GitHub did not accept cancellation yet; retrying shortly"
+                    sleep "$api_backoff"
+                    api_backoff=$((api_backoff * 2))
+                    [ "$api_backoff" -gt 120 ] && api_backoff=120
+                  fi
+                else
+                  echo "Room beat $latest_id is '$latest_status' (${queued_age}s); checking again shortly"
+                  sleep 8
+                fi
                 continue
                 ;;
             esac
