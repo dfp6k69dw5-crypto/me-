@@ -41,11 +41,8 @@ def contaminated_text(text):
     low=str(text or "").lower()
     return any(fragment in low for fragment in CONTROL_FRAGMENTS+BROKEN_CONTEXT_FRAGMENTS)
 
-# The visible transcript is preserved, but known broken-era lines are not model context.
 clean_history=[m for m in conversation if not contaminated_text(m.get("text",""))]
 
-# Legacy weights have no timestamp of their own. A legacy subject is allowed back into
-# association cues only after a valid post-rebuild, non-contaminated memory learns it again.
 post_break_topics=set()
 for remembered in entity.get("memory",[]) or []:
     if str(remembered.get("at","") or "")>=CLEAN_BREAK and remembered.get("cognitive_mode") in {"continue","associate","jump"} and not contaminated_text(remembered.get("text","")):
@@ -88,7 +85,6 @@ elif r<weights[0]+weights[1]: cognitive_mode="associate"
 else: cognitive_mode="jump"
 
 base_recent=7+int(round(3*iq_scale))
-# A jump gets its own private subject, so it never needs the recent transcript as a crutch.
 if cognitive_mode=="jump": mode_recent=0
 elif cognitive_mode=="associate": mode_recent=2 if topic_fatigue>=.72 else max(4,base_recent-2)
 else: mode_recent=base_recent
@@ -149,7 +145,6 @@ top_p=min(0.995,0.92+0.04*g["exploration"]+0.04*silence_pressure)
 max_tokens=50+int(round(42*iq_scale)); context_tokens=1280+int(round(768*iq_scale)); max_attempts=5+int(round(2*iq_scale))+int(round(5*silence_pressure)); char_cap=320+int(round(220*iq_scale))
 repeat_limit=max(.44,min(.78,.62-.12*topic_fatigue+.10*silence_pressure))
 
-# Low-level local inference used both for a private jump spark and for the spoken line.
 def run_local(sys_text,prompt_text,local_seed,n_tokens,temp):
     if not model_path.is_file():raise RuntimeError(f"GitHub-held model missing: {model_path}")
     if not completion_bin.is_file():raise RuntimeError(f"GitHub-held completion runtime missing: {completion_bin}")
@@ -161,9 +156,23 @@ def run_local(sys_text,prompt_text,local_seed,n_tokens,temp):
 
 def clean_short(raw):
     text=(raw or "").replace("\r"," ").replace("\n"," ")
-    text=re.sub(r"\x1b\[[0-9;?]*[A-Za-z]","",text).strip().strip('"\'` ')
+    text=re.sub(r"\x1b\[[0-9;?]*[A-Za-z]","",text)
+    for marker in ("<|im_end|>","<|eot_id|>","<|end_of_text|>","[end of text]","[end of sentence]"):
+        if marker.lower() in text.lower(): text=re.split(re.escape(marker),text,flags=re.I,maxsplit=1)[0]
+    text=text.strip().strip('"\'` ')
     text=re.sub(r"^(?:subject|idea|thought|spark)\s*[:>-]\s*","",text,flags=re.I).strip()
     return " ".join(text.split())[:90]
+
+def loose_stem(w):
+    w=str(w or "").lower().strip()
+    for suffix in ("ness","ments","ment","ation","ations","ing","ers","er","ed","es","s"):
+        if len(w)>len(suffix)+4 and w.endswith(suffix): return w[:-len(suffix)]
+    return w
+
+def concept_match(a_words,b_words):
+    a={loose_stem(w) for w in a_words}; b={loose_stem(w) for w in b_words}
+    if a & b: return True
+    return any(len(x)>=5 and len(y)>=5 and x[:5]==y[:5] for x in a for y in b)
 
 private_spark=""
 if cognitive_mode=="jump":
@@ -241,7 +250,7 @@ def forbidden_reason(text):
     if cognitive_mode in {"jump","associate"} and not semantic_content:return "empty-lateral-content"
     if cognitive_mode=="jump" and private_spark:
         spark_words=set(content_tokens(private_spark))
-        if spark_words and not (set(semantic_content)&spark_words): return "lost-private-spark"
+        if spark_words and not concept_match(set(semantic_content),spark_words): return "lost-private-spark"
     overlap=len(set(semantic_content) & rut_words)
     if topic_fatigue>=.72:
         if cognitive_mode=="jump" and overlap>0:return "jump-rut-overlap"
