@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.275,
+        "activation": 0.304,
         "attention": [
           "people",
           "problem",
@@ -10,10 +10,10 @@
           "thinks",
           "talking",
           "same",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "evidence",
+          "messy",
+          "pattern",
+          "hiding"
         ]
       },
       "medium": {
@@ -24,10 +24,10 @@
           "thinks",
           "talking",
           "same",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "evidence",
+          "messy",
+          "pattern",
+          "hiding"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.2373,
-        "association": 0.0962,
-        "inhibition": 0.0321,
-        "social": 0.149
+        "activation": 0.0907,
+        "association": -0.0088,
+        "inhibition": -0.0767,
+        "social": 0.1638
       },
       "room_memories": [
-        {
-          "source": "20260817T204709602-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "discourse": "d-20260817T204709602-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "That gives me a more specific picture of how you think.",
-          "discourse": "d-20260817T204709602-sarah-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T204709602-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "What makes you say that?",
-          "discourse": "d-20260817T204709602-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
         {
           "source": "20260817T204711729-jules-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T204843300-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005549"
+        },
+        {
+          "source": "20260817T204845303-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Because I like when the real problem is that people think they agree when they do not.",
+          "discourse": "d-20260817T204845303-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T204845303-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T204845303-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that kind of problem satisfying?",
+          "discourse": "d-20260817T204845303-sarah-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T204212866-sarah-v4",
-          "text": "That gives me a more specific picture of how you think.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T204210805-jules-v4",
-          "discourse": "d-20260817T204212866-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005370"
-        },
         {
           "source": "20260817T204214826-sarah-v4",
           "text": "What sort of problem do you actually enjoy solving?",
@@ -3462,22 +3453,24 @@
           "branch_memory": "20260817T204843300-sarah-v4",
           "discourse": "d-20260817T204843300-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005549"
+        },
+        {
+          "source": "20260817T204845303-sarah-v4",
+          "text": "What makes that kind of problem satisfying?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T204843300-mara-v4",
+          "discourse": "d-20260817T204845303-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
         }
       ],
-      "last_event": "20260817T204843300-owen-v4",
-      "spoken": 5534,
+      "last_event": "20260817T204845303-sarah-v4",
+      "spoken": 5535,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T204109529-mara-v4",
-              "status": "reported",
-              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T204109529-mara-v4"
-            },
             {
               "source": "20260817T204115897-mara-v4",
               "status": "reported",
@@ -4098,6 +4091,13 @@
               "source": "20260817T204843300-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T204843300-mara-v4"
+            },
+            {
+              "source": "20260817T204845303-mara-v4",
+              "status": "reported",
+              "text": "Because I like when the real problem is that people think they agree when they do not.",
               "branch_owner": "mara",
               "branch_memory": "20260817T204843300-mara-v4"
             }
@@ -5377,7 +5377,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.4,
+        "activation": 0.396,
         "attention": [
           "people",
           "problem",
@@ -5385,10 +5385,10 @@
           "thinks",
           "talking",
           "same",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "evidence",
+          "messy",
+          "pattern",
+          "hiding"
         ]
       },
       "medium": {
@@ -5399,10 +5399,10 @@
           "thinks",
           "talking",
           "same",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "evidence",
+          "messy",
+          "pattern",
+          "hiding"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0916,
+        "activation": 0.0932,
         "association": 0.25,
-        "inhibition": 0.0008,
-        "social": 0.1155
+        "inhibition": -0.0181,
+        "social": 0.1087
       },
       "room_memories": [
-        {
-          "source": "20260817T204709602-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "discourse": "d-20260817T204709602-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "That gives me a more specific picture of how you think.",
-          "discourse": "d-20260817T204709602-sarah-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T204709602-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "What makes you say that?",
-          "discourse": "d-20260817T204709602-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
         {
           "source": "20260817T204711729-jules-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T204843300-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005549"
+        },
+        {
+          "source": "20260817T204845303-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Because I like when the real problem is that people think they agree when they do not.",
+          "discourse": "d-20260817T204845303-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T204845303-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T204845303-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that kind of problem satisfying?",
+          "discourse": "d-20260817T204845303-sarah-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T204212866-mara-v4",
-          "text": "What makes you say that?",
-          "move": "follow_up",
-          "memory": null,
-          "branch_memory": "20260817T204210805-jules-v4",
-          "discourse": "d-20260817T204212866-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005370"
-        },
         {
           "source": "20260817T204214826-mara-v4",
           "text": "That is the kind of answer that actually tells me something about you.",
@@ -8837,10 +8828,19 @@
           "branch_memory": "20260817T204843300-mara-v4",
           "discourse": "d-20260817T204843300-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005549"
+        },
+        {
+          "source": "20260817T204845303-mara-v4",
+          "text": "Because I like when the real problem is that people think they agree when they do not.",
+          "move": "answer",
+          "memory": "20260817T204216854-mara-v4",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "discourse": "d-20260817T204845303-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
         }
       ],
-      "last_event": "20260817T204843300-owen-v4",
-      "spoken": 5538,
+      "last_event": "20260817T204845303-sarah-v4",
+      "spoken": 5539,
       "silences": 0,
       "people": {
         "sarah": {
@@ -10752,7 +10752,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.246,
+        "activation": 0.26,
         "attention": [
           "people",
           "problem",
@@ -10760,10 +10760,10 @@
           "thinks",
           "talking",
           "same",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "evidence",
+          "messy",
+          "pattern",
+          "hiding"
         ]
       },
       "medium": {
@@ -10774,10 +10774,10 @@
           "thinks",
           "talking",
           "same",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "evidence",
+          "messy",
+          "pattern",
+          "hiding"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0847,
-        "association": 0.1744,
-        "inhibition": -0.0835,
-        "social": 0.19
+        "activation": -0.1243,
+        "association": 0.1204,
+        "inhibition": -0.0837,
+        "social": 0.1556
       },
       "room_memories": [
-        {
-          "source": "20260817T204709602-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "discourse": "d-20260817T204709602-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "That gives me a more specific picture of how you think.",
-          "discourse": "d-20260817T204709602-sarah-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T204709602-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "What makes you say that?",
-          "discourse": "d-20260817T204709602-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
         {
           "source": "20260817T204711729-jules-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T204843300-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005549"
+        },
+        {
+          "source": "20260817T204845303-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Because I like when the real problem is that people think they agree when they do not.",
+          "discourse": "d-20260817T204845303-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T204845303-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T204845303-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that kind of problem satisfying?",
+          "discourse": "d-20260817T204845303-sarah-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T204212866-owen-v4",
-          "text": "There is a useful rule underneath that answer.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T204210805-jules-v4",
-          "discourse": "d-20260817T204212866-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005370"
-        },
         {
           "source": "20260817T204214826-owen-v4",
           "text": "There is a useful rule underneath that answer.",
@@ -14212,10 +14203,19 @@
           "branch_memory": "20260817T204843300-mara-v4",
           "discourse": "d-20260817T204843300-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005549"
+        },
+        {
+          "source": "20260817T204845303-owen-v4",
+          "text": "There is a useful rule underneath that answer.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T204843300-mara-v4",
+          "discourse": "d-20260817T204845303-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
         }
       ],
-      "last_event": "20260817T204843300-owen-v4",
-      "spoken": 5533,
+      "last_event": "20260817T204845303-sarah-v4",
+      "spoken": 5534,
       "silences": 0,
       "people": {
         "sarah": {
@@ -14857,13 +14857,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T204109529-mara-v4",
-              "status": "reported",
-              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T204109529-mara-v4"
-            },
-            {
               "source": "20260817T204115897-mara-v4",
               "status": "reported",
               "text": "How they treat people when there is nothing to gain from it.",
@@ -15483,6 +15476,13 @@
               "source": "20260817T204843300-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T204843300-mara-v4"
+            },
+            {
+              "source": "20260817T204845303-mara-v4",
+              "status": "reported",
+              "text": "Because I like when the real problem is that people think they agree when they do not.",
               "branch_owner": "mara",
               "branch_memory": "20260817T204843300-mara-v4"
             }
@@ -16127,7 +16127,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.218,
+        "activation": 0.262,
         "attention": [
           "people",
           "problem",
@@ -16135,10 +16135,10 @@
           "thinks",
           "talking",
           "same",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "evidence",
+          "messy",
+          "pattern",
+          "hiding"
         ]
       },
       "medium": {
@@ -16149,10 +16149,10 @@
           "thinks",
           "talking",
           "same",
-          "gives",
-          "specific",
-          "picture",
-          "how"
+          "evidence",
+          "messy",
+          "pattern",
+          "hiding"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1936,
-        "association": -0.2298,
-        "inhibition": 0.1725,
-        "social": -0.1103
+        "activation": -0.0515,
+        "association": -0.2069,
+        "inhibition": 0.0531,
+        "social": -0.0693
       },
       "room_memories": [
-        {
-          "source": "20260817T204709602-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "discourse": "d-20260817T204709602-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "That gives me a more specific picture of how you think.",
-          "discourse": "d-20260817T204709602-sarah-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T204709602-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
-        {
-          "source": "20260817T204709602-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "What makes you say that?",
-          "discourse": "d-20260817T204709602-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204707497-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005505"
-        },
         {
           "source": "20260817T204711729-jules-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": "mara",
           "branch_memory": "20260817T204843300-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005549"
+        },
+        {
+          "source": "20260817T204845303-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Because I like when the real problem is that people think they agree when they do not.",
+          "discourse": "d-20260817T204845303-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T204845303-jules-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T204845303-owen-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
+        },
+        {
+          "source": "20260817T204845303-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that kind of problem satisfying?",
+          "discourse": "d-20260817T204845303-sarah-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204843300-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T204212866-jules-v4",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "move": "answer",
-          "memory": "20260817T203559710-jules-v4",
-          "branch_memory": "20260817T204210805-jules-v4",
-          "discourse": "d-20260817T204212866-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005370"
-        },
         {
           "source": "20260817T204214826-jules-v4",
           "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
@@ -19587,10 +19578,19 @@
           "branch_memory": "20260817T204843300-jules-v4",
           "discourse": "d-20260817T204843300-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005549"
+        },
+        {
+          "source": "20260817T204845303-jules-v4",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T204843300-mara-v4",
+          "discourse": "d-20260817T204845303-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005550"
         }
       ],
-      "last_event": "20260817T204843300-owen-v4",
-      "spoken": 5534,
+      "last_event": "20260817T204845303-sarah-v4",
+      "spoken": 5535,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20232,13 +20232,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T204109529-mara-v4",
-              "status": "reported",
-              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T204109529-mara-v4"
-            },
-            {
               "source": "20260817T204115897-mara-v4",
               "status": "reported",
               "text": "How they treat people when there is nothing to gain from it.",
@@ -20858,6 +20851,13 @@
               "source": "20260817T204843300-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T204843300-mara-v4"
+            },
+            {
+              "source": "20260817T204845303-mara-v4",
+              "status": "reported",
+              "text": "Because I like when the real problem is that people think they agree when they do not.",
               "branch_owner": "mara",
               "branch_memory": "20260817T204843300-mara-v4"
             }
