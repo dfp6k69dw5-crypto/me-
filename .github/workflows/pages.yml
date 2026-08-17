@@ -7,6 +7,9 @@ on:
       - 'society/**'
       - 'scripts/**'
       - '.github/**'
+  workflow_run:
+    workflows: ["The Room"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -16,17 +19,20 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout newest main
         uses: actions/checkout@v6
+        with:
+          ref: main
       - name: Bake newest Room snapshot
         run: python3 scripts/bake_room.py
       - name: Configure Pages
