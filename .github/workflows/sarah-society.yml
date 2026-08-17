@@ -12,6 +12,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: the-room-world-main
@@ -120,4 +122,32 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
 
-# GitHub Pages is published by pages.yml after this workflow completes successfully.
+  publish-room:
+    name: Publish newest Room snapshot
+    needs: commit-room
+    if: needs.commit-room.result == 'success'
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout newest main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Bake newest Room snapshot
+        run: python3 scripts/bake_room.py
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
