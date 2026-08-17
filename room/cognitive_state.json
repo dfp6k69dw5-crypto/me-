@@ -2,32 +2,30 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.4,
+        "activation": 0.363,
         "attention": [
-          "consistency",
-          "trust",
-          "people",
-          "keeps",
-          "matching",
-          "whether",
-          "strange",
-          "without",
-          "feeling",
-          "manage"
+          "edges",
+          "basic",
+          "preference",
+          "answer",
+          "tells",
+          "useful",
+          "rule",
+          "underneath",
+          "changed"
         ]
       },
       "medium": {
         "topics": [
-          "consistency",
-          "trust",
-          "people",
-          "keeps",
-          "matching",
-          "whether",
-          "strange",
-          "without",
-          "feeling",
-          "manage"
+          "edges",
+          "basic",
+          "preference",
+          "answer",
+          "tells",
+          "useful",
+          "rule",
+          "underneath",
+          "changed"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +33,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1614,
-        "association": -0.1189,
-        "inhibition": 0.0694,
-        "social": -0.0138
+        "activation": 0.0809,
+        "association": -0.1186,
+        "inhibition": 0.0523,
+        "social": -0.0441
       },
       "room_memories": [
-        {
-          "source": "20260817T200607966-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "discourse": "d-20260817T200607966-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T200607966-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T200607966-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What do you notice first when you meet someone?",
-          "discourse": "d-20260817T200607966-sarah-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
         {
           "source": "20260817T200609994-jules-v4",
           "status": "observed",
@@ -1840,18 +1798,49 @@
           "branch_owner": "sarah",
           "branch_memory": "20260817T200752843-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004422"
+        },
+        {
+          "source": "20260817T200757238-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "A little around the edges, but the basic preference is still there.",
+          "discourse": "d-20260817T200757238-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T200757238-jules-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T200757238-owen-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "What kind of humor works on you?",
+          "discourse": "d-20260817T200757238-mara-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T200119160-sarah-v4",
-          "text": "What do you notice first when you meet someone?",
-          "move": "question",
-          "memory": null,
-          "branch_memory": null,
-          "discourse": "d-20260817T200119160-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004243"
-        },
         {
           "source": "20260817T200121114-sarah-v4",
           "text": "Has that preference changed much for you?",
@@ -3462,10 +3451,19 @@
           "branch_memory": "20260817T200752843-sarah-v4",
           "discourse": "d-20260817T200755011-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004422"
+        },
+        {
+          "source": "20260817T200757238-sarah-v4",
+          "text": "A little around the edges, but the basic preference is still there.",
+          "move": "answer",
+          "memory": "20260817T200257394-sarah-v4",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "discourse": "d-20260817T200757238-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
         }
       ],
-      "last_event": "20260817T200755011-jules-v4",
-      "spoken": 4407,
+      "last_event": "20260817T200757238-mara-v4",
+      "spoken": 4408,
       "silences": 0,
       "people": {
         "mara": {
@@ -5377,32 +5375,32 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.248,
+        "activation": 0.295,
         "attention": [
-          "consistency",
-          "trust",
-          "people",
-          "keeps",
-          "matching",
-          "whether",
-          "strange",
-          "without",
-          "feeling",
-          "manage"
+          "edges",
+          "basic",
+          "preference",
+          "answer",
+          "tells",
+          "useful",
+          "rule",
+          "underneath",
+          "changed",
+          "improvise"
         ]
       },
       "medium": {
         "topics": [
-          "consistency",
-          "trust",
-          "people",
-          "keeps",
-          "matching",
-          "whether",
-          "strange",
-          "without",
-          "feeling",
-          "manage"
+          "edges",
+          "basic",
+          "preference",
+          "answer",
+          "tells",
+          "useful",
+          "rule",
+          "underneath",
+          "changed",
+          "improvise"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5408,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0582,
-        "association": 0.1732,
-        "inhibition": -0.0276,
-        "social": -0.169
+        "activation": -0.0139,
+        "association": 0.1983,
+        "inhibition": -0.0668,
+        "social": -0.1829
       },
       "room_memories": [
-        {
-          "source": "20260817T200607966-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "discourse": "d-20260817T200607966-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T200607966-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T200607966-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What do you notice first when you meet someone?",
-          "discourse": "d-20260817T200607966-sarah-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
         {
           "source": "20260817T200609994-jules-v4",
           "status": "observed",
@@ -7215,18 +7173,49 @@
           "branch_owner": "sarah",
           "branch_memory": "20260817T200752843-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004422"
+        },
+        {
+          "source": "20260817T200757238-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "A little around the edges, but the basic preference is still there.",
+          "discourse": "d-20260817T200757238-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T200757238-jules-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T200757238-owen-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "What kind of humor works on you?",
+          "discourse": "d-20260817T200757238-mara-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T200119160-mara-v4",
-          "text": "Because I notice what people do when they stop performing for everybody else.",
-          "move": "answer",
-          "memory": "20260817T195513468-mara-v4",
-          "branch_memory": "20260817T200115071-mara-v4",
-          "discourse": "d-20260817T200119160-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004243"
-        },
         {
           "source": "20260817T200121114-mara-v4",
           "text": "Usually the mood between people.",
@@ -8837,22 +8826,24 @@
           "branch_memory": "20260817T200752843-sarah-v4",
           "discourse": "d-20260817T200755011-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004422"
+        },
+        {
+          "source": "20260817T200757238-mara-v4",
+          "text": "What kind of humor works on you?",
+          "move": "question",
+          "memory": null,
+          "branch_memory": null,
+          "discourse": "d-20260817T200757238-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
         }
       ],
-      "last_event": "20260817T200755011-jules-v4",
-      "spoken": 4411,
+      "last_event": "20260817T200757238-mara-v4",
+      "spoken": 4412,
       "silences": 0,
       "people": {
         "sarah": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T195812885-sarah-v4",
-              "status": "reported",
-              "text": "I like a loose plan and then room to change it.",
-              "branch_owner": "sarah",
-              "branch_memory": "20260817T195812885-sarah-v4"
-            },
             {
               "source": "20260817T195827335-sarah-v4",
               "status": "reported",
@@ -9471,6 +9462,13 @@
             },
             {
               "source": "20260817T200755011-sarah-v4",
+              "status": "reported",
+              "text": "A little around the edges, but the basic preference is still there.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T200752843-sarah-v4"
+            },
+            {
+              "source": "20260817T200757238-sarah-v4",
               "status": "reported",
               "text": "A little around the edges, but the basic preference is still there.",
               "branch_owner": "sarah",
@@ -10754,30 +10752,30 @@
       "fast": {
         "activation": 0.157,
         "attention": [
-          "consistency",
-          "trust",
-          "people",
-          "keeps",
-          "matching",
-          "whether",
-          "strange",
-          "without",
-          "feeling",
-          "manage"
+          "edges",
+          "basic",
+          "preference",
+          "answer",
+          "tells",
+          "useful",
+          "rule",
+          "underneath",
+          "changed",
+          "substantially"
         ]
       },
       "medium": {
         "topics": [
-          "consistency",
-          "trust",
-          "people",
-          "keeps",
-          "matching",
-          "whether",
-          "strange",
-          "without",
-          "feeling",
-          "manage"
+          "edges",
+          "basic",
+          "preference",
+          "answer",
+          "tells",
+          "useful",
+          "rule",
+          "underneath",
+          "changed",
+          "substantially"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10783,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.094,
-        "association": -0.0598,
-        "inhibition": 0.0073,
-        "social": -0.0603
+        "activation": 0.1671,
+        "association": -0.0859,
+        "inhibition": -0.0163,
+        "social": -0.0546
       },
       "room_memories": [
-        {
-          "source": "20260817T200607966-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "discourse": "d-20260817T200607966-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T200607966-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T200607966-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What do you notice first when you meet someone?",
-          "discourse": "d-20260817T200607966-sarah-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
         {
           "source": "20260817T200609994-jules-v4",
           "status": "observed",
@@ -12590,18 +12548,49 @@
           "branch_owner": "sarah",
           "branch_memory": "20260817T200752843-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004422"
+        },
+        {
+          "source": "20260817T200757238-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "A little around the edges, but the basic preference is still there.",
+          "discourse": "d-20260817T200757238-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T200757238-jules-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T200757238-owen-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "What kind of humor works on you?",
+          "discourse": "d-20260817T200757238-mara-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T200119160-owen-v4",
-          "text": "There is a useful rule underneath that answer.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T200115071-mara-v4",
-          "discourse": "d-20260817T200119160-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004243"
-        },
         {
           "source": "20260817T200121113-owen-v4",
           "text": "Usually what is out of place or does not quite add up.",
@@ -14212,22 +14201,24 @@
           "branch_memory": "20260817T200752843-sarah-v4",
           "discourse": "d-20260817T200755011-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004422"
+        },
+        {
+          "source": "20260817T200757238-owen-v4",
+          "text": "There is a useful rule underneath that answer.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "discourse": "d-20260817T200757238-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
         }
       ],
-      "last_event": "20260817T200755011-jules-v4",
-      "spoken": 4406,
+      "last_event": "20260817T200757238-mara-v4",
+      "spoken": 4407,
       "silences": 0,
       "people": {
         "sarah": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T195812885-sarah-v4",
-              "status": "reported",
-              "text": "I like a loose plan and then room to change it.",
-              "branch_owner": "sarah",
-              "branch_memory": "20260817T195812885-sarah-v4"
-            },
             {
               "source": "20260817T195827335-sarah-v4",
               "status": "reported",
@@ -14846,6 +14837,13 @@
             },
             {
               "source": "20260817T200755011-sarah-v4",
+              "status": "reported",
+              "text": "A little around the edges, but the basic preference is still there.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T200752843-sarah-v4"
+            },
+            {
+              "source": "20260817T200757238-sarah-v4",
               "status": "reported",
               "text": "A little around the edges, but the basic preference is still there.",
               "branch_owner": "sarah",
@@ -16127,32 +16125,32 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.379,
+        "activation": 0.331,
         "attention": [
-          "consistency",
-          "trust",
-          "people",
-          "keeps",
-          "matching",
-          "whether",
-          "strange",
-          "without",
-          "feeling",
-          "manage"
+          "edges",
+          "basic",
+          "preference",
+          "answer",
+          "tells",
+          "useful",
+          "rule",
+          "underneath",
+          "changed",
+          "open-ended"
         ]
       },
       "medium": {
         "topics": [
-          "consistency",
-          "trust",
-          "people",
-          "keeps",
-          "matching",
-          "whether",
-          "strange",
-          "without",
-          "feeling",
-          "manage"
+          "edges",
+          "basic",
+          "preference",
+          "answer",
+          "tells",
+          "useful",
+          "rule",
+          "underneath",
+          "changed",
+          "open-ended"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16158,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0135,
-        "association": -0.0879,
-        "inhibition": -0.0668,
-        "social": 0.2095
+        "activation": -0.1332,
+        "association": -0.1172,
+        "inhibition": -0.147,
+        "social": 0.1377
       },
       "room_memories": [
-        {
-          "source": "20260817T200607966-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "discourse": "d-20260817T200607966-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "discourse": "d-20260817T200607966-mara-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T200607966-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T200603571-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
-        {
-          "source": "20260817T200607966-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What do you notice first when you meet someone?",
-          "discourse": "d-20260817T200607966-sarah-v4",
-          "branch_owner": null,
-          "branch_memory": null,
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004378"
-        },
         {
           "source": "20260817T200609994-jules-v4",
           "status": "observed",
@@ -17965,18 +17923,49 @@
           "branch_owner": "sarah",
           "branch_memory": "20260817T200752843-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004422"
+        },
+        {
+          "source": "20260817T200757238-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "A little around the edges, but the basic preference is still there.",
+          "discourse": "d-20260817T200757238-sarah-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "discourse": "d-20260817T200757238-jules-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "There is a useful rule underneath that answer.",
+          "discourse": "d-20260817T200757238-owen-v4",
+          "branch_owner": "sarah",
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
+        },
+        {
+          "source": "20260817T200757238-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "What kind of humor works on you?",
+          "discourse": "d-20260817T200757238-mara-v4",
+          "branch_owner": null,
+          "branch_memory": null,
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T200119160-jules-v4",
-          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T200115071-mara-v4",
-          "discourse": "d-20260817T200119160-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004243"
-        },
         {
           "source": "20260817T200121114-jules-v4",
           "text": "Usually one odd detail that probably was not supposed to be important.",
@@ -19587,22 +19576,24 @@
           "branch_memory": "20260817T200752843-sarah-v4",
           "discourse": "d-20260817T200755011-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004422"
+        },
+        {
+          "source": "20260817T200757238-jules-v4",
+          "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T200752843-sarah-v4",
+          "discourse": "d-20260817T200757238-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-004423"
         }
       ],
-      "last_event": "20260817T200755011-jules-v4",
-      "spoken": 4407,
+      "last_event": "20260817T200757238-mara-v4",
+      "spoken": 4408,
       "silences": 0,
       "people": {
         "sarah": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T195812885-sarah-v4",
-              "status": "reported",
-              "text": "I like a loose plan and then room to change it.",
-              "branch_owner": "sarah",
-              "branch_memory": "20260817T195812885-sarah-v4"
-            },
             {
               "source": "20260817T195827335-sarah-v4",
               "status": "reported",
@@ -20221,6 +20212,13 @@
             },
             {
               "source": "20260817T200755011-sarah-v4",
+              "status": "reported",
+              "text": "A little around the edges, but the basic preference is still there.",
+              "branch_owner": "sarah",
+              "branch_memory": "20260817T200752843-sarah-v4"
+            },
+            {
+              "source": "20260817T200757238-sarah-v4",
               "status": "reported",
               "text": "A little around the edges, but the basic preference is still there.",
               "branch_owner": "sarah",
