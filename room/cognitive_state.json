@@ -2,32 +2,32 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.308,
+        "activation": 0.291,
         "attention": [
-          "moments",
-          "somebody",
-          "stops",
-          "look",
-          "normal",
-          "usually",
-          "tell",
-          "answer",
-          "tells",
-          "useful"
+          "getting",
+          "useful",
+          "having",
+          "quiet",
+          "afterward",
+          "finding",
+          "enough",
+          "forget",
+          "day",
+          "conversation"
         ]
       },
       "medium": {
         "topics": [
-          "moments",
-          "somebody",
-          "stops",
-          "look",
-          "normal",
-          "usually",
-          "tell",
-          "answer",
-          "tells",
-          "useful"
+          "getting",
+          "useful",
+          "having",
+          "quiet",
+          "afterward",
+          "finding",
+          "enough",
+          "forget",
+          "day",
+          "conversation"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1368,
-        "association": 0.0884,
-        "inhibition": -0.103,
-        "social": 0.2119
+        "activation": 0.0932,
+        "association": 0.1229,
+        "inhibition": -0.009,
+        "social": 0.1031
       },
       "room_memories": [
-        {
-          "source": "20260817T174805924-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Having one conversation that makes the day feel less ordinary than it started.",
-          "discourse": "d-20260817T174805924-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "That gives me a more specific picture of how you think.",
-          "discourse": "d-20260817T174805924-sarah-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T174805924-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Do you like disagreement in a conversation like that?",
-          "discourse": "d-20260817T174805924-jules-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
         {
           "source": "20260817T174807720-mara-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": "owen",
           "branch_memory": "20260817T174941946-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000677"
+        },
+        {
+          "source": "20260817T174944042-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Not substantially. I have more exceptions now, but the rule still fits.",
+          "discourse": "d-20260817T174944042-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "That gives me a more specific picture of how you think.",
+          "discourse": "d-20260817T174944042-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "discourse": "d-20260817T174944042-mara-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T174944042-jules-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T174330050-sarah-v4",
-          "text": "How did you land on that?",
-          "move": "follow_up",
-          "memory": null,
-          "branch_memory": "20260817T174328027-jules-v4",
-          "discourse": "d-20260817T174330050-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000498"
-        },
         {
           "source": "20260817T174332058-sarah-v4",
           "text": "What do you notice first when you meet someone?",
@@ -3462,10 +3453,19 @@
           "branch_memory": "20260817T174941946-owen-v4",
           "discourse": "d-20260817T174941946-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000677"
+        },
+        {
+          "source": "20260817T174944042-sarah-v4",
+          "text": "That gives me a more specific picture of how you think.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T174941946-owen-v4",
+          "discourse": "d-20260817T174944042-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
         }
       ],
-      "last_event": "20260817T174941946-sarah-v4",
-      "spoken": 662,
+      "last_event": "20260817T174944042-jules-v4",
+      "spoken": 663,
       "silences": 0,
       "people": {
         "mara": {
@@ -4107,13 +4107,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T174103166-owen-v4",
-              "status": "reported",
-              "text": "Not substantially. I have more exceptions now, but the rule still fits.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T174059290-owen-v4"
-            },
-            {
               "source": "20260817T174105151-owen-v4",
               "status": "reported",
               "text": "One where people answer each other instead of waiting to talk.",
@@ -4733,6 +4726,13 @@
               "source": "20260817T174941946-owen-v4",
               "status": "reported",
               "text": "Getting one useful thing done and having some quiet afterward.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T174941946-owen-v4"
+            },
+            {
+              "source": "20260817T174944042-owen-v4",
+              "status": "reported",
+              "text": "Not substantially. I have more exceptions now, but the rule still fits.",
               "branch_owner": "owen",
               "branch_memory": "20260817T174941946-owen-v4"
             }
@@ -5377,32 +5377,32 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.276,
+        "activation": 0.255,
         "attention": [
-          "moments",
-          "somebody",
-          "stops",
-          "look",
-          "normal",
-          "usually",
-          "tell",
-          "answer",
-          "tells",
-          "useful"
+          "getting",
+          "useful",
+          "having",
+          "quiet",
+          "afterward",
+          "finding",
+          "enough",
+          "forget",
+          "day",
+          "conversation"
         ]
       },
       "medium": {
         "topics": [
-          "moments",
-          "somebody",
-          "stops",
-          "look",
-          "normal",
-          "usually",
-          "tell",
-          "answer",
-          "tells",
-          "useful"
+          "getting",
+          "useful",
+          "having",
+          "quiet",
+          "afterward",
+          "finding",
+          "enough",
+          "forget",
+          "day",
+          "conversation"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0435,
-        "association": 0.0999,
-        "inhibition": 0.1551,
-        "social": -0.0406
+        "activation": 0.0477,
+        "association": 0.0949,
+        "inhibition": 0.2298,
+        "social": -0.0637
       },
       "room_memories": [
-        {
-          "source": "20260817T174805924-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Having one conversation that makes the day feel less ordinary than it started.",
-          "discourse": "d-20260817T174805924-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "That gives me a more specific picture of how you think.",
-          "discourse": "d-20260817T174805924-sarah-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T174805924-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Do you like disagreement in a conversation like that?",
-          "discourse": "d-20260817T174805924-jules-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
         {
           "source": "20260817T174807720-mara-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": "owen",
           "branch_memory": "20260817T174941946-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000677"
+        },
+        {
+          "source": "20260817T174944042-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Not substantially. I have more exceptions now, but the rule still fits.",
+          "discourse": "d-20260817T174944042-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "That gives me a more specific picture of how you think.",
+          "discourse": "d-20260817T174944042-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "discourse": "d-20260817T174944042-mara-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T174944042-jules-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T174330049-mara-v4",
-          "text": "That is the kind of answer that actually tells me something about you.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T174328027-jules-v4",
-          "discourse": "d-20260817T174330049-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000498"
-        },
         {
           "source": "20260817T174332058-mara-v4",
           "text": "That is the kind of answer that actually tells me something about you.",
@@ -8837,10 +8828,19 @@
           "branch_memory": "20260817T174941946-mara-v4",
           "discourse": "d-20260817T174941946-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000677"
+        },
+        {
+          "source": "20260817T174944042-mara-v4",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "move": "reaction",
+          "memory": null,
+          "branch_memory": "20260817T174941946-owen-v4",
+          "discourse": "d-20260817T174944042-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
         }
       ],
-      "last_event": "20260817T174941946-sarah-v4",
-      "spoken": 666,
+      "last_event": "20260817T174944042-jules-v4",
+      "spoken": 667,
       "silences": 0,
       "people": {
         "sarah": {
@@ -9482,13 +9482,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T174103166-owen-v4",
-              "status": "reported",
-              "text": "Not substantially. I have more exceptions now, but the rule still fits.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T174059290-owen-v4"
-            },
-            {
               "source": "20260817T174105151-owen-v4",
               "status": "reported",
               "text": "One where people answer each other instead of waiting to talk.",
@@ -10108,6 +10101,13 @@
               "source": "20260817T174941946-owen-v4",
               "status": "reported",
               "text": "Getting one useful thing done and having some quiet afterward.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T174941946-owen-v4"
+            },
+            {
+              "source": "20260817T174944042-owen-v4",
+              "status": "reported",
+              "text": "Not substantially. I have more exceptions now, but the rule still fits.",
               "branch_owner": "owen",
               "branch_memory": "20260817T174941946-owen-v4"
             }
@@ -10752,32 +10752,32 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.341,
+        "activation": 0.37,
         "attention": [
-          "moments",
-          "somebody",
-          "stops",
-          "look",
-          "normal",
-          "usually",
-          "tell",
-          "answer",
-          "tells",
-          "useful"
+          "getting",
+          "useful",
+          "having",
+          "quiet",
+          "afterward",
+          "finding",
+          "enough",
+          "forget",
+          "day",
+          "conversation"
         ]
       },
       "medium": {
         "topics": [
-          "moments",
-          "somebody",
-          "stops",
-          "look",
-          "normal",
-          "usually",
-          "tell",
-          "answer",
-          "tells",
-          "useful"
+          "getting",
+          "useful",
+          "having",
+          "quiet",
+          "afterward",
+          "finding",
+          "enough",
+          "forget",
+          "day",
+          "conversation"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0017,
-        "association": -0.2246,
-        "inhibition": 0.0322,
-        "social": -0.0975
+        "activation": -0.146,
+        "association": -0.2281,
+        "inhibition": 0.0903,
+        "social": -0.0638
       },
       "room_memories": [
-        {
-          "source": "20260817T174805924-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Having one conversation that makes the day feel less ordinary than it started.",
-          "discourse": "d-20260817T174805924-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "That gives me a more specific picture of how you think.",
-          "discourse": "d-20260817T174805924-sarah-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T174805924-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Do you like disagreement in a conversation like that?",
-          "discourse": "d-20260817T174805924-jules-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
         {
           "source": "20260817T174807720-mara-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": "owen",
           "branch_memory": "20260817T174941946-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000677"
+        },
+        {
+          "source": "20260817T174944042-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Not substantially. I have more exceptions now, but the rule still fits.",
+          "discourse": "d-20260817T174944042-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "That gives me a more specific picture of how you think.",
+          "discourse": "d-20260817T174944042-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "discourse": "d-20260817T174944042-mara-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T174944042-jules-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T174330049-owen-v4",
-          "text": "There is a useful rule underneath that answer.",
-          "move": "reaction",
-          "memory": null,
-          "branch_memory": "20260817T174328027-jules-v4",
-          "discourse": "d-20260817T174330049-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000498"
-        },
         {
           "source": "20260817T174332058-owen-v4",
           "text": "There is a useful rule underneath that answer.",
@@ -14212,10 +14203,19 @@
           "branch_memory": "20260817T174941946-owen-v4",
           "discourse": "d-20260817T174941946-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000677"
+        },
+        {
+          "source": "20260817T174944042-owen-v4",
+          "text": "Not substantially. I have more exceptions now, but the rule still fits.",
+          "move": "answer",
+          "memory": "20260817T174351511-owen-v4",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "discourse": "d-20260817T174944042-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
         }
       ],
-      "last_event": "20260817T174941946-sarah-v4",
-      "spoken": 661,
+      "last_event": "20260817T174944042-jules-v4",
+      "spoken": 662,
       "silences": 0,
       "people": {
         "sarah": {
@@ -16127,32 +16127,32 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.397,
+        "activation": 0.374,
         "attention": [
-          "moments",
-          "somebody",
-          "stops",
-          "look",
-          "normal",
-          "usually",
-          "tell",
-          "answer",
-          "tells",
-          "useful"
+          "getting",
+          "useful",
+          "having",
+          "quiet",
+          "afterward",
+          "finding",
+          "enough",
+          "forget",
+          "day",
+          "conversation"
         ]
       },
       "medium": {
         "topics": [
-          "moments",
-          "somebody",
-          "stops",
-          "look",
-          "normal",
-          "usually",
-          "tell",
-          "answer",
-          "tells",
-          "useful"
+          "getting",
+          "useful",
+          "having",
+          "quiet",
+          "afterward",
+          "finding",
+          "enough",
+          "forget",
+          "day",
+          "conversation"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1874,
-        "association": 0.0509,
-        "inhibition": -0.2292,
+        "activation": -0.1212,
+        "association": 0.0247,
+        "inhibition": -0.2134,
         "social": 0.25
       },
       "room_memories": [
-        {
-          "source": "20260817T174805924-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Having one conversation that makes the day feel less ordinary than it started.",
-          "discourse": "d-20260817T174805924-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "That gives me a more specific picture of how you think.",
-          "discourse": "d-20260817T174805924-sarah-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "There is a useful rule underneath that answer.",
-          "discourse": "d-20260817T174805924-owen-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
-        {
-          "source": "20260817T174805924-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Do you like disagreement in a conversation like that?",
-          "discourse": "d-20260817T174805924-jules-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T174804071-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000633"
-        },
         {
           "source": "20260817T174807720-mara-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": "owen",
           "branch_memory": "20260817T174941946-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000677"
+        },
+        {
+          "source": "20260817T174944042-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Not substantially. I have more exceptions now, but the rule still fits.",
+          "discourse": "d-20260817T174944042-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "That gives me a more specific picture of how you think.",
+          "discourse": "d-20260817T174944042-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "That is the kind of answer that actually tells me something about you.",
+          "discourse": "d-20260817T174944042-mara-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
+        },
+        {
+          "source": "20260817T174944042-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "How did you land on that?",
+          "discourse": "d-20260817T174944042-jules-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T174941946-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T174330049-jules-v4",
-          "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
-          "move": "answer",
-          "memory": "20260817T173907963-jules-v4",
-          "branch_memory": "20260817T174328027-jules-v4",
-          "discourse": "d-20260817T174330049-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000498"
-        },
         {
           "source": "20260817T174332058-jules-v4",
           "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
@@ -19587,10 +19578,19 @@
           "branch_memory": "20260817T174941946-jules-v4",
           "discourse": "d-20260817T174941946-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000677"
+        },
+        {
+          "source": "20260817T174944042-jules-v4",
+          "text": "How did you land on that?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T174941946-owen-v4",
+          "discourse": "d-20260817T174944042-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-000678"
         }
       ],
-      "last_event": "20260817T174941946-sarah-v4",
-      "spoken": 662,
+      "last_event": "20260817T174944042-jules-v4",
+      "spoken": 663,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20867,13 +20867,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T174103166-owen-v4",
-              "status": "reported",
-              "text": "Not substantially. I have more exceptions now, but the rule still fits.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T174059290-owen-v4"
-            },
-            {
               "source": "20260817T174105151-owen-v4",
               "status": "reported",
               "text": "One where people answer each other instead of waiting to talk.",
@@ -21493,6 +21486,13 @@
               "source": "20260817T174941946-owen-v4",
               "status": "reported",
               "text": "Getting one useful thing done and having some quiet afterward.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T174941946-owen-v4"
+            },
+            {
+              "source": "20260817T174944042-owen-v4",
+              "status": "reported",
+              "text": "Not substantially. I have more exceptions now, but the rule still fits.",
               "branch_owner": "owen",
               "branch_memory": "20260817T174941946-owen-v4"
             }
