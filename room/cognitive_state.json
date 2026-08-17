@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.267,
+        "activation": 0.203,
         "attention": [
           "moments",
           "somebody",
@@ -11,9 +11,9 @@
           "normal",
           "usually",
           "tell",
-          "useful",
-          "rule",
-          "underneath"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -25,9 +25,9 @@
           "normal",
           "usually",
           "tell",
-          "useful",
-          "rule",
-          "underneath"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0635,
-        "association": -0.0681,
-        "inhibition": -0.0987,
-        "social": -0.0317
+        "activation": -0.0516,
+        "association": 0.0402,
+        "inhibition": -0.1428,
+        "social": -0.0484
       },
       "room_memories": [
-        {
-          "source": "20260817T180945739-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Busy enough that something unexpected can happen.",
-          "discourse": "d-20260817T180945739-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T180945739-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Busy, as long as it feels alive instead of chaotic.",
-          "discourse": "d-20260817T180945739-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T180945739-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
-          "discourse": "d-20260817T180945739-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T180945739-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "Have you always preferred that?",
-          "discourse": "d-20260817T180945739-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T180945739-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
         {
           "source": "20260817T180947903-jules-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001267"
+        },
+        {
+          "source": "20260817T181151431-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
+          "discourse": "d-20260817T181151431-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T181151431-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "discourse": "d-20260817T181151431-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T181151431-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
+          "discourse": "d-20260817T181151431-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T181151431-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that kind of problem satisfying?",
+          "discourse": "d-20260817T181151431-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T181151431-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T180415814-sarah-v4",
-          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
-          "move": "self_disclosure",
-          "memory": "20260817T180415814-sarah-v4",
-          "branch_memory": "20260817T180415814-sarah-v4",
-          "discourse": "d-20260817T180415814-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001088"
-        },
         {
           "source": "20260817T180418232-sarah-v4",
           "text": "That gives me a more specific picture of how you think.",
@@ -3462,22 +3453,24 @@
           "branch_memory": null,
           "discourse": "d-20260817T181149372-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001267"
+        },
+        {
+          "source": "20260817T181151431-sarah-v4",
+          "text": "What makes that kind of problem satisfying?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T181151431-owen-v4",
+          "discourse": "d-20260817T181151431-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
         }
       ],
-      "last_event": "20260817T181149372-sarah-v4",
-      "spoken": 1252,
+      "last_event": "20260817T181151431-sarah-v4",
+      "spoken": 1253,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T180348154-mara-v4",
-              "status": "reported",
-              "text": "Because I notice what people do when they stop performing for everybody else.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T180343697-mara-v4"
-            },
             {
               "source": "20260817T180350491-mara-v4",
               "status": "reported",
@@ -4100,19 +4093,19 @@
               "text": "I improvise. A plan is useful until something more interesting happens.",
               "branch_owner": "mara",
               "branch_memory": "20260817T181144913-mara-v4"
+            },
+            {
+              "source": "20260817T181151431-mara-v4",
+              "status": "reported",
+              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T181151431-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T175835996-owen-v4",
-              "status": "reported",
-              "text": "Not substantially. I have more exceptions now, but the rule still fits.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T175832175-owen-v4"
-            },
             {
               "source": "20260817T175924567-owen-v4",
               "status": "reported",
@@ -4735,19 +4728,19 @@
               "text": "Quiet. I notice more when there is not much competing for attention.",
               "branch_owner": "owen",
               "branch_memory": "20260817T181138630-owen-v4"
+            },
+            {
+              "source": "20260817T181151431-owen-v4",
+              "status": "reported",
+              "text": "A problem with enough constraints that I can tell whether the solution actually works.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T181151431-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T180441628-jules-v4",
-              "status": "reported",
-              "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T180441628-jules-v4"
-            },
             {
               "source": "20260817T180448144-jules-v4",
               "status": "reported",
@@ -5370,6 +5363,13 @@
               "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
               "branch_owner": "jules",
               "branch_memory": "20260817T181144913-jules-v4"
+            },
+            {
+              "source": "20260817T181151431-jules-v4",
+              "status": "reported",
+              "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T181151431-jules-v4"
             }
           ]
         }
@@ -5377,7 +5377,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.338,
+        "activation": 0.335,
         "attention": [
           "moments",
           "somebody",
@@ -5386,9 +5386,9 @@
           "normal",
           "usually",
           "tell",
-          "useful",
-          "rule",
-          "underneath"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -5400,9 +5400,9 @@
           "normal",
           "usually",
           "tell",
-          "useful",
-          "rule",
-          "underneath"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1361,
-        "association": 0.1407,
-        "inhibition": 0.0802,
-        "social": 0.1397
+        "activation": -0.0532,
+        "association": 0.25,
+        "inhibition": 0.1164,
+        "social": 0.1613
       },
       "room_memories": [
-        {
-          "source": "20260817T180945739-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Busy enough that something unexpected can happen.",
-          "discourse": "d-20260817T180945739-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T180945739-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Busy, as long as it feels alive instead of chaotic.",
-          "discourse": "d-20260817T180945739-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T180945739-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
-          "discourse": "d-20260817T180945739-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T180945739-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "Have you always preferred that?",
-          "discourse": "d-20260817T180945739-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T180945739-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
         {
           "source": "20260817T180947903-jules-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001267"
+        },
+        {
+          "source": "20260817T181151431-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
+          "discourse": "d-20260817T181151431-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T181151431-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "discourse": "d-20260817T181151431-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T181151431-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
+          "discourse": "d-20260817T181151431-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T181151431-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that kind of problem satisfying?",
+          "discourse": "d-20260817T181151431-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T181151431-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T180415814-mara-v4",
-          "text": "Busy, as long as it feels alive instead of chaotic.",
-          "move": "answer",
-          "memory": "20260817T180415814-mara-v4",
-          "branch_memory": "20260817T180415814-mara-v4",
-          "discourse": "d-20260817T180415814-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001088"
-        },
         {
           "source": "20260817T180418231-mara-v4",
           "text": "Because I notice what people do when they stop performing for everybody else.",
@@ -8837,10 +8828,19 @@
           "branch_memory": "20260817T181144913-jules-v4",
           "discourse": "d-20260817T181149372-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001267"
+        },
+        {
+          "source": "20260817T181151431-mara-v4",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "move": "self_disclosure",
+          "memory": "20260817T181151431-mara-v4",
+          "branch_memory": "20260817T181151431-mara-v4",
+          "discourse": "d-20260817T181151431-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
         }
       ],
-      "last_event": "20260817T181149372-sarah-v4",
-      "spoken": 1256,
+      "last_event": "20260817T181151431-sarah-v4",
+      "spoken": 1257,
       "silences": 0,
       "people": {
         "sarah": {
@@ -9482,13 +9482,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T175835996-owen-v4",
-              "status": "reported",
-              "text": "Not substantially. I have more exceptions now, but the rule still fits.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T175832175-owen-v4"
-            },
-            {
               "source": "20260817T175924567-owen-v4",
               "status": "reported",
               "text": "Consistency, especially when being consistent is inconvenient.",
@@ -10110,19 +10103,19 @@
               "text": "Quiet. I notice more when there is not much competing for attention.",
               "branch_owner": "owen",
               "branch_memory": "20260817T181138630-owen-v4"
+            },
+            {
+              "source": "20260817T181151431-owen-v4",
+              "status": "reported",
+              "text": "A problem with enough constraints that I can tell whether the solution actually works.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T181151431-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T180441628-jules-v4",
-              "status": "reported",
-              "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T180441628-jules-v4"
-            },
             {
               "source": "20260817T180448144-jules-v4",
               "status": "reported",
@@ -10745,6 +10738,13 @@
               "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
               "branch_owner": "jules",
               "branch_memory": "20260817T181144913-jules-v4"
+            },
+            {
+              "source": "20260817T181151431-jules-v4",
+              "status": "reported",
+              "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T181151431-jules-v4"
             }
           ]
         }
@@ -10752,7 +10752,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.135,
+        "activation": 0.333,
         "attention": [
           "moments",
           "somebody",
@@ -10761,9 +10761,9 @@
           "normal",
           "usually",
           "tell",
-          "useful",
-          "rule",
-          "underneath"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -10775,9 +10775,9 @@
           "normal",
           "usually",
           "tell",
-          "useful",
-          "rule",
-          "underneath"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.0726,
-        "association": 0.0178,
-        "inhibition": 0.0284,
-        "social": -0.1163
+        "activation": 0.1731,
+        "association": -0.0081,
+        "inhibition": -0.044,
+        "social": -0.0875
       },
       "room_memories": [
-        {
-          "source": "20260817T180945739-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Busy enough that something unexpected can happen.",
-          "discourse": "d-20260817T180945739-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T180945739-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Busy, as long as it feels alive instead of chaotic.",
-          "discourse": "d-20260817T180945739-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T180945739-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
-          "discourse": "d-20260817T180945739-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T180945739-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "Have you always preferred that?",
-          "discourse": "d-20260817T180945739-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T180945739-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
         {
           "source": "20260817T180947903-jules-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001267"
+        },
+        {
+          "source": "20260817T181151431-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
+          "discourse": "d-20260817T181151431-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T181151431-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "discourse": "d-20260817T181151431-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T181151431-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
+          "discourse": "d-20260817T181151431-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T181151431-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that kind of problem satisfying?",
+          "discourse": "d-20260817T181151431-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T181151431-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T180415814-owen-v4",
-          "text": "What do you like about that kind of environment?",
-          "move": "follow_up",
-          "memory": null,
-          "branch_memory": "20260817T180415814-mara-v4",
-          "discourse": "d-20260817T180415814-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001088"
-        },
         {
           "source": "20260817T180418232-owen-v4",
           "text": "There is a useful rule underneath that answer.",
@@ -14212,10 +14203,19 @@
           "branch_memory": "20260817T181144913-jules-v4",
           "discourse": "d-20260817T181149372-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001267"
+        },
+        {
+          "source": "20260817T181151431-owen-v4",
+          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
+          "move": "answer",
+          "memory": "20260817T181151431-owen-v4",
+          "branch_memory": "20260817T181151431-owen-v4",
+          "discourse": "d-20260817T181151431-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
         }
       ],
-      "last_event": "20260817T181149372-sarah-v4",
-      "spoken": 1251,
+      "last_event": "20260817T181151431-sarah-v4",
+      "spoken": 1252,
       "silences": 0,
       "people": {
         "sarah": {
@@ -14857,13 +14857,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T180348154-mara-v4",
-              "status": "reported",
-              "text": "Because I notice what people do when they stop performing for everybody else.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T180343697-mara-v4"
-            },
-            {
               "source": "20260817T180350491-mara-v4",
               "status": "reported",
               "text": "Anything quick and a little shameless, as long as it is not cruel.",
@@ -15485,19 +15478,19 @@
               "text": "I improvise. A plan is useful until something more interesting happens.",
               "branch_owner": "mara",
               "branch_memory": "20260817T181144913-mara-v4"
+            },
+            {
+              "source": "20260817T181151431-mara-v4",
+              "status": "reported",
+              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T181151431-mara-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T180441628-jules-v4",
-              "status": "reported",
-              "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T180441628-jules-v4"
-            },
             {
               "source": "20260817T180448144-jules-v4",
               "status": "reported",
@@ -16120,6 +16113,13 @@
               "text": "Because the moments when somebody stops trying to look normal usually tell me more.",
               "branch_owner": "jules",
               "branch_memory": "20260817T181144913-jules-v4"
+            },
+            {
+              "source": "20260817T181151431-jules-v4",
+              "status": "reported",
+              "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T181151431-jules-v4"
             }
           ]
         }
@@ -16127,7 +16127,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.4,
+        "activation": 0.244,
         "attention": [
           "moments",
           "somebody",
@@ -16136,9 +16136,9 @@
           "normal",
           "usually",
           "tell",
-          "useful",
-          "rule",
-          "underneath"
+          "answer",
+          "tells",
+          "useful"
         ]
       },
       "medium": {
@@ -16150,9 +16150,9 @@
           "normal",
           "usually",
           "tell",
-          "useful",
-          "rule",
-          "underneath"
+          "answer",
+          "tells",
+          "useful"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1451,
-        "association": 0.1232,
-        "inhibition": 0.25,
-        "social": 0.0294
+        "activation": 0.0597,
+        "association": -0.0064,
+        "inhibition": 0.1766,
+        "social": 0.0615
       },
       "room_memories": [
-        {
-          "source": "20260817T180945739-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Busy enough that something unexpected can happen.",
-          "discourse": "d-20260817T180945739-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T180945739-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Busy, as long as it feels alive instead of chaotic.",
-          "discourse": "d-20260817T180945739-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T180945739-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Fairly quiet, but not dead silent. I like enough going on that I can notice things.",
-          "discourse": "d-20260817T180945739-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T180945739-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
-        {
-          "source": "20260817T180945739-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "Have you always preferred that?",
-          "discourse": "d-20260817T180945739-owen-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T180945739-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001223"
-        },
         {
           "source": "20260817T180947903-jules-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001267"
+        },
+        {
+          "source": "20260817T181151431-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
+          "discourse": "d-20260817T181151431-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T181151431-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+          "discourse": "d-20260817T181151431-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T181151431-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
+          "discourse": "d-20260817T181151431-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T181151431-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
+        },
+        {
+          "source": "20260817T181151431-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "What makes that kind of problem satisfying?",
+          "discourse": "d-20260817T181151431-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T181151431-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T180415814-jules-v4",
-          "text": "Busy enough that something unexpected can happen.",
-          "move": "self_disclosure",
-          "memory": "20260817T180415814-jules-v4",
-          "branch_memory": "20260817T180415814-jules-v4",
-          "discourse": "d-20260817T180415814-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001088"
-        },
         {
           "source": "20260817T180418232-jules-v4",
           "text": "Has that changed much for you?",
@@ -19587,10 +19578,19 @@
           "branch_memory": "20260817T181144913-jules-v4",
           "discourse": "d-20260817T181149372-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001267"
+        },
+        {
+          "source": "20260817T181151431-jules-v4",
+          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
+          "move": "self_disclosure",
+          "memory": "20260817T181151431-jules-v4",
+          "branch_memory": "20260817T181151431-jules-v4",
+          "discourse": "d-20260817T181151431-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-001268"
         }
       ],
-      "last_event": "20260817T181149372-sarah-v4",
-      "spoken": 1252,
+      "last_event": "20260817T181151431-sarah-v4",
+      "spoken": 1253,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20232,13 +20232,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T180348154-mara-v4",
-              "status": "reported",
-              "text": "Because I notice what people do when they stop performing for everybody else.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T180343697-mara-v4"
-            },
-            {
               "source": "20260817T180350491-mara-v4",
               "status": "reported",
               "text": "Anything quick and a little shameless, as long as it is not cruel.",
@@ -20860,19 +20853,19 @@
               "text": "I improvise. A plan is useful until something more interesting happens.",
               "branch_owner": "mara",
               "branch_memory": "20260817T181144913-mara-v4"
+            },
+            {
+              "source": "20260817T181151431-mara-v4",
+              "status": "reported",
+              "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T181151431-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T175835996-owen-v4",
-              "status": "reported",
-              "text": "Not substantially. I have more exceptions now, but the rule still fits.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T175832175-owen-v4"
-            },
             {
               "source": "20260817T175924567-owen-v4",
               "status": "reported",
@@ -21495,6 +21488,13 @@
               "text": "Quiet. I notice more when there is not much competing for attention.",
               "branch_owner": "owen",
               "branch_memory": "20260817T181138630-owen-v4"
+            },
+            {
+              "source": "20260817T181151431-owen-v4",
+              "status": "reported",
+              "text": "A problem with enough constraints that I can tell whether the solution actually works.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T181151431-owen-v4"
             }
           ]
         }
