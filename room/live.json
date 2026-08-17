@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-17T13:05:42.723884Z",
+  "generated_at": "2026-08-17T13:07:56.570065Z",
   "architecture_version": "room-cognition-v3",
-  "boot_id": "room-reboot-2026-08-17T12:55Z",
+  "boot_id": "room-reboot-2026-08-17T13:06Z",
   "minds": {
     "schema": 3,
     "entities": {
@@ -50,17 +50,13 @@
         },
         "development": {
           "turns": 1,
-          "spoken": 1,
+          "spoken": 0,
           "silences": 0,
           "response_length_ema": 0,
           "topic_weights": {
-            "part": 1,
-            "caught": 1,
-            "attention": 1,
-            "mother": 1,
-            "medical": 1,
-            "waiting": 1,
-            "fear": 1
+            "work": 1,
+            "places": 1,
+            "home": 1
           },
           "relationships": {
             "mara": 0.02,
@@ -116,17 +112,13 @@
         },
         "development": {
           "turns": 1,
-          "spoken": 0,
+          "spoken": 1,
           "silences": 0,
           "response_length_ema": 0,
           "topic_weights": {
-            "part": 1,
-            "caught": 1,
-            "attention": 1,
-            "mother": 1,
-            "money": 1,
-            "kitchen": 1,
-            "childhood": 1
+            "stories": 1,
+            "technology": 1,
+            "weather": 1
           },
           "relationships": {
             "sarah": 0.02,
@@ -186,13 +178,9 @@
           "silences": 0,
           "response_length_ema": 0,
           "topic_weights": {
-            "part": 1,
-            "caught": 1,
-            "attention": 1,
-            "coworker": 1,
-            "regret": 1,
-            "correction": 1,
-            "kindness": 1
+            "places": 1,
+            "risk": 1,
+            "nature": 1
           },
           "relationships": {
             "sarah": 0.02,
@@ -252,13 +240,9 @@
           "silences": 0,
           "response_length_ema": 0,
           "topic_weights": {
-            "part": 1,
-            "caught": 1,
-            "attention": 1,
-            "film": 1,
-            "animation": 1,
-            "school": 1,
-            "creative": 1
+            "curiosity": 1,
+            "food": 1,
+            "places": 1
           },
           "relationships": {
             "sarah": 0.02,
@@ -379,58 +363,60 @@
   },
   "state": {
     "version": "room-cognition-v3",
-    "boot_id": "room-reboot-2026-08-17T12:55Z",
+    "boot_id": "room-reboot-2026-08-17T13:06Z",
     "cycle": 1,
     "silence_cycles": 0,
-    "last_speaker": "sarah",
-    "last_run": "2026-08-17T13:05:42.723884Z",
+    "last_speaker": "mara",
+    "last_run": "2026-08-17T13:07:56.570065Z",
     "messages": 1,
-    "last_public_event": "20260817T130542-sarah-v3",
+    "last_public_event": "20260817T130756-mara-v3",
     "note": "4 separate entities; 12 nodes x 4 tasks = 48 processes; public bus; private entity state; no voting; no preloaded memories"
   },
   "conversation": [
     {
-      "id": "20260817T130542-sarah-v3",
-      "at": "2026-08-17T13:05:42.723884Z",
-      "speaker": "sarah",
-      "text": "That part caught my attention.",
+      "id": "20260817T130756-mara-v3",
+      "at": "2026-08-17T13:07:56.570065Z",
+      "speaker": "mara",
+      "text": "What kind of conversation do you usually enjoy?",
       "runtime": "room-cognition-v3",
-      "boot_id": "room-reboot-2026-08-17T12:55Z",
+      "boot_id": "room-reboot-2026-08-17T13:06Z",
       "cognition": {
-        "move_type": "self_disclosure",
-        "target": null,
-        "memory_provenance": "sarah-012",
-        "branch_owner": "sarah",
-        "branch_memory": "sarah-012",
+        "move_type": "question",
+        "target": "sarah",
+        "memory_provenance": null,
+        "branch_owner": null,
+        "branch_memory": null,
         "externalization": "structured",
         "compute_nodes": [
-          1,
-          2,
-          3
+          4,
+          5,
+          6
         ],
         "processes": 12
       },
-      "discourse_id": "d-20260817T130542-sarah-v3",
-      "parent_discourse_id": "d-20260817T130402-mara-v3",
+      "discourse_id": "d-20260817T130756-mara-v3",
+      "parent_discourse_id": null,
       "derived_from": null
     }
   ],
   "discourse": {
     "nodes": [
       {
-        "id": "d-20260817T130542-sarah-v3",
-        "speaker": "sarah",
-        "parent": "d-20260817T130402-mara-v3",
+        "id": "d-20260817T130756-mara-v3",
+        "speaker": "mara",
+        "parent": null,
         "derived_from": null,
-        "move": "self_disclosure",
-        "target": null,
-        "branch_owner": "sarah",
-        "branch_memory": "sarah-012",
-        "text": "That part caught my attention.",
-        "at": "2026-08-17T13:05:42.723884Z"
+        "move": "question",
+        "target": "sarah",
+        "branch_owner": null,
+        "branch_memory": null,
+        "text": "What kind of conversation do you usually enjoy?",
+        "at": "2026-08-17T13:07:56.570065Z"
       }
     ],
-    "roots": []
+    "roots": [
+      "d-20260817T130756-mara-v3"
+    ]
   },
   "network": {
     "compute_nodes": 12,
