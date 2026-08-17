@@ -81,6 +81,7 @@ jobs:
             [ "$failed" -eq 0 ] || return 1
 
             python3 scripts/room_engine.py commit || return 1
+            python3 scripts/build_room_feed.py || return 1
           }
 
           while [ "$SECONDS" -lt "$stop_at" ]; do
