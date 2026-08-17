@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       entity:
-        description: Legacy pulse compatibility; ignored because all four entities process every cycle
+        description: Legacy pulse compatibility; ignored because all four entities process every beat
         required: true
         default: auto
         type: choice
@@ -12,8 +12,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: the-room-world-main
@@ -95,7 +93,7 @@ jobs:
           retention-days: 1
 
   commit-room:
-    name: Integrate cognition and serialize expression
+    name: Integrate four-person conversational beat
     needs: recurrent
     runs-on: ubuntu-latest
     steps:
@@ -108,7 +106,7 @@ jobs:
           pattern: room-recurrent-*
           path: room_parts
           merge-multiple: true
-      - name: Commit one expression or genuine silence — no voting
+      - name: Commit four contributions — no voting
         env:
           ROOM_CYCLE_KEY: ${{ github.run_id }}:${{ github.run_attempt }}
         run: python3 scripts/room_engine.py commit
@@ -118,36 +116,6 @@ jobs:
           git config user.name "the-room"
           git config user.email "actions@users.noreply.github.com"
           git add room society/live.json
-          git commit -m "Room cognition v3 cycle" || true
+          git commit -m "Room cognition v4 shared beat" || true
           git pull --rebase origin main
           git push origin HEAD:main
-
-  publish-room:
-    name: Publish newest Room snapshot
-    needs: commit-room
-    if: needs.commit-room.result == 'success'
-    concurrency:
-      group: pages
-      cancel-in-progress: false
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout newest main
-        uses: actions/checkout@v6
-        with:
-          ref: main
-      - name: Bake newest Room snapshot
-        run: python3 scripts/bake_room.py
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - name: Upload site
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: .
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
