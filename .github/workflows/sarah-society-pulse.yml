@@ -13,26 +13,42 @@ permissions:
 
 concurrency:
   group: the-room-pulse-chain
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   pulse:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
-      - name: Give The Room a turn about every minute
+      - name: Keep The Room running at GitHub's fastest sustainable cadence
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          for n in $(seq 1 330); do
-            echo "Dispatching room turn $n of 330"
-            gh workflow run sarah-society.yml \
+
+          # Keep one Room beat in flight at a time. As soon as it finishes,
+          # dispatch the next one. This avoids flooding the concurrency queue
+          # with one-minute dispatches that GitHub then cancels/replaces.
+          stop_at=$((SECONDS + 19800))
+          while [ "$SECONDS" -lt "$stop_at" ]; do
+            active="$(gh run list \
               --repo "$GITHUB_REPOSITORY" \
-              --ref main \
-              -f entity=auto
-            if [ "$n" -lt 330 ]; then
-              sleep 60
+              --workflow sarah-society.yml \
+              --limit 20 \
+              --json status \
+              --jq '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending" or .status == "waiting")] | length')"
+
+            if [ "$active" = "0" ]; then
+              echo "Room is free; dispatching the next conversational beat"
+              gh workflow run sarah-society.yml \
+                --repo "$GITHUB_REPOSITORY" \
+                --ref main \
+                -f entity=auto
+              # Give the newly dispatched run time to appear in the Actions API.
+              sleep 12
+            else
+              echo "Room beat still running; checking again shortly"
+              sleep 8
             fi
           done
 
