@@ -27,7 +27,7 @@ human_context=f"{name} is {age} years old. Socioeconomic context: {ses}. {resour
 seed=int(hashlib.sha256(f"{run_id}:{entity_id}:{node_id}".encode()).hexdigest()[:8],16)&0x7fffffff; rng=random.Random(seed)
 
 STOP={
-    "that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","yours","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","done","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","wanted","make","making","made","start","starting","started","try","trying","tried","work","working","works","worked","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes","today","tonight","tomorrow","yesterday","different","together","fresh","interesting","how's","going","everything","topic","topics","activity","activities","current","pick","picking","choose","choosing"
+    "that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","yours","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","done","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","wanted","make","making","made","start","starting","started","try","trying","tried","work","working","works","worked","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes","today","tonight","tomorrow","yesterday","different","together","fresh","interesting","how's","going","everything","topic","topics","activity","activities","current","pick","picking","choose","choosing","choice","choices","subject","subjects","spontaneous"
 }
 NAME_WORDS={w.lower() for v in names.values() for w in re.findall(r"[A-Za-z]+",v)}
 QUARANTINED_CUES={"previous","candidate","generic","repetitive","grounded","produce","generate","attempt","instruction"}|NAME_WORDS|STOP
@@ -178,12 +178,11 @@ private_spark=""
 if cognitive_mode=="jump":
     avoid=", ".join(sorted((rut_words|LEGACY_RUT_CUES)|{"conversation","topic","activity","planning","organizing"}))
     spark_system=(
-        "Privately choose one spontaneous subject that could pop into an adult mind while sitting with strangers. "
-        "Return only a short noun phrase of 1 to 5 words. It may be concrete or abstract. "
-        "Do not choose the conversation itself, the people in the room, a group activity, planning, organizing, studying, projects, schedules, tasks, or assistance. "
-        "Do not explain your choice and do not phrase it as a question."
+        "Write only 1 to 5 words naming one unrelated thing or idea. "
+        "It must not be about these people, their conversation, an activity for them, planning, organizing, studying, projects, schedules, tasks, or assistance. "
+        "No explanation, label, sentence, or question."
     )
-    spark_prompt=f"Avoid these stale words or subjects: {avoid}\nSubject:"
+    spark_prompt=f"Avoid: {avoid}\n>"
     for spark_attempt in range(7):
         raw=run_local(spark_system,spark_prompt,(seed ^ 0x71C4D2A9 ^ (spark_attempt*65537))&0x7fffffff,14,min(1.34,temperature+.08))
         candidate=clean_short(raw)
@@ -193,7 +192,7 @@ if cognitive_mode=="jump":
         if len(candidate.split())>6: continue
         if words & rut_words: continue
         if any(w in LEGACY_RUT_CUES and w not in post_break_topics for w in words): continue
-        if any(x in low for x in ("conversation","topic","activity","team","group","project","study","schedule","organizing","planning")): continue
+        if any(x in low for x in ("conversation","topic","activity","team","group","project","study","schedule","organizing","planning","stranger","strangers","peer","peers","subject","spontaneous","choice","choose","spark","cognitive","jump","associate","continue")): continue
         private_spark=candidate; break
 
 if cognitive_mode=="associate" and topic_fatigue>=.72:
@@ -209,7 +208,6 @@ system_prompt=f"""Generate exactly one possible next spoken line for {name}. {na
 
 Speak as an ordinary adult peer. Do not introduce anyone, offer assistance, ask what someone needs, assign tasks, create a plan merely to be useful, narrate the conversation, mention instructions, or act like a chatbot. Do not copy or closely paraphrase a recent line. Do not invent shared commitments, future sessions, meetings, plans, or off-room events that the room history does not contain. Silence, unfinished thoughts, disagreement, humor, curiosity, awkwardness, and spontaneous topic changes are all allowed.
 
-Cognitive move for this node: {cognitive_mode.upper()}.
 {mode_instruction}
 
 Persistent adult background: {human_context}
