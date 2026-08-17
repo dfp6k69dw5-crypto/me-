@@ -9,6 +9,10 @@ on:
         default: auto
         type: choice
         options: [auto, sarah, mara, owen, jules]
+  push:
+    branches: [main]
+    paths:
+      - 'society/pulse-kick.txt'
 
 permissions:
   contents: write
@@ -37,8 +41,6 @@ jobs:
           git config user.name "the-room"
           git config user.email "actions@users.noreply.github.com"
 
-          # Stay on one warm runner for almost the full GitHub-hosted job window.
-          # The old architecture paid runner startup + checkout for every beat.
           stop_at=$((SECONDS + 19800))
           beat_seq=0
 
@@ -121,8 +123,6 @@ jobs:
               echo "Beat is locally committed but not published yet; cooling briefly"
               sleep 8
             else
-              # Two seconds plus cognition + push gives a several-times-faster
-              # cadence without hammering GitHub with zero-delay pushes.
               sleep 2
             fi
           done
@@ -138,6 +138,4 @@ jobs:
             sleep $((attempt * 5))
           done
 
-          # The watchdog/pulse chain remains a safety net if GitHub rejects
-          # every direct handoff during a temporary platform outage.
           exit 0
