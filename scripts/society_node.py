@@ -27,10 +27,11 @@ human_context=f"{name} is {age} years old. Socioeconomic context: {ses}. {resour
 seed=int(hashlib.sha256(f"{run_id}:{entity_id}:{node_id}".encode()).hexdigest()[:8],16)&0x7fffffff; rng=random.Random(seed)
 
 STOP={
-    "that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","yours","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","done","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","wanted","make","making","made","start","starting","started","try","trying","tried","work","working","works","worked","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes","today","tonight","tomorrow","yesterday","different","together","fresh","interesting","how's","going"
+    "that","this","with","from","have","has","had","just","what","when","where","there","they","them","then","than","your","yours","about","would","could","should","into","only","really","some","more","very","like","because","been","being","does","doing","done","will","well","yeah","okay","also","still","room","says","said","next","lets","let's","dont","don't","cant","can't","im","i'm","ive","i've","weve","we've","were","we're","youre","you're","thats","that's","its","it's","maybe","kind","sort","thing","things","something","anything","someone","everyone","human","people","person","conversation","talking","talk","say","saying","think","thinking","thought","know","knowing","mean","means","seem","seems","want","wants","wanted","make","making","made","start","starting","started","try","trying","tried","work","working","works","worked","good","great","nice","sure","right","actually","probably","pretty","little","much","many","few","around","again","already","even","ever","never","always","often","sometimes","today","tonight","tomorrow","yesterday","different","together","fresh","interesting","how's","going","everything"
 }
 NAME_WORDS={w.lower() for v in names.values() for w in re.findall(r"[A-Za-z]+",v)}
 QUARANTINED_CUES={"previous","candidate","generic","repetitive","grounded","produce","generate","attempt","instruction"}|NAME_WORDS|STOP
+LEGACY_RUT_CUES={"brainstorm","brainstorming","project","study","homework","schedule","team","group","gather","input","activities"}
 
 def content_tokens(text):
     out=[]
@@ -79,6 +80,7 @@ raw_weighted=[]
 for k,v in (d.get("topic_weights") or {}).items():
     key=str(k).lower().strip()
     if not key or key in QUARANTINED_CUES: continue
+    if topic_fatigue>=.55 and key in LEGACY_RUT_CUES: continue
     fatigue=float(stored_fatigue.get(key,0) or 0)
     effective=max(0.0,float(v))/(1.0+2.8*fatigue)
     if effective>0.02: raw_weighted.append((key,effective))
@@ -98,7 +100,7 @@ else: cue_n={"continue":3+int(iq_scale>0.6),"associate":4+int(iq_scale>0.4)}[cog
 topics=weighted_sample(raw_weighted[:24],cue_n) if cue_n else []
 topic_text=", ".join(k for k,_ in topics) or "none selected for this move"
 
-CONTROL_FRAGMENTS=("previous candidate","too generic or repetitive","try another natural line","grounded in the room","differ substantially from the first attempt","produce a genuinely different","generate a fresh")
+CONTROL_FRAGMENTS=("previous candidate","too generic or repetitive","try another natural line","grounded in the room","differ substantially from the first attempt","produce a genuinely different","generate a fresh","brainstorm","study schedule","team members","gather input","project idea","homework")
 safe_memory=[]
 for m in entity.get("memory",[]) or []:
     txt=str(m.get("text","")).strip(); low=txt.lower()
@@ -151,13 +153,14 @@ base_prompt=(f"Recent room speech:\n{transcript}\n\n{name}:" if recent else f"{n
 
 SERVICE=[r"\bhow can i help\b",r"\bhow may i help\b",r"\bwhat can i do for you\b",r"\bhow can i assist\b",r"\bdo you need (?:anything|help)\b",r"\bwhat do you need\b",r"\bhere to help\b",r"\bwhat (?:specific )?tasks or goals\b",r"\bfor (?:your|our) next meeting\b"]
 FACILITATOR=[r"\bare you looking for\b",r"\bwhat (?:would|do) you like to (?:talk about|discuss|explore|do)\b",r"\bwhat do we want to do\b",r"\bwhat should we do\b",r"\bwhat (?:specific )?topic\b",r"\btopic to (?:explore|discuss|talk about)\b",r"\banything (?:you'd|you would) like to (?:talk about|discuss|explore|do)\b"]
+ROLE_CONTRADICTION=[r"\bteam members?\b",r"\b(?:the|our|this) team\b",r"\bgather input\b",r"\bbrainstorming session\b",r"\bstudy schedule\b",r"\bnext step\b"]
 META=[r"\bif [a-z]+ has something to say\b",r"\b[a-z]+ could say\b",r"\b[a-z]+ is now in the room\b",r"\boutput only\b",r"\brecent room speech\b",r"\bcontinue directly from here\b",r"\bprevious candidate\b",r"\bprevious (?:response|conversation) was (?:too )?(?:generic|repetitive)\b",r"\btoo generic or repetitive\b",r"\bgenuinely different peer remark\b",r"\bgrounded in the room\b",r"\bservice/task question\b",r"\bproduce a genuinely different\b",r"\bgenerate a fresh, thought-provoking statement\b",r"\btry another natural line\b",r"\bdiffer substantially from the first attempt\b",r"\bcontinue the peers'? current exchange\b",r"\bselected earlier memories\b",r"\bremembered room content\b",r"\bpersistent adult background\b",r"\bcognitive move\b"]
 speaker_label_re=re.compile(r"(?im)(?:^|\n)\s*(?:"+"|".join(re.escape(v) for v in names.values())+r")\s*:")
 def max_recent_similarity(text): return max((jac(text,m.get("text","") ) for m in recent),default=0.0)
 def natural_candidate(text):
     low=(text or "").lower().strip()
     if not low:return False
-    return not speaker_label_re.search(text) and not any(re.search(p,low) for p in SERVICE+FACILITATOR+META)
+    return not speaker_label_re.search(text) and not any(re.search(p,low) for p in SERVICE+FACILITATOR+ROLE_CONTRADICTION+META)
 def forbidden_reason(text):
     low=(text or "").lower().strip()
     if not recent and re.match(r"^(?:me too|same here|same|i agree|exactly|yeah[,!]|right[,!])\b",low): return "contextless-agreement"
@@ -166,6 +169,8 @@ def forbidden_reason(text):
         if re.search(pat,low):return "service-language"
     for pat in FACILITATOR:
         if re.search(pat,low):return "facilitator-language"
+    for pat in ROLE_CONTRADICTION:
+        if re.search(pat,low):return "role-contradiction"
     for pat in META:
         if re.search(pat,low):return "prompt-echo"
     for m in recent:
