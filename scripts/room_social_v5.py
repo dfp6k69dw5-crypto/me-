@@ -73,7 +73,8 @@ def observe_message(M,msg,cycle,by=None):
  return M
 def topic_terms_from_messages(ms,limit=12):
  c=Counter(); rec=[]
- for m in ms[-16:]: ws=words(m.get('text','')); rec.extend(ws[:6]); c.update(ws)
+ for m in ms[-16:]:
+  ws=words(m.get('text','')); rec.extend(ws); c.update(ws)
  return sorted(c,key=lambda w:(-c[w],-max(i for i,x in enumerate(rec) if x==w),w))[:limit] if rec else []
 def update_topic(t,ms,cycle):
  t=t or topic_template(cycle); terms=topic_terms_from_messages(ms); old=set(t.get('recent_terms',[])); novel=[w for w in terms if w not in old]
