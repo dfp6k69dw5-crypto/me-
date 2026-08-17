@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.302,
+        "activation": 0.208,
         "attention": [
           "weird",
           "possibility",
@@ -11,9 +11,9 @@
           "enough",
           "become",
           "useful",
-          "answer",
-          "tells",
-          "rule"
+          "gives",
+          "specific",
+          "picture"
         ]
       },
       "medium": {
@@ -25,9 +25,9 @@
           "enough",
           "become",
           "useful",
-          "answer",
-          "tells",
-          "rule"
+          "gives",
+          "specific",
+          "picture"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.137,
-        "association": 0.1439,
-        "inhibition": -0.1076,
-        "social": 0.0809
+        "activation": 0.0156,
+        "association": 0.25,
+        "inhibition": -0.0702,
+        "social": -0.0779
       },
       "room_memories": [
-        {
-          "source": "20260817T190222462-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Dry humor, especially when it sneaks up on me.",
-          "discourse": "d-20260817T190222462-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190222462-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "The stranger and more sideways it is, the better.",
-          "discourse": "d-20260817T190222462-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190222462-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Anything quick and a little shameless, as long as it is not cruel.",
-          "discourse": "d-20260817T190222462-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190222462-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "How did you land on that?",
-          "discourse": "d-20260817T190222462-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190222462-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
         {
           "source": "20260817T190224545-sarah-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002674"
+        },
+        {
+          "source": "20260817T190402761-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "I plan first. I relax more when I know the shape of what I am doing.",
+          "discourse": "d-20260817T190402761-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190402761-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "discourse": "d-20260817T190402761-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190402761-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "discourse": "d-20260817T190402761-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190402761-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that changed much for you?",
+          "discourse": "d-20260817T190402761-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190402761-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T185716356-sarah-v4",
-          "text": "Usually what they seem curious about.",
-          "move": "answer",
-          "memory": "20260817T185716356-sarah-v4",
-          "branch_memory": "20260817T185716356-sarah-v4",
-          "discourse": "d-20260817T185716356-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002495"
-        },
         {
           "source": "20260817T185718467-sarah-v4",
           "text": "Because I tend to trust patterns more than first impressions.",
@@ -3462,22 +3453,24 @@
           "branch_memory": "20260817T190356693-jules-v4",
           "discourse": "d-20260817T190400649-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002674"
+        },
+        {
+          "source": "20260817T190402761-sarah-v4",
+          "text": "Has that changed much for you?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T190402761-owen-v4",
+          "discourse": "d-20260817T190402761-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
         }
       ],
-      "last_event": "20260817T190400649-mara-v4",
-      "spoken": 2659,
+      "last_event": "20260817T190402761-sarah-v4",
+      "spoken": 2660,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185803190-mara-v4",
-              "status": "reported",
-              "text": "One where people actually reveal something instead of staying polite the whole time.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T185803190-mara-v4"
-            },
             {
               "source": "20260817T185809674-mara-v4",
               "status": "reported",
@@ -4100,19 +4093,19 @@
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
               "branch_owner": "mara",
               "branch_memory": "20260817T190356693-mara-v4"
+            },
+            {
+              "source": "20260817T190402761-mara-v4",
+              "status": "reported",
+              "text": "I improvise. A plan is useful until something more interesting happens.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T190402761-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185125494-owen-v4",
-              "status": "reported",
-              "text": "A problem with a clear shape that I can actually get somewhere with.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T185125494-owen-v4"
-            },
             {
               "source": "20260817T185127637-owen-v4",
               "status": "reported",
@@ -4735,19 +4728,19 @@
               "text": "Consistency, especially when being consistent is inconvenient.",
               "branch_owner": "owen",
               "branch_memory": "20260817T190336377-owen-v4"
+            },
+            {
+              "source": "20260817T190402761-owen-v4",
+              "status": "reported",
+              "text": "I plan first. I relax more when I know the shape of what I am doing.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T190402761-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185709911-jules-v4",
-              "status": "reported",
-              "text": "The stranger and more sideways it is, the better.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T185709911-jules-v4"
-            },
             {
               "source": "20260817T185716356-jules-v4",
               "status": "reported",
@@ -5370,6 +5363,13 @@
               "text": "Because I like when a weird possibility survives long enough to become useful.",
               "branch_owner": "jules",
               "branch_memory": "20260817T190356693-jules-v4"
+            },
+            {
+              "source": "20260817T190402761-jules-v4",
+              "status": "reported",
+              "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T190402761-jules-v4"
             }
           ]
         }
@@ -5377,7 +5377,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.198,
+        "activation": 0.206,
         "attention": [
           "weird",
           "possibility",
@@ -5386,9 +5386,9 @@
           "enough",
           "become",
           "useful",
-          "answer",
-          "tells",
-          "rule"
+          "gives",
+          "specific",
+          "picture"
         ]
       },
       "medium": {
@@ -5400,9 +5400,9 @@
           "enough",
           "become",
           "useful",
-          "answer",
-          "tells",
-          "rule"
+          "gives",
+          "specific",
+          "picture"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1966,
-        "association": 0.0667,
-        "inhibition": 0.0338,
-        "social": -0.2298
+        "activation": -0.1463,
+        "association": 0.0201,
+        "inhibition": 0.0482,
+        "social": -0.2316
       },
       "room_memories": [
-        {
-          "source": "20260817T190222462-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Dry humor, especially when it sneaks up on me.",
-          "discourse": "d-20260817T190222462-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190222462-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "The stranger and more sideways it is, the better.",
-          "discourse": "d-20260817T190222462-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190222462-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Anything quick and a little shameless, as long as it is not cruel.",
-          "discourse": "d-20260817T190222462-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190222462-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "How did you land on that?",
-          "discourse": "d-20260817T190222462-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190222462-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
         {
           "source": "20260817T190224545-sarah-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002674"
+        },
+        {
+          "source": "20260817T190402761-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "I plan first. I relax more when I know the shape of what I am doing.",
+          "discourse": "d-20260817T190402761-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190402761-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "discourse": "d-20260817T190402761-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190402761-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "discourse": "d-20260817T190402761-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190402761-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that changed much for you?",
+          "discourse": "d-20260817T190402761-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190402761-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T185716356-mara-v4",
-          "text": "Usually the mood between people.",
-          "move": "self_disclosure",
-          "memory": "20260817T185716356-mara-v4",
-          "branch_memory": "20260817T185716356-mara-v4",
-          "discourse": "d-20260817T185716356-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002495"
-        },
         {
           "source": "20260817T185718467-mara-v4",
           "text": "What makes that signal matter to you?",
@@ -8837,10 +8828,19 @@
           "branch_memory": null,
           "discourse": "d-20260817T190400649-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002674"
+        },
+        {
+          "source": "20260817T190402761-mara-v4",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "move": "self_disclosure",
+          "memory": "20260817T190402761-mara-v4",
+          "branch_memory": "20260817T190402761-mara-v4",
+          "discourse": "d-20260817T190402761-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
         }
       ],
-      "last_event": "20260817T190400649-mara-v4",
-      "spoken": 2663,
+      "last_event": "20260817T190402761-sarah-v4",
+      "spoken": 2664,
       "silences": 0,
       "people": {
         "sarah": {
@@ -9482,13 +9482,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T185125494-owen-v4",
-              "status": "reported",
-              "text": "A problem with a clear shape that I can actually get somewhere with.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T185125494-owen-v4"
-            },
-            {
               "source": "20260817T185127637-owen-v4",
               "status": "reported",
               "text": "Because constraints give me something I can test instead of just argue about.",
@@ -10110,19 +10103,19 @@
               "text": "Consistency, especially when being consistent is inconvenient.",
               "branch_owner": "owen",
               "branch_memory": "20260817T190336377-owen-v4"
+            },
+            {
+              "source": "20260817T190402761-owen-v4",
+              "status": "reported",
+              "text": "I plan first. I relax more when I know the shape of what I am doing.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T190402761-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185709911-jules-v4",
-              "status": "reported",
-              "text": "The stranger and more sideways it is, the better.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T185709911-jules-v4"
-            },
             {
               "source": "20260817T185716356-jules-v4",
               "status": "reported",
@@ -10745,6 +10738,13 @@
               "text": "Because I like when a weird possibility survives long enough to become useful.",
               "branch_owner": "jules",
               "branch_memory": "20260817T190356693-jules-v4"
+            },
+            {
+              "source": "20260817T190402761-jules-v4",
+              "status": "reported",
+              "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T190402761-jules-v4"
             }
           ]
         }
@@ -10752,7 +10752,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.23,
+        "activation": 0.356,
         "attention": [
           "weird",
           "possibility",
@@ -10761,9 +10761,9 @@
           "enough",
           "become",
           "useful",
-          "answer",
-          "tells",
-          "rule"
+          "gives",
+          "specific",
+          "picture"
         ]
       },
       "medium": {
@@ -10775,9 +10775,9 @@
           "enough",
           "become",
           "useful",
-          "answer",
-          "tells",
-          "rule"
+          "gives",
+          "specific",
+          "picture"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1875,
-        "association": -0.1426,
-        "inhibition": -0.0502,
-        "social": 0.0978
+        "activation": -0.25,
+        "association": -0.045,
+        "inhibition": 0.0402,
+        "social": 0.0005
       },
       "room_memories": [
-        {
-          "source": "20260817T190222462-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Dry humor, especially when it sneaks up on me.",
-          "discourse": "d-20260817T190222462-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190222462-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "The stranger and more sideways it is, the better.",
-          "discourse": "d-20260817T190222462-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190222462-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Anything quick and a little shameless, as long as it is not cruel.",
-          "discourse": "d-20260817T190222462-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190222462-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "How did you land on that?",
-          "discourse": "d-20260817T190222462-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190222462-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
         {
           "source": "20260817T190224545-sarah-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002674"
+        },
+        {
+          "source": "20260817T190402761-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "I plan first. I relax more when I know the shape of what I am doing.",
+          "discourse": "d-20260817T190402761-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190402761-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "discourse": "d-20260817T190402761-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190402761-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "discourse": "d-20260817T190402761-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190402761-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that changed much for you?",
+          "discourse": "d-20260817T190402761-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190402761-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T185716357-owen-v4",
-          "text": "What makes you say that?",
-          "move": "follow_up",
-          "memory": null,
-          "branch_memory": "20260817T185716356-sarah-v4",
-          "discourse": "d-20260817T185716357-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002495"
-        },
         {
           "source": "20260817T185718467-owen-v4",
           "text": "There is a useful rule underneath that answer.",
@@ -14212,10 +14203,19 @@
           "branch_memory": "20260817T190356693-jules-v4",
           "discourse": "d-20260817T190400649-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002674"
+        },
+        {
+          "source": "20260817T190402761-owen-v4",
+          "text": "I plan first. I relax more when I know the shape of what I am doing.",
+          "move": "answer",
+          "memory": "20260817T190402761-owen-v4",
+          "branch_memory": "20260817T190402761-owen-v4",
+          "discourse": "d-20260817T190402761-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
         }
       ],
-      "last_event": "20260817T190400649-mara-v4",
-      "spoken": 2658,
+      "last_event": "20260817T190402761-sarah-v4",
+      "spoken": 2659,
       "silences": 0,
       "people": {
         "sarah": {
@@ -14857,13 +14857,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T185803190-mara-v4",
-              "status": "reported",
-              "text": "One where people actually reveal something instead of staying polite the whole time.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T185803190-mara-v4"
-            },
-            {
               "source": "20260817T185809674-mara-v4",
               "status": "reported",
               "text": "Usually the mood between people.",
@@ -15485,19 +15478,19 @@
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
               "branch_owner": "mara",
               "branch_memory": "20260817T190356693-mara-v4"
+            },
+            {
+              "source": "20260817T190402761-mara-v4",
+              "status": "reported",
+              "text": "I improvise. A plan is useful until something more interesting happens.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T190402761-mara-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185709911-jules-v4",
-              "status": "reported",
-              "text": "The stranger and more sideways it is, the better.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T185709911-jules-v4"
-            },
             {
               "source": "20260817T185716356-jules-v4",
               "status": "reported",
@@ -16120,6 +16113,13 @@
               "text": "Because I like when a weird possibility survives long enough to become useful.",
               "branch_owner": "jules",
               "branch_memory": "20260817T190356693-jules-v4"
+            },
+            {
+              "source": "20260817T190402761-jules-v4",
+              "status": "reported",
+              "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T190402761-jules-v4"
             }
           ]
         }
@@ -16127,7 +16127,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.398,
+        "activation": 0.258,
         "attention": [
           "weird",
           "possibility",
@@ -16136,9 +16136,9 @@
           "enough",
           "become",
           "useful",
-          "answer",
-          "tells",
-          "rule"
+          "gives",
+          "specific",
+          "picture"
         ]
       },
       "medium": {
@@ -16150,9 +16150,9 @@
           "enough",
           "become",
           "useful",
-          "answer",
-          "tells",
-          "rule"
+          "gives",
+          "specific",
+          "picture"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1113,
-        "association": -0.0465,
-        "inhibition": -0.0218,
-        "social": 0.0684
+        "activation": 0.1291,
+        "association": 0.1188,
+        "inhibition": 0.1057,
+        "social": -0.0693
       },
       "room_memories": [
-        {
-          "source": "20260817T190222462-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "Dry humor, especially when it sneaks up on me.",
-          "discourse": "d-20260817T190222462-sarah-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190222462-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "The stranger and more sideways it is, the better.",
-          "discourse": "d-20260817T190222462-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T190222462-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "Anything quick and a little shameless, as long as it is not cruel.",
-          "discourse": "d-20260817T190222462-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T190222462-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
-        {
-          "source": "20260817T190222462-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "How did you land on that?",
-          "discourse": "d-20260817T190222462-owen-v4",
-          "branch_owner": "sarah",
-          "branch_memory": "20260817T190222462-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002630"
-        },
         {
           "source": "20260817T190224545-sarah-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002674"
+        },
+        {
+          "source": "20260817T190402761-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "I plan first. I relax more when I know the shape of what I am doing.",
+          "discourse": "d-20260817T190402761-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190402761-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "discourse": "d-20260817T190402761-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T190402761-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "I improvise. A plan is useful until something more interesting happens.",
+          "discourse": "d-20260817T190402761-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T190402761-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
+        },
+        {
+          "source": "20260817T190402761-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that changed much for you?",
+          "discourse": "d-20260817T190402761-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T190402761-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T185716356-jules-v4",
-          "text": "Usually one odd detail that probably was not supposed to be important.",
-          "move": "self_disclosure",
-          "memory": "20260817T185716356-jules-v4",
-          "branch_memory": "20260817T185716356-jules-v4",
-          "discourse": "d-20260817T185716356-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002495"
-        },
         {
           "source": "20260817T185718467-jules-v4",
           "text": "That answer has a shape to it. I can already imagine the exceptions being interesting.",
@@ -19587,10 +19578,19 @@
           "branch_memory": "20260817T190356693-jules-v4",
           "discourse": "d-20260817T190400649-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002674"
+        },
+        {
+          "source": "20260817T190402761-jules-v4",
+          "text": "Mostly improviser. Too much structure makes me want to escape the structure.",
+          "move": "self_disclosure",
+          "memory": "20260817T190402761-jules-v4",
+          "branch_memory": "20260817T190402761-jules-v4",
+          "discourse": "d-20260817T190402761-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-002675"
         }
       ],
-      "last_event": "20260817T190400649-mara-v4",
-      "spoken": 2659,
+      "last_event": "20260817T190402761-sarah-v4",
+      "spoken": 2660,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20232,13 +20232,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T185803190-mara-v4",
-              "status": "reported",
-              "text": "One where people actually reveal something instead of staying polite the whole time.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T185803190-mara-v4"
-            },
-            {
               "source": "20260817T185809674-mara-v4",
               "status": "reported",
               "text": "Usually the mood between people.",
@@ -20860,19 +20853,19 @@
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
               "branch_owner": "mara",
               "branch_memory": "20260817T190356693-mara-v4"
+            },
+            {
+              "source": "20260817T190402761-mara-v4",
+              "status": "reported",
+              "text": "I improvise. A plan is useful until something more interesting happens.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T190402761-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T185125494-owen-v4",
-              "status": "reported",
-              "text": "A problem with a clear shape that I can actually get somewhere with.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T185125494-owen-v4"
-            },
             {
               "source": "20260817T185127637-owen-v4",
               "status": "reported",
@@ -21495,6 +21488,13 @@
               "text": "Consistency, especially when being consistent is inconvenient.",
               "branch_owner": "owen",
               "branch_memory": "20260817T190336377-owen-v4"
+            },
+            {
+              "source": "20260817T190402761-owen-v4",
+              "status": "reported",
+              "text": "I plan first. I relax more when I know the shape of what I am doing.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T190402761-owen-v4"
             }
           ]
         }
