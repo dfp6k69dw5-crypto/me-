@@ -38,10 +38,45 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ROOM_RELAY_URL: https://room-live-mirror.dfp6k69dw5.workers.dev
+          ROOM_PROMPT_PERCEPTION: ${{ secrets.ROOM_PROMPT_PERCEPTION }}
+          ROOM_PROMPT_DELIBERATION: ${{ secrets.ROOM_PROMPT_DELIBERATION }}
+          ROOM_PROMPT_EXPRESSION: ${{ secrets.ROOM_PROMPT_EXPRESSION }}
         run: |
           set -uo pipefail
           git config user.name "the-room"
           git config user.email "actions@users.noreply.github.com"
+
+          # Private prompts are optional runtime secrets. If all three are present,
+          # load the GitHub-held local model once and share it across the 12 nodes.
+          export ROOM_MODEL_URL=""
+          model_pid=""
+          if [ -n "${ROOM_PROMPT_PERCEPTION:-}" ] && [ -n "${ROOM_PROMPT_DELIBERATION:-}" ] && [ -n "${ROOM_PROMPT_EXPRESSION:-}" ]; then
+            mkdir -p .room_model/runtime
+            gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'society-brain-q4_0.gguf' --dir .room_model
+            gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'llama-runtime-linux-x64.tar.gz' --dir .room_model
+            echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  .room_model/society-brain-q4_0.gguf' | sha256sum -c -
+            echo '360a5bfab5b8fe562c52e060a998a052f5fc7d98a0448b035c2eedbb6acfbd94  .room_model/llama-runtime-linux-x64.tar.gz' | sha256sum -c -
+            tar -xzf .room_model/llama-runtime-linux-x64.tar.gz -C .room_model/runtime
+            server_bin=$(find .room_model/runtime -type f -name 'llama-server' | head -1)
+            if [ -n "$server_bin" ]; then
+              chmod +x "$server_bin"
+              "$server_bin" -m .room_model/society-brain-q4_0.gguf --host 127.0.0.1 --port 18080 -c 8192 -np 4 >.room_model/server.log 2>&1 &
+              model_pid=$!
+              for attempt in $(seq 1 120); do
+                if curl -fsS http://127.0.0.1:18080/health >/dev/null 2>&1; then
+                  export ROOM_MODEL_URL='http://127.0.0.1:18080/completion'
+                  break
+                fi
+                if ! kill -0 "$model_pid" 2>/dev/null; then
+                  break
+                fi
+                sleep 1
+              done
+            fi
+            if [ -z "$ROOM_MODEL_URL" ]; then
+              echo "Private local model unavailable; deterministic research-informed cognition remains active"
+            fi
+          fi
 
           stop_at=$((SECONDS + 19800))
           beat_seq=0
@@ -50,15 +85,12 @@ jobs:
 
           publish_relay() {
             [ -n "${ROOM_RELAY_URL:-}" ] || return 0
-
             now=$(date +%s)
             if [ -z "$relay_token" ] || [ "$now" -ge "$relay_token_refresh_at" ]; then
-              token_json=$(curl -fsS \
-                -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
-                "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror") || {
-                  echo "Cloudflare relay token unavailable; Room continues normally"
-                  return 0
-                }
+              token_json=$(curl -fsS -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror") || {
+                echo "Cloudflare relay token unavailable; Room continues normally"
+                return 0
+              }
               relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("value", ""))')
               if [ -z "$relay_token" ]; then
                 echo "Cloudflare relay token was empty; Room continues normally"
@@ -66,13 +98,7 @@ jobs:
               fi
               relay_token_refresh_at=$((now + 240))
             fi
-
-            if ! curl -fsS \
-              -X POST \
-              -H "Authorization: Bearer ${relay_token}" \
-              -H "Content-Type: application/json" \
-              --data-binary @room/feed.json \
-              "${ROOM_RELAY_URL%/}/api/ingest" >/dev/null; then
+            if ! curl -fsS -X POST -H "Authorization: Bearer ${relay_token}" -H "Content-Type: application/json" --data-binary @room/feed.json "${ROOM_RELAY_URL%/}/api/ingest" >/dev/null; then
               echo "Cloudflare relay unavailable; Room continues normally"
             fi
             return 0
@@ -86,35 +112,39 @@ jobs:
 
             pids=()
             for n in $(seq 0 11); do
+              case $((n % 3)) in
+                0) node_prompt="${ROOM_PROMPT_PERCEPTION:-}" ;;
+                1) node_prompt="${ROOM_PROMPT_DELIBERATION:-}" ;;
+                2) node_prompt="${ROOM_PROMPT_EXPRESSION:-}" ;;
+              esac
               (
-                export ROOM_NODE_ID="$n"
-                python3 scripts/room_engine.py node --phase sense
+                env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
+                  ROOM_NODE_PROMPT="$node_prompt" ROOM_NODE_ID="$n" \
+                  python3 scripts/room_engine_v5.py node --phase sense
               ) &
               pids+=("$!")
             done
             failed=0
-            for pid in "${pids[@]}"; do
-              wait "$pid" || failed=1
-            done
+            for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
             [ "$failed" -eq 0 ] || return 1
 
-            python3 scripts/room_engine.py bus || return 1
+            env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
+              python3 scripts/room_engine_v5.py bus || return 1
 
             pids=()
             for n in $(seq 0 11); do
               (
-                export ROOM_NODE_ID="$n"
-                python3 scripts/room_engine.py node --phase recurrent --bus room_work/bus-sense.json
+                env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
+                  ROOM_NODE_ID="$n" python3 scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-sense.json
               ) &
               pids+=("$!")
             done
             failed=0
-            for pid in "${pids[@]}"; do
-              wait "$pid" || failed=1
-            done
+            for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
             [ "$failed" -eq 0 ] || return 1
 
-            python3 scripts/room_engine.py commit || return 1
+            env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
+              python3 scripts/room_engine_v5.py commit || return 1
             python3 scripts/build_room_feed.py || return 1
           }
 
@@ -124,13 +154,9 @@ jobs:
               sleep 3
               continue
             fi
-
             git add room society/live.json
-            if git diff --cached --quiet; then
-              continue
-            fi
-
-            git commit -m "Room cognition v4 shared beat"
+            if git diff --cached --quiet; then continue; fi
+            git commit -m "Room cognition v5 research-informed beat"
 
             pushed=0
             for attempt in 1 2 3 4; do
@@ -139,12 +165,8 @@ jobs:
                 publish_relay
                 break
               fi
-
               echo "Push attempt $attempt collided with a newer main; rebasing"
-              if ! git fetch origin main; then
-                sleep $((attempt * 2))
-                continue
-              fi
+              if ! git fetch origin main; then sleep $((attempt * 2)); continue; fi
               if ! git rebase origin/main; then
                 git rebase --abort || true
                 echo "Could not rebase cleanly; leaving the state intact and retrying shortly"
@@ -152,22 +174,16 @@ jobs:
               fi
               sleep 1
             done
-
             if [ "$pushed" -eq 0 ]; then
               echo "Beat is locally committed but not published yet; cooling briefly"
               sleep 8
             fi
           done
 
+          if [ -n "$model_pid" ]; then kill "$model_pid" 2>/dev/null || true; fi
           echo "Warm Room runner is handing itself to a fresh runner"
           for attempt in 1 2 3 4 5; do
-            if gh workflow run sarah-society.yml \
-              --repo "$GITHUB_REPOSITORY" \
-              --ref main \
-              -f entity=auto; then
-              exit 0
-            fi
+            if gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto; then exit 0; fi
             sleep $((attempt * 5))
           done
-
           exit 0
