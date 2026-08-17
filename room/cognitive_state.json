@@ -2,7 +2,7 @@
   "entities": {
     "sarah": {
       "fast": {
-        "activation": 0.222,
+        "activation": 0.251,
         "attention": [
           "notice",
           "people",
@@ -10,10 +10,10 @@
           "performing",
           "everybody",
           "else",
-          "useful",
-          "rule",
-          "underneath",
-          "answer"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -24,10 +24,10 @@
           "performing",
           "everybody",
           "else",
-          "useful",
-          "rule",
-          "underneath",
-          "answer"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.64
       },
@@ -35,52 +35,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": 0.1599,
-        "association": -0.0241,
-        "inhibition": -0.1315,
-        "social": -0.0338
+        "activation": 0.1475,
+        "association": -0.1161,
+        "inhibition": -0.1221,
+        "social": -0.0094
       },
       "room_memories": [
-        {
-          "source": "20260817T204019169-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "Consistency, especially when being consistent is inconvenient.",
-          "discourse": "d-20260817T204019169-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204019169-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "How they treat people when there is nothing to gain from it.",
-          "discourse": "d-20260817T204019169-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T204019169-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-          "discourse": "d-20260817T204019169-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204019169-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T204019169-sarah-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204019169-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
         {
           "source": "20260817T204021117-owen-v4",
           "status": "observed",
@@ -1840,18 +1800,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005359"
+        },
+        {
+          "source": "20260817T204152497-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Usually what is out of place or does not quite add up.",
+          "discourse": "d-20260817T204152497-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T204152497-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152497-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Usually the mood between people.",
+          "discourse": "d-20260817T204152497-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204152497-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152497-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Usually one odd detail that probably was not supposed to be important.",
+          "discourse": "d-20260817T204152497-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204152497-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152498-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that preference changed much for you?",
+          "discourse": "d-20260817T204152498-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T204152497-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T203527687-sarah-v4",
-          "text": "How did you land on that?",
-          "move": "follow_up",
-          "memory": null,
-          "branch_memory": "20260817T203527687-jules-v4",
-          "discourse": "d-20260817T203527687-sarah-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005180"
-        },
         {
           "source": "20260817T203529890-sarah-v4",
           "text": "That gives me a more specific picture of how you think.",
@@ -3462,22 +3453,24 @@
           "branch_memory": null,
           "discourse": "d-20260817T204150422-sarah-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005359"
+        },
+        {
+          "source": "20260817T204152498-sarah-v4",
+          "text": "Has that preference changed much for you?",
+          "move": "follow_up",
+          "memory": null,
+          "branch_memory": "20260817T204152497-owen-v4",
+          "discourse": "d-20260817T204152498-sarah-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
         }
       ],
-      "last_event": "20260817T204150422-sarah-v4",
-      "spoken": 5344,
+      "last_event": "20260817T204152498-sarah-v4",
+      "spoken": 5345,
       "silences": 0,
       "people": {
         "mara": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T203513746-mara-v4",
-              "status": "reported",
-              "text": "I improvise. A plan is useful until something more interesting happens.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T203513746-mara-v4"
-            },
             {
               "source": "20260817T203520979-mara-v4",
               "status": "reported",
@@ -4100,19 +4093,19 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T204146445-mara-v4"
+            },
+            {
+              "source": "20260817T204152497-mara-v4",
+              "status": "reported",
+              "text": "Usually the mood between people.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T204152497-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T203127799-owen-v4",
-              "status": "reported",
-              "text": "Because consistency is harder to fake over time than confidence is.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T203125760-owen-v4"
-            },
             {
               "source": "20260817T203129996-owen-v4",
               "status": "reported",
@@ -4735,19 +4728,19 @@
               "text": "Because consistency is harder to fake over time than confidence is.",
               "branch_owner": "owen",
               "branch_memory": "20260817T204139984-owen-v4"
+            },
+            {
+              "source": "20260817T204152497-owen-v4",
+              "status": "reported",
+              "text": "Usually what is out of place or does not quite add up.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T204152497-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T203525609-jules-v4",
-              "status": "reported",
-              "text": "Because I like when a weird possibility survives long enough to become useful.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T203520979-jules-v4"
-            },
             {
               "source": "20260817T203527687-jules-v4",
               "status": "reported",
@@ -5370,6 +5363,13 @@
               "text": "Busy enough that something unexpected can happen.",
               "branch_owner": "jules",
               "branch_memory": "20260817T204146446-jules-v4"
+            },
+            {
+              "source": "20260817T204152497-jules-v4",
+              "status": "reported",
+              "text": "Usually one odd detail that probably was not supposed to be important.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T204152497-jules-v4"
             }
           ]
         }
@@ -5377,7 +5377,7 @@
     },
     "mara": {
       "fast": {
-        "activation": 0.4,
+        "activation": 0.289,
         "attention": [
           "notice",
           "people",
@@ -5385,10 +5385,10 @@
           "performing",
           "everybody",
           "else",
-          "useful",
-          "rule",
-          "underneath",
-          "answer"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -5399,10 +5399,10 @@
           "performing",
           "everybody",
           "else",
-          "useful",
-          "rule",
-          "underneath",
-          "answer"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.528
       },
@@ -5410,52 +5410,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.1202,
-        "association": -0.002,
-        "inhibition": 0.0886,
-        "social": -0.0838
+        "activation": 0.0092,
+        "association": 0.0478,
+        "inhibition": 0.1175,
+        "social": -0.0688
       },
       "room_memories": [
-        {
-          "source": "20260817T204019169-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "Consistency, especially when being consistent is inconvenient.",
-          "discourse": "d-20260817T204019169-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204019169-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "How they treat people when there is nothing to gain from it.",
-          "discourse": "d-20260817T204019169-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T204019169-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-          "discourse": "d-20260817T204019169-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204019169-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T204019169-sarah-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204019169-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
         {
           "source": "20260817T204021117-owen-v4",
           "status": "observed",
@@ -7215,18 +7175,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005359"
+        },
+        {
+          "source": "20260817T204152497-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Usually what is out of place or does not quite add up.",
+          "discourse": "d-20260817T204152497-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T204152497-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152497-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Usually the mood between people.",
+          "discourse": "d-20260817T204152497-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204152497-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152497-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Usually one odd detail that probably was not supposed to be important.",
+          "discourse": "d-20260817T204152497-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204152497-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152498-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that preference changed much for you?",
+          "discourse": "d-20260817T204152498-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T204152497-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T203527687-mara-v4",
-          "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
-          "move": "self_disclosure",
-          "memory": "20260817T203527687-mara-v4",
-          "branch_memory": "20260817T203527687-mara-v4",
-          "discourse": "d-20260817T203527687-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005180"
-        },
         {
           "source": "20260817T203529890-mara-v4",
           "text": "What makes you say that?",
@@ -8837,10 +8828,19 @@
           "branch_memory": "20260817T204146445-mara-v4",
           "discourse": "d-20260817T204150422-mara-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005359"
+        },
+        {
+          "source": "20260817T204152497-mara-v4",
+          "text": "Usually the mood between people.",
+          "move": "self_disclosure",
+          "memory": "20260817T204152497-mara-v4",
+          "branch_memory": "20260817T204152497-mara-v4",
+          "discourse": "d-20260817T204152497-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
         }
       ],
-      "last_event": "20260817T204150422-sarah-v4",
-      "spoken": 5348,
+      "last_event": "20260817T204152498-sarah-v4",
+      "spoken": 5349,
       "silences": 0,
       "people": {
         "sarah": {
@@ -9482,13 +9482,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T203127799-owen-v4",
-              "status": "reported",
-              "text": "Because consistency is harder to fake over time than confidence is.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T203125760-owen-v4"
-            },
-            {
               "source": "20260817T203129996-owen-v4",
               "status": "reported",
               "text": "Not substantially. I have more exceptions now, but the rule still fits.",
@@ -10110,19 +10103,19 @@
               "text": "Because consistency is harder to fake over time than confidence is.",
               "branch_owner": "owen",
               "branch_memory": "20260817T204139984-owen-v4"
+            },
+            {
+              "source": "20260817T204152497-owen-v4",
+              "status": "reported",
+              "text": "Usually what is out of place or does not quite add up.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T204152497-owen-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T203525609-jules-v4",
-              "status": "reported",
-              "text": "Because I like when a weird possibility survives long enough to become useful.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T203520979-jules-v4"
-            },
             {
               "source": "20260817T203527687-jules-v4",
               "status": "reported",
@@ -10745,6 +10738,13 @@
               "text": "Busy enough that something unexpected can happen.",
               "branch_owner": "jules",
               "branch_memory": "20260817T204146446-jules-v4"
+            },
+            {
+              "source": "20260817T204152497-jules-v4",
+              "status": "reported",
+              "text": "Usually one odd detail that probably was not supposed to be important.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T204152497-jules-v4"
             }
           ]
         }
@@ -10752,7 +10752,7 @@
     },
     "owen": {
       "fast": {
-        "activation": 0.241,
+        "activation": 0.4,
         "attention": [
           "notice",
           "people",
@@ -10760,10 +10760,10 @@
           "performing",
           "everybody",
           "else",
-          "useful",
-          "rule",
-          "underneath",
-          "answer"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -10774,10 +10774,10 @@
           "performing",
           "everybody",
           "else",
-          "useful",
-          "rule",
-          "underneath",
-          "answer"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.62
       },
@@ -10785,52 +10785,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0233,
-        "association": 0.0383,
-        "inhibition": -0.1076,
-        "social": 0.0801
+        "activation": -0.0191,
+        "association": -0.1474,
+        "inhibition": -0.1985,
+        "social": 0.1638
       },
       "room_memories": [
-        {
-          "source": "20260817T204019169-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "Consistency, especially when being consistent is inconvenient.",
-          "discourse": "d-20260817T204019169-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204019169-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "How they treat people when there is nothing to gain from it.",
-          "discourse": "d-20260817T204019169-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T204019169-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-          "discourse": "d-20260817T204019169-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204019169-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T204019169-sarah-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204019169-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
         {
           "source": "20260817T204021117-owen-v4",
           "status": "observed",
@@ -12590,18 +12550,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005359"
+        },
+        {
+          "source": "20260817T204152497-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Usually what is out of place or does not quite add up.",
+          "discourse": "d-20260817T204152497-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T204152497-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152497-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Usually the mood between people.",
+          "discourse": "d-20260817T204152497-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204152497-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152497-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Usually one odd detail that probably was not supposed to be important.",
+          "discourse": "d-20260817T204152497-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204152497-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152498-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that preference changed much for you?",
+          "discourse": "d-20260817T204152498-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T204152497-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T203527687-owen-v4",
-          "text": "A problem with enough constraints that I can tell whether the solution actually works.",
-          "move": "self_disclosure",
-          "memory": "20260817T203527687-owen-v4",
-          "branch_memory": "20260817T203527687-owen-v4",
-          "discourse": "d-20260817T203527687-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005180"
-        },
         {
           "source": "20260817T203529889-owen-v4",
           "text": "There is a useful rule underneath that answer.",
@@ -14212,10 +14203,19 @@
           "branch_memory": "20260817T204146445-mara-v4",
           "discourse": "d-20260817T204150422-owen-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005359"
+        },
+        {
+          "source": "20260817T204152497-owen-v4",
+          "text": "Usually what is out of place or does not quite add up.",
+          "move": "answer",
+          "memory": "20260817T204152497-owen-v4",
+          "branch_memory": "20260817T204152497-owen-v4",
+          "discourse": "d-20260817T204152497-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
         }
       ],
-      "last_event": "20260817T204150422-sarah-v4",
-      "spoken": 5343,
+      "last_event": "20260817T204152498-sarah-v4",
+      "spoken": 5344,
       "silences": 0,
       "people": {
         "sarah": {
@@ -14857,13 +14857,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T203513746-mara-v4",
-              "status": "reported",
-              "text": "I improvise. A plan is useful until something more interesting happens.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T203513746-mara-v4"
-            },
-            {
               "source": "20260817T203520979-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
@@ -15485,19 +15478,19 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T204146445-mara-v4"
+            },
+            {
+              "source": "20260817T204152497-mara-v4",
+              "status": "reported",
+              "text": "Usually the mood between people.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T204152497-mara-v4"
             }
           ]
         },
         "jules": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T203525609-jules-v4",
-              "status": "reported",
-              "text": "Because I like when a weird possibility survives long enough to become useful.",
-              "branch_owner": "jules",
-              "branch_memory": "20260817T203520979-jules-v4"
-            },
             {
               "source": "20260817T203527687-jules-v4",
               "status": "reported",
@@ -16120,6 +16113,13 @@
               "text": "Busy enough that something unexpected can happen.",
               "branch_owner": "jules",
               "branch_memory": "20260817T204146446-jules-v4"
+            },
+            {
+              "source": "20260817T204152497-jules-v4",
+              "status": "reported",
+              "text": "Usually one odd detail that probably was not supposed to be important.",
+              "branch_owner": "jules",
+              "branch_memory": "20260817T204152497-jules-v4"
             }
           ]
         }
@@ -16127,7 +16127,7 @@
     },
     "jules": {
       "fast": {
-        "activation": 0.295,
+        "activation": 0.289,
         "attention": [
           "notice",
           "people",
@@ -16135,10 +16135,10 @@
           "performing",
           "everybody",
           "else",
-          "useful",
-          "rule",
-          "underneath",
-          "answer"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ]
       },
       "medium": {
@@ -16149,10 +16149,10 @@
           "performing",
           "everybody",
           "else",
-          "useful",
-          "rule",
-          "underneath",
-          "answer"
+          "answer",
+          "shape",
+          "imagine",
+          "exceptions"
         ],
         "branch_interest": 0.56
       },
@@ -16160,52 +16160,12 @@
         "social_energy": 0.55
       },
       "noise": {
-        "activation": -0.0041,
-        "association": 0.195,
-        "inhibition": 0.0155,
-        "social": 0.1121
+        "activation": -0.0929,
+        "association": 0.2116,
+        "inhibition": 0.1076,
+        "social": 0.0531
       },
       "room_memories": [
-        {
-          "source": "20260817T204019169-owen-v4",
-          "status": "observed",
-          "speaker": "owen",
-          "text": "Consistency, especially when being consistent is inconvenient.",
-          "discourse": "d-20260817T204019169-owen-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204019169-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-mara-v4",
-          "status": "observed",
-          "speaker": "mara",
-          "text": "How they treat people when there is nothing to gain from it.",
-          "discourse": "d-20260817T204019169-mara-v4",
-          "branch_owner": "mara",
-          "branch_memory": "20260817T204019169-mara-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-jules-v4",
-          "status": "observed",
-          "speaker": "jules",
-          "text": "Whether I can be a little strange around them without feeling like I have to manage their reaction.",
-          "discourse": "d-20260817T204019169-jules-v4",
-          "branch_owner": "jules",
-          "branch_memory": "20260817T204019169-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
-        {
-          "source": "20260817T204019169-sarah-v4",
-          "status": "observed",
-          "speaker": "sarah",
-          "text": "What makes that signal matter to you?",
-          "discourse": "d-20260817T204019169-sarah-v4",
-          "branch_owner": "owen",
-          "branch_memory": "20260817T204019169-owen-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005315"
-        },
         {
           "source": "20260817T204021117-owen-v4",
           "status": "observed",
@@ -17965,18 +17925,49 @@
           "branch_owner": null,
           "branch_memory": null,
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005359"
+        },
+        {
+          "source": "20260817T204152497-owen-v4",
+          "status": "observed",
+          "speaker": "owen",
+          "text": "Usually what is out of place or does not quite add up.",
+          "discourse": "d-20260817T204152497-owen-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T204152497-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152497-mara-v4",
+          "status": "observed",
+          "speaker": "mara",
+          "text": "Usually the mood between people.",
+          "discourse": "d-20260817T204152497-mara-v4",
+          "branch_owner": "mara",
+          "branch_memory": "20260817T204152497-mara-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152497-jules-v4",
+          "status": "observed",
+          "speaker": "jules",
+          "text": "Usually one odd detail that probably was not supposed to be important.",
+          "discourse": "d-20260817T204152497-jules-v4",
+          "branch_owner": "jules",
+          "branch_memory": "20260817T204152497-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
+        },
+        {
+          "source": "20260817T204152498-sarah-v4",
+          "status": "observed",
+          "speaker": "sarah",
+          "text": "Has that preference changed much for you?",
+          "discourse": "d-20260817T204152498-sarah-v4",
+          "branch_owner": "owen",
+          "branch_memory": "20260817T204152497-owen-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
         }
       ],
       "self_history": [
-        {
-          "source": "20260817T203527687-jules-v4",
-          "text": "An open-ended one where a ridiculous idea has at least a small chance of being useful.",
-          "move": "answer",
-          "memory": "20260817T203527687-jules-v4",
-          "branch_memory": "20260817T203527687-jules-v4",
-          "discourse": "d-20260817T203527687-jules-v4",
-          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005180"
-        },
         {
           "source": "20260817T203529889-jules-v4",
           "text": "Because I like when a weird possibility survives long enough to become useful.",
@@ -19587,10 +19578,19 @@
           "branch_memory": "20260817T204146445-mara-v4",
           "discourse": "d-20260817T204150422-jules-v4",
           "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005359"
+        },
+        {
+          "source": "20260817T204152497-jules-v4",
+          "text": "Usually one odd detail that probably was not supposed to be important.",
+          "move": "self_disclosure",
+          "memory": "20260817T204152497-jules-v4",
+          "branch_memory": "20260817T204152497-jules-v4",
+          "discourse": "d-20260817T204152497-jules-v4",
+          "beat_id": "beat-room-reboot-2026-08-17T13:06Z-005360"
         }
       ],
-      "last_event": "20260817T204150422-sarah-v4",
-      "spoken": 5344,
+      "last_event": "20260817T204152498-sarah-v4",
+      "spoken": 5345,
       "silences": 0,
       "people": {
         "sarah": {
@@ -20232,13 +20232,6 @@
           "familiarity": 1,
           "reports": [
             {
-              "source": "20260817T203513746-mara-v4",
-              "status": "reported",
-              "text": "I improvise. A plan is useful until something more interesting happens.",
-              "branch_owner": "mara",
-              "branch_memory": "20260817T203513746-mara-v4"
-            },
-            {
               "source": "20260817T203520979-mara-v4",
               "status": "reported",
               "text": "A people problem where everybody thinks they are talking about the same thing but they are not.",
@@ -20860,19 +20853,19 @@
               "text": "Because I notice what people do when they stop performing for everybody else.",
               "branch_owner": "mara",
               "branch_memory": "20260817T204146445-mara-v4"
+            },
+            {
+              "source": "20260817T204152497-mara-v4",
+              "status": "reported",
+              "text": "Usually the mood between people.",
+              "branch_owner": "mara",
+              "branch_memory": "20260817T204152497-mara-v4"
             }
           ]
         },
         "owen": {
           "familiarity": 1,
           "reports": [
-            {
-              "source": "20260817T203127799-owen-v4",
-              "status": "reported",
-              "text": "Because consistency is harder to fake over time than confidence is.",
-              "branch_owner": "owen",
-              "branch_memory": "20260817T203125760-owen-v4"
-            },
             {
               "source": "20260817T203129996-owen-v4",
               "status": "reported",
@@ -21495,6 +21488,13 @@
               "text": "Because consistency is harder to fake over time than confidence is.",
               "branch_owner": "owen",
               "branch_memory": "20260817T204139984-owen-v4"
+            },
+            {
+              "source": "20260817T204152497-owen-v4",
+              "status": "reported",
+              "text": "Usually what is out of place or does not quite add up.",
+              "branch_owner": "owen",
+              "branch_memory": "20260817T204152497-owen-v4"
             }
           ]
         }
