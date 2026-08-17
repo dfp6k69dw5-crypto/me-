@@ -38,10 +38,13 @@ init()
 
 def conv(): return load(ROOM/"conversation.json",[])
 def msgs(): return [m for m in conv() if str(m.get("runtime","")).startswith("room-cognition-v") and m.get("boot_id",BOOT)==BOOT]
+def unit_id(m):
+    if not m:return None
+    return m.get("beat_id") or ("legacy-"+str(m.get("id","unknown")))
 def context():
     m=msgs()
     if not m:return []
-    b=m[-1].get("beat_id"); z=[x for x in m if x.get("beat_id")==b] if b else []
+    b=unit_id(m[-1]); z=[x for x in m if unit_id(x)==b]
     return (z or m)[-4:]
 def event(): c=context(); return c[-1] if c else None
 def minds(): return load(ROOM/"cognitive_state.json",fresh_minds())
@@ -142,7 +145,7 @@ def category(q):
     if "worthwhile" in q:return "worth"
     if "conversation" in q:return "conversation"
     return None
-def blank_answer(e,q): 
+def blank_answer(e,q):
     c=category(q)
     return ANS[c][e] if c else {"sarah":"I would need a second to make that precise.","mara":"I usually know my reaction before I know my explanation.","owen":"I am not sure yet. I would rather be specific than invent an answer.","jules":"I have an answer forming, but it is taking the scenic route."}[e]
 def follow(e,m,key):
@@ -171,15 +174,15 @@ def react(e,m):
     return {"sarah":"That gives me a more specific picture of how you think.","mara":"That is the kind of answer that actually tells me something about you.","owen":"There is a useful rule underneath that answer.","jules":"That answer has a shape to it. I can already imagine the exceptions being interesting."}[e]
 
 def observe(M,msg):
-    c=msg["cognition"]; move=c["move_type"]
+    c=msg.get("cognition") or {}; move=c.get("move_type"); uid=unit_id(msg)
     for e in ORDER:
         s=M["entities"][e]
-        if s.get("last_event")==msg["id"]:continue
-        s.setdefault("room_memories",[]).append({"source":msg["id"],"status":"observed","speaker":msg["speaker"],"text":msg["text"][:300],"discourse":msg["discourse_id"],"branch_owner":c.get("branch_owner"),"branch_memory":c.get("branch_memory"),"beat_id":msg["beat_id"]}); s["room_memories"]=s["room_memories"][-180:]
-        if msg["speaker"]!=e:
+        if s.get("last_event")==msg.get("id"):continue
+        s.setdefault("room_memories",[]).append({"source":msg.get("id"),"status":"observed","speaker":msg.get("speaker"),"text":str(msg.get("text",""))[:300],"discourse":msg.get("discourse_id"),"branch_owner":c.get("branch_owner"),"branch_memory":c.get("branch_memory"),"beat_id":uid}); s["room_memories"]=s["room_memories"][-180:]
+        if msg.get("speaker")!=e and msg.get("speaker") in ORDER:
             p=s["people"].setdefault(msg["speaker"],{"familiarity":.02,"reports":[]}); p["familiarity"]=round(clamp(p.get("familiarity",.02)+.012),3)
-            if move in {"answer","self_disclosure","new_root"}: p["reports"].append({"source":msg["id"],"status":"reported","text":msg["text"][:300],"branch_owner":c.get("branch_owner"),"branch_memory":c.get("branch_memory")}); p["reports"]=p["reports"][-90:]
-        s["last_event"]=msg["id"]
+            if move in {"answer","self_disclosure","new_root"}: p["reports"].append({"source":msg.get("id"),"status":"reported","text":str(msg.get("text",""))[:300],"branch_owner":c.get("branch_owner"),"branch_memory":c.get("branch_memory")}); p["reports"]=p["reports"][-90:]
+        s["last_event"]=msg.get("id")
 def ingest(M,V):
     ids=[x.get("id") for x in V]
     for e in ORDER:
@@ -235,7 +238,8 @@ def commit(parts,key):
 def selftest():
     S=[sense(n,"test") for n in range(12)]; B=bus(S,"test"); R=[recurrent(n,"test",B) for n in range(12)]; o,E=order4(R,event(),state().get("cycle",0)+1)
     assert len(S)==12 and len(R)==12 and set(o)==set(ORDER) and A["network"]["voting"] is False
-    print("PASS v4: 12 nodes, 48 processes, four contributors per beat, no voting")
+    legacy={"id":"legacy-test","speaker":"sarah","text":"A pre-beat Room event.","runtime":"room-cognition-v3","boot_id":BOOT,"cognition":{"move_type":"question","target":"mara"},"discourse_id":"d-legacy-test"}; tm=fresh_minds(); observe(tm,legacy); assert tm["entities"]["mara"]["room_memories"][-1]["beat_id"]=="legacy-legacy-test"
+    print("PASS v4: 12 nodes, 48 processes, legacy events normalized, four contributors per beat, no voting")
 def main():
     ap=argparse.ArgumentParser(); sp=ap.add_subparsers(dest="cmd",required=True); p=sp.add_parser("node"); p.add_argument("--phase",choices=["sense","recurrent"],required=True); p.add_argument("--bus",default=""); sp.add_parser("bus"); sp.add_parser("commit"); sp.add_parser("selftest"); a=ap.parse_args(); key=os.environ.get("ROOM_CYCLE_KEY") or f'{state().get("cycle",0)+1}:{os.environ.get("GITHUB_RUN_ID","local")}'
     if a.cmd=="node":
