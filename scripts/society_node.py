@@ -31,14 +31,24 @@ STOP={
 }
 NAME_WORDS={w.lower() for v in names.values() for w in re.findall(r"[A-Za-z]+",v)}
 QUARANTINED_CUES={"previous","candidate","generic","repetitive","grounded","produce","generate","attempt","instruction"}|NAME_WORDS|STOP
-LEGACY_RUT_CUES={"brainstorm","brainstorming","project","study","homework","schedule","team","group","gather","input","activities"}
+LEGACY_RUT_CUES={"brainstorm","brainstorming","project","study","homework","schedule","team","group","gather","input","activities","break","breaking","problem","manageable","smaller","details","focus","session","motivated","specific","approach","finish"}
 CLEAN_BREAK="2026-08-17T00:57:20Z"
+CONTROL_FRAGMENTS=("previous candidate","too generic or repetitive","try another natural line","grounded in the room","differ substantially from the first attempt","produce a genuinely different","generate a fresh")
+LEGACY_MEMORY_FRAGMENTS=("brainstorm","study schedule","study session","team members","gather input","project idea","homework","break the problem down","manageable pieces","work on the details","stay focused","staying focused")
+BROKEN_CONTEXT_FRAGMENTS=LEGACY_MEMORY_FRAGMENTS+("specific topic","good topic","current activity or topic","activity or topic","what do we want to do","what should we do")
+
+def contaminated_text(text):
+    low=str(text or "").lower()
+    return any(fragment in low for fragment in CONTROL_FRAGMENTS+BROKEN_CONTEXT_FRAGMENTS)
+
+# The visible transcript is preserved, but known broken-era lines are not model context.
+clean_history=[m for m in conversation if not contaminated_text(m.get("text",""))]
 
 # Legacy weights have no timestamp of their own. A legacy subject is allowed back into
-# association cues only after a valid post-rebuild memory has learned it again naturally.
+# association cues only after a valid post-rebuild, non-contaminated memory learns it again.
 post_break_topics=set()
 for remembered in entity.get("memory",[]) or []:
-    if str(remembered.get("at","") or "")>=CLEAN_BREAK and remembered.get("cognitive_mode") in {"continue","associate","jump"}:
+    if str(remembered.get("at","") or "")>=CLEAN_BREAK and remembered.get("cognitive_mode") in {"continue","associate","jump"} and not contaminated_text(remembered.get("text","")):
         for t in remembered.get("topics") or []:
             post_break_topics.add(str(t).lower().strip())
 
@@ -57,7 +67,7 @@ def jac(a,b):
     if not a or not b:return 0.0
     return len(a&b)/len(a|b)
 
-fatigue_window=conversation[-12:]
+fatigue_window=clean_history[-12:]
 recent_content=[content_tokens(m.get("text","")) for m in fatigue_window]
 flat=[w for row in recent_content for w in set(row)]
 counts=Counter(flat)
@@ -81,7 +91,7 @@ base_recent=7+int(round(3*iq_scale))
 if cognitive_mode=="jump": mode_recent=0 if topic_fatigue>=.58 else 1
 elif cognitive_mode=="associate": mode_recent=2 if topic_fatigue>=.72 else max(4,base_recent-2)
 else: mode_recent=base_recent
-recent=[] if mode_recent==0 else conversation[-mode_recent:]
+recent=[] if mode_recent==0 else clean_history[-mode_recent:]
 last_text=str(recent[-1].get("text","") if recent else "")
 transcript="\n".join(f'{names.get(m.get("speaker"),m.get("speaker","?"))}: {m.get("text","")}' for m in recent)
 
@@ -109,13 +119,12 @@ else: cue_n={"continue":3+int(iq_scale>0.6),"associate":4+int(iq_scale>0.4)}[cog
 topics=weighted_sample(raw_weighted[:24],cue_n) if cue_n else []
 topic_text=", ".join(k for k,_ in topics) or "none selected for this move"
 
-CONTROL_FRAGMENTS=("previous candidate","too generic or repetitive","try another natural line","grounded in the room","differ substantially from the first attempt","produce a genuinely different","generate a fresh")
-LEGACY_MEMORY_FRAGMENTS=("brainstorm","study schedule","study session","team members","gather input","project idea","homework")
 safe_memory=[]
 for m in entity.get("memory",[]) or []:
     txt=str(m.get("text","")).strip(); low=txt.lower(); at=str(m.get("at","") or "")
     if not txt or any(fragment in low for fragment in CONTROL_FRAGMENTS): continue
     if at<CLEAN_BREAK and any(fragment in low for fragment in LEGACY_MEMORY_FRAGMENTS): continue
+    if contaminated_text(txt): continue
     if cognitive_mode=="associate" and topic_fatigue>=.72 and set(content_tokens(txt)) & rut_words: continue
     safe_memory.append(txt)
 mem_rng=random.Random(seed ^ 0x31F20B77)
