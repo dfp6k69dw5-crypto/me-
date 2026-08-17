@@ -51,21 +51,22 @@ def jac(a,b):
     if not a or not b:return 0.0
     return len(a&b)/len(a|b)
 
-# Detect a lexical/conceptual rut without naming a replacement subject. Repeated content
-# words raise topic fatigue, which increases lateral and jump probability.
+# Detect a rut without naming a replacement subject. Repeated content words raise fatigue,
+# and the most repeated words become temporary avoidance signals only.
 fatigue_window=conversation[-12:]
 recent_content=[content_tokens(m.get("text","")) for m in fatigue_window]
 flat=[w for row in recent_content for w in set(row)]
+counts=Counter(flat)
 if flat:
-    counts=Counter(flat); repeated=sum(c-1 for c in counts.values() if c>1); topic_fatigue=max(0.0,min(1.0,repeated/max(4,len(fatigue_window)*1.6)))
+    repeated=sum(c-1 for c in counts.values() if c>1); topic_fatigue=max(0.0,min(1.0,repeated/max(4,len(fatigue_window)*1.6)))
 else: topic_fatigue=0.0
 stored_fatigue=d.get("topic_fatigue",{}) or {}
 if stored_fatigue:
     topic_fatigue=max(topic_fatigue,min(1.0,sum(sorted((float(v) for v in stored_fatigue.values()),reverse=True)[:3])/3.0))
+rut_words={w for w,c in counts.most_common(10) if c>=2}
 
 # Each node independently chooses a cognitive move. The genome changes probabilities,
-# not topics. Imitation now actually increases continuation; association_spread increases
-# sideways movement; exploration and novelty_weight increase jumps. Fatigue pushes outward.
+# not topics. Fatigue pushes outward.
 continue_w=max(.05, .78 + .55*g["attention_persistence"] + .32*g["imitation"] - .80*g["exploration"] - .95*topic_fatigue)
 associate_w=max(.05, .24 + .95*g["association_spread"] + .28*g["exploration"] + .72*topic_fatigue)
 jump_w=max(.03, .06 + .50*g["exploration"] + .52*g["novelty_weight"] - .18*g["attention_persistence"] + .88*topic_fatigue)
@@ -74,16 +75,17 @@ if r<weights[0]: cognitive_mode="continue"
 elif r<weights[0]+weights[1]: cognitive_mode="associate"
 else: cognitive_mode="jump"
 
-# Context width depends on cognitive move. A jump sees less immediate transcript so the
-# last topic cannot dominate; an association sees enough context to move sideways coherently.
+# Deep-rut jumps get no recent transcript at all. The local model was able to parrot a
+# three-turn context even when told to jump, so true detachment requires an empty local view.
 base_recent=7+int(round(3*iq_scale))
-mode_recent={"continue":base_recent,"associate":max(4,base_recent-2),"jump":3}[cognitive_mode]
-recent=conversation[-mode_recent:]
+if cognitive_mode=="jump": mode_recent=0 if topic_fatigue>=.58 else 1
+elif cognitive_mode=="associate": mode_recent=2 if topic_fatigue>=.72 else max(4,base_recent-2)
+else: mode_recent=base_recent
+recent=[] if mode_recent==0 else conversation[-mode_recent:]
 last_text=str(recent[-1].get("text","") if recent else "")
 transcript="\n".join(f'{names.get(m.get("speaker"),m.get("speaker","?"))}: {m.get("text","")}' for m in recent) or "(The four strangers are spending time together quietly; nobody needs to fill the silence.)"
 
 # Learned associations are sampled rather than repeatedly injecting the strongest ones.
-# Immediate fatigue suppresses recently overused cues without erasing long-term learning.
 raw_weighted=[]
 for k,v in (d.get("topic_weights") or {}).items():
     key=str(k).lower().strip()
@@ -102,7 +104,8 @@ def weighted_sample(items,n):
             if x<=acc:
                 chosen.append((k,w)); pool.pop(i); break
     return chosen
-cue_n={"continue":3+int(iq_scale>0.6),"associate":4+int(iq_scale>0.4),"jump":0}[cognitive_mode]
+if cognitive_mode=="jump" or (cognitive_mode=="associate" and topic_fatigue>=.72): cue_n=0
+else: cue_n={"continue":3+int(iq_scale>0.6),"associate":4+int(iq_scale>0.4)}[cognitive_mode]
 topics=weighted_sample(raw_weighted[:24],cue_n) if cue_n else []
 topic_text=", ".join(k for k,_ in topics) or "none selected for this move"
 
@@ -110,28 +113,38 @@ CONTROL_FRAGMENTS=("previous candidate","too generic or repetitive","try another
 safe_memory=[]
 for m in entity.get("memory",[]) or []:
     txt=str(m.get("text","")).strip(); low=txt.lower()
-    if txt and not any(fragment in low for fragment in CONTROL_FRAGMENTS): safe_memory.append(txt)
+    if not txt or any(fragment in low for fragment in CONTROL_FRAGMENTS): continue
+    if cognitive_mode=="associate" and topic_fatigue>=.72 and set(content_tokens(txt)) & rut_words: continue
+    safe_memory.append(txt)
 mem_rng=random.Random(seed ^ 0x31F20B77)
-mem_n={"continue":1+int(iq_scale>.7),"associate":2+int(iq_scale>.4),"jump":0}[cognitive_mode]
+if cognitive_mode=="jump": mem_n=0
+elif cognitive_mode=="associate" and topic_fatigue>=.72: mem_n=1
+else: mem_n={"continue":1+int(iq_scale>.7),"associate":2+int(iq_scale>.4)}[cognitive_mode]
 mem_pick=mem_rng.sample(safe_memory,min(mem_n,len(safe_memory))) if safe_memory and mem_n else []
 memory_text="\n".join(f"- {t[:260]}" for t in mem_pick) or "- none selected for this move"
 
 activation=float(d.get("recent_activation",0.5) or 0.5)
 drive=0.50+0.22*g["spontaneous_initiation"]-0.20*g["inhibition"]+0.07*activation
 if recent: drive+=0.09*g["social_salience"]+0.04*g["attention_persistence"]
-drive+=0.28*silence_pressure; drive=max(0.16,min(0.98,drive)); wants_to_speak=(silent_streak>=HARD_SILENCE) or (rng.random()<drive)
-mode_temp={"continue":0.00,"associate":0.12,"jump":0.25}[cognitive_mode]
+drive+=0.28*silence_pressure
+if cognitive_mode=="associate": drive+=.04*topic_fatigue
+elif cognitive_mode=="jump": drive+=.10+.10*topic_fatigue
+drive=max(0.16,min(0.98,drive)); wants_to_speak=(silent_streak>=HARD_SILENCE) or (rng.random()<drive)
+mode_temp={"continue":0.00,"associate":0.14,"jump":0.30}[cognitive_mode]
 base_temperature=max(0.42,min(1.08,0.45+0.48*g["exploration"]+0.12*g["association_spread"]))
-temperature=min(1.32,base_temperature+mode_temp+0.16*silence_pressure)
-top_p=min(0.99,0.92+0.04*g["exploration"]+0.04*silence_pressure)
+temperature=min(1.36,base_temperature+mode_temp+0.16*silence_pressure)
+top_p=min(0.995,0.92+0.04*g["exploration"]+0.04*silence_pressure)
 max_tokens=50+int(round(42*iq_scale)); context_tokens=1280+int(round(768*iq_scale)); max_attempts=5+int(round(2*iq_scale))+int(round(5*silence_pressure)); char_cap=320+int(round(220*iq_scale))
-repeat_limit=max(.46,min(.78,.62-.10*topic_fatigue+.10*silence_pressure))
+repeat_limit=max(.44,min(.78,.62-.12*topic_fatigue+.10*silence_pressure))
 
-mode_instruction={
-    "continue":"Stay with the current thread if it still has life. Add something of your own rather than paraphrasing it. You may disagree, hesitate, joke, answer indirectly, or let the thought trail off.",
-    "associate":"Let one element of the current exchange trigger a sideways association: a contrast, analogy, implication, sensory image, remembered room idea, cause, consequence, or nearby question. The subject may drift substantially. Do not explain the association process.",
-    "jump":"Let attention move away from the current subject and say something genuinely different that could naturally occur to a stranger spending unstructured time with other strangers. Do not announce a topic change, do not force a question, and do not use the current topic as a bridge unless it happens spontaneously."
-}[cognitive_mode]
+if cognitive_mode=="associate" and topic_fatigue>=.72:
+    mode_instruction="The current subject has become stale. Do not repeat, rephrase, organize, or solve it. Let a minor detail or an unrelated remembered room fragment pull attention sideways into a substantially different nearby subject. Do not explain the transition."
+elif cognitive_mode=="associate":
+    mode_instruction="Let one element of the current exchange trigger a sideways association: a contrast, analogy, implication, sensory image, remembered room idea, cause, consequence, or nearby question. The subject may drift substantially. Do not explain the association process."
+elif cognitive_mode=="jump":
+    mode_instruction="Ignore the current subject. Let a different observation, curiosity, opinion, sensation, memory-like room association, odd thought, or question occur naturally. There is nothing to accomplish, organize, study, brainstorm, or plan. Do not announce a topic change and do not bridge back to the previous subject."
+else:
+    mode_instruction="Stay with the current thread if it still has life. Add something of your own rather than paraphrasing it. You may disagree, hesitate, joke, answer indirectly, or let the thought trail off."
 
 system_prompt=f"""Generate exactly one possible next spoken line for {name}. {name}, {peer_names} are four strangers spending unstructured time together. They are not a team, not coworkers, not a study group, and have no shared task, project, agenda, host, customer, user, or service relationship. They may gradually become familiar only through what actually happens in this room.
 
@@ -149,19 +162,25 @@ base_prompt=f"Recent room speech:\n{transcript}\n\n{name}:"
 
 SERVICE=[r"\bhow can i help\b",r"\bhow may i help\b",r"\bwhat can i do for you\b",r"\bhow can i assist\b",r"\bdo you need (?:anything|help)\b",r"\bwhat do you need\b",r"\bhere to help\b",r"\bwhat (?:specific )?tasks or goals\b",r"\bfor (?:your|our) next meeting\b"]
 META=[r"\bif [a-z]+ has something to say\b",r"\b[a-z]+ could say\b",r"\b[a-z]+ is now in the room\b",r"\boutput only\b",r"\brecent room speech\b",r"\bcontinue directly from here\b",r"\bprevious candidate\b",r"\bprevious (?:response|conversation) was (?:too )?(?:generic|repetitive)\b",r"\btoo generic or repetitive\b",r"\bgenuinely different peer remark\b",r"\bgrounded in the room\b",r"\bservice/task question\b",r"\bproduce a genuinely different\b",r"\bgenerate a fresh, thought-provoking statement\b",r"\btry another natural line\b",r"\bdiffer substantially from the first attempt\b",r"\bcontinue the peers'? current exchange\b",r"\bselected earlier memories\b",r"\bremembered room content\b",r"\bpersistent adult background\b",r"\bcognitive move\b"]
+speaker_label_re=re.compile(r"(?im)(?:^|\n)\s*(?:"+"|".join(re.escape(v) for v in names.values())+r")\s*:")
 def max_recent_similarity(text): return max((jac(text,m.get("text","") ) for m in recent),default=0.0)
 def natural_candidate(text):
     low=(text or "").lower().strip()
     if not low:return False
-    return not any(re.search(p,low) for p in SERVICE+META)
+    return not speaker_label_re.search(text) and not any(re.search(p,low) for p in SERVICE+META)
 def forbidden_reason(text):
     low=(text or "").lower().strip()
+    if speaker_label_re.search(text or ""): return "speaker-label-echo"
     for pat in SERVICE:
         if re.search(pat,low):return "service-language"
     for pat in META:
         if re.search(pat,low):return "prompt-echo"
     for m in recent:
         if " ".join(low.split())==" ".join(str(m.get("text","")).lower().split()) and low:return "exact-repeat"
+    overlap=len(set(content_tokens(text)) & rut_words)
+    if topic_fatigue>=.72:
+        if cognitive_mode=="jump" and overlap>0:return "jump-rut-overlap"
+        if cognitive_mode=="associate" and overlap>=2:return "associate-rut-overlap"
     sim=max_recent_similarity(text)
     if sim>=repeat_limit:return f"near-repeat-{sim:.2f}"
     return ""
@@ -184,7 +203,6 @@ def clean_generation(raw):
 
 def infer_topics(text):
     words=content_tokens(text); counts=Counter(words); out=[]
-    # Prefer repeated/longer content words, but preserve order when scores tie.
     scored=[]
     for i,w in enumerate(dict.fromkeys(words)):
         score=counts[w]+min(.8,max(0,len(w)-5)*.08)
@@ -217,7 +235,7 @@ try:
             text=candidate;break
         if text:
             nov=novelty(text); result["speak"]=True; result["text"]=text; result["topics"]=infer_topics(text); result["novelty"]=round(nov,4)
-            mode_sal={"continue":0.00,"associate":0.05,"jump":0.08}[cognitive_mode]
+            mode_sal={"continue":0.00,"associate":0.05,"jump":0.10}[cognitive_mode]
             sal=0.22+0.16*min(1,len(text.split())/18)+0.36*nov+0.18*g["novelty_weight"]+mode_sal; result["salience"]=round(max(0,min(1,sal)),4)
             if result["salience"]>=0.66:result["memory_note"]=text[:160]
         elif rejected:result["rejected_candidates"]=rejected
