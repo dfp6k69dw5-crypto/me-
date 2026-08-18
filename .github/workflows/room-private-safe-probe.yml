@@ -22,6 +22,43 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+      - name: Run deterministic branching conversation-tree simulator
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,sys
+          sys.path.insert(0,'scripts')
+          import room_social_v5 as s
+          t={
+            'semantic_schema':3,'id':'topic-000001','root':'learning','current_facet':'skepticism',
+            'facets':['skepticism','curiosity'],'visited_facets':['skepticism'],'facet_index':0,
+            'unresolved':[],'examples':[],'disagreements':[],'shared_references':[],
+            'participants':list(s.ORDER),'turns':500,'low_novelty_beats':0,'recent_terms':['learning','skepticism'],
+            'last_shift_cycle':1,'status':'active'
+          }
+          history=[]
+          cycle=501
+          def beat(terms):
+            global cycle,t
+            msgs=[]
+            for i,sp in enumerate(s.ORDER):
+              msgs.append({'speaker':sp,'text':' '.join(terms),'cognition':{'topic_episode':'topic-000001','topic_terms':terms}})
+            t=s.update_topic(t,msgs,cycle)
+            history.append({'cycle':cycle,'focus':t.get('current_facet'),'status':t.get('status'),'branches':[b.get('label') for b in t.get('branches',[])[:12]]})
+            cycle+=1
+          for _ in range(6): beat(['learning','skepticism','photography'])
+          first_focus=t.get('current_facet')
+          for _ in range(6): beat(['photography','composition','light'])
+          second_focus=t.get('current_facet')
+          assert int(t.get('semantic_schema',0))==4
+          assert first_focus!='skepticism', (first_focus,history)
+          assert second_focus!='skepticism', (second_focus,history)
+          assert 'skepticism' in t.get('branch_history',[]), t
+          assert any(int(b.get('depth',0))>=2 for b in t.get('branches',[])), t
+          out={'pass':True,'first_focus':first_focus,'second_focus':second_focus,'branch_history':t.get('branch_history',[]),'branches':t.get('branches',[]),'trace':history}
+          open('room/topic-tree-diagnostic.json','w').write(json.dumps(out,indent=2)+'\n')
+          print('TOPIC TREE PASS',first_focus,'->',second_focus)
+          PY
       - name: Prepare exact production model runtime for simulator
         run: |
           set -euo pipefail
@@ -59,7 +96,7 @@ jobs:
         run: |
           git config user.name "the-room-probe"
           git config user.email "actions@users.noreply.github.com"
-          git add room/expression-diversity-diagnostic.json room/private-full-beat-diagnostic.json 2>/dev/null || true
+          git add room/topic-tree-diagnostic.json room/expression-diversity-diagnostic.json room/private-full-beat-diagnostic.json 2>/dev/null || true
           git commit -m "Record Room simulator results" || true
           for n in 1 2 3 4; do
             git push origin HEAD:main && exit 0
