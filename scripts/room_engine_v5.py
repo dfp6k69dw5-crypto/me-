@@ -44,6 +44,10 @@ CONVERSATION_JOBS = (
     "Add a personal or social implication, preference, or consequence that changes the angle.",
     "Make a comparison or unexpected connection that introduces a genuinely new direction.",
 )
+BREAKOUT_SUBJECTS = (
+    "music", "places", "food", "friendship", "nature", "travel", "books", "art",
+    "work", "home", "weather", "skills", "movies", "gardens", "photography", "humor",
+)
 
 
 def load(path: Path, default):
@@ -67,6 +71,57 @@ def clamp(value, low=0, high=1):
 def conversation_job(entity, key):
     offset = rr("conversation-job", key).randrange(len(CONVERSATION_JOBS))
     return CONVERSATION_JOBS[(ORDER.index(entity) + offset) % len(CONVERSATION_JOBS)]
+
+
+def breakout_subject(key):
+    return BREAKOUT_SUBJECTS[rr("breakout-subject", key).randrange(len(BREAKOUT_SUBJECTS))]
+
+
+def _simple_norm(text):
+    return re.sub(r"\W+", " ", str(text or "").lower()).strip()
+
+
+def context_collapsed(context):
+    recent = [_simple_norm(item.get("text", "")) for item in list(context or [])[-8:] if str(item.get("text", "")).strip()]
+    if len(recent) < 6:
+        return False
+    unique = set(recent)
+    if len(unique) <= 3:
+        return True
+    signatures = []
+    for text in recent:
+        words = set(text.split())
+        signatures.append(words)
+    similar_pairs = 0
+    total_pairs = 0
+    for i in range(len(signatures)):
+        for j in range(i + 1, len(signatures)):
+            total_pairs += 1
+            left, right = signatures[i], signatures[j]
+            score = len(left & right) / max(1, len(left | right))
+            if score >= 0.72:
+                similar_pairs += 1
+    return total_pairs > 0 and similar_pairs / total_pairs >= 0.65
+
+
+def prior_expression_messages(current_node):
+    out = []
+    for path in sorted(PARTS.glob("recurrent-*.json")):
+        part = load(path, {})
+        if int(part.get("node", -1)) == current_node or part.get("role") != "expression":
+            continue
+        expr = (part.get("private") or {}).get("expression")
+        if not isinstance(expr, dict):
+            continue
+        text = str(expr.get("utterance") or "").strip()
+        if not text:
+            continue
+        out.append({
+            "speaker": part.get("entity"),
+            "text": text[:700],
+            "cognition": {"target": expr.get("target")},
+        })
+    return out
 
 
 def toks(text):
@@ -271,9 +326,30 @@ def recurrent(node, key, bus_data):
         thought = (bus_data.get("recurrent", {}).get(entity, {}) or {}).get("thought", {})
         deliberation = (thought.get("private") or {}).get("deliberation")
         job = conversation_job(entity, key)
+        collapsed = context_collapsed(base.get("context"))
+        prior_turns = prior_expression_messages(node)
+        expression_context = ([] if collapsed else list(base.get("context") or [])[-5:]) + prior_turns
+        expression_topic = dict(base.get("topic") or {})
+        if collapsed:
+            fresh_subject = breakout_subject(key)
+            expression_topic.update({
+                "root": fresh_subject,
+                "current_facet": fresh_subject,
+                "facets": [],
+                "visited_facets": [],
+                "shared_references": [],
+                "unresolved": [],
+                "status": "active",
+            })
+        else:
+            fresh_subject = None
         if isinstance(deliberation, dict):
             deliberation = dict(deliberation)
             original_goal = str(deliberation.get("new_information_goal") or "").strip()
+            if collapsed:
+                deliberation["action"] = "BRIDGE"
+                deliberation["focus"] = fresh_subject
+                original_goal = ""
             deliberation["new_information_goal"] = (original_goal + " " if original_goal else "") + "Distinct contribution: " + job
             deliberation["conversation_job"] = job
         expression = model_run("expression", {
@@ -282,17 +358,19 @@ def recurrent(node, key, bus_data):
             "social_observation": perception,
             "deliberation": deliberation,
             "conversation_job": job,
-            "event": base.get("event"),
-            "context": base.get("context"),
-            "topic": base.get("topic"),
+            "event": expression_context[-1] if expression_context else (None if collapsed else base.get("event")),
+            "context": expression_context,
+            "topic": expression_topic,
             "partner": base.get("partner"),
             "relationship": base.get("relationship"),
             "mandatory_speech": True,
         })
         ready = float(source["public"].get("readiness", 0.5))
+        generation_rank = int(os.environ.get("ROOM_EXPRESSION_RANK", str(ORDER.index(entity))))
         intent = {
             "readiness": ready,
             "latency": round(max(0.05, 1.35 - 0.9 * ready + 0.25 * trait(entity, "inhibition") + rr("latency", key, entity).uniform(0, 0.12)), 4),
+            "generation_rank": generation_rank,
             "mandatory_speech": True,
         }
     private = {"source": base, "intent": intent, "deliberation": deliberation, "expression": expression}
@@ -312,20 +390,20 @@ def order4(parts, prev, cycle):
     expressions = {part["entity"]: part for part in parts if part["role"] == "expression" and part["private"].get("intent")}
     if set(expressions) != set(ORDER):
         raise RuntimeError("four expression processes required")
-    ordered = [
-        entity for _, _, entity in sorted(
-            (
-                part["private"]["intent"]["latency"] - 0.2 * part["private"]["intent"]["readiness"] + 0.015 * ((ORDER.index(entity) - cycle) % 4),
-                ORDER.index(entity),
-                entity,
+    ranks = [part["private"]["intent"].get("generation_rank") for part in expressions.values()]
+    if all(isinstance(rank, int) for rank in ranks) and len(set(ranks)) == 4:
+        ordered = [entity for entity, part in sorted(expressions.items(), key=lambda item: item[1]["private"]["intent"]["generation_rank"])]
+    else:
+        ordered = [
+            entity for _, _, entity in sorted(
+                (
+                    part["private"]["intent"]["latency"] - 0.2 * part["private"]["intent"]["readiness"] + 0.015 * ((ORDER.index(entity) - cycle) % 4),
+                    ORDER.index(entity),
+                    entity,
+                )
+                for entity, part in expressions.items()
             )
-            for entity, part in expressions.items()
-        )
-    ]
-    directed = target(prev) if prev else None
-    if directed in ordered:
-        ordered.remove(directed)
-        ordered.insert(0, directed)
+        ]
     return ordered, expressions
 
 
@@ -459,10 +537,11 @@ def selftest():
     assert all(plan.get("mandatory_speech") for plan in plans.values())
     jobs = [conversation_job(entity, "selftest") for entity in ORDER]
     assert len(set(jobs)) == 4
+    assert context_collapsed([{"text": "same sentence"}] * 8)
     senses = [sense(node, "selftest") for node in range(12)]
     first_bus = bus(senses, "selftest")
     assert len(senses) == 12 and set(first_bus.get("private", {})) == set(ORDER)
-    print("PASS: clean 12-node engine; four rotating contribution jobs; no deterministic public language path")
+    print("PASS: sequential four-voice engine with repetition-loop breakout and no deterministic public language")
 
 
 def main():
