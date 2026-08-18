@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1050,
+  "cycle": 1051,
   "silence_cycles": 0,
-  "last_speaker": "owen",
-  "last_run": "2026-08-18T22:38:37.521757Z",
+  "last_speaker": "jules",
+  "last_run": "2026-08-18T22:39:42.321304Z",
   "messages": 1000,
-  "last_public_event": "20260818T223837519-owen-v5",
+  "last_public_event": "20260818T223942320-jules-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001050",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001051",
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -84,16 +84,14 @@
       "owen",
       "jules"
     ],
-    "turns": 2099,
+    "turns": 2101,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "skeptical thinking",
+      "do you have the ability to make a judgement on a particular question or claim?",
       "learning",
       "skepticism",
-      "learn",
-      "knowledgeable",
-      "curiosity",
-      "do you have the ability to make a judgement on a particular question or claim?"
+      "skepticism is a power",
+      "innovation"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +101,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 1050,
-        "hits": 8575,
+        "last_cycle": 1051,
+        "hits": 8592,
         "status": "open"
       },
       {
@@ -112,8 +110,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 1050,
-        "hits": 3378,
+        "last_cycle": 1051,
+        "hits": 3389,
         "status": "open"
       },
       {
@@ -121,8 +119,89 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 1050,
-        "hits": 811,
+        "last_cycle": 1051,
+        "hits": 813,
+        "status": "open"
+      },
+      {
+        "label": "innovation",
+        "parent": "open to ideas",
+        "depth": 108,
+        "first_cycle": 1041,
+        "last_cycle": 1051,
+        "hits": 51,
+        "status": "open"
+      },
+      {
+        "label": "invention",
+        "parent": "innovation",
+        "depth": 109,
+        "first_cycle": 1043,
+        "last_cycle": 1051,
+        "hits": 39,
+        "status": "open"
+      },
+      {
+        "label": "observation",
+        "parent": "exploration",
+        "depth": 112,
+        "first_cycle": 1047,
+        "last_cycle": 1051,
+        "hits": 26,
+        "status": "open"
+      },
+      {
+        "label": "valuable",
+        "parent": "invention",
+        "depth": 110,
+        "first_cycle": 1045,
+        "last_cycle": 1051,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "exploration",
+        "parent": "valuable",
+        "depth": 111,
+        "first_cycle": 1046,
+        "last_cycle": 1051,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "ponder",
+        "parent": "observation",
+        "depth": 113,
+        "first_cycle": 1048,
+        "last_cycle": 1051,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "skeptical thinking",
+        "parent": "ponder",
+        "depth": 114,
+        "first_cycle": 1049,
+        "last_cycle": 1051,
+        "hits": 11,
+        "status": "open"
+      },
+      {
+        "label": "knowledge",
+        "parent": "valuable",
+        "depth": 111,
+        "first_cycle": 1046,
+        "last_cycle": 1051,
+        "hits": 5,
+        "status": "open"
+      },
+      {
+        "label": "do you have the ability to make a judgement on a particular question or claim?",
+        "parent": "skeptical thinking",
+        "depth": 115,
+        "first_cycle": 1050,
+        "last_cycle": 1051,
+        "hits": 5,
         "status": "open"
       },
       {
@@ -141,87 +220,6 @@
         "first_cycle": 1028,
         "last_cycle": 1050,
         "hits": 83,
-        "status": "open"
-      },
-      {
-        "label": "innovation",
-        "parent": "open to ideas",
-        "depth": 108,
-        "first_cycle": 1041,
-        "last_cycle": 1050,
-        "hits": 49,
-        "status": "open"
-      },
-      {
-        "label": "invention",
-        "parent": "innovation",
-        "depth": 109,
-        "first_cycle": 1043,
-        "last_cycle": 1050,
-        "hits": 38,
-        "status": "open"
-      },
-      {
-        "label": "observation",
-        "parent": "exploration",
-        "depth": 112,
-        "first_cycle": 1047,
-        "last_cycle": 1050,
-        "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "valuable",
-        "parent": "invention",
-        "depth": 110,
-        "first_cycle": 1045,
-        "last_cycle": 1050,
-        "hits": 21,
-        "status": "open"
-      },
-      {
-        "label": "exploration",
-        "parent": "valuable",
-        "depth": 111,
-        "first_cycle": 1046,
-        "last_cycle": 1050,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "ponder",
-        "parent": "observation",
-        "depth": 113,
-        "first_cycle": 1048,
-        "last_cycle": 1050,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "skeptical thinking",
-        "parent": "ponder",
-        "depth": 114,
-        "first_cycle": 1049,
-        "last_cycle": 1050,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "knowledge",
-        "parent": "valuable",
-        "depth": 111,
-        "first_cycle": 1046,
-        "last_cycle": 1050,
-        "hits": 4,
-        "status": "open"
-      },
-      {
-        "label": "do you have the ability to make a judgement on a particular question or claim?",
-        "parent": "skeptical thinking",
-        "depth": 115,
-        "first_cycle": 1050,
-        "last_cycle": 1050,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -565,7 +563,7 @@
       "ponder",
       "skeptical thinking"
     ],
-    "focus_turns": 0,
+    "focus_turns": 2,
     "last_branch_cycle": 1050,
     "escape_pressure": 0
   }
