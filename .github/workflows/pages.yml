@@ -4,7 +4,10 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - 'room/**'
+      # Live Room data changes constantly and must not redeploy Pages every beat.
+      # Viewer HTML under room/ must remain deployable.
+      - 'room/*.json'
+      - 'room/**/*.json'
       - 'society/**'
       - 'scripts/**'
       - '.github/**'
