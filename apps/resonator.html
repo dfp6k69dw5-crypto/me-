@@ -4,7 +4,7 @@
  const parts=['01','02','03','04','05','06','07','08a','08b','09'];
  let b='';
  for(const n of parts){
-   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817h',{cache:'no-store'});
+   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817i',{cache:'no-store'});
    if(!r.ok) throw new Error('Missing payload part '+n);
    b+=(await r.text()).trim();
  }
@@ -16,8 +16,9 @@
  text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
  text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
  text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
- text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
- text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
+ // Keep only a short amount of audio rendered ahead so new strikes are heard promptly.
+ text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.05){ if(cursor>0) DIAG.under++; cursor=now+0.10; }");
+ text=text.replace("while(cursor<now+0.70){","while(cursor<now+0.32){");
  text=text.replace("flex:0 0 38vh;min-height:230px","flex:0 0 54dvh;min-height:320px");
  text=text.replaceAll("Math.min(W,H)*0.86","Math.min(W*0.94,H*0.90)");
  text=text.replace("display:flex;flex-wrap:wrap;gap:4px","display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px");
