@@ -93,7 +93,7 @@ def run_cmd(cmd: list[str]) -> tuple[bool, dict]:
 
 
 def main() -> int:
-    result = {"server_ready": False, "phase": "starting", "ctx_total": CTX_TOTAL, "parallel_slots": PARALLEL_SLOTS, "model_node_batching": True}
+    result = {"server_ready": False, "phase": "starting", "ctx_total": CTX_TOTAL, "parallel_slots": PARALLEL_SLOTS, "model_node_batching": True, "public_fallback": False}
     write(result)
     bins = list(RUNTIME_DIR.rglob("llama-server"))
     if not MODEL.exists() or not bins:
@@ -169,7 +169,7 @@ def main() -> int:
             return 0
 
         result["phase"] = "commit"
-        ok, detail = run_cmd(["python3", "scripts/room_engine_v5.py", "commit"])
+        ok, detail = run_cmd(["python3", "scripts/room_private_commit.py", "commit"])
         result["commit"] = detail
         result["status"] = "accepted" if ok else "failed"
         write(result)
