@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T19:38:06.909462+00:00",
-  "cycle_key": "32153618883:1:234",
+  "generated_at": "2026-08-18T19:39:05.127200+00:00",
+  "cycle_key": "32153618883:1:235",
   "node": 11,
   "entity": "jules",
   "role": "expression",
@@ -32,20 +32,19 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 5.05,
-      "confidence": 0.999,
-      "raw_score": 5.05,
+      "score": 3.2,
+      "confidence": 0.973,
+      "raw_score": 3.2,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "example",
         "specific",
+        "example",
         "observation"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "example",
             "specific"
           ],
           "weight": 1.8
@@ -53,15 +52,7 @@
         {
           "kind": "message",
           "matched": [
-            "specific",
-            "observation"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "observation"
+            "specific"
           ],
           "weight": 1.15
         },
@@ -75,14 +66,23 @@
         {
           "kind": "message",
           "matched": [
+            "example",
             "specific"
           ],
           "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific",
+            "observation"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "fd33e78a949d",
+  "context_fingerprint": "54eedcbffe84",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 493,
   "approx_added_tokens": 123
