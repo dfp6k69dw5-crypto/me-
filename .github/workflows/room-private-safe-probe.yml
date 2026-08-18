@@ -22,6 +22,16 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+      - name: Prepare exact production model runtime for simulator
+        run: |
+          set -euo pipefail
+          rm -rf .room_probe_model
+          mkdir -p .room_probe_model/runtime
+          gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'society-brain-q4_0.gguf' --dir .room_probe_model
+          gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'llama-runtime-linux-x64.tar.gz' --dir .room_probe_model
+          echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  .room_probe_model/society-brain-q4_0.gguf' | sha256sum -c -
+          echo '360a5bfab5b8fe562c52e060a998a052f5fc7d98a0448b035c2eedbb6acfbd94  .room_probe_model/llama-runtime-linux-x64.tar.gz' | sha256sum -c -
+          tar -xzf .room_probe_model/llama-runtime-linux-x64.tar.gz -C .room_probe_model/runtime
       - name: Run current full 12-node Room simulator without publishing dialogue
         run: python3 scripts/room_full_beat_probe.py
       - name: Publish safe full-beat result
