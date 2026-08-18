@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T16:36:14.253415+00:00",
-  "cycle_key": "32153618883:1:70",
+  "generated_at": "2026-08-18T16:37:20.145794+00:00",
+  "cycle_key": "32153618883:1:71",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,50 +29,53 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "sure"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "sure"
-          ],
-          "weight": 1.15
-        }
-      ]
-    },
-    {
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 2.02,
+      "confidence": 0.84,
+      "raw_score": 2.3,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "detail",
         "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "specific",
+            "detail"
           ],
           "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.54
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "specific",
+            "detail"
+          ],
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "983ec4767a6a",
+  "context_fingerprint": "6108506c06c9",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 839,
-  "approx_added_tokens": 210
+  "temporary_skill_chars": 493,
+  "approx_added_tokens": 123
 }
