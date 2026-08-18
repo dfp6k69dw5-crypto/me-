@@ -86,6 +86,21 @@ def run_nodes(nodes: list[int], phase: str, bus: str | None = None) -> tuple[boo
     return ok, results
 
 
+def run_expression_nodes(nodes: list[int], bus: str) -> tuple[bool, dict]:
+    results: dict = {}
+    for rank, node in enumerate(nodes):
+        env = clean_base_env()
+        env["ROOM_NODE_ID"] = str(node)
+        env["ROOM_NODE_PROMPT"] = node_prompt(node, "recurrent")
+        env["ROOM_EXPRESSION_RANK"] = str(rank)
+        cmd = ["python3", "scripts/room_engine_v5.py", "node", "--phase", "recurrent", "--bus", bus]
+        proc = subprocess.run(cmd, cwd=ROOT, env=env, text=True, capture_output=True, timeout=90)
+        results[str(node)] = {"returncode": proc.returncode, "stdout": safe(proc.stdout), "stderr": safe(proc.stderr)}
+        if proc.returncode != 0:
+            return False, results
+    return True, results
+
+
 def run_cmd(cmd: list[str]) -> tuple[bool, dict]:
     env = clean_base_env()
     proc = subprocess.run(cmd, cwd=ROOT, env=env, text=True, capture_output=True, timeout=90)
@@ -118,6 +133,7 @@ def main() -> int:
         "ctx_total": CTX_TOTAL,
         "parallel_slots": PARALLEL_SLOTS,
         "model_node_batching": True,
+        "expression_sequential": True,
         "public_fallback": False,
         "safe_public_candidate_capture": True,
     }
@@ -193,7 +209,7 @@ def main() -> int:
             return 0
 
         result["phase"] = "expression"
-        ok, detail = run_nodes([2, 5, 8, 11], "recurrent", "room_work/bus-recurrent.json")
+        ok, detail = run_expression_nodes([2, 5, 8, 11], "room_work/bus-recurrent.json")
         result["expression"] = detail
         write(result)
         if not ok:
