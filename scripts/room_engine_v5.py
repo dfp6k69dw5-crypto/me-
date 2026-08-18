@@ -38,6 +38,12 @@ N = {entity: P[entity]["name"] for entity in ORDER}
 STOP = set(
     "the and but for not was are you your our out too did can got one once that this with from have has had just what when where how there they them then than about would could should into only really some more very like because been being does doing done will well yeah okay also still maybe kind sort thing things something anything someone everyone say saying think thinking thought know knowing mean means seem seems want wants wanted make making made start starting started try trying tried good great nice sure right actually probably pretty little much many few around again already even ever never always often sometimes today tonight tomorrow yesterday different together interesting going everything current".split()
 )
+CONVERSATION_JOBS = (
+    "Add one concrete example or specific observation that has not already been stated.",
+    "Test or challenge one claim with a reason, exception, or piece of evidence.",
+    "Add a personal or social implication, preference, or consequence that changes the angle.",
+    "Make a comparison or unexpected connection that introduces a genuinely new direction.",
+)
 
 
 def load(path: Path, default):
@@ -56,6 +62,11 @@ def rr(*parts):
 
 def clamp(value, low=0, high=1):
     return max(low, min(high, float(value)))
+
+
+def conversation_job(entity, key):
+    offset = rr("conversation-job", key).randrange(len(CONVERSATION_JOBS))
+    return CONVERSATION_JOBS[(ORDER.index(entity) + offset) % len(CONVERSATION_JOBS)]
 
 
 def toks(text):
@@ -259,11 +270,18 @@ def recurrent(node, key, bus_data):
         perception = rp(bus_data, entity, "comprehension")["private"].get("social_observation")
         thought = (bus_data.get("recurrent", {}).get(entity, {}) or {}).get("thought", {})
         deliberation = (thought.get("private") or {}).get("deliberation")
+        job = conversation_job(entity, key)
+        if isinstance(deliberation, dict):
+            deliberation = dict(deliberation)
+            original_goal = str(deliberation.get("new_information_goal") or "").strip()
+            deliberation["new_information_goal"] = (original_goal + " " if original_goal else "") + "Distinct contribution: " + job
+            deliberation["conversation_job"] = job
         expression = model_run("expression", {
             "entity": entity,
             "profile": P[entity],
             "social_observation": perception,
             "deliberation": deliberation,
+            "conversation_job": job,
             "event": base.get("event"),
             "context": base.get("context"),
             "topic": base.get("topic"),
@@ -439,10 +457,12 @@ def selftest():
     plans = plan_actions(list(ORDER), None, mind, current, 1)
     assert set(plans) == set(ORDER)
     assert all(plan.get("mandatory_speech") for plan in plans.values())
+    jobs = [conversation_job(entity, "selftest") for entity in ORDER]
+    assert len(set(jobs)) == 4
     senses = [sense(node, "selftest") for node in range(12)]
     first_bus = bus(senses, "selftest")
     assert len(senses) == 12 and set(first_bus.get("private", {})) == set(ORDER)
-    print("PASS: clean 12-node engine; no deterministic public language path")
+    print("PASS: clean 12-node engine; four rotating contribution jobs; no deterministic public language path")
 
 
 def main():
