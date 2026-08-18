@@ -5,7 +5,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'society/sterilize-kick.txt'
+      - 'society/maintenance-kick.txt'
 
 permissions:
   contents: write
@@ -38,7 +38,6 @@ jobs:
           python3 scripts/room_sterilize.py
           python3 scripts/build_room_feed.py
 
-          # Current branch: no archived or derived conversational history survives.
           git add -A room society
           if ! git diff --cached --quiet; then
             git commit -m "Sterilize Room historical cognition"
@@ -52,7 +51,6 @@ jobs:
             done
           fi
 
-          # Replace the external relay immediately with the sterile empty generation.
           token_json=$(curl -fsS -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror")
           relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("value", ""))')
           test -n "$relay_token"
@@ -62,7 +60,6 @@ jobs:
             --data-binary @room/feed.json \
             "${ROOM_RELAY_URL%/}/api/ingest" >/dev/null
 
-          # Verify the generation barrier and the absence of readable historical text.
           python3 - <<'PY'
           import json
           from pathlib import Path
