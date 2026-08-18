@@ -83,23 +83,52 @@ jobs:
           relay_token=""
           relay_token_refresh_at=0
 
+          refresh_relay_token() {
+            [ -n "${ROOM_RELAY_URL:-}" ] || return 1
+            now=$(date +%s)
+            if [ -n "$relay_token" ] && [ "$now" -lt "$relay_token_refresh_at" ]; then
+              return 0
+            fi
+            token_json=$(curl -fsS -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror") || {
+              echo "Cloudflare relay token unavailable; Room continues normally"
+              return 1
+            }
+            relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("value", ""))')
+            if [ -z "$relay_token" ]; then
+              echo "Cloudflare relay token was empty; Room continues normally"
+              return 1
+            fi
+            relay_token_refresh_at=$((now + 240))
+            return 0
+          }
+
           publish_relay() {
             [ -n "${ROOM_RELAY_URL:-}" ] || return 0
-            now=$(date +%s)
-            if [ -z "$relay_token" ] || [ "$now" -ge "$relay_token_refresh_at" ]; then
-              token_json=$(curl -fsS -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror") || {
-                echo "Cloudflare relay token unavailable; Room continues normally"
-                return 0
-              }
-              relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("value", ""))')
-              if [ -z "$relay_token" ]; then
-                echo "Cloudflare relay token was empty; Room continues normally"
-                return 0
-              fi
-              relay_token_refresh_at=$((now + 240))
-            fi
+            refresh_relay_token || return 0
             if ! curl -fsS -X POST -H "Authorization: Bearer ${relay_token}" -H "Content-Type: application/json" --data-binary @room/feed.json "${ROOM_RELAY_URL%/}/api/ingest" >/dev/null; then
               echo "Cloudflare relay unavailable; Room continues normally"
+            fi
+            return 0
+          }
+
+          fetch_allen_turns() {
+            printf '%s\n' '{"messages":[]}' > room_work/allen-inbox.json
+            [ -n "${ROOM_RELAY_URL:-}" ] || return 0
+            refresh_relay_token || return 0
+            if ! curl -fsS -H "Authorization: Bearer ${relay_token}" "${ROOM_RELAY_URL%/}/api/participant/pending" > room_work/allen-inbox.json; then
+              printf '%s\n' '{"messages":[]}' > room_work/allen-inbox.json
+              return 0
+            fi
+            return 0
+          }
+
+          ack_allen_turns() {
+            [ -s room_work/allen-ack.json ] || return 0
+            ack_count=$(python3 -c 'import json; print(len(json.load(open("room_work/allen-ack.json")).get("ids", [])))' 2>/dev/null || echo 0)
+            [ "$ack_count" -gt 0 ] || return 0
+            refresh_relay_token || return 0
+            if ! curl -fsS -X POST -H "Authorization: Bearer ${relay_token}" -H "Content-Type: application/json" --data-binary @room_work/allen-ack.json "${ROOM_RELAY_URL%/}/api/participant/ack" >/dev/null; then
+              echo "Allen queue acknowledgement failed; it will be retried safely"
             fi
             return 0
           }
@@ -115,6 +144,12 @@ jobs:
             export ROOM_CYCLE_KEY="${GITHUB_RUN_ID}:${GITHUB_RUN_ATTEMPT}:${beat_seq}"
             rm -rf room_parts room_work
             mkdir -p room_parts room_work
+
+            # Pull any waiting Allen turns before cognition starts. The injector gives
+            # them the same public conversational shape as the Room speakers, with no
+            # human/operator marker exposed to the entities.
+            fetch_allen_turns
+            python3 scripts/room_participant.py room_work/allen-inbox.json room_work/allen-ack.json || return 1
 
             # Phase 1: unprompted sense nodes run together; four perception nodes use
             # the two verified model slots in two pairs.
@@ -207,6 +242,7 @@ jobs:
               if git push origin HEAD:main; then
                 pushed=1
                 publish_relay
+                ack_allen_turns
                 break
               fi
               echo "Push attempt $attempt collided with a newer main; rebasing"
