@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -11,8 +10,8 @@ ROOM = ROOT / "room"
 SOCIETY = ROOT / "society"
 CONFIG = ROOM / "config.json"
 MARKER = ROOM / "sterilization.json"
-STERILIZATION_VERSION = 1
-CLEAN_BOOT = "room-sterile-v1-2026-08-18"
+STERILIZATION_VERSION = 2
+CLEAN_BOOT = "room-sterile-v2-2026-08-18"
 
 
 def load(path: Path, default):
@@ -69,7 +68,7 @@ def fresh_minds(order: list[str]) -> dict:
     return {"entities": entities}
 
 
-def clean_topic() -> dict:
+def clean_subject_state() -> dict:
     return {
         "semantic_schema": 3,
         "id": "topic-000000",
@@ -94,7 +93,7 @@ def clean_topic() -> dict:
 def main() -> int:
     current_marker = load(MARKER, {})
     if int(current_marker.get("sterilization_version", 0)) >= STERILIZATION_VERSION and current_marker.get("boot_id") == CLEAN_BOOT:
-        print("Room sterilization already applied")
+        print("Room sterilization v2 already applied")
         return 0
 
     stamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -105,7 +104,7 @@ def main() -> int:
     order = ["sarah", "mara", "owen", "jules"]
     profiles = cfg.get("p", {})
     minds = fresh_minds(order)
-    topic = clean_topic()
+    subject_state = clean_subject_state()
     state = {
         "version": "room-cognition-v5",
         "boot_id": CLEAN_BOOT,
@@ -115,11 +114,11 @@ def main() -> int:
         "last_run": stamp,
         "messages": 0,
         "last_public_event": None,
-        "note": "sterilized private-model v5; pre-sterilization cognition quarantined",
+        "note": "sterile-v2 private-model Room; pre-v2 cognition quarantined; contamination gates active",
         "last_beat_id": None,
         "beat_contributors": [],
         "beat_message_count": 0,
-        "topic_episode": topic,
+        "topic_episode": subject_state,
     }
     discourse = {"nodes": [], "roots": []}
 
@@ -161,7 +160,7 @@ def main() -> int:
         "state": state,
         "conversation": [],
         "discourse": discourse,
-        "topic_episode": topic,
+        "topic_episode": subject_state,
         "network": {
             "compute_nodes": 12,
             "entities": 4,
@@ -174,6 +173,8 @@ def main() -> int:
             "beat_output": "4 mandatory unique speakers",
             "private_pipeline": "perception->deliberation->expression",
             "history_generation": CLEAN_BOOT,
+            "public_fallback": False,
+            "contamination_gate": True,
         },
     }
     feed = {
@@ -183,7 +184,6 @@ def main() -> int:
         "conversation": [],
     }
 
-    # Primary Room reservoirs.
     save(ROOM / "conversation.json", [])
     save(ROOM / "discourse.json", discourse)
     save(ROOM / "cognitive_state.json", minds)
@@ -191,7 +191,6 @@ def main() -> int:
     save(ROOM / "live.json", live)
     save(ROOM / "feed.json", feed)
 
-    # Legacy Society reservoirs are sterilized too so no future migration can rehydrate them.
     save(SOCIETY / "conversation.json", [])
     save(SOCIETY / "minds.json", {"entities": {}})
     save(SOCIETY / "cognition.json", {"sterilized": True, "boot_id": CLEAN_BOOT, "at": stamp})
@@ -204,7 +203,6 @@ def main() -> int:
             if path.is_file():
                 path.unlink()
 
-    # Diagnostic traces are not cognition, but clear stale historical copies anyway.
     for name in ("private-full-beat-diagnostic.json", "private-model-diagnostic.json", "private-secret-presence.json"):
         path = ROOM / name
         if path.exists():
@@ -214,15 +212,15 @@ def main() -> int:
         "sterilization_version": STERILIZATION_VERSION,
         "boot_id": CLEAN_BOOT,
         "sterilized_at": stamp,
-        "policy": "No pre-sterilization conversational or derived historical state may be loaded into cognition.",
+        "policy": "No pre-v2 conversational or derived historical state may be loaded into cognition.",
         "reset": [
             "room conversation", "room discourse", "entity self histories", "entity room memories",
-            "relationship event/report/shared-reference histories", "topic history", "live snapshots",
+            "relationship event/report/shared-reference histories", "subject history", "live snapshots",
             "public feed", "legacy society conversation/minds/cognition/state/live", "society archives",
-            "diagnostic historical traces"
+            "diagnostic historical traces", "sterile-v1 first beat and all derivatives"
         ],
     })
-    print(f"STERILIZED {CLEAN_BOOT}")
+    print(f"STERILIZED_V2 {CLEAN_BOOT}")
     return 0
 
 
