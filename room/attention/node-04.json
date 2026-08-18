@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T21:27:45.794644+00:00",
-  "cycle_key": "32184487392:1:35",
+  "generated_at": "2026-08-18T21:28:53.096032+00:00",
+  "cycle_key": "32184487392:1:36",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,12 +32,14 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.52,
-      "confidence": 0.68,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.28,
+      "score": 3.64,
+      "confidence": 0.99,
+      "raw_score": 3.64,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "specific"
+        "specific",
+        "concrete",
+        "example"
       ],
       "evidence_sources": [
         {
@@ -50,15 +52,53 @@
         {
           "kind": "message",
           "matched": [
+            "example",
+            "specific",
+            "concrete"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
             "specific"
           ],
           "weight": 0.76
         }
       ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 2.37,
+      "confidence": 0.908,
+      "raw_score": 2.37,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "sure",
+        "claim"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "claim"
+          ],
+          "weight": 0.92
+        }
+      ]
     }
   ],
-  "context_fingerprint": "74c9f3db811f",
+  "context_fingerprint": "7e392330f88f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 493,
-  "approx_added_tokens": 123
+  "temporary_skill_chars": 839,
+  "approx_added_tokens": 210
 }
