@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T20:10:57.515444+00:00",
-  "cycle_key": "32153618883:1:264",
+  "generated_at": "2026-08-18T20:12:16.090699+00:00",
+  "cycle_key": "32153618883:1:265",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
+      "score": 1.52,
+      "confidence": 0.68,
       "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "question"
       ],
@@ -46,6 +46,20 @@
             "question"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "question"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "question"
+          ],
+          "weight": 0.76
         }
       ]
     },
@@ -53,10 +67,10 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.8,
-      "confidence": 0.779,
+      "score": 1.52,
+      "confidence": 0.68,
       "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "place"
       ],
@@ -67,11 +81,25 @@
             "place"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "place"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "place"
+          ],
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "9f060029bec6",
+  "context_fingerprint": "1794cb4d366b",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 831,
   "approx_added_tokens": 208
