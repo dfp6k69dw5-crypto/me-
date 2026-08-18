@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 600,
+  "cycle": 601,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-18T14:16:27.628363Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-18T14:17:31.952716Z",
   "messages": 1000,
-  "last_public_event": "20260818T141627626-jules-v5",
+  "last_public_event": "20260818T141731950-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000600",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000601",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "observed observation",
+    "current_facet": "socially attentive",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "thoughts",
       "acquire",
       "new skills",
       "cooking",
@@ -71,7 +70,8 @@
       "curious",
       "common",
       "approaching topic",
-      "observed observation"
+      "observed observation",
+      "socially attentive"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,17 +84,17 @@
       "owen",
       "jules"
     ],
-    "turns": 1199,
+    "turns": 1201,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "approaching topic",
-      "learning",
-      "skeptic",
-      "skepticism",
-      "approaching",
-      "skepticism observation",
       "observed observation",
-      "owen"
+      "learning",
+      "skepticism",
+      "topic",
+      "obsessive",
+      "common topic for discussion",
+      "common idea of skepticism",
+      "socially attentive"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -104,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 600,
-        "hits": 1154,
+        "last_cycle": 601,
+        "hits": 1171,
         "status": "open"
       },
       {
@@ -113,8 +113,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 600,
-        "hits": 790,
+        "last_cycle": 601,
+        "hits": 808,
         "status": "open"
       },
       {
@@ -122,8 +122,62 @@
         "parent": "skepticism",
         "depth": 2,
         "first_cycle": 531,
-        "last_cycle": 600,
-        "hits": 82,
+        "last_cycle": 601,
+        "hits": 84,
+        "status": "open"
+      },
+      {
+        "label": "common",
+        "parent": "curious",
+        "depth": 39,
+        "first_cycle": 595,
+        "last_cycle": 601,
+        "hits": 53,
+        "status": "open"
+      },
+      {
+        "label": "approaching topic",
+        "parent": "common",
+        "depth": 40,
+        "first_cycle": 598,
+        "last_cycle": 601,
+        "hits": 28,
+        "status": "open"
+      },
+      {
+        "label": "curious",
+        "parent": "specific active detail",
+        "depth": 38,
+        "first_cycle": 594,
+        "last_cycle": 601,
+        "hits": 26,
+        "status": "open"
+      },
+      {
+        "label": "observed observation",
+        "parent": "approaching topic",
+        "depth": 41,
+        "first_cycle": 600,
+        "last_cycle": 601,
+        "hits": 5,
+        "status": "open"
+      },
+      {
+        "label": "obsessive",
+        "parent": "observed observation",
+        "depth": 42,
+        "first_cycle": 601,
+        "last_cycle": 601,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "socially attentive",
+        "parent": "observed observation",
+        "depth": 42,
+        "first_cycle": 601,
+        "last_cycle": 601,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -142,42 +196,6 @@
         "first_cycle": 591,
         "last_cycle": 600,
         "hits": 58,
-        "status": "open"
-      },
-      {
-        "label": "common",
-        "parent": "curious",
-        "depth": 39,
-        "first_cycle": 595,
-        "last_cycle": 600,
-        "hits": 48,
-        "status": "open"
-      },
-      {
-        "label": "curious",
-        "parent": "specific active detail",
-        "depth": 38,
-        "first_cycle": 594,
-        "last_cycle": 600,
-        "hits": 25,
-        "status": "open"
-      },
-      {
-        "label": "approaching topic",
-        "parent": "common",
-        "depth": 40,
-        "first_cycle": 598,
-        "last_cycle": 600,
-        "hits": 17,
-        "status": "open"
-      },
-      {
-        "label": "observed observation",
-        "parent": "approaching topic",
-        "depth": 41,
-        "first_cycle": 600,
-        "last_cycle": 600,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -512,28 +530,9 @@
         "last_cycle": 570,
         "hits": 2,
         "status": "open"
-      },
-      {
-        "label": "join",
-        "parent": "cooking",
-        "depth": 22,
-        "first_cycle": 570,
-        "last_cycle": 570,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "simple explanation",
-        "parent": "easy concept",
-        "depth": 17,
-        "first_cycle": 560,
-        "last_cycle": 569,
-        "hits": 55,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "hard to work with",
       "difficult to work with",
       "brief description of what this turn should add",
       "context",
@@ -564,10 +563,11 @@
       "specific active detail",
       "curious",
       "common",
-      "approaching topic"
+      "approaching topic",
+      "observed observation"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 600,
+    "last_branch_cycle": 601,
     "escape_pressure": 0
   }
 }
