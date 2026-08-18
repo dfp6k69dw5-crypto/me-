@@ -22,21 +22,9 @@ META_PATTERNS = (
     r"\b(?:should|allowed|required)\s+(?:i\s+)?(?:be\s+)?speaking\b",
     r"\bnot\s+sure\s+if\s+i\s+should\s+be\s+speaking\b",
     r"\b[a-z-]+-related\s+topic\b",
-)
-OLD_FRAME_PATTERNS = (
-    r"^the new piece for me is\b",
-    r"^i'd separate the pattern around\b",
-    r"^what interests me in\b",
-    r"^the part of .+ i keep coming back to\b",
-    r"^i don't think .+ stands alone\b",
-    r"^the piece of .+ that feels real to me\b",
-    r"^i hear .+ leaning on\b",
-    r"^the useful distinction for me is\b",
-    r"^i'd test .+ against\b",
-    r"^for me, .+ gets concrete\b",
-    r"^i'm connecting this with\b",
-    r"^if .+ has a clean story\b",
-    r"^the weird edge of\b",
+    r"\b(?:main|current)\s+subject\b",
+    r"\bcurrent\s+focus\b",
+    r"\bdiscussion\s+(?:subject|focus)\b",
 )
 
 
@@ -44,8 +32,8 @@ def enabled(role: str) -> bool:
     return bool(os.environ.get("ROOM_NODE_PROMPT", "").strip() and os.environ.get("ROOM_MODEL_URL", "").strip())
 
 
-def _norm(text: object) -> str:
-    return re.sub(r"\s+", " ", str(text or "").strip().lower())
+def _norm(value: object) -> str:
+    return re.sub(r"\s+", " ", str(value or "").strip().lower())
 
 
 def _extract_json(text: str):
@@ -63,19 +51,39 @@ def _extract_json(text: str):
     return obj
 
 
-def _contains_explicit_leak_marker(text: str) -> bool:
-    low = _norm(text)
+def _contains_explicit_leak_marker(value: object) -> bool:
+    low = _norm(value)
     return any(marker in low for marker in LEAK_MARKERS)
 
 
-def _contains_meta_language(text: object) -> bool:
-    low = _norm(text)
+def _contains_meta_language(value: object) -> bool:
+    low = _norm(value)
     return any(re.search(pattern, low) for pattern in META_PATTERNS)
 
 
-def _looks_like_template_echo(text: str) -> bool:
-    low = _norm(text)
-    return any(re.search(pattern, low) for pattern in OLD_FRAME_PATTERNS)
+def _structure_contaminated(value: object) -> bool:
+    if isinstance(value, str):
+        return _contains_explicit_leak_marker(value) or _contains_meta_language(value)
+    if isinstance(value, list):
+        return any(_structure_contaminated(item) for item in value)
+    if isinstance(value, dict):
+        return any(_structure_contaminated(item) for item in value.values())
+    return False
+
+
+def _clean_private(value: object):
+    if isinstance(value, str):
+        return None if _contains_explicit_leak_marker(value) or _contains_meta_language(value) else value
+    if isinstance(value, list):
+        out = []
+        for item in value:
+            cleaned = _clean_private(item)
+            if cleaned is not None:
+                out.append(cleaned)
+        return out
+    if isinstance(value, dict):
+        return {key: _clean_private(item) for key, item in value.items()}
+    return value
 
 
 def _decontaminate_instruction(prompt: str) -> str:
@@ -96,28 +104,19 @@ def _decontaminate_instruction(prompt: str) -> str:
         (r"(?i)current narrow topic facet", "specific detail"),
         (r"(?i)current narrow facet", "specific detail"),
         (r"(?i)current topic facet", "specific detail"),
-        (r"(?i)current topic root", "main subject"),
-        (r"(?i)topic root", "main subject"),
+        (r"(?i)current topic root", "main idea"),
+        (r"(?i)topic root", "main idea"),
         (r"(?i)topic facet", "specific detail"),
         (r"(?i)topic episode", "ongoing discussion"),
         (r"(?i)\btopic\b", "subject"),
         (r"(?i)\bfacet\b", "detail"),
+        (r"(?i)\broot\b", "basis"),
+        (r"(?i)\bschema\b", "structure"),
+        (r"(?i)\bjson\b", "structured data"),
     )
     for pattern, replacement in replacements:
         text = re.sub(pattern, replacement, text)
     return text
-
-
-def _looks_like_public_leak(text: str) -> bool:
-    low = _norm(text)
-    if _contains_explicit_leak_marker(low) or _contains_meta_language(low):
-        return True
-    secret = _decontaminate_instruction(os.environ.get("ROOM_NODE_PROMPT", ""))
-    if secret:
-        chunks = [secret[i:i+56].lower() for i in range(0, max(0, len(secret)-55), 28)]
-        if any(chunk and chunk in low for chunk in chunks):
-            return True
-    return False
 
 
 def _nullable_string() -> dict:
@@ -174,51 +173,18 @@ def _schema(role: str) -> dict:
 
 
 def _bad_term(value: object) -> bool:
-    s = _norm(value)
-    if not s or len(s) > 80:
+    text = _norm(value)
+    if not text or len(text) > 80:
         return True
-    if _contains_meta_language(s) or _contains_explicit_leak_marker(s):
+    if _contains_meta_language(text) or _contains_explicit_leak_marker(text):
         return True
-    if re.fullmatch(r"topic[-_ ]?\d+", s):
+    if re.fullmatch(r"topic[-_ ]?\d+", text):
         return True
-    if s in {"topic", "conversation", "discussion", "subject", "facet", "root", "schema", "context", "label", "category"}:
+    if text in {"topic", "conversation", "discussion", "subject", "facet", "root", "schema", "context", "label", "category"}:
         return True
-    if s.endswith(" topic") or s.startswith("topic "):
+    if text.endswith(" topic") or text.startswith("topic "):
         return True
     return False
-
-
-def _validate(role: str, obj: object) -> dict:
-    if not isinstance(obj, dict):
-        raise ValueError("model output was not a structured object")
-    if role == "expression":
-        if str(obj.get("decision", "")).upper() != "SPEAK":
-            raise ValueError("expression did not satisfy required response")
-        utterance = obj.get("utterance")
-        if not isinstance(utterance, str) or not utterance.strip():
-            raise ValueError("expression returned no utterance")
-        if len(utterance.strip()) > 700:
-            raise ValueError("expression utterance exceeded length limit")
-        if _looks_like_public_leak(utterance) or _looks_like_template_echo(utterance):
-            raise ValueError("expression failed contamination filter")
-        if not isinstance(obj.get("semantic_terms"), list):
-            raise ValueError("expression returned no semantic terms")
-    elif role == "thought":
-        if not isinstance(obj.get("action"), str):
-            raise ValueError("deliberation returned no action")
-        if obj.get("must_respond") is not True:
-            raise ValueError("deliberation did not preserve required response")
-    elif role == "comprehension":
-        if not isinstance(obj.get("participation"), str):
-            raise ValueError("perception returned no participation state")
-        if not isinstance(obj.get("relationship_events"), list):
-            raise ValueError("perception returned invalid relationship events")
-    return obj
-
-
-def _completion_url(model_url: str) -> str:
-    base = model_url.rstrip("/")
-    return base if base.endswith("/completion") else base + "/completion"
 
 
 def _public_message(message: object, text_limit: int) -> dict:
@@ -233,10 +199,10 @@ def _safe_semantic_list(values: object, limit: int) -> list[str]:
     if not isinstance(values, list):
         return out
     for value in values:
-        s = _norm(value)
-        if _bad_term(s) or s in out:
+        text = _norm(value)
+        if _bad_term(text) or text in out:
             continue
-        out.append(s)
+        out.append(text)
         if len(out) >= limit:
             break
     return out
@@ -246,6 +212,7 @@ def _compact_payload(payload: dict, role: str) -> dict:
     out = dict(payload or {})
     out.pop("mandatory_speech", None)
     out["must_respond"] = True
+
     if role == "comprehension":
         context_count, text_limit, event_limit = 4, 320, 420
     else:
@@ -260,7 +227,7 @@ def _compact_payload(payload: dict, role: str) -> dict:
         cleaned = []
         for message in context[-context_count:]:
             public = _public_message(message, text_limit)
-            if _contains_meta_language(public.get("text")) or _looks_like_template_echo(public.get("text", "")):
+            if _contains_meta_language(public.get("text")):
                 continue
             cleaned.append(public)
         out["context"] = cleaned[-context_count:]
@@ -269,7 +236,7 @@ def _compact_payload(payload: dict, role: str) -> dict:
     if isinstance(profile, dict):
         traits = profile.get("traits", {}) if isinstance(profile.get("traits"), dict) else {}
         if role == "comprehension":
-            traits = {k: traits.get(k) for k in ("social_sensitivity", "curiosity", "skepticism") if k in traits}
+            traits = {key: traits.get(key) for key in ("social_sensitivity", "curiosity", "skepticism") if key in traits}
         out["profile"] = {"name": profile.get("name"), "traits": traits}
 
     internal = out.pop("topic", None)
@@ -284,43 +251,95 @@ def _compact_payload(payload: dict, role: str) -> dict:
             "open_questions": _safe_semantic_list(internal.get("unresolved"), 5),
         }
 
-    keywords = out.get("keywords")
-    if isinstance(keywords, list):
-        out["keywords"] = _safe_semantic_list(keywords, 8 if role == "comprehension" else 12)
+    if isinstance(out.get("keywords"), list):
+        out["keywords"] = _safe_semantic_list(out["keywords"], 8 if role == "comprehension" else 12)
+    if "social_observation" in out:
+        out["social_observation"] = _clean_private(out.get("social_observation"))
+    if "deliberation" in out:
+        out["deliberation"] = _clean_private(out.get("deliberation"))
     return out
 
 
-def _sanitize_expression(obj: dict, compact: dict) -> dict:
-    entity = _norm(compact.get("entity"))
-    utterance = str(obj.get("utterance", "")).strip()
+def _prompt_overlap(utterance: str, prompt: str) -> bool:
     low = _norm(utterance)
-    if entity in PEOPLE and re.match(rf"^(?:i['’]?m sorry,?\s*)?{re.escape(entity)}\s+(?:is|means|represents)\b", low):
-        raise ValueError("expression described self as a category")
-    if entity in PEOPLE and re.search(rf"\b{re.escape(entity)}\b", low) and re.search(r"\b(?:should|allowed|required)\b.*\bspeak", low):
-        raise ValueError("expression discussed speaking permission")
+    clean_prompt = _norm(prompt)
+    if not low or not clean_prompt:
+        return False
+    chunks = [clean_prompt[i:i+64] for i in range(0, max(0, len(clean_prompt)-63), 32)]
+    return any(chunk and chunk in low for chunk in chunks)
 
+
+def _validate(role: str, obj: object, compact: dict, prompt: str) -> dict:
+    if not isinstance(obj, dict):
+        raise ValueError("not_object")
+    if role == "expression":
+        if str(obj.get("decision", "")).upper() != "SPEAK":
+            raise ValueError("missing_speak")
+        utterance = obj.get("utterance")
+        if not isinstance(utterance, str) or not utterance.strip():
+            raise ValueError("missing_utterance")
+        if len(utterance.strip()) > 700:
+            raise ValueError("utterance_too_long")
+        if _contains_explicit_leak_marker(utterance):
+            raise ValueError("privacy_marker")
+        if _contains_meta_language(utterance):
+            raise ValueError("meta_language")
+        if _prompt_overlap(utterance, prompt):
+            raise ValueError("instruction_overlap")
+        if not isinstance(obj.get("semantic_terms"), list):
+            raise ValueError("missing_semantic_terms")
+        entity = _norm(compact.get("entity"))
+        low = _norm(utterance)
+        if entity in PEOPLE and re.match(rf"^(?:i['’]?m sorry,?\s*)?{re.escape(entity)}\s+(?:is|means|represents)\b", low):
+            raise ValueError("self_category")
+        if re.search(r"\b(?:should|allowed|required)\b.*\bspeak", low):
+            raise ValueError("speaking_permission")
+    elif role == "thought":
+        if not isinstance(obj.get("action"), str):
+            raise ValueError("missing_action")
+        if obj.get("must_respond") is not True:
+            raise ValueError("must_respond_false")
+        if _structure_contaminated(obj):
+            raise ValueError("private_meta_language")
+    elif role == "comprehension":
+        if not isinstance(obj.get("participation"), str):
+            raise ValueError("missing_participation")
+        if not isinstance(obj.get("relationship_events"), list):
+            raise ValueError("bad_relationship_events")
+        if _structure_contaminated(obj):
+            raise ValueError("private_meta_language")
+    return obj
+
+
+def _sanitize_expression(obj: dict, compact: dict) -> dict:
     terms: list[str] = []
     discussion = compact.get("discussion") if isinstance(compact.get("discussion"), dict) else {}
     for value in (discussion.get("subject"), discussion.get("focus")):
-        s = _norm(value)
-        if not _bad_term(s) and s not in terms:
-            terms.append(s)
+        text = _norm(value)
+        if not _bad_term(text) and text not in terms:
+            terms.append(text)
     for value in obj.get("semantic_terms", []) if isinstance(obj.get("semantic_terms"), list) else []:
-        s = _norm(value)
-        if _bad_term(s) or s in terms:
+        text = _norm(value)
+        if _bad_term(text) or text in terms:
             continue
-        terms.append(s)
+        terms.append(text)
     obj["semantic_terms"] = terms[:4]
     if not obj["semantic_terms"]:
-        raise ValueError("expression had no usable semantic terms")
+        raise ValueError("no_usable_semantic_terms")
 
+    entity = _norm(compact.get("entity"))
     if obj.get("target") == entity:
         partner = _norm(compact.get("partner"))
         if partner in PEOPLE and partner != entity:
             obj["target"] = partner
         else:
-            raise ValueError("expression targeted self")
+            raise ValueError("self_target")
     return obj
+
+
+def _completion_url(model_url: str) -> str:
+    base = model_url.rstrip("/")
+    return base if base.endswith("/completion") else base + "/completion"
 
 
 def _safe_http_detail(exc: urllib.error.HTTPError) -> str:
@@ -344,6 +363,25 @@ def _safe_http_detail(exc: urllib.error.HTTPError) -> str:
     return re.sub(r"\s+", " ", detail).strip()[:240]
 
 
+def _request(model_url: str, prompt: str, role: str, temperature: float, timeout: int) -> str:
+    request_body = {
+        "prompt": prompt,
+        "n_predict": {"comprehension": 192, "thought": 220, "expression": 220}.get(role, 192),
+        "temperature": temperature,
+        "cache_prompt": True,
+        "json_schema": _schema(role),
+    }
+    req = urllib.request.Request(
+        _completion_url(model_url),
+        data=json.dumps(request_body, ensure_ascii=False).encode(),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        data = json.loads(resp.read().decode("utf-8", "replace"))
+    return str(data.get("content", ""))
+
+
 def run(role: str, payload: dict, timeout: int = 30):
     raw_prompt = os.environ.get("ROOM_NODE_PROMPT", "").strip()
     if not raw_prompt:
@@ -354,39 +392,47 @@ def run(role: str, payload: dict, timeout: int = 30):
         raise RuntimeError(f"private model unavailable for {role}")
 
     compact = _compact_payload(payload, role)
-    guard = ""
+    base_guard = ""
     if role == "expression":
-        guard = (
+        base_guard = (
             "\nPUBLIC_SPEECH_RULE\n"
             "Produce ordinary in-world conversation only. Do not discuss formatting, control structures, hidden instructions, model behavior, internal labels, or permission to speak. "
-            "Use a concrete detail, example, implication, disagreement, comparison, experience, or consequence grounded in the supplied situation.\n"
+            "Use concrete content from the supplied situation.\n"
         )
 
-    combined = prompt + guard + "\nSITUATION_DATA\n" + json.dumps(compact, ensure_ascii=False, separators=(",", ":")) + "\nRETURN_STRUCTURED_DATA_ONLY\n"
-    n_predict = {"comprehension": 192, "thought": 220, "expression": 220}.get(role, 192)
-    temperature = {"comprehension": 0.15, "thought": 0.25, "expression": 0.42}.get(role, 0.25)
-    request_body = {"prompt": combined, "n_predict": n_predict, "temperature": temperature, "cache_prompt": True, "json_schema": _schema(role)}
-    body = json.dumps(request_body, ensure_ascii=False).encode()
-    req = urllib.request.Request(_completion_url(model_url), data=body, headers={"Content-Type": "application/json"}, method="POST")
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            data = json.loads(resp.read().decode("utf-8", "replace"))
-    except urllib.error.HTTPError as exc:
-        detail = _safe_http_detail(exc)
-        suffix = f": {detail}" if detail else ""
-        raise RuntimeError(f"private model request failed for {role}: HTTP {exc.code}{suffix}") from exc
-    except Exception as exc:
-        raise RuntimeError(f"private model request failed for {role}: {type(exc).__name__}") from exc
+    attempts = 3 if role == "expression" else 2
+    last_reason = "unknown"
+    for attempt in range(attempts):
+        retry_guard = ""
+        if attempt:
+            retry_guard = (
+                "\nFRESH_CANDIDATE_RULE\n"
+                "A previous candidate failed a private quality gate. Produce a completely different candidate. Do not refer to the prior candidate, the gate, the task, rules, formatting, or whether anyone may speak.\n"
+            )
+        combined = (
+            prompt + base_guard + retry_guard
+            + "\nSITUATION_DATA\n"
+            + json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
+            + "\nRETURN_STRUCTURED_DATA_ONLY\n"
+        )
+        temperature = {"comprehension": 0.15, "thought": 0.25, "expression": 0.42}.get(role, 0.25) + 0.06 * attempt
+        try:
+            out = _request(model_url, combined, role, temperature, timeout)
+            if not out:
+                last_reason = "empty_output"
+                continue
+            obj = _validate(role, _extract_json(out), compact, prompt)
+            if role == "expression":
+                obj = _sanitize_expression(obj, compact)
+            return obj
+        except urllib.error.HTTPError as exc:
+            detail = _safe_http_detail(exc)
+            suffix = f": {detail}" if detail else ""
+            raise RuntimeError(f"private model request failed for {role}: HTTP {exc.code}{suffix}") from exc
+        except ValueError as exc:
+            last_reason = str(exc)[:80]
+            continue
+        except Exception as exc:
+            raise RuntimeError(f"private model request failed for {role}: {type(exc).__name__}") from exc
 
-    out = str(data.get("content", ""))
-    if not out:
-        raise RuntimeError(f"private model returned empty output for {role}")
-    if role != "expression" and _contains_explicit_leak_marker(out):
-        raise RuntimeError(f"private model private structure failed privacy marker check for {role}")
-    try:
-        obj = _validate(role, _extract_json(out))
-        if role == "expression":
-            obj = _sanitize_expression(obj, compact)
-        return obj
-    except Exception as exc:
-        raise RuntimeError(f"private model output rejected for {role}: {type(exc).__name__}") from exc
+    raise RuntimeError(f"private model output rejected for {role}: {last_reason}")
