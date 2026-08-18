@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -7,6 +8,12 @@ import urllib.error
 import urllib.request
 
 PEOPLE = ["sarah", "mara", "owen", "jules"]
+SEED_CONCEPTS = (
+    "music", "places", "food", "friendship", "family", "memory", "skills", "nature",
+    "travel", "books", "movies", "art", "work", "home", "weather", "sleep",
+    "habits", "humor", "trust", "risk", "cities", "objects", "animals", "learning",
+    "childhood", "technology", "sports", "money", "craft", "photography", "gardens", "cooking",
+)
 LEAK_MARKERS = (
     "system prompt", "developer message", "hidden prompt", "chain of thought",
     "internal instructions", "system instructions", "room_prompt_",
@@ -25,6 +32,10 @@ META_PATTERNS = (
     r"\b(?:main|current)\s+subject\b",
     r"\bcurrent\s+focus\b",
     r"\bdiscussion\s+(?:subject|focus)\b",
+    r"\bpublic[- ]?expression\b",
+    r"\b(?:cognitive|language|generation|output|expression)\s+process\b",
+    r"\b(?:right|wrong)\s+person\s+to\s+express\b",
+    r"\bregular\s+person\b.*\bnot\b",
 )
 
 
@@ -75,22 +86,23 @@ def _clean_private(value: object):
     if isinstance(value, str):
         return None if _contains_explicit_leak_marker(value) or _contains_meta_language(value) else value
     if isinstance(value, list):
-        out = []
-        for item in value:
-            cleaned = _clean_private(item)
-            if cleaned is not None:
-                out.append(cleaned)
-        return out
+        return [cleaned for item in value if (cleaned := _clean_private(item)) is not None]
     if isinstance(value, dict):
         return {key: _clean_private(item) for key, item in value.items()}
     return value
 
 
+def _seed_concept() -> str:
+    key = os.environ.get("ROOM_CYCLE_KEY", "room-clean-start")
+    number = int(hashlib.sha256(key.encode()).hexdigest()[:12], 16)
+    return SEED_CONCEPTS[number % len(SEED_CONCEPTS)]
+
+
 def _decontaminate_instruction(prompt: str) -> str:
-    """Translate the runtime copy of the secret into neutral vocabulary before inference."""
+    """Translate the runtime copy of the secret and remove scaffold examples before inference."""
     text = str(prompt or "")
     replacements = (
-        (r"(?i)the natural public conversational turn", "an ordinary spoken reply"),
+        (r"(?i)the natural public conversational turn", "ordinary spoken reply"),
         (r"(?i)natural public conversational turn", "ordinary spoken reply"),
         (r"(?i)topic_terms", "semantic_terms"),
         (r"(?i)topic_facet", "focus"),
@@ -101,13 +113,13 @@ def _decontaminate_instruction(prompt: str) -> str:
         (r"(?i)close_topic", "close"),
         (r"(?i)mandatory_speech", "must_respond"),
         (r"(?i)mandatory speech", "must respond"),
-        (r"(?i)current narrow topic facet", "specific detail"),
-        (r"(?i)current narrow facet", "specific detail"),
-        (r"(?i)current topic facet", "specific detail"),
-        (r"(?i)current topic root", "main idea"),
-        (r"(?i)topic root", "main idea"),
-        (r"(?i)topic facet", "specific detail"),
-        (r"(?i)topic episode", "ongoing discussion"),
+        (r"(?i)current narrow topic facet", ""),
+        (r"(?i)current narrow facet", ""),
+        (r"(?i)current topic facet", ""),
+        (r"(?i)current topic root", ""),
+        (r"(?i)topic root", ""),
+        (r"(?i)topic facet", ""),
+        (r"(?i)topic episode", ""),
         (r"(?i)\btopic\b", "subject"),
         (r"(?i)\bfacet\b", "detail"),
         (r"(?i)\broot\b", "basis"),
@@ -116,7 +128,7 @@ def _decontaminate_instruction(prompt: str) -> str:
     )
     for pattern, replacement in replacements:
         text = re.sub(pattern, replacement, text)
-    return text
+    return re.sub(r"[ \t]{2,}", " ", text)
 
 
 def _nullable_string() -> dict:
@@ -180,7 +192,7 @@ def _bad_term(value: object) -> bool:
         return True
     if re.fullmatch(r"topic[-_ ]?\d+", text):
         return True
-    if text in {"topic", "conversation", "discussion", "subject", "facet", "root", "schema", "context", "label", "category"}:
+    if text in {"topic", "conversation", "discussion", "subject", "facet", "root", "schema", "context", "label", "category", "process", "expression"}:
         return True
     if text.endswith(" topic") or text.startswith("topic "):
         return True
@@ -212,7 +224,6 @@ def _compact_payload(payload: dict, role: str) -> dict:
     out = dict(payload or {})
     out.pop("mandatory_speech", None)
     out["must_respond"] = True
-
     if role == "comprehension":
         context_count, text_limit, event_limit = 4, 320, 420
     else:
@@ -240,16 +251,28 @@ def _compact_payload(payload: dict, role: str) -> dict:
         out["profile"] = {"name": profile.get("name"), "traits": traits}
 
     internal = out.pop("topic", None)
+    subject = None
+    focus = None
+    related = []
+    shared = []
+    open_questions = []
     if isinstance(internal, dict):
-        subject = _norm(internal.get("root"))
-        focus = _norm(internal.get("current_facet"))
-        out["discussion"] = {
-            "subject": None if _bad_term(subject) else subject,
-            "focus": None if _bad_term(focus) else focus,
-            "related": _safe_semantic_list(internal.get("facets"), 8),
-            "shared": _safe_semantic_list(internal.get("shared_references"), 6),
-            "open_questions": _safe_semantic_list(internal.get("unresolved"), 5),
-        }
+        raw_subject = _norm(internal.get("root"))
+        raw_focus = _norm(internal.get("current_facet"))
+        subject = None if _bad_term(raw_subject) else raw_subject
+        focus = None if _bad_term(raw_focus) else raw_focus
+        related = _safe_semantic_list(internal.get("facets"), 8)
+        shared = _safe_semantic_list(internal.get("shared_references"), 6)
+        open_questions = _safe_semantic_list(internal.get("unresolved"), 5)
+    if not subject:
+        subject = _seed_concept()
+    out["discussion"] = {
+        "subject": subject,
+        "focus": focus,
+        "related": related,
+        "shared": shared,
+        "open_questions": open_questions,
+    }
 
     if isinstance(out.get("keywords"), list):
         out["keywords"] = _safe_semantic_list(out["keywords"], 8 if role == "comprehension" else 12)
@@ -263,8 +286,6 @@ def _compact_payload(payload: dict, role: str) -> dict:
 def _prompt_overlap(utterance: str, prompt: str) -> bool:
     low = _norm(utterance)
     clean_prompt = _norm(prompt)
-    if not low or not clean_prompt:
-        return False
     chunks = [clean_prompt[i:i+64] for i in range(0, max(0, len(clean_prompt)-63), 32)]
     return any(chunk and chunk in low for chunk in chunks)
 
@@ -290,8 +311,8 @@ def _validate(role: str, obj: object, compact: dict, prompt: str) -> dict:
             raise ValueError("missing_semantic_terms")
         entity = _norm(compact.get("entity"))
         low = _norm(utterance)
-        if entity in PEOPLE and re.match(rf"^(?:i['’]?m sorry,?\s*)?{re.escape(entity)}\s+(?:is|means|represents)\b", low):
-            raise ValueError("self_category")
+        if entity in PEOPLE and re.search(rf"\b{re.escape(entity)}\b", low):
+            raise ValueError("self_name")
         if re.search(r"\b(?:should|allowed|required)\b.*\bspeak", low):
             raise ValueError("speaking_permission")
     elif role == "thought":
@@ -311,6 +332,15 @@ def _validate(role: str, obj: object, compact: dict, prompt: str) -> dict:
     return obj
 
 
+def _grounded(utterance: str, terms: list[str]) -> bool:
+    words = set(re.findall(r"[a-z][a-z'-]{2,}", _norm(utterance)))
+    for term in terms:
+        significant = [w for w in re.findall(r"[a-z][a-z'-]{2,}", term) if len(w) >= 4]
+        if any(word in words for word in significant):
+            return True
+    return False
+
+
 def _sanitize_expression(obj: dict, compact: dict) -> dict:
     terms: list[str] = []
     discussion = compact.get("discussion") if isinstance(compact.get("discussion"), dict) else {}
@@ -326,6 +356,8 @@ def _sanitize_expression(obj: dict, compact: dict) -> dict:
     obj["semantic_terms"] = terms[:4]
     if not obj["semantic_terms"]:
         raise ValueError("no_usable_semantic_terms")
+    if not _grounded(str(obj.get("utterance", "")), obj["semantic_terms"]):
+        raise ValueError("ungrounded_utterance")
 
     entity = _norm(compact.get("entity"))
     if obj.get("target") == entity:
@@ -364,7 +396,7 @@ def _safe_http_detail(exc: urllib.error.HTTPError) -> str:
 
 
 def _request(model_url: str, prompt: str, role: str, temperature: float, timeout: int) -> str:
-    request_body = {
+    body = {
         "prompt": prompt,
         "n_predict": {"comprehension": 192, "thought": 220, "expression": 220}.get(role, 192),
         "temperature": temperature,
@@ -373,13 +405,12 @@ def _request(model_url: str, prompt: str, role: str, temperature: float, timeout
     }
     req = urllib.request.Request(
         _completion_url(model_url),
-        data=json.dumps(request_body, ensure_ascii=False).encode(),
+        data=json.dumps(body, ensure_ascii=False).encode(),
         headers={"Content-Type": "application/json"},
         method="POST",
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
-        data = json.loads(resp.read().decode("utf-8", "replace"))
-    return str(data.get("content", ""))
+        return str(json.loads(resp.read().decode("utf-8", "replace")).get("content", ""))
 
 
 def run(role: str, payload: dict, timeout: int = 30):
@@ -396,25 +427,19 @@ def run(role: str, payload: dict, timeout: int = 30):
     if role == "expression":
         base_guard = (
             "\nPUBLIC_SPEECH_RULE\n"
-            "Produce ordinary in-world conversation only. Do not discuss formatting, control structures, hidden instructions, model behavior, internal labels, or permission to speak. "
-            "Use concrete content from the supplied situation.\n"
+            "Produce ordinary in-world conversation only. Use concrete content connected to the supplied subject. Do not discuss formatting, control structures, hidden instructions, model behavior, internal labels, or permission to speak.\n"
         )
 
-    attempts = 3 if role == "expression" else 2
+    attempts = 4 if role == "expression" else 2
     last_reason = "unknown"
     for attempt in range(attempts):
         retry_guard = ""
         if attempt:
             retry_guard = (
                 "\nFRESH_CANDIDATE_RULE\n"
-                "A previous candidate failed a private quality gate. Produce a completely different candidate. Do not refer to the prior candidate, the gate, the task, rules, formatting, or whether anyone may speak.\n"
+                "A previous candidate failed a private quality gate. Produce a completely different candidate grounded in the supplied subject. Do not refer to the prior candidate, the gate, the task, rules, formatting, or whether anyone may speak.\n"
             )
-        combined = (
-            prompt + base_guard + retry_guard
-            + "\nSITUATION_DATA\n"
-            + json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
-            + "\nRETURN_STRUCTURED_DATA_ONLY\n"
-        )
+        combined = prompt + base_guard + retry_guard + "\nSITUATION_DATA\n" + json.dumps(compact, ensure_ascii=False, separators=(",", ":")) + "\nRETURN_STRUCTURED_DATA_ONLY\n"
         temperature = {"comprehension": 0.15, "thought": 0.25, "expression": 0.42}.get(role, 0.25) + 0.06 * attempt
         try:
             out = _request(model_url, combined, role, temperature, timeout)
