@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 808,
+  "cycle": 809,
   "silence_cycles": 0,
-  "last_speaker": "sarah",
-  "last_run": "2026-08-18T18:15:09.422604Z",
+  "last_speaker": "mara",
+  "last_run": "2026-08-18T18:16:10.016573Z",
   "messages": 1000,
-  "last_public_event": "20260818T181509420-sarah-v5",
+  "last_public_event": "20260818T181610014-mara-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000808",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000809",
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "the new concept",
+    "current_facet": "popularity",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "future",
       "navigating the information",
       "alignment",
       "goals",
@@ -71,7 +70,8 @@
       "congratulations",
       "friend",
       "new idea",
-      "the new concept"
+      "the new concept",
+      "popularity"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,16 +84,16 @@
       "owen",
       "jules"
     ],
-    "turns": 1615,
+    "turns": 1617,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "new idea",
-      "learning",
-      "not change",
-      "change",
       "the new concept",
-      "interesting",
-      "interest"
+      "learning",
+      "new",
+      "new idea",
+      "concept",
+      "popularity",
+      "should"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 808,
-        "hits": 4563,
+        "last_cycle": 809,
+        "hits": 4579,
         "status": "open"
       },
       {
@@ -112,8 +112,89 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 808,
-        "hits": 522,
+        "last_cycle": 809,
+        "hits": 523,
+        "status": "open"
+      },
+      {
+        "label": "counter example",
+        "parent": "reason",
+        "depth": 51,
+        "first_cycle": 802,
+        "last_cycle": 809,
+        "hits": 44,
+        "status": "open"
+      },
+      {
+        "label": "conversation history",
+        "parent": "counter example",
+        "depth": 52,
+        "first_cycle": 803,
+        "last_cycle": 809,
+        "hits": 37,
+        "status": "open"
+      },
+      {
+        "label": "congratulations",
+        "parent": "conversation history",
+        "depth": 53,
+        "first_cycle": 805,
+        "last_cycle": 809,
+        "hits": 19,
+        "status": "open"
+      },
+      {
+        "label": "friend",
+        "parent": "congratulations",
+        "depth": 54,
+        "first_cycle": 806,
+        "last_cycle": 809,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "new idea",
+        "parent": "friend",
+        "depth": 55,
+        "first_cycle": 807,
+        "last_cycle": 809,
+        "hits": 14,
+        "status": "open"
+      },
+      {
+        "label": "interests",
+        "parent": "friend",
+        "depth": 55,
+        "first_cycle": 807,
+        "last_cycle": 809,
+        "hits": 9,
+        "status": "open"
+      },
+      {
+        "label": "unexpected",
+        "parent": "counter example",
+        "depth": 52,
+        "first_cycle": 803,
+        "last_cycle": 809,
+        "hits": 8,
+        "status": "open"
+      },
+      {
+        "label": "the new concept",
+        "parent": "new idea",
+        "depth": 56,
+        "first_cycle": 808,
+        "last_cycle": 809,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "popularity",
+        "parent": "the new concept",
+        "depth": 57,
+        "first_cycle": 809,
+        "last_cycle": 809,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -126,28 +207,10 @@
         "status": "open"
       },
       {
-        "label": "counter example",
-        "parent": "reason",
-        "depth": 51,
-        "first_cycle": 802,
-        "last_cycle": 808,
-        "hits": 42,
-        "status": "open"
-      },
-      {
         "label": "counterexample",
         "parent": "active claim",
         "depth": 49,
         "first_cycle": 800,
-        "last_cycle": 808,
-        "hits": 36,
-        "status": "open"
-      },
-      {
-        "label": "conversation history",
-        "parent": "counter example",
-        "depth": 52,
-        "first_cycle": 803,
         "last_cycle": 808,
         "hits": 36,
         "status": "open"
@@ -159,51 +222,6 @@
         "first_cycle": 801,
         "last_cycle": 808,
         "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "congratulations",
-        "parent": "conversation history",
-        "depth": 53,
-        "first_cycle": 805,
-        "last_cycle": 808,
-        "hits": 15,
-        "status": "open"
-      },
-      {
-        "label": "friend",
-        "parent": "congratulations",
-        "depth": 54,
-        "first_cycle": 806,
-        "last_cycle": 808,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "new idea",
-        "parent": "friend",
-        "depth": 55,
-        "first_cycle": 807,
-        "last_cycle": 808,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "interests",
-        "parent": "friend",
-        "depth": 55,
-        "first_cycle": 807,
-        "last_cycle": 808,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "the new concept",
-        "parent": "new idea",
-        "depth": 56,
-        "first_cycle": 808,
-        "last_cycle": 808,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -222,15 +240,6 @@
         "first_cycle": 738,
         "last_cycle": 807,
         "hits": 25,
-        "status": "open"
-      },
-      {
-        "label": "unexpected",
-        "parent": "counter example",
-        "depth": 52,
-        "first_cycle": 803,
-        "last_cycle": 807,
-        "hits": 7,
         "status": "open"
       },
       {
@@ -520,19 +529,9 @@
         "last_cycle": 780,
         "hits": 41,
         "status": "open"
-      },
-      {
-        "label": "navigate",
-        "parent": "navigating the information",
-        "depth": 107,
-        "first_cycle": 779,
-        "last_cycle": 779,
-        "hits": 1,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "excitement",
       "share",
       "new stuff",
       "new ideas",
@@ -563,10 +562,11 @@
       "conversation history",
       "congratulations",
       "friend",
-      "new idea"
+      "new idea",
+      "the new concept"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 808,
+    "last_branch_cycle": 809,
     "escape_pressure": 0
   }
 }
