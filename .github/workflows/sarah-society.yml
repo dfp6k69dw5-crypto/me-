@@ -152,7 +152,8 @@ jobs:
             python3 scripts/room_participant.py room_work/allen-inbox.json room_work/allen-ack.json || return 1
 
             # Phase 1: unprompted sense nodes run together; four perception nodes use
-            # the two verified model slots in two pairs.
+            # the two verified model slots in two pairs. Prompted nodes pass through
+            # the attention router, which adds at most two temporary project skills.
             pids=()
             for n in 1 2 4 5 7 8 10 11; do
               (
@@ -170,7 +171,7 @@ jobs:
                 (
                   env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
                     ROOM_NODE_PROMPT="${ROOM_PROMPT_PERCEPTION:-}" ROOM_NODE_ID="$n" \
-                    python3 scripts/room_engine_v5.py node --phase sense
+                    python3 scripts/room_skill_exec.py scripts/room_engine_v5.py node --phase sense
                 ) &
                 pids+=("$!")
               done
@@ -199,7 +200,7 @@ jobs:
                 (
                   env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
                     ROOM_NODE_PROMPT="${ROOM_PROMPT_DELIBERATION:-}" ROOM_NODE_ID="$n" \
-                    python3 scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-sense.json
+                    python3 scripts/room_skill_exec.py scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-sense.json
                 ) &
                 pids+=("$!")
               done
@@ -219,7 +220,7 @@ jobs:
               n=${expr_nodes[$idx]}
               env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
                 ROOM_NODE_PROMPT="${ROOM_PROMPT_EXPRESSION:-}" ROOM_NODE_ID="$n" ROOM_EXPRESSION_RANK="$rank" \
-                python3 scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-recurrent.json || return 1
+                python3 scripts/room_skill_exec.py scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-recurrent.json || return 1
             done
 
             env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
@@ -235,7 +236,7 @@ jobs:
             fi
             git add room society/live.json
             if git diff --cached --quiet; then continue; fi
-            git commit -m "Room cognition v5 research-informed beat"
+            git commit -m "Room cognition v5 attention-routed skills beat"
 
             pushed=0
             for attempt in 1 2 3 4; do
