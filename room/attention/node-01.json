@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T18:33:22.864946+00:00",
-  "cycle_key": "32153618883:1:174",
+  "generated_at": "2026-08-18T18:34:33.485469+00:00",
+  "cycle_key": "32153618883:1:175",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,73 +32,59 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.75,
+      "score": 5.32,
       "confidence": 0.999,
-      "raw_score": 4.75,
+      "raw_score": 5.32,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "claim",
         "evidence",
-        "sure"
+        "sure",
+        "compare",
+        "claim"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "evidence",
-            "claim"
+            "evidence"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
+            "evidence",
             "sure"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "compare"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "evidence",
-            "claim",
-            "sure"
+            "claim"
           ],
           "weight": 0.92
         },
         {
-          "kind": "topic",
-          "matched": [
-            "evidence"
-          ],
-          "weight": 0.58
-        }
-      ]
-    },
-    {
-      "name": "concrete-specificity",
-      "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "show"
-      ],
-      "evidence_sources": [
-        {
           "kind": "message",
           "matched": [
-            "show"
+            "evidence",
+            "claim"
           ],
-          "weight": 1.8
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "09fef7ab18d0",
+  "context_fingerprint": "c80a476bbd99",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 839,
-  "approx_added_tokens": 210
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
