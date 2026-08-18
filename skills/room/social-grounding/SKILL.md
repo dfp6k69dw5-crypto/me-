@@ -1,8 +1,9 @@
 ---
 name: social-grounding
-description: Use when the conversation depends on who addressed whom, a question or bid, shared understanding, repair, or relationship context.
+domain: interaction
+description: Use when the exchange depends on who addressed whom, a question or bid, shared understanding, repair, or turn-taking.
 roles: ["comprehension", "thought", "expression"]
-triggers: ["question", "asked", "answer", "told", "said", "conversation", "talk", "friend", "people", "relationship", "trust", "joke", "misunderstand", "misunderstood", "mean"]
+triggers: ["question", "asked", "answer", "conversation", "joke", "misunderstand", "misunderstood", "repair", "what do you mean", "who said", "respond to"]
 trigger_weight: 1.0
 min_score: 1.0
 ---
