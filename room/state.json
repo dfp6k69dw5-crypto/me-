@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 575,
+  "cycle": 576,
   "silence_cycles": 0,
-  "last_speaker": "owen",
-  "last_run": "2026-08-18T13:49:15.363443Z",
+  "last_speaker": "jules",
+  "last_run": "2026-08-18T13:50:20.425833Z",
   "messages": 1000,
-  "last_public_event": "20260818T134915361-owen-v5",
+  "last_public_event": "20260818T135020424-jules-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000575",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000576",
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "puzzle",
+    "current_facet": "word",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "new approach",
       "implement",
       "mara",
       "components",
@@ -71,7 +70,8 @@
       "to cook",
       "direction goal",
       "hard to find one",
-      "puzzle"
+      "puzzle",
+      "word"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,18 +84,16 @@
       "owen",
       "jules"
     ],
-    "turns": 1149,
+    "turns": 1151,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "hard to find one",
-      "learning",
       "skepticism",
-      "hard",
       "puzzle",
-      "math",
-      "easy",
-      "skepticism is a challenge",
-      "skepticism is a challenging concept to explain"
+      "learning",
+      "word",
+      "learn",
+      "challenge",
+      "curiosity"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -105,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 575,
-        "hits": 735,
+        "last_cycle": 576,
+        "hits": 754,
         "status": "open"
       },
       {
@@ -114,8 +112,89 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 575,
-        "hits": 431,
+        "last_cycle": 576,
+        "hits": 443,
+        "status": "open"
+      },
+      {
+        "label": "challenge",
+        "parent": "cooking",
+        "depth": 22,
+        "first_cycle": 570,
+        "last_cycle": 576,
+        "hits": 41,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 576,
+        "hits": 41,
+        "status": "open"
+      },
+      {
+        "label": "cooking",
+        "parent": "new skills",
+        "depth": 21,
+        "first_cycle": 569,
+        "last_cycle": 576,
+        "hits": 37,
+        "status": "open"
+      },
+      {
+        "label": "to cook",
+        "parent": "challenge",
+        "depth": 23,
+        "first_cycle": 572,
+        "last_cycle": 576,
+        "hits": 26,
+        "status": "open"
+      },
+      {
+        "label": "direction goal",
+        "parent": "to cook",
+        "depth": 24,
+        "first_cycle": 573,
+        "last_cycle": 576,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "hard to find one",
+        "parent": "direction goal",
+        "depth": 25,
+        "first_cycle": 574,
+        "last_cycle": 576,
+        "hits": 12,
+        "status": "open"
+      },
+      {
+        "label": "puzzle",
+        "parent": "hard to find one",
+        "depth": 26,
+        "first_cycle": 575,
+        "last_cycle": 576,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "math",
+        "parent": "hard to find one",
+        "depth": 26,
+        "first_cycle": 575,
+        "last_cycle": 576,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "word",
+        "parent": "puzzle",
+        "depth": 27,
+        "first_cycle": 576,
+        "last_cycle": 576,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -128,15 +207,6 @@
         "status": "open"
       },
       {
-        "label": "challenge",
-        "parent": "cooking",
-        "depth": 22,
-        "first_cycle": 570,
-        "last_cycle": 575,
-        "hits": 39,
-        "status": "open"
-      },
-      {
         "label": "new skills",
         "parent": "acquire",
         "depth": 20,
@@ -146,66 +216,12 @@
         "status": "open"
       },
       {
-        "label": "cooking",
-        "parent": "new skills",
-        "depth": 21,
-        "first_cycle": 569,
-        "last_cycle": 575,
-        "hits": 36,
-        "status": "open"
-      },
-      {
-        "label": "to cook",
-        "parent": "challenge",
-        "depth": 23,
-        "first_cycle": 572,
-        "last_cycle": 575,
-        "hits": 21,
-        "status": "open"
-      },
-      {
         "label": "sarah",
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
         "last_cycle": 575,
         "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "direction goal",
-        "parent": "to cook",
-        "depth": 24,
-        "first_cycle": 573,
-        "last_cycle": 575,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "hard to find one",
-        "parent": "direction goal",
-        "depth": 25,
-        "first_cycle": 574,
-        "last_cycle": 575,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "puzzle",
-        "parent": "hard to find one",
-        "depth": 26,
-        "first_cycle": 575,
-        "last_cycle": 575,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "math",
-        "parent": "hard to find one",
-        "depth": 26,
-        "first_cycle": 575,
-        "last_cycle": 575,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -323,15 +339,6 @@
         "first_cycle": 560,
         "last_cycle": 569,
         "hits": 55,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 569,
-        "hits": 40,
         "status": "open"
       },
       {
@@ -522,15 +529,6 @@
         "last_cycle": 556,
         "hits": 39,
         "status": "open"
-      },
-      {
-        "label": "collaborative",
-        "parent": "designed",
-        "depth": 11,
-        "first_cycle": 553,
-        "last_cycle": 555,
-        "hits": 2,
-        "status": "open"
       }
     ],
     "branch_history": [
@@ -564,10 +562,11 @@
       "challenge",
       "to cook",
       "direction goal",
-      "hard to find one"
+      "hard to find one",
+      "puzzle"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 575,
+    "last_branch_cycle": 576,
     "escape_pressure": 0
   }
 }
