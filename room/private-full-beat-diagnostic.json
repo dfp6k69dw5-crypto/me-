@@ -1,5 +1,146 @@
 {
-  "sterilized": true,
-  "boot_id": "room-sterile-v3-2026-08-18",
-  "at": "2026-08-18T03:01:10.531380Z"
+  "server_ready": true,
+  "phase": "expression",
+  "ctx_total": 16384,
+  "parallel_slots": 2,
+  "model_node_batching": true,
+  "public_fallback": false,
+  "safe_public_candidate_capture": true,
+  "sense": {
+    "1": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "2": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "4": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "5": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "7": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "8": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "10": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "11": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "0": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "3": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "6": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "9": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "bus": {
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "deliberation": {
+    "0": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "3": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "6": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "9": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "1": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "4": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "7": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "10": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "bus2": {
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "expression": {
+    "2": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "5": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "8": {
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 484, in <module>\n    main()\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 464, in main\n    result = sense(node, key) if args.phase == \"sense\" else recurrent(node, key, load(Path(args.bus), {}))\n                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 262, in recurrent\n    expression = model_run(\"expression\", {\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_private_model.py\", line 463, in run\n    raise RuntimeError(f\"private model output rejected for {role}: {last_reason}\")\nRuntimeError: private model output rejected for expression: self_name\n"
+    },
+    "11": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "status": "failed"
 }
