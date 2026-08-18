@@ -116,6 +116,40 @@ def _completion_url(model_url: str) -> str:
     return base if base.endswith("/completion") else base + "/completion"
 
 
+def _public_message(message: object) -> dict:
+    if not isinstance(message, dict):
+        return {"speaker": None, "text": str(message or "")[:600], "target": None}
+    cognition = message.get("cognition") if isinstance(message.get("cognition"), dict) else {}
+    return {
+        "speaker": message.get("speaker"),
+        "text": str(message.get("text", ""))[:600],
+        "target": cognition.get("target"),
+        "topic_episode": message.get("topic_episode") or cognition.get("topic_episode"),
+    }
+
+
+def _compact_payload(payload: dict) -> dict:
+    out = dict(payload or {})
+    if "event" in out:
+        out["event"] = _public_message(out.get("event"))
+    context = out.get("context")
+    if isinstance(context, list):
+        out["context"] = [_public_message(m) for m in context[-6:]]
+    profile = out.get("profile")
+    if isinstance(profile, dict):
+        out["profile"] = {
+            "name": profile.get("name"),
+            "age": profile.get("age"),
+            "traits": profile.get("traits", {}),
+            "question_bias": profile.get("question_bias", []),
+        }
+    topic = out.get("topic")
+    if isinstance(topic, dict):
+        keep = ("id", "root", "current_facet", "facets", "visited_facets", "status", "unresolved", "shared_references")
+        out["topic"] = {k: topic.get(k) for k in keep if k in topic}
+    return out
+
+
 def run(role: str, payload: dict, timeout: int = 30):
     """Private local-model adapter. Prompted live nodes fail closed; no canned fallback."""
     prompt = os.environ.get("ROOM_NODE_PROMPT", "").strip()
@@ -126,10 +160,11 @@ def run(role: str, payload: dict, timeout: int = 30):
     if not model_url:
         raise RuntimeError(f"private model unavailable for {role}")
 
+    compact = _compact_payload(payload)
     combined = (
         prompt
         + "\nINPUT_JSON\n"
-        + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+        + json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
         + "\nOUTPUT_JSON_ONLY\n"
     )
     request_body = {
