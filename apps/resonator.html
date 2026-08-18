@@ -4,7 +4,7 @@
  const parts=['01','02','03','04','05','06','07','08a','08b','09'];
  let b='';
  for(const n of parts){
-   const r=await fetch('resonator-parts/'+n+'.txt?v=20260816a',{cache:'no-store'});
+   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817c',{cache:'no-store'});
    if(!r.ok) throw new Error('Missing payload part '+n);
    b+=(await r.text()).trim();
  }
@@ -21,12 +21,28 @@
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
 
+ // Make the playing body the dominant thing on a phone.
+ text=text.replace("flex:0 0 38vh;min-height:230px","flex:0 0 68dvh;min-height:390px");
+ text=text.replaceAll("Math.min(W,H)*0.86","Math.min(W,H)*1.18");
+ text=text.replace("display:flex;flex-wrap:wrap;gap:4px","display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px");
+ text=text.replace("font-size:10px;letter-spacing:.06em;padding:9px 10px;min-height:36px","font-size:9px;letter-spacing:.04em;padding:6px 8px;min-height:30px;flex:0 0 auto");
+ text=text.replace('<div id="deck">','<div id="deck" class="shut">');
+ text=text.replace('<button id="handle" aria-expanded="true"><span>Keys</span><b>&#9662;</b></button>','<button id="handle" aria-expanded="false"><span>Keys</span><b>&#9652;</b></button>');
+
  // Preserve the continuous mobile orbit behavior if the payload still has the older gesture constants.
  text=text.replace("camRotate(1,(e.clientX-drag.x)*0.008);","camRotate(1,(e.clientX-drag.x)*0.017);");
  text=text.replace("camRotate(0,(e.clientY-drag.y)*0.008);","camRotate(0,-(e.clientY-drag.y)*0.008);");
  if(!text.includes("addEventListener('pointercancel',()=>{drag=null;});")){
    text=text.replace("addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; });","addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; }); addEventListener('pointercancel',()=>{drag=null;});");
  }
+
+ // Cabinet state must start finite.
+ text=text.replace("this.c1=0; this.c2=0; this.b1=0; this.b2=0; this.t1=0; this.t2=0; this.lp1b=0;","this.c1=0; this.c2=0; this.b1=0; this.b2=0; this.t1=0; this.t2=0; this.lp1b=0; this.lp1c=0; this.lp1d=0; this.body=0;");
+
+ // New bodies must not inherit cached geometry from the previous body.
+ text=text.replace("build(d){\nconst N=d.n, S=d.si.length, V=this.VMAX;","build(d){\nconst N=d.n, S=d.si.length, V=this.VMAX;\nthis.cx=undefined;this.cy=undefined;this.cz=undefined;this.cenX=undefined;this.cenY=undefined;this.cenZ=undefined;this.micJ=-1;");
+ text=text.replace("moveMass(n,x,y,z){\nif(!this.ok||n<0||n>=this.N) return;\nconst b=n*3;","moveMass(n,x,y,z){\nif(!this.ok||n<0||n>=this.N) return;\nthis.cx=undefined;this.cy=undefined;this.cz=undefined;this.cenX=undefined;this.cenY=undefined;this.cenZ=undefined;\nconst b=n*3;");
+ text=text.replace("function pick(cx,cy2,freeOnly){\nconst g=state.geo; if(!g) return -1;","function pick(cx,cy2,freeOnly){\nconst g=state.geo; if(!g) return -1;\nif(!_px||!_py||!_pf||_cap<g.P.length) return -1;");
 
  // Add the tested low-frequency 50,000 litre silo as its own body.
  const milkSilo=`'Milk Silo':{min:10,max:16,def:12,note:'A 50,000 litre stainless milk silo: three metres across, nearly nine tall, thin-walled and standing free with nothing touching it. Tall and thin means its lowest sounds are not the obvious in-and-out but high-count ripples running round the wall — twenty-two modes below a hundred hertz. Stainless loses almost nothing, so give it a long decay and a soft beater.',make(C){
