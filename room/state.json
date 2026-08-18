@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 773,
+  "cycle": 774,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-18T17:34:49.472595Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-18T17:35:55.262839Z",
   "messages": 1000,
-  "last_public_event": "20260818T173449471-mara-v5",
+  "last_public_event": "20260818T173555260-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000773",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000774",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "opinions",
+    "current_facet": "current_state",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "education",
       "challenging",
       "dubt",
       "skepticity",
@@ -71,7 +70,8 @@
       "new ideas",
       "not easy to follow",
       "reconciled",
-      "opinions"
+      "opinions",
+      "current_state"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,16 +84,17 @@
       "owen",
       "jules"
     ],
-    "turns": 1545,
-    "low_novelty_beats": 1,
+    "turns": 1547,
+    "low_novelty_beats": 0,
     "recent_terms": [
       "opinions",
       "learning",
-      "skepticism",
-      "new",
-      "new information goal",
-      "skeptic",
-      "new goal"
+      "opinion_of_owen",
+      "current_state",
+      "opinion",
+      "curiosity",
+      "current state of relationship",
+      "skepticism"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 773,
-        "hits": 3998,
+        "last_cycle": 774,
+        "hits": 4014,
         "status": "open"
       },
       {
@@ -112,8 +113,17 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 773,
-        "hits": 1768,
+        "last_cycle": 774,
+        "hits": 1777,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 774,
+        "hits": 485,
         "status": "open"
       },
       {
@@ -121,8 +131,80 @@
         "parent": "exploration",
         "depth": 45,
         "first_cycle": 604,
-        "last_cycle": 773,
-        "hits": 231,
+        "last_cycle": 774,
+        "hits": 239,
+        "status": "open"
+      },
+      {
+        "label": "excited",
+        "parent": "speak",
+        "depth": 92,
+        "first_cycle": 755,
+        "last_cycle": 774,
+        "hits": 88,
+        "status": "open"
+      },
+      {
+        "label": "new stuff",
+        "parent": "share",
+        "depth": 98,
+        "first_cycle": 765,
+        "last_cycle": 774,
+        "hits": 46,
+        "status": "open"
+      },
+      {
+        "label": "new ideas",
+        "parent": "new stuff",
+        "depth": 99,
+        "first_cycle": 767,
+        "last_cycle": 774,
+        "hits": 38,
+        "status": "open"
+      },
+      {
+        "label": "not easy to follow",
+        "parent": "new ideas",
+        "depth": 100,
+        "first_cycle": 769,
+        "last_cycle": 774,
+        "hits": 35,
+        "status": "open"
+      },
+      {
+        "label": "reconciled",
+        "parent": "not easy to follow",
+        "depth": 101,
+        "first_cycle": 771,
+        "last_cycle": 774,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "opinions",
+        "parent": "reconciled",
+        "depth": 102,
+        "first_cycle": 772,
+        "last_cycle": 774,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "current_state",
+        "parent": "opinions",
+        "depth": 103,
+        "first_cycle": 774,
+        "last_cycle": 774,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "opinion_of_owen",
+        "parent": "opinions",
+        "depth": 103,
+        "first_cycle": 774,
+        "last_cycle": 774,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -132,69 +214,6 @@
         "first_cycle": 728,
         "last_cycle": 773,
         "hits": 131,
-        "status": "open"
-      },
-      {
-        "label": "excited",
-        "parent": "speak",
-        "depth": 92,
-        "first_cycle": 755,
-        "last_cycle": 773,
-        "hits": 87,
-        "status": "open"
-      },
-      {
-        "label": "new stuff",
-        "parent": "share",
-        "depth": 98,
-        "first_cycle": 765,
-        "last_cycle": 773,
-        "hits": 45,
-        "status": "open"
-      },
-      {
-        "label": "new ideas",
-        "parent": "new stuff",
-        "depth": 99,
-        "first_cycle": 767,
-        "last_cycle": 773,
-        "hits": 37,
-        "status": "open"
-      },
-      {
-        "label": "not easy to follow",
-        "parent": "new ideas",
-        "depth": 100,
-        "first_cycle": 769,
-        "last_cycle": 773,
-        "hits": 31,
-        "status": "open"
-      },
-      {
-        "label": "reconciled",
-        "parent": "not easy to follow",
-        "depth": 101,
-        "first_cycle": 771,
-        "last_cycle": 773,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "opinions",
-        "parent": "reconciled",
-        "depth": 102,
-        "first_cycle": 772,
-        "last_cycle": 773,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 772,
-        "hits": 484,
         "status": "open"
       },
       {
@@ -511,28 +530,9 @@
         "last_cycle": 747,
         "hits": 25,
         "status": "open"
-      },
-      {
-        "label": "use",
-        "parent": "skepticity",
-        "depth": 83,
-        "first_cycle": 746,
-        "last_cycle": 747,
-        "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "topic",
-        "parent": "beliefs impact",
-        "depth": 66,
-        "first_cycle": 704,
-        "last_cycle": 746,
-        "hits": 42,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "powerful tool",
       "exciting idea",
       "sara",
       "thoughts",
@@ -563,10 +563,11 @@
       "new stuff",
       "new ideas",
       "not easy to follow",
-      "reconciled"
+      "reconciled",
+      "opinions"
     ],
-    "focus_turns": 2,
-    "last_branch_cycle": 772,
+    "focus_turns": 0,
+    "last_branch_cycle": 774,
     "escape_pressure": 0
   }
 }
