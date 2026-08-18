@@ -1,0 +1,53 @@
+name: Resonator one-shot deploy
+
+on:
+  push:
+    paths:
+      - '.github/workflows/resonator-one-shot.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install exact standalone Resonator
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, gzip, re, shutil
+
+          parts = Path('apps/resonator-parts')
+          names = ['01','02','03','04','05','06','07','08a','08b','09']
+          encoded = ''.join((parts / f'{name}.txt').read_text().strip() for name in names)
+          html = gzip.decompress(base64.b64decode(encoded))
+          Path('apps/resonator.html').write_bytes(html)
+
+          shutil.rmtree(parts)
+
+          index = Path('index.html')
+          text = index.read_text()
+          text, count = re.subn(r'apps/resonator\.html\?v=[^"\s<]+', 'apps/resonator.html?v=20260818', text, count=1)
+          if count != 1:
+              raise RuntimeError('Could not find exactly one Resonator launcher URL in index.html')
+          index.write_text(text)
+
+          Path('.github/workflows/resonator-one-shot.yml').unlink()
+          PY
+
+          test "$(git hash-object apps/resonator.html)" = "5eefc483eadca5c5a30e3389d33e661f58ae90c0"
+          test ! -e apps/resonator-parts
+          grep -q 'apps/resonator.html?v=20260818' index.html
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Deploy exact standalone Resonator'
+          git pull --rebase origin main
+          git push origin HEAD:main
