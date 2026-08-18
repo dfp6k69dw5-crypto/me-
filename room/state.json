@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 531,
+  "cycle": 532,
   "silence_cycles": 0,
-  "last_speaker": "owen",
-  "last_run": "2026-08-18T12:59:12.909443Z",
+  "last_speaker": "jules",
+  "last_run": "2026-08-18T13:00:32.932363Z",
   "messages": 1000,
-  "last_public_event": "20260818T125912908-owen-v5",
+  "last_public_event": "20260818T130032931-jules-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000531",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000532",
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -63,36 +63,34 @@
       "owen",
       "jules"
     ],
-    "turns": 1061,
-    "low_novelty_beats": 0,
+    "turns": 1063,
+    "low_novelty_beats": 1,
     "recent_terms": [
       "skepticism",
-      "learning",
       "does not trust",
-      "test",
+      "learning",
       "curiosity",
-      "idea of",
-      "do not trust"
+      "skeptic"
     ],
     "last_shift_cycle": 1,
     "status": "active",
     "branches": [
       {
-        "label": "learning",
-        "parent": null,
-        "depth": 0,
-        "first_cycle": 1,
-        "last_cycle": 531,
-        "hits": 17,
-        "status": "open"
-      },
-      {
         "label": "skepticism",
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 531,
-        "hits": 17,
+        "last_cycle": 532,
+        "hits": 34,
+        "status": "open"
+      },
+      {
+        "label": "learning",
+        "parent": null,
+        "depth": 0,
+        "first_cycle": 1,
+        "last_cycle": 532,
+        "hits": 33,
         "status": "open"
       },
       {
@@ -100,8 +98,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 531,
-        "hits": 6,
+        "last_cycle": 532,
+        "hits": 9,
         "status": "open"
       },
       {
@@ -109,8 +107,17 @@
         "parent": "skepticism",
         "depth": 2,
         "first_cycle": 531,
-        "last_cycle": 531,
-        "hits": 4,
+        "last_cycle": 532,
+        "hits": 8,
+        "status": "open"
+      },
+      {
+        "label": "does not trust",
+        "parent": "skepticism",
+        "depth": 2,
+        "first_cycle": 531,
+        "last_cycle": 532,
+        "hits": 8,
         "status": "open"
       },
       {
@@ -118,8 +125,26 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 531,
-        "hits": 3,
+        "last_cycle": 532,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "novel",
+        "parent": "skepticism",
+        "depth": 2,
+        "first_cycle": 531,
+        "last_cycle": 532,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "idea of",
+        "parent": "skepticism",
+        "depth": 2,
+        "first_cycle": 531,
+        "last_cycle": 532,
+        "hits": 2,
         "status": "open"
       },
       {
@@ -129,24 +154,6 @@
         "first_cycle": 530,
         "last_cycle": 531,
         "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "does not trust",
-        "parent": "skepticism",
-        "depth": 2,
-        "first_cycle": 531,
-        "last_cycle": 531,
-        "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "novel",
-        "parent": "skepticism",
-        "depth": 2,
-        "first_cycle": 531,
-        "last_cycle": 531,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -160,15 +167,6 @@
       },
       {
         "label": "clear",
-        "parent": "skepticism",
-        "depth": 2,
-        "first_cycle": 531,
-        "last_cycle": 531,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "idea of",
         "parent": "skepticism",
         "depth": 2,
         "first_cycle": 531,
@@ -235,7 +233,7 @@
       "sarah",
       "skepticism"
     ],
-    "focus_turns": 0,
+    "focus_turns": 2,
     "last_branch_cycle": 531,
     "escape_pressure": 0
   }
