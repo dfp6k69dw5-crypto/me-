@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T19:34:32.077419+00:00",
-  "cycle_key": "32153618883:1:231",
+  "generated_at": "2026-08-18T19:35:36.041073+00:00",
+  "cycle_key": "32153618883:1:232",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.93,
-      "confidence": 0.817,
-      "raw_score": 2.21,
-      "repeat_penalty": 0.28,
+      "score": 2.38,
+      "confidence": 0.909,
+      "raw_score": 2.38,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
         "specific",
         "example"
@@ -46,6 +46,13 @@
           "matched": [
             "specific"
           ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
           "weight": 1.45
         },
         {
@@ -65,72 +72,44 @@
         {
           "kind": "message",
           "matched": [
-            "example",
             "specific"
           ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.54
+          "weight": 0.64
         }
       ]
     },
     {
-      "name": "social-grounding",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "interaction",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.28,
+      "domain": "affect",
+      "score": 1.53,
+      "confidence": 0.684,
+      "raw_score": 1.53,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "conversation"
+        "love",
+        "trust"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "conversation"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
+            "love"
           ],
           "weight": 1.15
         },
         {
-          "kind": "message",
+          "kind": "topic_support",
           "matched": [
-            "conversation"
+            "trust"
           ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 0.54
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "5b3039f50274",
+  "context_fingerprint": "77a836d31f89",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 831,
-  "approx_added_tokens": 208
+  "temporary_skill_chars": 854,
+  "approx_added_tokens": 214
 }
