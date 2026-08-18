@@ -55,4 +55,4 @@ Revert v2 if live beats begin failing because of the router, cadence degrades ma
 
 ## Post-change status
 
-Implementation prepared on `agent/attention-router-v2`. Local synthetic execution passes all 11 routing tests. GitHub CI and live post-merge telemetry remain the deployment gates.
+PR #63 merged to `main` on 2026-08-18. GitHub's Room Attention Smoke job compiled the router and ran all 11 regression tests successfully. The Room restart was issued immediately after merge. At the final verification point, the repository still contained the last v1 attention record from 15:16:44 UTC and no post-restart v2 beat had been committed yet, so live v2 telemetry remained the only pending deployment observation.
