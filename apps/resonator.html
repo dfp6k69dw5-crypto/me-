@@ -4,7 +4,7 @@
  const parts=['01','02','03','04','05','06','07','08a','08b','09'];
  let b='';
  for(const n of parts){
-   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817e',{cache:'no-store'});
+   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817f',{cache:'no-store'});
    if(!r.ok) throw new Error('Missing payload part '+n);
    b+=(await r.text()).trim();
  }
@@ -124,6 +124,24 @@ return {P,F,S,axis:0,mic:rings[3][1],hit:rings[6][Math.floor(C/2)],needSub:0.000
      }
    }
  }
+ // Milk Silo uses the same settings as the validated render test. No added oscillator or harmonic generator.
+ const applyMilkSiloSettings=function(){
+   try{
+     if(typeof state!=='undefined'&&state.val){state.val.decay=40;state.val.loss=0.05;state.val.hard=0.9;}
+     if(typeof syncKnob==='function'){syncKnob('decay');syncKnob('loss');syncKnob('hard');}
+     if(typeof node!=='undefined'&&node&&node.port){
+       node.port.postMessage({t:'p',k:'decay',v:40});
+       node.port.postMessage({t:'p',k:'loss',v:0.05});
+       node.port.postMessage({t:'p',k:'hard',v:0.9});
+     }
+   }catch(e){}
+ };
+ document.addEventListener('click',function(e){
+   let el=e.target;
+   for(let i=0;i<5&&el;i++,el=el.parentElement){
+     if((el.textContent||'').trim()==='Milk Silo'){setTimeout(applyMilkSiloSettings,80);break;}
+   }
+ },true);
 })();<\/script>`;
  text=text.replace('</body>',foldJs+'</body>');
 
