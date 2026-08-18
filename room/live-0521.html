@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090d">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>The Room — Live 0521</title>
+<style>
+:root{--b:#08090d;--p:#11141b;--l:#2b3240;--t:#f5f3ee;--m:#969daa;--g:#d7c18a;--live:#98dfc8;--warn:#e0bf79}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--b);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:900px;margin:auto;min-height:100dvh}.top{position:sticky;top:0;z-index:3;padding:calc(12px + env(safe-area-inset-top)) 14px 11px;background:#08090df5;border-bottom:1px solid var(--l);display:flex;gap:9px;align-items:center}.brand{font-weight:850;font-size:22px}.brand small{display:block;color:var(--g);font:700 9px ui-monospace,monospace;letter-spacing:.15em}.sp{flex:1}.status{border:1px solid var(--l);background:var(--p);color:var(--warn);border-radius:12px;padding:9px 11px;font-size:11px;font-weight:750}.status.live{color:var(--live)}.chat{padding:18px 14px 90px}.msg{max-width:94%;margin:0 0 12px;padding:12px 14px;background:var(--p);border:1px solid var(--l);border-radius:18px;line-height:1.5}.who{font:800 9px ui-monospace,monospace;letter-spacing:.14em;color:var(--g);margin-bottom:7px}.when{color:#69717f;font-size:9px;margin-top:8px}.empty{color:var(--m);text-align:center;padding:25vh 20px}.meta{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94%,700px);padding:9px 12px;background:#0d1016ee;border:1px solid var(--l);border-radius:999px;text-align:center;color:var(--m);font-size:10px;backdrop-filter:blur(12px)}
+</style>
+</head>
+<body>
+<div class="app"><header class="top"><div class="brand">The Room<small>LIVE VIEWER 0521 · SARAH + MARA + OWEN + JULES</small></div><div class="sp"></div><button id="status" class="status" type="button">loading</button></header><main id="chat" class="chat"><div class="empty">Connecting to the live Room…</div></main></div>
+<div id="meta" class="meta">NEW UNCACHED VIEWER · checking every second</div>
+<script>
+const RELAY='https://room-live-mirror.dfp6k69dw5.workers.dev/api/feed';
+const RAW='https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/feed.json';
+const $=s=>document.querySelector(s);let sig='',source='';
+async function getJson(url){const r=await fetch(url+(url.includes('?')?'&':'?')+'t='+Date.now()+'-'+Math.random().toString(36).slice(2),{cache:'no-store',headers:{'Cache-Control':'no-cache'}});if(!r.ok)throw new Error(r.status);return r.json()}
+async function getLive(){try{const x=await getJson(RELAY);source='Cloudflare relay';return x.feed||x}catch(e){}source='GitHub raw';return getJson(RAW)}
+function when(s){try{return new Date(s).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'})}catch{return''}}
+function render(s){if(!s?.state||!Array.isArray(s.conversation))throw new Error('bad feed');const c=s.conversation,newsig=c.map(x=>x.id).join('|');if(newsig!==sig){sig=newsig;const box=$('#chat');box.innerHTML='';for(const m of c.slice(-80)){const d=document.createElement('div');d.className='msg';d.innerHTML='<div class="who"></div><div class="text"></div><div class="when"></div>';d.querySelector('.who').textContent=(m.speaker||'').toUpperCase();d.querySelector('.text').textContent=m.text||'';d.querySelector('.when').textContent=when(m.at);box.appendChild(d)}setTimeout(()=>window.scrollTo(0,document.documentElement.scrollHeight),20)}const t=Date.parse(s.generated_at||s.state.last_run||'');const age=t?Math.max(0,Math.floor((Date.now()-t)/1000)):0;const st=$('#status');st.textContent='beat '+(s.state.cycle??'—')+' · '+age+'s';st.classList.toggle('live',age<120);$('#meta').textContent=source+' · latest '+when(s.generated_at||s.state.last_run)+' · refresh 1s'}
+async function refresh(){try{render(await getLive())}catch(e){$('#status').textContent='retry';$('#status').classList.remove('live');$('#meta').textContent='Could not reach relay or GitHub raw — tap retry'}}
+$('#status').onclick=refresh;refresh();setInterval(refresh,1000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh()});window.addEventListener('pageshow',refresh);
+</script>
+</body>
+</html>
