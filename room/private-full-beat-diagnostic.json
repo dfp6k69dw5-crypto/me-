@@ -1,9 +1,10 @@
 {
   "server_ready": true,
-  "phase": "commit",
+  "phase": "expression",
   "ctx_total": 16384,
   "parallel_slots": 2,
   "model_node_batching": true,
+  "public_fallback": false,
   "sense": {
     "1": {
       "returncode": 0,
@@ -120,30 +121,15 @@
   },
   "expression": {
     "2": {
-      "returncode": 0,
+      "returncode": 1,
       "stdout": "",
-      "stderr": ""
+      "stderr": "(n,key) if a.phase=='sense' else recurrent(n,key,load(Path(a.bus),{})); PARTS.mkdir(exist_ok=True); save(PARTS/f'{a.phase}-{n:02d}.json',x)\n                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 80, in recurrent\n    expression=model_run('expression',{'entity':e,'profile':P[e],'social_observation':perception,'deliberation':deliberation,'event':base.get('event'),'context':base.get('context'),'topic':base.get('topic'),'partner':base.get('partner'),'relationship':base.get('relationship'),'mandatory_speech':True})\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_private_model.py\", line 302, in run\n    raise RuntimeError(f\"private model output rejected for {role}: {type(exc).__name__}\") from exc\nRuntimeError: private model output rejected for expression: ValueError\n"
     },
     "5": {
       "returncode": 0,
       "stdout": "",
       "stderr": ""
-    },
-    "8": {
-      "returncode": 0,
-      "stdout": "",
-      "stderr": ""
-    },
-    "11": {
-      "returncode": 0,
-      "stdout": "",
-      "stderr": ""
     }
   },
-  "commit": {
-    "returncode": 0,
-    "stdout": "Room v5 beat 8566 : Sarah, Mara, Jules, Owen topic= routine / effort\n",
-    "stderr": ""
-  },
-  "status": "accepted"
+  "status": "failed"
 }
