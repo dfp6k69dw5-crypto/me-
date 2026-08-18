@@ -52,7 +52,7 @@ def node_prompt(n: int, phase: str) -> str:
     return ""
 
 
-def run_nodes(nodes: list[int], phase: str, bus: str | None = None) -> tuple[bool, dict]:
+def launch_nodes(nodes: list[int], phase: str, bus: str | None, results: dict) -> bool:
     procs = []
     for n in nodes:
         env = clean_base_env()
@@ -62,13 +62,27 @@ def run_nodes(nodes: list[int], phase: str, bus: str | None = None) -> tuple[boo
         if bus:
             cmd += ["--bus", bus]
         procs.append((n, subprocess.Popen(cmd, cwd=ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)))
-    results = {}
     ok = True
     for n, p in procs:
         out, err = p.communicate(timeout=90)
         results[str(n)] = {"returncode": p.returncode, "stdout": safe(out), "stderr": safe(err)}
         if p.returncode != 0:
             ok = False
+    return ok
+
+
+def run_nodes(nodes: list[int], phase: str, bus: str | None = None) -> tuple[bool, dict]:
+    results: dict = {}
+    plain = [n for n in nodes if not node_prompt(n, phase)]
+    prompted = [n for n in nodes if node_prompt(n, phase)]
+    ok = True
+    if plain:
+        ok = launch_nodes(plain, phase, bus, results) and ok
+    for start in range(0, len(prompted), PARALLEL_SLOTS):
+        batch = prompted[start:start + PARALLEL_SLOTS]
+        ok = launch_nodes(batch, phase, bus, results) and ok
+        if not ok:
+            break
     return ok, results
 
 
@@ -79,7 +93,7 @@ def run_cmd(cmd: list[str]) -> tuple[bool, dict]:
 
 
 def main() -> int:
-    result = {"server_ready": False, "phase": "starting", "ctx_total": CTX_TOTAL, "parallel_slots": PARALLEL_SLOTS}
+    result = {"server_ready": False, "phase": "starting", "ctx_total": CTX_TOTAL, "parallel_slots": PARALLEL_SLOTS, "model_node_batching": True}
     write(result)
     bins = list(RUNTIME_DIR.rglob("llama-server"))
     if not MODEL.exists() or not bins:
