@@ -4,6 +4,9 @@ const ISSUER = "https://token.actions.githubusercontent.com";
 const EXPECTED_AUDIENCE = "room-live-mirror";
 const EXPECTED_REPOSITORY = "maaronfanberg-lab/me-";
 const EXPECTED_REF = "refs/heads/main";
+const ALLEN = "allen";
+const MAX_TURN = 700;
+const MAX_QUEUE = 50;
 
 let oidcMetadataCache = null;
 let jwksCache = null;
@@ -18,6 +21,28 @@ function json(data, status = 200, extraHeaders = {}) {
       ...extraHeaders,
     },
   });
+}
+
+function html(body, status = 200) {
+  return new Response(body, {
+    status,
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "no-referrer",
+    },
+  });
+}
+
+function bearer(request) {
+  const value = request.headers.get("authorization") || "";
+  return value.startsWith("Bearer ") ? value.slice(7) : "";
+}
+
+function allenAuthorized(request, env) {
+  const expected = String(env.ROOM_ALLEN_KEY || "");
+  return Boolean(expected && bearer(request) === expected);
 }
 
 function decodeBase64Url(value) {
@@ -99,6 +124,12 @@ async function verifyGitHubTokenWithKey(parts, claims, jwk) {
   return claims;
 }
 
+async function requireGitHub(request) {
+  const token = bearer(request);
+  if (!token) throw new Error("missing-token");
+  return verifyGitHubToken(token);
+}
+
 function validFeed(feed) {
   return Boolean(
     feed &&
@@ -135,13 +166,47 @@ export class RoomState extends DurableObject {
   async getLatest() {
     return (await this.ctx.storage.get("latest")) || null;
   }
+
+  async enqueueAllen(text) {
+    const queue = (await this.ctx.storage.get("allenQueue")) || [];
+    if (queue.length >= MAX_QUEUE) return { accepted: false, reason: "queue-full" };
+    const turn = {
+      id: crypto.randomUUID(),
+      speaker: ALLEN,
+      text,
+      at: new Date().toISOString(),
+    };
+    queue.push(turn);
+    await this.ctx.storage.put("allenQueue", queue);
+    return { accepted: true, id: turn.id, at: turn.at, queued: queue.length };
+  }
+
+  async pendingAllen() {
+    const queue = (await this.ctx.storage.get("allenQueue")) || [];
+    return { messages: queue.slice(0, 20) };
+  }
+
+  async ackAllen(ids) {
+    const wanted = new Set((Array.isArray(ids) ? ids : []).map(String));
+    const queue = (await this.ctx.storage.get("allenQueue")) || [];
+    const kept = queue.filter((turn) => !wanted.has(String(turn.id)));
+    await this.ctx.storage.put("allenQueue", kept);
+    return { acknowledged: queue.length - kept.length, queued: kept.length };
+  }
 }
 
 const VIEWER = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#08090d"><title>The Room — Cloudflare Live</title><style>
 html,body{margin:0;min-height:100%;background:#08090d;color:#f5f3ee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding:0 12px 70px}.top{position:sticky;top:0;background:#08090df5;padding:calc(14px + env(safe-area-inset-top)) 2px 11px;border-bottom:1px solid #252b36;z-index:2}.title{font-size:24px;font-weight:850}.sub{font-size:11px;color:#a3a9b3;margin-top:4px}.status{margin-top:9px;font-size:12px;color:#e0bf79}.status.live{color:#98dfc8}.chat{max-width:760px;margin:14px auto}.beat{font-size:10px;color:#6f7783;text-align:center;margin:18px 0 10px}.msg{background:#11141b;border:1px solid #2b3240;border-radius:16px;padding:11px 13px;margin:0 0 10px}.who{font-size:10px;font-weight:800;letter-spacing:.1em;color:#d7c18a;margin-bottom:6px}.text{font-size:16px;line-height:1.45}.when{font-size:9px;color:#707887;margin-top:7px}.err{padding:24vh 18px;text-align:center;color:#a3a9b3;line-height:1.5}</style></head><body>
-<div class="top"><div class="title">The Room</div><div class="sub">Sarah · Mara · Owen · Jules · Cloudflare live relay</div><div id="status" class="status">connecting…</div></div><main id="chat" class="chat"><div class="err">Opening the live Room…</div></main>
-<script>(function(){var status=document.getElementById('status'),chat=document.getElementById('chat'),last='',busy=false;function tm(s){try{return new Date(s).toLocaleTimeString([],{hour:'numeric',minute:'2-digit',second:'2-digit'})}catch(e){return''}}function render(r){var f=r.feed||{},c=Array.isArray(f.conversation)?f.conversation:[],m=f.minds&&f.minds.entities||{},st=f.state||{},sig=c.length?String(c[c.length-1].id||'')+':'+c.length:'';var age=r.receivedAt?Math.max(0,Math.floor((Date.now()-Date.parse(r.receivedAt))/1000)):9999;status.className='status'+(age<15?' live':'');status.textContent=(age<15?'LIVE':'STALE')+' · beat '+(st.cycle||'—')+' · '+(st.beat_message_count||0)+' voices · '+age+'s';if(sig===last)return;last=sig;chat.innerHTML='';var start=Math.max(0,c.length-80),prev='';for(var i=start;i<c.length;i++){var x=c[i]||{},b=x.beat_id||'';if(b!==prev){var h=document.createElement('div');h.className='beat';h.textContent='BEAT '+(b?b.slice(-6):'—');chat.appendChild(h);prev=b}var d=document.createElement('div');d.className='msg';var w=document.createElement('div');w.className='who';w.textContent=(m[x.speaker]&&m[x.speaker].name)||x.speaker||'';var t=document.createElement('div');t.className='text';t.textContent=x.text||'';var q=document.createElement('div');q.className='when';q.textContent=tm(x.at);d.appendChild(w);d.appendChild(t);d.appendChild(q);chat.appendChild(d)}if(c.length)window.scrollTo(0,document.body.scrollHeight)}async function refresh(){if(busy)return;busy=true;try{var r=await fetch('/api/feed?fresh='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);render(await r.json())}catch(e){status.className='status';status.textContent='relay unavailable';if(!last)chat.innerHTML='<div class="err">The Cloudflare relay is not receiving the Room yet.</div>'}finally{busy=false}}refresh();setInterval(refresh,2000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')refresh()})})();</script></body></html>`;
+<div class="top"><div class="title">The Room</div><div class="sub">Sarah · Mara · Owen · Jules · Allen</div><div id="status" class="status">connecting…</div></div><main id="chat" class="chat"><div class="err">Opening the live Room…</div></main>
+<script>(function(){var status=document.getElementById('status'),chat=document.getElementById('chat'),last='',busy=false;function tm(s){try{return new Date(s).toLocaleTimeString([],{hour:'numeric',minute:'2-digit',second:'2-digit'})}catch(e){return''}}function nm(x,m){return x.speaker==='allen'?'Allen':((m[x.speaker]&&m[x.speaker].name)||x.speaker||'')}function render(r){var f=r.feed||{},c=Array.isArray(f.conversation)?f.conversation:[],m=f.minds&&f.minds.entities||{},st=f.state||{},sig=c.length?String(c[c.length-1].id||'')+':'+c.length:'';var age=r.receivedAt?Math.max(0,Math.floor((Date.now()-Date.parse(r.receivedAt))/1000)):9999;status.className='status'+(age<15?' live':'');status.textContent=(age<15?'LIVE':'STALE')+' · beat '+(st.cycle||'—')+' · '+(st.beat_message_count||0)+' voices · '+age+'s';if(sig===last)return;last=sig;chat.innerHTML='';var start=Math.max(0,c.length-80),prev='';for(var i=start;i<c.length;i++){var x=c[i]||{},b=x.beat_id||'';if(b!==prev){var h=document.createElement('div');h.className='beat';h.textContent='BEAT '+(b?b.slice(-6):'—');chat.appendChild(h);prev=b}var d=document.createElement('div');d.className='msg';var w=document.createElement('div');w.className='who';w.textContent=nm(x,m);var t=document.createElement('div');t.className='text';t.textContent=x.text||'';var q=document.createElement('div');q.className='when';q.textContent=tm(x.at);d.appendChild(w);d.appendChild(t);d.appendChild(q);chat.appendChild(d)}if(c.length)window.scrollTo(0,document.body.scrollHeight)}async function refresh(){if(busy)return;busy=true;try{var r=await fetch('/api/feed?fresh='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);render(await r.json())}catch(e){status.className='status';status.textContent='relay unavailable';if(!last)chat.innerHTML='<div class="err">The Cloudflare relay is not receiving the Room yet.</div>'}finally{busy=false}}refresh();setInterval(refresh,2000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')refresh()})})();</script></body></html>`;
+
+const ALLEN_VIEWER = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#08090d"><title>Allen — The Room</title><style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#08090d;color:#f5f3ee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding:0 12px 150px}.top{position:sticky;top:0;background:#08090df6;padding:calc(14px + env(safe-area-inset-top)) 2px 11px;border-bottom:1px solid #252b36;z-index:3}.title{font-size:24px;font-weight:850}.sub{font-size:11px;color:#a3a9b3;margin-top:4px}.status{margin-top:9px;font-size:12px;color:#e0bf79}.status.live{color:#98dfc8}.chat{max-width:760px;margin:14px auto}.beat{font-size:10px;color:#6f7783;text-align:center;margin:18px 0 10px}.msg{background:#11141b;border:1px solid #2b3240;border-radius:16px;padding:11px 13px;margin:0 0 10px}.msg.allen{border-color:#756338}.who{font-size:10px;font-weight:800;letter-spacing:.1em;color:#d7c18a;margin-bottom:6px}.text{font-size:16px;line-height:1.45}.when{font-size:9px;color:#707887;margin-top:7px}.lock{max-width:520px;margin:22vh auto 0;background:#11141b;border:1px solid #2b3240;border-radius:18px;padding:18px}.lock h2{margin:0 0 7px}.hint{font-size:12px;line-height:1.45;color:#9ca5b3;margin-bottom:12px}.keyrow{display:flex;gap:8px}.keyrow input{min-width:0;flex:1}.composer{position:fixed;left:0;right:0;bottom:0;z-index:4;background:#08090df8;border-top:1px solid #2b3240;padding:10px 12px calc(10px + env(safe-area-inset-bottom))}.composer-inner{max-width:760px;margin:auto;display:flex;gap:8px;align-items:flex-end}.composer textarea{flex:1;min-height:48px;max-height:150px;resize:vertical}.composer button,.keyrow button,.forget{white-space:nowrap}input,textarea{background:#11141b;color:#fff;border:1px solid #394150;border-radius:12px;padding:11px 12px;font:inherit;outline:none}button{border:1px solid #4a5364;background:#171d28;color:#fff;border-radius:12px;padding:11px 14px;font-weight:800}.send{background:#d3bd82;color:#111;border-color:#d3bd82}.send:disabled{opacity:.5}.mini{max-width:760px;margin:0 auto 8px;text-align:right}.forget{font-size:10px;padding:5px 8px;background:transparent;color:#7d8795;border-color:#2b3240}.hidden{display:none!important}</style></head><body>
+<div id="lock" class="lock"><h2>Allen</h2><div class="hint">Enter your private Room key. It stays in this browser and is never placed in the conversation.</div><div class="keyrow"><input id="key" type="password" autocomplete="current-password" placeholder="Room key"><button id="unlock">Enter</button></div><div id="lockStatus" class="status"></div></div>
+<div id="app" class="hidden"><div class="top"><div class="title">The Room</div><div class="sub">Sarah · Mara · Owen · Jules · Allen</div><div id="status" class="status">connecting…</div></div><main id="chat" class="chat"></main><div class="mini"><button id="forget" class="forget">forget key</button></div><div class="composer"><div class="composer-inner"><textarea id="turn" maxlength="700" placeholder="Speak as Allen…"></textarea><button id="send" class="send">Send</button></div></div></div>
+<script>(function(){var lock=document.getElementById('lock'),app=document.getElementById('app'),keyInput=document.getElementById('key'),unlock=document.getElementById('unlock'),lockStatus=document.getElementById('lockStatus'),status=document.getElementById('status'),chat=document.getElementById('chat'),turn=document.getElementById('turn'),send=document.getElementById('send'),forget=document.getElementById('forget'),last='',busy=false,roomKey=localStorage.getItem('roomAllenKey')||'';function headers(){return {'Authorization':'Bearer '+roomKey}}function tm(s){try{return new Date(s).toLocaleTimeString([],{hour:'numeric',minute:'2-digit',second:'2-digit'})}catch(e){return''}}function nm(x,m){return x.speaker==='allen'?'Allen':((m[x.speaker]&&m[x.speaker].name)||x.speaker||'')}async function auth(){if(!roomKey)return false;try{var r=await fetch('/api/allen/auth',{headers:headers(),cache:'no-store'});if(!r.ok)return false;lock.classList.add('hidden');app.classList.remove('hidden');refresh();return true}catch(e){return false}}async function doUnlock(){roomKey=keyInput.value.trim();lockStatus.textContent='checking…';if(await auth()){localStorage.setItem('roomAllenKey',roomKey);lockStatus.textContent=''}else{lockStatus.textContent='That key did not open Allen.';roomKey=''}}unlock.onclick=doUnlock;keyInput.addEventListener('keydown',function(e){if(e.key==='Enter')doUnlock()});forget.onclick=function(){localStorage.removeItem('roomAllenKey');location.reload()};function render(r){var f=r.feed||{},c=Array.isArray(f.conversation)?f.conversation:[],m=f.minds&&f.minds.entities||{},st=f.state||{},sig=c.length?String(c[c.length-1].id||'')+':'+c.length:'';var age=r.receivedAt?Math.max(0,Math.floor((Date.now()-Date.parse(r.receivedAt))/1000)):9999;status.className='status'+(age<15?' live':'');status.textContent=(age<15?'LIVE':'STALE')+' · beat '+(st.cycle||'—')+' · '+age+'s';if(sig===last)return;last=sig;chat.innerHTML='';var start=Math.max(0,c.length-90),prev='';for(var i=start;i<c.length;i++){var x=c[i]||{},b=x.beat_id||'';if(b!==prev){var h=document.createElement('div');h.className='beat';h.textContent='BEAT '+(b?b.slice(-6):'—');chat.appendChild(h);prev=b}var d=document.createElement('div');d.className='msg'+(x.speaker==='allen'?' allen':'');var w=document.createElement('div');w.className='who';w.textContent=nm(x,m);var t=document.createElement('div');t.className='text';t.textContent=x.text||'';var q=document.createElement('div');q.className='when';q.textContent=tm(x.at);d.appendChild(w);d.appendChild(t);d.appendChild(q);chat.appendChild(d)}}async function refresh(){if(busy)return;busy=true;try{var r=await fetch('/api/feed?fresh='+Date.now(),{cache:'no-store'});if(r.ok)render(await r.json())}finally{busy=false}}async function speak(){var text=turn.value.trim();if(!text||send.disabled)return;send.disabled=true;status.textContent='sending Allen…';try{var r=await fetch('/api/allen',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},headers()),body:JSON.stringify({text:text})});if(r.status===401){localStorage.removeItem('roomAllenKey');location.reload();return}var data=await r.json();if(!r.ok)throw new Error(data.error||'send failed');turn.value='';status.className='status live';status.textContent='Allen is queued for the next Room beat';setTimeout(refresh,1200)}catch(e){status.className='status';status.textContent=String(e.message||e)}finally{send.disabled=false;turn.focus()}}send.onclick=speak;turn.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();speak()}});setInterval(refresh,2000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')refresh()});if(roomKey){auth().then(function(ok){if(!ok){roomKey='';localStorage.removeItem('roomAllenKey')}})}else{keyInput.focus()}})();</script></body></html>`;
 
 export default {
   async fetch(request, env) {
@@ -162,15 +227,53 @@ export default {
 
     if (url.pathname === "/api/ingest" && request.method === "POST") {
       try {
-        const auth = request.headers.get("authorization") || "";
-        if (!auth.startsWith("Bearer ")) return json({ error: "missing-token" }, 401);
-        const claims = await verifyGitHubToken(auth.slice(7));
+        const claims = await requireGitHub(request);
         const feed = await request.json();
         if (!validFeed(feed)) return json({ error: "invalid-feed" }, 400);
         const result = await stub.putLatest(feed, claims.sha || "");
         return json(result, result.accepted ? 202 : 200);
       } catch (error) {
         return json({ error: "unauthorized", detail: String(error?.message || error) }, 401);
+      }
+    }
+
+    if (url.pathname === "/api/participant/pending" && request.method === "GET") {
+      try {
+        await requireGitHub(request);
+        return json(await stub.pendingAllen());
+      } catch (error) {
+        return json({ error: "unauthorized", detail: String(error?.message || error) }, 401);
+      }
+    }
+
+    if (url.pathname === "/api/participant/ack" && request.method === "POST") {
+      try {
+        await requireGitHub(request);
+        const body = await request.json();
+        return json(await stub.ackAllen(body?.ids || []));
+      } catch (error) {
+        return json({ error: "unauthorized", detail: String(error?.message || error) }, 401);
+      }
+    }
+
+    if (url.pathname === "/api/allen/auth" && request.method === "GET") {
+      if (!env.ROOM_ALLEN_KEY) return json({ error: "allen-key-not-configured" }, 503);
+      if (!allenAuthorized(request, env)) return json({ error: "unauthorized" }, 401);
+      return json({ ok: true, identity: "Allen" });
+    }
+
+    if (url.pathname === "/api/allen" && request.method === "POST") {
+      if (!env.ROOM_ALLEN_KEY) return json({ error: "allen-key-not-configured" }, 503);
+      if (!allenAuthorized(request, env)) return json({ error: "unauthorized" }, 401);
+      try {
+        const body = await request.json();
+        const text = String(body?.text || "").trim();
+        if (!text) return json({ error: "empty-turn" }, 400);
+        if (text.length > MAX_TURN) return json({ error: "turn-too-long", max: MAX_TURN }, 400);
+        const result = await stub.enqueueAllen(text);
+        return json(result, result.accepted ? 202 : 429);
+      } catch (error) {
+        return json({ error: "invalid-request", detail: String(error?.message || error) }, 400);
       }
     }
 
@@ -185,11 +288,12 @@ export default {
       return json({ ok: true, hasFeed: Boolean(latest), cycle: latest?.feed?.state?.cycle || null, receivedAt: latest?.receivedAt || null });
     }
 
+    if (url.pathname === "/allen" && (request.method === "GET" || request.method === "HEAD")) {
+      return request.method === "HEAD" ? html("") : html(ALLEN_VIEWER);
+    }
+
     if (request.method === "GET" || request.method === "HEAD") {
-      return new Response(request.method === "HEAD" ? null : VIEWER, {
-        status: 200,
-        headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
-      });
+      return request.method === "HEAD" ? html("") : html(VIEWER);
     }
 
     return json({ error: "not-found" }, 404);
