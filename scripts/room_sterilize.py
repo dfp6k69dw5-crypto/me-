@@ -10,8 +10,8 @@ ROOM = ROOT / "room"
 SOCIETY = ROOT / "society"
 CONFIG = ROOM / "config.json"
 MARKER = ROOM / "sterilization.json"
-STERILIZATION_VERSION = 2
-CLEAN_BOOT = "room-sterile-v2-2026-08-18"
+STERILIZATION_VERSION = 3
+CLEAN_BOOT = "room-sterile-v3-2026-08-18"
 
 
 def load(path: Path, default):
@@ -93,7 +93,7 @@ def clean_subject_state() -> dict:
 def main() -> int:
     current_marker = load(MARKER, {})
     if int(current_marker.get("sterilization_version", 0)) >= STERILIZATION_VERSION and current_marker.get("boot_id") == CLEAN_BOOT:
-        print("Room sterilization v2 already applied")
+        print("Room sterilization v3 already applied")
         return 0
 
     stamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -114,7 +114,7 @@ def main() -> int:
         "last_run": stamp,
         "messages": 0,
         "last_public_event": None,
-        "note": "sterile-v2 private-model Room; pre-v2 cognition quarantined; contamination gates active",
+        "note": "sterile-v3 private-model Room; all pre-v3 cognition quarantined; grounding and contamination gates active",
         "last_beat_id": None,
         "beat_contributors": [],
         "beat_message_count": 0,
@@ -175,6 +175,7 @@ def main() -> int:
             "history_generation": CLEAN_BOOT,
             "public_fallback": False,
             "contamination_gate": True,
+            "semantic_grounding_gate": True,
         },
     }
     feed = {
@@ -212,15 +213,16 @@ def main() -> int:
         "sterilization_version": STERILIZATION_VERSION,
         "boot_id": CLEAN_BOOT,
         "sterilized_at": stamp,
-        "policy": "No pre-v2 conversational or derived historical state may be loaded into cognition.",
+        "policy": "No pre-v3 conversational or derived historical state may be loaded into cognition.",
         "reset": [
             "room conversation", "room discourse", "entity self histories", "entity room memories",
             "relationship event/report/shared-reference histories", "subject history", "live snapshots",
             "public feed", "legacy society conversation/minds/cognition/state/live", "society archives",
-            "diagnostic historical traces", "sterile-v1 first beat and all derivatives"
+            "diagnostic historical traces", "sterile-v1 contaminated beats and all derivatives",
+            "sterile-v2 contaminated beat and all derivatives"
         ],
     })
-    print(f"STERILIZED_V2 {CLEAN_BOOT}")
+    print(f"STERILIZED_V3 {CLEAN_BOOT}")
     return 0
 
 
