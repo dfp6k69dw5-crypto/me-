@@ -77,7 +77,7 @@ def run_cmd(cmd: list[str]) -> tuple[bool, dict]:
 
 
 def main() -> int:
-    result = {"server_ready": False, "phase": "starting"}
+    result = {"server_ready": False, "phase": "starting", "ctx_total": 32768, "parallel_slots": 4}
     write(result)
     bins = list(RUNTIME_DIR.rglob("llama-server"))
     if not MODEL.exists() or not bins:
@@ -88,7 +88,7 @@ def main() -> int:
     server.chmod(0o755)
     server_env = clean_base_env()
     server_env.pop("ROOM_MODEL_URL", None)
-    proc = subprocess.Popen([str(server), "-m", str(MODEL), "--host", "127.0.0.1", "--port", "18080", "-c", "8192", "-np", "4"], cwd=ROOT, env=server_env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    proc = subprocess.Popen([str(server), "-m", str(MODEL), "--host", "127.0.0.1", "--port", "18080", "-c", "32768", "-np", "4"], cwd=ROOT, env=server_env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     try:
         for _ in range(120):
             if proc.poll() is not None:
