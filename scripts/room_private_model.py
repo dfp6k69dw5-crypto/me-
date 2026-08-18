@@ -150,6 +150,28 @@ def _compact_payload(payload: dict) -> dict:
     return out
 
 
+def _safe_http_detail(exc: urllib.error.HTTPError) -> str:
+    detail = ""
+    try:
+        raw = exc.read().decode("utf-8", "replace")
+        parsed = json.loads(raw)
+        error = parsed.get("error") if isinstance(parsed, dict) else None
+        if isinstance(error, dict):
+            detail = str(error.get("message") or error.get("type") or "")
+        elif error:
+            detail = str(error)
+        if not detail and isinstance(parsed, dict):
+            detail = str(parsed.get("message") or "")
+    except Exception:
+        detail = ""
+    for key in ("ROOM_NODE_PROMPT", "ROOM_PROMPT_PERCEPTION", "ROOM_PROMPT_DELIBERATION", "ROOM_PROMPT_EXPRESSION"):
+        secret = os.environ.get(key, "")
+        if secret:
+            detail = detail.replace(secret, "[redacted]")
+    detail = re.sub(r"\s+", " ", detail).strip()
+    return detail[:240]
+
+
 def run(role: str, payload: dict, timeout: int = 30):
     """Private local-model adapter. Prompted live nodes fail closed; no canned fallback."""
     prompt = os.environ.get("ROOM_NODE_PROMPT", "").strip()
@@ -186,7 +208,9 @@ def run(role: str, payload: dict, timeout: int = 30):
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             data = json.loads(resp.read().decode("utf-8", "replace"))
     except urllib.error.HTTPError as exc:
-        raise RuntimeError(f"private model request failed for {role}: HTTP {exc.code}") from exc
+        detail = _safe_http_detail(exc)
+        suffix = f": {detail}" if detail else ""
+        raise RuntimeError(f"private model request failed for {role}: HTTP {exc.code}{suffix}") from exc
     except Exception as exc:
         raise RuntimeError(f"private model request failed for {role}: {type(exc).__name__}") from exc
 
