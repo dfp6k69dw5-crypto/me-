@@ -28,6 +28,28 @@
    text=text.replace("addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; });","addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; }); addEventListener('pointercancel',()=>{drag=null;});");
  }
 
+ // Add the tested low-frequency 50,000 litre silo as its own body.
+ const milkSilo=`'Milk Silo':{min:10,max:16,def:12,note:'A 50,000 litre stainless milk silo: three metres across, nearly nine tall, thin-walled and standing free with nothing touching it. Tall and thin means its lowest sounds are not the obvious in-and-out but high-count ripples running round the wall — twenty-two modes below a hundred hertz. Stainless loses almost nothing, so give it a long decay and a soft beater.',make(C){
+const P=[],F=[],S=[],R=0.19,H=0.56,RINGS=9,rings=[];
+const ring=(y,r,ph)=>{const ids=[];for(let j=0;j<C;j++){const a=2*Math.PI*j/C+(ph||0);
+const w=1+0.008*Math.cos(3*a+0.5)+0.005*Math.cos(7*a);
+ids.push(P.length);P.push([r*w*Math.cos(a),y,r*w*Math.sin(a)]);F.push(0);}
+rings.push(ids);return ids;};
+const base=P.length;P.push([0,-H/2-R*0.10,0]);F.push(0);
+ring(-H/2-R*0.055,R*0.55,0);
+for(let k=0;k<=RINGS;k++) ring(-H/2+H*k/RINGS,R,0);
+ring(H/2+R*0.10,R*0.62,0);
+const top=P.length;P.push([0,H/2+R*0.19,0]);F.push(0);
+const link=(a,b)=>{if(a!==b)S.push([a,b]);};
+for(const ids of rings) for(let j=0;j<C;j++) link(ids[j],ids[(j+1)%C]);
+for(let r=0;r<rings.length-1;r++){const a=rings[r],b=rings[r+1];
+for(let j=0;j<C;j++){link(a[j],b[j]);link(a[j],b[(j+1)%C]);link(a[(j+1)%C],b[j]);}}
+for(let j=0;j<C;j++){link(base,rings[0][j]);link(top,rings[rings.length-1][j]);}
+return {P,F,S,axis:0,mic:rings[3][1],hit:rings[6][Math.floor(C/2)],needSub:0.0002};}},`;
+ if(!text.includes("'Milk Silo':{")){
+   text=text.replace("Twins:{min:5,",milkSilo+"Twins:{min:5,");
+ }
+
  document.open();document.write(text);document.close();
 }catch(e){
  document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';
