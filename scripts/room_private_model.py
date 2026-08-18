@@ -33,9 +33,14 @@ def _extract_json(text: str):
     return obj
 
 
-def _looks_like_leak(text: str) -> bool:
-    low = text.lower()
-    if any(marker in low for marker in LEAK_MARKERS):
+def _contains_explicit_leak_marker(text: str) -> bool:
+    low = str(text or "").lower()
+    return any(marker in low for marker in LEAK_MARKERS)
+
+
+def _looks_like_public_leak(text: str) -> bool:
+    low = str(text or "").lower()
+    if _contains_explicit_leak_marker(low):
         return True
     secret = os.environ.get("ROOM_NODE_PROMPT", "").strip()
     if secret:
@@ -109,7 +114,7 @@ def _validate(role: str, obj: object) -> dict:
             raise ValueError("expression returned no utterance")
         if len(utterance.strip()) > 700:
             raise ValueError("expression utterance exceeded length limit")
-        if _looks_like_leak(utterance):
+        if _looks_like_public_leak(utterance):
             raise ValueError("expression failed privacy filter")
         if not isinstance(obj.get("topic_terms"), list):
             raise ValueError("expression returned no semantic topic terms")
@@ -135,12 +140,7 @@ def _public_message(message: object, text_limit: int) -> dict:
     if not isinstance(message, dict):
         return {"speaker": None, "text": str(message or "")[:text_limit], "target": None}
     cognition = message.get("cognition") if isinstance(message.get("cognition"), dict) else {}
-    return {
-        "speaker": message.get("speaker"),
-        "text": str(message.get("text", ""))[:text_limit],
-        "target": cognition.get("target"),
-        "topic_episode": message.get("topic_episode") or cognition.get("topic_episode"),
-    }
+    return {"speaker": message.get("speaker"), "text": str(message.get("text", ""))[:text_limit], "target": cognition.get("target"), "topic_episode": message.get("topic_episode") or cognition.get("topic_episode")}
 
 
 def _compact_payload(payload: dict, role: str) -> dict:
@@ -218,8 +218,8 @@ def run(role: str, payload: dict, timeout: int = 30):
     out = str(data.get("content", ""))
     if not out:
         raise RuntimeError(f"private model returned empty output for {role}")
-    if _looks_like_leak(out):
-        raise RuntimeError(f"private model output failed privacy filter for {role}")
+    if role != "expression" and _contains_explicit_leak_marker(out):
+        raise RuntimeError(f"private model private structure failed privacy marker check for {role}")
     try:
         return _validate(role, _extract_json(out))
     except Exception as exc:
