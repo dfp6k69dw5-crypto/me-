@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T16:56:04.217239+00:00",
-  "cycle_key": "32153618883:1:88",
+  "generated_at": "2026-08-18T16:57:16.971657+00:00",
+  "cycle_key": "32153618883:1:89",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,12 +32,13 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "score": 2.95,
+      "confidence": 0.965,
+      "raw_score": 2.95,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "whether"
+        "whether",
+        "compare"
       ],
       "evidence_sources": [
         {
@@ -46,12 +47,54 @@
             "whether"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "compare"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "whether"
+          ],
+          "weight": 0.76
+        }
+      ]
+    },
+    {
+      "name": "memory-callback",
+      "tier": "project",
+      "domain": "memory-callback",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "past"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "past"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "past"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "6fdab86e6373",
+  "context_fingerprint": "6b340353c5c4",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 861,
+  "approx_added_tokens": 215
 }
