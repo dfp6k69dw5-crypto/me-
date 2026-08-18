@@ -1,17 +1,57 @@
 {
-  "boot_id": "room-sterile-v3-2026-08-18",
+  "boot_id": "room-sterile-v4-2026-08-18",
   "a": {
     "version": "room-cognition-v3",
     "entities": {
-      "sarah": [0, 1, 2],
-      "mara": [3, 4, 5],
-      "owen": [6, 7, 8],
-      "jules": [9, 10, 11]
+      "sarah": [
+        0,
+        1,
+        2
+      ],
+      "mara": [
+        3,
+        4,
+        5
+      ],
+      "owen": [
+        6,
+        7,
+        8
+      ],
+      "jules": [
+        9,
+        10,
+        11
+      ]
     },
     "roles": {
-      "0": ["comprehension", ["lexical_semantic_activation", "hierarchical_parsing", "structure_constrained_prediction", "situation_common_ground"]],
-      "1": ["thought", ["concept_association", "merge_composition", "memory_retrieval", "simulation_personality_affect"]],
-      "2": ["expression", ["integration_intention", "message_planning", "externalization_readiness", "monitoring_turn_taking_silence"]]
+      "0": [
+        "comprehension",
+        [
+          "lexical_semantic_activation",
+          "hierarchical_parsing",
+          "structure_constrained_prediction",
+          "situation_common_ground"
+        ]
+      ],
+      "1": [
+        "thought",
+        [
+          "concept_association",
+          "merge_composition",
+          "memory_retrieval",
+          "simulation_personality_affect"
+        ]
+      ],
+      "2": [
+        "expression",
+        [
+          "integration_intention",
+          "message_planning",
+          "externalization_readiness",
+          "monitoring_turn_taking_silence"
+        ]
+      ]
     },
     "network": {
       "nodes": 12,
@@ -23,40 +63,135 @@
     },
     "discourse": {
       "max_depth": 6,
-      "moves": ["question", "answer", "follow_up", "reaction", "self_disclosure", "new_root"],
+      "moves": [
+        "question",
+        "answer",
+        "follow_up",
+        "reaction",
+        "self_disclosure",
+        "new_root"
+      ],
       "recursion": false
     },
-    "memory_status": ["observed", "reported", "inferred", "imagined", "remembered", "uncertain"]
+    "memory_status": [
+      "observed",
+      "reported",
+      "inferred",
+      "imagined",
+      "remembered",
+      "uncertain"
+    ]
   },
   "p": {
     "sarah": {
       "name": "Sarah",
       "age": 32,
       "ses": "middle income",
-      "traits": {"openness": 0.84, "extraversion": 0.42, "conscientiousness": 0.65, "agreeableness": 0.62, "emotional_reactivity": 0.49, "curiosity": 0.88, "skepticism": 0.71, "self_disclosure": 0.43, "social_sensitivity": 0.67, "novelty_seeking": 0.69, "inhibition": 0.58, "humor": 0.61, "attention_persistence": 0.72},
-      "question_bias": ["why", "motivation", "meaning", "change_over_time"]
+      "traits": {
+        "openness": 0.84,
+        "extraversion": 0.42,
+        "conscientiousness": 0.65,
+        "agreeableness": 0.62,
+        "emotional_reactivity": 0.49,
+        "curiosity": 0.88,
+        "skepticism": 0.71,
+        "self_disclosure": 0.43,
+        "social_sensitivity": 0.67,
+        "novelty_seeking": 0.69,
+        "inhibition": 0.58,
+        "humor": 0.61,
+        "attention_persistence": 0.72
+      },
+      "question_bias": [
+        "why",
+        "motivation",
+        "meaning",
+        "change_over_time"
+      ]
     },
     "mara": {
       "name": "Mara",
       "age": 26,
       "ses": "low income",
-      "traits": {"openness": 0.76, "extraversion": 0.78, "conscientiousness": 0.48, "agreeableness": 0.72, "emotional_reactivity": 0.68, "curiosity": 0.79, "skepticism": 0.43, "self_disclosure": 0.79, "social_sensitivity": 0.83, "novelty_seeking": 0.77, "inhibition": 0.31, "humor": 0.81, "attention_persistence": 0.53},
-      "question_bias": ["personal_experience", "feelings", "relationships", "what_happened_next"]
+      "traits": {
+        "openness": 0.76,
+        "extraversion": 0.78,
+        "conscientiousness": 0.48,
+        "agreeableness": 0.72,
+        "emotional_reactivity": 0.68,
+        "curiosity": 0.79,
+        "skepticism": 0.43,
+        "self_disclosure": 0.79,
+        "social_sensitivity": 0.83,
+        "novelty_seeking": 0.77,
+        "inhibition": 0.31,
+        "humor": 0.81,
+        "attention_persistence": 0.53
+      },
+      "question_bias": [
+        "personal_experience",
+        "feelings",
+        "relationships",
+        "what_happened_next"
+      ]
     },
     "owen": {
       "name": "Owen",
       "age": 35,
       "ses": "upper-middle income",
-      "traits": {"openness": 0.61, "extraversion": 0.34, "conscientiousness": 0.84, "agreeableness": 0.57, "emotional_reactivity": 0.38, "curiosity": 0.69, "skepticism": 0.82, "self_disclosure": 0.32, "social_sensitivity": 0.48, "novelty_seeking": 0.41, "inhibition": 0.74, "humor": 0.46, "attention_persistence": 0.86},
-      "question_bias": ["how", "cause", "sequence", "whether_it_changed"]
+      "traits": {
+        "openness": 0.61,
+        "extraversion": 0.34,
+        "conscientiousness": 0.84,
+        "agreeableness": 0.57,
+        "emotional_reactivity": 0.38,
+        "curiosity": 0.69,
+        "skepticism": 0.82,
+        "self_disclosure": 0.32,
+        "social_sensitivity": 0.48,
+        "novelty_seeking": 0.41,
+        "inhibition": 0.74,
+        "humor": 0.46,
+        "attention_persistence": 0.86
+      },
+      "question_bias": [
+        "how",
+        "cause",
+        "sequence",
+        "whether_it_changed"
+      ]
     },
     "jules": {
       "name": "Jules",
       "age": 29,
       "ses": "lower-middle income",
-      "traits": {"openness": 0.94, "extraversion": 0.59, "conscientiousness": 0.39, "agreeableness": 0.65, "emotional_reactivity": 0.56, "curiosity": 0.93, "skepticism": 0.58, "self_disclosure": 0.64, "social_sensitivity": 0.59, "novelty_seeking": 0.91, "inhibition": 0.37, "humor": 0.87, "attention_persistence": 0.47},
-      "question_bias": ["counterfactual", "association", "odd_detail", "unexpected_connection"]
+      "traits": {
+        "openness": 0.94,
+        "extraversion": 0.59,
+        "conscientiousness": 0.39,
+        "agreeableness": 0.65,
+        "emotional_reactivity": 0.56,
+        "curiosity": 0.93,
+        "skepticism": 0.58,
+        "self_disclosure": 0.64,
+        "social_sensitivity": 0.59,
+        "novelty_seeking": 0.91,
+        "inhibition": 0.37,
+        "humor": 0.87,
+        "attention_persistence": 0.47
+      },
+      "question_bias": [
+        "counterfactual",
+        "association",
+        "odd_detail",
+        "unexpected_connection"
+      ]
     }
   },
-  "m": {"sarah": [], "mara": [], "owen": [], "jules": []}
+  "m": {
+    "sarah": [],
+    "mara": [],
+    "owen": [],
+    "jules": []
+  }
 }
