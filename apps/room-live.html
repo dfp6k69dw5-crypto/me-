@@ -10,7 +10,7 @@ html,body{margin:0;min-height:100%;background:#08090d;color:#f5f3ee;font-family:
 </style>
 </head>
 <body>
-<div class="top"><div class="title">The Room</div><div class="sub">Sarah · Mara · Owen · Jules</div><div id="status" class="status">connecting…</div></div>
+<div class="top"><div class="title">The Room</div><div class="sub">Sarah · Mara · Owen · Jules · Allen</div><div id="status" class="status">connecting…</div></div>
 <main id="chat" class="chat"><div class="err">Opening the live feed…</div></main>
 <script>
 (function(){
@@ -21,6 +21,7 @@ html,body{margin:0;min-height:100%;background:#08090d;color:#f5f3ee;font-family:
   var last='';
   var busy=false;
   function escTime(s){try{return new Date(s).toLocaleTimeString([], {hour:'numeric',minute:'2-digit',second:'2-digit'});}catch(e){return '';}}
+  function speakerName(id,minds){return id==='allen'?'Allen':((minds[id]&&minds[id].name)||id||'');}
   function getJSON(url,done,fail){
     var x=new XMLHttpRequest();
     x.open('GET',url+(url.indexOf('?')>=0?'&':'?')+'fresh='+Date.now(),true);
@@ -45,7 +46,7 @@ html,body{margin:0;min-height:100%;background:#08090d;color:#f5f3ee;font-family:
       var m=conv[i]||{},beat=m.beat_id||'';
       if(beat!==prevBeat){var b=document.createElement('div');b.className='beat';b.textContent='BEAT '+(beat?beat.slice(-6):'—');chat.appendChild(b);prevBeat=beat;}
       var d=document.createElement('div');d.className='msg';
-      var w=document.createElement('div');w.className='who';w.textContent=(minds[m.speaker]&&minds[m.speaker].name)||m.speaker||'';
+      var w=document.createElement('div');w.className='who';w.textContent=speakerName(m.speaker,minds);
       var t=document.createElement('div');t.className='text';t.textContent=m.text||'';
       var tm=document.createElement('div');tm.className='when';tm.textContent=escTime(m.at);
       d.appendChild(w);d.appendChild(t);d.appendChild(tm);chat.appendChild(d);
