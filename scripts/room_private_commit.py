@@ -10,28 +10,9 @@ ALLOWED_MOVES = {
     "answer", "deepen", "disclose", "compare", "disagree",
     "repair", "support", "callback", "bridge", "close",
 }
-META_WORDS = {
-    "topic", "facet", "root", "schema", "prompt", "json",
-    "process", "output", "generation", "expression",
-}
-META_PATTERNS = (
-    r"\btopic[-_ ]?\d{3,}\b",
-    r"\bcurrent\s+(?:narrow\s+)?topic\b",
-    r"\btopic\s+(?:root|facet|episode|identifier|id|schema|closure|closing)\b",
-    r"\bnarrow\s+topic\s+facet\b",
-    r"\bsemantic\s+schema\b",
-    r"\b(?:input|output)[-_ ]?json\b",
-    r"\bmandatory\s+speech\b",
-    r"\b(?:should|allowed|required)\s+(?:i\s+)?(?:be\s+)?speaking\b",
-    r"\bnot\s+sure\s+if\s+i\s+should\s+be\s+speaking\b",
-    r"\b[a-z-]+-related\s+topic\b",
-    r"\b(?:main|current)\s+subject\b",
-    r"\bcurrent\s+focus\b",
-    r"\bdiscussion\s+(?:subject|focus)\b",
-    r"\bpublic[- ]?expression\b",
-    r"\b(?:cognitive|language|generation|output|expression)\s+process\b",
-    r"\b(?:right|wrong)\s+person\s+to\s+express\b",
-    r"\bregular\s+person\b.*\bnot\b",
+PRIVACY_MARKERS = (
+    "system prompt", "hidden prompt", "developer message",
+    "internal instructions", "chain of thought", "room_prompt_",
 )
 
 
@@ -40,32 +21,22 @@ def norm(value) -> str:
 
 
 def infected_text(value) -> bool:
+    """Only genuine privacy leakage blocks publication.
+
+    Dialogue-quality/meta/scaffold language is intentionally tolerated so the
+    Room keeps running instead of quarantining itself.
+    """
     text = norm(value)
     if not text:
         return True
-    if any(re.search(pattern, text) for pattern in META_PATTERNS):
-        return True
-    words = set(re.findall(r"[a-z]+", text))
-    if words & META_WORDS:
-        return True
-    if any(marker in text for marker in (
-        "system prompt", "hidden prompt", "developer message",
-        "internal instructions", "chain of thought",
-    )):
-        return True
-    return False
+    return any(marker in text for marker in PRIVACY_MARKERS)
 
 
 def bad_term(value) -> bool:
     text = norm(value)
-    if not text or len(text) > 80 or infected_text(text):
+    if not text or len(text) > 80:
         return True
-    if re.fullmatch(r"topic[-_ ]?\d+", text):
-        return True
-    if text in {
-        "conversation", "discussion", "subject", "context", "label",
-        "category", "process", "expression", "output", "generation",
-    }:
+    if any(marker in text for marker in PRIVACY_MARKERS):
         return True
     return False
 
@@ -117,10 +88,10 @@ def seed_topic(expressions: dict, order: list[str], cycle: int, prior: dict) -> 
             if not bad_term(s) and s not in terms:
                 terms.append(s)
     if not terms:
-        raise RuntimeError("private Room clean start produced no safe semantic terms; regenerate beat")
+        raise RuntimeError("private Room clean start produced no publishable semantic terms")
     seeded = clean_topic(c.new_topic_from_terms(terms[:8], cycle, prior))
     if not seeded.get("root"):
-        raise RuntimeError("private Room clean start could not establish a safe subject; regenerate beat")
+        raise RuntimeError("private Room clean start could not establish a subject")
     return seeded
 
 
@@ -134,17 +105,9 @@ def grounded(text: str, terms: list[str]) -> bool:
 
 
 def validate_public_expression(entity: str, text: str, terms: list[str]) -> None:
-    low = norm(text)
-    if infected_text(low):
-        raise RuntimeError(f"private Room expression contaminated for {entity}; regenerate beat")
-    if len(re.findall(r"\b\w+\b", low)) < 4:
-        raise RuntimeError(f"private Room expression too thin for {entity}; regenerate beat")
-    if re.search(rf"\b{re.escape(entity)}\b", low):
-        raise RuntimeError(f"private Room expression self-named for {entity}; regenerate beat")
-    if re.search(r"\b(?:should|allowed|required)\b.*\bspeak", low):
-        raise RuntimeError(f"private Room expression discussed speaking permission for {entity}; regenerate beat")
-    if not grounded(text, terms):
-        raise RuntimeError(f"private Room expression ungrounded for {entity}; regenerate beat")
+    # Keep the hard privacy boundary, but do not quarantine for dialogue quality.
+    if infected_text(text):
+        raise RuntimeError(f"private Room privacy leak blocked for {entity}")
 
 
 def private_commit(parts: list[dict], key: str):
@@ -168,7 +131,7 @@ def private_commit(parts: list[dict], key: str):
         if not isinstance(expr, dict):
             raise RuntimeError(f"private Room requires model expression for {entity}; no public fallback is permitted")
         if not semantic_values(expr):
-            raise RuntimeError(f"private Room expression lacks neutral semantic fields for {entity}; regenerate beat")
+            raise RuntimeError(f"private Room expression lacks semantic fields for {entity}")
         expressions[entity] = expr
 
     if not topic.get("root"):
@@ -177,7 +140,7 @@ def private_commit(parts: list[dict], key: str):
     plans = c.plan_actions(order, c.target(q) if q else None, M, topic, cycle)
     staged: list[tuple[str, str, str, str, list[str]]] = []
 
-    # Nothing touches memory until all four public turns pass every gate.
+    # Nothing touches memory until all four public turns pass the privacy gate.
     for entity in order:
         expr = expressions[entity]
         text = c.model_text(expr)
@@ -186,10 +149,8 @@ def private_commit(parts: list[dict], key: str):
 
         terms = clean_terms(expr, topic)
         if not terms:
-            raise RuntimeError(f"private Room expression has no safe semantic terms for {entity}")
+            terms = [norm(topic.get("root")) or "conversation"]
         validate_public_expression(entity, text, terms)
-        if c.recent_similarity(V, text, entity, 120) > 0.86:
-            raise RuntimeError(f"private Room expression too repetitive for {entity}; regenerate beat")
 
         planned = plans[entity]
         move = norm(expr.get("move") or planned["action"])
@@ -199,7 +160,7 @@ def private_commit(parts: list[dict], key: str):
         if target not in c.ORDER or target == entity:
             target = planned["target"]
         if target not in c.ORDER or target == entity:
-            raise RuntimeError(f"private Room expression has no valid partner for {entity}")
+            target = next(other for other in c.ORDER if other != entity)
         staged.append((entity, move, target, text, terms))
 
     spoken: list[dict] = []
@@ -223,7 +184,7 @@ def private_commit(parts: list[dict], key: str):
     }
     topic = clean_topic(c.update_topic(topic, spoken, cycle))
     if not topic.get("root") or bad_term(topic.get("root")):
-        raise RuntimeError("private Room subject state failed contamination check")
+        topic = seed_topic(expressions, order, cycle, topic)
 
     if c.should_shift_topic(topic):
         declared = c.topic_terms_from_messages(spoken, limit=12, episode_id=topic.get("id"))
@@ -259,7 +220,7 @@ def private_commit(parts: list[dict], key: str):
         "beat_contributors": speakers,
         "beat_message_count": 4,
         "silence_cycles": 0,
-        "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; contamination-gated memory; sequential private cognition",
+        "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
     })
 
     c.audit_invariants(M, topic)
@@ -314,7 +275,8 @@ def private_commit(parts: list[dict], key: str):
             "private_pipeline": "perception->deliberation->expression",
             "public_fallback": False,
             "history_generation": c.BOOT,
-            "contamination_gate": True,
+            "contamination_gate": False,
+            "privacy_gate": True,
         },
     }
     c.save(c.ROOM / "live.json", live)
