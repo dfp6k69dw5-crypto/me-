@@ -12,6 +12,28 @@ LEAK_MARKERS = (
 )
 
 PEOPLE = ["sarah", "mara", "owen", "jules"]
+PLACEHOLDER_TERMS = {
+    "current topic root", "current narrow facet", "topic root", "topic facet",
+    "natural public conversational turn", "the natural public conversational turn",
+}
+OLD_FRAME_PATTERNS = (
+    r"^the natural public conversational turn[.!]?$",
+    r"^the new piece for me is\b",
+    r"^the use of .+ is a useful distinction for the speaker[.!]?$",
+    r"^i'd separate the pattern around\b",
+    r"^what interests me in\b",
+    r"^the part of .+ i keep coming back to\b",
+    r"^i don't think .+ stands alone\b",
+    r"^the piece of .+ that feels real to me\b",
+    r"^i hear .+ leaning on\b",
+    r"^the useful distinction for me is\b",
+    r"^i'd test .+ against\b",
+    r"^what did somebody do—not just say—\b",
+    r"^for me, .+ gets concrete\b",
+    r"^i'm connecting this with\b",
+    r"^if .+ has a clean story\b",
+    r"^the weird edge of\b",
+)
 
 
 def enabled(role: str) -> bool:
@@ -48,6 +70,11 @@ def _looks_like_public_leak(text: str) -> bool:
         if any(chunk and chunk in low for chunk in chunks):
             return True
     return False
+
+
+def _looks_like_template_echo(text: str) -> bool:
+    low = re.sub(r"\s+", " ", str(text or "").strip().lower())
+    return any(re.search(pattern, low) for pattern in OLD_FRAME_PATTERNS)
 
 
 def _nullable_string() -> dict:
@@ -116,6 +143,8 @@ def _validate(role: str, obj: object) -> dict:
             raise ValueError("expression utterance exceeded length limit")
         if _looks_like_public_leak(utterance):
             raise ValueError("expression failed privacy filter")
+        if _looks_like_template_echo(utterance):
+            raise ValueError("expression copied a forbidden template frame")
         if not isinstance(obj.get("topic_terms"), list):
             raise ValueError("expression returned no semantic topic terms")
     elif role == "thought":
@@ -148,12 +177,18 @@ def _compact_payload(payload: dict, role: str) -> dict:
     if role == "comprehension":
         context_count, text_limit, event_limit = 4, 320, 420
     else:
-        context_count, text_limit, event_limit = 6, 450, 520
+        context_count, text_limit, event_limit = 5, 420, 500
     if "event" in out:
         out["event"] = _public_message(out.get("event"), event_limit)
     context = out.get("context")
     if isinstance(context, list):
-        out["context"] = [_public_message(m, text_limit) for m in context[-context_count:]]
+        cleaned = []
+        for m in context[-context_count:]:
+            p = _public_message(m, text_limit)
+            if _looks_like_template_echo(p.get("text", "")):
+                continue
+            cleaned.append(p)
+        out["context"] = cleaned[-context_count:]
     profile = out.get("profile")
     if isinstance(profile, dict):
         traits = profile.get("traits", {}) if isinstance(profile.get("traits"), dict) else {}
@@ -163,11 +198,40 @@ def _compact_payload(payload: dict, role: str) -> dict:
     topic = out.get("topic")
     if isinstance(topic, dict):
         keep = ("id", "root", "current_facet", "facets", "status", "shared_references") if role == "comprehension" else ("id", "root", "current_facet", "facets", "visited_facets", "status", "unresolved", "shared_references")
-        out["topic"] = {k: topic.get(k) for k in keep if k in topic}
+        compact_topic = {k: topic.get(k) for k in keep if k in topic}
+        for k in ("facets", "visited_facets", "shared_references", "unresolved"):
+            if isinstance(compact_topic.get(k), list):
+                compact_topic[k] = [x for x in compact_topic[k] if str(x or "").strip().lower() not in PLACEHOLDER_TERMS]
+        out["topic"] = compact_topic
     keywords = out.get("keywords")
     if isinstance(keywords, list):
-        out["keywords"] = keywords[:8 if role == "comprehension" else 12]
+        out["keywords"] = [x for x in keywords if str(x or "").strip().lower() not in PLACEHOLDER_TERMS][:8 if role == "comprehension" else 12]
     return out
+
+
+def _sanitize_expression(obj: dict, compact: dict) -> dict:
+    topic = compact.get("topic") if isinstance(compact.get("topic"), dict) else {}
+    terms = []
+    for x in (topic.get("root"), topic.get("current_facet")):
+        s = str(x or "").strip().lower()
+        if s and s not in PLACEHOLDER_TERMS and s not in terms:
+            terms.append(s)
+    for x in obj.get("topic_terms", []) if isinstance(obj.get("topic_terms"), list) else []:
+        s = str(x or "").strip().lower()
+        if not s or s in PLACEHOLDER_TERMS or s in terms:
+            continue
+        terms.append(s)
+    obj["topic_terms"] = terms[:4]
+    if not obj["topic_terms"]:
+        raise ValueError("expression had no usable semantic topic terms")
+    entity = str(compact.get("entity") or "").strip().lower()
+    if obj.get("target") == entity:
+        partner = str(compact.get("partner") or "").strip().lower()
+        if partner in PEOPLE and partner != entity:
+            obj["target"] = partner
+        else:
+            raise ValueError("expression targeted self")
+    return obj
 
 
 def _safe_http_detail(exc: urllib.error.HTTPError) -> str:
@@ -200,9 +264,18 @@ def run(role: str, payload: dict, timeout: int = 30):
     if not model_url:
         raise RuntimeError(f"private model unavailable for {role}")
     compact = _compact_payload(payload, role)
-    combined = prompt + "\nINPUT_JSON\n" + json.dumps(compact, ensure_ascii=False, separators=(",", ":")) + "\nOUTPUT_JSON_ONLY\n"
+    guard = ""
+    if role == "expression":
+        guard = (
+            "\nRUNTIME_OUTPUT_GUARD\n"
+            "Schema example strings are placeholders, never dialogue to copy. Never output the literal phrases "
+            "'the natural public conversational turn', 'current topic root', or 'current narrow facet'. "
+            "Do not imitate repetitive sentence frames from recent context. Speak as the entity directly, "
+            "using a specific detail, implication, disagreement, example, comparison, or consequence grounded in INPUT_JSON.\n"
+        )
+    combined = prompt + guard + "\nINPUT_JSON\n" + json.dumps(compact, ensure_ascii=False, separators=(",", ":")) + "\nOUTPUT_JSON_ONLY\n"
     n_predict = {"comprehension": 192, "thought": 220, "expression": 220}.get(role, 192)
-    temperature = {"comprehension": 0.15, "thought": 0.25, "expression": 0.35}.get(role, 0.25)
+    temperature = {"comprehension": 0.15, "thought": 0.25, "expression": 0.42}.get(role, 0.25)
     request_body = {"prompt": combined, "n_predict": n_predict, "temperature": temperature, "cache_prompt": True, "json_schema": _schema(role)}
     body = json.dumps(request_body, ensure_ascii=False).encode()
     req = urllib.request.Request(_completion_url(model_url), data=body, headers={"Content-Type": "application/json"}, method="POST")
@@ -221,6 +294,9 @@ def run(role: str, payload: dict, timeout: int = 30):
     if role != "expression" and _contains_explicit_leak_marker(out):
         raise RuntimeError(f"private model private structure failed privacy marker check for {role}")
     try:
-        return _validate(role, _extract_json(out))
+        obj = _validate(role, _extract_json(out))
+        if role == "expression":
+            obj = _sanitize_expression(obj, compact)
+        return obj
     except Exception as exc:
         raise RuntimeError(f"private model output rejected for {role}: {type(exc).__name__}") from exc
