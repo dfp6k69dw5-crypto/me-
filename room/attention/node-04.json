@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T23:43:58.143613+00:00",
-  "cycle_key": "32184487392:1:165",
+  "generated_at": "2026-08-18T23:45:13.151508+00:00",
+  "cycle_key": "32184487392:1:166",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,9 +32,9 @@
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.52,
-      "confidence": 0.68,
-      "raw_score": 1.8,
+      "score": 1.17,
+      "confidence": 0.531,
+      "raw_score": 1.45,
       "repeat_penalty": 0.28,
       "matched_triggers": [
         "history"
@@ -45,14 +45,21 @@
           "matched": [
             "history"
           ],
-          "weight": 1.8
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
             "history"
           ],
-          "weight": 1.45
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "history"
+          ],
+          "weight": 0.76
         },
         {
           "kind": "message",
@@ -67,10 +74,10 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.45,
-      "confidence": 0.652,
+      "score": 1.17,
+      "confidence": 0.531,
       "raw_score": 1.45,
-      "repeat_penalty": 0.0,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "idea"
       ],
@@ -81,11 +88,18 @@
             "idea"
           ],
           "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "3f2c4e11d062",
+  "context_fingerprint": "0a8a77f88faf",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 820,
   "approx_added_tokens": 205
