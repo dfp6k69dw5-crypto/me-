@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T17:29:01.575150+00:00",
-  "cycle_key": "32153618883:1:117",
+  "generated_at": "2026-08-18T17:30:06.139861+00:00",
+  "cycle_key": "32153618883:1:118",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,21 +29,21 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "creative-bridge",
       "tier": "project",
-      "domain": "critical-testing",
+      "domain": "creative-bridge",
       "score": 1.45,
       "confidence": 0.652,
       "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "compare"
+        "idea"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "compare"
+            "idea"
           ],
           "weight": 1.45
         }
@@ -53,10 +53,10 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.17,
+      "confidence": 0.531,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "conversation"
       ],
@@ -66,13 +66,27 @@
           "matched": [
             "conversation"
           ],
-          "weight": 1.15
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "63a4206d92e4",
+  "context_fingerprint": "6ea4766ecc7c",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 867,
-  "approx_added_tokens": 217
+  "temporary_skill_chars": 826,
+  "approx_added_tokens": 206
 }
