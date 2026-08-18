@@ -105,7 +105,7 @@ def inject(inbox_path: Path, ack_path: Path) -> int:
         message = {
             "id": message_id,
             "at": at,
-            "speaker": "allen",
+            "speaker": "Allen",
             "text": text,
             "runtime": "room-cognition-v5-participant",
             "boot_id": c.BOOT,
@@ -118,7 +118,7 @@ def inject(inbox_path: Path, ack_path: Path) -> int:
         }
         node = {
             "id": discourse_id,
-            "speaker": "allen",
+            "speaker": "Allen",
             "parent": parent,
             "derived_from": None,
             "move": "contribute",
@@ -142,7 +142,7 @@ def inject(inbox_path: Path, ack_path: Path) -> int:
             memories.append({
                 "source": message_id,
                 "status": "observed",
-                "speaker": "allen",
+                "speaker": "Allen",
                 "text": text[:300],
                 "discourse": discourse_id,
                 "beat_id": beat_id,
@@ -165,7 +165,7 @@ def inject(inbox_path: Path, ack_path: Path) -> int:
         S["topic_episode"] = topic
         S["messages"] = len(V)
         S["last_public_event"] = V[-1]["id"]
-        S["last_speaker"] = "allen"
+        S["last_speaker"] = "Allen"
         S["last_beat_id"] = V[-1]["beat_id"]
         S["beat_contributors"] = ["allen"]
         S["beat_message_count"] = 1
