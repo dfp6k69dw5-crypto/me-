@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T15:26:47.500376+00:00",
-  "cycle_key": "32153618883:1:7",
+  "generated_at": "2026-08-18T15:27:47.503490+00:00",
+  "cycle_key": "32153618883:1:8",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,33 +29,38 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.74,
-      "confidence": 0.76,
-      "raw_score": 1.74,
+      "domain": "interaction",
+      "score": 2.07,
+      "confidence": 0.851,
+      "raw_score": 2.07,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "claim",
-        "evidence",
-        "reason"
+        "question",
+        "asked"
       ],
       "evidence_sources": [
         {
-          "kind": "topic",
+          "kind": "message",
           "matched": [
-            "evidence",
-            "claim",
-            "reason"
+            "question"
           ],
-          "weight": 0.58
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "question",
+            "asked"
+          ],
+          "weight": 0.92
         }
       ]
     }
   ],
-  "context_fingerprint": "7b63fc220b66",
+  "context_fingerprint": "db5cf3a6703b",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 521,
+  "approx_added_tokens": 130
 }
