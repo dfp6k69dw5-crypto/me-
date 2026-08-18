@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import urllib.error
 import urllib.request
 
 LEAK_MARKERS = (
@@ -46,51 +47,33 @@ def _schema(role: str) -> dict:
     if role == "comprehension":
         return {
             "type": "object",
-            "additionalProperties": False,
             "properties": {
                 "participation": {"type": "string", "enum": ["DIRECT_ADDRESSEE", "PARTICIPANT", "OVERHEARER"]},
                 "partner": {"anyOf": [{"type": "string", "enum": people}, {"type": "null"}]},
-                "move": {"type": "string", "enum": ["answer", "disclosure", "question", "disagreement", "support", "joke", "clarification", "repair", "repair_attempt", "topic_deepening", "topic_bridge", "topic_closing", "other"]},
-                "grounding": {"type": "string", "enum": ["understood", "apparently_understood", "ambiguous", "contradicted", "misunderstood", "repair_needed"]},
-                "topic_facet": _nullable_string(),
-                "new_details": {"type": "array", "items": {"type": "string"}, "maxItems": 8},
-                "bids": {"type": "array", "items": {"type": "string"}, "maxItems": 8},
-                "relationship_events": {"type": "array", "items": {"type": "string"}, "maxItems": 8},
-                "shared_references": {"type": "array", "items": {"type": "string"}, "maxItems": 8},
-                "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+                "relationship_events": {"type": "array", "items": {"type": "string"}},
             },
-            "required": ["participation", "partner", "move", "grounding", "topic_facet", "new_details", "bids", "relationship_events", "shared_references", "confidence"],
+            "required": ["participation", "partner", "relationship_events"],
         }
     if role == "thought":
         return {
             "type": "object",
-            "additionalProperties": False,
             "properties": {
                 "action": {"type": "string", "enum": ["ANSWER", "DEEPEN", "DISCLOSE", "COMPARE", "DISAGREE", "REPAIR", "SUPPORT", "CALLBACK", "BRIDGE", "CLOSE_TOPIC"]},
                 "preferred_partner": {"type": "string", "enum": people},
-                "topic_facet": {"type": "string"},
-                "new_information_goal": {"type": "string"},
-                "disclosure_depth": {"type": "integer", "minimum": 0, "maximum": 4},
-                "interpersonal_risk": {"type": "integer", "minimum": 0, "maximum": 4},
-                "shared_reference": _nullable_string(),
-                "unresolved_thread": _nullable_string(),
-                "reason_summary": {"type": "string", "maxLength": 180},
-                "mandatory_speech": {"type": "boolean", "const": True},
+                "mandatory_speech": {"type": "boolean"},
             },
-            "required": ["action", "preferred_partner", "topic_facet", "new_information_goal", "disclosure_depth", "interpersonal_risk", "shared_reference", "unresolved_thread", "reason_summary", "mandatory_speech"],
+            "required": ["action", "preferred_partner", "mandatory_speech"],
         }
     if role == "expression":
         return {
             "type": "object",
-            "additionalProperties": False,
             "properties": {
-                "decision": {"type": "string", "const": "SPEAK"},
+                "decision": {"type": "string", "enum": ["SPEAK"]},
                 "target": {"type": "string", "enum": people},
-                "move": {"type": "string", "enum": ["answer", "deepen", "disclose", "compare", "disagree", "repair", "support", "callback", "bridge", "close_topic"]},
-                "utterance": {"type": "string", "minLength": 1, "maxLength": 700},
-                "topic_terms": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 4},
+                "utterance": {"type": "string"},
+                "topic_terms": {"type": "array", "items": {"type": "string"}},
             },
-            "required": ["decision", "target", "move", "utterance", "topic_terms"],
+            "required": ["decision", "target", "utterance", "topic_terms"],
         }
     raise ValueError(f"unknown private model role: {role}")
 
@@ -98,7 +81,6 @@ def _schema(role: str) -> dict:
 def _validate(role: str, obj: object) -> dict:
     if not isinstance(obj, dict):
         raise ValueError("model output was not a JSON object")
-
     if role == "expression":
         if str(obj.get("decision", "")).upper() != "SPEAK":
             raise ValueError("expression did not satisfy mandatory speech")
@@ -111,73 +93,70 @@ def _validate(role: str, obj: object) -> dict:
             raise ValueError("expression failed privacy filter")
         if not isinstance(obj.get("topic_terms"), list):
             raise ValueError("expression returned no semantic topic terms")
-
     elif role == "thought":
         if not isinstance(obj.get("action"), str):
             raise ValueError("deliberation returned no action")
         if obj.get("mandatory_speech") is not True:
             raise ValueError("deliberation did not preserve mandatory speech")
-
     elif role == "comprehension":
         if not isinstance(obj.get("participation"), str):
             raise ValueError("perception returned no participation state")
         if not isinstance(obj.get("relationship_events"), list):
             raise ValueError("perception returned invalid relationship events")
-
     return obj
 
 
-def _chat_url(model_url: str) -> str:
+def _completion_url(model_url: str) -> str:
     base = model_url.rstrip("/")
-    if base.endswith("/completion"):
-        base = base[: -len("/completion")]
-    return base + "/v1/chat/completions"
+    return base if base.endswith("/completion") else base + "/completion"
 
 
 def run(role: str, payload: dict, timeout: int = 30):
     """Private local-model adapter. Prompted live nodes fail closed; no canned fallback."""
     prompt = os.environ.get("ROOM_NODE_PROMPT", "").strip()
     if not prompt:
-        # Offline tests and unprompted nodes may continue without the local model.
         return None
 
     model_url = os.environ.get("ROOM_MODEL_URL", "").strip()
     if not model_url:
         raise RuntimeError(f"private model unavailable for {role}")
 
-    schema = _schema(role)
-    user_input = "INPUT_JSON\n" + json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\nOUTPUT_JSON_ONLY"
+    combined = (
+        prompt
+        + "\nINPUT_JSON\n"
+        + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+        + "\nOUTPUT_JSON_ONLY\n"
+    )
     request_body = {
-        "model": "local",
-        "messages": [
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": user_input},
-        ],
+        "prompt": combined,
+        "n_predict": 320,
         "temperature": 0.25,
-        "max_tokens": 320,
-        "response_format": {"type": "json_object", "schema": schema},
+        "cache_prompt": False,
+        "json_schema": _schema(role),
     }
     body = json.dumps(request_body, ensure_ascii=False).encode()
-    req = urllib.request.Request(_chat_url(model_url), data=body, headers={"Content-Type": "application/json"}, method="POST")
+    req = urllib.request.Request(
+        _completion_url(model_url),
+        data=body,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
 
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             data = json.loads(resp.read().decode("utf-8", "replace"))
+    except urllib.error.HTTPError as exc:
+        raise RuntimeError(f"private model request failed for {role}: HTTP {exc.code}") from exc
     except Exception as exc:
         raise RuntimeError(f"private model request failed for {role}: {type(exc).__name__}") from exc
 
-    try:
-        out = str(data["choices"][0]["message"]["content"])
-    except Exception as exc:
-        raise RuntimeError(f"private model returned unexpected response for {role}") from exc
-
+    out = str(data.get("content", ""))
     if not out:
         raise RuntimeError(f"private model returned empty output for {role}")
     if _looks_like_leak(out):
         raise RuntimeError(f"private model output failed privacy filter for {role}")
 
     try:
-        obj = _extract_json(out)
-        return _validate(role, obj)
+        return _validate(role, _extract_json(out))
     except Exception as exc:
         raise RuntimeError(f"private model output rejected for {role}: {type(exc).__name__}") from exc
