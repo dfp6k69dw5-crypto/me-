@@ -21,9 +21,9 @@
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
 
- // Make the playing body the dominant thing on a phone.
+ // Keep the entire playing body visible on a phone while still using most of the stage.
  text=text.replace("flex:0 0 38vh;min-height:230px","flex:0 0 68dvh;min-height:390px");
- text=text.replaceAll("Math.min(W,H)*0.86","Math.min(W,H)*1.18");
+ text=text.replaceAll("Math.min(W,H)*0.86","Math.min(W*0.94,H*0.90)");
  text=text.replace("display:flex;flex-wrap:wrap;gap:4px","display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px");
  text=text.replace("font-size:10px;letter-spacing:.06em;padding:9px 10px;min-height:36px","font-size:9px;letter-spacing:.04em;padding:6px 8px;min-height:30px;flex:0 0 auto");
  text=text.replace('<div id="deck">','<div id="deck" class="shut">');
