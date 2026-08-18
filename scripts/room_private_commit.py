@@ -10,7 +10,10 @@ ALLOWED_MOVES = {
     "answer", "deepen", "disclose", "compare", "disagree",
     "repair", "support", "callback", "bridge", "close",
 }
-META_WORDS = {"topic", "facet", "root", "schema", "prompt", "json"}
+META_WORDS = {
+    "topic", "facet", "root", "schema", "prompt", "json",
+    "process", "output", "generation", "expression",
+}
 META_PATTERNS = (
     r"\btopic[-_ ]?\d{3,}\b",
     r"\bcurrent\s+(?:narrow\s+)?topic\b",
@@ -22,6 +25,13 @@ META_PATTERNS = (
     r"\b(?:should|allowed|required)\s+(?:i\s+)?(?:be\s+)?speaking\b",
     r"\bnot\s+sure\s+if\s+i\s+should\s+be\s+speaking\b",
     r"\b[a-z-]+-related\s+topic\b",
+    r"\b(?:main|current)\s+subject\b",
+    r"\bcurrent\s+focus\b",
+    r"\bdiscussion\s+(?:subject|focus)\b",
+    r"\bpublic[- ]?expression\b",
+    r"\b(?:cognitive|language|generation|output|expression)\s+process\b",
+    r"\b(?:right|wrong)\s+person\s+to\s+express\b",
+    r"\bregular\s+person\b.*\bnot\b",
 )
 
 
@@ -38,7 +48,10 @@ def infected_text(value) -> bool:
     words = set(re.findall(r"[a-z]+", text))
     if words & META_WORDS:
         return True
-    if any(marker in text for marker in ("system prompt", "hidden prompt", "developer message", "internal instructions", "chain of thought")):
+    if any(marker in text for marker in (
+        "system prompt", "hidden prompt", "developer message",
+        "internal instructions", "chain of thought",
+    )):
         return True
     return False
 
@@ -49,7 +62,10 @@ def bad_term(value) -> bool:
         return True
     if re.fullmatch(r"topic[-_ ]?\d+", text):
         return True
-    if text in {"conversation", "discussion", "subject", "context", "label", "category"}:
+    if text in {
+        "conversation", "discussion", "subject", "context", "label",
+        "category", "process", "expression", "output", "generation",
+    }:
         return True
     return False
 
@@ -108,16 +124,27 @@ def seed_topic(expressions: dict, order: list[str], cycle: int, prior: dict) -> 
     return seeded
 
 
-def validate_public_expression(entity: str, expr: dict, text: str) -> None:
+def grounded(text: str, terms: list[str]) -> bool:
+    words = set(re.findall(r"[a-z][a-z'-]{2,}", norm(text)))
+    for term in terms:
+        significant = [word for word in re.findall(r"[a-z][a-z'-]{2,}", norm(term)) if len(word) >= 4]
+        if any(word in words for word in significant):
+            return True
+    return False
+
+
+def validate_public_expression(entity: str, text: str, terms: list[str]) -> None:
     low = norm(text)
     if infected_text(low):
         raise RuntimeError(f"private Room expression contaminated for {entity}; regenerate beat")
     if len(re.findall(r"\b\w+\b", low)) < 4:
         raise RuntimeError(f"private Room expression too thin for {entity}; regenerate beat")
-    if re.match(rf"^(?:i['’]?m sorry,?\s*)?{re.escape(entity)}\s+(?:is|means|represents|equals)\b", low):
-        raise RuntimeError(f"private Room expression self-categorized for {entity}; regenerate beat")
+    if re.search(rf"\b{re.escape(entity)}\b", low):
+        raise RuntimeError(f"private Room expression self-named for {entity}; regenerate beat")
     if re.search(r"\b(?:should|allowed|required)\b.*\bspeak", low):
         raise RuntimeError(f"private Room expression discussed speaking permission for {entity}; regenerate beat")
+    if not grounded(text, terms):
+        raise RuntimeError(f"private Room expression ungrounded for {entity}; regenerate beat")
 
 
 def private_commit(parts: list[dict], key: str):
@@ -150,12 +177,17 @@ def private_commit(parts: list[dict], key: str):
     plans = c.plan_actions(order, c.target(q) if q else None, M, topic, cycle)
     staged: list[tuple[str, str, str, str, list[str]]] = []
 
+    # Nothing touches memory until all four public turns pass every gate.
     for entity in order:
         expr = expressions[entity]
         text = c.model_text(expr)
         if not text:
             raise RuntimeError(f"private Room expression invalid for {entity}; no public fallback is permitted")
-        validate_public_expression(entity, expr, text)
+
+        terms = clean_terms(expr, topic)
+        if not terms:
+            raise RuntimeError(f"private Room expression has no safe semantic terms for {entity}")
+        validate_public_expression(entity, text, terms)
         if c.recent_similarity(V, text, entity, 120) > 0.86:
             raise RuntimeError(f"private Room expression too repetitive for {entity}; regenerate beat")
 
@@ -168,10 +200,6 @@ def private_commit(parts: list[dict], key: str):
             target = planned["target"]
         if target not in c.ORDER or target == entity:
             raise RuntimeError(f"private Room expression has no valid partner for {entity}")
-
-        terms = clean_terms(expr, topic)
-        if not terms:
-            raise RuntimeError(f"private Room expression has no safe semantic terms for {entity}")
         staged.append((entity, move, target, text, terms))
 
     spoken: list[dict] = []
@@ -208,7 +236,10 @@ def private_commit(parts: list[dict], key: str):
     S["topic_episode"] = topic
     for entity in c.ORDER:
         M["entities"][entity]["medium"] = {
-            "topics": [x for x in [topic.get("root"), topic.get("current_facet")] + list(topic.get("facets", []))[:8] if x and not bad_term(x)],
+            "topics": [
+                x for x in [topic.get("root"), topic.get("current_facet")] + list(topic.get("facets", []))[:8]
+                if x and not bad_term(x)
+            ],
             "branch_interest": round(c.clamp(.4 * c.trait(entity, "curiosity") + .4 * c.trait(entity, "attention_persistence")), 3),
         }
 
