@@ -1,32 +1,78 @@
 {
-  "version": "room-attention-v1",
-  "generated_at": "2026-08-18T15:17:24.258633+00:00",
-  "cycle_key": "32149978380:1:31",
+  "version": "room-attention-v2",
+  "generated_at": "2026-08-18T15:21:11.396091+00:00",
+  "cycle_key": "32153618883:1:1",
   "node": 8,
   "entity": "owen",
   "role": "expression",
   "available_project_skills": 7,
+  "available_reference_skills": 1,
   "resident_project_skill_chars": 0,
+  "tiers": {
+    "resident": {
+      "source": "private-role-prompt",
+      "project_skill_chars": 0
+    },
+    "project": {
+      "available": 7,
+      "implicit": true
+    },
+    "reference": {
+      "available": 1,
+      "implicit": false
+    }
+  },
+  "budget": {
+    "max_skills": 1,
+    "max_chars": 720,
+    "min_score": 1.2
+  },
   "selected_skills": [
     {
       "name": "social-grounding",
-      "score": 2.0,
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.52,
+      "confidence": 0.64,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "said",
-        "trust"
-      ]
-    },
-    {
-      "name": "concrete-specificity",
-      "score": 2.0,
-      "matched_triggers": [
-        "specific",
-        "detail"
+        "conversation"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.92
+        }
       ]
     }
   ],
-  "context_fingerprint": "01eb2f59833c",
+  "context_fingerprint": "235b60ce30b6",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 803,
-  "approx_added_tokens": 201
+  "temporary_skill_chars": 521,
+  "approx_added_tokens": 130
 }
