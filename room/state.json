@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 580,
+  "cycle": 581,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-18T13:54:35.359737Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-18T13:55:43.960117Z",
   "messages": 1000,
-  "last_public_event": "20260818T135435357-jules-v5",
+  "last_public_event": "20260818T135543959-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000580",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000581",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -84,15 +84,14 @@
       "owen",
       "jules"
     ],
-    "turns": 1159,
+    "turns": 1161,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "use",
-      "learning",
-      "doubt",
       "skepticism",
       "second-person",
-      "first-person"
+      "learning",
+      "doubt",
+      "concept"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -102,8 +101,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 580,
-        "hits": 823,
+        "last_cycle": 581,
+        "hits": 839,
         "status": "open"
       },
       {
@@ -111,8 +110,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 580,
-        "hits": 502,
+        "last_cycle": 581,
+        "hits": 516,
         "status": "open"
       },
       {
@@ -120,7 +119,16 @@
         "parent": "cooking",
         "depth": 22,
         "first_cycle": 570,
-        "last_cycle": 580,
+        "last_cycle": 581,
+        "hits": 49,
+        "status": "open"
+      },
+      {
+        "label": "easy concept",
+        "parent": "hard concept",
+        "depth": 16,
+        "first_cycle": 558,
+        "last_cycle": 581,
         "hits": 48,
         "status": "open"
       },
@@ -129,8 +137,71 @@
         "parent": "word",
         "depth": 28,
         "first_cycle": 577,
-        "last_cycle": 580,
-        "hits": 25,
+        "last_cycle": 581,
+        "hits": 38,
+        "status": "open"
+      },
+      {
+        "label": "hard to find one",
+        "parent": "direction goal",
+        "depth": 25,
+        "first_cycle": 574,
+        "last_cycle": 581,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "word",
+        "parent": "puzzle",
+        "depth": 27,
+        "first_cycle": 576,
+        "last_cycle": 581,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "puzzle",
+        "parent": "hard to find one",
+        "depth": 26,
+        "first_cycle": 575,
+        "last_cycle": 581,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "first person",
+        "parent": "doubt",
+        "depth": 29,
+        "first_cycle": 578,
+        "last_cycle": 581,
+        "hits": 19,
+        "status": "open"
+      },
+      {
+        "label": "use",
+        "parent": "first person",
+        "depth": 30,
+        "first_cycle": 579,
+        "last_cycle": 581,
+        "hits": 11,
+        "status": "open"
+      },
+      {
+        "label": "second-person",
+        "parent": "use",
+        "depth": 31,
+        "first_cycle": 580,
+        "last_cycle": 581,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "first-person",
+        "parent": "use",
+        "depth": 31,
+        "first_cycle": 580,
+        "last_cycle": 581,
+        "hits": 2,
         "status": "open"
       },
       {
@@ -140,69 +211,6 @@
         "first_cycle": 573,
         "last_cycle": 580,
         "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "hard to find one",
-        "parent": "direction goal",
-        "depth": 25,
-        "first_cycle": 574,
-        "last_cycle": 580,
-        "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "word",
-        "parent": "puzzle",
-        "depth": 27,
-        "first_cycle": 576,
-        "last_cycle": 580,
-        "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "puzzle",
-        "parent": "hard to find one",
-        "depth": 26,
-        "first_cycle": 575,
-        "last_cycle": 580,
-        "hits": 21,
-        "status": "open"
-      },
-      {
-        "label": "first person",
-        "parent": "doubt",
-        "depth": 29,
-        "first_cycle": 578,
-        "last_cycle": 580,
-        "hits": 13,
-        "status": "open"
-      },
-      {
-        "label": "use",
-        "parent": "first person",
-        "depth": 30,
-        "first_cycle": 579,
-        "last_cycle": 580,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "second-person",
-        "parent": "use",
-        "depth": 31,
-        "first_cycle": 580,
-        "last_cycle": 580,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "first-person",
-        "parent": "use",
-        "depth": 31,
-        "first_cycle": 580,
-        "last_cycle": 580,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -248,15 +256,6 @@
         "first_cycle": 575,
         "last_cycle": 576,
         "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "easy concept",
-        "parent": "hard concept",
-        "depth": 16,
-        "first_cycle": 558,
-        "last_cycle": 575,
-        "hits": 47,
         "status": "open"
       },
       {
@@ -564,7 +563,7 @@
       "first person",
       "use"
     ],
-    "focus_turns": 0,
+    "focus_turns": 2,
     "last_branch_cycle": 580,
     "escape_pressure": 0
   }
