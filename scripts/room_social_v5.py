@@ -7,6 +7,7 @@ REL_KEYS=("exposure","direct_familiarity","trust","predictability","reciprocity"
 GENERIC=set("the and but for not was are you your our out too did can got one once that this with from have has had just what when where how there they them then than about would could should into only because been being does doing done will well yeah okay also still maybe kind sort thing things something anything someone everyone say saying think thinking thought know knowing mean means seem seems want wants wanted make making made start starting started try trying tried good great nice sure right actually probably pretty little much many few around again already even ever never always often sometimes today tonight tomorrow yesterday different together interesting going everything really people person conversation talk feel feeling answer question makes like their which while more very usually between over under through during before after each other another both such own same much example specific rule case point pattern actual interaction general concrete keep hear hearing saying said change changes changed outcome matter matters version part piece compare comparison contrast exception exceptions different differently useful interesting coming leaving leave pin rather now edge test against gets involving especially happens rest i'd".split())
 GENERIC.update({"you're","we're","they're","i'm","don't","doesn't","isn't","aren't","wasn't","weren't","can't","won't","wouldn't","couldn't","shouldn't"})
 
+
 def clamp(x,a=0,b=1): return max(a,min(b,float(x)))
 def approach(x,rate): return clamp(float(x)+float(rate)*(1-float(x)))
 def words(text):
@@ -15,6 +16,7 @@ def words(text):
   w=w.strip("'-"); w=w[:-2] if w.endswith("'s") else w
   if w and w not in GENERIC and w not in out: out.append(w)
  return out
+
 
 def rel_template(legacy=.02):
  legacy=clamp(legacy)
@@ -47,16 +49,74 @@ def migrate_minds(M):
     old['events']=list(old.get('events',[]))[-160:]; old['shared_references']=list(old.get('shared_references',[]))[-60:]; old['reports']=list(old.get('reports',[]))[-90:]
  return M
 
+
 def topic_template(c=0):
- return {'semantic_schema':3,'id':f'topic-{c:06d}','root':None,'current_facet':None,'facets':[],'visited_facets':[],'facet_index':0,'unresolved':[],'examples':[],'disagreements':[],'shared_references':[],'participants':list(ORDER),'turns':0,'low_novelty_beats':0,'recent_terms':[],'last_shift_cycle':c,'status':'forming'}
+ return {
+  'semantic_schema':4,'id':f'topic-{c:06d}','root':None,'current_facet':None,
+  'facets':[],'visited_facets':[],'facet_index':0,'unresolved':[],'examples':[],
+  'disagreements':[],'shared_references':[],'participants':list(ORDER),'turns':0,
+  'low_novelty_beats':0,'recent_terms':[],'last_shift_cycle':c,'status':'forming',
+  'branches':[],'branch_history':[],'focus_turns':0,'last_branch_cycle':c,'escape_pressure':0,
+ }
+
+
+def _term_tokens(value):
+ return {w for w in words(value) if len(w)>=3}
+
+def _near_term(a,b):
+ a=str(a or '').strip().lower(); b=str(b or '').strip().lower()
+ if not a or not b: return False
+ if a==b: return True
+ ta,tb=_term_tokens(a),_term_tokens(b)
+ if not ta or not tb: return a in b or b in a
+ if len(a)>=4 and len(b)>=4 and (a in b or b in a): return True
+ return len(ta&tb)/max(1,min(len(ta),len(tb)))>=.72
+
+def _branch_index(t,label):
+ for i,b in enumerate(t.get('branches',[])):
+  if _near_term(b.get('label'),label): return i
+ return None
+
+def _add_branch(t,label,parent,cycle,depth=None):
+ label=str(label or '').strip().lower()
+ if not label or not _term_tokens(label): return None
+ idx=_branch_index(t,label)
+ if idx is not None:
+  b=t['branches'][idx]; b['hits']=int(b.get('hits',0))+1; b['last_cycle']=cycle; b['status']='open'; return b
+ parent=str(parent or '').strip().lower() or None
+ if depth is None:
+  pidx=_branch_index(t,parent) if parent else None
+  depth=(int(t['branches'][pidx].get('depth',0))+1) if pidx is not None else (0 if parent is None else 1)
+ b={'label':label,'parent':parent,'depth':int(depth),'first_cycle':cycle,'last_cycle':cycle,'hits':1,'status':'open'}
+ t.setdefault('branches',[]).append(b)
+ return b
+
+def _upgrade_topic_tree(t,cycle):
+ defaults=topic_template(cycle)
+ for k,v in defaults.items(): t.setdefault(k,v)
+ if int(t.get('semantic_schema',1))<4:
+  old_root=str(t.get('root') or '').strip().lower() or None
+  old_facets=[str(x or '').strip().lower() for x in t.get('facets',[]) if str(x or '').strip()]
+  old_visited=[str(x or '').strip().lower() for x in t.get('visited_facets',[]) if str(x or '').strip()]
+  t['branches']=[]
+  if old_root: _add_branch(t,old_root,None,int(t.get('last_shift_cycle') or cycle),0)
+  for f in old_facets[:16]:
+   if old_root and _near_term(f,old_root): continue
+   _add_branch(t,f,old_root,cycle,1)
+  t['branch_history']=old_visited[-24:]
+  t['focus_turns']=0
+  t['last_branch_cycle']=int(t.get('last_shift_cycle') or cycle)
+  t['escape_pressure']=0
+  t['semantic_schema']=4
+ return t
+
 def migrate_state(S):
  S=S or {}; cycle=int(S.get('cycle',0)); old=S.get('topic_episode')
  if not old or int(old.get('semantic_schema',1))<3:
-  S['topic_episode']=topic_template(cycle)
-  return S
- t=S['topic_episode']
- for k,v in topic_template(cycle).items(): t.setdefault(k,v)
+  S['topic_episode']=topic_template(cycle); return S
+ S['topic_episode']=_upgrade_topic_tree(S['topic_episode'],cycle)
  return S
+
 
 def _target(msg,by=None):
  c=(msg or {}).get('cognition') or {}; tgt=c.get('target')
@@ -100,6 +160,7 @@ def observe_message(M,msg,cycle,by=None):
    r['shared_references']=refs[-60:]
  return M
 
+
 def _declared_terms(m):
  c=(m or {}).get('cognition') or {}; vals=c.get('topic_terms')
  if isinstance(vals,list) and vals:
@@ -115,34 +176,118 @@ def topic_terms_from_messages(ms,limit=12,episode_id=None):
   if episode_id and ((m.get('cognition') or {}).get('topic_episode')!=episode_id): continue
   ws=_declared_terms(m); rec.extend(ws); c.update(ws)
  return sorted(c,key=lambda w:(-c[w],-max(i for i,x in enumerate(rec) if x==w),w))[:limit] if rec else []
+
+def _recent_term_counts(ms,episode_id=None,window=12):
+ c=Counter()
+ for m in ms[-window:]:
+  if episode_id and ((m.get('cognition') or {}).get('topic_episode')!=episode_id): continue
+  c.update(_declared_terms(m))
+ return c
+
+def _meaningfully_new(term,t):
+ term=str(term or '').strip().lower()
+ if not term or not _term_tokens(term): return False
+ existing=[t.get('root'),t.get('current_facet')]+[b.get('label') for b in t.get('branches',[])]
+ return not any(_near_term(term,x) for x in existing if x)
+
+def _set_focus(t,label,cycle):
+ label=str(label or '').strip().lower()
+ if not label: return
+ current=str(t.get('current_facet') or '').strip().lower()
+ if current and not _near_term(current,label): t.setdefault('branch_history',[]).append(current)
+ t['current_facet']=label
+ if label not in t.setdefault('visited_facets',[]): t['visited_facets'].append(label)
+ t['facet_index']=max(0,len(t['visited_facets'])-1)
+ t['focus_turns']=0
+ t['last_branch_cycle']=cycle
+ t['escape_pressure']=0
+ t['status']='active'
+
+def _branch_score(branch,cycle,current):
+ if _near_term(branch.get('label'),current): return -999
+ age=max(0,cycle-int(branch.get('last_cycle',cycle)))
+ recency=max(0,1-age/36)
+ depth=min(4,int(branch.get('depth',0)))/4
+ hits=min(8,int(branch.get('hits',1)))/8
+ return 1.3*recency+.8*hits+.35*depth
+
 def update_topic(t,ms,cycle):
- t=t or topic_template(cycle); terms=topic_terms_from_messages(ms,episode_id=t.get('id')); previous=set(t.get('recent_terms',[])); novel=[w for w in terms if w not in previous]
+ t=_upgrade_topic_tree(t or topic_template(cycle),cycle)
+ terms=topic_terms_from_messages(ms,episode_id=t.get('id'))
+ counts=_recent_term_counts(ms,t.get('id'),12)
+
  if t.get('root') is None and terms:
-  t['root']=terms[0]; rest=[x for x in terms[1:] if x!=terms[0]]; t['facets']=list(dict.fromkeys(rest)); t['current_facet']=t['facets'][0] if t['facets'] else t['root']; t['visited_facets']=[t['current_facet']]; t['status']='active'; t['last_shift_cycle']=cycle
+  t['root']=terms[0]
+  _add_branch(t,t['root'],None,cycle,0)
+  rest=[x for x in terms[1:] if not _near_term(x,t['root'])]
+  t['facets']=list(dict.fromkeys(rest))
+  for x in rest[:8]: _add_branch(t,x,t['root'],cycle,1)
+  t['current_facet']=rest[0] if rest else t['root']
+  t['visited_facets']=[t['current_facet']]
+  t['branch_history']=[]; t['focus_turns']=0; t['status']='active'; t['last_shift_cycle']=cycle; t['last_branch_cycle']=cycle
  else:
+  current=t.get('current_facet') or t.get('root')
+  parent=current or t.get('root')
+  added=[]
   for x in terms:
+   idx=_branch_index(t,x)
+   if idx is not None:
+    b=t['branches'][idx]; b['hits']=int(b.get('hits',0))+max(1,int(counts.get(x,1))); b['last_cycle']=cycle
+   elif _meaningfully_new(x,t):
+    b=_add_branch(t,x,parent,cycle)
+    if b: added.append(b)
    if x!=t.get('root') and x not in t.setdefault('facets',[]): t['facets'].append(x)
- t['turns']=int(t.get('turns',0))+1; t['recent_terms']=terms
- t['low_novelty_beats']=int(t.get('low_novelty_beats',0))+1 if not novel else 0
- if t['low_novelty_beats']>=4:
-  unvisited=[x for x in t.get('facets',[]) if x not in t.get('visited_facets',[])]
-  if unvisited:
-   t['current_facet']=unvisited[0]; t.setdefault('visited_facets',[]).append(unvisited[0]); t['facet_index']=len(t['visited_facets'])-1; t['low_novelty_beats']=0
-  elif t['turns']>=12:
-   t['status']='ready_to_bridge'
- t['facets']=list(dict.fromkeys(t.get('facets',[])))[:16]; t['visited_facets']=list(dict.fromkeys(t.get('visited_facets',[])))[:16]
+
+  t['focus_turns']=int(t.get('focus_turns',0))+1
+  # A child introduced by the current exchange is the most natural next branch.
+  if added and t['focus_turns']>=2:
+   best=max(added,key=lambda b:(int(b.get('hits',1)),len(_term_tokens(b.get('label'))),-int(b.get('depth',0))))
+   _set_focus(t,best['label'],cycle)
+  elif t['focus_turns']>=6:
+   # If the current branch is narrowing without producing a child, revive a recent sibling/cousin.
+   candidates=[b for b in t.get('branches',[]) if b.get('status','open')=='open' and not _near_term(b.get('label'),current)]
+   candidates=[b for b in candidates if int(b.get('last_cycle',0))>=cycle-40]
+   if candidates:
+    best=max(candidates,key=lambda b:_branch_score(b,cycle,current))
+    if _branch_score(best,cycle,current)>.45: _set_focus(t,best['label'],cycle)
+
+ t['turns']=int(t.get('turns',0))+1
+ previous=set(t.get('recent_terms',[])); meaningful=[x for x in terms if _meaningfully_new(x,{'root':None,'current_facet':None,'branches':[{'label':p} for p in previous]})]
+ t['recent_terms']=terms
+ t['low_novelty_beats']=int(t.get('low_novelty_beats',0))+1 if not meaningful else 0
+
+ # An unrelated stimulus is only an escape hatch when the whole live tree has stopped offering branches.
+ current=t.get('current_facet') or t.get('root')
+ viable=[b for b in t.get('branches',[]) if not _near_term(b.get('label'),current) and int(b.get('last_cycle',0))>=cycle-40]
+ if int(t.get('focus_turns',0))>=10 and not viable:
+  t['escape_pressure']=int(t.get('escape_pressure',0))+1
+ else:
+  t['escape_pressure']=max(0,int(t.get('escape_pressure',0))-1)
+ if int(t.get('escape_pressure',0))>=3:
+  t['status']='ready_to_bridge'
+
+ t['facets']=list(dict.fromkeys(t.get('facets',[])))[:24]
+ t['visited_facets']=list(dict.fromkeys(t.get('visited_facets',[])))[-24:]
+ t['branch_history']=list(dict.fromkeys(t.get('branch_history',[])))[-32:]
+ t['branches']=sorted(t.get('branches',[]),key=lambda b:(int(b.get('last_cycle',0)),int(b.get('hits',0))),reverse=True)[:48]
  return t
+
 def should_shift_topic(t): return bool(t and t.get('status')=='ready_to_bridge')
 def new_topic_from_terms(terms,cycle,prior=None):
  clean=[]
  for x in terms:
   x=str(x or '').strip().lower()
-  if x and x not in clean: clean.append(x)
+  if x and _term_tokens(x) and not any(_near_term(x,y) for y in clean): clean.append(x)
  t=topic_template(cycle)
  if clean:
-  t['root']=clean[0]; t['facets']=clean[1:]; t['current_facet']=t['facets'][0] if t['facets'] else clean[0]; t['visited_facets']=[t['current_facet']]; t['status']='active'
+  t['root']=clean[0]; _add_branch(t,clean[0],None,cycle,0)
+  t['facets']=clean[1:]
+  for x in clean[1:8]: _add_branch(t,x,clean[0],cycle,1)
+  t['current_facet']=t['facets'][0] if t['facets'] else clean[0]
+  t['visited_facets']=[t['current_facet']]; t['status']='active'
  if prior and prior.get('current_facet'): t['shared_references']=[prior['current_facet']]
  return t
+
 
 def choose_partner(e,M,t,cycle):
  scored=[]
@@ -176,4 +321,5 @@ def audit_invariants(M,t):
    for k in REL_KEYS:
     if not 0<=float(M['entities'][e]['people'][o].get(k,0))<=1: raise AssertionError(f'{e}->{o} {k} out of range')
  if t is not None and not isinstance(t.get('facets',[]),list): raise AssertionError('topic facets must be a list')
+ if t is not None and not isinstance(t.get('branches',[]),list): raise AssertionError('topic branches must be a list')
  return True
