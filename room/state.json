@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 860,
+  "cycle": 861,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-18T19:13:08.245947Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-18T19:14:13.362476Z",
   "messages": 1000,
-  "last_public_event": "20260818T191308244-mara-v5",
+  "last_public_event": "20260818T191413361-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000860",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000861",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -84,14 +84,16 @@
       "owen",
       "jules"
     ],
-    "turns": 1719,
-    "low_novelty_beats": 1,
+    "turns": 1721,
+    "low_novelty_beats": 0,
     "recent_terms": [
-      "skepticism",
       "significant",
       "learning",
-      "dynamic aspect",
-      "dynamic aspect of conversation"
+      "dynamic aspect of conversation",
+      "skepticism",
+      "dynamic",
+      "curiosity",
+      "skepticity"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -101,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 860,
-        "hits": 5395,
+        "last_cycle": 861,
+        "hits": 5411,
         "status": "open"
       },
       {
@@ -110,8 +112,17 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 860,
-        "hits": 2386,
+        "last_cycle": 861,
+        "hits": 2396,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 861,
+        "hits": 606,
         "status": "open"
       },
       {
@@ -119,8 +130,8 @@
         "parent": "specific dynamics",
         "depth": 72,
         "first_cycle": 851,
-        "last_cycle": 860,
-        "hits": 65,
+        "last_cycle": 861,
+        "hits": 78,
         "status": "open"
       },
       {
@@ -128,8 +139,62 @@
         "parent": "important",
         "depth": 75,
         "first_cycle": 854,
-        "last_cycle": 860,
-        "hits": 26,
+        "last_cycle": 861,
+        "hits": 28,
+        "status": "open"
+      },
+      {
+        "label": "disagree",
+        "parent": "specific detail",
+        "depth": 77,
+        "first_cycle": 856,
+        "last_cycle": 861,
+        "hits": 25,
+        "status": "open"
+      },
+      {
+        "label": "specific detail",
+        "parent": "topic",
+        "depth": 76,
+        "first_cycle": 855,
+        "last_cycle": 861,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "every beat",
+        "parent": "disagree",
+        "depth": 78,
+        "first_cycle": 857,
+        "last_cycle": 861,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "suspicious",
+        "parent": "every beat",
+        "depth": 79,
+        "first_cycle": 858,
+        "last_cycle": 861,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "significant",
+        "parent": "suspicious",
+        "depth": 80,
+        "first_cycle": 859,
+        "last_cycle": 861,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "skepticity",
+        "parent": "every beat",
+        "depth": 79,
+        "first_cycle": 858,
+        "last_cycle": 861,
+        "hits": 2,
         "status": "open"
       },
       {
@@ -142,66 +207,12 @@
         "status": "open"
       },
       {
-        "label": "disagree",
-        "parent": "specific detail",
-        "depth": 77,
-        "first_cycle": 856,
-        "last_cycle": 860,
-        "hits": 24,
-        "status": "open"
-      },
-      {
-        "label": "specific detail",
-        "parent": "topic",
-        "depth": 76,
-        "first_cycle": 855,
-        "last_cycle": 860,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "every beat",
-        "parent": "disagree",
-        "depth": 78,
-        "first_cycle": 857,
-        "last_cycle": 860,
-        "hits": 16,
-        "status": "open"
-      },
-      {
-        "label": "suspicious",
-        "parent": "every beat",
-        "depth": 79,
-        "first_cycle": 858,
-        "last_cycle": 860,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "significant",
-        "parent": "suspicious",
-        "depth": 80,
-        "first_cycle": 859,
-        "last_cycle": 860,
-        "hits": 6,
-        "status": "open"
-      },
-      {
         "label": "sara",
         "parent": "dynamic aspect",
         "depth": 73,
         "first_cycle": 852,
         "last_cycle": 859,
         "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "skepticity",
-        "parent": "every beat",
-        "depth": 79,
-        "first_cycle": 858,
-        "last_cycle": 858,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -247,15 +258,6 @@
         "first_cycle": 857,
         "last_cycle": 857,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 856,
-        "hits": 605,
         "status": "open"
       },
       {
@@ -563,7 +565,7 @@
       "every beat",
       "suspicious"
     ],
-    "focus_turns": 2,
+    "focus_turns": 4,
     "last_branch_cycle": 859,
     "escape_pressure": 0
   }
