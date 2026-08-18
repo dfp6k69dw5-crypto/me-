@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 556,
+  "cycle": 557,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-18T13:27:49.524128Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-18T13:28:49.773710Z",
   "messages": 1000,
-  "last_public_event": "20260818T132749522-jules-v5",
+  "last_public_event": "20260818T132849771-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000556",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000557",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "context",
+    "current_facet": "hard concept",
     "facets": [
       "sarah",
       "skepticism",
@@ -65,9 +65,10 @@
       "hard to work with",
       "difficult to work with",
       "brief description of what this turn should add",
-      "context"
+      "context",
+      "hard concept"
     ],
-    "facet_index": 17,
+    "facet_index": 18,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -78,15 +79,16 @@
       "owen",
       "jules"
     ],
-    "turns": 1111,
+    "turns": 1113,
     "low_novelty_beats": 0,
     "recent_terms": [
       "skepticism",
-      "brief description of what this turn should add",
-      "learning",
-      "easy to work with",
       "context",
-      "hard to work with"
+      "learning",
+      "concept",
+      "hard concept",
+      "easy",
+      "skeptic"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -96,8 +98,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 556,
-        "hits": 417,
+        "last_cycle": 557,
+        "hits": 433,
         "status": "open"
       },
       {
@@ -105,8 +107,17 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 556,
-        "hits": 253,
+        "last_cycle": 557,
+        "hits": 265,
+        "status": "open"
+      },
+      {
+        "label": "new concept",
+        "parent": "newness",
+        "depth": 4,
+        "first_cycle": 536,
+        "last_cycle": 557,
+        "hits": 134,
         "status": "open"
       },
       {
@@ -114,8 +125,89 @@
         "parent": "mara",
         "depth": 8,
         "first_cycle": 550,
-        "last_cycle": 556,
-        "hits": 42,
+        "last_cycle": 557,
+        "hits": 43,
+        "status": "open"
+      },
+      {
+        "label": "contribute to",
+        "parent": "components",
+        "depth": 9,
+        "first_cycle": 551,
+        "last_cycle": 557,
+        "hits": 25,
+        "status": "open"
+      },
+      {
+        "label": "hard to work with",
+        "parent": "designed",
+        "depth": 11,
+        "first_cycle": 553,
+        "last_cycle": 557,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "designed",
+        "parent": "contribute to",
+        "depth": 10,
+        "first_cycle": 552,
+        "last_cycle": 557,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "easy to work with",
+        "parent": "designed",
+        "depth": 11,
+        "first_cycle": 553,
+        "last_cycle": 557,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "difficult to work with",
+        "parent": "hard to work with",
+        "depth": 12,
+        "first_cycle": 554,
+        "last_cycle": 557,
+        "hits": 19,
+        "status": "open"
+      },
+      {
+        "label": "brief description of what this turn should add",
+        "parent": "difficult to work with",
+        "depth": 13,
+        "first_cycle": 555,
+        "last_cycle": 557,
+        "hits": 11,
+        "status": "open"
+      },
+      {
+        "label": "context",
+        "parent": "brief description of what this turn should add",
+        "depth": 14,
+        "first_cycle": 556,
+        "last_cycle": 557,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "unexpected connection",
+        "parent": "difficult to work with",
+        "depth": 13,
+        "first_cycle": 555,
+        "last_cycle": 557,
+        "hits": 3,
+        "status": "open"
+      },
+      {
+        "label": "hard concept",
+        "parent": "context",
+        "depth": 15,
+        "first_cycle": 557,
+        "last_cycle": 557,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -125,78 +217,6 @@
         "first_cycle": 548,
         "last_cycle": 556,
         "hits": 39,
-        "status": "open"
-      },
-      {
-        "label": "contribute to",
-        "parent": "components",
-        "depth": 9,
-        "first_cycle": 551,
-        "last_cycle": 556,
-        "hits": 24,
-        "status": "open"
-      },
-      {
-        "label": "designed",
-        "parent": "contribute to",
-        "depth": 10,
-        "first_cycle": 552,
-        "last_cycle": 556,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "hard to work with",
-        "parent": "designed",
-        "depth": 11,
-        "first_cycle": 553,
-        "last_cycle": 556,
-        "hits": 17,
-        "status": "open"
-      },
-      {
-        "label": "easy to work with",
-        "parent": "designed",
-        "depth": 11,
-        "first_cycle": 553,
-        "last_cycle": 556,
-        "hits": 15,
-        "status": "open"
-      },
-      {
-        "label": "difficult to work with",
-        "parent": "hard to work with",
-        "depth": 12,
-        "first_cycle": 554,
-        "last_cycle": 556,
-        "hits": 13,
-        "status": "open"
-      },
-      {
-        "label": "brief description of what this turn should add",
-        "parent": "difficult to work with",
-        "depth": 13,
-        "first_cycle": 555,
-        "last_cycle": 556,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "unexpected connection",
-        "parent": "difficult to work with",
-        "depth": 13,
-        "first_cycle": 555,
-        "last_cycle": 556,
-        "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "context",
-        "parent": "brief description of what this turn should add",
-        "depth": 14,
-        "first_cycle": 556,
-        "last_cycle": 556,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -260,15 +280,6 @@
         "first_cycle": 547,
         "last_cycle": 554,
         "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "new concept",
-        "parent": "newness",
-        "depth": 4,
-        "first_cycle": 536,
-        "last_cycle": 553,
-        "hits": 133,
         "status": "open"
       },
       {
@@ -513,15 +524,6 @@
         "last_cycle": 530,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "expressing",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 530,
-        "hits": 1,
-        "status": "open"
       }
     ],
     "branch_history": [
@@ -541,10 +543,11 @@
       "designed",
       "hard to work with",
       "difficult to work with",
-      "brief description of what this turn should add"
+      "brief description of what this turn should add",
+      "context"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 556,
+    "last_branch_cycle": 557,
     "escape_pressure": 0
   }
 }
