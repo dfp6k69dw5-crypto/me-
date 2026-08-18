@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1088,
+  "cycle": 1089,
   "silence_cycles": 0,
-  "last_speaker": "sarah",
-  "last_run": "2026-08-18T23:19:05.286479Z",
+  "last_speaker": "mara",
+  "last_run": "2026-08-18T23:20:09.007803Z",
   "messages": 1000,
-  "last_public_event": "20260818T231905285-sarah-v5",
+  "last_public_event": "20260818T232009005-mara-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001088",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001089",
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "clarification",
+    "current_facet": "scope",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "do you have the ability to make a judgement on a particular question or claim?",
       "powerful tool",
       "mind",
       "understood",
@@ -71,7 +70,8 @@
       "idea",
       "private speech",
       "test and verification",
-      "clarification"
+      "clarification",
+      "scope"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,16 +84,18 @@
       "owen",
       "jules"
     ],
-    "turns": 2175,
-    "low_novelty_beats": 1,
+    "turns": 2177,
+    "low_novelty_beats": 0,
     "recent_terms": [
       "clarification",
       "learning",
+      "learning context",
+      "test and verification",
+      "skepticism",
+      "learn about",
       "public speech",
-      "test",
-      "test exception",
-      "verification",
-      "learning, public speech"
+      "scope",
+      "limit"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +105,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 1088,
-        "hits": 9211,
+        "last_cycle": 1089,
+        "hits": 9229,
         "status": "open"
       },
       {
@@ -112,8 +114,17 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 1088,
-        "hits": 3727,
+        "last_cycle": 1089,
+        "hits": 3730,
+        "status": "open"
+      },
+      {
+        "label": "learn more",
+        "parent": "why",
+        "depth": 68,
+        "first_cycle": 846,
+        "last_cycle": 1089,
+        "hits": 334,
         "status": "open"
       },
       {
@@ -121,17 +132,8 @@
         "parent": "clear and unambiguous",
         "depth": 98,
         "first_cycle": 1080,
-        "last_cycle": 1088,
-        "hits": 87,
-        "status": "open"
-      },
-      {
-        "label": "test and verify",
-        "parent": "beliefs",
-        "depth": 97,
-        "first_cycle": 1079,
-        "last_cycle": 1088,
-        "hits": 25,
+        "last_cycle": 1089,
+        "hits": 93,
         "status": "open"
       },
       {
@@ -139,26 +141,17 @@
         "parent": "private speech",
         "depth": 101,
         "first_cycle": 1085,
-        "last_cycle": 1088,
-        "hits": 22,
+        "last_cycle": 1089,
+        "hits": 29,
         "status": "open"
       },
       {
-        "label": "idea",
-        "parent": "public speech",
-        "depth": 99,
-        "first_cycle": 1083,
-        "last_cycle": 1088,
-        "hits": 21,
-        "status": "open"
-      },
-      {
-        "label": "private speech",
-        "parent": "idea",
-        "depth": 100,
-        "first_cycle": 1084,
-        "last_cycle": 1088,
-        "hits": 20,
+        "label": "test and verify",
+        "parent": "beliefs",
+        "depth": 97,
+        "first_cycle": 1079,
+        "last_cycle": 1089,
+        "hits": 28,
         "status": "open"
       },
       {
@@ -166,8 +159,44 @@
         "parent": "test and verification",
         "depth": 102,
         "first_cycle": 1086,
-        "last_cycle": 1088,
-        "hits": 15,
+        "last_cycle": 1089,
+        "hits": 28,
+        "status": "open"
+      },
+      {
+        "label": "idea",
+        "parent": "public speech",
+        "depth": 99,
+        "first_cycle": 1083,
+        "last_cycle": 1089,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "private speech",
+        "parent": "idea",
+        "depth": 100,
+        "first_cycle": 1084,
+        "last_cycle": 1089,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "scope",
+        "parent": "clarification",
+        "depth": 103,
+        "first_cycle": 1089,
+        "last_cycle": 1089,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "limit",
+        "parent": "clarification",
+        "depth": 103,
+        "first_cycle": 1089,
+        "last_cycle": 1089,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -303,15 +332,6 @@
         "first_cycle": 1080,
         "last_cycle": 1080,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "learn more",
-        "parent": "why",
-        "depth": 68,
-        "first_cycle": 846,
-        "last_cycle": 1079,
-        "hits": 333,
         "status": "open"
       },
       {
@@ -511,28 +531,9 @@
         "last_cycle": 1067,
         "hits": 55,
         "status": "open"
-      },
-      {
-        "label": "correct",
-        "parent": "differences",
-        "depth": 88,
-        "first_cycle": 1065,
-        "last_cycle": 1066,
-        "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "invention",
-        "parent": "innovation",
-        "depth": 109,
-        "first_cycle": 1043,
-        "last_cycle": 1065,
-        "hits": 42,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "problem",
       "open to ideas",
       "innovation",
       "invention",
@@ -563,10 +564,11 @@
       "public speech",
       "idea",
       "private speech",
-      "test and verification"
+      "test and verification",
+      "clarification"
     ],
-    "focus_turns": 4,
-    "last_branch_cycle": 1086,
+    "focus_turns": 0,
+    "last_branch_cycle": 1089,
     "escape_pressure": 0
   }
 }
