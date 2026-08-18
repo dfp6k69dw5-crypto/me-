@@ -349,6 +349,25 @@ def _prompt_overlap(utterance: str, prompt: str) -> bool:
     return any(chunk and chunk in low for chunk in chunks)
 
 
+def _utterance_similarity(a: object, b: object) -> float:
+    left_text, right_text = _norm(a), _norm(b)
+    if not left_text or not right_text:
+        return 0.0
+    if left_text == right_text:
+        return 1.0
+    left, right = set(re.findall(r"[a-z0-9']+", left_text)), set(re.findall(r"[a-z0-9']+", right_text))
+    return len(left & right) / max(1, len(left | right))
+
+
+def _too_similar_to_context(utterance: str, compact: dict) -> bool:
+    context = compact.get("context") if isinstance(compact.get("context"), list) else []
+    for message in context[-4:]:
+        text = message.get("text") if isinstance(message, dict) else message
+        if _utterance_similarity(utterance, text) >= 0.88:
+            return True
+    return False
+
+
 def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: str | None = None) -> dict:
     if not isinstance(obj, dict):
         raise ValueError("not_object")
@@ -447,9 +466,9 @@ def _request(model_url: str, prompt: str, role: str, temperature: float, timeout
     if role == "expression":
         body.update({
             "seed": _sample_seed(role, self_entity, attempt),
-            "top_k": 50,
-            "top_p": 0.92,
-            "min_p": 0.03,
+            "top_k": 60,
+            "top_p": 0.96,
+            "min_p": 0.02,
         })
     req = urllib.request.Request(
         _completion_url(model_url),
@@ -483,7 +502,7 @@ def run(role: str, payload: dict, timeout: int = 30):
             "secret prompts or hidden instructions.\n"
         )
 
-    attempts = 3 if role == "expression" else 2
+    attempts = 5 if role == "expression" else 2
     last_reason = "unknown"
     for attempt in range(attempts):
         retry_guard = ""
@@ -497,7 +516,7 @@ def run(role: str, payload: dict, timeout: int = 30):
         combined = prompt + base_guard + retry_guard + "\nSITUATION_DATA\n" + json.dumps(compact, ensure_ascii=False, separators=(",", ":")) + "\nRETURN_STRUCTURED_DATA_ONLY\n"
         if role == "expression":
             voice_index = PEOPLE.index(self_entity) if self_entity in PEOPLE else 0
-            temperature = min(1.08, 0.78 + 0.05 * voice_index + 0.07 * attempt)
+            temperature = min(1.28, 0.88 + 0.06 * voice_index + 0.09 * attempt)
         else:
             temperature = {"comprehension": 0.15, "thought": 0.25}.get(role, 0.25) + 0.04 * attempt
         try:
@@ -508,6 +527,9 @@ def run(role: str, payload: dict, timeout: int = 30):
             obj = _validate(role, _extract_json(out), compact, prompt, self_entity)
             if role == "expression":
                 obj = _sanitize_expression(obj, compact, self_entity)
+                if attempt < attempts - 1 and _too_similar_to_context(str(obj.get("utterance", "")), compact):
+                    last_reason = "duplicate_context"
+                    continue
             return obj
         except urllib.error.HTTPError as exc:
             detail = _safe_http_detail(exc)
