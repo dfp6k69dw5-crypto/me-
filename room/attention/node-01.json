@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T19:28:11.141498+00:00",
-  "cycle_key": "32153618883:1:225",
+  "generated_at": "2026-08-18T19:29:18.400786+00:00",
+  "cycle_key": "32153618883:1:226",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,18 +29,50 @@
   },
   "selected_skills": [
     {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "conversation"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.64
+        }
+      ]
+    },
+    {
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.98,
-      "confidence": 0.83,
-      "raw_score": 2.26,
+      "score": 1.17,
+      "confidence": 0.531,
+      "raw_score": 1.45,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "specific",
-        "show",
-        "concrete",
-        "example"
+        "specific"
       ],
       "evidence_sources": [
         {
@@ -48,49 +80,20 @@
           "matched": [
             "specific"
           ],
-          "weight": 0.76
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "example",
-            "concrete"
+            "specific"
           ],
-          "weight": 0.46
-        },
-        {
-          "kind": "topic",
-          "matched": [
-            "show"
-          ],
-          "weight": 0.58
-        }
-      ]
-    },
-    {
-      "name": "creative-bridge",
-      "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "connection"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "connection"
-          ],
-          "weight": 1.8
+          "weight": 0.92
         }
       ]
     }
   ],
-  "context_fingerprint": "45080a209dbb",
+  "context_fingerprint": "fef619111f1d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 798,
-  "approx_added_tokens": 200
+  "temporary_skill_chars": 831,
+  "approx_added_tokens": 208
 }
