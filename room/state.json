@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1008,
+  "cycle": 1009,
   "silence_cycles": 0,
-  "last_speaker": "sarah",
-  "last_run": "2026-08-18T21:54:26.378944Z",
+  "last_speaker": "mara",
+  "last_run": "2026-08-18T21:55:42.966380Z",
   "messages": 1000,
-  "last_public_event": "20260818T215426375-sarah-v5",
+  "last_public_event": "20260818T215542964-mara-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001008",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001009",
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "memories experience",
+    "current_facet": "memoried",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "view",
       "personality",
       "new knowledge",
       "newness",
@@ -71,7 +70,8 @@
       "skill",
       "importance",
       "memorable",
-      "memories experience"
+      "memories experience",
+      "memoried"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,18 +84,18 @@
       "owen",
       "jules"
     ],
-    "turns": 2015,
+    "turns": 2017,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "memorable",
+      "memories experience",
       "learning",
       "hard skill",
-      "learn a hard skill",
+      "critical skill",
       "skepticism",
-      "memorability",
-      "opinion",
-      "interesting",
-      "memories experience"
+      "memories",
+      "new information goal",
+      "curiosity",
+      "memoried"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -105,8 +105,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 1008,
-        "hits": 7890,
+        "last_cycle": 1009,
+        "hits": 7908,
         "status": "open"
       },
       {
@@ -114,8 +114,26 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 1008,
-        "hits": 3139,
+        "last_cycle": 1009,
+        "hits": 3140,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 1009,
+        "hits": 742,
+        "status": "open"
+      },
+      {
+        "label": "new information goal",
+        "parent": "self",
+        "depth": 77,
+        "first_cycle": 958,
+        "last_cycle": 1009,
+        "hits": 156,
         "status": "open"
       },
       {
@@ -123,8 +141,8 @@
         "parent": "word",
         "depth": 84,
         "first_cycle": 996,
-        "last_cycle": 1008,
-        "hits": 81,
+        "last_cycle": 1009,
+        "hits": 82,
         "status": "open"
       },
       {
@@ -132,8 +150,8 @@
         "parent": "big unknown",
         "depth": 92,
         "first_cycle": 907,
-        "last_cycle": 1008,
-        "hits": 48,
+        "last_cycle": 1009,
+        "hits": 50,
         "status": "open"
       },
       {
@@ -141,17 +159,8 @@
         "parent": "practice",
         "depth": 81,
         "first_cycle": 1002,
-        "last_cycle": 1008,
-        "hits": 37,
-        "status": "open"
-      },
-      {
-        "label": "practice",
-        "parent": "big deal",
-        "depth": 80,
-        "first_cycle": 1001,
-        "last_cycle": 1008,
-        "hits": 34,
+        "last_cycle": 1009,
+        "hits": 38,
         "status": "open"
       },
       {
@@ -159,8 +168,17 @@
         "parent": "value",
         "depth": 83,
         "first_cycle": 1005,
-        "last_cycle": 1008,
-        "hits": 25,
+        "last_cycle": 1009,
+        "hits": 36,
+        "status": "open"
+      },
+      {
+        "label": "practice",
+        "parent": "big deal",
+        "depth": 80,
+        "first_cycle": 1001,
+        "last_cycle": 1009,
+        "hits": 35,
         "status": "open"
       },
       {
@@ -168,8 +186,44 @@
         "parent": "description",
         "depth": 82,
         "first_cycle": 1004,
-        "last_cycle": 1008,
-        "hits": 20,
+        "last_cycle": 1009,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "importance",
+        "parent": "skill",
+        "depth": 84,
+        "first_cycle": 1006,
+        "last_cycle": 1009,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "memorable",
+        "parent": "importance",
+        "depth": 85,
+        "first_cycle": 1007,
+        "last_cycle": 1009,
+        "hits": 11,
+        "status": "open"
+      },
+      {
+        "label": "memories experience",
+        "parent": "memorable",
+        "depth": 86,
+        "first_cycle": 1008,
+        "last_cycle": 1009,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "memoried",
+        "parent": "memories experience",
+        "depth": 87,
+        "first_cycle": 1009,
+        "last_cycle": 1009,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -191,24 +245,6 @@
         "status": "open"
       },
       {
-        "label": "importance",
-        "parent": "skill",
-        "depth": 84,
-        "first_cycle": 1006,
-        "last_cycle": 1008,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "memorable",
-        "parent": "importance",
-        "depth": 85,
-        "first_cycle": 1007,
-        "last_cycle": 1008,
-        "hits": 6,
-        "status": "open"
-      },
-      {
         "label": "memorability",
         "parent": "memorable",
         "depth": 86,
@@ -219,15 +255,6 @@
       },
       {
         "label": "opinion",
-        "parent": "memorable",
-        "depth": 86,
-        "first_cycle": 1008,
-        "last_cycle": 1008,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "memories experience",
         "parent": "memorable",
         "depth": 86,
         "first_cycle": 1008,
@@ -251,15 +278,6 @@
         "first_cycle": 1006,
         "last_cycle": 1006,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "new information goal",
-        "parent": "self",
-        "depth": 77,
-        "first_cycle": 958,
-        "last_cycle": 1005,
-        "hits": 155,
         "status": "open"
       },
       {
@@ -350,15 +368,6 @@
         "first_cycle": 1001,
         "last_cycle": 1001,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 1000,
-        "hits": 741,
         "status": "open"
       },
       {
@@ -522,19 +531,9 @@
         "last_cycle": 987,
         "hits": 25,
         "status": "open"
-      },
-      {
-        "label": "certain level of certainty",
-        "parent": "bias",
-        "depth": 79,
-        "first_cycle": 977,
-        "last_cycle": 986,
-        "hits": 56,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "valuable skill",
       "value",
       "owen",
       "position",
@@ -565,10 +564,11 @@
       "description",
       "skill",
       "importance",
-      "memorable"
+      "memorable",
+      "memories experience"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 1008,
+    "last_branch_cycle": 1009,
     "escape_pressure": 0
   }
 }
