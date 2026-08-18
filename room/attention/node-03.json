@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T17:08:47.350376+00:00",
-  "cycle_key": "32153618883:1:99",
+  "generated_at": "2026-08-18T17:09:59.719343+00:00",
+  "cycle_key": "32153618883:1:100",
   "node": 3,
   "entity": "mara",
   "role": "comprehension",
@@ -29,29 +29,37 @@
   },
   "selected_skills": [
     {
-      "name": "social-grounding",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "affect",
+      "score": 1.83,
+      "confidence": 0.788,
+      "raw_score": 1.83,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "conversation"
+        "feel",
+        "trust"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "conversation"
+            "feel"
           ],
-          "weight": 1.8
+          "weight": 1.45
+        },
+        {
+          "kind": "topic_support",
+          "matched": [
+            "trust"
+          ],
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "bb05384b39bd",
+  "context_fingerprint": "f295e594799e",
   "base_prompt_chars": 2277,
-  "temporary_skill_chars": 521,
-  "approx_added_tokens": 130
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
