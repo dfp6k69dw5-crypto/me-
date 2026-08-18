@@ -19,17 +19,33 @@
 const RELAY='https://room-live-mirror.dfp6k69dw5.workers.dev/api/feed';
 const RAW='https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/feed.json';
 const LOCAL='feed.json';
-const $=s=>document.querySelector(s);let last=null,lastSource='';
+const API='https://api.github.com/repos/maaronfanberg-lab/me-/contents/room/feed.json?ref=main';
+const $=s=>document.querySelector(s);
+let last=null,lastSource='',lastApiAt=0,lastApiCandidate=null,lastGoodData=null,lastGoodSource='',lastGoodStamp=0;
 function when(s){try{return new Date(s).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'})}catch{return''}}
 function setStatus(txt,ok){const e=$('#status');e.textContent=txt;e.classList.toggle('live',!!ok)}
 async function fetchJson(url){const sep=url.includes('?')?'&':'?';const r=await fetch(url+sep+'fresh='+Date.now()+'-'+Math.random().toString(36).slice(2),{cache:'no-store'});if(!r.ok)throw new Error(String(r.status));return r.json()}
+async function fetchApiFeed(){const sep=API.includes('?')?'&':'?';const r=await fetch(API+sep+'fresh='+Date.now(),{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});if(!r.ok)throw new Error(String(r.status));const obj=await r.json();if(!obj?.content)throw new Error('no api content');const bytes=Uint8Array.from(atob(String(obj.content).replace(/\s/g,'')),c=>c.charCodeAt(0));return JSON.parse(new TextDecoder().decode(bytes))}
 function unwrap(raw){return raw?.feed||raw}
 function valid(s){if(!s||!s.state||!Array.isArray(s.conversation))throw new Error('bad feed');return s}
 function stamp(s){const t=Date.parse(s?.generated_at||s?.state?.last_run||'');return Number.isFinite(t)?t:0}
 async function candidate(source,url){try{return {source,data:valid(unwrap(await fetchJson(url)))}}catch{return null}}
-async function getLive(){const results=await Promise.all([candidate('relay',RELAY),candidate('raw',RAW),candidate('pages',LOCAL)]);const good=results.filter(Boolean);if(!good.length)throw new Error('no live source');good.sort((a,b)=>stamp(b.data)-stamp(a.data));lastSource=good[0].source;return good[0].data}
-function render(s){const minds=s?.minds?.entities||{};const people=$('#people');people.innerHTML='';for(const [id,m] of Object.entries(minds)){const p=document.createElement('div');p.className='person';p.innerHTML='<b>'+(m.name||id)+'</b> 3 nodes';people.appendChild(p)}const conv=Array.isArray(s?.conversation)?s.conversation:[];const sig=conv.map(x=>x.id).join('|');if(sig!==last){const nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-180;last=sig;const chat=$('#chat');chat.innerHTML='';if(!conv.length)chat.innerHTML='<div class="empty">The room is quiet.</div>';for(const m of conv){const d=document.createElement('div');d.className='msg';const who=minds[m.speaker]?.name||m.speaker;d.innerHTML='<div class="who"></div><div class="text"></div><div class="when"></div>';d.querySelector('.who').textContent=who;d.querySelector('.text').textContent=m.text;d.querySelector('.when').textContent=when(m.at);chat.appendChild(d)}if(nearBottom||!conv.length)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'auto'}),20)}const t=stamp(s);const age=t?Math.max(0,Math.floor((Date.now()-t)/1000)):0;const beat=s?.state?.cycle??'—';setStatus('beat '+beat+' · '+age+'s',age<120);const label=lastSource==='relay'?'Cloudflare relay':lastSource==='raw'?'GitHub Raw':'Pages snapshot';$('#meta').textContent='Freshest: '+label+' · checks every second'}
-async function refresh(){try{render(await getLive())}catch(e){setStatus('retry',false)}}
-$('#status').onclick=refresh;refresh();setInterval(refresh,1000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh()});window.addEventListener('pageshow',refresh);
+async function apiCandidate(force=false){const now=Date.now();if(!force&&now-lastApiAt<60000)return lastApiCandidate;lastApiAt=now;try{lastApiCandidate={source:'api',data:valid(unwrap(await fetchApiFeed()))};return lastApiCandidate}catch{return lastApiCandidate}}
+async function getLive(forceApi=false){
+  const results=await Promise.all([candidate('relay',RELAY),candidate('raw',RAW),candidate('pages',LOCAL)]);
+  let good=results.filter(Boolean);
+  if(lastApiCandidate)good.push(lastApiCandidate);
+  good.sort((a,b)=>stamp(b.data)-stamp(a.data));
+  let best=good[0]||null;
+  const stale=!best||Date.now()-stamp(best.data)>90000;
+  if(forceApi||stale){const direct=await apiCandidate(forceApi);if(direct){good.push(direct);good.sort((a,b)=>stamp(b.data)-stamp(a.data));best=good[0]}}
+  if(!best)throw new Error('no live source');
+  const bestStamp=stamp(best.data);
+  if(lastGoodData&&bestStamp<lastGoodStamp){lastSource=lastGoodSource;return lastGoodData}
+  lastGoodData=best.data;lastGoodSource=best.source;lastGoodStamp=bestStamp;lastSource=best.source;return best.data
+}
+function render(s){const minds=s?.minds?.entities||{};const people=$('#people');people.innerHTML='';for(const [id,m] of Object.entries(minds)){const p=document.createElement('div');p.className='person';p.innerHTML='<b>'+(m.name||id)+'</b> 3 nodes';people.appendChild(p)}const conv=Array.isArray(s?.conversation)?s.conversation:[];const sig=conv.map(x=>x.id).join('|');if(sig!==last){const nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-180;last=sig;const chat=$('#chat');chat.innerHTML='';if(!conv.length)chat.innerHTML='<div class="empty">The room is quiet.</div>';for(const m of conv){const d=document.createElement('div');d.className='msg';const who=minds[m.speaker]?.name||m.speaker;d.innerHTML='<div class="who"></div><div class="text"></div><div class="when"></div>';d.querySelector('.who').textContent=who;d.querySelector('.text').textContent=m.text;d.querySelector('.when').textContent=when(m.at);chat.appendChild(d)}if(nearBottom||!conv.length)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'auto'}),20)}const t=stamp(s);const age=t?Math.max(0,Math.floor((Date.now()-t)/1000)):0;const beat=s?.state?.cycle??'—';setStatus('beat '+beat+' · '+age+'s',age<120);const label=lastSource==='relay'?'Cloudflare relay':lastSource==='raw'?'GitHub Raw':lastSource==='api'?'GitHub API direct':'Pages snapshot';$('#meta').textContent='Freshest: '+label+' · checks every second'}
+async function refresh(forceApi=false){try{render(await getLive(forceApi))}catch(e){setStatus('retry',false)}}
+$('#status').onclick=()=>refresh(true);refresh(false);setInterval(()=>refresh(false),1000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh(true)});window.addEventListener('pageshow',()=>refresh(true));
 </script>
 </body></html>
