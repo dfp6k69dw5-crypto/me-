@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T23:58:07.504519+00:00",
-  "cycle_key": "32184487392:1:177",
+  "generated_at": "2026-08-18T23:59:13.057364+00:00",
+  "cycle_key": "32184487392:1:178",
   "node": 9,
   "entity": "jules",
   "role": "comprehension",
@@ -29,44 +29,50 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "affect",
-      "score": 1.55,
-      "confidence": 0.692,
-      "raw_score": 1.83,
-      "repeat_penalty": 0.28,
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "afraid",
-        "trust"
+        "conversation"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "afraid"
+            "conversation"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "afraid"
+            "conversation"
           ],
-          "weight": 0.76
+          "weight": 0.64
         },
         {
-          "kind": "topic_support",
+          "kind": "message",
           "matched": [
-            "trust"
+            "conversation"
           ],
-          "weight": 0.38
+          "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "eab0d62632ac",
+  "context_fingerprint": "623386f8cb16",
   "base_prompt_chars": 2277,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 521,
+  "approx_added_tokens": 130
 }
