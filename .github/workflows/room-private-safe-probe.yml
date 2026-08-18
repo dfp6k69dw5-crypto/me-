@@ -22,15 +22,13 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-      - name: Run safe private model probe
-        run: python3 scripts/room_private_probe.py
-      - name: Run one full private Room beat without publishing dialogue
+      - name: Run current full 12-node Room simulator without publishing dialogue
         run: python3 scripts/room_full_beat_probe.py
-      - name: Publish safe probe results
+      - name: Publish safe full-beat result
         run: |
           git config user.name "the-room-probe"
           git config user.email "actions@users.noreply.github.com"
-          git add room/private-model-diagnostic.json room/private-full-beat-diagnostic.json
+          git add room/private-full-beat-diagnostic.json
           git commit -m "Record full private Room probe" || true
           for n in 1 2 3 4; do
             git push origin HEAD:main && exit 0
