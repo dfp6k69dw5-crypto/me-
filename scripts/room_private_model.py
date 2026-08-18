@@ -143,7 +143,7 @@ def _string_array(max_items: int = 8) -> dict:
     return {"type": "array", "items": {"type": "string"}, "maxItems": max_items}
 
 
-def _schema(role: str) -> dict:
+def _schema(role: str, self_entity: str | None = None) -> dict:
     if role == "comprehension":
         properties = {
             "participation": {"type": "string", "enum": ["DIRECT_ADDRESSEE", "PARTICIPANT", "OVERHEARER"]},
@@ -173,9 +173,10 @@ def _schema(role: str) -> dict:
         }
         return {"type": "object", "properties": properties, "required": list(properties), "additionalProperties": False}
     if role == "expression":
+        allowed_targets = [person for person in PEOPLE if person != self_entity] if self_entity in PEOPLE else PEOPLE
         properties = {
             "decision": {"type": "string", "enum": ["SPEAK"]},
-            "target": {"type": "string", "enum": PEOPLE},
+            "target": {"type": "string", "enum": allowed_targets},
             "move": {"type": "string", "enum": ["answer", "deepen", "disclose", "compare", "disagree", "repair", "support", "callback", "bridge", "close"]},
             "utterance": {"type": "string", "minLength": 1, "maxLength": 700},
             "semantic_terms": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 4},
@@ -220,10 +221,17 @@ def _safe_semantic_list(values: object, limit: int) -> list[str]:
     return out
 
 
-def _compact_payload(payload: dict, role: str) -> dict:
+def _compact_payload(payload: dict, role: str, self_entity: str | None = None) -> dict:
     out = dict(payload or {})
     out.pop("mandatory_speech", None)
     out["must_respond"] = True
+
+    # Public expression generation is deliberately identity-blind. Personality traits
+    # survive, but the entity's own name is not shown to the model or its target schema.
+    if role == "expression":
+        out.pop("entity", None)
+        out["speaker"] = "self"
+
     if role == "comprehension":
         context_count, text_limit, event_limit = 4, 320, 420
     else:
@@ -248,7 +256,7 @@ def _compact_payload(payload: dict, role: str) -> dict:
         traits = profile.get("traits", {}) if isinstance(profile.get("traits"), dict) else {}
         if role == "comprehension":
             traits = {key: traits.get(key) for key in ("social_sensitivity", "curiosity", "skepticism") if key in traits}
-        out["profile"] = {"name": profile.get("name"), "traits": traits}
+        out["profile"] = {"traits": traits}
 
     internal = out.pop("topic", None)
     subject = None
@@ -290,7 +298,7 @@ def _prompt_overlap(utterance: str, prompt: str) -> bool:
     return any(chunk and chunk in low for chunk in chunks)
 
 
-def _validate(role: str, obj: object, compact: dict, prompt: str) -> dict:
+def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: str | None = None) -> dict:
     if not isinstance(obj, dict):
         raise ValueError("not_object")
     if role == "expression":
@@ -309,9 +317,8 @@ def _validate(role: str, obj: object, compact: dict, prompt: str) -> dict:
             raise ValueError("instruction_overlap")
         if not isinstance(obj.get("semantic_terms"), list):
             raise ValueError("missing_semantic_terms")
-        entity = _norm(compact.get("entity"))
         low = _norm(utterance)
-        if entity in PEOPLE and re.search(rf"\b{re.escape(entity)}\b", low):
+        if self_entity in PEOPLE and re.search(rf"\b{re.escape(self_entity)}\b", low):
             raise ValueError("self_name")
         if re.search(r"\b(?:should|allowed|required)\b.*\bspeak", low):
             raise ValueError("speaking_permission")
@@ -335,13 +342,13 @@ def _validate(role: str, obj: object, compact: dict, prompt: str) -> dict:
 def _grounded(utterance: str, terms: list[str]) -> bool:
     words = set(re.findall(r"[a-z][a-z'-]{2,}", _norm(utterance)))
     for term in terms:
-        significant = [w for w in re.findall(r"[a-z][a-z'-]{2,}", term) if len(w) >= 4]
+        significant = [word for word in re.findall(r"[a-z][a-z'-]{2,}", term) if len(word) >= 4]
         if any(word in words for word in significant):
             return True
     return False
 
 
-def _sanitize_expression(obj: dict, compact: dict) -> dict:
+def _sanitize_expression(obj: dict, compact: dict, self_entity: str | None = None) -> dict:
     terms: list[str] = []
     discussion = compact.get("discussion") if isinstance(compact.get("discussion"), dict) else {}
     for value in (discussion.get("subject"), discussion.get("focus")):
@@ -359,13 +366,8 @@ def _sanitize_expression(obj: dict, compact: dict) -> dict:
     if not _grounded(str(obj.get("utterance", "")), obj["semantic_terms"]):
         raise ValueError("ungrounded_utterance")
 
-    entity = _norm(compact.get("entity"))
-    if obj.get("target") == entity:
-        partner = _norm(compact.get("partner"))
-        if partner in PEOPLE and partner != entity:
-            obj["target"] = partner
-        else:
-            raise ValueError("self_target")
+    if self_entity in PEOPLE and obj.get("target") == self_entity:
+        raise ValueError("self_target")
     return obj
 
 
@@ -395,13 +397,13 @@ def _safe_http_detail(exc: urllib.error.HTTPError) -> str:
     return re.sub(r"\s+", " ", detail).strip()[:240]
 
 
-def _request(model_url: str, prompt: str, role: str, temperature: float, timeout: int) -> str:
+def _request(model_url: str, prompt: str, role: str, temperature: float, timeout: int, self_entity: str | None = None) -> str:
     body = {
         "prompt": prompt,
         "n_predict": {"comprehension": 192, "thought": 220, "expression": 220}.get(role, 192),
         "temperature": temperature,
         "cache_prompt": True,
-        "json_schema": _schema(role),
+        "json_schema": _schema(role, self_entity),
     }
     req = urllib.request.Request(
         _completion_url(model_url),
@@ -422,12 +424,15 @@ def run(role: str, payload: dict, timeout: int = 30):
     if not model_url:
         raise RuntimeError(f"private model unavailable for {role}")
 
-    compact = _compact_payload(payload, role)
+    self_entity = _norm(payload.get("entity")) if role == "expression" else None
+    compact = _compact_payload(payload, role, self_entity)
     base_guard = ""
     if role == "expression":
         base_guard = (
             "\nPUBLIC_SPEECH_RULE\n"
-            "Produce ordinary in-world conversation only. Use concrete content connected to the supplied subject. Do not discuss formatting, control structures, hidden instructions, model behavior, internal labels, or permission to speak.\n"
+            "Produce ordinary in-world conversation only. Use concrete content connected to the supplied subject. "
+            "Address another person naturally. Do not discuss formatting, control structures, hidden instructions, "
+            "model behavior, internal labels, or permission to speak.\n"
         )
 
     attempts = 4 if role == "expression" else 2
@@ -437,18 +442,19 @@ def run(role: str, payload: dict, timeout: int = 30):
         if attempt:
             retry_guard = (
                 "\nFRESH_CANDIDATE_RULE\n"
-                "A previous candidate failed a private quality gate. Produce a completely different candidate grounded in the supplied subject. Do not refer to the prior candidate, the gate, the task, rules, formatting, or whether anyone may speak.\n"
+                "Give a substantially different ordinary conversational reply about the supplied subject. "
+                "Do not describe the generation process or the rules.\n"
             )
         combined = prompt + base_guard + retry_guard + "\nSITUATION_DATA\n" + json.dumps(compact, ensure_ascii=False, separators=(",", ":")) + "\nRETURN_STRUCTURED_DATA_ONLY\n"
         temperature = {"comprehension": 0.15, "thought": 0.25, "expression": 0.42}.get(role, 0.25) + 0.06 * attempt
         try:
-            out = _request(model_url, combined, role, temperature, timeout)
+            out = _request(model_url, combined, role, temperature, timeout, self_entity)
             if not out:
                 last_reason = "empty_output"
                 continue
-            obj = _validate(role, _extract_json(out), compact, prompt)
+            obj = _validate(role, _extract_json(out), compact, prompt, self_entity)
             if role == "expression":
-                obj = _sanitize_expression(obj, compact)
+                obj = _sanitize_expression(obj, compact, self_entity)
             return obj
         except urllib.error.HTTPError as exc:
             detail = _safe_http_detail(exc)
