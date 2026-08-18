@@ -8,7 +8,7 @@ import room_engine_v5 as c
 
 ALLOWED_MOVES = {
     "answer", "deepen", "disclose", "compare", "disagree",
-    "repair", "support", "callback", "bridge", "close_topic",
+    "repair", "support", "callback", "bridge", "close",
 }
 META_WORDS = {"topic", "facet", "root", "schema", "prompt", "json"}
 META_PATTERNS = (
@@ -35,7 +35,6 @@ def infected_text(value) -> bool:
         return True
     if any(re.search(pattern, text) for pattern in META_PATTERNS):
         return True
-    # Public dialogue should never contain these implementation/scaffold words.
     words = set(re.findall(r"[a-z]+", text))
     if words & META_WORDS:
         return True
@@ -68,10 +67,7 @@ def clean_topic(topic: dict) -> dict:
             topic[key] = cleaned
     root = norm(topic.get("root"))
     facet = norm(topic.get("current_facet"))
-    if bad_term(root):
-        topic["root"] = None
-    else:
-        topic["root"] = root
+    topic["root"] = None if bad_term(root) else root
     if bad_term(facet):
         choices = [x for x in topic.get("facets", []) if not bad_term(x)]
         topic["current_facet"] = topic.get("root") or (choices[0] if choices else None)
@@ -80,28 +76,27 @@ def clean_topic(topic: dict) -> dict:
     return topic
 
 
+def semantic_values(expr: dict) -> list:
+    return expr.get("semantic_terms") if isinstance(expr, dict) and isinstance(expr.get("semantic_terms"), list) else []
+
+
 def clean_terms(expr: dict, topic: dict) -> list[str]:
     out: list[str] = []
     for value in (topic.get("root"), topic.get("current_facet")):
         s = norm(value)
         if not bad_term(s) and s not in out:
             out.append(s)
-    vals = expr.get("topic_terms") if isinstance(expr, dict) else None
-    if isinstance(vals, list):
-        for value in vals:
-            s = norm(value)
-            if not bad_term(s) and s not in out:
-                out.append(s)
+    for value in semantic_values(expr):
+        s = norm(value)
+        if not bad_term(s) and s not in out:
+            out.append(s)
     return out[:4]
 
 
 def seed_topic(expressions: dict, order: list[str], cycle: int, prior: dict) -> dict:
     terms: list[str] = []
     for entity in order:
-        vals = expressions[entity].get("topic_terms") if isinstance(expressions.get(entity), dict) else None
-        if not isinstance(vals, list):
-            continue
-        for value in vals:
+        for value in semantic_values(expressions.get(entity, {})):
             s = norm(value)
             if not bad_term(s) and s not in terms:
                 terms.append(s)
@@ -119,7 +114,6 @@ def validate_public_expression(entity: str, expr: dict, text: str) -> None:
         raise RuntimeError(f"private Room expression contaminated for {entity}; regenerate beat")
     if len(re.findall(r"\b\w+\b", low)) < 4:
         raise RuntimeError(f"private Room expression too thin for {entity}; regenerate beat")
-    # Prevent the model from turning its own identity into a category/definition.
     if re.match(rf"^(?:i['’]?m sorry,?\s*)?{re.escape(entity)}\s+(?:is|means|represents|equals)\b", low):
         raise RuntimeError(f"private Room expression self-categorized for {entity}; regenerate beat")
     if re.search(r"\b(?:should|allowed|required)\b.*\bspeak", low):
@@ -146,6 +140,8 @@ def private_commit(parts: list[dict], key: str):
         expr = (E[entity].get("private") or {}).get("expression")
         if not isinstance(expr, dict):
             raise RuntimeError(f"private Room requires model expression for {entity}; no public fallback is permitted")
+        if not semantic_values(expr):
+            raise RuntimeError(f"private Room expression lacks neutral semantic fields for {entity}; regenerate beat")
         expressions[entity] = expr
 
     if not topic.get("root"):
@@ -153,9 +149,7 @@ def private_commit(parts: list[dict], key: str):
 
     plans = c.plan_actions(order, c.target(q) if q else None, M, topic, cycle)
     staged: list[tuple[str, str, str, str, list[str]]] = []
-    answer_parent = None
 
-    # Validate all four public turns BEFORE mutating memory, discourse, or relationship state.
     for entity in order:
         expr = expressions[entity]
         text = c.model_text(expr)
@@ -201,7 +195,7 @@ def private_commit(parts: list[dict], key: str):
     }
     topic = clean_topic(c.update_topic(topic, spoken, cycle))
     if not topic.get("root") or bad_term(topic.get("root")):
-        raise RuntimeError("private Room topic state failed contamination check")
+        raise RuntimeError("private Room subject state failed contamination check")
 
     if c.should_shift_topic(topic):
         declared = c.topic_terms_from_messages(spoken, limit=12, episode_id=topic.get("id"))
