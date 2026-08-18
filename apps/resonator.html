@@ -4,7 +4,7 @@
  const parts=['01','02','03','04','05','06','07','08a','08b','09'];
  let b='';
  for(const n of parts){
-   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817f',{cache:'no-store'});
+   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817g',{cache:'no-store'});
    if(!r.ok) throw new Error('Missing payload part '+n);
    b+=(await r.text()).trim();
  }
@@ -62,6 +62,34 @@ for(let j=0;j<C;j++){link(base,rings[0][j]);link(top,rings[rings.length-1][j]);}
 return {P,F,S,axis:0,mic:rings[3][1],hit:rings[6][Math.floor(C/2)],needSub:0.0002};}},`;
  if(!text.includes("'Milk Silo':{")){
    text=text.replace("Twins:{min:5,",milkSilo+"Twins:{min:5,");
+ }
+
+ // Mobile complexity governor: keep generated bodies below the proven real-time mesh range before modal calibration.
+ const mobileMesh=`
+const _mobileAudio=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&Math.min(innerWidth,innerHeight)<900);
+if(_mobileAudio&&typeof SHAPES!=='undefined'){
+ const MAX_MOBILE_POINTS=52;
+ for(const _name of Object.keys(SHAPES)){
+  const _shape=SHAPES[_name];
+  if(!_shape||typeof _shape.make!=='function'||_shape.__mobileSafe) continue;
+  const _make=_shape.make.bind(_shape);
+  _shape.make=function(C){
+   const requested=Math.max(3,Math.round(Number(C)||_shape.def||6));
+   let c=requested,g;
+   try{g=_make(c);}catch(e){return _make(requested);}
+   let guard=0;
+   while(g&&g.P&&g.P.length>MAX_MOBILE_POINTS&&c>3&&guard++<32){
+    const next=c-1;
+    try{const gg=_make(next);g=gg;c=next;}catch(e){break;}
+   }
+   if(g){g.mobileMeshC=c;g.mobileMeshRequested=requested;}
+   return g;
+  };
+  _shape.__mobileSafe=1;
+ }
+}`;
+ if(!text.includes('MAX_MOBILE_POINTS=52')){
+   text=text.replace("buildShape(true);",mobileMesh+"\nbuildShape(true);");
  }
 
  // Phone drawers: controls, keys and stage tools can be opened independently.
