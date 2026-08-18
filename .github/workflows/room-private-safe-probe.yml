@@ -1,0 +1,39 @@
+name: Room private safe probe
+
+on:
+  push:
+    paths:
+      - 'society/room-private-safe-probe.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ROOM_PROMPT_PERCEPTION: ${{ secrets.ROOM_PROMPT_PERCEPTION }}
+      ROOM_PROMPT_DELIBERATION: ${{ secrets.ROOM_PROMPT_DELIBERATION }}
+      ROOM_PROMPT_EXPRESSION: ${{ secrets.ROOM_PROMPT_EXPRESSION }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Run safe private model probe
+        run: python3 scripts/room_private_probe.py
+      - name: Publish safe probe result
+        run: |
+          git config user.name "the-room-probe"
+          git config user.email "actions@users.noreply.github.com"
+          git add room/private-model-diagnostic.json
+          git commit -m "Record safe private model probe" || true
+          for n in 1 2 3 4; do
+            git push origin HEAD:main && exit 0
+            git fetch origin main || true
+            git rebase origin/main || { git rebase --abort || true; }
+            sleep "$n"
+          done
+          exit 1
