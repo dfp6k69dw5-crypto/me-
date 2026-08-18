@@ -1,6 +1,6 @@
 {
   "server_ready": true,
-  "phase": "sense",
+  "phase": "commit",
   "ctx_total": 16384,
   "parallel_slots": 2,
   "model_node_batching": true,
@@ -46,15 +46,104 @@
       "stderr": ""
     },
     "0": {
-      "returncode": 1,
+      "returncode": 0,
       "stdout": "",
-      "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 260, in <module>\n    if __name__=='__main__': main()\n                             ^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 251, in main\n    n=int(os.environ['ROOM_NODE_ID']); x=sense(n,key) if a.phase=='sense' else recurrent(n,key,load(Path(a.bus),{})); PARTS.mkdir(exist_ok=True); save(PARTS/f'{a.phase}-{n:02d}.json',x)\n                                         ^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 54, in sense\n    perception=model_run('comprehension',{'entity':e,'profile':P[e],**base}) if role=='comprehension' else None\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_private_model.py\", line 222, in run\n    raise RuntimeError(f\"private model output failed privacy filter for {role}\")\nRuntimeError: private model output failed privacy filter for comprehension\n"
+      "stderr": ""
     },
     "3": {
-      "returncode": 1,
+      "returncode": 0,
       "stdout": "",
-      "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 260, in <module>\n    if __name__=='__main__': main()\n                             ^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 251, in main\n    n=int(os.environ['ROOM_NODE_ID']); x=sense(n,key) if a.phase=='sense' else recurrent(n,key,load(Path(a.bus),{})); PARTS.mkdir(exist_ok=True); save(PARTS/f'{a.phase}-{n:02d}.json',x)\n                                         ^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 54, in sense\n    perception=model_run('comprehension',{'entity':e,'profile':P[e],**base}) if role=='comprehension' else None\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_private_model.py\", line 222, in run\n    raise RuntimeError(f\"private model output failed privacy filter for {role}\")\nRuntimeError: private model output failed privacy filter for comprehension\n"
+      "stderr": ""
+    },
+    "6": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "9": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
     }
   },
-  "status": "failed"
+  "bus": {
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "deliberation": {
+    "0": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "3": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "6": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "9": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "1": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "4": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "7": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "10": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "bus2": {
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "expression": {
+    "2": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "5": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "8": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "11": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "commit": {
+    "returncode": 0,
+    "stdout": "Room v5 beat 8566 : Sarah, Mara, Jules, Owen topic= routine / effort\n",
+    "stderr": ""
+  },
+  "status": "accepted"
 }
