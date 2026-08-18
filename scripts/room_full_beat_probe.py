@@ -29,20 +29,20 @@ def safe(text: str) -> str:
 
 def write(data: dict) -> None:
     STATUS.parent.mkdir(parents=True, exist_ok=True)
-    STATUS.write_text(json.dumps(data, indent=2) + "\n")
+    STATUS.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
 
 
 def clean_base_env() -> dict:
     env = dict(os.environ)
-    for k in ("ROOM_PROMPT_PERCEPTION", "ROOM_PROMPT_DELIBERATION", "ROOM_PROMPT_EXPRESSION", "ROOM_NODE_PROMPT"):
-        env.pop(k, None)
+    for key in ("ROOM_PROMPT_PERCEPTION", "ROOM_PROMPT_DELIBERATION", "ROOM_PROMPT_EXPRESSION", "ROOM_NODE_PROMPT"):
+        env.pop(key, None)
     env["ROOM_MODEL_URL"] = "http://127.0.0.1:18080/completion"
     env["ROOM_CYCLE_KEY"] = "full-private-probe"
     return env
 
 
-def node_prompt(n: int, phase: str) -> str:
-    local = n % 3
+def node_prompt(node: int, phase: str) -> str:
+    local = node % 3
     if phase == "sense" and local == 0:
         return os.environ.get("ROOM_PROMPT_PERCEPTION", "")
     if phase == "recurrent" and local == 1:
@@ -54,27 +54,27 @@ def node_prompt(n: int, phase: str) -> str:
 
 def launch_nodes(nodes: list[int], phase: str, bus: str | None, results: dict) -> bool:
     procs = []
-    for n in nodes:
+    for node in nodes:
         env = clean_base_env()
-        env["ROOM_NODE_ID"] = str(n)
-        env["ROOM_NODE_PROMPT"] = node_prompt(n, phase)
+        env["ROOM_NODE_ID"] = str(node)
+        env["ROOM_NODE_PROMPT"] = node_prompt(node, phase)
         cmd = ["python3", "scripts/room_engine_v5.py", "node", "--phase", phase]
         if bus:
             cmd += ["--bus", bus]
-        procs.append((n, subprocess.Popen(cmd, cwd=ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)))
+        procs.append((node, subprocess.Popen(cmd, cwd=ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)))
     ok = True
-    for n, p in procs:
-        out, err = p.communicate(timeout=90)
-        results[str(n)] = {"returncode": p.returncode, "stdout": safe(out), "stderr": safe(err)}
-        if p.returncode != 0:
+    for node, proc in procs:
+        out, err = proc.communicate(timeout=90)
+        results[str(node)] = {"returncode": proc.returncode, "stdout": safe(out), "stderr": safe(err)}
+        if proc.returncode != 0:
             ok = False
     return ok
 
 
 def run_nodes(nodes: list[int], phase: str, bus: str | None = None) -> tuple[bool, dict]:
     results: dict = {}
-    plain = [n for n in nodes if not node_prompt(n, phase)]
-    prompted = [n for n in nodes if node_prompt(n, phase)]
+    plain = [node for node in nodes if not node_prompt(node, phase)]
+    prompted = [node for node in nodes if node_prompt(node, phase)]
     ok = True
     if plain:
         ok = launch_nodes(plain, phase, bus, results) and ok
@@ -88,12 +88,39 @@ def run_nodes(nodes: list[int], phase: str, bus: str | None = None) -> tuple[boo
 
 def run_cmd(cmd: list[str]) -> tuple[bool, dict]:
     env = clean_base_env()
-    p = subprocess.run(cmd, cwd=ROOT, env=env, text=True, capture_output=True, timeout=90)
-    return p.returncode == 0, {"returncode": p.returncode, "stdout": safe(p.stdout), "stderr": safe(p.stderr)}
+    proc = subprocess.run(cmd, cwd=ROOT, env=env, text=True, capture_output=True, timeout=90)
+    return proc.returncode == 0, {"returncode": proc.returncode, "stdout": safe(proc.stdout), "stderr": safe(proc.stderr)}
+
+
+def public_candidates() -> list[dict]:
+    path = ROOT / "room" / "conversation.json"
+    try:
+        conversation = json.loads(path.read_text())
+    except Exception:
+        return []
+    out = []
+    for message in conversation[-4:]:
+        cognition = message.get("cognition") if isinstance(message.get("cognition"), dict) else {}
+        out.append({
+            "speaker": message.get("speaker"),
+            "text": str(message.get("text", ""))[:700],
+            "move": cognition.get("move_type"),
+            "target": cognition.get("target"),
+            "semantic_terms": list(cognition.get("topic_terms") or [])[:4],
+        })
+    return out
 
 
 def main() -> int:
-    result = {"server_ready": False, "phase": "starting", "ctx_total": CTX_TOTAL, "parallel_slots": PARALLEL_SLOTS, "model_node_batching": True, "public_fallback": False}
+    result = {
+        "server_ready": False,
+        "phase": "starting",
+        "ctx_total": CTX_TOTAL,
+        "parallel_slots": PARALLEL_SLOTS,
+        "model_node_batching": True,
+        "public_fallback": False,
+        "safe_public_candidate_capture": True,
+    }
     write(result)
     bins = list(RUNTIME_DIR.rglob("llama-server"))
     if not MODEL.exists() or not bins:
@@ -104,7 +131,13 @@ def main() -> int:
     server.chmod(0o755)
     server_env = clean_base_env()
     server_env.pop("ROOM_MODEL_URL", None)
-    proc = subprocess.Popen([str(server), "-m", str(MODEL), "--host", "127.0.0.1", "--port", "18080", "-c", str(CTX_TOTAL), "-np", str(PARALLEL_SLOTS)], cwd=ROOT, env=server_env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    proc = subprocess.Popen(
+        [str(server), "-m", str(MODEL), "--host", "127.0.0.1", "--port", "18080", "-c", str(CTX_TOTAL), "-np", str(PARALLEL_SLOTS)],
+        cwd=ROOT,
+        env=server_env,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
     try:
         for _ in range(120):
             if proc.poll() is not None:
@@ -171,6 +204,8 @@ def main() -> int:
         result["phase"] = "commit"
         ok, detail = run_cmd(["python3", "scripts/room_private_commit.py", "commit"])
         result["commit"] = detail
+        if ok:
+            result["public_candidates"] = public_candidates()
         result["status"] = "accepted" if ok else "failed"
         write(result)
         return 0
