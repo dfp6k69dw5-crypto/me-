@@ -50,6 +50,21 @@ def clean_terms(expr: dict, topic: dict) -> list[str]:
     return out[:4]
 
 
+def seed_topic(expressions: dict, order: list[str], cycle: int, prior: dict) -> dict:
+    terms: list[str] = []
+    for e in order:
+        vals = expressions[e].get("topic_terms") if isinstance(expressions.get(e), dict) else None
+        if not isinstance(vals, list):
+            continue
+        for value in vals:
+            s = str(value or "").strip().lower()
+            if s and s not in BLOCKED_TERMS and s not in terms:
+                terms.append(s)
+    if not terms:
+        raise RuntimeError("private Room clean start produced no semantic topic; regenerate beat")
+    return clean_topic(c.new_topic_from_terms(terms[:8], cycle, prior))
+
+
 def private_commit(parts: list[dict], key: str):
     S = c.state()
     M = c.minds()
@@ -72,8 +87,10 @@ def private_commit(parts: list[dict], key: str):
             raise RuntimeError(f"private Room requires model expression for {e}; no public fallback is permitted")
         expressions[e] = expr
 
+    # After sterilization there is no historical topic by design. The first topic may
+    # only be seeded from semantic terms independently produced by private model nodes.
     if not topic.get("root"):
-        raise RuntimeError("private Room has no active semantic topic; refusing canned starter language")
+        topic = seed_topic(expressions, order, cycle, topic)
 
     plans = c.plan_actions(order, c.target(q) if q else None, M, topic, cycle)
     spoken: list[dict] = []
@@ -118,8 +135,6 @@ def private_commit(parts: list[dict], key: str):
     }
     topic = clean_topic(c.update_topic(topic, spoken, cycle))
 
-    # A topic transition is earned by a model-generated bridge term. We never inject
-    # a canned starter question into the public conversation.
     if c.should_shift_topic(topic):
         declared = c.topic_terms_from_messages(spoken, limit=12, episode_id=topic.get("id"))
         novel = [
@@ -210,6 +225,7 @@ def private_commit(parts: list[dict], key: str):
             "beat_output": "4 mandatory unique speakers",
             "private_pipeline": "perception->deliberation->expression",
             "public_fallback": False,
+            "history_generation": c.BOOT,
         },
     }
     c.save(c.ROOM / "live.json", live)
