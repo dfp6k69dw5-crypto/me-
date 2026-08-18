@@ -24,36 +24,16 @@
 </div>
 <div class="nodes" id="nodes"></div>
 <div class="links"><a href="sarah-room.html">OPEN THE ROOM</a><a href="sarah-ai.html">SARAH</a><a href="supercomputer.html">SUPERCOMPUTER</a></div>
-<div class="foot" id="status">Waiting for attention telemetry…</div>
+<div class="foot" id="status">Waiting for live attention telemetry…</div>
 </main>
 <script>
 const names=['Sarah','Sarah','Sarah','Mara','Mara','Mara','Owen','Owen','Owen','Jules','Jules','Jules'];
 const roles=['comprehension','thought','expression'];
+const RAW='https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/attention/';
 const box=document.getElementById('nodes');
 const pct=n=>Number.isFinite(Number(n))?Math.round(Number(n)*100)+'%':'—';
-function card(i,d){
-  const el=document.createElement('div');el.className='node';
-  const skills=(d?.selected_skills||[]),budget=d?.budget||{};
-  el.innerHTML=`<div class="top"><span class="num">${String(i).padStart(2,'0')}</span><span class="who">${names[i]}</span><span class="role">${roles[i%3]}</span></div>
-  <div class="skills"><span class="skill core">RESIDENT CORE</span>${skills.map(s=>`<span class="skill ${s.tier==='reference'?'reference':''}">${(s.tier||'project').toUpperCase()} · ${s.name}</span>`).join('')}</div>
-  ${skills.length?'':`<div class="empty">No temporary skill cleared the relevance threshold.</div>`}
-  <div class="meta">${skills.map(s=>`${s.name} · <span class="confidence">${pct(s.confidence)}</span> · ${(s.matched_triggers||[]).join(', ')||'explicit'}`).join('<br>')}
-  ${d?`<br>budget: ≤${budget.max_skills??'—'} skill(s), ≤${budget.max_chars??'—'} chars<br>used: ${d.temporary_skill_chars||0} chars · ~${d.approx_added_tokens||0} tokens`:''}</div>`;
-  return el
-}
-async function get(i){const p=`../room/attention/node-${String(i).padStart(2,'0')}.json?fresh=${Date.now()}-${Math.random()}`;const r=await fetch(p,{cache:'no-store'});if(!r.ok)throw new Error(String(r.status));return r.json()}
-async function refresh(){
-  const data=await Promise.all(Array.from({length:12},async(_,i)=>{try{return await get(i)}catch{return null}}));
-  box.innerHTML='';data.forEach((d,i)=>box.appendChild(card(i,d)));
-  const valid=data.filter(Boolean),selected=valid.flatMap(d=>d.selected_skills||[]);
-  const first=valid[0]||{};
-  document.getElementById('project').textContent=first.available_project_skills??first.tiers?.project?.available??'—';
-  document.getElementById('reference').textContent=first.available_reference_skills??first.tiers?.reference?.available??0;
-  document.getElementById('loaded').textContent=selected.length;
-  document.getElementById('chars').textContent=valid.reduce((n,d)=>n+(d.temporary_skill_chars||0),0).toLocaleString();
-  const latest=valid.map(d=>Date.parse(d.generated_at||0)).filter(Number.isFinite).sort((a,b)=>b-a)[0];
-  const versions=[...new Set(valid.map(d=>d.version).filter(Boolean))].join(', ');
-  document.getElementById('status').textContent=valid.length?`${valid.length}/12 node records · ${versions||'attention telemetry'} · latest ${latest?new Date(latest).toLocaleString():'unknown'}`:'No routed beat has published telemetry yet.';
-}
+function card(i,d){const el=document.createElement('div');el.className='node';const skills=(d?.selected_skills||[]),budget=d?.budget||{};el.innerHTML=`<div class="top"><span class="num">${String(i).padStart(2,'0')}</span><span class="who">${names[i]}</span><span class="role">${roles[i%3]}</span></div><div class="skills"><span class="skill core">RESIDENT CORE</span>${skills.map(s=>`<span class="skill ${s.tier==='reference'?'reference':''}">${(s.tier||'project').toUpperCase()} · ${s.name}</span>`).join('')}</div>${skills.length?'':`<div class="empty">No temporary skill cleared the relevance threshold.</div>`}<div class="meta">${skills.map(s=>`${s.name} · <span class="confidence">${pct(s.confidence)}</span> · ${(s.matched_triggers||[]).join(', ')||'explicit'}`).join('<br>')}${d?`<br>budget: ≤${budget.max_skills??'—'} skill(s), ≤${budget.max_chars??'—'} chars<br>used: ${d.temporary_skill_chars||0} chars · ~${d.approx_added_tokens||0} tokens`:''}</div>`;return el}
+async function get(i){const name=`node-${String(i).padStart(2,'0')}.json`;const fresh=`fresh=${Date.now()}-${Math.random()}`;for(const p of [`${RAW}${name}?${fresh}`,`../room/attention/${name}?${fresh}`]){try{const r=await fetch(p,{cache:'no-store'});if(r.ok)return await r.json()}catch{}}throw new Error('unavailable')}
+async function refresh(){const data=await Promise.all(Array.from({length:12},async(_,i)=>{try{return await get(i)}catch{return null}}));box.innerHTML='';data.forEach((d,i)=>box.appendChild(card(i,d)));const valid=data.filter(Boolean),selected=valid.flatMap(d=>d.selected_skills||[]),first=valid[0]||{};document.getElementById('project').textContent=first.available_project_skills??first.tiers?.project?.available??'—';document.getElementById('reference').textContent=first.available_reference_skills??first.tiers?.reference?.available??0;document.getElementById('loaded').textContent=selected.length;document.getElementById('chars').textContent=valid.reduce((n,d)=>n+(d.temporary_skill_chars||0),0).toLocaleString();const latest=valid.map(d=>Date.parse(d.generated_at||0)).filter(Number.isFinite).sort((a,b)=>b-a)[0];const versions=[...new Set(valid.map(d=>d.version).filter(Boolean))].join(', ');document.getElementById('status').textContent=valid.length?`${valid.length}/12 live node records · ${versions||'attention telemetry'} · latest ${latest?new Date(latest).toLocaleString():'unknown'}`:'Live telemetry is not reachable yet.'}
 refresh();setInterval(refresh,5000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh()});
 </script></body></html>
