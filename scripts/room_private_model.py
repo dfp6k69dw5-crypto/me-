@@ -116,37 +116,49 @@ def _completion_url(model_url: str) -> str:
     return base if base.endswith("/completion") else base + "/completion"
 
 
-def _public_message(message: object) -> dict:
+def _public_message(message: object, text_limit: int) -> dict:
     if not isinstance(message, dict):
-        return {"speaker": None, "text": str(message or "")[:600], "target": None}
+        return {"speaker": None, "text": str(message or "")[:text_limit], "target": None}
     cognition = message.get("cognition") if isinstance(message.get("cognition"), dict) else {}
     return {
         "speaker": message.get("speaker"),
-        "text": str(message.get("text", ""))[:600],
+        "text": str(message.get("text", ""))[:text_limit],
         "target": cognition.get("target"),
         "topic_episode": message.get("topic_episode") or cognition.get("topic_episode"),
     }
 
 
-def _compact_payload(payload: dict) -> dict:
+def _compact_payload(payload: dict, role: str) -> dict:
     out = dict(payload or {})
+    if role == "comprehension":
+        context_count, text_limit, event_limit = 4, 320, 420
+    else:
+        context_count, text_limit, event_limit = 6, 450, 520
+
     if "event" in out:
-        out["event"] = _public_message(out.get("event"))
+        out["event"] = _public_message(out.get("event"), event_limit)
     context = out.get("context")
     if isinstance(context, list):
-        out["context"] = [_public_message(m) for m in context[-6:]]
+        out["context"] = [_public_message(m, text_limit) for m in context[-context_count:]]
+
     profile = out.get("profile")
     if isinstance(profile, dict):
-        out["profile"] = {
-            "name": profile.get("name"),
-            "age": profile.get("age"),
-            "traits": profile.get("traits", {}),
-            "question_bias": profile.get("question_bias", []),
-        }
+        traits = profile.get("traits", {}) if isinstance(profile.get("traits"), dict) else {}
+        if role == "comprehension":
+            traits = {k: traits.get(k) for k in ("social_sensitivity", "curiosity", "skepticism") if k in traits}
+        out["profile"] = {"name": profile.get("name"), "traits": traits}
+
     topic = out.get("topic")
     if isinstance(topic, dict):
-        keep = ("id", "root", "current_facet", "facets", "visited_facets", "status", "unresolved", "shared_references")
+        if role == "comprehension":
+            keep = ("id", "root", "current_facet", "facets", "status", "shared_references")
+        else:
+            keep = ("id", "root", "current_facet", "facets", "visited_facets", "status", "unresolved", "shared_references")
         out["topic"] = {k: topic.get(k) for k in keep if k in topic}
+
+    keywords = out.get("keywords")
+    if isinstance(keywords, list):
+        out["keywords"] = keywords[:8 if role == "comprehension" else 12]
     return out
 
 
@@ -182,17 +194,19 @@ def run(role: str, payload: dict, timeout: int = 30):
     if not model_url:
         raise RuntimeError(f"private model unavailable for {role}")
 
-    compact = _compact_payload(payload)
+    compact = _compact_payload(payload, role)
     combined = (
         prompt
         + "\nINPUT_JSON\n"
         + json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
         + "\nOUTPUT_JSON_ONLY\n"
     )
+    n_predict = {"comprehension": 96, "thought": 144, "expression": 220}.get(role, 160)
+    temperature = {"comprehension": 0.15, "thought": 0.25, "expression": 0.35}.get(role, 0.25)
     request_body = {
         "prompt": combined,
-        "n_predict": 320,
-        "temperature": 0.25,
+        "n_predict": n_predict,
+        "temperature": temperature,
         "cache_prompt": False,
         "json_schema": _schema(role),
     }
