@@ -4,7 +4,7 @@
  const parts=['01','02','03','04','05','06','07','08a','08b','09'];
  let b='';
  for(const n of parts){
-   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817g',{cache:'no-store'});
+   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817h',{cache:'no-store'});
    if(!r.ok) throw new Error('Missing payload part '+n);
    b+=(await r.text()).trim();
  }
@@ -12,169 +12,34 @@
  const ds=new DecompressionStream('gzip');
  let text=await new Response(new Blob([raw]).stream().pipeThrough(ds)).text();
  if(!text.includes('<title>RESONATOR</title>')) throw new Error('RESONATOR payload failed integrity check.');
-
- // Preserve the proven iPhone-safe audio behavior when the payload still contains the older defaults.
  text=text.replace("state.rate=+(function(){try{return localStorage.getItem('resonator.rate');}catch(e){return null;}}()||32000);","state.rate=22050;");
  text=text.replace("if(state.audioMode==='buffered'){node.port.postMessage({t:'p',k:'osMax',v:10});}","node.port.postMessage({t:'p',k:'osMax',v:8});");
  text=text.replace("lite:false,liteUntil:0","lite:true,liteUntil:Number.MAX_SAFE_INTEGER");
  text=text.replace("function frame(){requestAnimationFrame(frame);","let _rf=0;function frame(){requestAnimationFrame(frame);if((_rf++&1)!==0)return;");
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
-
- // Full-body mobile fit with enough room left for drawers.
  text=text.replace("flex:0 0 38vh;min-height:230px","flex:0 0 54dvh;min-height:320px");
  text=text.replaceAll("Math.min(W,H)*0.86","Math.min(W*0.94,H*0.90)");
  text=text.replace("display:flex;flex-wrap:wrap;gap:4px","display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px");
  text=text.replace("font-size:10px;letter-spacing:.06em;padding:9px 10px;min-height:36px","font-size:9px;letter-spacing:.04em;padding:6px 8px;min-height:30px;flex:0 0 auto");
-
- // Preserve the continuous mobile orbit behavior if the payload still has the older gesture constants.
  text=text.replace("camRotate(1,(e.clientX-drag.x)*0.008);","camRotate(1,(e.clientX-drag.x)*0.017);");
  text=text.replace("camRotate(0,(e.clientY-drag.y)*0.008);","camRotate(0,-(e.clientY-drag.y)*0.008);");
- if(!text.includes("addEventListener('pointercancel',()=>{drag=null;});")){
-   text=text.replace("addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; });","addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; }); addEventListener('pointercancel',()=>{drag=null;});");
- }
-
- // Cabinet state must start finite.
+ if(!text.includes("addEventListener('pointercancel',()=>{drag=null;});")) text=text.replace("addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; });","addEventListener('pointerup',()=>{ if(drag&&drag.node!==undefined) drawInfo(); drag=null; }); addEventListener('pointercancel',()=>{drag=null;});");
  text=text.replace("this.c1=0; this.c2=0; this.b1=0; this.b2=0; this.t1=0; this.t2=0; this.lp1b=0;","this.c1=0; this.c2=0; this.b1=0; this.b2=0; this.t1=0; this.t2=0; this.lp1b=0; this.lp1c=0; this.lp1d=0; this.body=0;");
-
- // New bodies must not inherit cached geometry from the previous body.
  text=text.replace("build(d){\nconst N=d.n, S=d.si.length, V=this.VMAX;","build(d){\nconst N=d.n, S=d.si.length, V=this.VMAX;\nthis.cx=undefined;this.cy=undefined;this.cz=undefined;this.cenX=undefined;this.cenY=undefined;this.cenZ=undefined;this.micJ=-1;");
  text=text.replace("moveMass(n,x,y,z){\nif(!this.ok||n<0||n>=this.N) return;\nconst b=n*3;","moveMass(n,x,y,z){\nif(!this.ok||n<0||n>=this.N) return;\nthis.cx=undefined;this.cy=undefined;this.cz=undefined;this.cenX=undefined;this.cenY=undefined;this.cenZ=undefined;\nconst b=n*3;");
  text=text.replace("function pick(cx,cy2,freeOnly){\nconst g=state.geo; if(!g) return -1;","function pick(cx,cy2,freeOnly){\nconst g=state.geo; if(!g) return -1;\nif(!_px||!_py||!_pf||_cap<g.P.length) return -1;");
-
- // Add the tested low-frequency 50,000 litre silo as its own body.
- const milkSilo=`'Milk Silo':{min:10,max:16,def:12,note:'A 50,000 litre stainless milk silo: three metres across, nearly nine tall, thin-walled and standing free with nothing touching it. Tall and thin means its lowest sounds are not the obvious in-and-out but high-count ripples running round the wall — twenty-two modes below a hundred hertz. Stainless loses almost nothing, so give it a long decay and a soft beater.',make(C){
-const P=[],F=[],S=[],R=0.19,H=0.56,RINGS=9,rings=[];
-const ring=(y,r,ph)=>{const ids=[];for(let j=0;j<C;j++){const a=2*Math.PI*j/C+(ph||0);
-const w=1+0.008*Math.cos(3*a+0.5)+0.005*Math.cos(7*a);
-ids.push(P.length);P.push([r*w*Math.cos(a),y,r*w*Math.sin(a)]);F.push(0);}
-rings.push(ids);return ids;};
-const base=P.length;P.push([0,-H/2-R*0.10,0]);F.push(0);
-ring(-H/2-R*0.055,R*0.55,0);
-for(let k=0;k<=RINGS;k++) ring(-H/2+H*k/RINGS,R,0);
-ring(H/2+R*0.10,R*0.62,0);
-const top=P.length;P.push([0,H/2+R*0.19,0]);F.push(0);
-const link=(a,b)=>{if(a!==b)S.push([a,b]);};
-for(const ids of rings) for(let j=0;j<C;j++) link(ids[j],ids[(j+1)%C]);
-for(let r=0;r<rings.length-1;r++){const a=rings[r],b=rings[r+1];
-for(let j=0;j<C;j++){link(a[j],b[j]);link(a[j],b[(j+1)%C]);link(a[(j+1)%C],b[j]);}}
-for(let j=0;j<C;j++){link(base,rings[0][j]);link(top,rings[rings.length-1][j]);}
-return {P,F,S,axis:0,mic:rings[3][1],hit:rings[6][Math.floor(C/2)],needSub:0.0002};}},`;
- if(!text.includes("'Milk Silo':{")){
-   text=text.replace("Twins:{min:5,",milkSilo+"Twins:{min:5,");
- }
-
- // Mobile complexity governor: keep generated bodies below the proven real-time mesh range before modal calibration.
- const mobileMesh=`
-const _mobileAudio=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&Math.min(innerWidth,innerHeight)<900);
-if(_mobileAudio&&typeof SHAPES!=='undefined'){
- const MAX_MOBILE_POINTS=52;
- for(const _name of Object.keys(SHAPES)){
-  const _shape=SHAPES[_name];
-  if(!_shape||typeof _shape.make!=='function'||_shape.__mobileSafe) continue;
-  const _make=_shape.make.bind(_shape);
-  _shape.make=function(C){
-   const requested=Math.max(3,Math.round(Number(C)||_shape.def||6));
-   let c=requested,g;
-   try{g=_make(c);}catch(e){return _make(requested);}
-   let guard=0;
-   while(g&&g.P&&g.P.length>MAX_MOBILE_POINTS&&c>3&&guard++<32){
-    const next=c-1;
-    try{const gg=_make(next);g=gg;c=next;}catch(e){break;}
-   }
-   if(g){g.mobileMeshC=c;g.mobileMeshRequested=requested;}
-   return g;
-  };
-  _shape.__mobileSafe=1;
- }
-}`;
- if(!text.includes('MAX_MOBILE_POINTS=52')){
-   text=text.replace("buildShape(true);",mobileMesh+"\nbuildShape(true);");
- }
-
- // Phone drawers: controls, keys and stage tools can be opened independently.
- const foldCss=`<style id="res-mobile-folds">
-@media(max-width:800px){
- #resControlToggle{width:100%;height:34px;border:0;border-top:1px solid rgba(82,205,221,.35);border-bottom:1px solid rgba(82,205,221,.28);background:#0A1223;color:#9EABC5;font:11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.22em;text-align:center;}
- #mobileControlsWrap{max-height:31dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:#08101F;}
- #mobileControlsWrap.mobile-collapsed{display:none!important;}
- #resToolToggle{position:absolute;right:10px;bottom:10px;z-index:30;border:1px solid rgba(82,205,221,.6);border-radius:4px;background:rgba(8,16,31,.88);color:#B8C4D8;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;padding:7px 9px;backdrop-filter:blur(8px);}
- #deck.mobile-shut>*:not(#handle){display:none!important;}
- #deck #handle{min-height:38px!important;}
-}
-</style>`;
- text=text.replace('</head>',foldCss+'</head>');
- const foldJs=`<script>(function(){
- const stage=document.getElementById('stage');
- const tabs=document.getElementById('tabs');
- const deck=document.getElementById('deck');
- if(tabs&&deck&&tabs.parentNode===deck.parentNode&&!document.getElementById('mobileControlsWrap')){
-   const parent=tabs.parentNode;
-   const wrap=document.createElement('div');wrap.id='mobileControlsWrap';
-   parent.insertBefore(wrap,tabs);
-   let n=tabs;
-   while(n&&n!==deck){const next=n.nextSibling;wrap.appendChild(n);n=next;}
-   const toggle=document.createElement('button');toggle.id='resControlToggle';toggle.type='button';
-   parent.insertBefore(toggle,wrap);
-   const setOpen=function(open){
-     wrap.classList.toggle('mobile-collapsed',!open);
-     toggle.textContent=open?'CONTROLS  ▾':'CONTROLS  ▸';
-     toggle.setAttribute('aria-expanded',open?'true':'false');
-     if(stage){stage.style.flexBasis=open?'54dvh':'72dvh';stage.style.minHeight=open?'320px':'410px';}
-   };
-   setOpen(true);
-   toggle.addEventListener('click',function(){setOpen(wrap.classList.contains('mobile-collapsed'));});
- }
- if(deck){
-   deck.classList.add('mobile-shut');
-   const h=document.getElementById('handle');
-   if(h){
-     h.setAttribute('aria-expanded','false');
-     const b=h.querySelector('b');if(b)b.textContent='▸';
-     h.addEventListener('click',function(e){
-       e.preventDefault();e.stopImmediatePropagation();
-       const shut=deck.classList.toggle('mobile-shut');
-       h.setAttribute('aria-expanded',shut?'false':'true');
-       const bb=h.querySelector('b');if(bb)bb.textContent=shut?'▸':'▾';
-     },true);
-   }
- }
- if(stage&&!document.getElementById('resToolToggle')){
-   const wanted=['orbit','strike','mic','move','link','pin','reset view'];
-   const buttons=[...stage.querySelectorAll('button')].filter(function(b){return wanted.includes((b.textContent||'').trim().toLowerCase());});
-   if(buttons.length>=4){
-     let row=buttons[0].parentElement;
-     while(row&&row!==stage&&!buttons.every(function(b){return row.contains(b);})){row=row.parentElement;}
-     if(row&&row!==stage){
-       const t=document.createElement('button');t.id='resToolToggle';t.type='button';t.textContent='TOOLS  ▾';stage.appendChild(t);
-       let shown=true;
-       t.addEventListener('click',function(e){e.stopPropagation();shown=!shown;row.style.display=shown?'':'none';t.textContent=shown?'TOOLS  ▾':'TOOLS  ▸';});
-     }
-   }
- }
- // Milk Silo uses the same settings as the validated render test. No added oscillator or harmonic generator.
- const applyMilkSiloSettings=function(){
-   try{
-     if(typeof state!=='undefined'&&state.val){state.val.decay=40;state.val.loss=0.05;state.val.hard=0.9;}
-     if(typeof syncKnob==='function'){syncKnob('decay');syncKnob('loss');syncKnob('hard');}
-     if(typeof node!=='undefined'&&node&&node.port){
-       node.port.postMessage({t:'p',k:'decay',v:40});
-       node.port.postMessage({t:'p',k:'loss',v:0.05});
-       node.port.postMessage({t:'p',k:'hard',v:0.9});
-     }
-   }catch(e){}
- };
- document.addEventListener('click',function(e){
-   let el=e.target;
-   for(let i=0;i<5&&el;i++,el=el.parentElement){
-     if((el.textContent||'').trim()==='Milk Silo'){setTimeout(applyMilkSiloSettings,80);break;}
-   }
- },true);
-})();<\/script>`;
- text=text.replace('</body>',foldJs+'</body>');
-
+ const milkSilo=`'Milk Silo':{min:10,max:16,def:12,note:'A 50,000 litre stainless milk silo: three metres across, nearly nine tall, thin-walled and standing free. Stainless loses almost nothing, so give it a long decay and a firm beater.',make(C){
+const mobile=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&Math.min(innerWidth,innerHeight)<900);
+const SEG=mobile?12:C,RINGS=mobile?2:9;
+const P=[],F=[],S=[],R=0.19,H=0.56,rings=[];
+const ring=(y,r,ph)=>{const ids=[];for(let j=0;j<SEG;j++){const a=2*Math.PI*j/SEG+(ph||0);const w=1+0.008*Math.cos(3*a+0.5)+0.005*Math.cos(7*a);ids.push(P.length);P.push([r*w*Math.cos(a),y,r*w*Math.sin(a)]);F.push(0);}rings.push(ids);return ids;};
+const base=P.length;P.push([0,-H/2-R*0.10,0]);F.push(0);ring(-H/2-R*0.055,R*0.55,0);for(let k=0;k<=RINGS;k++) ring(-H/2+H*k/RINGS,R,0);ring(H/2+R*0.10,R*0.62,0);const top=P.length;P.push([0,H/2+R*0.19,0]);F.push(0);
+const link=(a,b)=>{if(a!==b)S.push([a,b]);};for(const ids of rings) for(let j=0;j<SEG;j++){link(ids[j],ids[(j+1)%SEG]);link(ids[j],ids[(j+2)%SEG]);}for(let r=0;r<rings.length-1;r++){const a=rings[r],bb=rings[r+1];for(let j=0;j<SEG;j++){link(a[j],bb[j]);link(a[j],bb[(j+1)%SEG]);link(a[(j+1)%SEG],bb[j]);}}for(let j=0;j<SEG;j++){link(base,rings[0][j]);link(top,rings[rings.length-1][j]);}
+const micRing=Math.min(2,rings.length-2),hitRing=Math.max(micRing,Math.min(rings.length-2,rings.length-3));return {P,F,S,axis:0,mic:rings[micRing][1],hit:rings[hitRing][Math.floor(SEG/2)],needSub:0.0002};}},`;
+ if(!text.includes("'Milk Silo':{")) text=text.replace("Twins:{min:5,",milkSilo+"Twins:{min:5,");
+ const foldCss=`<style id="res-mobile-folds">@media(max-width:800px){#resControlToggle{width:100%;height:34px;border:0;border-top:1px solid rgba(82,205,221,.35);border-bottom:1px solid rgba(82,205,221,.28);background:#0A1223;color:#9EABC5;font:11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.22em;text-align:center}#mobileControlsWrap{max-height:31dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:#08101F}#mobileControlsWrap.mobile-collapsed{display:none!important}#resToolToggle{position:absolute;right:10px;bottom:10px;z-index:30;border:1px solid rgba(82,205,221,.6);border-radius:4px;background:rgba(8,16,31,.88);color:#B8C4D8;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;padding:7px 9px;backdrop-filter:blur(8px)}#deck.mobile-shut>*:not(#handle){display:none!important}#deck #handle{min-height:38px!important}}</style>`;text=text.replace('</head>',foldCss+'</head>');
+ const foldJs=`<script>(function(){const stage=document.getElementById('stage'),tabs=document.getElementById('tabs'),deck=document.getElementById('deck');if(tabs&&deck&&tabs.parentNode===deck.parentNode&&!document.getElementById('mobileControlsWrap')){const parent=tabs.parentNode,wrap=document.createElement('div');wrap.id='mobileControlsWrap';parent.insertBefore(wrap,tabs);let n=tabs;while(n&&n!==deck){const next=n.nextSibling;wrap.appendChild(n);n=next}const toggle=document.createElement('button');toggle.id='resControlToggle';toggle.type='button';parent.insertBefore(toggle,wrap);const setOpen=open=>{wrap.classList.toggle('mobile-collapsed',!open);toggle.textContent=open?'CONTROLS  ▾':'CONTROLS  ▸';toggle.setAttribute('aria-expanded',open?'true':'false');if(stage){stage.style.flexBasis=open?'54dvh':'72dvh';stage.style.minHeight=open?'320px':'410px'}};setOpen(true);toggle.addEventListener('click',()=>setOpen(wrap.classList.contains('mobile-collapsed')))}if(deck){deck.classList.add('mobile-shut');const h=document.getElementById('handle');if(h){h.setAttribute('aria-expanded','false');const b=h.querySelector('b');if(b)b.textContent='▸';h.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();const shut=deck.classList.toggle('mobile-shut');h.setAttribute('aria-expanded',shut?'false':'true');const bb=h.querySelector('b');if(bb)bb.textContent=shut?'▸':'▾'},true)}}if(stage&&!document.getElementById('resToolToggle')){const wanted=['orbit','strike','mic','move','link','pin','reset view'];const buttons=[...stage.querySelectorAll('button')].filter(b=>wanted.includes((b.textContent||'').trim().toLowerCase()));if(buttons.length>=4){let row=buttons[0].parentElement;while(row&&row!==stage&&!buttons.every(b=>row.contains(b)))row=row.parentElement;if(row&&row!==stage){const t=document.createElement('button');t.id='resToolToggle';t.type='button';t.textContent='TOOLS  ▾';stage.appendChild(t);let shown=true;t.addEventListener('click',e=>{e.stopPropagation();shown=!shown;row.style.display=shown?'':'none';t.textContent=shown?'TOOLS  ▾':'TOOLS  ▸'})}}}const siloSettings=()=>{try{if(typeof state!=='undefined'&&state.val){state.val.decay=40;state.val.loss=.05;state.val.hard=.9}if(typeof syncKnob==='function'){syncKnob('decay');syncKnob('loss');syncKnob('hard')}if(typeof node!=='undefined'&&node&&node.port){node.port.postMessage({t:'p',k:'decay',v:40});node.port.postMessage({t:'p',k:'loss',v:.05});node.port.postMessage({t:'p',k:'hard',v:.9})}}catch(e){}};document.addEventListener('click',e=>{let el=e.target;for(let i=0;i<5&&el;i++,el=el.parentElement)if((el.textContent||'').trim()==='Milk Silo'){setTimeout(siloSettings,80);break}},true)})();<\/script>`;text=text.replace('</body>',foldJs+'</body>');
  document.open();document.write(text);document.close();
-}catch(e){
- document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>';
-}})();
+}catch(e){document.body.innerHTML='<div style="padding:28px;font:14px system-ui;background:#080D1A;color:#F0EAD8;min-height:100vh"><h2>RESONATOR could not load</h2><p>'+String(e.message||e)+'</p></div>'}})();
 </script></body></html>
