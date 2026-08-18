@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 604,
+  "cycle": 605,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-18T14:20:45.407893Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-18T14:21:50.895907Z",
   "messages": 1000,
-  "last_public_event": "20260818T142045405-jules-v5",
+  "last_public_event": "20260818T142150893-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000604",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000605",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "new information goal",
+    "current_facet": "important",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "challenge",
       "to cook",
       "direction goal",
       "hard to find one",
@@ -71,7 +70,8 @@
       "socially attentive",
       "suggestion",
       "exploration",
-      "new information goal"
+      "new information goal",
+      "important"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,16 +84,16 @@
       "owen",
       "jules"
     ],
-    "turns": 1207,
+    "turns": 1209,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "skepticism",
-      "exploration",
-      "learning",
-      "skeptic",
-      "test",
       "new information goal",
-      "curiosity"
+      "learning",
+      "skepticism",
+      "important",
+      "reason",
+      "topic of skepticism",
+      "exploring"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 604,
-        "hits": 1221,
+        "last_cycle": 605,
+        "hits": 1237,
         "status": "open"
       },
       {
@@ -112,8 +112,89 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 604,
-        "hits": 857,
+        "last_cycle": 605,
+        "hits": 873,
+        "status": "open"
+      },
+      {
+        "label": "approaching topic",
+        "parent": "common",
+        "depth": 40,
+        "first_cycle": 598,
+        "last_cycle": 605,
+        "hits": 49,
+        "status": "open"
+      },
+      {
+        "label": "observed observation",
+        "parent": "approaching topic",
+        "depth": 41,
+        "first_cycle": 600,
+        "last_cycle": 605,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "socially attentive",
+        "parent": "observed observation",
+        "depth": 42,
+        "first_cycle": 601,
+        "last_cycle": 605,
+        "hits": 19,
+        "status": "open"
+      },
+      {
+        "label": "suggestion",
+        "parent": "socially attentive",
+        "depth": 43,
+        "first_cycle": 602,
+        "last_cycle": 605,
+        "hits": 19,
+        "status": "open"
+      },
+      {
+        "label": "exploration",
+        "parent": "suggestion",
+        "depth": 44,
+        "first_cycle": 603,
+        "last_cycle": 605,
+        "hits": 13,
+        "status": "open"
+      },
+      {
+        "label": "new information goal",
+        "parent": "exploration",
+        "depth": 45,
+        "first_cycle": 604,
+        "last_cycle": 605,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "exploring",
+        "parent": "socially attentive",
+        "depth": 43,
+        "first_cycle": 602,
+        "last_cycle": 605,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "important",
+        "parent": "new information goal",
+        "depth": 46,
+        "first_cycle": 605,
+        "last_cycle": 605,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "reason",
+        "parent": "new information goal",
+        "depth": 46,
+        "first_cycle": 605,
+        "last_cycle": 605,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -135,66 +216,12 @@
         "status": "open"
       },
       {
-        "label": "approaching topic",
-        "parent": "common",
-        "depth": 40,
-        "first_cycle": 598,
-        "last_cycle": 604,
-        "hits": 47,
-        "status": "open"
-      },
-      {
-        "label": "observed observation",
-        "parent": "approaching topic",
-        "depth": 41,
-        "first_cycle": 600,
-        "last_cycle": 604,
-        "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "socially attentive",
-        "parent": "observed observation",
-        "depth": 42,
-        "first_cycle": 601,
-        "last_cycle": 604,
-        "hits": 15,
-        "status": "open"
-      },
-      {
-        "label": "suggestion",
-        "parent": "socially attentive",
-        "depth": 43,
-        "first_cycle": 602,
-        "last_cycle": 604,
-        "hits": 13,
-        "status": "open"
-      },
-      {
-        "label": "exploration",
-        "parent": "suggestion",
-        "depth": 44,
-        "first_cycle": 603,
-        "last_cycle": 604,
-        "hits": 7,
-        "status": "open"
-      },
-      {
         "label": "skepticing",
         "parent": "suggestion",
         "depth": 44,
         "first_cycle": 603,
         "last_cycle": 604,
         "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "new information goal",
-        "parent": "exploration",
-        "depth": 45,
-        "first_cycle": 604,
-        "last_cycle": 604,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -222,15 +249,6 @@
         "first_cycle": 601,
         "last_cycle": 602,
         "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "exploring",
-        "parent": "socially attentive",
-        "depth": 43,
-        "first_cycle": 602,
-        "last_cycle": 602,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -511,28 +529,9 @@
         "last_cycle": 574,
         "hits": 22,
         "status": "open"
-      },
-      {
-        "label": "easiness",
-        "parent": "direction goal",
-        "depth": 25,
-        "first_cycle": 574,
-        "last_cycle": 574,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "thoughts",
-        "parent": "skepticology",
-        "depth": 18,
-        "first_cycle": 566,
-        "last_cycle": 573,
-        "hits": 23,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "hard concept",
       "easy concept",
       "simple explanation",
       "mix",
@@ -563,10 +562,11 @@
       "observed observation",
       "socially attentive",
       "suggestion",
-      "exploration"
+      "exploration",
+      "new information goal"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 604,
+    "last_branch_cycle": 605,
     "escape_pressure": 0
   }
 }
