@@ -68,9 +68,9 @@ jobs:
           from pathlib import Path
           root=Path('.')
           marker=json.loads((root/'room/sterilization.json').read_text())
-          assert marker['sterilization_version'] >= 3
+          assert marker['sterilization_version'] >= 4
           boot=marker['boot_id']
-          assert boot.startswith('room-sterile-v3-')
+          assert boot.startswith('room-sterile-v4-')
           state=json.loads((root/'room/state.json').read_text())
           assert state['boot_id'] == boot and state['cycle'] == 0 and state['messages'] == 0
           assert json.loads((root/'room/conversation.json').read_text()) == []
@@ -86,7 +86,7 @@ jobs:
                   assert rel.get('reports') == []
           assert not list((root/'society/archive').glob('*.json'))
           assert json.loads((root/'society/conversation.json').read_text()) == []
-          print('STERILE_V3_VALIDATION_OK', boot)
+          print('STERILE_V4_VALIDATION_OK', boot)
           PY
 
           echo "Room remains quarantined after sterilization; no cognition restart from this workflow"
