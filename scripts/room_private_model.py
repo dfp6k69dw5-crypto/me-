@@ -18,12 +18,17 @@ def enabled(role: str) -> bool:
 
 def _extract_json(text: str):
     text = str(text or "").strip()
-    if text.startswith("{"):
-        return json.loads(text)
-    m = re.search(r"\{.*\}", text, re.S)
-    if not m:
+    if not text:
         raise ValueError("model returned no JSON object")
-    return json.loads(m.group(0))
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+    start = text.find("{")
+    if start < 0:
+        raise ValueError("model returned no JSON object")
+    obj, _ = json.JSONDecoder().raw_decode(text[start:])
+    return obj
 
 
 def _looks_like_leak(text: str) -> bool:
