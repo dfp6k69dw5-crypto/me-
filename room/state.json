@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 640,
+  "cycle": 641,
   "silence_cycles": 0,
-  "last_speaker": "owen",
-  "last_run": "2026-08-18T15:04:54.080397Z",
+  "last_speaker": "jules",
+  "last_run": "2026-08-18T15:05:52.815757Z",
   "messages": 1000,
-  "last_public_event": "20260818T150454078-owen-v5",
+  "last_public_event": "20260818T150552813-jules-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000640",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000641",
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "might not confuse",
+    "current_facet": "sara",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "explanation",
       "discussion topic",
       "current information",
       "other ways",
@@ -71,7 +70,8 @@
       "conflicted",
       "confident",
       "mara",
-      "might not confuse"
+      "might not confuse",
+      "sara"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,16 +84,18 @@
       "owen",
       "jules"
     ],
-    "turns": 1279,
+    "turns": 1281,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "mara",
-      "learning",
-      "confused",
-      "confusion",
       "might not confuse",
-      "something",
-      "learn"
+      "learning",
+      "sara",
+      "curiosity",
+      "skepticism",
+      "is",
+      "current",
+      "new information goal",
+      "confusion"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +105,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 640,
-        "hits": 1834,
+        "last_cycle": 641,
+        "hits": 1850,
         "status": "open"
       },
       {
@@ -112,8 +114,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 640,
-        "hits": 1181,
+        "last_cycle": 641,
+        "hits": 1185,
         "status": "open"
       },
       {
@@ -121,8 +123,116 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 640,
-        "hits": 188,
+        "last_cycle": 641,
+        "hits": 189,
+        "status": "open"
+      },
+      {
+        "label": "confused",
+        "parent": "current reference",
+        "depth": 66,
+        "first_cycle": 635,
+        "last_cycle": 641,
+        "hits": 43,
+        "status": "open"
+      },
+      {
+        "label": "confusion",
+        "parent": "current reference",
+        "depth": 66,
+        "first_cycle": 635,
+        "last_cycle": 641,
+        "hits": 40,
+        "status": "open"
+      },
+      {
+        "label": "new information goal",
+        "parent": "exploration",
+        "depth": 45,
+        "first_cycle": 604,
+        "last_cycle": 641,
+        "hits": 29,
+        "status": "open"
+      },
+      {
+        "label": "current reference",
+        "parent": "current goal",
+        "depth": 65,
+        "first_cycle": 634,
+        "last_cycle": 641,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "conflicting",
+        "parent": "current reference",
+        "depth": 66,
+        "first_cycle": 635,
+        "last_cycle": 641,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "blame",
+        "parent": "conflicting",
+        "depth": 67,
+        "first_cycle": 636,
+        "last_cycle": 641,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "conflicted",
+        "parent": "blame",
+        "depth": 68,
+        "first_cycle": 637,
+        "last_cycle": 641,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "confident",
+        "parent": "conflicted",
+        "depth": 69,
+        "first_cycle": 638,
+        "last_cycle": 641,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "mara",
+        "parent": "confident",
+        "depth": 70,
+        "first_cycle": 639,
+        "last_cycle": 641,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "mistake",
+        "parent": "conflicting",
+        "depth": 67,
+        "first_cycle": 636,
+        "last_cycle": 641,
+        "hits": 9,
+        "status": "open"
+      },
+      {
+        "label": "might not confuse",
+        "parent": "mara",
+        "depth": 71,
+        "first_cycle": 640,
+        "last_cycle": 641,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "sara",
+        "parent": "might not confuse",
+        "depth": 72,
+        "first_cycle": 641,
+        "last_cycle": 641,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -132,96 +242,6 @@
         "first_cycle": 631,
         "last_cycle": 640,
         "hits": 58,
-        "status": "open"
-      },
-      {
-        "label": "confused",
-        "parent": "current reference",
-        "depth": 66,
-        "first_cycle": 635,
-        "last_cycle": 640,
-        "hits": 37,
-        "status": "open"
-      },
-      {
-        "label": "confusion",
-        "parent": "current reference",
-        "depth": 66,
-        "first_cycle": 635,
-        "last_cycle": 640,
-        "hits": 33,
-        "status": "open"
-      },
-      {
-        "label": "current reference",
-        "parent": "current goal",
-        "depth": 65,
-        "first_cycle": 634,
-        "last_cycle": 640,
-        "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "conflicting",
-        "parent": "current reference",
-        "depth": 66,
-        "first_cycle": 635,
-        "last_cycle": 640,
-        "hits": 21,
-        "status": "open"
-      },
-      {
-        "label": "blame",
-        "parent": "conflicting",
-        "depth": 67,
-        "first_cycle": 636,
-        "last_cycle": 640,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "conflicted",
-        "parent": "blame",
-        "depth": 68,
-        "first_cycle": 637,
-        "last_cycle": 640,
-        "hits": 16,
-        "status": "open"
-      },
-      {
-        "label": "confident",
-        "parent": "conflicted",
-        "depth": 69,
-        "first_cycle": 638,
-        "last_cycle": 640,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "mistake",
-        "parent": "conflicting",
-        "depth": 67,
-        "first_cycle": 636,
-        "last_cycle": 640,
-        "hits": 8,
-        "status": "open"
-      },
-      {
-        "label": "mara",
-        "parent": "confident",
-        "depth": 70,
-        "first_cycle": 639,
-        "last_cycle": 640,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "might not confuse",
-        "parent": "mara",
-        "depth": 71,
-        "first_cycle": 640,
-        "last_cycle": 640,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -511,28 +531,9 @@
         "last_cycle": 614,
         "hits": 5,
         "status": "open"
-      },
-      {
-        "label": "important",
-        "parent": "new information goal",
-        "depth": 46,
-        "first_cycle": 605,
-        "last_cycle": 613,
-        "hits": 39,
-        "status": "open"
-      },
-      {
-        "label": "new information goal",
-        "parent": "exploration",
-        "depth": 45,
-        "first_cycle": 604,
-        "last_cycle": 613,
-        "hits": 28,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "common",
       "approaching topic",
       "observed observation",
       "socially attentive",
@@ -563,10 +564,11 @@
       "blame",
       "conflicted",
       "confident",
-      "mara"
+      "mara",
+      "might not confuse"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 640,
+    "last_branch_cycle": 641,
     "escape_pressure": 0
   }
 }
