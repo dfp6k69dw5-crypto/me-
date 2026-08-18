@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T16:29:35.119995+00:00",
-  "cycle_key": "32153618883:1:64",
+  "generated_at": "2026-08-18T16:30:39.188947+00:00",
+  "cycle_key": "32153618883:1:65",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,38 +29,50 @@
   },
   "selected_skills": [
     {
-      "name": "concrete-specificity",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.56,
-      "confidence": 0.696,
-      "raw_score": 1.84,
-      "repeat_penalty": 0.28,
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "example",
-        "specific"
+        "conversation"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "example",
-            "specific"
+            "conversation"
           ],
-          "weight": 0.92
-        },
+          "weight": 1.45
+        }
+      ]
+    },
+    {
+      "name": "memory-callback",
+      "tier": "project",
+      "domain": "memory-callback",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "history"
+      ],
+      "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "example"
+            "history"
           ],
-          "weight": 0.54
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "2f85eb916e27",
+  "context_fingerprint": "69d5ecdac0b7",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 493,
-  "approx_added_tokens": 123
+  "temporary_skill_chars": 853,
+  "approx_added_tokens": 213
 }
