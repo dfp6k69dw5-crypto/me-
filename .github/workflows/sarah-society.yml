@@ -46,8 +46,9 @@ jobs:
           git config user.name "the-room"
           git config user.email "actions@users.noreply.github.com"
 
-          # Private prompts are optional runtime secrets. If all three are present,
-          # one runner-local model server is shared while each process receives only its own role prompt.
+          # Private prompts are runtime-only secrets. The local model has two inference
+          # slots; prompted nodes are scheduled in pairs so all four entities retain
+          # the same three-stage cognition without oversubscribing the runner CPU.
           export ROOM_MODEL_URL=""
           model_pid=""
           if [ -n "${ROOM_PROMPT_PERCEPTION:-}" ] && [ -n "${ROOM_PROMPT_DELIBERATION:-}" ] && [ -n "${ROOM_PROMPT_EXPRESSION:-}" ]; then
@@ -61,7 +62,7 @@ jobs:
             if [ -n "$server_bin" ]; then
               chmod +x "$server_bin"
               env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION -u ROOM_NODE_PROMPT \
-                "$server_bin" -m .room_model/society-brain-q4_0.gguf --host 127.0.0.1 --port 18080 -c 8192 -np 4 >.room_model/server.log 2>&1 &
+                "$server_bin" -m .room_model/society-brain-q4_0.gguf --host 127.0.0.1 --port 18080 -c 16384 -np 2 >.room_model/server.log 2>&1 &
               model_pid=$!
               for attempt in $(seq 1 120); do
                 if curl -fsS http://127.0.0.1:18080/health >/dev/null 2>&1; then
@@ -73,7 +74,7 @@ jobs:
               done
             fi
             if [ -z "$ROOM_MODEL_URL" ]; then
-              echo "Private local model unavailable; deterministic research-informed cognition remains active"
+              echo "Private local model unavailable; prompted Room beats will fail closed and retry"
             fi
           fi
 
@@ -103,62 +104,90 @@ jobs:
             return 0
           }
 
+          wait_batch() {
+            failed=0
+            for pid in "$@"; do wait "$pid" || failed=1; done
+            [ "$failed" -eq 0 ]
+          }
+
           run_beat() {
             beat_seq=$((beat_seq + 1))
             export ROOM_CYCLE_KEY="${GITHUB_RUN_ID}:${GITHUB_RUN_ATTEMPT}:${beat_seq}"
             rm -rf room_parts room_work
             mkdir -p room_parts room_work
 
-            # Phase 1: all nodes sense; only the four comprehension nodes receive the perception prompt.
+            # Phase 1: unprompted sense nodes run together; four perception nodes use
+            # the two verified model slots in two pairs.
             pids=()
-            for n in $(seq 0 11); do
-              if [ $((n % 3)) -eq 0 ]; then node_prompt="${ROOM_PROMPT_PERCEPTION:-}"; else node_prompt=""; fi
+            for n in 1 2 4 5 7 8 10 11; do
               (
                 env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
-                  ROOM_NODE_PROMPT="$node_prompt" ROOM_NODE_ID="$n" \
+                  ROOM_NODE_PROMPT="" ROOM_NODE_ID="$n" \
                   python3 scripts/room_engine_v5.py node --phase sense
               ) &
               pids+=("$!")
             done
-            failed=0
-            for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
-            [ "$failed" -eq 0 ] || return 1
+            wait_batch "${pids[@]}" || return 1
+
+            for pair in "0 3" "6 9"; do
+              pids=()
+              for n in $pair; do
+                (
+                  env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
+                    ROOM_NODE_PROMPT="${ROOM_PROMPT_PERCEPTION:-}" ROOM_NODE_ID="$n" \
+                    python3 scripts/room_engine_v5.py node --phase sense
+                ) &
+                pids+=("$!")
+              done
+              wait_batch "${pids[@]}" || return 1
+            done
 
             env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
               python3 scripts/room_engine_v5.py bus || return 1
 
-            # Phase 2: comprehension settles and the four thought nodes deliberate from perception.
+            # Phase 2: comprehension recurrence is unprompted; thought nodes deliberate
+            # in two pairs against the same settled perception bus.
             pids=()
-            for n in $(seq 0 11); do
-              [ $((n % 3)) -eq 2 ] && continue
-              if [ $((n % 3)) -eq 1 ]; then node_prompt="${ROOM_PROMPT_DELIBERATION:-}"; else node_prompt=""; fi
+            for n in 0 3 6 9; do
               (
                 env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
-                  ROOM_NODE_PROMPT="$node_prompt" ROOM_NODE_ID="$n" \
+                  ROOM_NODE_PROMPT="" ROOM_NODE_ID="$n" \
                   python3 scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-sense.json
               ) &
               pids+=("$!")
             done
-            failed=0
-            for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
-            [ "$failed" -eq 0 ] || return 1
+            wait_batch "${pids[@]}" || return 1
+
+            for pair in "1 4" "7 10"; do
+              pids=()
+              for n in $pair; do
+                (
+                  env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
+                    ROOM_NODE_PROMPT="${ROOM_PROMPT_DELIBERATION:-}" ROOM_NODE_ID="$n" \
+                    python3 scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-sense.json
+                ) &
+                pids+=("$!")
+              done
+              wait_batch "${pids[@]}" || return 1
+            done
 
             env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
               python3 scripts/room_engine_v5.py bus2 --bus room_work/bus-sense.json || return 1
 
-            # Phase 3: expression nodes receive deliberation + perception, then all four must speak.
-            pids=()
-            for n in 2 5 8 11; do
-              (
-                env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
-                  ROOM_NODE_PROMPT="${ROOM_PROMPT_EXPRESSION:-}" ROOM_NODE_ID="$n" \
-                  python3 scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-recurrent.json
-              ) &
-              pids+=("$!")
+            # Phase 3: expression nodes receive deliberation + perception in two pairs.
+            # Commit still requires exactly four unique speakers before anything publishes.
+            for pair in "2 5" "8 11"; do
+              pids=()
+              for n in $pair; do
+                (
+                  env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
+                    ROOM_NODE_PROMPT="${ROOM_PROMPT_EXPRESSION:-}" ROOM_NODE_ID="$n" \
+                    python3 scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-recurrent.json
+                ) &
+                pids+=("$!")
+              done
+              wait_batch "${pids[@]}" || return 1
             done
-            failed=0
-            for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
-            [ "$failed" -eq 0 ] || return 1
 
             env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
               python3 scripts/room_engine_v5.py commit || return 1
