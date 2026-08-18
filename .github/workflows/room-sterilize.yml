@@ -41,14 +41,17 @@ jobs:
           git add -A room society
           if ! git diff --cached --quiet; then
             git commit -m "Sterilize Room historical cognition"
-            for attempt in 1 2 3 4; do
+            pushed=0
+            for attempt in 1 2 3 4 5; do
               if git push origin HEAD:main; then
+                pushed=1
                 break
               fi
               git fetch origin main
-              git rebase origin/main
+              git rebase origin/main || { git rebase --abort || true; exit 1; }
               sleep "$attempt"
             done
+            test "$pushed" -eq 1
           fi
 
           token_json=$(curl -fsS -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror")
@@ -65,8 +68,9 @@ jobs:
           from pathlib import Path
           root=Path('.')
           marker=json.loads((root/'room/sterilization.json').read_text())
-          assert marker['sterilization_version'] == 1
+          assert marker['sterilization_version'] >= 3
           boot=marker['boot_id']
+          assert boot.startswith('room-sterile-v3-')
           state=json.loads((root/'room/state.json').read_text())
           assert state['boot_id'] == boot and state['cycle'] == 0 and state['messages'] == 0
           assert json.loads((root/'room/conversation.json').read_text()) == []
@@ -82,7 +86,7 @@ jobs:
                   assert rel.get('reports') == []
           assert not list((root/'society/archive').glob('*.json'))
           assert json.loads((root/'society/conversation.json').read_text()) == []
-          print('STERILE_VALIDATION_OK', boot)
+          print('STERILE_V3_VALIDATION_OK', boot)
           PY
 
-          gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
+          echo "Room remains quarantined after sterilization; no cognition restart from this workflow"
