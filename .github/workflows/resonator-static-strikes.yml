@@ -26,52 +26,40 @@ jobs:
           p = Path('apps/resonator.html')
           s = p.read_text()
 
-          # Stop the AudioWorklet from building/transferring mass displacement + velocity arrays.
-          pat = re.compile(
-              r"      // FIX8: reuse returned buffers instead of allocating every frame\.\n"
-              r"      let P=this\.pool\.pop\(\);\n"
-              r"      if\(!P \|\| P\.byteLength!==this\.N\*4\*4\) P=new Float32Array\(this\.N\*4\);\n"
-              r"      for\(let q=0;q<this\.N;q\+\+\)\{.*?"
-              r"      this\.port\.postMessage\(\{t:'frame',P,pk:this\.peak\},\[P\.buffer\]\);",
-              re.S,
-          )
-          s, n = pat.subn(
-              "      // Meter only: keep audio physics internal and do not ship body motion to the UI.\n"
-              "      this.port.postMessage({t:'frame',pk:this.peak});",
-              s,
-              count=1,
-          )
-          if n != 1:
-              raise RuntimeError(f'worklet visual payload patch count={n}')
+          # Replace the entire physics-visual payload section using stable boundary markers.
+          a = "      // FIX8: reuse returned buffers instead of allocating every frame."
+          b = "      if(this.att>0){"
+          ia = s.find(a)
+          ib = s.find(b, ia)
+          if ia < 0 or ib < 0:
+              raise RuntimeError(f'visual payload markers not found: {ia}, {ib}')
+          s = s[:ia] + "      // Meter only: keep audio physics internal and do not ship body motion to the UI.\n      this.port.postMessage({t:'frame',pk:this.peak});\n" + s[ib:]
 
-          old = """   if(d.t==='frame'){
-     const N=state.geo.P.length;
-     state.disp=d.P.subarray(0,N*3);state.spd=d.P.subarray(N*3);
-     state.retBuf=d.P; state.peak=d.pk; state.ranOnce=true; drawLevel();"""
-          new = """   if(d.t==='frame'){
-     state.peak=d.pk; state.ranOnce=true; drawLevel();"""
-          if s.count(old) != 1:
-              raise RuntimeError(f'main-thread frame handler count={s.count(old)}')
-          s = s.replace(old, new, 1)
+          # Main thread no longer receives or stores mass displacement/velocity arrays.
+          a = "   if(d.t==='frame'){\n"
+          b = "   } else if(d.t==='rec'){"
+          ia = s.find(a)
+          ib = s.find(b, ia)
+          if ia < 0 or ib < 0:
+              raise RuntimeError(f'frame handler markers not found: {ia}, {ib}')
+          s = s[:ia] + "   if(d.t==='frame'){\n     state.peak=d.pk; state.ranOnce=true; drawLevel();\n" + s[ib:]
 
+          # Render the body at its rest geometry, not the exaggerated physical displacement.
           old = " const D=state.disp,SPD=state.spd,mag=val.mag,N=g.P.length;"
-          new = " const SPD=null,N=g.P.length;"
-          if s.count(old) != 1:
-              raise RuntimeError(f'render state line count={s.count(old)}')
-          s = s.replace(old, new, 1)
+          if old not in s:
+              raise RuntimeError('render-state line not found')
+          s = s.replace(old, " const SPD=null,N=g.P.length;", 1)
 
           old = "   const x=g.P[i][0]+(D?D[i*3]*mag:0),y=g.P[i][1]+(D?D[i*3+1]*mag:0),z=g.P[i][2]+(D?D[i*3+2]*mag:0);"
-          new = "   const x=g.P[i][0],y=g.P[i][1],z=g.P[i][2];"
-          if s.count(old) != 1:
-              raise RuntimeError(f'static geometry line count={s.count(old)}')
-          s = s.replace(old, new, 1)
+          if old not in s:
+              raise RuntimeError('dynamic geometry line not found')
+          s = s.replace(old, "   const x=g.P[i][0],y=g.P[i][1],z=g.P[i][2];", 1)
 
-          # When the user is not orbiting or actively dragging geometry, redraw at 10 fps instead of 60.
+          # Static tools do not need 60 full canvas redraws per second.
           old = "function frame(){requestAnimationFrame(frame);if(!W)resize();g2.clearRect(0,0,W,H);"
-          new = "function frame(ts){requestAnimationFrame(frame);if(!W)resize();if(state.tool!=='orbit'&&!drag&&ts-(state._lastDraw||0)<100)return;state._lastDraw=ts;g2.clearRect(0,0,W,H);"
-          if s.count(old) != 1:
-              raise RuntimeError(f'frame throttle line count={s.count(old)}')
-          s = s.replace(old, new, 1)
+          if old not in s:
+              raise RuntimeError('frame loop line not found')
+          s = s.replace(old, "function frame(ts){requestAnimationFrame(frame);if(!W)resize();if(state.tool!=='orbit'&&!drag&&ts-(state._lastDraw||0)<100)return;state._lastDraw=ts;g2.clearRect(0,0,W,H);", 1)
 
           p.write_text(s)
 
