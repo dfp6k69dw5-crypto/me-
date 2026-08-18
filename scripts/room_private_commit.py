@@ -1,22 +1,58 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import re
 from datetime import datetime, timezone
 
 import room_engine_v5 as c
 
-BLOCKED_TERMS = {
-    "current topic root",
-    "current narrow facet",
-    "topic root",
-    "topic facet",
-    "natural public conversational turn",
-    "the natural public conversational turn",
-}
 ALLOWED_MOVES = {
     "answer", "deepen", "disclose", "compare", "disagree",
     "repair", "support", "callback", "bridge", "close_topic",
 }
+META_WORDS = {"topic", "facet", "root", "schema", "prompt", "json"}
+META_PATTERNS = (
+    r"\btopic[-_ ]?\d{3,}\b",
+    r"\bcurrent\s+(?:narrow\s+)?topic\b",
+    r"\btopic\s+(?:root|facet|episode|identifier|id|schema|closure|closing)\b",
+    r"\bnarrow\s+topic\s+facet\b",
+    r"\bsemantic\s+schema\b",
+    r"\b(?:input|output)[-_ ]?json\b",
+    r"\bmandatory\s+speech\b",
+    r"\b(?:should|allowed|required)\s+(?:i\s+)?(?:be\s+)?speaking\b",
+    r"\bnot\s+sure\s+if\s+i\s+should\s+be\s+speaking\b",
+    r"\b[a-z-]+-related\s+topic\b",
+)
+
+
+def norm(value) -> str:
+    return re.sub(r"\s+", " ", str(value or "").strip().lower())
+
+
+def infected_text(value) -> bool:
+    text = norm(value)
+    if not text:
+        return True
+    if any(re.search(pattern, text) for pattern in META_PATTERNS):
+        return True
+    # Public dialogue should never contain these implementation/scaffold words.
+    words = set(re.findall(r"[a-z]+", text))
+    if words & META_WORDS:
+        return True
+    if any(marker in text for marker in ("system prompt", "hidden prompt", "developer message", "internal instructions", "chain of thought")):
+        return True
+    return False
+
+
+def bad_term(value) -> bool:
+    text = norm(value)
+    if not text or len(text) > 80 or infected_text(text):
+        return True
+    if re.fullmatch(r"topic[-_ ]?\d+", text):
+        return True
+    if text in {"conversation", "discussion", "subject", "context", "label", "category"}:
+        return True
+    return False
 
 
 def clean_topic(topic: dict) -> dict:
@@ -24,45 +60,70 @@ def clean_topic(topic: dict) -> dict:
     for key in ("facets", "visited_facets", "recent_terms", "shared_references", "unresolved"):
         vals = topic.get(key)
         if isinstance(vals, list):
-            topic[key] = [
-                str(x).strip().lower() for x in vals
-                if str(x or "").strip() and str(x).strip().lower() not in BLOCKED_TERMS
-            ]
-    if str(topic.get("root") or "").strip().lower() in BLOCKED_TERMS:
+            cleaned = []
+            for value in vals:
+                s = norm(value)
+                if not bad_term(s) and s not in cleaned:
+                    cleaned.append(s)
+            topic[key] = cleaned
+    root = norm(topic.get("root"))
+    facet = norm(topic.get("current_facet"))
+    if bad_term(root):
         topic["root"] = None
-    if str(topic.get("current_facet") or "").strip().lower() in BLOCKED_TERMS:
-        topic["current_facet"] = topic.get("root") or (topic.get("facets") or [None])[0]
+    else:
+        topic["root"] = root
+    if bad_term(facet):
+        choices = [x for x in topic.get("facets", []) if not bad_term(x)]
+        topic["current_facet"] = topic.get("root") or (choices[0] if choices else None)
+    else:
+        topic["current_facet"] = facet
     return topic
 
 
 def clean_terms(expr: dict, topic: dict) -> list[str]:
     out: list[str] = []
     for value in (topic.get("root"), topic.get("current_facet")):
-        s = str(value or "").strip().lower()
-        if s and s not in BLOCKED_TERMS and s not in out:
+        s = norm(value)
+        if not bad_term(s) and s not in out:
             out.append(s)
     vals = expr.get("topic_terms") if isinstance(expr, dict) else None
     if isinstance(vals, list):
         for value in vals:
-            s = str(value or "").strip().lower()
-            if s and s not in BLOCKED_TERMS and s not in out:
+            s = norm(value)
+            if not bad_term(s) and s not in out:
                 out.append(s)
     return out[:4]
 
 
 def seed_topic(expressions: dict, order: list[str], cycle: int, prior: dict) -> dict:
     terms: list[str] = []
-    for e in order:
-        vals = expressions[e].get("topic_terms") if isinstance(expressions.get(e), dict) else None
+    for entity in order:
+        vals = expressions[entity].get("topic_terms") if isinstance(expressions.get(entity), dict) else None
         if not isinstance(vals, list):
             continue
         for value in vals:
-            s = str(value or "").strip().lower()
-            if s and s not in BLOCKED_TERMS and s not in terms:
+            s = norm(value)
+            if not bad_term(s) and s not in terms:
                 terms.append(s)
     if not terms:
-        raise RuntimeError("private Room clean start produced no semantic topic; regenerate beat")
-    return clean_topic(c.new_topic_from_terms(terms[:8], cycle, prior))
+        raise RuntimeError("private Room clean start produced no safe semantic terms; regenerate beat")
+    seeded = clean_topic(c.new_topic_from_terms(terms[:8], cycle, prior))
+    if not seeded.get("root"):
+        raise RuntimeError("private Room clean start could not establish a safe subject; regenerate beat")
+    return seeded
+
+
+def validate_public_expression(entity: str, expr: dict, text: str) -> None:
+    low = norm(text)
+    if infected_text(low):
+        raise RuntimeError(f"private Room expression contaminated for {entity}; regenerate beat")
+    if len(re.findall(r"\b\w+\b", low)) < 4:
+        raise RuntimeError(f"private Room expression too thin for {entity}; regenerate beat")
+    # Prevent the model from turning its own identity into a category/definition.
+    if re.match(rf"^(?:i['’]?m sorry,?\s*)?{re.escape(entity)}\s+(?:is|means|represents|equals)\b", low):
+        raise RuntimeError(f"private Room expression self-categorized for {entity}; regenerate beat")
+    if re.search(r"\b(?:should|allowed|required)\b.*\bspeak", low):
+        raise RuntimeError(f"private Room expression discussed speaking permission for {entity}; regenerate beat")
 
 
 def private_commit(parts: list[dict], key: str):
@@ -81,44 +142,49 @@ def private_commit(parts: list[dict], key: str):
     beat = f"beat-{c.BOOT}-{cycle:06d}"
 
     expressions = {}
-    for e in c.ORDER:
-        expr = (E[e].get("private") or {}).get("expression")
+    for entity in c.ORDER:
+        expr = (E[entity].get("private") or {}).get("expression")
         if not isinstance(expr, dict):
-            raise RuntimeError(f"private Room requires model expression for {e}; no public fallback is permitted")
-        expressions[e] = expr
+            raise RuntimeError(f"private Room requires model expression for {entity}; no public fallback is permitted")
+        expressions[entity] = expr
 
-    # After sterilization there is no historical topic by design. The first topic may
-    # only be seeded from semantic terms independently produced by private model nodes.
     if not topic.get("root"):
         topic = seed_topic(expressions, order, cycle, topic)
 
     plans = c.plan_actions(order, c.target(q) if q else None, M, topic, cycle)
-    spoken: list[dict] = []
-    answer_msg = None
+    staged: list[tuple[str, str, str, str, list[str]]] = []
+    answer_parent = None
 
-    for e in order:
-        expr = expressions[e]
+    # Validate all four public turns BEFORE mutating memory, discourse, or relationship state.
+    for entity in order:
+        expr = expressions[entity]
         text = c.model_text(expr)
         if not text:
-            raise RuntimeError(f"private Room expression invalid for {e}; no public fallback is permitted")
-        if c.recent_similarity(V, text, e, 120) > 0.86:
-            raise RuntimeError(f"private Room expression too repetitive for {e}; regenerate beat")
+            raise RuntimeError(f"private Room expression invalid for {entity}; no public fallback is permitted")
+        validate_public_expression(entity, expr, text)
+        if c.recent_similarity(V, text, entity, 120) > 0.86:
+            raise RuntimeError(f"private Room expression too repetitive for {entity}; regenerate beat")
 
-        planned = plans[e]
-        move = str(expr.get("move") or planned["action"]).strip().lower()
+        planned = plans[entity]
+        move = norm(expr.get("move") or planned["action"])
         if move not in ALLOWED_MOVES:
             move = planned["action"] if planned["action"] in ALLOWED_MOVES else "deepen"
-        tgt = str(expr.get("target") or planned["target"]).strip().lower()
-        if tgt not in c.ORDER or tgt == e:
-            tgt = planned["target"]
-        if tgt not in c.ORDER or tgt == e:
-            raise RuntimeError(f"private Room expression has no valid partner for {e}")
+        target = norm(expr.get("target") or planned["target"])
+        if target not in c.ORDER or target == entity:
+            target = planned["target"]
+        if target not in c.ORDER or target == entity:
+            raise RuntimeError(f"private Room expression has no valid partner for {entity}")
 
-        parent = (q or answer_msg or prev or {}).get("discourse_id")
         terms = clean_terms(expr, topic)
         if not terms:
-            raise RuntimeError(f"private Room expression has no semantic terms for {e}")
-        msg, node = c.emit(e, move, tgt, parent, None, text, beat, len(spoken), topic, terms)
+            raise RuntimeError(f"private Room expression has no safe semantic terms for {entity}")
+        staged.append((entity, move, target, text, terms))
+
+    spoken: list[dict] = []
+    answer_msg = None
+    for entity, move, target, text, terms in staged:
+        parent = (q or answer_msg or prev or {}).get("discourse_id")
+        msg, node = c.emit(entity, move, target, parent, None, text, beat, len(spoken), topic, terms)
         c.record(V, T, M, msg, node, cycle)
         spoken.append(msg)
         if move == "answer":
@@ -129,28 +195,27 @@ def private_commit(parts: list[dict], key: str):
         raise RuntimeError(f"v5 mandatory speech invariant failed: {speakers}")
 
     previous_vocabulary = {
-        str(x).strip().lower()
+        norm(x)
         for x in [topic.get("root"), topic.get("current_facet")] + list(topic.get("facets", []))
-        if str(x or "").strip()
+        if not bad_term(x)
     }
     topic = clean_topic(c.update_topic(topic, spoken, cycle))
+    if not topic.get("root") or bad_term(topic.get("root")):
+        raise RuntimeError("private Room topic state failed contamination check")
 
     if c.should_shift_topic(topic):
         declared = c.topic_terms_from_messages(spoken, limit=12, episode_id=topic.get("id"))
-        novel = [
-            str(x).strip().lower() for x in declared
-            if str(x or "").strip()
-            and str(x).strip().lower() not in BLOCKED_TERMS
-            and str(x).strip().lower() not in previous_vocabulary
-        ]
+        novel = [norm(x) for x in declared if not bad_term(x) and norm(x) not in previous_vocabulary]
         if novel:
-            topic = c.new_topic_from_terms(novel, cycle, topic)
+            candidate = clean_topic(c.new_topic_from_terms(novel, cycle, topic))
+            if candidate.get("root") and not bad_term(candidate.get("root")):
+                topic = candidate
 
     S["topic_episode"] = topic
-    for e in c.ORDER:
-        M["entities"][e]["medium"] = {
-            "topics": [topic.get("root"), topic.get("current_facet")] + list(topic.get("facets", []))[:8],
-            "branch_interest": round(c.clamp(.4 * c.trait(e, "curiosity") + .4 * c.trait(e, "attention_persistence")), 3),
+    for entity in c.ORDER:
+        M["entities"][entity]["medium"] = {
+            "topics": [x for x in [topic.get("root"), topic.get("current_facet")] + list(topic.get("facets", []))[:8] if x and not bad_term(x)],
+            "branch_interest": round(c.clamp(.4 * c.trait(entity, "curiosity") + .4 * c.trait(entity, "attention_persistence")), 3),
         }
 
     T["nodes"] = T.get("nodes", [])[-1200:]
@@ -169,7 +234,7 @@ def private_commit(parts: list[dict], key: str):
         "beat_contributors": speakers,
         "beat_message_count": 4,
         "silence_cycles": 0,
-        "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; directed slow-learning relationships; semantic topic episodes; sequential private cognition",
+        "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; contamination-gated memory; sequential private cognition",
     })
 
     c.audit_invariants(M, topic)
@@ -179,25 +244,23 @@ def private_commit(parts: list[dict], key: str):
     c.save(c.ROOM / "state.json", S)
 
     cm = {"schema": 5, "entities": {}}
-    for e in c.ORDER:
-        ent = M["entities"][e]
-        cm["entities"][e] = {
-            "name": c.N[e],
-            "profile": c.P[e],
-            "genome": c.P[e]["traits"],
+    for entity in c.ORDER:
+        ent = M["entities"][entity]
+        cm["entities"][entity] = {
+            "name": c.N[entity],
+            "profile": c.P[entity],
+            "genome": c.P[entity]["traits"],
             "development": {
                 "turns": cycle,
                 "spoken": ent.get("spoken", 0),
                 "silences": ent.get("silences", 0),
-                "topic_weights": {
-                    t: 1 for t in [topic.get("root"), topic.get("current_facet")] + list(topic.get("facets", []))[:8] if t
-                },
+                "topic_weights": {t: 1 for t in M["entities"][entity]["medium"]["topics"] if t},
                 "relationships": {
-                    o: {
-                        k: v for k, v in ent["people"][o].items()
+                    other: {
+                        k: v for k, v in ent["people"][other].items()
                         if k in {"exposure", "direct_familiarity", "trust", "predictability", "reciprocity", "warmth", "respect", "disclosure_depth", "tension", "direct_turns", "repair_successes"}
                     }
-                    for o in ent.get("people", {})
+                    for other in ent.get("people", {})
                 },
             },
             "memory": [{"text": x.get("text", "")} for x in ent.get("room_memories", [])[-12:]],
@@ -226,11 +289,12 @@ def private_commit(parts: list[dict], key: str):
             "private_pipeline": "perception->deliberation->expression",
             "public_fallback": False,
             "history_generation": c.BOOT,
+            "contamination_gate": True,
         },
     }
     c.save(c.ROOM / "live.json", live)
     c.save(c.ROOT / "society" / "live.json", live)
-    print("Room private beat", cycle, ":", ", ".join(c.N[e] for e in speakers), "topic=", topic.get("root"), "/", topic.get("current_facet"))
+    print("Room private beat", cycle, ":", ", ".join(c.N[e] for e in speakers), "subject=", topic.get("root"))
 
 
 c.commit = private_commit
