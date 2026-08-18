@@ -190,7 +190,7 @@ jobs:
             done
 
             env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION \
-              python3 scripts/room_engine_v5.py commit || return 1
+              python3 scripts/room_private_commit.py commit || return 1
             python3 scripts/build_room_feed.py || return 1
           }
 
