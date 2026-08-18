@@ -1,6 +1,6 @@
 {
   "server_ready": true,
-  "phase": "expression",
+  "phase": "commit",
   "ctx_total": 16384,
   "parallel_slots": 2,
   "model_node_batching": true,
@@ -132,15 +132,20 @@
       "stderr": ""
     },
     "8": {
-      "returncode": 1,
+      "returncode": 0,
       "stdout": "",
-      "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 484, in <module>\n    main()\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 464, in main\n    result = sense(node, key) if args.phase == \"sense\" else recurrent(node, key, load(Path(args.bus), {}))\n                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 262, in recurrent\n    expression = model_run(\"expression\", {\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_private_model.py\", line 463, in run\n    raise RuntimeError(f\"private model output rejected for {role}: {last_reason}\")\nRuntimeError: private model output rejected for expression: self_name\n"
+      "stderr": ""
     },
     "11": {
       "returncode": 0,
       "stdout": "",
       "stderr": ""
     }
+  },
+  "commit": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_private_commit.py\", line 328, in <module>\n    c.main()\n  File \"/home/runner/work/me-/me-/scripts/room_engine_v5.py\", line 478, in main\n    commit(parts, key)\n  File \"/home/runner/work/me-/me-/scripts/room_private_commit.py\", line 192, in private_commit\n    raise RuntimeError(f\"private Room expression too repetitive for {entity}; regenerate beat\")\nRuntimeError: private Room expression too repetitive for owen; regenerate beat\n"
   },
   "status": "failed"
 }
