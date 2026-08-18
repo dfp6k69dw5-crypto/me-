@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 805,
+  "cycle": 806,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-18T18:11:54.065910Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-18T18:13:00.266397Z",
   "messages": 1000,
-  "last_public_event": "20260818T181154062-mara-v5",
+  "last_public_event": "20260818T181300264-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000805",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000806",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "congratulations",
+    "current_facet": "friend",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "opinions",
       "current_state",
       "current relationship",
       "future",
@@ -71,7 +70,8 @@
       "reason",
       "counter example",
       "conversation history",
-      "congratulations"
+      "congratulations",
+      "friend"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,19 +84,17 @@
       "owen",
       "jules"
     ],
-    "turns": 1609,
+    "turns": 1611,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "conversation history",
-      "learning",
-      "new information",
       "congratulations",
-      "challenge",
-      "test",
-      "concerned",
-      "surprised",
+      "learning",
       "curiosity",
-      "unexpected counter example"
+      "skepticism",
+      "exception",
+      "test",
+      "other",
+      "friend"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -106,8 +104,17 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 805,
-        "hits": 4515,
+        "last_cycle": 806,
+        "hits": 4531,
+        "status": "open"
+      },
+      {
+        "label": "skepticism",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 806,
+        "hits": 1915,
         "status": "open"
       },
       {
@@ -115,8 +122,89 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 805,
-        "hits": 517,
+        "last_cycle": 806,
+        "hits": 518,
+        "status": "open"
+      },
+      {
+        "label": "public-expression",
+        "parent": "in the position",
+        "depth": 47,
+        "first_cycle": 798,
+        "last_cycle": 806,
+        "hits": 72,
+        "status": "open"
+      },
+      {
+        "label": "active claim",
+        "parent": "public-expression",
+        "depth": 48,
+        "first_cycle": 799,
+        "last_cycle": 806,
+        "hits": 46,
+        "status": "open"
+      },
+      {
+        "label": "counter example",
+        "parent": "reason",
+        "depth": 51,
+        "first_cycle": 802,
+        "last_cycle": 806,
+        "hits": 35,
+        "status": "open"
+      },
+      {
+        "label": "counterexample",
+        "parent": "active claim",
+        "depth": 49,
+        "first_cycle": 800,
+        "last_cycle": 806,
+        "hits": 34,
+        "status": "open"
+      },
+      {
+        "label": "conversation history",
+        "parent": "counter example",
+        "depth": 52,
+        "first_cycle": 803,
+        "last_cycle": 806,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "reason",
+        "parent": "counterexample",
+        "depth": 50,
+        "first_cycle": 801,
+        "last_cycle": 806,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "unexpected",
+        "parent": "counter example",
+        "depth": 52,
+        "first_cycle": 803,
+        "last_cycle": 806,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "congratulations",
+        "parent": "conversation history",
+        "depth": 53,
+        "first_cycle": 805,
+        "last_cycle": 806,
+        "hits": 5,
+        "status": "open"
+      },
+      {
+        "label": "friend",
+        "parent": "congratulations",
+        "depth": 54,
+        "first_cycle": 806,
+        "last_cycle": 806,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -129,84 +217,12 @@
         "status": "open"
       },
       {
-        "label": "public-expression",
-        "parent": "in the position",
-        "depth": 47,
-        "first_cycle": 798,
-        "last_cycle": 805,
-        "hits": 69,
-        "status": "open"
-      },
-      {
-        "label": "active claim",
-        "parent": "public-expression",
-        "depth": 48,
-        "first_cycle": 799,
-        "last_cycle": 805,
-        "hits": 44,
-        "status": "open"
-      },
-      {
-        "label": "counterexample",
-        "parent": "active claim",
-        "depth": 49,
-        "first_cycle": 800,
-        "last_cycle": 805,
-        "hits": 33,
-        "status": "open"
-      },
-      {
-        "label": "counter example",
-        "parent": "reason",
-        "depth": 51,
-        "first_cycle": 802,
-        "last_cycle": 805,
-        "hits": 26,
-        "status": "open"
-      },
-      {
-        "label": "reason",
-        "parent": "counterexample",
-        "depth": 50,
-        "first_cycle": 801,
-        "last_cycle": 805,
-        "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "conversation history",
-        "parent": "counter example",
-        "depth": 52,
-        "first_cycle": 803,
-        "last_cycle": 805,
-        "hits": 15,
-        "status": "open"
-      },
-      {
         "label": "activity",
         "parent": "public-expression",
         "depth": 48,
         "first_cycle": 799,
         "last_cycle": 805,
         "hits": 9,
-        "status": "open"
-      },
-      {
-        "label": "unexpected",
-        "parent": "counter example",
-        "depth": 52,
-        "first_cycle": 803,
-        "last_cycle": 805,
-        "hits": 4,
-        "status": "open"
-      },
-      {
-        "label": "congratulations",
-        "parent": "conversation history",
-        "depth": 53,
-        "first_cycle": 805,
-        "last_cycle": 805,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -252,15 +268,6 @@
         "first_cycle": 803,
         "last_cycle": 803,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "skepticism",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 802,
-        "hits": 1914,
         "status": "open"
       },
       {
@@ -523,19 +530,9 @@
         "last_cycle": 776,
         "hits": 24,
         "status": "open"
-      },
-      {
-        "label": "new ideas",
-        "parent": "new stuff",
-        "depth": 99,
-        "first_cycle": 767,
-        "last_cycle": 775,
-        "hits": 39,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "exciting about something new",
       "personal growth",
       "excuse",
       "excitement",
@@ -566,10 +563,11 @@
       "counterexample",
       "reason",
       "counter example",
-      "conversation history"
+      "conversation history",
+      "congratulations"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 805,
+    "last_branch_cycle": 806,
     "escape_pressure": 0
   }
 }
