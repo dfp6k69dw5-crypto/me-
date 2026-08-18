@@ -4,7 +4,7 @@
  const parts=['01','02','03','04','05','06','07','08a','08b','09'];
  let b='';
  for(const n of parts){
-   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817c',{cache:'no-store'});
+   const r=await fetch('resonator-parts/'+n+'.txt?v=20260817e',{cache:'no-store'});
    if(!r.ok) throw new Error('Missing payload part '+n);
    b+=(await r.text()).trim();
  }
@@ -21,13 +21,11 @@
  text=text.replace("if(cursor<now+0.06){ if(cursor>0) DIAG.under++; cursor=now+0.20; }","if(cursor<now+0.12){ if(cursor>0) DIAG.under++; cursor=now+0.45; }");
  text=text.replace("while(cursor<now+0.70){","while(cursor<now+1.20){");
 
- // Keep the entire playing body visible on a phone while still using most of the stage.
- text=text.replace("flex:0 0 38vh;min-height:230px","flex:0 0 68dvh;min-height:390px");
+ // Full-body mobile fit with enough room left for drawers.
+ text=text.replace("flex:0 0 38vh;min-height:230px","flex:0 0 54dvh;min-height:320px");
  text=text.replaceAll("Math.min(W,H)*0.86","Math.min(W*0.94,H*0.90)");
  text=text.replace("display:flex;flex-wrap:wrap;gap:4px","display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px");
  text=text.replace("font-size:10px;letter-spacing:.06em;padding:9px 10px;min-height:36px","font-size:9px;letter-spacing:.04em;padding:6px 8px;min-height:30px;flex:0 0 auto");
- text=text.replace('<div id="deck">','<div id="deck" class="shut">');
- text=text.replace('<button id="handle" aria-expanded="true"><span>Keys</span><b>&#9662;</b></button>','<button id="handle" aria-expanded="false"><span>Keys</span><b>&#9652;</b></button>');
 
  // Preserve the continuous mobile orbit behavior if the payload still has the older gesture constants.
  text=text.replace("camRotate(1,(e.clientX-drag.x)*0.008);","camRotate(1,(e.clientX-drag.x)*0.017);");
@@ -65,6 +63,69 @@ return {P,F,S,axis:0,mic:rings[3][1],hit:rings[6][Math.floor(C/2)],needSub:0.000
  if(!text.includes("'Milk Silo':{")){
    text=text.replace("Twins:{min:5,",milkSilo+"Twins:{min:5,");
  }
+
+ // Phone drawers: controls, keys and stage tools can be opened independently.
+ const foldCss=`<style id="res-mobile-folds">
+@media(max-width:800px){
+ #resControlToggle{width:100%;height:34px;border:0;border-top:1px solid rgba(82,205,221,.35);border-bottom:1px solid rgba(82,205,221,.28);background:#0A1223;color:#9EABC5;font:11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.22em;text-align:center;}
+ #mobileControlsWrap{max-height:31dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:#08101F;}
+ #mobileControlsWrap.mobile-collapsed{display:none!important;}
+ #resToolToggle{position:absolute;right:10px;bottom:10px;z-index:30;border:1px solid rgba(82,205,221,.6);border-radius:4px;background:rgba(8,16,31,.88);color:#B8C4D8;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;padding:7px 9px;backdrop-filter:blur(8px);}
+ #deck.mobile-shut>*:not(#handle){display:none!important;}
+ #deck #handle{min-height:38px!important;}
+}
+</style>`;
+ text=text.replace('</head>',foldCss+'</head>');
+ const foldJs=`<script>(function(){
+ const stage=document.getElementById('stage');
+ const tabs=document.getElementById('tabs');
+ const deck=document.getElementById('deck');
+ if(tabs&&deck&&tabs.parentNode===deck.parentNode&&!document.getElementById('mobileControlsWrap')){
+   const parent=tabs.parentNode;
+   const wrap=document.createElement('div');wrap.id='mobileControlsWrap';
+   parent.insertBefore(wrap,tabs);
+   let n=tabs;
+   while(n&&n!==deck){const next=n.nextSibling;wrap.appendChild(n);n=next;}
+   const toggle=document.createElement('button');toggle.id='resControlToggle';toggle.type='button';
+   parent.insertBefore(toggle,wrap);
+   const setOpen=function(open){
+     wrap.classList.toggle('mobile-collapsed',!open);
+     toggle.textContent=open?'CONTROLS  ▾':'CONTROLS  ▸';
+     toggle.setAttribute('aria-expanded',open?'true':'false');
+     if(stage){stage.style.flexBasis=open?'54dvh':'72dvh';stage.style.minHeight=open?'320px':'410px';}
+   };
+   setOpen(true);
+   toggle.addEventListener('click',function(){setOpen(wrap.classList.contains('mobile-collapsed'));});
+ }
+ if(deck){
+   deck.classList.add('mobile-shut');
+   const h=document.getElementById('handle');
+   if(h){
+     h.setAttribute('aria-expanded','false');
+     const b=h.querySelector('b');if(b)b.textContent='▸';
+     h.addEventListener('click',function(e){
+       e.preventDefault();e.stopImmediatePropagation();
+       const shut=deck.classList.toggle('mobile-shut');
+       h.setAttribute('aria-expanded',shut?'false':'true');
+       const bb=h.querySelector('b');if(bb)bb.textContent=shut?'▸':'▾';
+     },true);
+   }
+ }
+ if(stage&&!document.getElementById('resToolToggle')){
+   const wanted=['orbit','strike','mic','move','link','pin','reset view'];
+   const buttons=[...stage.querySelectorAll('button')].filter(function(b){return wanted.includes((b.textContent||'').trim().toLowerCase());});
+   if(buttons.length>=4){
+     let row=buttons[0].parentElement;
+     while(row&&row!==stage&&!buttons.every(function(b){return row.contains(b);})){row=row.parentElement;}
+     if(row&&row!==stage){
+       const t=document.createElement('button');t.id='resToolToggle';t.type='button';t.textContent='TOOLS  ▾';stage.appendChild(t);
+       let shown=true;
+       t.addEventListener('click',function(e){e.stopPropagation();shown=!shown;row.style.display=shown?'':'none';t.textContent=shown?'TOOLS  ▾':'TOOLS  ▸';});
+     }
+   }
+ }
+})();<\/script>`;
+ text=text.replace('</body>',foldJs+'</body>');
 
  document.open();document.write(text);document.close();
 }catch(e){
