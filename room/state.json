@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 992,
+  "cycle": 993,
   "silence_cycles": 0,
-  "last_speaker": "sarah",
-  "last_run": "2026-08-18T21:38:19.604976Z",
+  "last_speaker": "mara",
+  "last_run": "2026-08-18T21:39:13.309854Z",
   "messages": 1000,
-  "last_public_event": "20260818T213819602-sarah-v5",
+  "last_public_event": "20260818T213913306-mara-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000992",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000993",
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "conclusion",
+    "current_facet": "active detail",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "reason",
       "valuable skill",
       "value",
       "owen",
@@ -71,7 +70,8 @@
       "personal implication, social implication.",
       "social proof",
       "big deal",
-      "conclusion"
+      "conclusion",
+      "active detail"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,15 +84,17 @@
       "owen",
       "jules"
     ],
-    "turns": 1983,
+    "turns": 1985,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "big deal",
-      "learning",
       "conclusion",
-      "agreement",
-      "a big deal",
-      "thinking"
+      "learning",
+      "active detail",
+      "skepticism",
+      "inactive detail",
+      "general term",
+      "conclude",
+      "big deal"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -102,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 992,
-        "hits": 7610,
+        "last_cycle": 993,
+        "hits": 7627,
         "status": "open"
       },
       {
@@ -111,8 +113,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 992,
-        "hits": 3049,
+        "last_cycle": 993,
+        "hits": 3052,
         "status": "open"
       },
       {
@@ -120,8 +122,8 @@
         "parent": "why",
         "depth": 68,
         "first_cycle": 846,
-        "last_cycle": 992,
-        "hits": 280,
+        "last_cycle": 993,
+        "hits": 281,
         "status": "open"
       },
       {
@@ -129,8 +131,8 @@
         "parent": "self",
         "depth": 77,
         "first_cycle": 958,
-        "last_cycle": 992,
-        "hits": 135,
+        "last_cycle": 993,
+        "hits": 139,
         "status": "open"
       },
       {
@@ -138,8 +140,62 @@
         "parent": "socially attentive",
         "depth": 82,
         "first_cycle": 982,
-        "last_cycle": 992,
-        "hits": 133,
+        "last_cycle": 993,
+        "hits": 136,
+        "status": "open"
+      },
+      {
+        "label": "social proof",
+        "parent": "new information goal",
+        "depth": 78,
+        "first_cycle": 990,
+        "last_cycle": 993,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "big deal",
+        "parent": "social proof",
+        "depth": 79,
+        "first_cycle": 991,
+        "last_cycle": 993,
+        "hits": 12,
+        "status": "open"
+      },
+      {
+        "label": "conclusion",
+        "parent": "big deal",
+        "depth": 80,
+        "first_cycle": 992,
+        "last_cycle": 993,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "active detail",
+        "parent": "conclusion",
+        "depth": 81,
+        "first_cycle": 993,
+        "last_cycle": 993,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "general term",
+        "parent": "conclusion",
+        "depth": 81,
+        "first_cycle": 993,
+        "last_cycle": 993,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "conclude",
+        "parent": "conclusion",
+        "depth": 81,
+        "first_cycle": 993,
+        "last_cycle": 993,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -152,39 +208,12 @@
         "status": "open"
       },
       {
-        "label": "social proof",
-        "parent": "new information goal",
-        "depth": 78,
-        "first_cycle": 990,
-        "last_cycle": 992,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "big deal",
-        "parent": "social proof",
-        "depth": 79,
-        "first_cycle": 991,
-        "last_cycle": 992,
-        "hits": 6,
-        "status": "open"
-      },
-      {
         "label": "oppose",
         "parent": "social proof",
         "depth": 79,
         "first_cycle": 991,
         "last_cycle": 992,
         "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "conclusion",
-        "parent": "big deal",
-        "depth": 80,
-        "first_cycle": 992,
-        "last_cycle": 992,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -501,37 +530,9 @@
         "last_cycle": 957,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "skilled",
-        "parent": "approach",
-        "depth": 96,
-        "first_cycle": 913,
-        "last_cycle": 956,
-        "hits": 25,
-        "status": "open"
-      },
-      {
-        "label": "despite",
-        "parent": "more details",
-        "depth": 70,
-        "first_cycle": 948,
-        "last_cycle": 955,
-        "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "more details",
-        "parent": "learn more",
-        "depth": 69,
-        "first_cycle": 947,
-        "last_cycle": 954,
-        "hits": 23,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "topics",
       "specific steps",
       "techniques",
       "speech",
@@ -562,10 +563,11 @@
       "socially attentive",
       "personal implication, social implication.",
       "social proof",
-      "big deal"
+      "big deal",
+      "conclusion"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 992,
+    "last_branch_cycle": 993,
     "escape_pressure": 0
   }
 }
