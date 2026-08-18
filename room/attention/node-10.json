@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-18T19:00:30.465471+00:00",
-  "cycle_key": "32153618883:1:199",
+  "generated_at": "2026-08-18T19:01:36.992968+00:00",
+  "cycle_key": "32153618883:1:200",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -53,6 +53,13 @@
           "matched": [
             "relationship"
           ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
+          ],
           "weight": 0.92
         },
         {
@@ -63,18 +70,11 @@
           "weight": 0.64
         },
         {
-          "kind": "topic",
+          "kind": "message",
           "matched": [
             "relationship"
           ],
-          "weight": 0.58
-        },
-        {
-          "kind": "topic_support",
-          "matched": [
-            "trust"
-          ],
-          "weight": 0.38
+          "weight": 0.46
         }
       ]
     },
@@ -82,10 +82,10 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "conversation"
       ],
@@ -95,7 +95,7 @@
           "matched": [
             "conversation"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -109,13 +109,6 @@
           "matched": [
             "conversation"
           ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
           "weight": 0.64
         },
         {
@@ -123,12 +116,12 @@
           "matched": [
             "conversation"
           ],
-          "weight": 0.54
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "02c6e7f6d688",
+  "context_fingerprint": "c7ff41bad4d3",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 882,
   "approx_added_tokens": 220
