@@ -1,5 +1,5 @@
 name: Deploy validated Room Worker
-# self-reporting deployment gate: 2026-08-19
+# self-reporting deployment gate plus live Allen auth probe: 2026-08-19
 
 on:
   push:
@@ -42,6 +42,25 @@ jobs:
             echo 'available=false' >> "$GITHUB_OUTPUT"
             echo 'Cloudflare deployment credentials are not available in the expected GitHub Actions secret/variable names.'
           fi
+
+      - name: Probe live Allen auth without a credential
+        id: allen_auth
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          code=$(curl -sS --connect-timeout 3 --max-time 8 \
+            -o /tmp/allen-auth-response.json \
+            -w '%{http_code}' \
+            "${ROOM_RELAY_URL}/api/allen/auth")
+          rc=$?
+          set -e
+          echo "http_code=${code}" >> "$GITHUB_OUTPUT"
+          echo "curl_rc=${rc}" >> "$GITHUB_OUTPUT"
+          echo "Allen auth HTTP ${code}; curl rc ${rc}"
+          cat /tmp/allen-auth-response.json 2>/dev/null || true
+          test "$rc" -eq 0
 
       - name: Refuse unvalidated Worker source
         id: validate
@@ -126,12 +145,22 @@ jobs:
           DEPLOY_OUTCOME: ${{ steps.deploy_worker.outcome }}
           INGEST_OUTCOME: ${{ steps.ingest.outcome }}
           VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          ALLEN_AUTH_OUTCOME: ${{ steps.allen_auth.outcome }}
+          ALLEN_AUTH_HTTP: ${{ steps.allen_auth.outputs.http_code }}
+          ALLEN_AUTH_CURL_RC: ${{ steps.allen_auth.outputs.curl_rc }}
         run: |
           mkdir -p room
           python3 - <<'PY'
           import json, os, subprocess
           from datetime import datetime, timezone
           creds=os.environ.get('CREDS_AVAILABLE')=='true'
+          auth={}
+          try:
+              auth=json.load(open('/tmp/allen-auth-response.json'))
+          except Exception:
+              pass
+          auth_http=str(os.environ.get('ALLEN_AUTH_HTTP') or '')
+          allen_live=(auth_http=='401' and auth.get('error')=='unauthorized')
           out={
             'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
             'worker':'room-live-mirror',
@@ -141,8 +170,18 @@ jobs:
             'deploy':os.environ.get('DEPLOY_OUTCOME') or 'skipped',
             'ingest':os.environ.get('INGEST_OUTCOME') or 'skipped',
             'verify':os.environ.get('VERIFY_OUTCOME') or 'skipped',
+            'allen_auth_transport':os.environ.get('ALLEN_AUTH_OUTCOME') or 'skipped',
+            'allen_auth_http':auth_http,
+            'allen_auth_error':auth.get('error'),
+            'allen_auth_fallback_live':allen_live,
           }
           out['pass']=creds and out['validate']=='success' and out['deploy']=='success' and out['ingest']=='success' and out['verify']=='success'
+          if allen_live:
+              out['allen_state']='fallback-capable-worker-live'
+          elif auth.get('error')=='allen-key-not-configured':
+              out['allen_state']='old-secret-only-worker-live'
+          else:
+              out['allen_state']='live-auth-state-unresolved'
           out['state']='deployed-and-verified' if out['pass'] else ('missing-github-cloudflare-credentials' if not creds else 'deployment-or-verification-failed')
           open('room/cloudflare-deploy-status.json','w').write(json.dumps(out,indent=2)+'\n')
           print(json.dumps(out,indent=2))
