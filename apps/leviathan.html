@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="leviathan.css?v=20260819b">
-
 </head>
 <body>
 
@@ -38,6 +37,17 @@
 
 <button class="power" id="power">POWER ON</button>
 
+<div id="classicQuick" style="margin:12px;padding:12px;border:1px solid #38455F;background:#0C111C">
+  <div style="font-family:Oswald,sans-serif;font-size:15px;letter-spacing:.16em;color:#C9D3E6;margin-bottom:3px">CLASSICAL AUTO-PLAY</div>
+  <div style="font-size:10px;color:#68758F;margin-bottom:10px">Tap one. LEVIATHAN powers itself on and performs for about 70 seconds.</div>
+  <div style="display:grid;grid-template-columns:1fr;gap:7px">
+    <button class="btn" style="width:100%;text-align:left;padding:13px" onclick="window.playLeviathanClassic&&window.playLeviathanClassic('bach')">▶ BACH — PRELUDE IN C · ~71 SEC</button>
+    <button class="btn" style="width:100%;text-align:left;padding:13px" onclick="window.playLeviathanClassic&&window.playLeviathanClassic('moon')">▶ BEETHOVEN — MOONLIGHT · ~75 SEC</button>
+    <button class="btn" style="width:100%;text-align:left;padding:13px" onclick="window.playLeviathanClassic&&window.playLeviathanClassic('satie')">▶ SATIE — GYMNOPÉDIE NO. 1 · ~72 SEC</button>
+    <button class="btn on" style="width:100%;padding:13px" onclick="window.playLeviathanAll&&window.playLeviathanAll()">▶▶ PLAY ALL THREE · ~3½ MIN</button>
+  </div>
+</div>
+
 <div class="kbwrap" id="kbwrap" style="display:none">
   <div class="kbrow kb-acc" id="kbAcc"></div>
   <div class="kbrow kb-nat" id="kbNat"></div>
@@ -63,6 +73,6 @@
 <script src="leviathan-core.js?v=20260819b"></script>
 <script src="leviathan-ui.js?v=20260819b"></script>
 <script src="leviathan-checks.js?v=20260819b"></script>
-<script src="leviathan-classics.js?v=20260819c"></script>
+<script src="leviathan-classics.js?v=20260819d"></script>
 </body>
 </html>
