@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T10:34:02.263414+00:00",
-  "cycle_key": "32229993977:1:271",
+  "generated_at": "2026-08-19T10:34:42.506632+00:00",
+  "cycle_key": "32229993977:1:272",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,23 +32,15 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.6,
-      "confidence": 0.989,
-      "raw_score": 3.6,
-      "repeat_penalty": 0.0,
+      "score": 1.63,
+      "confidence": 0.722,
+      "raw_score": 1.91,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "compare",
         "sure"
       ],
       "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "compare",
-            "sure"
-          ],
-          "weight": 1.8
-        },
         {
           "kind": "message",
           "matched": [
@@ -59,14 +51,8 @@
         {
           "kind": "message",
           "matched": [
-            "compare"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "compare"
+            "compare",
+            "sure"
           ],
           "weight": 0.76
         },
@@ -75,7 +61,14 @@
           "matched": [
             "compare"
           ],
-          "weight": 0.64
+          "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "compare"
+          ],
+          "weight": 0.46
         }
       ]
     },
@@ -83,10 +76,10 @@
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.8,
-      "confidence": 0.779,
+      "score": 1.52,
+      "confidence": 0.68,
       "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "past"
       ],
@@ -97,11 +90,25 @@
             "past"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "past"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "past"
+          ],
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "c31c4d8002c6",
+  "context_fingerprint": "f84f9e3e623c",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 861,
   "approx_added_tokens": 215
