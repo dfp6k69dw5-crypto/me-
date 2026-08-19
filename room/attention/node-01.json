@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T04:41:26.527004+00:00",
-  "cycle_key": "32208320454:1:228",
+  "generated_at": "2026-08-19T04:42:06.148356+00:00",
+  "cycle_key": "32208320454:1:229",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,35 +32,41 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.44,
-      "confidence": 0.985,
-      "raw_score": 3.44,
-      "repeat_penalty": 0.0,
+      "score": 1.51,
+      "confidence": 0.677,
+      "raw_score": 1.79,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "evidence",
         "reason",
-        "because"
+        "evidence"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "reason"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "reason"
+          ],
+          "weight": 0.92
+        },
         {
           "kind": "message",
           "matched": [
             "evidence",
             "reason"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "because"
-          ],
-          "weight": 0.54
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "a01de4282a75",
+  "context_fingerprint": "9dd1b2ed815e",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 529,
   "approx_added_tokens": 132
