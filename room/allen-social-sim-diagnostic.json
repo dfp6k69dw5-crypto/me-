@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-19T23:32:45.456192Z",
+  "checked_at": "2026-08-19T23:34:43.953862Z",
   "pass": false,
   "exit_code": 1,
   "output": "PASS: autonomous generator iteration remains exactly four entities\nPASS: Allen is not generated as an autonomous entity\nPASS: engine participant set contains Allen\nTraceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 117, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 32, in main\n    require(\"social participant set contains Allen\", social_participants == PARTICIPANTS, social_participants)\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 21, in require\n    raise AssertionError(f\"{name}: {detail}\")\nAssertionError: social participant set contains Allen: ()\n"
