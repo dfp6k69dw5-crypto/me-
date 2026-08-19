@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T18:37:59.640468+00:00",
-  "cycle_key": "32263398867:1:371",
+  "generated_at": "2026-08-19T18:38:34.599628+00:00",
+  "cycle_key": "32263398867:1:372",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,29 +29,50 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
+      "domain": "interaction",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "compare"
+        "conversation"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "compare"
+            "conversation"
           ],
-          "weight": 1.15
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "441dc28710ce",
+  "context_fingerprint": "32086be8b672",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 521,
+  "approx_added_tokens": 130
 }
