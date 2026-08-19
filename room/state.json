@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2662,
+  "cycle": 2663,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-19T17:51:27.188639Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-19T17:52:05.191958Z",
   "messages": 1000,
-  "last_public_event": "20260819T175127186-jules-v5",
+  "last_public_event": "20260819T175205190-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002662",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002663",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -84,18 +84,18 @@
       "owen",
       "jules"
     ],
-    "turns": 5323,
+    "turns": 5325,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "application",
-      "learning",
-      "legal concepts",
-      "cases",
-      "specific",
-      "legal and nonlegal concepts set",
-      "test exception",
       "description of what this turn should add test",
-      "legal and nonlegal concepts"
+      "learning",
+      "legal and nonlegal concepts",
+      "curiosity",
+      "skepticism",
+      "specific cases",
+      "rules and procedures",
+      "rules",
+      "set"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -105,8 +105,26 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2662,
-        "hits": 34929,
+        "last_cycle": 2663,
+        "hits": 34945,
+        "status": "open"
+      },
+      {
+        "label": "skepticism",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 2663,
+        "hits": 9803,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "curious",
+        "depth": 281,
+        "first_cycle": 1640,
+        "last_cycle": 2663,
+        "hits": 1573,
         "status": "open"
       },
       {
@@ -114,8 +132,80 @@
         "parent": "new information goal",
         "depth": 321,
         "first_cycle": 2643,
-        "last_cycle": 2662,
-        "hits": 189,
+        "last_cycle": 2663,
+        "hits": 193,
+        "status": "open"
+      },
+      {
+        "label": "new stuff",
+        "parent": "large number of rules and examples",
+        "depth": 321,
+        "first_cycle": 2657,
+        "last_cycle": 2663,
+        "hits": 37,
+        "status": "open"
+      },
+      {
+        "label": "concepts",
+        "parent": "system",
+        "depth": 318,
+        "first_cycle": 2653,
+        "last_cycle": 2663,
+        "hits": 36,
+        "status": "open"
+      },
+      {
+        "label": "large number of rules and examples",
+        "parent": "understand",
+        "depth": 320,
+        "first_cycle": 2656,
+        "last_cycle": 2663,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "set of rules and procedures",
+        "parent": "new stuff",
+        "depth": 322,
+        "first_cycle": 2659,
+        "last_cycle": 2663,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "core concept",
+        "parent": "set of rules and procedures",
+        "depth": 323,
+        "first_cycle": 2660,
+        "last_cycle": 2663,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "application",
+        "parent": "core concept",
+        "depth": 324,
+        "first_cycle": 2661,
+        "last_cycle": 2663,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "description of what this turn should add test",
+        "parent": "application",
+        "depth": 325,
+        "first_cycle": 2662,
+        "last_cycle": 2663,
+        "hits": 5,
+        "status": "open"
+      },
+      {
+        "label": "specific cases",
+        "parent": "set of rules and procedures",
+        "depth": 323,
+        "first_cycle": 2660,
+        "last_cycle": 2663,
+        "hits": 4,
         "status": "open"
       },
       {
@@ -128,84 +218,12 @@
         "status": "open"
       },
       {
-        "label": "new stuff",
-        "parent": "large number of rules and examples",
-        "depth": 321,
-        "first_cycle": 2657,
-        "last_cycle": 2662,
-        "hits": 36,
-        "status": "open"
-      },
-      {
-        "label": "concepts",
-        "parent": "system",
-        "depth": 318,
-        "first_cycle": 2653,
-        "last_cycle": 2662,
-        "hits": 27,
-        "status": "open"
-      },
-      {
         "label": "understand",
         "parent": "laws",
         "depth": 319,
         "first_cycle": 2655,
         "last_cycle": 2662,
         "hits": 25,
-        "status": "open"
-      },
-      {
-        "label": "large number of rules and examples",
-        "parent": "understand",
-        "depth": 320,
-        "first_cycle": 2656,
-        "last_cycle": 2662,
-        "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "set of rules and procedures",
-        "parent": "new stuff",
-        "depth": 322,
-        "first_cycle": 2659,
-        "last_cycle": 2662,
-        "hits": 18,
-        "status": "open"
-      },
-      {
-        "label": "core concept",
-        "parent": "set of rules and procedures",
-        "depth": 323,
-        "first_cycle": 2660,
-        "last_cycle": 2662,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "application",
-        "parent": "core concept",
-        "depth": 324,
-        "first_cycle": 2661,
-        "last_cycle": 2662,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "specific cases",
-        "parent": "set of rules and procedures",
-        "depth": 323,
-        "first_cycle": 2660,
-        "last_cycle": 2662,
-        "hits": 3,
-        "status": "open"
-      },
-      {
-        "label": "description of what this turn should add test",
-        "parent": "application",
-        "depth": 325,
-        "first_cycle": 2662,
-        "last_cycle": 2662,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -224,15 +242,6 @@
         "first_cycle": 2652,
         "last_cycle": 2661,
         "hits": 7,
-        "status": "open"
-      },
-      {
-        "label": "skepticism",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 2660,
-        "hits": 9802,
         "status": "open"
       },
       {
@@ -278,15 +287,6 @@
         "first_cycle": 2657,
         "last_cycle": 2657,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "curious",
-        "depth": 281,
-        "first_cycle": 1640,
-        "last_cycle": 2656,
-        "hits": 1572,
         "status": "open"
       },
       {
@@ -567,7 +567,7 @@
       "core concept",
       "application"
     ],
-    "focus_turns": 0,
+    "focus_turns": 2,
     "last_branch_cycle": 2662,
     "escape_pressure": 0
   }
