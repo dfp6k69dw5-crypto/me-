@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1708,
+  "cycle": 1709,
   "silence_cycles": 0,
-  "last_speaker": "sarah",
-  "last_run": "2026-08-19T06:56:50.503355Z",
+  "last_speaker": "mara",
+  "last_run": "2026-08-19T06:57:23.184210Z",
   "messages": 1000,
-  "last_public_event": "20260819T065650502-sarah-v5",
+  "last_public_event": "20260819T065723183-mara-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001708",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001709",
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "related",
+    "current_facet": "socrates",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "new information goal",
       "testing",
       "false",
       "indicators",
@@ -71,7 +70,8 @@
       "human",
       "research",
       "key factor",
-      "related"
+      "related",
+      "socrates"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,14 +84,16 @@
       "owen",
       "jules"
     ],
-    "turns": 3415,
-    "low_novelty_beats": 1,
+    "turns": 3417,
+    "low_novelty_beats": 0,
     "recent_terms": [
       "related",
       "learning",
-      "field of learning",
+      "field of study",
+      "socrates",
       "curiosity",
-      "curiosity is a key concept that has become fundamental in the field of learning"
+      "key concept",
+      "field of learning"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -101,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 1708,
-        "hits": 19357,
+        "last_cycle": 1709,
+        "hits": 19381,
         "status": "open"
       },
       {
@@ -110,8 +112,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 1708,
-        "hits": 6286,
+        "last_cycle": 1709,
+        "hits": 6287,
         "status": "open"
       },
       {
@@ -119,8 +121,8 @@
         "parent": "owen",
         "depth": 223,
         "first_cycle": 1399,
-        "last_cycle": 1708,
-        "hits": 411,
+        "last_cycle": 1709,
+        "hits": 413,
         "status": "open"
       },
       {
@@ -128,8 +130,17 @@
         "parent": "curious",
         "depth": 281,
         "first_cycle": 1640,
-        "last_cycle": 1708,
-        "hits": 218,
+        "last_cycle": 1709,
+        "hits": 229,
+        "status": "open"
+      },
+      {
+        "label": "concept",
+        "parent": "explain",
+        "depth": 259,
+        "first_cycle": 1694,
+        "last_cycle": 1709,
+        "hits": 65,
         "status": "open"
       },
       {
@@ -137,8 +148,8 @@
         "parent": "research",
         "depth": 266,
         "first_cycle": 1703,
-        "last_cycle": 1708,
-        "hits": 47,
+        "last_cycle": 1709,
+        "hits": 51,
         "status": "open"
       },
       {
@@ -146,8 +157,35 @@
         "parent": "emotion",
         "depth": 263,
         "first_cycle": 1700,
-        "last_cycle": 1708,
-        "hits": 45,
+        "last_cycle": 1709,
+        "hits": 48,
+        "status": "open"
+      },
+      {
+        "label": "related",
+        "parent": "key factor",
+        "depth": 267,
+        "first_cycle": 1706,
+        "last_cycle": 1709,
+        "hits": 28,
+        "status": "open"
+      },
+      {
+        "label": "research",
+        "parent": "human",
+        "depth": 265,
+        "first_cycle": 1702,
+        "last_cycle": 1709,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "socrates",
+        "parent": "related",
+        "depth": 268,
+        "first_cycle": 1709,
+        "last_cycle": 1709,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -157,33 +195,6 @@
         "first_cycle": 1701,
         "last_cycle": 1708,
         "hits": 25,
-        "status": "open"
-      },
-      {
-        "label": "research",
-        "parent": "human",
-        "depth": 265,
-        "first_cycle": 1702,
-        "last_cycle": 1708,
-        "hits": 21,
-        "status": "open"
-      },
-      {
-        "label": "related",
-        "parent": "key factor",
-        "depth": 267,
-        "first_cycle": 1706,
-        "last_cycle": 1708,
-        "hits": 15,
-        "status": "open"
-      },
-      {
-        "label": "concept",
-        "parent": "explain",
-        "depth": 259,
-        "first_cycle": 1694,
-        "last_cycle": 1707,
-        "hits": 64,
         "status": "open"
       },
       {
@@ -518,19 +529,9 @@
         "last_cycle": 1679,
         "hits": 2,
         "status": "open"
-      },
-      {
-        "label": "false",
-        "parent": "testing",
-        "depth": 225,
-        "first_cycle": 1667,
-        "last_cycle": 1674,
-        "hits": 22,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "new phenomenon",
       "history",
       "jules",
       "well known",
@@ -561,10 +562,11 @@
       "field",
       "human",
       "research",
-      "key factor"
+      "key factor",
+      "related"
     ],
-    "focus_turns": 4,
-    "last_branch_cycle": 1706,
+    "focus_turns": 0,
+    "last_branch_cycle": 1709,
     "escape_pressure": 0
   }
 }
