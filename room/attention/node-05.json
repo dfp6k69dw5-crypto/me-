@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T18:54:34.608651+00:00",
-  "cycle_key": "32263398867:1:396",
+  "generated_at": "2026-08-19T18:55:15.628948+00:00",
+  "cycle_key": "32263398867:1:397",
   "node": 5,
   "entity": "mara",
   "role": "expression",
@@ -32,27 +32,43 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 1.84,
-      "confidence": 0.76,
-      "raw_score": 1.84,
+      "score": 4.06,
+      "confidence": 0.994,
+      "raw_score": 4.06,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "answer",
-        "conversation"
+        "conversation",
+        "question",
+        "answer"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "question",
+            "conversation"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.45
+        },
         {
           "kind": "message",
           "matched": [
             "answer",
             "conversation"
           ],
-          "weight": 0.92
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "3fc9a27cf611",
+  "context_fingerprint": "30025cabef8e",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 521,
   "approx_added_tokens": 130
