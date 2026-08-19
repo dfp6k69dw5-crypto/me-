@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T07:46:15.976787+00:00",
-  "cycle_key": "32208320454:1:531",
+  "generated_at": "2026-08-19T07:46:52.686303+00:00",
+  "cycle_key": "32208320454:1:532",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,15 +32,13 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.45,
-      "confidence": 0.986,
-      "raw_score": 3.45,
-      "repeat_penalty": 0.0,
+      "score": 1.63,
+      "confidence": 0.722,
+      "raw_score": 1.91,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "compare",
-        "evidence",
-        "reason",
-        "why"
+        "evidence"
       ],
       "evidence_sources": [
         {
@@ -49,20 +47,6 @@
             "compare"
           ],
           "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "evidence"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "evidence"
-          ],
-          "weight": 0.76
         },
         {
           "kind": "message",
@@ -74,54 +58,64 @@
         {
           "kind": "message",
           "matched": [
-            "why",
-            "reason"
+            "evidence"
           ],
-          "weight": 0.54
+          "weight": 0.46
         }
       ]
     },
     {
-      "name": "concrete-specificity",
+      "name": "creative-bridge",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 3.29,
-      "confidence": 0.981,
-      "raw_score": 3.29,
+      "domain": "creative-bridge",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "concrete",
-        "example",
-        "specific"
+        "idea"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "concrete"
+            "idea"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "example",
-            "specific"
+            "idea"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "idea"
           ],
           "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "6208822586f1",
+  "context_fingerprint": "a589efc2d0e5",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 839,
-  "approx_added_tokens": 210
+  "temporary_skill_chars": 834,
+  "approx_added_tokens": 208
 }
