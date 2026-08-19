@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T11:46:23.799850+00:00",
-  "cycle_key": "32229993977:1:394",
+  "generated_at": "2026-08-19T11:47:05.128608+00:00",
+  "cycle_key": "32229993977:1:395",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,38 +32,30 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.2,
-      "confidence": 0.996,
-      "raw_score": 4.2,
+      "score": 4.0,
+      "confidence": 0.995,
+      "raw_score": 4.0,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "compare",
-        "whether",
+        "because",
         "why",
-        "evidence"
+        "compare",
+        "whether"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "compare",
-            "whether"
+            "because"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "compare"
-          ],
-          "weight": 0.92
+          "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
             "why"
           ],
-          "weight": 0.76
+          "weight": 0.92
         },
         {
           "kind": "message",
@@ -76,9 +68,9 @@
         {
           "kind": "message",
           "matched": [
-            "evidence"
+            "compare"
           ],
-          "weight": 0.54
+          "weight": 0.46
         }
       ]
     },
@@ -86,14 +78,21 @@
       "name": "technical-systems",
       "tier": "project",
       "domain": "technical-systems",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
       "repeat_penalty": 0.28,
       "matched_triggers": [
         "model"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "model"
+          ],
+          "weight": 1.8
+        },
         {
           "kind": "message",
           "matched": [
@@ -125,7 +124,7 @@
       ]
     }
   ],
-  "context_fingerprint": "0368fb25c3c5",
+  "context_fingerprint": "a0142614a43b",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 915,
   "approx_added_tokens": 229
