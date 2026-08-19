@@ -2,8 +2,13 @@ name: Allen social boundary simulator
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
     paths:
+      - 'scripts/room_allen_response_sim.py'
+      - 'scripts/room_social_v5.py'
+      - 'scripts/room_engine_v5.py'
+      - 'scripts/room_private_model.py'
+      - 'scripts/room_private_commit.py'
       - '.github/workflows/room-allen-social-sim.yml'
   workflow_dispatch:
 
@@ -16,9 +21,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: fix/allen-social-participant-20260819
+          ref: ${{ github.ref_name }}
           fetch-depth: 0
-      - name: Run exact Allen social boundary simulator and engine self-test on isolated branch
+      - name: Run Allen social boundary simulator and existing engine self-test
         shell: bash
         run: |
           set +e
@@ -41,25 +46,25 @@ jobs:
               'engine_selftest_exit_code':engine_status,
               'sim_output':read('/tmp/allen-social.txt'),
               'engine_selftest_output':read('/tmp/engine-selftest.txt'),
-              'validated_ref':'fix/allen-social-participant-20260819',
           }
           open('room/allen-social-sim-diagnostic.json','w').write(json.dumps(payload,indent=2)+'\n')
           print(json.dumps(payload,indent=2))
+          if not payload['pass']:
+              raise SystemExit(1)
           PY
-      - name: Record diagnostic on isolated branch
+      - name: Record diagnostic on tested branch
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'allen-social-simulator'
           git config user.email 'actions@users.noreply.github.com'
           git add room/allen-social-sim-diagnostic.json
-          git commit -m 'Record validated Allen social boundary candidate' || exit 0
+          git commit -m 'Record Allen social boundary simulator' || exit 0
+          branch="${GITHUB_REF_NAME}"
           for n in 1 2 3 4 5; do
-            if git push origin HEAD:fix/allen-social-participant-20260819; then exit 0; fi
-            git fetch origin fix/allen-social-participant-20260819
-            git rebase origin/fix/allen-social-participant-20260819 || { git rebase --abort || true; exit 1; }
+            if git push origin "HEAD:${branch}"; then exit 0; fi
+            git fetch origin "$branch"
+            git rebase "origin/$branch" || { git rebase --abort || true; exit 1; }
             sleep "$n"
           done
           exit 1
-
-# isolated-branch-validation-trigger: 2026-08-19T23:36Z
