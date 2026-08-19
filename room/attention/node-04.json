@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T08:31:40.870446+00:00",
-  "cycle_key": "32229993977:1:63",
+  "generated_at": "2026-08-19T08:32:19.180666+00:00",
+  "cycle_key": "32229993977:1:64",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,50 +29,57 @@
   },
   "selected_skills": [
     {
-      "name": "concrete-specificity",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.28,
+      "domain": "critical-testing",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "specific"
+        "compare"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "compare"
+          ],
+          "weight": 1.8
+        }
+      ]
+    },
+    {
+      "name": "creative-bridge",
+      "tier": "project",
+      "domain": "creative-bridge",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "idea"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "idea"
           ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.54
+          "weight": 0.92
         }
       ]
     }
   ],
-  "context_fingerprint": "2bfa2875b1a0",
+  "context_fingerprint": "501ea6b9ac53",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 493,
-  "approx_added_tokens": 123
+  "temporary_skill_chars": 834,
+  "approx_added_tokens": 208
 }
