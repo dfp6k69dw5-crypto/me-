@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+# trigger: 2026-08-19 validated Allen response relevance repair
+
 import json
 import sys
 from pathlib import Path
