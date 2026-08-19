@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T23:22:31.301097+00:00",
-  "cycle_key": "32311652079:1:27",
+  "generated_at": "2026-08-19T23:23:04.949885+00:00",
+  "cycle_key": "32311652079:1:28",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,15 +32,14 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 5.34,
-      "confidence": 1.0,
-      "raw_score": 5.34,
+      "score": 3.08,
+      "confidence": 0.972,
+      "raw_score": 3.08,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "sure",
         "claim",
-        "reason",
-        "compare"
+        "reason"
       ],
       "evidence_sources": [
         {
@@ -53,51 +52,23 @@
         {
           "kind": "message",
           "matched": [
+            "sure"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
             "claim",
             "reason"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "compare"
-          ],
           "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "compare"
-          ],
-          "weight": 0.54
-        }
-      ]
-    },
-    {
-      "name": "memory-callback",
-      "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "before"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "before"
-          ],
-          "weight": 1.8
         }
       ]
     }
   ],
-  "context_fingerprint": "e2cb4acd8f1e",
+  "context_fingerprint": "2875a2825543",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 861,
-  "approx_added_tokens": 215
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
