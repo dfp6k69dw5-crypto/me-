@@ -1,4 +1,5 @@
 name: Deploy validated Room Worker
+# self-reporting deployment gate: 2026-08-19
 
 on:
   push:
@@ -9,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 concurrency:
@@ -28,7 +29,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: main
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Check deploy credentials without exposing them
         id: creds
@@ -43,7 +44,9 @@ jobs:
           fi
 
       - name: Refuse unvalidated Worker source
+        id: validate
         if: steps.creds.outputs.available == 'true'
+        continue-on-error: true
         run: |
           node scripts/room_worker_ingest_sim.mjs
           python3 - <<'PY'
@@ -55,11 +58,15 @@ jobs:
           PY
 
       - name: Deploy existing room-live-mirror Worker
-        if: steps.creds.outputs.available == 'true'
+        id: deploy_worker
+        if: steps.creds.outputs.available == 'true' && steps.validate.outcome == 'success'
+        continue-on-error: true
         run: npx --yes wrangler@latest deploy --config cloudflare/room-worker/wrangler.toml
 
       - name: Push current Room feed through deployed Worker
-        if: steps.creds.outputs.available == 'true'
+        id: ingest
+        if: steps.deploy_worker.outcome == 'success'
+        continue-on-error: true
         shell: bash
         run: |
           token_json=$(curl -fsS --connect-timeout 3 --max-time 8 \
@@ -78,7 +85,9 @@ jobs:
           test "$accepted" = true
 
       - name: Verify live relay now matches the current Room boot
-        if: steps.creds.outputs.available == 'true'
+        id: verify
+        if: steps.ingest.outcome == 'success'
+        continue-on-error: true
         shell: bash
         run: |
           curl -fsS --connect-timeout 3 --max-time 8 \
@@ -109,8 +118,50 @@ jobs:
               raise SystemExit('Relay is still stale')
           PY
 
-      - name: Credential status
-        if: steps.creds.outputs.available != 'true'
+      - name: Write non-secret deployment status
+        if: always()
+        env:
+          CREDS_AVAILABLE: ${{ steps.creds.outputs.available }}
+          VALIDATE_OUTCOME: ${{ steps.validate.outcome }}
+          DEPLOY_OUTCOME: ${{ steps.deploy_worker.outcome }}
+          INGEST_OUTCOME: ${{ steps.ingest.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
         run: |
-          echo 'DEPLOY_SKIPPED_MISSING_CREDENTIALS=true'
-          exit 0
+          mkdir -p room
+          python3 - <<'PY'
+          import json, os, subprocess
+          from datetime import datetime, timezone
+          creds=os.environ.get('CREDS_AVAILABLE')=='true'
+          out={
+            'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
+            'worker':'room-live-mirror',
+            'source_sha':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+            'credentials_available':creds,
+            'validate':os.environ.get('VALIDATE_OUTCOME') or 'skipped',
+            'deploy':os.environ.get('DEPLOY_OUTCOME') or 'skipped',
+            'ingest':os.environ.get('INGEST_OUTCOME') or 'skipped',
+            'verify':os.environ.get('VERIFY_OUTCOME') or 'skipped',
+          }
+          out['pass']=creds and out['validate']=='success' and out['deploy']=='success' and out['ingest']=='success' and out['verify']=='success'
+          out['state']='deployed-and-verified' if out['pass'] else ('missing-github-cloudflare-credentials' if not creds else 'deployment-or-verification-failed')
+          open('room/cloudflare-deploy-status.json','w').write(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out,indent=2))
+          PY
+
+      - name: Publish deployment status
+        if: always()
+        run: |
+          git config user.name "room-worker-deployer"
+          git config user.email "actions@users.noreply.github.com"
+          git add room/cloudflare-deploy-status.json
+          git commit -m "Record Room Worker deployment status" || exit 0
+          for n in 1 2 3 4 5 6; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            sleep "$n"
+          done
+          exit 1
