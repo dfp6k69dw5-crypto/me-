@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T20:15:37.112979+00:00",
-  "cycle_key": "32295508468:1:19",
+  "generated_at": "2026-08-19T20:16:42.902677+00:00",
+  "cycle_key": "32295508468:1:20",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,60 +29,24 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 2.9,
-      "confidence": 0.962,
-      "raw_score": 2.9,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "reason",
-        "why"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "why",
-            "reason"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why"
-          ],
-          "weight": 0.92
-        }
-      ]
-    },
-    {
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.28,
+      "score": 2.44,
+      "confidence": 0.918,
+      "raw_score": 2.44,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
+        "example",
         "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "example"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.92
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -90,11 +54,55 @@
             "specific"
           ],
           "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.46
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.28,
+      "confidence": 0.58,
+      "raw_score": 1.56,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "why",
+        "reason"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why",
+            "reason"
+          ],
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "e15a0b4cd351",
+  "context_fingerprint": "a3ca0dbe3c61",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 839,
   "approx_added_tokens": 210
