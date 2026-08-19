@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T13:27:22.230041+00:00",
-  "cycle_key": "32258012227:1:1",
+  "generated_at": "2026-08-19T13:27:58.519426+00:00",
+  "cycle_key": "32258012227:1:2",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,13 +32,12 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.71,
-      "confidence": 0.75,
-      "raw_score": 1.99,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "claim",
-        "compare"
+        "claim"
       ],
       "evidence_sources": [
         {
@@ -46,14 +45,7 @@
           "matched": [
             "claim"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "claim"
-          ],
-          "weight": 0.92
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -61,13 +53,6 @@
             "claim"
           ],
           "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "compare"
-          ],
-          "weight": 0.54
         },
         {
           "kind": "message",
@@ -82,10 +67,10 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "conversation"
       ],
@@ -95,7 +80,7 @@
           "matched": [
             "conversation"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -112,16 +97,23 @@
           "weight": 0.92
         },
         {
-          "kind": "topic",
+          "kind": "message",
           "matched": [
             "conversation"
           ],
-          "weight": 0.58
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "c3b3a444b81e",
+  "context_fingerprint": "f7342798d159",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 867,
   "approx_added_tokens": 217
