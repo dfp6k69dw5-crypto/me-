@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T21:54:14.857171+00:00",
-  "cycle_key": "32295508468:1:113",
+  "generated_at": "2026-08-19T21:55:19.110036+00:00",
+  "cycle_key": "32295508468:1:114",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "specific"
       ],
@@ -45,13 +45,41 @@
           "matched": [
             "specific"
           ],
-          "weight": 1.15
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.54
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "compare"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "compare"
+          ],
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "ce8683eaf53a",
+  "context_fingerprint": "2248e6e39514",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 493,
-  "approx_added_tokens": 123
+  "temporary_skill_chars": 839,
+  "approx_added_tokens": 210
 }
