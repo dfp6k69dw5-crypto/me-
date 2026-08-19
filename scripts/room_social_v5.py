@@ -3,6 +3,7 @@ import re
 from collections import Counter
 
 ORDER=("sarah","mara","owen","jules")
+PARTICIPANTS=ORDER+("allen",)
 REL_KEYS=("exposure","direct_familiarity","trust","predictability","reciprocity","warmth","respect","disclosure_depth","tension")
 GENERIC=set("the and but for not was are you your our out too did can got one once that this with from have has had just what when where how there they them then than about would could should into only because been being does doing done will well yeah okay also still maybe kind sort thing things something anything someone everyone say saying think thinking thought know knowing mean means seem seems want wants wanted make making made start starting started try trying tried good great nice sure right actually probably pretty little much many few around again already even ever never always often sometimes today tonight tomorrow yesterday different together interesting going everything really people person conversation talk feel feeling answer question makes like their which while more very usually between over under through during before after each other another both such own same much example specific rule case point pattern actual interaction general concrete keep hear hearing saying said change changes changed outcome matter matters version part piece compare comparison contrast exception exceptions different differently useful interesting coming leaving leave pin rather now edge test against gets involving especially happens rest i'd".split())
 GENERIC.update({"you're","we're","they're","i'm","don't","doesn't","isn't","aren't","wasn't","weren't","can't","won't","wouldn't","couldn't","shouldn't"})
@@ -36,7 +37,7 @@ def migrate_minds(M):
  M=M or {'entities':{}}; ents=M.setdefault('entities',{})
  for e in ORDER:
   people=ents.setdefault(e,{}).setdefault('people',{})
-  for o in ORDER:
+  for o in PARTICIPANTS:
    if o==e: continue
    old=people.get(o) or {}
    if 'trust' not in old or 'direct_familiarity' not in old:
@@ -54,7 +55,7 @@ def topic_template(c=0):
  return {
   'semantic_schema':4,'id':f'topic-{c:06d}','root':None,'current_facet':None,
   'facets':[],'visited_facets':[],'facet_index':0,'unresolved':[],'examples':[],
-  'disagreements':[],'shared_references':[],'participants':list(ORDER),'turns':0,
+  'disagreements':[],'shared_references':[],'participants':list(PARTICIPANTS),'turns':0,
   'low_novelty_beats':0,'recent_terms':[],'last_shift_cycle':c,'status':'forming',
   'branches':[],'branch_history':[],'focus_turns':0,'last_branch_cycle':c,'escape_pressure':0,
  }
@@ -62,7 +63,6 @@ def topic_template(c=0):
 
 def _term_tokens(value):
  return {w for w in words(value) if len(w)>=3}
-
 def _near_term(a,b):
  a=str(a or '').strip().lower(); b=str(b or '').strip().lower()
  if not a or not b: return False
@@ -71,12 +71,10 @@ def _near_term(a,b):
  if not ta or not tb: return a in b or b in a
  if len(a)>=4 and len(b)>=4 and (a in b or b in a): return True
  return len(ta&tb)/max(1,min(len(ta),len(tb)))>=.72
-
 def _branch_index(t,label):
  for i,b in enumerate(t.get('branches',[])):
   if _near_term(b.get('label'),label): return i
  return None
-
 def _add_branch(t,label,parent,cycle,depth=None):
  label=str(label or '').strip().lower()
  if not label or not _term_tokens(label): return None
@@ -90,10 +88,10 @@ def _add_branch(t,label,parent,cycle,depth=None):
  b={'label':label,'parent':parent,'depth':int(depth),'first_cycle':cycle,'last_cycle':cycle,'hits':1,'status':'open'}
  t.setdefault('branches',[]).append(b)
  return b
-
 def _upgrade_topic_tree(t,cycle):
  defaults=topic_template(cycle)
  for k,v in defaults.items(): t.setdefault(k,v)
+ t['participants']=list(PARTICIPANTS)
  if int(t.get('semantic_schema',1))<4:
   old_root=str(t.get('root') or '').strip().lower() or None
   old_facets=[str(x or '').strip().lower() for x in t.get('facets',[]) if str(x or '').strip()]
@@ -109,7 +107,6 @@ def _upgrade_topic_tree(t,cycle):
   t['escape_pressure']=0
   t['semantic_schema']=4
  return t
-
 def migrate_state(S):
  S=S or {}; cycle=int(S.get('cycle',0)); old=S.get('topic_episode')
  if not old or int(old.get('semantic_schema',1))<3:
@@ -120,13 +117,13 @@ def migrate_state(S):
 
 def _target(msg,by=None):
  c=(msg or {}).get('cognition') or {}; tgt=c.get('target')
- if tgt in ORDER: return tgt
+ if tgt in PARTICIPANTS: return tgt
  p=(msg or {}).get('parent_discourse_id')
- if p and by and p in by and by[p].get('speaker') in ORDER: return by[p]['speaker']
+ if p and by and p in by and by[p].get('speaker') in PARTICIPANTS: return by[p]['speaker']
  return None
 def classify_event(listener,msg,by=None):
  sp=(msg or {}).get('speaker')
- if sp not in ORDER or sp==listener: return None
+ if sp not in PARTICIPANTS or sp==listener: return None
  c=(msg or {}).get('cognition') or {}; move=c.get('move_type') or 'other'; direct=_target(msg,by)==listener; low=str(msg.get('text','')).lower(); risk=1 if move in {'self_disclosure','disclosure'} else 0
  if any(x in low for x in ('afraid','ashamed','regret','hurt','vulnerable','trust you','scared')): risk=max(risk,2)
  return {'speaker':sp,'listener':listener,'direct':direct,'participation':'DIRECT_ADDRESSEE' if direct else 'OVERHEARER','move':move,'risk':risk,'repair_attempt':any(x in low for x in ('sorry','misunderstood','what i meant','i was wrong','let me correct')),'disagreement':move in {'disagree','disagreement'} or bool(re.search(r"\b(i don't agree|i disagree|not sure i agree|but i think)\b",low)),'support':bool(re.search(r"\b(that makes sense|i can see why|i get why|i'm with you|i understand)\b",low)),'callback':move=='callback' or bool(c.get('shared_reference')),'terms':list(c.get('topic_terms') or words(msg.get('text','')))[:8],'message_id':msg.get('id')}
@@ -183,13 +180,11 @@ def _recent_term_counts(ms,episode_id=None,window=12):
   if episode_id and ((m.get('cognition') or {}).get('topic_episode')!=episode_id): continue
   c.update(_declared_terms(m))
  return c
-
 def _meaningfully_new(term,t):
  term=str(term or '').strip().lower()
  if not term or not _term_tokens(term): return False
  existing=[t.get('root'),t.get('current_facet')]+[b.get('label') for b in t.get('branches',[])]
  return not any(_near_term(term,x) for x in existing if x)
-
 def _set_focus(t,label,cycle):
  label=str(label or '').strip().lower()
  if not label: return
@@ -210,7 +205,6 @@ def _branch_score(branch,cycle,current):
  depth=min(4,int(branch.get('depth',0)))/4
  hits=min(8,int(branch.get('hits',1)))/8
  return 1.3*recency+.8*hits+.35*depth
-
 def update_topic(t,ms,cycle):
  t=_upgrade_topic_tree(t or topic_template(cycle),cycle)
  terms=topic_terms_from_messages(ms,episode_id=t.get('id'))
@@ -271,7 +265,6 @@ def update_topic(t,ms,cycle):
  t['branch_history']=list(dict.fromkeys(t.get('branch_history',[])))[-32:]
  t['branches']=sorted(t.get('branches',[]),key=lambda b:(int(b.get('last_cycle',0)),int(b.get('hits',0))),reverse=True)[:48]
  return t
-
 def should_shift_topic(t): return bool(t and t.get('status')=='ready_to_bridge')
 def new_topic_from_terms(terms,cycle,prior=None):
  clean=[]
@@ -311,12 +304,12 @@ def plan_actions(order,qtarget,M,t,cycle):
  for i,e in enumerate(order):
   action='answer' if e==qtarget else roles[i%len(roles)]
   if action in used and e!=qtarget: action=next((x for x in roles if x not in used),'deepen')
-  used.add(action); partner=qtarget if qtarget in ORDER and qtarget!=e else choose_partner(e,M,t,cycle); plans[e]={'action':action,'target':partner,'topic_facet':(t or {}).get('current_facet'),'relationship':relationship_view(M,e,partner),'mandatory_speech':True}
+  used.add(action); partner=qtarget if qtarget in PARTICIPANTS and qtarget!=e else choose_partner(e,M,t,cycle); plans[e]={'action':action,'target':partner,'topic_facet':(t or {}).get('current_facet'),'relationship':relationship_view(M,e,partner),'mandatory_speech':True}
  return plans
 def audit_invariants(M,t):
  migrate_minds(M)
  for e in ORDER:
-  for o in ORDER:
+  for o in PARTICIPANTS:
    if e==o:continue
    for k in REL_KEYS:
     if not 0<=float(M['entities'][e]['people'][o].get(k,0))<=1: raise AssertionError(f'{e}->{o} {k} out of range')
