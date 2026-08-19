@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2640,
+  "cycle": 2641,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-19T17:35:54.991936Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-19T17:36:33.706973Z",
   "messages": 1000,
-  "last_public_event": "20260819T173554990-mara-v5",
+  "last_public_event": "20260819T173633705-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002640",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002641",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -84,18 +84,15 @@
       "owen",
       "jules"
     ],
-    "turns": 5279,
+    "turns": 5281,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "real or in-person",
-      "learning",
-      "test",
-      "test exception",
       "new information goal",
-      "testable",
-      "learn more",
+      "learning",
+      "testability",
       "current goal",
-      "goal"
+      "current goal testability is currently impossible",
+      "testability is currently impossible"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -105,8 +102,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2640,
-        "hits": 34577,
+        "last_cycle": 2641,
+        "hits": 34593,
         "status": "open"
       },
       {
@@ -114,17 +111,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 2640,
-        "hits": 9776,
-        "status": "open"
-      },
-      {
-        "label": "tackle challenge",
-        "parent": "sarah",
-        "depth": 300,
-        "first_cycle": 2607,
-        "last_cycle": 2640,
-        "hits": 53,
+        "last_cycle": 2641,
+        "hits": 9778,
         "status": "open"
       },
       {
@@ -132,8 +120,17 @@
         "parent": "search for evidence",
         "depth": 291,
         "first_cycle": 2597,
-        "last_cycle": 2640,
-        "hits": 53,
+        "last_cycle": 2641,
+        "hits": 56,
+        "status": "open"
+      },
+      {
+        "label": "tackle challenge",
+        "parent": "sarah",
+        "depth": 300,
+        "first_cycle": 2607,
+        "last_cycle": 2641,
+        "hits": 54,
         "status": "open"
       },
       {
@@ -141,8 +138,71 @@
         "parent": "negative term",
         "depth": 342,
         "first_cycle": 2457,
-        "last_cycle": 2640,
-        "hits": 51,
+        "last_cycle": 2641,
+        "hits": 52,
+        "status": "open"
+      },
+      {
+        "label": "current goal",
+        "parent": "current context",
+        "depth": 314,
+        "first_cycle": 2634,
+        "last_cycle": 2641,
+        "hits": 40,
+        "status": "open"
+      },
+      {
+        "label": "testable",
+        "parent": "challenge the goal",
+        "depth": 317,
+        "first_cycle": 2637,
+        "last_cycle": 2641,
+        "hits": 30,
+        "status": "open"
+      },
+      {
+        "label": "challenge the context",
+        "parent": "current goal",
+        "depth": 315,
+        "first_cycle": 2635,
+        "last_cycle": 2641,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "challenge the goal",
+        "parent": "challenge the context",
+        "depth": 316,
+        "first_cycle": 2636,
+        "last_cycle": 2641,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "testability",
+        "parent": "testable",
+        "depth": 318,
+        "first_cycle": 2638,
+        "last_cycle": 2641,
+        "hits": 19,
+        "status": "open"
+      },
+      {
+        "label": "real or in-person",
+        "parent": "testability",
+        "depth": 319,
+        "first_cycle": 2639,
+        "last_cycle": 2641,
+        "hits": 11,
+        "status": "open"
+      },
+      {
+        "label": "new information goal",
+        "parent": "real or in-person",
+        "depth": 320,
+        "first_cycle": 2640,
+        "last_cycle": 2641,
+        "hits": 5,
         "status": "open"
       },
       {
@@ -152,15 +212,6 @@
         "first_cycle": 2481,
         "last_cycle": 2640,
         "hits": 47,
-        "status": "open"
-      },
-      {
-        "label": "current goal",
-        "parent": "current context",
-        "depth": 314,
-        "first_cycle": 2634,
-        "last_cycle": 2640,
-        "hits": 34,
         "status": "open"
       },
       {
@@ -179,60 +230,6 @@
         "first_cycle": 2633,
         "last_cycle": 2640,
         "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "testable",
-        "parent": "challenge the goal",
-        "depth": 317,
-        "first_cycle": 2637,
-        "last_cycle": 2640,
-        "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "challenge the context",
-        "parent": "current goal",
-        "depth": 315,
-        "first_cycle": 2635,
-        "last_cycle": 2640,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "challenge the goal",
-        "parent": "challenge the context",
-        "depth": 316,
-        "first_cycle": 2636,
-        "last_cycle": 2640,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "testability",
-        "parent": "testable",
-        "depth": 318,
-        "first_cycle": 2638,
-        "last_cycle": 2640,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "real or in-person",
-        "parent": "testability",
-        "depth": 319,
-        "first_cycle": 2639,
-        "last_cycle": 2640,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "new information goal",
-        "parent": "real or in-person",
-        "depth": 320,
-        "first_cycle": 2640,
-        "last_cycle": 2640,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -567,7 +564,7 @@
       "testability",
       "real or in-person"
     ],
-    "focus_turns": 0,
+    "focus_turns": 2,
     "last_branch_cycle": 2640,
     "escape_pressure": 0
   }
