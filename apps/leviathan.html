@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>LEVIATHAN — cable bass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="leviathan.css?v=20260819b">
+
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-top">
+    <h1>LEVIATHAN</h1>
+    <span class="sub">7 cables · 7 pickups</span>
+    <span class="sub" id="engTag" style="margin-left:auto;color:#4C5872"></span>
+  </div>
+  <div class="gauge">
+    <div class="gauge-track">
+      <div class="gauge-fill" id="gfill"></div>
+      <div class="gauge-mark" style="left:20%"></div>
+    </div>
+    <div class="gauge-lbl">
+      <span>CABLE LOAD <b id="gpct">—</b> of breaking</span>
+      <span>FRAME <b id="gframe">—</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="stage">
+  <canvas id="cv"></canvas>
+  <div class="stage-tag">bridge → clamp → nut</div>
+  <div class="stage-note" id="noteName">—</div>
+</div>
+
+<button class="power" id="power">POWER ON</button>
+
+<div class="kbwrap" id="kbwrap" style="display:none">
+  <div class="kbrow kb-acc" id="kbAcc"></div>
+  <div class="kbrow kb-nat" id="kbNat"></div>
+  <div class="kbctl">
+    <button class="btn wide" id="octDn">◀ OCTAVE</button>
+    <button class="btn" id="panic">STOP</button>
+    <button class="btn wide" id="octUp">OCTAVE ▶</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" data-p="pu">PICKUPS</button>
+  <button class="tab" data-p="st">STRING</button>
+  <button class="tab" data-p="rig">RIG</button>
+  <button class="tab" data-p="ck">CHECK</button>
+</div>
+
+<div class="panel on" id="p-pu"></div>
+<div class="panel" id="p-st"></div>
+<div class="panel" id="p-rig"></div>
+<div class="panel" id="p-ck"></div>
+
+<script src="leviathan-core.js?v=20260819b"></script>
+<script src="leviathan-ui.js?v=20260819b"></script>
+<script src="leviathan-checks.js?v=20260819b"></script>
+</body>
+</html>
