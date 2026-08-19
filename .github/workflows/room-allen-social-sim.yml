@@ -5,7 +5,6 @@ on:
     branches: ['**']
     paths:
       - 'scripts/room_allen_response_sim.py'
-      - 'scripts/apply_allen_social_participant_fix.py'
       - 'scripts/room_social_v5.py'
       - 'scripts/room_engine_v5.py'
       - 'scripts/room_private_model.py'
@@ -24,9 +23,7 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
-      - name: Apply only the social participant boundary candidate
-        run: python3 scripts/apply_allen_social_participant_fix.py
-      - name: Run exact Allen social boundary simulator and existing engine self-test
+      - name: Run Allen social boundary simulator and existing engine self-test
         shell: bash
         run: |
           set +e
@@ -51,19 +48,18 @@ jobs:
               'engine_selftest_output':read('/tmp/engine-selftest.txt'),
           }
           open('room/allen-social-sim-diagnostic.json','w').write(json.dumps(payload,indent=2)+'\n')
-          if not payload['pass']:
-              print(json.dumps(payload,indent=2))
-              raise SystemExit(1)
           print(json.dumps(payload,indent=2))
+          if not payload['pass']:
+              raise SystemExit(1)
           PY
-      - name: Record validated candidate on tested branch
+      - name: Record diagnostic on tested branch
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'allen-social-simulator'
           git config user.email 'actions@users.noreply.github.com'
-          git add scripts/room_social_v5.py room/allen-social-sim-diagnostic.json
-          git commit -m 'fix: recognize Allen throughout Room social state' || exit 0
+          git add room/allen-social-sim-diagnostic.json
+          git commit -m 'Record Allen social boundary simulator' || exit 0
           branch="${GITHUB_REF_NAME}"
           for n in 1 2 3 4 5; do
             if git push origin "HEAD:${branch}"; then exit 0; fi
