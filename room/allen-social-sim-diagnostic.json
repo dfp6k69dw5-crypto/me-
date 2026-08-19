@@ -1,6 +1,9 @@
 {
-  "checked_at": "2026-08-19T23:32:45.456192Z",
+  "checked_at": "2026-08-19T23:43:44.139868Z",
   "pass": false,
-  "exit_code": 1,
-  "output": "PASS: autonomous generator iteration remains exactly four entities\nPASS: Allen is not generated as an autonomous entity\nPASS: engine participant set contains Allen\nTraceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 117, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 32, in main\n    require(\"social participant set contains Allen\", social_participants == PARTICIPANTS, social_participants)\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 21, in require\n    raise AssertionError(f\"{name}: {detail}\")\nAssertionError: social participant set contains Allen: ()\n"
+  "sim_exit_code": 1,
+  "engine_selftest_exit_code": 0,
+  "sim_output": "PASS: autonomous generator iteration remains exactly four entities\nPASS: Allen is not generated as an autonomous entity\nPASS: engine participant set contains Allen\nPASS: social participant set contains Allen\nPASS: social generator order remains exactly four\nPASS: relationship migration creates Allen for every autonomous entity\nPASS: social event classifier recognizes Allen as Sarah's direct addressee partner\nPASS: topic participant state contains Allen\nPASS: direct Allen turn updates Sarah-to-Allen relationship state\nPASS: expression schema can target Allen\nPASS: thought schema can choose Allen\nTraceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 117, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 99, in main\n    require(\"latest Allen turn remains active engine partner\", private.get(\"partner\") == \"allen\", private.get(\"partner\"))\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 21, in require\n    raise AssertionError(f\"{name}: {detail}\")\nAssertionError: latest Allen turn remains active engine partner: jules\n",
+  "engine_selftest_output": "PASS: sequential four-voice engine with repetition-loop breakout and no deterministic public language\n",
+  "validated_ref": "fix/allen-social-participant-20260819"
 }
