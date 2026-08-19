@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T08:07:38.481394+00:00",
-  "cycle_key": "32229993977:1:21",
+  "generated_at": "2026-08-19T08:08:14.900975+00:00",
+  "cycle_key": "32229993977:1:22",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,6 +29,27 @@
   },
   "selected_skills": [
     {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "compare"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "compare"
+          ],
+          "weight": 1.8
+        }
+      ]
+    },
+    {
       "name": "technical-systems",
       "tier": "project",
       "domain": "technical-systems",
@@ -52,13 +73,6 @@
           "matched": [
             "technology"
           ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "technology"
-          ],
           "weight": 0.64
         },
         {
@@ -71,8 +85,8 @@
       ]
     }
   ],
-  "context_fingerprint": "d149405a1ec2",
+  "context_fingerprint": "0d6c4d9249cf",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 569,
-  "approx_added_tokens": 142
+  "temporary_skill_chars": 915,
+  "approx_added_tokens": 229
 }
