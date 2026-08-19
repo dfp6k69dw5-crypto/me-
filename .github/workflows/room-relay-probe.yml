@@ -1,5 +1,5 @@
 name: Room relay transport probe
-# timestamp/boot freshness probe: 2026-08-19
+# authenticated ingest verification: 2026-08-19
 
 on:
   push:
@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   probe:
@@ -21,70 +22,92 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Probe public relay feed and browser CORS
+      - name: Test authenticated ingest then verify public relay
+        env:
+          ROOM_RELAY_URL: https://room-live-mirror.dfp6k69dw5.workers.dev
         run: |
           rm -f room/relay-transport-diagnostic.json
-          http_code=$(curl -sS --connect-timeout 3 --max-time 8 \
+          token_ok=false
+          ingest_code=0
+          token_json=$(curl -fsS --connect-timeout 3 --max-time 8 \
+            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror" || true)
+          relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; 
+          try: print(json.load(sys.stdin).get("value", ""))
+          except Exception: print("")')
+          if [ -n "$relay_token" ]; then
+            token_ok=true
+            ingest_code=$(curl -sS --connect-timeout 3 --max-time 8 \
+              -X POST -H "Authorization: Bearer ${relay_token}" \
+              -H 'Content-Type: application/json' \
+              --data-binary @room/feed.json \
+              -o /tmp/ingest-body.txt -w '%{http_code}' \
+              "${ROOM_RELAY_URL}/api/ingest" || true)
+          else
+            printf '%s' 'OIDC token unavailable' > /tmp/ingest-body.txt
+          fi
+
+          sleep 1
+          get_code=$(curl -sS --connect-timeout 3 --max-time 8 \
             -H 'Origin: https://maaronfanberg-lab.github.io' \
             -D /tmp/relay-headers.txt -o /tmp/relay-body.json \
             -w '%{http_code}' \
-            https://room-live-mirror.dfp6k69dw5.workers.dev/api/feed || true)
-          HTTP_CODE="$http_code" python3 - <<'PY'
+            "${ROOM_RELAY_URL}/api/feed" || true)
+
+          TOKEN_OK="$token_ok" INGEST_CODE="$ingest_code" GET_CODE="$get_code" python3 - <<'PY'
           import json, os
-          from datetime import datetime, timezone
+          from datetime import datetime
           from pathlib import Path
 
           def epoch(value):
               if not value: return 0.0
-              try:
-                  return datetime.fromisoformat(str(value).replace('Z','+00:00')).timestamp()
-              except Exception:
-                  return 0.0
+              try: return datetime.fromisoformat(str(value).replace('Z','+00:00')).timestamp()
+              except Exception: return 0.0
 
           local=json.load(open('room/feed.json'))
           headers={}
-          p=Path('/tmp/relay-headers.txt')
-          if p.exists():
-              for line in p.read_text(errors='replace').splitlines():
+          hp=Path('/tmp/relay-headers.txt')
+          if hp.exists():
+              for line in hp.read_text(errors='replace').splitlines():
                   if ':' in line:
                       k,v=line.split(':',1); headers[k.strip().lower()]=v.strip()
+
           remote=None; parse_error=''
-          b=Path('/tmp/relay-body.json')
-          if b.exists():
+          bp=Path('/tmp/relay-body.json')
+          if bp.exists():
               try:
-                  raw=json.loads(b.read_text(errors='replace'))
+                  raw=json.loads(bp.read_text(errors='replace'))
                   remote=raw.get('feed',raw) if isinstance(raw,dict) else None
               except Exception as e: parse_error=str(e)
 
-          ls=local.get('state',{})
-          rs=(remote or {}).get('state',{})
-          local_generated=local.get('generated_at') or ls.get('last_run') or ''
-          relay_generated=(remote or {}).get('generated_at') or rs.get('last_run') or ''
-          local_epoch=epoch(local_generated); relay_epoch=epoch(relay_generated)
-          lag=round(local_epoch-relay_epoch,3) if local_epoch and relay_epoch else None
-          local_boot=str(ls.get('boot_id') or '')
-          relay_boot=str(rs.get('boot_id') or '')
+          ls=local.get('state',{}); rs=(remote or {}).get('state',{})
+          lg=local.get('generated_at') or ls.get('last_run') or ''
+          rg=(remote or {}).get('generated_at') or rs.get('last_run') or ''
+          le,re=epoch(lg),epoch(rg)
+          lag=round(le-re,3) if le and re else None
+          lb=str(ls.get('boot_id') or ''); rb=str(rs.get('boot_id') or '')
           acao=headers.get('access-control-allow-origin','')
-          http=int(os.environ.get('HTTP_CODE') or 0)
+          ingest_body=Path('/tmp/ingest-body.txt').read_text(errors='replace')[:500] if Path('/tmp/ingest-body.txt').exists() else ''
           out={
-            'http_status':http,
+            'oidc_token_obtained':os.environ.get('TOKEN_OK')=='true',
+            'ingest_http_status':int(os.environ.get('INGEST_CODE') or 0),
+            'ingest_response_excerpt':ingest_body,
+            'feed_http_status':int(os.environ.get('GET_CODE') or 0),
             'local_cycle':ls.get('cycle'),
             'relay_cycle':rs.get('cycle'),
-            'local_boot_id':local_boot,
-            'relay_boot_id':relay_boot,
-            'same_boot':bool(local_boot and relay_boot and local_boot==relay_boot),
-            'local_generated_at':local_generated,
-            'relay_generated_at':relay_generated,
+            'local_boot_id':lb,
+            'relay_boot_id':rb,
+            'same_boot':bool(lb and rb and lb==rb),
+            'local_generated_at':lg,
+            'relay_generated_at':rg,
             'timestamp_lag_seconds':lag,
             'access_control_allow_origin':acao,
-            'content_type':headers.get('content-type',''),
-            'cache_control':headers.get('cache-control',''),
-            'parse_error':parse_error,
             'browser_cors_ok':acao in ('*','https://maaronfanberg-lab.github.io'),
-            'relay_reachable':http==200 and remote is not None,
             'relay_timestamp_current':lag is not None and lag<=90,
+            'parse_error':parse_error,
           }
-          out['pass']=out['relay_reachable'] and out['browser_cors_ok'] and out['same_boot'] and out['relay_timestamp_current']
+          out['ingest_ok']=200 <= out['ingest_http_status'] < 300
+          out['pass']=out['oidc_token_obtained'] and out['ingest_ok'] and out['feed_http_status']==200 and out['browser_cors_ok'] and out['same_boot'] and out['relay_timestamp_current']
           Path('room/relay-transport-diagnostic.json').write_text(json.dumps(out,indent=2)+'\n')
           print(json.dumps(out,indent=2))
           PY
