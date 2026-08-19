@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T23:34:29.516429+00:00",
-  "cycle_key": "32311652079:1:47",
+  "generated_at": "2026-08-19T23:35:08.591340+00:00",
+  "cycle_key": "32311652079:1:48",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -27,9 +27,74 @@
     "max_chars": 1080,
     "min_score": 1.1
   },
-  "selected_skills": [],
-  "context_fingerprint": "540dd0d702aa",
+  "selected_skills": [
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 2.18,
+      "confidence": 0.875,
+      "raw_score": 2.18,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "relationship",
+        "trust"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "relationship"
+          ],
+          "weight": 0.58
+        },
+        {
+          "kind": "topic_support",
+          "matched": [
+            "trust"
+          ],
+          "weight": 0.38
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "because"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "because"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "because"
+          ],
+          "weight": 1.15
+        }
+      ]
+    }
+  ],
+  "context_fingerprint": "401cd8af1063",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 0,
-  "approx_added_tokens": 0
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }
