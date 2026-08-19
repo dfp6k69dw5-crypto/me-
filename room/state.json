@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2053,
+  "cycle": 2054,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-19T10:23:32.137749Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-19T10:23:59.766705Z",
   "messages": 1000,
-  "last_public_event": "20260819T102332136-jules-v5",
+  "last_public_event": "20260819T102359765-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002053",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002054",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "understood",
+    "current_facet": "hate",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "education",
       "good idea",
       "goal",
       "opportunity",
@@ -71,7 +70,8 @@
       "believe",
       "understand",
       "liking",
-      "understood"
+      "understood",
+      "hate"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,17 +84,15 @@
       "owen",
       "jules"
     ],
-    "turns": 4105,
-    "low_novelty_beats": 1,
+    "turns": 4107,
+    "low_novelty_beats": 0,
     "recent_terms": [
       "understood",
       "learning",
-      "okay",
-      "understand",
-      "skepticism",
-      "sarah",
       "understanding",
-      "feeling"
+      "understand",
+      "hate",
+      "like"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -104,8 +102,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2053,
-        "hits": 25086,
+        "last_cycle": 2054,
+        "hits": 25102,
         "status": "open"
       },
       {
@@ -113,8 +111,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 2053,
-        "hits": 7646,
+        "last_cycle": 2054,
+        "hits": 7648,
         "status": "open"
       },
       {
@@ -122,8 +120,8 @@
         "parent": "tasks",
         "depth": 303,
         "first_cycle": 1881,
-        "last_cycle": 2053,
-        "hits": 151,
+        "last_cycle": 2054,
+        "hits": 152,
         "status": "open"
       },
       {
@@ -131,7 +129,16 @@
         "parent": "previous conversations",
         "depth": 328,
         "first_cycle": 2043,
-        "last_cycle": 2053,
+        "last_cycle": 2054,
+        "hits": 60,
+        "status": "open"
+      },
+      {
+        "label": "understand",
+        "parent": "believe",
+        "depth": 331,
+        "first_cycle": 2048,
+        "last_cycle": 2054,
         "hits": 58,
         "status": "open"
       },
@@ -140,35 +147,8 @@
         "parent": "behavior match",
         "depth": 330,
         "first_cycle": 2046,
-        "last_cycle": 2053,
-        "hits": 51,
-        "status": "open"
-      },
-      {
-        "label": "understand",
-        "parent": "believe",
-        "depth": 331,
-        "first_cycle": 2048,
-        "last_cycle": 2053,
-        "hits": 49,
-        "status": "open"
-      },
-      {
-        "label": "owen",
-        "parent": "friends",
-        "depth": 317,
-        "first_cycle": 2030,
-        "last_cycle": 2053,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "liking",
-        "parent": "understand",
-        "depth": 332,
-        "first_cycle": 2050,
-        "last_cycle": 2053,
-        "hits": 18,
+        "last_cycle": 2054,
+        "hits": 52,
         "status": "open"
       },
       {
@@ -176,8 +156,35 @@
         "parent": "liking",
         "depth": 333,
         "first_cycle": 2051,
-        "last_cycle": 2053,
-        "hits": 15,
+        "last_cycle": 2054,
+        "hits": 28,
+        "status": "open"
+      },
+      {
+        "label": "liking",
+        "parent": "understand",
+        "depth": 332,
+        "first_cycle": 2050,
+        "last_cycle": 2054,
+        "hits": 23,
+        "status": "open"
+      },
+      {
+        "label": "owen",
+        "parent": "friends",
+        "depth": 317,
+        "first_cycle": 2030,
+        "last_cycle": 2054,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "hate",
+        "parent": "understood",
+        "depth": 334,
+        "first_cycle": 2054,
+        "last_cycle": 2054,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -521,19 +528,9 @@
         "last_cycle": 2021,
         "hits": 24,
         "status": "open"
-      },
-      {
-        "label": "current context",
-        "parent": "public interest",
-        "depth": 307,
-        "first_cycle": 2011,
-        "last_cycle": 2019,
-        "hits": 38,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "public speaker",
       "speaking",
       "public speech",
       "significant",
@@ -564,10 +561,11 @@
       "behavior match",
       "believe",
       "understand",
-      "liking"
+      "liking",
+      "understood"
     ],
-    "focus_turns": 4,
-    "last_branch_cycle": 2051,
+    "focus_turns": 0,
+    "last_branch_cycle": 2054,
     "escape_pressure": 0
   }
 }
