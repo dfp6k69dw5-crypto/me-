@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T17:53:46.822619+00:00",
-  "cycle_key": "32263398867:1:304",
+  "generated_at": "2026-08-19T17:54:27.399174+00:00",
+  "cycle_key": "32263398867:1:305",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,35 +29,6 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.63,
-      "confidence": 0.722,
-      "raw_score": 1.91,
-      "repeat_penalty": 0.28,
-      "matched_triggers": [
-        "true",
-        "compare"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "true"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "compare"
-          ],
-          "weight": 0.76
-        }
-      ]
-    },
-    {
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
@@ -81,14 +52,7 @@
           "matched": [
             "specific"
           ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.92
+          "weight": 0.64
         },
         {
           "kind": "message",
@@ -105,9 +69,37 @@
           "weight": 0.46
         }
       ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.17,
+      "confidence": 0.531,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "true"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "true"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "true"
+          ],
+          "weight": 0.54
+        }
+      ]
     }
   ],
-  "context_fingerprint": "58709beff54e",
+  "context_fingerprint": "38037017227d",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 839,
   "approx_added_tokens": 210
