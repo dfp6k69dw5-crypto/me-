@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T06:44:42.958548+00:00",
-  "cycle_key": "32208320454:1:430",
+  "generated_at": "2026-08-19T06:45:22.730297+00:00",
+  "cycle_key": "32208320454:1:431",
   "node": 2,
   "entity": "sarah",
   "role": "expression",
@@ -27,9 +27,40 @@
     "max_chars": 720,
     "min_score": 1.2
   },
-  "selected_skills": [],
-  "context_fingerprint": "2fb0826ff729",
+  "selected_skills": [
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 3.6,
+      "confidence": 0.987,
+      "raw_score": 3.6,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "example",
+        "specific"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "example",
+            "specific"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "example"
+          ],
+          "weight": 0.54
+        }
+      ]
+    }
+  ],
+  "context_fingerprint": "ec5212834e83",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 0,
-  "approx_added_tokens": 0
+  "temporary_skill_chars": 493,
+  "approx_added_tokens": 123
 }
