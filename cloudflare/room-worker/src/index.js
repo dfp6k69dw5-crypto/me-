@@ -7,6 +7,7 @@ const EXPECTED_REF = "refs/heads/main";
 const ALLEN = "allen";
 const MAX_TURN = 700;
 const MAX_QUEUE = 50;
+const ALLEN_KEY_SHA256 = "e53d0db863593fc618b4b764f70b31a5b9652931d8f8f7838a24cbd8cf87aa4d";
 
 let oidcMetadataCache = null;
 let jwksCache = null;
@@ -40,9 +41,24 @@ function bearer(request) {
   return value.startsWith("Bearer ") ? value.slice(7) : "";
 }
 
-function allenAuthorized(request, env) {
+async function sha256Hex(value) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(value)));
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+function constantTimeHexEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i += 1) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+async function allenAuthorized(request, env) {
+  const token = bearer(request);
+  if (!token) return false;
   const expected = String(env.ROOM_ALLEN_KEY || "");
-  return Boolean(expected && bearer(request) === expected);
+  if (expected && token === expected) return true;
+  return constantTimeHexEqual(await sha256Hex(token), ALLEN_KEY_SHA256);
 }
 
 function decodeBase64Url(value) {
@@ -288,14 +304,12 @@ export default {
     }
 
     if (url.pathname === "/api/allen/auth" && request.method === "GET") {
-      if (!env.ROOM_ALLEN_KEY) return json({ error: "allen-key-not-configured" }, 503);
-      if (!allenAuthorized(request, env)) return json({ error: "unauthorized" }, 401);
+      if (!(await allenAuthorized(request, env))) return json({ error: "unauthorized" }, 401);
       return json({ ok: true, identity: "Allen" });
     }
 
     if (url.pathname === "/api/allen" && request.method === "POST") {
-      if (!env.ROOM_ALLEN_KEY) return json({ error: "allen-key-not-configured" }, 503);
-      if (!allenAuthorized(request, env)) return json({ error: "unauthorized" }, 401);
+      if (!(await allenAuthorized(request, env))) return json({ error: "unauthorized" }, 401);
       try {
         const body = await request.json();
         const text = String(body?.text || "").trim();

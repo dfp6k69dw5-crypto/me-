@@ -61,3 +61,11 @@ Observed production baseline: unauthenticated `/api/allen/auth` returns HTTP 503
 5. `POST /api/allen` accepts the verifier-backed token and continues to queue `speaker: "allen"` with no human/operator metadata.
 6. No plaintext Allen bearer token is committed to GitHub.
 7. After automatic deployment, `/api/allen/auth` without credentials returns 401 rather than `allen-key-not-configured` 503, proving the fallback-capable build is live.
+
+## Repository validation result
+
+The same `scripts/room_allen_auth_sim.mjs` invariant was run immediately before and after the source change. Before the patch it failed because the source had no hash fallback. After the patch it passed all five checks: fallback auth without an environment secret; wrong-token rejection; missing-token 401; compatibility with an existing `ROOM_ALLEN_KEY`; and verifier-backed Allen POST queueing.
+
+The plaintext fallback token was not written to the repository or workflow. Only its SHA-256 verifier is committed.
+
+Production validation remains: wait for the automatic Cloudflare deployment, then confirm unauthenticated `/api/allen/auth` returns 401 rather than `allen-key-not-configured` 503 before releasing the private token to the user.
