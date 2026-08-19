@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T14:50:00.334276+00:00",
-  "cycle_key": "32263398867:1:39",
+  "generated_at": "2026-08-19T14:50:43.329941+00:00",
+  "cycle_key": "32263398867:1:40",
   "node": 8,
   "entity": "owen",
   "role": "expression",
@@ -27,9 +27,56 @@
     "max_chars": 720,
     "min_score": 1.2
   },
-  "selected_skills": [],
-  "context_fingerprint": "b1070b55d56d",
+  "selected_skills": [
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 7.2,
+      "confidence": 1.0,
+      "raw_score": 7.2,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "concrete",
+        "detail",
+        "example",
+        "specific"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "example",
+            "specific",
+            "detail",
+            "concrete"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "example",
+            "specific",
+            "detail",
+            "concrete"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "example",
+            "specific",
+            "concrete"
+          ],
+          "weight": 0.92
+        }
+      ]
+    }
+  ],
+  "context_fingerprint": "848f5720c5d5",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 0,
-  "approx_added_tokens": 0
+  "temporary_skill_chars": 493,
+  "approx_added_tokens": 123
 }
