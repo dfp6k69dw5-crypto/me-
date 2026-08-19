@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T07:27:44.071598+00:00",
-  "cycle_key": "32208320454:1:501",
+  "generated_at": "2026-08-19T07:28:30.944494+00:00",
+  "cycle_key": "32208320454:1:502",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,9 +32,9 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 5.05,
-      "confidence": 0.999,
-      "raw_score": 5.05,
+      "score": 3.45,
+      "confidence": 0.986,
+      "raw_score": 3.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "concrete",
@@ -46,21 +46,6 @@
           "kind": "message",
           "matched": [
             "example",
-            "concrete"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific",
-            "concrete"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
             "specific",
             "concrete"
           ],
@@ -69,44 +54,90 @@
         {
           "kind": "message",
           "matched": [
-            "specific",
+            "example",
             "concrete"
           ],
           "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "example",
+            "concrete"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific",
+            "concrete"
+          ],
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific",
+            "concrete"
+          ],
+          "weight": 0.54
         }
       ]
     },
     {
-      "name": "critical-testing",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "domain": "affect",
+      "score": 1.83,
+      "confidence": 0.788,
+      "raw_score": 1.83,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "sure"
+        "relationship",
+        "trust"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "relationship"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "relationship"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
           ],
           "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
+          ],
+          "weight": 0.46
+        },
+        {
+          "kind": "topic_support",
+          "matched": [
+            "trust"
+          ],
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "cfcbdc0f3293",
+  "context_fingerprint": "d67b0ac9b1f9",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 839,
-  "approx_added_tokens": 210
+  "temporary_skill_chars": 854,
+  "approx_added_tokens": 214
 }
