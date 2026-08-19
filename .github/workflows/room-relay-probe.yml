@@ -1,5 +1,5 @@
 name: Room relay transport probe
-# deploy validated Worker on proven runner: 2026-08-19
+# direct live-source deployment check: 2026-08-19
 
 on:
   push:
@@ -19,15 +19,9 @@ concurrency:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 4
     env:
       ROOM_RELAY_URL: https://room-live-mirror.dfp6k69dw5.workers.dev
-      CF_TOKEN_PRIMARY: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CF_TOKEN_ALT: ${{ secrets.CF_API_TOKEN }}
-      CF_ACCOUNT_SECRET: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      CF_ACCOUNT_VAR: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-      CF_ACCOUNT_ALT_SECRET: ${{ secrets.CF_ACCOUNT_ID }}
-      CF_ACCOUNT_ALT_VAR: ${{ vars.CF_ACCOUNT_ID }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -41,37 +35,9 @@ jobs:
           rm -f room/worker-ingest-simulator-diagnostic.json
           node scripts/room_worker_ingest_sim.mjs
 
-      - name: Resolve Cloudflare deploy credentials without exposing them
-        id: creds
-        shell: bash
-        run: |
-          token="$CF_TOKEN_PRIMARY"
-          [ -n "$token" ] || token="$CF_TOKEN_ALT"
-          account="$CF_ACCOUNT_SECRET"
-          [ -n "$account" ] || account="$CF_ACCOUNT_VAR"
-          [ -n "$account" ] || account="$CF_ACCOUNT_ALT_SECRET"
-          [ -n "$account" ] || account="$CF_ACCOUNT_ALT_VAR"
-          if [ -n "$token" ] && [ -n "$account" ]; then
-            echo "::add-mask::$token"
-            echo "::add-mask::$account"
-            printf 'CLOUDFLARE_API_TOKEN=%s\n' "$token" >> "$GITHUB_ENV"
-            printf 'CLOUDFLARE_ACCOUNT_ID=%s\n' "$account" >> "$GITHUB_ENV"
-            echo 'available=true' >> "$GITHUB_OUTPUT"
-            echo 'Cloudflare deploy credentials found.'
-          else
-            echo 'available=false' >> "$GITHUB_OUTPUT"
-            echo 'Cloudflare deploy credentials not found in expected Actions secret/variable names.'
-          fi
-
-      - name: Deploy existing room-live-mirror Worker
-        id: deploy_worker
-        if: steps.validate.outcome == 'success' && steps.creds.outputs.available == 'true'
-        continue-on-error: true
-        run: npx --yes wrangler@latest deploy --config cloudflare/room-worker/wrangler.toml
-
-      - name: Authenticated ingest through deployed Worker
+      - name: Send current Room feed to live Worker
         id: ingest
-        if: steps.deploy_worker.outcome == 'success'
+        if: steps.validate.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
@@ -86,82 +52,73 @@ jobs:
             -H 'Content-Type: application/json' \
             --data-binary @room/feed.json \
             "${ROOM_RELAY_URL}/api/ingest")
-          printf '%s\n' "$body"
-          printf '%s' "$body" | python3 -c 'import json,sys; d=json.load(sys.stdin); raise SystemExit(0 if d.get("accepted") else 1)'
+          printf '%s\n' "$body" > /tmp/ingest-response.json
+          cat /tmp/ingest-response.json
 
-      - name: Verify public relay boot and freshness
-        id: verify
-        if: steps.ingest.outcome == 'success'
+      - name: Read live Worker after ingest attempt
+        id: readback
+        if: always()
         continue-on-error: true
         shell: bash
         run: |
           curl -fsS --connect-timeout 3 --max-time 8 \
             -H 'Origin: https://maaronfanberg-lab.github.io' \
             "${ROOM_RELAY_URL}/api/feed?fresh=$(date +%s)" > /tmp/relay-live.json
-          python3 - <<'PY'
-          import json
-          from datetime import datetime
-          local=json.load(open('room/feed.json'))
-          raw=json.load(open('/tmp/relay-live.json'))
-          remote=raw.get('feed',raw)
-          ls=local.get('state',{}); rs=remote.get('state',{})
-          def stamp(v): return datetime.fromisoformat(str(v).replace('Z','+00:00')).timestamp()
-          lg=local.get('generated_at') or ls.get('last_run')
-          rg=remote.get('generated_at') or rs.get('last_run')
-          lag=stamp(lg)-stamp(rg)
-          result={
-            'local_boot_id':ls.get('boot_id'),
-            'relay_boot_id':rs.get('boot_id'),
-            'local_cycle':ls.get('cycle'),
-            'relay_cycle':rs.get('cycle'),
-            'timestamp_lag_seconds':lag,
-          }
-          print(json.dumps(result,indent=2))
-          if ls.get('boot_id') != rs.get('boot_id'): raise SystemExit('wrong relay boot')
-          if lag > 90: raise SystemExit('relay stale')
-          PY
 
-      - name: Write non-secret relay deployment result
+      - name: Write live deployment diagnosis
         if: always()
         env:
           VALIDATE_OUTCOME: ${{ steps.validate.outcome }}
-          CREDS_AVAILABLE: ${{ steps.creds.outputs.available }}
-          DEPLOY_OUTCOME: ${{ steps.deploy_worker.outcome }}
           INGEST_OUTCOME: ${{ steps.ingest.outcome }}
-          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          READBACK_OUTCOME: ${{ steps.readback.outcome }}
         run: |
           python3 - <<'PY'
           import json,os,subprocess
           from datetime import datetime,timezone
-          creds=os.environ.get('CREDS_AVAILABLE')=='true'
+          local=json.load(open('room/feed.json'))
+          ls=local.get('state',{})
+          ingest={}
+          try: ingest=json.load(open('/tmp/ingest-response.json'))
+          except Exception: pass
+          raw={}
+          try: raw=json.load(open('/tmp/relay-live.json'))
+          except Exception: pass
+          remote=raw.get('feed',raw) if isinstance(raw,dict) else {}
+          rs=remote.get('state',{}) if isinstance(remote,dict) else {}
+          same_boot=bool(ls.get('boot_id') and ls.get('boot_id')==rs.get('boot_id'))
+          accepted=bool(ingest.get('accepted'))
+          reason=ingest.get('reason')
+          fixed_live = accepted and same_boot
           out={
             'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
-            'worker':'room-live-mirror',
             'source_sha':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-            'validate':os.environ.get('VALIDATE_OUTCOME') or 'skipped',
-            'credentials_available':creds,
-            'deploy':os.environ.get('DEPLOY_OUTCOME') or 'skipped',
-            'ingest':os.environ.get('INGEST_OUTCOME') or 'skipped',
-            'verify':os.environ.get('VERIFY_OUTCOME') or 'skipped',
+            'source_validation':os.environ.get('VALIDATE_OUTCOME') or 'skipped',
+            'ingest_transport':os.environ.get('INGEST_OUTCOME') or 'skipped',
+            'readback_transport':os.environ.get('READBACK_OUTCOME') or 'skipped',
+            'ingest_accepted':accepted,
+            'ingest_reason':reason,
+            'local_boot_id':ls.get('boot_id'),
+            'local_cycle':ls.get('cycle'),
+            'relay_boot_id':rs.get('boot_id'),
+            'relay_cycle':rs.get('cycle'),
+            'same_boot':same_boot,
+            'validated_fix_is_live':fixed_live,
           }
-          out['pass']=out['validate']=='success' and creds and out['deploy']=='success' and out['ingest']=='success' and out['verify']=='success'
-          if out['pass']: out['state']='deployed-and-verified'
-          elif not creds: out['state']='missing-github-cloudflare-credentials'
-          elif out['validate']!='success': out['state']='source-validation-failed'
-          elif out['deploy']!='success': out['state']='cloudflare-deploy-failed'
-          elif out['ingest']!='success': out['state']='relay-ingest-failed'
-          else: out['state']='relay-verification-failed'
-          open('room/relay-deploy-probe-status.json','w').write(json.dumps(out,indent=2)+'\n')
+          if fixed_live: out['state']='validated-worker-fix-live'
+          elif reason=='older-cycle': out['state']='live-worker-still-old-cycle-only-build'
+          elif not same_boot: out['state']='live-worker-still-on-older-room-boot'
+          else: out['state']='live-worker-needs-deployment-or-further-inspection'
+          open('room/relay-live-source-status.json','w').write(json.dumps(out,indent=2)+'\n')
           print(json.dumps(out,indent=2))
           PY
 
-      - name: Publish relay deployment result
+      - name: Publish live deployment diagnosis
         if: always()
         run: |
           git config user.name "room-relay-probe"
           git config user.email "actions@users.noreply.github.com"
-          git add room/relay-deploy-probe-status.json
-          git commit -m "Record Room relay deployment result" || exit 0
+          git add room/relay-live-source-status.json
+          git commit -m "Record live Room Worker source status" || exit 0
           for n in 1 2 3 4 5 6; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
