@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2018,
+  "cycle": 2019,
   "silence_cycles": 0,
-  "last_speaker": "sarah",
-  "last_run": "2026-08-19T10:04:09.844751Z",
+  "last_speaker": "mara",
+  "last_run": "2026-08-19T10:04:42.544801Z",
   "messages": 1000,
-  "last_public_event": "20260819T100409843-sarah-v5",
+  "last_public_event": "20260819T100442543-mara-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002018",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002019",
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "education",
+    "current_facet": "good idea",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "active detail",
       "determination",
       "experiences",
       "value",
@@ -71,7 +70,8 @@
       "current context",
       "current interest",
       "other contexts",
-      "education"
+      "education",
+      "good idea"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,14 +84,17 @@
       "owen",
       "jules"
     ],
-    "turns": 4035,
-    "low_novelty_beats": 1,
+    "turns": 4037,
+    "low_novelty_beats": 0,
     "recent_terms": [
-      "other contexts",
-      "learning",
-      "public interest in education",
       "education",
-      "interests"
+      "learning",
+      "good idea",
+      "public interest in education",
+      "something",
+      "learn",
+      "curiosity",
+      "skepticism"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -101,8 +104,89 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2018,
-        "hits": 24470,
+        "last_cycle": 2019,
+        "hits": 24495,
+        "status": "open"
+      },
+      {
+        "label": "skepticism",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 2019,
+        "hits": 7518,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "curious",
+        "depth": 281,
+        "first_cycle": 1640,
+        "last_cycle": 2019,
+        "hits": 739,
+        "status": "open"
+      },
+      {
+        "label": "public interest",
+        "parent": "public discourse",
+        "depth": 306,
+        "first_cycle": 2010,
+        "last_cycle": 2019,
+        "hits": 63,
+        "status": "open"
+      },
+      {
+        "label": "current interest",
+        "parent": "current context",
+        "depth": 308,
+        "first_cycle": 2013,
+        "last_cycle": 2019,
+        "hits": 56,
+        "status": "open"
+      },
+      {
+        "label": "current context",
+        "parent": "public interest",
+        "depth": 307,
+        "first_cycle": 2011,
+        "last_cycle": 2019,
+        "hits": 38,
+        "status": "open"
+      },
+      {
+        "label": "other contexts",
+        "parent": "current interest",
+        "depth": 309,
+        "first_cycle": 2016,
+        "last_cycle": 2019,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "education",
+        "parent": "other contexts",
+        "depth": 310,
+        "first_cycle": 2018,
+        "last_cycle": 2019,
+        "hits": 7,
+        "status": "open"
+      },
+      {
+        "label": "interests",
+        "parent": "other contexts",
+        "depth": 310,
+        "first_cycle": 2018,
+        "last_cycle": 2019,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "good idea",
+        "parent": "education",
+        "depth": 311,
+        "first_cycle": 2019,
+        "last_cycle": 2019,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -112,60 +196,6 @@
         "first_cycle": 2008,
         "last_cycle": 2018,
         "hits": 75,
-        "status": "open"
-      },
-      {
-        "label": "public interest",
-        "parent": "public discourse",
-        "depth": 306,
-        "first_cycle": 2010,
-        "last_cycle": 2018,
-        "hits": 57,
-        "status": "open"
-      },
-      {
-        "label": "current interest",
-        "parent": "current context",
-        "depth": 308,
-        "first_cycle": 2013,
-        "last_cycle": 2018,
-        "hits": 52,
-        "status": "open"
-      },
-      {
-        "label": "current context",
-        "parent": "public interest",
-        "depth": 307,
-        "first_cycle": 2011,
-        "last_cycle": 2018,
-        "hits": 37,
-        "status": "open"
-      },
-      {
-        "label": "other contexts",
-        "parent": "current interest",
-        "depth": 309,
-        "first_cycle": 2016,
-        "last_cycle": 2018,
-        "hits": 15,
-        "status": "open"
-      },
-      {
-        "label": "education",
-        "parent": "other contexts",
-        "depth": 310,
-        "first_cycle": 2018,
-        "last_cycle": 2018,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "interests",
-        "parent": "other contexts",
-        "depth": 310,
-        "first_cycle": 2018,
-        "last_cycle": 2018,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -223,30 +253,12 @@
         "status": "open"
       },
       {
-        "label": "curiosity",
-        "parent": "curious",
-        "depth": 281,
-        "first_cycle": 1640,
-        "last_cycle": 2012,
-        "hits": 738,
-        "status": "open"
-      },
-      {
         "label": "speaking",
         "parent": "public speaker",
         "depth": 301,
         "first_cycle": 2005,
         "last_cycle": 2012,
         "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "skepticism",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 2011,
-        "hits": 7517,
         "status": "open"
       },
       {
@@ -518,19 +530,9 @@
         "last_cycle": 1997,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "relationship",
-        "parent": "specific way",
-        "depth": 293,
-        "first_cycle": 1995,
-        "last_cycle": 1995,
-        "hits": 1,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "fundamental concept",
       "explore",
       "fields",
       "curiosity",
@@ -561,10 +563,11 @@
       "public interest",
       "current context",
       "current interest",
-      "other contexts"
+      "other contexts",
+      "education"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 2018,
+    "last_branch_cycle": 2019,
     "escape_pressure": 0
   }
 }
