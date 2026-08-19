@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T04:53:38.299625+00:00",
-  "cycle_key": "32208320454:1:248",
+  "generated_at": "2026-08-19T04:54:20.250724+00:00",
+  "cycle_key": "32208320454:1:249",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,13 +29,55 @@
   },
   "selected_skills": [
     {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "conversation"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.64
+        }
+      ]
+    },
+    {
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.83,
-      "confidence": 0.788,
-      "raw_score": 1.83,
-      "repeat_penalty": 0.0,
+      "score": 1.25,
+      "confidence": 0.567,
+      "raw_score": 1.53,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "excited",
         "trust"
@@ -46,14 +88,21 @@
           "matched": [
             "excited"
           ],
-          "weight": 1.45
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
             "excited"
           ],
-          "weight": 0.92
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "excited"
+          ],
+          "weight": 0.46
         },
         {
           "kind": "topic_support",
@@ -63,30 +112,9 @@
           "weight": 0.38
         }
       ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "conversation"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 1.45
-        }
-      ]
     }
   ],
-  "context_fingerprint": "a6ed41f1659d",
+  "context_fingerprint": "731f921afd94",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 882,
   "approx_added_tokens": 220
