@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2997,
+  "cycle": 2998,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-19T22:34:04.230169Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-19T22:34:40.018330Z",
   "messages": 1000,
-  "last_public_event": "20260819T223404228-jules-v5",
+  "last_public_event": "20260819T223440017-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002997",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002998",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "important",
+    "current_facet": "impossible",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "focus",
       "word",
       "why",
       "disagree",
@@ -71,7 +70,8 @@
       "new idea",
       "true",
       "real-world",
-      "important"
+      "important",
+      "impossible"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,17 +84,17 @@
       "owen",
       "jules"
     ],
-    "turns": 5993,
+    "turns": 5995,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "real-world",
-      "learning",
       "important",
-      "testing an idea to see if it will work in the real world",
-      "test exception",
-      "sara",
-      "real world",
-      "test idea"
+      "learning",
+      "real-world applications",
+      "testing an idea in the real world",
+      "impossible",
+      "work in the real world",
+      "real",
+      "testing"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -104,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2997,
-        "hits": 40358,
+        "last_cycle": 2998,
+        "hits": 40374,
         "status": "open"
       },
       {
@@ -113,8 +113,80 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 2997,
-        "hits": 11008,
+        "last_cycle": 2998,
+        "hits": 11009,
+        "status": "open"
+      },
+      {
+        "label": "new idea",
+        "parent": "test-ability",
+        "depth": 285,
+        "first_cycle": 2992,
+        "last_cycle": 2998,
+        "hits": 44,
+        "status": "open"
+      },
+      {
+        "label": "test-ability",
+        "parent": "false",
+        "depth": 284,
+        "first_cycle": 2991,
+        "last_cycle": 2998,
+        "hits": 39,
+        "status": "open"
+      },
+      {
+        "label": "true",
+        "parent": "new idea",
+        "depth": 286,
+        "first_cycle": 2994,
+        "last_cycle": 2998,
+        "hits": 31,
+        "status": "open"
+      },
+      {
+        "label": "real question",
+        "parent": "false",
+        "depth": 284,
+        "first_cycle": 2991,
+        "last_cycle": 2998,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "real-world",
+        "parent": "true",
+        "depth": 287,
+        "first_cycle": 2996,
+        "last_cycle": 2998,
+        "hits": 14,
+        "status": "open"
+      },
+      {
+        "label": "testing",
+        "parent": "test-ability",
+        "depth": 285,
+        "first_cycle": 2992,
+        "last_cycle": 2998,
+        "hits": 12,
+        "status": "open"
+      },
+      {
+        "label": "important",
+        "parent": "real-world",
+        "depth": 288,
+        "first_cycle": 2997,
+        "last_cycle": 2998,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "impossible",
+        "parent": "important",
+        "depth": 289,
+        "first_cycle": 2998,
+        "last_cycle": 2998,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -127,33 +199,6 @@
         "status": "open"
       },
       {
-        "label": "new idea",
-        "parent": "test-ability",
-        "depth": 285,
-        "first_cycle": 2992,
-        "last_cycle": 2997,
-        "hits": 42,
-        "status": "open"
-      },
-      {
-        "label": "test-ability",
-        "parent": "false",
-        "depth": 284,
-        "first_cycle": 2991,
-        "last_cycle": 2997,
-        "hits": 34,
-        "status": "open"
-      },
-      {
-        "label": "true",
-        "parent": "new idea",
-        "depth": 286,
-        "first_cycle": 2994,
-        "last_cycle": 2997,
-        "hits": 23,
-        "status": "open"
-      },
-      {
         "label": "false",
         "parent": "curious",
         "depth": 283,
@@ -163,48 +208,12 @@
         "status": "open"
       },
       {
-        "label": "real question",
-        "parent": "false",
-        "depth": 284,
-        "first_cycle": 2991,
-        "last_cycle": 2997,
-        "hits": 16,
-        "status": "open"
-      },
-      {
         "label": "sara",
         "parent": "word",
         "depth": 325,
         "first_cycle": 2968,
         "last_cycle": 2997,
         "hits": 16,
-        "status": "open"
-      },
-      {
-        "label": "testing",
-        "parent": "test-ability",
-        "depth": 285,
-        "first_cycle": 2992,
-        "last_cycle": 2997,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "real-world",
-        "parent": "true",
-        "depth": 287,
-        "first_cycle": 2996,
-        "last_cycle": 2997,
-        "hits": 7,
-        "status": "open"
-      },
-      {
-        "label": "important",
-        "parent": "real-world",
-        "depth": 288,
-        "first_cycle": 2997,
-        "last_cycle": 2997,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -521,19 +530,9 @@
         "last_cycle": 2972,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "focus",
-        "parent": "mouse",
-        "depth": 323,
-        "first_cycle": 2966,
-        "last_cycle": 2971,
-        "hits": 21,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "louder",
       "underundering",
       "real-world scenarios",
       "powerful",
@@ -564,10 +563,11 @@
       "test-ability",
       "new idea",
       "true",
-      "real-world"
+      "real-world",
+      "important"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 2997,
+    "last_branch_cycle": 2998,
     "escape_pressure": 0
   }
 }
