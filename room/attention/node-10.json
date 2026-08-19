@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T00:01:18.821733+00:00",
-  "cycle_key": "32184487392:1:180",
+  "generated_at": "2026-08-19T00:02:15.926649+00:00",
+  "cycle_key": "32184487392:1:181",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,12 +32,14 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "score": 1.64,
+      "confidence": 0.726,
+      "raw_score": 1.92,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "compare"
+        "compare",
+        "evidence",
+        "reason"
       ],
       "evidence_sources": [
         {
@@ -45,63 +47,21 @@
           "matched": [
             "compare"
           ],
-          "weight": 1.8
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 1.55,
-      "confidence": 0.692,
-      "raw_score": 1.83,
-      "repeat_penalty": 0.28,
-      "matched_triggers": [
-        "excited",
-        "trust"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "excited"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "excited"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "excited"
-          ],
           "weight": 0.76
         },
         {
-          "kind": "message",
+          "kind": "topic",
           "matched": [
-            "excited"
+            "evidence",
+            "reason"
           ],
-          "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "excited"
-          ],
-          "weight": 0.46
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "3e5dc77595e0",
+  "context_fingerprint": "7b27dfc0e0c8",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 890,
-  "approx_added_tokens": 222
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
