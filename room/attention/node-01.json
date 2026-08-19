@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T07:32:40.335712+00:00",
-  "cycle_key": "32208320454:1:509",
+  "generated_at": "2026-08-19T07:33:14.537715+00:00",
+  "cycle_key": "32208320454:1:510",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,12 +32,13 @@
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.897,
-      "confidence": 0.808,
-      "raw_score": 1.897,
+      "score": 3.89,
+      "confidence": 0.993,
+      "raw_score": 3.89,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "used to"
+        "used to",
+        "past"
       ],
       "evidence_sources": [
         {
@@ -45,13 +46,64 @@
           "matched": [
             "used to"
           ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "used to"
+          ],
           "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "used to",
+            "past"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "used to"
+          ],
+          "weight": 0.54
+        }
+      ]
+    },
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.83,
+      "confidence": 0.788,
+      "raw_score": 1.83,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "relationship",
+        "trust"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "topic_support",
+          "matched": [
+            "trust"
+          ],
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "880631a8f114",
+  "context_fingerprint": "147b6038fc6b",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 515,
-  "approx_added_tokens": 129
+  "temporary_skill_chars": 876,
+  "approx_added_tokens": 219
 }
