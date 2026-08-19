@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T16:32:49.751681+00:00",
-  "cycle_key": "32263398867:1:187",
+  "generated_at": "2026-08-19T16:33:35.634801+00:00",
+  "cycle_key": "32263398867:1:188",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,29 +32,25 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 3.64,
-      "confidence": 0.99,
-      "raw_score": 3.64,
+      "score": 6.43,
+      "confidence": 1.0,
+      "raw_score": 6.43,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "detail",
         "example",
-        "specific"
+        "place",
+        "specific",
+        "concrete",
+        "detail"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "detail"
+            "example",
+            "place"
           ],
           "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "detail"
-          ],
-          "weight": 1.15
         },
         {
           "kind": "message",
@@ -62,27 +58,63 @@
             "example",
             "specific"
           ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "example",
+            "concrete"
+          ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "detail"
           ],
-          "weight": 0.64
+          "weight": 0.76
         },
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "detail"
           ],
           "weight": 0.54
         }
       ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "conversation"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.15
+        }
+      ]
     }
   ],
-  "context_fingerprint": "6edc4d5acd40",
+  "context_fingerprint": "38fa9aa2b30e",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 493,
-  "approx_added_tokens": 123
+  "temporary_skill_chars": 831,
+  "approx_added_tokens": 208
 }
