@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T04:52:57.540781+00:00",
-  "cycle_key": "32208320454:1:247",
+  "generated_at": "2026-08-19T04:53:31.934111+00:00",
+  "cycle_key": "32208320454:1:248",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,57 +29,65 @@
   },
   "selected_skills": [
     {
-      "name": "creative-bridge",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.28,
+      "domain": "affect",
+      "score": 1.83,
+      "confidence": 0.788,
+      "raw_score": 1.83,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "idea"
+        "excited",
+        "trust"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "idea"
+            "excited"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "idea"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "idea"
+            "excited"
           ],
           "weight": 0.92
         },
         {
-          "kind": "message",
+          "kind": "topic_support",
           "matched": [
-            "idea"
+            "trust"
           ],
-          "weight": 0.64
-        },
+          "weight": 0.38
+        }
+      ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "conversation"
+      ],
+      "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "idea"
+            "conversation"
           ],
-          "weight": 0.54
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "c2ccae182422",
+  "context_fingerprint": "a6ed41f1659d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 488,
-  "approx_added_tokens": 122
+  "temporary_skill_chars": 882,
+  "approx_added_tokens": 220
 }
