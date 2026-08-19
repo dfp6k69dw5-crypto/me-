@@ -31,8 +31,13 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: main
-      - name: Bake newest Room snapshot
-        run: python3 scripts/bake_room.py
+      - name: Bake newest Room snapshot when legacy launcher supports it
+        run: |
+          if grep -q '__ROOM_SNAPSHOT_B64__' apps/sarah-room.html; then
+            python3 scripts/bake_room.py
+          else
+            echo 'Current Room launcher uses the live viewer; skipping legacy snapshot bake.'
+          fi
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload site
