@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T02:09:03.198445+00:00",
-  "cycle_key": "32184487392:1:301",
+  "generated_at": "2026-08-19T02:10:06.764337+00:00",
+  "cycle_key": "32184487392:1:302",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.83,
-      "confidence": 0.788,
+      "score": 1.55,
+      "confidence": 0.692,
       "raw_score": 1.83,
-      "repeat_penalty": 0.0,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "feeling",
         "trust"
@@ -49,6 +49,13 @@
           "weight": 1.45
         },
         {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 0.64
+        },
+        {
           "kind": "topic_support",
           "matched": [
             "trust"
@@ -56,31 +63,10 @@
           "weight": 0.38
         }
       ]
-    },
-    {
-      "name": "creative-bridge",
-      "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "idea"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "idea"
-          ],
-          "weight": 1.45
-        }
-      ]
     }
   ],
-  "context_fingerprint": "c13eddc8f163",
+  "context_fingerprint": "a3ab88bb583f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 849,
-  "approx_added_tokens": 212
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
