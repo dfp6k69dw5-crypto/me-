@@ -133,9 +133,9 @@ test('open Room viewer must catch up from an independent live fallback when Page
   await page.goto(`${BASE}/room/?viewer-simulator=1`, { waitUntil: 'domcontentloaded' });
 
   // History must survive regardless of whether the independent fallback catches
-  // up immediately or on a later poll. The old viewer fails this test because it
-  // never queries the API at all and stays on the Pages snapshot at beat 100.
-  await expect(page.locator('.msg')).toHaveCount(1000, { timeout: 12000 });
+  // up immediately or on a later poll. A correct viewer may therefore show
+  // more than 1000 messages after appending the live tail.
+  await expect.poll(async () => page.locator('.msg').count(), { timeout: 12000 }).toBeGreaterThanOrEqual(1000);
   await page.waitForTimeout(4500);
 
   const status = await page.locator('#status').innerText();
