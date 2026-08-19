@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T22:31:37.305957+00:00",
-  "cycle_key": "32308826226:1:4",
+  "generated_at": "2026-08-19T22:32:12.566486+00:00",
+  "cycle_key": "32308826226:1:5",
   "node": 11,
   "entity": "jules",
   "role": "expression",
@@ -32,12 +32,13 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.4,
-      "confidence": 0.997,
-      "raw_score": 4.4,
+      "score": 3.78,
+      "confidence": 0.99,
+      "raw_score": 3.78,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "whether",
+        "compare",
         "because",
         "accurate"
       ],
@@ -47,20 +48,13 @@
           "matched": [
             "whether"
           ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "because"
-          ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "whether",
-            "accurate"
+            "compare",
+            "whether"
           ],
           "weight": 1.15
         },
@@ -69,7 +63,14 @@
           "matched": [
             "whether"
           ],
-          "weight": 0.92
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "because"
+          ],
+          "weight": 0.64
         },
         {
           "kind": "message",
@@ -77,12 +78,12 @@
             "whether",
             "accurate"
           ],
-          "weight": 0.64
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "bd0e50d8fa12",
+  "context_fingerprint": "e3f2ec7a5135",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 529,
   "approx_added_tokens": 132
