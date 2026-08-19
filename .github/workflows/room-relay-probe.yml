@@ -1,5 +1,5 @@
 name: Room relay transport probe
-# authenticated ingest + Worker reboot baseline: 2026-08-19c
+# validate-and-publish Worker reboot ordering fix: 2026-08-19
 
 on:
   push:
@@ -22,110 +22,31 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Execute actual Worker reboot-ingest baseline
+      - name: Apply only the boot-aware ingest patch in the checkout
+        run: python3 scripts/apply_room_worker_reboot_fix.py
+
+      - name: Execute actual patched RoomState.putLatest
         id: worker_sim
         continue-on-error: true
         run: |
           rm -f room/worker-ingest-simulator-diagnostic.json
           node scripts/room_worker_ingest_sim.mjs
 
-      - name: Test authenticated ingest then verify public relay
-        env:
-          ROOM_RELAY_URL: https://room-live-mirror.dfp6k69dw5.workers.dev
-        run: |
-          rm -f room/relay-transport-diagnostic.json
-          token_ok=false
-          ingest_code=0
-          token_json=$(curl -fsS --connect-timeout 3 --max-time 8 \
-            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror" || true)
-          relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("value", ""))' 2>/dev/null || true)
-          if [ -n "$relay_token" ]; then
-            token_ok=true
-            ingest_code=$(curl -sS --connect-timeout 3 --max-time 8 \
-              -X POST -H "Authorization: Bearer ${relay_token}" \
-              -H 'Content-Type: application/json' \
-              --data-binary @room/feed.json \
-              -o /tmp/ingest-body.txt -w '%{http_code}' \
-              "${ROOM_RELAY_URL}/api/ingest" || true)
-          else
-            printf '%s' 'OIDC token unavailable' > /tmp/ingest-body.txt
-          fi
-
-          sleep 1
-          get_code=$(curl -sS --connect-timeout 3 --max-time 8 \
-            -H 'Origin: https://maaronfanberg-lab.github.io' \
-            -D /tmp/relay-headers.txt -o /tmp/relay-body.json \
-            -w '%{http_code}' \
-            "${ROOM_RELAY_URL}/api/feed" || true)
-
-          TOKEN_OK="$token_ok" INGEST_CODE="$ingest_code" GET_CODE="$get_code" python3 - <<'PY'
-          import json, os
-          from datetime import datetime
-          from pathlib import Path
-
-          def epoch(value):
-              if not value: return 0.0
-              try: return datetime.fromisoformat(str(value).replace('Z','+00:00')).timestamp()
-              except Exception: return 0.0
-
-          local=json.load(open('room/feed.json'))
-          headers={}
-          hp=Path('/tmp/relay-headers.txt')
-          if hp.exists():
-              for line in hp.read_text(errors='replace').splitlines():
-                  if ':' in line:
-                      k,v=line.split(':',1); headers[k.strip().lower()]=v.strip()
-
-          remote=None; parse_error=''
-          bp=Path('/tmp/relay-body.json')
-          if bp.exists():
-              try:
-                  raw=json.loads(bp.read_text(errors='replace'))
-                  remote=raw.get('feed',raw) if isinstance(raw,dict) else None
-              except Exception as e: parse_error=str(e)
-
-          ls=local.get('state',{}); rs=(remote or {}).get('state',{})
-          lg=local.get('generated_at') or ls.get('last_run') or ''
-          rg=(remote or {}).get('generated_at') or rs.get('last_run') or ''
-          le,re=epoch(lg),epoch(rg)
-          lag=round(le-re,3) if le and re else None
-          lb=str(ls.get('boot_id') or ''); rb=str(rs.get('boot_id') or '')
-          acao=headers.get('access-control-allow-origin','')
-          ingest_body=Path('/tmp/ingest-body.txt').read_text(errors='replace')[:500] if Path('/tmp/ingest-body.txt').exists() else ''
-          out={
-            'oidc_token_obtained':os.environ.get('TOKEN_OK')=='true',
-            'ingest_http_status':int(os.environ.get('INGEST_CODE') or 0),
-            'ingest_response_excerpt':ingest_body,
-            'feed_http_status':int(os.environ.get('GET_CODE') or 0),
-            'local_cycle':ls.get('cycle'),
-            'relay_cycle':rs.get('cycle'),
-            'local_boot_id':lb,
-            'relay_boot_id':rb,
-            'same_boot':bool(lb and rb and lb==rb),
-            'local_generated_at':lg,
-            'relay_generated_at':rg,
-            'timestamp_lag_seconds':lag,
-            'access_control_allow_origin':acao,
-            'browser_cors_ok':acao in ('*','https://maaronfanberg-lab.github.io'),
-            'relay_timestamp_current':lag is not None and lag<=90,
-            'parse_error':parse_error,
-          }
-          out['ingest_ok']=200 <= out['ingest_http_status'] < 300
-          out['pass']=out['oidc_token_obtained'] and out['ingest_ok'] and out['feed_http_status']==200 and out['browser_cors_ok'] and out['same_boot'] and out['relay_timestamp_current']
-          Path('room/relay-transport-diagnostic.json').write_text(json.dumps(out,indent=2)+'\n')
-          print(json.dumps(out,indent=2))
-          PY
-
-      - name: Publish relay and Worker-simulator diagnostics
+      - name: Publish source only if simulator passed
         if: always()
+        env:
+          SIMULATOR_OUTCOME: ${{ steps.worker_sim.outcome }}
         run: |
-          test -f room/relay-transport-diagnostic.json || printf '%s\n' '{"pass":false,"error":"relay probe produced no diagnostic"}' > room/relay-transport-diagnostic.json
           test -f room/worker-ingest-simulator-diagnostic.json || printf '%s\n' '{"pass":false,"error":"worker ingest simulator produced no diagnostic"}' > room/worker-ingest-simulator-diagnostic.json
           git config user.name "room-relay-probe"
           git config user.email "actions@users.noreply.github.com"
-          git add room/relay-transport-diagnostic.json room/worker-ingest-simulator-diagnostic.json
-          git commit -m "Record Room relay and Worker ingest diagnostics" || exit 0
+          git add room/worker-ingest-simulator-diagnostic.json
+          if [ "$SIMULATOR_OUTCOME" = success ]; then
+            git add cloudflare/room-worker/src/index.js
+          else
+            git restore cloudflare/room-worker/src/index.js
+          fi
+          git commit -m "Validate and apply Room Worker reboot ordering" || exit 0
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
@@ -133,3 +54,9 @@ jobs:
             sleep "$n"
           done
           exit 1
+
+      - name: Enforce patched simulator result
+        if: always()
+        env:
+          SIMULATOR_OUTCOME: ${{ steps.worker_sim.outcome }}
+        run: test "$SIMULATOR_OUTCOME" = success
