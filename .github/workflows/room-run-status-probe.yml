@@ -1,5 +1,5 @@
 name: Room run status observer
-# observe Room + Worker simulator + relay validation: 2026-08-19
+# observe Room + Worker simulator + relay validation + deploy: 2026-08-19
 
 on:
   push:
@@ -30,12 +30,14 @@ jobs:
           gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --limit 5 --json "$fields" > /tmp/room-runs.json
           gh run list --repo "$GITHUB_REPOSITORY" --workflow room-worker-ingest-simulator.yml --limit 5 --json "$fields" > /tmp/worker-sim-runs.json
           gh run list --repo "$GITHUB_REPOSITORY" --workflow room-relay-probe.yml --limit 5 --json "$fields" > /tmp/relay-probe-runs.json
+          gh run list --repo "$GITHUB_REPOSITORY" --workflow deploy-room-worker.yml --limit 5 --json "$fields" > /tmp/deploy-runs.json
           python3 - <<'PY'
           import json
           out={
             'room':json.load(open('/tmp/room-runs.json')),
             'worker_ingest_simulator':json.load(open('/tmp/worker-sim-runs.json')),
             'relay_probe':json.load(open('/tmp/relay-probe-runs.json')),
+            'room_worker_deploy':json.load(open('/tmp/deploy-runs.json')),
           }
           open('room/run-status-probe.json','w').write(json.dumps(out,indent=2)+'\n')
           PY
