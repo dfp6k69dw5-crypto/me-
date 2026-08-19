@@ -28,6 +28,9 @@ jobs:
           ref: main
           fetch-depth: 0
 
+      - name: Clear prior simulator result
+        run: rm -f room/viewer-simulator-diagnostic.json
+
       - name: Install Playwright test runner and WebKit
         id: install
         continue-on-error: true
