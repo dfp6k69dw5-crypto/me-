@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T12:33:30.030272+00:00",
-  "cycle_key": "32229993977:1:470",
+  "generated_at": "2026-08-19T12:34:06.324090+00:00",
+  "cycle_key": "32229993977:1:471",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,21 +32,22 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.79,
-      "confidence": 0.776,
-      "raw_score": 2.07,
-      "repeat_penalty": 0.28,
+      "score": 3.29,
+      "confidence": 0.981,
+      "raw_score": 3.29,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "reason",
-        "claim"
+        "compare",
+        "claim",
+        "reason"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "reason"
+            "compare"
           ],
-          "weight": 1.15
+          "weight": 1.45
         },
         {
           "kind": "message",
@@ -62,6 +63,14 @@
             "reason"
           ],
           "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "claim",
+            "reason"
+          ],
+          "weight": 0.46
         }
       ]
     },
@@ -69,14 +78,21 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "idea"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 1.8
+        },
         {
           "kind": "message",
           "matched": [
@@ -89,19 +105,19 @@
           "matched": [
             "idea"
           ],
-          "weight": 0.92
+          "weight": 0.54
         },
         {
           "kind": "message",
           "matched": [
             "idea"
           ],
-          "weight": 0.54
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "376824b12dc6",
+  "context_fingerprint": "248f0db276f0",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 834,
   "approx_added_tokens": 208
