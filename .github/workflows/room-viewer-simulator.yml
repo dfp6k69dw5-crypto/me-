@@ -7,6 +7,7 @@ on:
     paths:
       - 'room/index.html'
       - 'tests/room-viewer-live.spec.mjs'
+      - 'tests/room-viewer-cors.spec.mjs'
       - 'tests/room-viewer.playwright.config.mjs'
       - 'tests/room-viewer-static-server.mjs'
       - '.github/workflows/room-viewer-simulator.yml'
@@ -31,8 +32,8 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Clear prior simulator result
-        run: rm -f room/viewer-simulator-diagnostic.json
+      - name: Clear prior simulator results
+        run: rm -f room/viewer-simulator-diagnostic.json room/viewer-cors-simulator-diagnostic.json
 
       - name: Install matching Playwright test package
         id: install
@@ -66,12 +67,13 @@ jobs:
           name: room-viewer-simulator-evidence
           path: |
             room/viewer-simulator-diagnostic.json
+            room/viewer-cors-simulator-diagnostic.json
             test-results/
             /tmp/room-viewer-http.log
           if-no-files-found: ignore
           retention-days: 14
 
-      - name: Publish simulator diagnostic
+      - name: Publish simulator diagnostics
         if: always()
         env:
           INSTALL_OUTCOME: ${{ steps.install.outcome }}
@@ -81,20 +83,21 @@ jobs:
           if [ ! -f room/viewer-simulator-diagnostic.json ]; then
             node - <<'NODE'
           const fs=require('fs');
-          const out={
-            pass:false,
-            error:'simulator produced no diagnostic',
-            install_outcome:process.env.INSTALL_OUTCOME||'',
-            server_outcome:process.env.SERVER_OUTCOME||'',
-            simulator_outcome:process.env.SIMULATOR_OUTCOME||'',
-          };
+          const out={pass:false,error:'simulator produced no diagnostic',install_outcome:process.env.INSTALL_OUTCOME||'',server_outcome:process.env.SERVER_OUTCOME||'',simulator_outcome:process.env.SIMULATOR_OUTCOME||''};
           fs.writeFileSync('room/viewer-simulator-diagnostic.json',JSON.stringify(out,null,2)+'\n');
+          NODE
+          fi
+          if [ ! -f room/viewer-cors-simulator-diagnostic.json ]; then
+            node - <<'NODE'
+          const fs=require('fs');
+          const out={pass:false,error:'CORS simulator produced no diagnostic',install_outcome:process.env.INSTALL_OUTCOME||'',server_outcome:process.env.SERVER_OUTCOME||'',simulator_outcome:process.env.SIMULATOR_OUTCOME||''};
+          fs.writeFileSync('room/viewer-cors-simulator-diagnostic.json',JSON.stringify(out,null,2)+'\n');
           NODE
           fi
           git config user.name "room-viewer-simulator"
           git config user.email "actions@users.noreply.github.com"
-          git add room/viewer-simulator-diagnostic.json
-          git commit -m "Record Room viewer simulator diagnostic" || exit 0
+          git add room/viewer-simulator-diagnostic.json room/viewer-cors-simulator-diagnostic.json
+          git commit -m "Record Room viewer simulator diagnostics" || exit 0
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
