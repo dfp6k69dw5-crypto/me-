@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T04:08:51.131334+00:00",
-  "cycle_key": "32208320454:1:174",
+  "generated_at": "2026-08-19T04:09:30.076880+00:00",
+  "cycle_key": "32208320454:1:175",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.8,
-      "confidence": 0.779,
+      "score": 1.52,
+      "confidence": 0.68,
       "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "concrete"
       ],
@@ -46,33 +46,26 @@
             "concrete"
           ],
           "weight": 1.8
-        }
-      ]
-    },
-    {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "compare"
-      ],
-      "evidence_sources": [
+        },
         {
           "kind": "message",
           "matched": [
-            "compare"
+            "concrete"
           ],
-          "weight": 1.45
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "concrete"
+          ],
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "9e38807838ae",
+  "context_fingerprint": "8231d0962ae5",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 839,
-  "approx_added_tokens": 210
+  "temporary_skill_chars": 493,
+  "approx_added_tokens": 123
 }
