@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2826,
+  "cycle": 2827,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-19T19:39:32.976057Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-19T19:40:14.927296Z",
   "messages": 1000,
-  "last_public_event": "20260819T193932974-jules-v5",
+  "last_public_event": "20260819T194014925-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002826",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002827",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "owen",
+    "current_facet": "confusion",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "i think it's cool",
       "fun",
       "reason",
       "challenge",
@@ -71,7 +70,8 @@
       "context",
       "detail",
       "entity",
-      "owen"
+      "owen",
+      "confusion"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,15 +84,16 @@
       "owen",
       "jules"
     ],
-    "turns": 5651,
+    "turns": 5653,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "entity",
+      "owen",
       "learning",
       "input.json",
-      "owen",
-      "specific detail",
-      "input"
+      "owen is still confused about the details we were discussing.",
+      "details",
+      "confusion",
+      "working"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -102,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2826,
-        "hits": 37616,
+        "last_cycle": 2827,
+        "hits": 37634,
         "status": "open"
       },
       {
@@ -111,8 +112,89 @@
         "parent": "public expression ability",
         "depth": 330,
         "first_cycle": 2481,
-        "last_cycle": 2826,
-        "hits": 79,
+        "last_cycle": 2827,
+        "hits": 80,
+        "status": "open"
+      },
+      {
+        "label": "input_json",
+        "parent": "evaluate",
+        "depth": 295,
+        "first_cycle": 2820,
+        "last_cycle": 2827,
+        "hits": 45,
+        "status": "open"
+      },
+      {
+        "label": "evaluate",
+        "parent": "methods",
+        "depth": 294,
+        "first_cycle": 2819,
+        "last_cycle": 2827,
+        "hits": 29,
+        "status": "open"
+      },
+      {
+        "label": "limit",
+        "parent": "input_json",
+        "depth": 296,
+        "first_cycle": 2822,
+        "last_cycle": 2827,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "context",
+        "parent": "limit",
+        "depth": 297,
+        "first_cycle": 2823,
+        "last_cycle": 2827,
+        "hits": 19,
+        "status": "open"
+      },
+      {
+        "label": "detail",
+        "parent": "context",
+        "depth": 298,
+        "first_cycle": 2824,
+        "last_cycle": 2827,
+        "hits": 18,
+        "status": "open"
+      },
+      {
+        "label": "entity",
+        "parent": "detail",
+        "depth": 299,
+        "first_cycle": 2825,
+        "last_cycle": 2827,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "owen",
+        "parent": "entity",
+        "depth": 300,
+        "first_cycle": 2826,
+        "last_cycle": 2827,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "work",
+        "parent": "input_json",
+        "depth": 296,
+        "first_cycle": 2822,
+        "last_cycle": 2827,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "confusion",
+        "parent": "owen",
+        "depth": 301,
+        "first_cycle": 2827,
+        "last_cycle": 2827,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -125,75 +207,12 @@
         "status": "open"
       },
       {
-        "label": "input_json",
-        "parent": "evaluate",
-        "depth": 295,
-        "first_cycle": 2820,
-        "last_cycle": 2826,
-        "hits": 40,
-        "status": "open"
-      },
-      {
         "label": "methods",
         "parent": "evaluation",
         "depth": 293,
         "first_cycle": 2818,
         "last_cycle": 2826,
         "hits": 31,
-        "status": "open"
-      },
-      {
-        "label": "evaluate",
-        "parent": "methods",
-        "depth": 294,
-        "first_cycle": 2819,
-        "last_cycle": 2826,
-        "hits": 28,
-        "status": "open"
-      },
-      {
-        "label": "limit",
-        "parent": "input_json",
-        "depth": 296,
-        "first_cycle": 2822,
-        "last_cycle": 2826,
-        "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "context",
-        "parent": "limit",
-        "depth": 297,
-        "first_cycle": 2823,
-        "last_cycle": 2826,
-        "hits": 15,
-        "status": "open"
-      },
-      {
-        "label": "detail",
-        "parent": "context",
-        "depth": 298,
-        "first_cycle": 2824,
-        "last_cycle": 2826,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "entity",
-        "parent": "detail",
-        "depth": 299,
-        "first_cycle": 2825,
-        "last_cycle": 2826,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "owen",
-        "parent": "entity",
-        "depth": 300,
-        "first_cycle": 2826,
-        "last_cycle": 2826,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -239,15 +258,6 @@
         "first_cycle": 2753,
         "last_cycle": 2822,
         "hits": 72,
-        "status": "open"
-      },
-      {
-        "label": "work",
-        "parent": "input_json",
-        "depth": 296,
-        "first_cycle": 2822,
-        "last_cycle": 2822,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -519,19 +529,9 @@
         "last_cycle": 2801,
         "hits": 32,
         "status": "open"
-      },
-      {
-        "label": "i think it's cool",
-        "parent": "coincidentally",
-        "depth": 286,
-        "first_cycle": 2793,
-        "last_cycle": 2800,
-        "hits": 22,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "reduced",
       "impact",
       "public discourse",
       "public sphere",
@@ -562,10 +562,11 @@
       "limit",
       "context",
       "detail",
-      "entity"
+      "entity",
+      "owen"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 2826,
+    "last_branch_cycle": 2827,
     "escape_pressure": 0
   }
 }
