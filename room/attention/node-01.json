@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T02:10:06.764337+00:00",
-  "cycle_key": "32184487392:1:302",
+  "generated_at": "2026-08-19T02:11:05.926125+00:00",
+  "cycle_key": "32184487392:1:303",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,11 +32,12 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.55,
-      "confidence": 0.692,
-      "raw_score": 1.83,
-      "repeat_penalty": 0.28,
+      "score": 2.82,
+      "confidence": 0.957,
+      "raw_score": 2.82,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
+        "feel",
         "feeling",
         "trust"
       ],
@@ -44,9 +45,9 @@
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "feel"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -63,10 +64,31 @@
           "weight": 0.38
         }
       ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "compare"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "compare"
+          ],
+          "weight": 1.15
+        }
+      ]
     }
   ],
-  "context_fingerprint": "a3ab88bb583f",
+  "context_fingerprint": "d83b96d5a097",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }
