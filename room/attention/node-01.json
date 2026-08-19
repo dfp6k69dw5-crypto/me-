@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T17:52:58.828775+00:00",
-  "cycle_key": "32263398867:1:303",
+  "generated_at": "2026-08-19T17:53:39.191646+00:00",
+  "cycle_key": "32263398867:1:304",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,20 +32,28 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "score": 1.63,
+      "confidence": 0.722,
+      "raw_score": 1.91,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "true",
         "compare"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "true"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
             "compare"
           ],
-          "weight": 1.8
+          "weight": 0.76
         }
       ]
     },
@@ -53,15 +61,21 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.33,
-      "confidence": 0.602,
-      "raw_score": 1.61,
+      "score": 1.17,
+      "confidence": 0.531,
+      "raw_score": 1.45,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "specific",
-        "concrete"
+        "specific"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 1.45
+        },
         {
           "kind": "message",
           "matched": [
@@ -81,26 +95,19 @@
           "matched": [
             "specific"
           ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
           "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "c91c93f0c0ac",
+  "context_fingerprint": "58709beff54e",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 839,
   "approx_added_tokens": 210
