@@ -28,6 +28,7 @@ jobs:
           fetch-depth: 0
 
       - name: Confirm current source is red on the Allen response invariant
+        id: baseline
         shell: bash
         run: |
           set -euo pipefail
@@ -40,15 +41,24 @@ jobs:
           echo 'Observed expected red baseline.'
 
       - name: Apply only the participant-recognition repair
+        id: patch
+        continue-on-error: true
         run: python3 scripts/apply_room_allen_response_fix.py
 
       - name: Re-run the exact same simulator
+        id: simulator
+        if: steps.patch.outcome == 'success'
+        continue-on-error: true
         run: python3 scripts/room_allen_response_sim.py
 
       - name: Run existing engine self-test
+        id: selftest
+        if: steps.simulator.outcome == 'success'
+        continue-on-error: true
         run: python3 scripts/room_engine_v5.py selftest
 
       - name: Record post-change research result and restart marker
+        if: steps.baseline.outcome == 'success' && steps.patch.outcome == 'success' && steps.simulator.outcome == 'success' && steps.selftest.outcome == 'success'
         shell: bash
         run: |
           cat >> docs/research/room-allen-response-relevance-2026-08-19.md <<'EOF'
@@ -60,6 +70,9 @@ EOF
           printf 'restart Room for validated Allen response relevance fix 2026-08-19\n' > society/pulse-kick.txt
 
       - name: Commit validated repair
+        id: publish_repair
+        if: steps.baseline.outcome == 'success' && steps.patch.outcome == 'success' && steps.simulator.outcome == 'success' && steps.selftest.outcome == 'success'
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
@@ -67,6 +80,52 @@ EOF
           git config user.email 'actions@users.noreply.github.com'
           git add scripts/room_engine_v5.py scripts/room_private_model.py scripts/room_private_commit.py docs/research/room-allen-response-relevance-2026-08-19.md society/pulse-kick.txt
           git commit -m 'fix: make Allen a direct conversational participant'
+          for n in 1 2 3 4 5 6; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            sleep "$n"
+          done
+          exit 1
+
+      - name: Write non-secret repair status
+        if: always()
+        env:
+          BASELINE: ${{ steps.baseline.outcome }}
+          PATCH: ${{ steps.patch.outcome }}
+          SIMULATOR: ${{ steps.simulator.outcome }}
+          SELFTEST: ${{ steps.selftest.outcome }}
+          PUBLISH_REPAIR: ${{ steps.publish_repair.outcome }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          data={
+            'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
+            'run_id':os.environ.get('GITHUB_RUN_ID'),
+            'baseline':os.environ.get('BASELINE') or 'skipped',
+            'patch':os.environ.get('PATCH') or 'skipped',
+            'simulator':os.environ.get('SIMULATOR') or 'skipped',
+            'selftest':os.environ.get('SELFTEST') or 'skipped',
+            'publish_repair':os.environ.get('PUBLISH_REPAIR') or 'skipped',
+          }
+          data['pass']=all(data[k]=='success' for k in ('baseline','patch','simulator','selftest','publish_repair'))
+          open('room/allen-response-repair-status.json','w').write(json.dumps(data,indent=2)+'\n')
+          print(json.dumps(data,indent=2))
+          PY
+
+      - name: Publish repair status
+        if: always()
+        shell: bash
+        run: |
+          git config user.name 'allen-response-repair'
+          git config user.email 'actions@users.noreply.github.com'
+          git add room/allen-response-repair-status.json
+          git commit -m 'Record Allen response repair status' || exit 0
           for n in 1 2 3 4 5 6; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
