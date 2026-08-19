@@ -14,105 +14,50 @@
 </head>
 <body>
 <div class="app"><header class="top"><div class="brand">The Room<small>SARAH + MARA + OWEN + JULES + ALLEN</small></div><div class="sp"></div><button id="status" class="status" type="button" aria-label="Refresh the Room">loading</button></header><div id="people" class="people"></div><main id="chat" class="chat"><div class="empty">Loading the room…</div></main></div>
-<div id="meta" class="meta">Loading retained conversation…</div>
+<div id="meta" class="meta">Opening live feed and retained history…</div>
 <script>
 const RELAY='https://room-live-mirror.dfp6k69dw5.workers.dev/api/feed';
 const RAW='https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/feed.json';
 const LOCAL='feed.json';
-const API='https://api.github.com/repos/maaronfanberg-lab/me-/contents/room/feed.json?ref=main';
 const HISTORY_RAW='https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/conversation.json';
 const HISTORY_LOCAL='conversation.json';
-const STALE_MS=45000,API_COOLDOWN_MS=90000,FETCH_TIMEOUT_MS=3000,HISTORY_TIMEOUT_MS=8000;
+const LIVE_TIMEOUT_MS=1800,HISTORY_TIMEOUT_MS=9000,RELAY_FRESH_MS=50000;
 const $=s=>document.querySelector(s);
-let last=null,lastSource='',lastApiAt=0,lastApiCandidate=null,lastGoodData=null,lastGoodSource='',lastGoodStamp=0,refreshing=false;
-let historyCache=null,historySource='',historyStamp=0,historyLoadedAt=0;
+let liveData=null,lastGoodLive=null,lastGoodStamp=0,lastSource='',historyData=[],historyLoaded=false;
+let renderedIds=new Set(),liveBusy=false,historyBusy=false;
 function when(s){try{return new Date(s).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'})}catch{return''}}
-function setStatus(txt,ok){const e=$('#status');e.textContent=txt;e.classList.toggle('live',!!ok)}
-async function timedFetch(url,opts={},timeout=FETCH_TIMEOUT_MS){const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),timeout);try{return await fetch(url,{...opts,signal:ctrl.signal})}finally{clearTimeout(timer)}}
-async function fetchJson(url,timeout=FETCH_TIMEOUT_MS){const sep=url.includes('?')?'&':'?';const r=await timedFetch(url+sep+'fresh='+Date.now()+'-'+Math.random().toString(36).slice(2),{cache:'no-store',headers:{'Cache-Control':'no-cache','Pragma':'no-cache'}},timeout);if(!r.ok)throw new Error(String(r.status));return r.json()}
-async function fetchApiFeed(){const sep=API.includes('?')?'&':'?';const r=await timedFetch(API+sep+'fresh='+Date.now(),{cache:'no-store',headers:{Accept:'application/vnd.github+json','Cache-Control':'no-cache'}});if(!r.ok)throw new Error(String(r.status));const obj=await r.json();if(!obj?.content)throw new Error('no api content');const bytes=Uint8Array.from(atob(String(obj.content).replace(/\s/g,'')),c=>c.charCodeAt(0));return JSON.parse(new TextDecoder().decode(bytes))}
-function unwrap(raw){return raw?.feed||raw}
-function valid(s){if(!s||!s.state||!Array.isArray(s.conversation))throw new Error('bad feed');return s}
 function stamp(s){const t=Date.parse(s?.generated_at||s?.state?.last_run||'');return Number.isFinite(t)?t:0}
-function historyTime(list){if(!Array.isArray(list)||!list.length)return 0;const t=Date.parse(list[list.length-1]?.at||'');return Number.isFinite(t)?t:0}
-async function candidate(source,url){try{return {source,data:valid(unwrap(await fetchJson(url)))}}catch{return null}}
-async function apiCandidate(force=false){const now=Date.now();if(!force&&now-lastApiAt<API_COOLDOWN_MS)return lastApiCandidate;lastApiAt=now;try{lastApiCandidate={source:'api',data:valid(unwrap(await fetchApiFeed()))};return lastApiCandidate}catch{return lastApiCandidate}}
-async function getLive(forceApi=false){
-  const results=await Promise.all([candidate('raw',RAW),candidate('relay',RELAY),candidate('pages',LOCAL)]);
-  let good=results.filter(Boolean);
-  if(lastApiCandidate)good.push(lastApiCandidate);
-  good.sort((a,b)=>stamp(b.data)-stamp(a.data));
-  let best=good[0]||null;
-  const stale=!best||Date.now()-stamp(best.data)>STALE_MS;
-  if(forceApi||stale){const direct=await apiCandidate(forceApi);if(direct){good.push(direct);good.sort((a,b)=>stamp(b.data)-stamp(a.data));best=good[0]}}
-  if(!best)throw new Error('no live source');
-  const bestStamp=stamp(best.data);
-  if(lastGoodData&&bestStamp<lastGoodStamp){lastSource=lastGoodSource;return lastGoodData}
-  lastGoodData=best.data;lastGoodSource=best.source;lastGoodStamp=bestStamp;lastSource=best.source;return best.data
+function setStatus(txt,ok){const e=$('#status');e.textContent=txt;e.classList.toggle('live',!!ok)}
+async function timedFetch(url,timeout){const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),timeout);try{return await fetch(url,{cache:'no-store',headers:{'Cache-Control':'no-cache','Pragma':'no-cache'},signal:ctrl.signal})}finally{clearTimeout(timer)}}
+async function fetchJson(url,timeout){const sep=url.includes('?')?'&':'?';const r=await timedFetch(url+sep+'fresh='+Date.now()+'-'+Math.random().toString(36).slice(2),timeout);if(!r.ok)throw new Error(String(r.status));return r.json()}
+function unwrap(raw){return raw?.feed||raw}
+function validLive(raw){const s=unwrap(raw);if(!s||!s.state||!Array.isArray(s.conversation))throw new Error('bad feed');return s}
+async function liveCandidate(source,url,timeout=LIVE_TIMEOUT_MS){try{const data=validLive(await fetchJson(url,timeout));return {source,data,stamp:stamp(data)}}catch{return null}}
+async function getLive(){
+  const relay=await liveCandidate('Cloudflare relay',RELAY,1200);
+  if(relay&&Date.now()-relay.stamp<=RELAY_FRESH_MS)return relay;
+  const raw=await liveCandidate('GitHub Raw',RAW,1800);
+  if(raw&&(!relay||raw.stamp>=relay.stamp))return raw;
+  if(relay)return relay;
+  const pages=await liveCandidate('Pages snapshot',LOCAL,1500);
+  if(pages)return pages;
+  throw new Error('no live source');
 }
-async function historyCandidate(source,url){try{const data=await fetchJson(url,HISTORY_TIMEOUT_MS);if(!Array.isArray(data))throw new Error('bad history');return {source,data,stamp:historyTime(data)}}catch{return null}}
-async function getHistory(force=false){
-  if(!force&&historyCache&&Date.now()-historyLoadedAt<60000)return historyCache;
-  const results=(await Promise.all([historyCandidate('GitHub history',HISTORY_RAW),historyCandidate('Pages history',HISTORY_LOCAL)])).filter(Boolean);
-  results.sort((a,b)=>(b.stamp-a.stamp)||(b.data.length-a.data.length));
-  const best=results[0];
-  if(best&&(!historyCache||best.stamp>=historyStamp||best.data.length>historyCache.length)){
-    historyCache=best.data;historySource=best.source;historyStamp=best.stamp;historyLoadedAt=Date.now();
-  }
-  return historyCache||[]
-}
-function mergedConversation(live,history){
-  const base=Array.isArray(history)?history:[];
-  const tail=Array.isArray(live?.conversation)?live.conversation:[];
-  const out=[],seen=new Set();
-  for(const m of base){if(!m||!m.id||seen.has(m.id))continue;seen.add(m.id);out.push(m)}
-  for(const m of tail){if(!m||!m.id||seen.has(m.id))continue;seen.add(m.id);out.push(m)}
-  return out
-}
-function render(s,history){
-  const minds=s?.minds?.entities||{};
-  const conv=mergedConversation(s,history);
-  const people=$('#people');
-  const peopleFrag=document.createDocumentFragment();
-  const shown=new Set();
-  for(const [id,m] of Object.entries(minds)){const p=document.createElement('div');p.className='person';const b=document.createElement('b');b.textContent=m.name||id;p.appendChild(b);p.append(' 3 nodes');peopleFrag.appendChild(p);shown.add(id)}
-  if(conv.some(m=>m?.speaker==='allen')&&!shown.has('allen')){const p=document.createElement('div');p.className='person';const b=document.createElement('b');b.textContent='Allen';p.appendChild(b);p.append(' participant');peopleFrag.appendChild(p)}
-  people.replaceChildren(peopleFrag);
-  const firstId=conv[0]?.id||'';const lastId=conv[conv.length-1]?.id||'';const sig=conv.length+'|'+firstId+'|'+lastId;
-  if(sig!==last){
-    const chat=$('#chat');
-    const existingMessages=chat.querySelectorAll('.msg').length;
-    if(conv.length||!existingMessages){
-      const nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-180;
-      const frag=document.createDocumentFragment();
-      if(!conv.length){const e=document.createElement('div');e.className='empty';e.textContent='The room is quiet.';frag.appendChild(e)}
-      for(const m of conv){const d=document.createElement('div');d.className='msg'+(m.speaker==='allen'?' allen':'');const w=document.createElement('div');w.className='who';w.textContent=m.speaker==='allen'?'Allen':(minds[m.speaker]?.name||m.speaker||'');const t=document.createElement('div');t.className='text';t.textContent=m.text||'';const q=document.createElement('div');q.className='when';q.textContent=when(m.at);d.appendChild(w);d.appendChild(t);d.appendChild(q);frag.appendChild(d)}
-      chat.replaceChildren(frag);last=sig;
-      if(nearBottom||existingMessages===0)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'auto'}),20)
-    }
-  }
-  const t=stamp(s);const age=t?Math.max(0,Math.floor((Date.now()-t)/1000)):0;const beat=s?.state?.cycle??'—';setStatus('beat '+beat+' · '+age+'s',age<90);
-  const label=lastSource==='relay'?'Cloudflare relay':lastSource==='raw'?'GitHub Raw':lastSource==='api'?'GitHub API direct':'Pages snapshot';
-  const historyLabel=historyCache?historyCache.length+' retained messages via '+historySource:'live tail only';
-  $('#meta').textContent=historyLabel+' · '+label+' · auto 2s';
-}
-async function refresh(forceApi=false){
-  if(refreshing)return;
-  refreshing=true;
-  const btn=$('#status');
-  if(forceApi){btn.disabled=true;setStatus('checking…',false)}
-  try{
-    const [live,history]=await Promise.all([getLive(forceApi),getHistory(forceApi||!historyCache)]);
-    render(live,history)
-  }catch(e){
-    if(lastGoodData){render(lastGoodData,historyCache||[]);setStatus('retry · kept',false)}
-    else setStatus('retry',false)
-  }finally{btn.disabled=false;refreshing=false}
-}
-$('#status').onclick=()=>refresh(true);
-refresh(true);
-setInterval(()=>refresh(false),2000);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh(true)});
-window.addEventListener('pageshow',()=>refresh(true));
+async function historyCandidate(source,url){try{const data=await fetchJson(url,HISTORY_TIMEOUT_MS);if(!Array.isArray(data))throw new Error('bad history');return {source,data}}catch{return null}}
+function displayName(id){if(id==='allen')return'Allen';const mind=liveData?.minds?.entities?.[id];if(mind?.name)return mind.name;return id?String(id).charAt(0).toUpperCase()+String(id).slice(1):''}
+function makeMessage(m){const d=document.createElement('div');d.className='msg'+(m?.speaker==='allen'?' allen':'');const w=document.createElement('div');w.className='who';w.textContent=displayName(m?.speaker);const t=document.createElement('div');t.className='text';t.textContent=m?.text||'';const q=document.createElement('div');q.className='when';q.textContent=when(m?.at);d.appendChild(w);d.appendChild(t);d.appendChild(q);return d}
+function mergedConversation(){const out=[],seen=new Set();for(const list of [historyData,liveData?.conversation||[]])for(const m of list){if(!m?.id||seen.has(m.id))continue;seen.add(m.id);out.push(m)}return out}
+function renderPeople(){const people=$('#people'),frag=document.createDocumentFragment(),minds=liveData?.minds?.entities||{},shown=new Set();for(const [id,m] of Object.entries(minds)){const p=document.createElement('div');p.className='person';const b=document.createElement('b');b.textContent=m.name||displayName(id);p.appendChild(b);p.append(' 3 nodes');frag.appendChild(p);shown.add(id)}const hasAllen=(historyData.some(m=>m?.speaker==='allen')||(liveData?.conversation||[]).some(m=>m?.speaker==='allen'));if(hasAllen&&!shown.has('allen')){const p=document.createElement('div');p.className='person';const b=document.createElement('b');b.textContent='Allen';p.appendChild(b);p.append(' participant');frag.appendChild(p)}people.replaceChildren(frag)}
+function rebuildTranscript(){const conv=mergedConversation(),chat=$('#chat'),wasEmpty=renderedIds.size===0,nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-220,frag=document.createDocumentFragment(),ids=new Set();if(!conv.length){const e=document.createElement('div');e.className='empty';e.textContent='The room is quiet.';frag.appendChild(e)}for(const m of conv){if(!m?.id||ids.has(m.id))continue;ids.add(m.id);frag.appendChild(makeMessage(m))}chat.replaceChildren(frag);renderedIds=ids;renderMeta();if(wasEmpty||nearBottom)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'auto'}),30)}
+function appendLive(){const chat=$('#chat'),nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-220,frag=document.createDocumentFragment();let added=0;for(const m of liveData?.conversation||[]){if(!m?.id||renderedIds.has(m.id))continue;renderedIds.add(m.id);frag.appendChild(makeMessage(m));added++}if(added){chat.querySelector('.empty')?.remove();chat.appendChild(frag);if(nearBottom)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'auto'}),20)}renderMeta()}
+function renderMeta(){const retained=historyLoaded?historyData.length+' retained':'history loading';const shown=renderedIds.size;$('#meta').textContent=shown+' shown · '+retained+' · '+(lastSource||'live source')+' · auto 2s'}
+function renderStatus(){if(!liveData){setStatus('retry',false);return}const t=stamp(liveData),age=t?Math.max(0,Math.floor((Date.now()-t)/1000)):0,beat=liveData?.state?.cycle??'—';setStatus('beat '+beat+' · '+age+'s',age<90)}
+async function refreshLive(manual=false){if(liveBusy)return;liveBusy=true;const btn=$('#status');if(manual){btn.disabled=true;setStatus('checking…',false)}try{const candidate=await getLive();if(candidate.stamp>=lastGoodStamp||!lastGoodLive){lastGoodLive=candidate.data;lastGoodStamp=candidate.stamp;lastSource=candidate.source}liveData=lastGoodLive;renderPeople();if(renderedIds.size)appendLive();else rebuildTranscript();renderStatus()}catch{if(lastGoodLive){liveData=lastGoodLive;renderStatus();setStatus('retry · kept',false)}else setStatus('retry',false)}finally{btn.disabled=false;liveBusy=false}}
+async function loadHistory(force=false){if(historyBusy||(historyLoaded&&!force))return;historyBusy=true;try{let best=await historyCandidate('GitHub history',HISTORY_RAW);if(!best)best=await historyCandidate('Pages history',HISTORY_LOCAL);if(best){historyData=best.data;historyLoaded=true;rebuildTranscript();renderPeople()}}finally{historyBusy=false;renderMeta()}}
+$('#status').onclick=()=>{refreshLive(true);loadHistory(true)};
+refreshLive(false);loadHistory(false);
+setInterval(()=>refreshLive(false),2000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshLive(false)});
+window.addEventListener('pageshow',()=>refreshLive(false));
 </script>
 </body></html>
