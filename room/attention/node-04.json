@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T01:40:04.763175+00:00",
-  "cycle_key": "32184487392:1:274",
+  "generated_at": "2026-08-19T01:41:24.328524+00:00",
+  "cycle_key": "32184487392:1:275",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,16 +32,15 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 6.96,
-      "confidence": 1.0,
-      "raw_score": 6.96,
+      "score": 4.18,
+      "confidence": 0.996,
+      "raw_score": 4.18,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "proof",
         "whether",
         "claim",
-        "reason",
-        "compare"
+        "reason"
       ],
       "evidence_sources": [
         {
@@ -50,31 +49,14 @@
             "proof",
             "whether"
           ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "proof",
-            "claim",
-            "reason"
-          ],
           "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "proof",
-            "whether"
-          ],
-          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
             "proof"
           ],
-          "weight": 0.92
+          "weight": 1.15
         },
         {
           "kind": "message",
@@ -83,33 +65,29 @@
             "whether"
           ],
           "weight": 0.76
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "question"
-      ],
-      "evidence_sources": [
+        },
         {
           "kind": "message",
           "matched": [
-            "question"
+            "proof",
+            "claim",
+            "reason"
           ],
-          "weight": 1.8
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "proof",
+            "whether"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "be76a13940c1",
+  "context_fingerprint": "79f7686e2993",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 867,
-  "approx_added_tokens": 217
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
