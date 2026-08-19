@@ -1,5 +1,5 @@
 name: Room relay transport probe
-# authenticated ingest verification: 2026-08-19b
+# authenticated ingest + Worker reboot baseline: 2026-08-19c
 
 on:
   push:
@@ -21,6 +21,13 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+
+      - name: Execute actual Worker reboot-ingest baseline
+        id: worker_sim
+        continue-on-error: true
+        run: |
+          rm -f room/worker-ingest-simulator-diagnostic.json
+          node scripts/room_worker_ingest_sim.mjs
 
       - name: Test authenticated ingest then verify public relay
         env:
@@ -110,14 +117,15 @@ jobs:
           print(json.dumps(out,indent=2))
           PY
 
-      - name: Publish relay diagnostic
+      - name: Publish relay and Worker-simulator diagnostics
         if: always()
         run: |
           test -f room/relay-transport-diagnostic.json || printf '%s\n' '{"pass":false,"error":"relay probe produced no diagnostic"}' > room/relay-transport-diagnostic.json
+          test -f room/worker-ingest-simulator-diagnostic.json || printf '%s\n' '{"pass":false,"error":"worker ingest simulator produced no diagnostic"}' > room/worker-ingest-simulator-diagnostic.json
           git config user.name "room-relay-probe"
           git config user.email "actions@users.noreply.github.com"
-          git add room/relay-transport-diagnostic.json
-          git commit -m "Record Room relay transport diagnostic" || exit 0
+          git add room/relay-transport-diagnostic.json room/worker-ingest-simulator-diagnostic.json
+          git commit -m "Record Room relay and Worker ingest diagnostics" || exit 0
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
