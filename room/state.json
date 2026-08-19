@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2418,
+  "cycle": 2419,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-19T15:01:07.963078Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-19T15:01:49.253841Z",
   "messages": 1000,
-  "last_public_event": "20260819T150107961-jules-v5",
+  "last_public_event": "20260819T150149252-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002418",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002419",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "interest",
+    "current_facet": "concept",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "better understand",
       "abstract example",
       "term",
       "exploration",
@@ -71,7 +70,8 @@
       "fully understand",
       "relatable",
       "progressive",
-      "interest"
+      "interest",
+      "concept"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,18 +84,17 @@
       "owen",
       "jules"
     ],
-    "turns": 4835,
+    "turns": 4837,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "progressive",
+      "interest",
       "learning",
       "skepticism",
-      "progression",
-      "topic",
-      "interest",
-      "topic progress",
-      "fully understand",
-      "topic progression"
+      "curiosity",
+      "concept",
+      "skepticism is important to fully understand the concept",
+      "topic progression is important to fully understand it",
+      "skepticism is important to fully understand the topic progression"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -105,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2418,
-        "hits": 30990,
+        "last_cycle": 2419,
+        "hits": 31006,
         "status": "open"
       },
       {
@@ -114,8 +113,17 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 2418,
-        "hits": 8750,
+        "last_cycle": 2419,
+        "hits": 8757,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "curious",
+        "depth": 281,
+        "first_cycle": 1640,
+        "last_cycle": 2419,
+        "hits": 1155,
         "status": "open"
       },
       {
@@ -123,8 +131,98 @@
         "parent": "contextual options",
         "depth": 317,
         "first_cycle": 2323,
-        "last_cycle": 2418,
-        "hits": 300,
+        "last_cycle": 2419,
+        "hits": 308,
+        "status": "open"
+      },
+      {
+        "label": "progression",
+        "parent": "mara",
+        "depth": 289,
+        "first_cycle": 2405,
+        "last_cycle": 2419,
+        "hits": 57,
+        "status": "open"
+      },
+      {
+        "label": "opinion",
+        "parent": "opponent",
+        "depth": 293,
+        "first_cycle": 2412,
+        "last_cycle": 2419,
+        "hits": 23,
+        "status": "open"
+      },
+      {
+        "label": "aim",
+        "parent": "opinion",
+        "depth": 294,
+        "first_cycle": 2413,
+        "last_cycle": 2419,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "importance",
+        "parent": "aim",
+        "depth": 295,
+        "first_cycle": 2414,
+        "last_cycle": 2419,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "fully understand",
+        "parent": "importance",
+        "depth": 296,
+        "first_cycle": 2415,
+        "last_cycle": 2419,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "specific active detail",
+        "parent": "progression",
+        "depth": 290,
+        "first_cycle": 2407,
+        "last_cycle": 2419,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "relatable",
+        "parent": "fully understand",
+        "depth": 297,
+        "first_cycle": 2416,
+        "last_cycle": 2419,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "progressive",
+        "parent": "relatable",
+        "depth": 298,
+        "first_cycle": 2417,
+        "last_cycle": 2419,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "interest",
+        "parent": "progressive",
+        "depth": 299,
+        "first_cycle": 2418,
+        "last_cycle": 2419,
+        "hits": 5,
+        "status": "open"
+      },
+      {
+        "label": "concept",
+        "parent": "interest",
+        "depth": 300,
+        "first_cycle": 2419,
+        "last_cycle": 2419,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -137,93 +235,12 @@
         "status": "open"
       },
       {
-        "label": "progression",
-        "parent": "mara",
-        "depth": 289,
-        "first_cycle": 2405,
-        "last_cycle": 2418,
-        "hits": 55,
-        "status": "open"
-      },
-      {
         "label": "opponent",
         "parent": "opposed",
         "depth": 292,
         "first_cycle": 2411,
         "last_cycle": 2418,
         "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "opinion",
-        "parent": "opponent",
-        "depth": 293,
-        "first_cycle": 2412,
-        "last_cycle": 2418,
-        "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "aim",
-        "parent": "opinion",
-        "depth": 294,
-        "first_cycle": 2413,
-        "last_cycle": 2418,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "importance",
-        "parent": "aim",
-        "depth": 295,
-        "first_cycle": 2414,
-        "last_cycle": 2418,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "fully understand",
-        "parent": "importance",
-        "depth": 296,
-        "first_cycle": 2415,
-        "last_cycle": 2418,
-        "hits": 16,
-        "status": "open"
-      },
-      {
-        "label": "specific active detail",
-        "parent": "progression",
-        "depth": 290,
-        "first_cycle": 2407,
-        "last_cycle": 2418,
-        "hits": 14,
-        "status": "open"
-      },
-      {
-        "label": "relatable",
-        "parent": "fully understand",
-        "depth": 297,
-        "first_cycle": 2416,
-        "last_cycle": 2418,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "progressive",
-        "parent": "relatable",
-        "depth": 298,
-        "first_cycle": 2417,
-        "last_cycle": 2418,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "interest",
-        "parent": "progressive",
-        "depth": 299,
-        "first_cycle": 2418,
-        "last_cycle": 2418,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -287,15 +304,6 @@
         "first_cycle": 2411,
         "last_cycle": 2411,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "curious",
-        "depth": 281,
-        "first_cycle": 1640,
-        "last_cycle": 2410,
-        "hits": 1154,
         "status": "open"
       },
       {
@@ -522,19 +530,9 @@
         "last_cycle": 2382,
         "hits": 22,
         "status": "open"
-      },
-      {
-        "label": "public-expression process",
-        "parent": "right choice for the conversation",
-        "depth": 337,
-        "first_cycle": 2358,
-        "last_cycle": 2381,
-        "hits": 177,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "speak",
       "views",
       "clear and concise",
       "content",
@@ -565,10 +563,11 @@
       "importance",
       "fully understand",
       "relatable",
-      "progressive"
+      "progressive",
+      "interest"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 2418,
+    "last_branch_cycle": 2419,
     "escape_pressure": 0
   }
 }
