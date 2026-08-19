@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T01:29:46.070723+00:00",
-  "cycle_key": "32184487392:1:264",
+  "generated_at": "2026-08-19T01:30:57.464694+00:00",
+  "cycle_key": "32184487392:1:265",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,19 +32,21 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.7,
-      "confidence": 0.998,
-      "raw_score": 4.7,
+      "score": 5.97,
+      "confidence": 1.0,
+      "raw_score": 5.97,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "reason",
         "proof",
-        "why"
+        "reason",
+        "why",
+        "compare"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "proof",
             "reason"
           ],
           "weight": 1.8
@@ -53,7 +55,8 @@
           "kind": "message",
           "matched": [
             "why",
-            "proof"
+            "proof",
+            "reason"
           ],
           "weight": 1.45
         },
@@ -63,60 +66,29 @@
             "why",
             "proof",
             "reason"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "proof",
+            "compare"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "why",
-            "proof",
             "reason"
           ],
           "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why",
-            "proof",
-            "reason"
-          ],
-          "weight": 0.64
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "asked"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "asked"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "asked"
-          ],
-          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "7ebf6332993e",
+  "context_fingerprint": "f1970febb2f2",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 867,
-  "approx_added_tokens": 217
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
