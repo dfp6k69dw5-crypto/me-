@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T23:19:08.601243+00:00",
-  "cycle_key": "32311652079:1:21",
+  "generated_at": "2026-08-19T23:19:38.798693+00:00",
+  "cycle_key": "32311652079:1:22",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,22 +32,20 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 5.4,
-      "confidence": 1.0,
-      "raw_score": 5.4,
+      "score": 3.32,
+      "confidence": 0.982,
+      "raw_score": 3.32,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "place",
         "concrete",
-        "example",
-        "place"
+        "example"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "example",
-            "place",
-            "concrete"
+            "place"
           ],
           "weight": 1.8
         },
@@ -75,43 +73,17 @@
         {
           "kind": "message",
           "matched": [
-            "place"
+            "example",
+            "place",
+            "concrete"
           ],
-          "weight": 0.64
-        }
-      ]
-    },
-    {
-      "name": "creative-bridge",
-      "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "idea"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "idea"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "topic",
-          "matched": [
-            "idea"
-          ],
-          "weight": 0.58
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "0b0461994f7d",
+  "context_fingerprint": "8ab7aba8a534",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 798,
-  "approx_added_tokens": 200
+  "temporary_skill_chars": 493,
+  "approx_added_tokens": 123
 }
