@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T11:49:12.388701+00:00",
-  "cycle_key": "32229993977:1:398",
+  "generated_at": "2026-08-19T11:49:50.473110+00:00",
+  "cycle_key": "32229993977:1:399",
   "node": 2,
   "entity": "sarah",
   "role": "expression",
@@ -29,58 +29,54 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "affect",
-      "score": 1.53,
-      "confidence": 0.644,
-      "raw_score": 1.53,
+      "domain": "critical-testing",
+      "score": 4.05,
+      "confidence": 0.994,
+      "raw_score": 4.05,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "love",
-        "trust"
+        "compare",
+        "why",
+        "whether"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "love"
+            "why",
+            "compare"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why",
+            "whether"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "love"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "love"
-          ],
-          "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "love"
+            "why"
           ],
           "weight": 0.54
         },
         {
-          "kind": "topic_support",
+          "kind": "message",
           "matched": [
-            "trust"
+            "why"
           ],
-          "weight": 0.38
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "0f69e5f883de",
+  "context_fingerprint": "b3709d8f0b82",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
