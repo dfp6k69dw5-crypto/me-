@@ -54,7 +54,7 @@ This corrective patch relies on the same conversation-mechanism evidence documen
 7. **Replication/correction/limitations — PASS.** This note explicitly corrects the earlier source-only inference with live evidence.
 8. **Context transfer — PASS WITH LIMITATION.** Multi-party Room behavior remains autonomous; only participant representation is generalized.
 9. **Implementation mapping — PASS.** Change `room_social_v5.py` participant recognition and migration while keeping `ORDER` four-only.
-10. **Post-change validation — DEFINED BEFORE PATCH.** The exact simulator must move from red to green, the Room must keep four generators, and persisted cognitive/topic state must contain Allen after restart.
+10. **Post-change validation — PASS IN SIMULATOR; LIVE PERSISTENCE PENDING.** The exact simulator moved from red to green while the existing engine self-test remained green. Persisted live state is checked only after merge/restart.
 
 ## Pre-change simulator result
 
@@ -86,3 +86,9 @@ The same `scripts/room_allen_response_sim.py` must pass all of the following aft
 8. engine sense retains Allen as the active partner.
 
 After merge/restart, persisted cognitive state and topic participant state must contain Allen. A fresh real Allen turn is then required for the final queue → injector → conversation → direct-response test.
+
+## Post-change simulator result
+
+At 2026-08-19T23:46:20Z the isolated fix branch passed the exact Allen social-boundary simulator and the existing engine self-test. The simulator confirmed all eight criteria above, including four-only autonomous generation, Allen relationship migration, direct event classification, topic participation, legal model targeting, and retention of Allen as the active engine partner. The engine self-test independently passed the sequential four-voice architecture invariant.
+
+One intermediate simulator run falsely reported Jules as the active partner because the test monkey-patched the compatibility wrapper while `sense()` remained bound to the preserved core module. The harness was corrected to replace the bindings actually resolved by `sense()`; no production behavior was changed to satisfy that harness error.
