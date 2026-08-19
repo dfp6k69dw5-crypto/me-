@@ -5,6 +5,7 @@ on:
     branches: ['**']
     paths:
       - 'scripts/room_allen_response_sim.py'
+      - 'scripts/apply_allen_social_participant_fix.py'
       - 'scripts/room_social_v5.py'
       - 'scripts/room_engine_v5.py'
       - 'scripts/room_private_model.py'
@@ -23,37 +24,46 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
-      - name: Run exact Allen social boundary simulator
+      - name: Apply only the social participant boundary candidate
+        run: python3 scripts/apply_allen_social_participant_fix.py
+      - name: Run exact Allen social boundary simulator and existing engine self-test
         shell: bash
         run: |
           set +e
           python3 scripts/room_allen_response_sim.py > /tmp/allen-social.txt 2>&1
-          status=$?
+          sim_status=$?
+          python3 scripts/room_engine_v5.py selftest > /tmp/engine-selftest.txt 2>&1
+          engine_status=$?
           set -e
-          python3 - "$status" <<'PY'
+          python3 - "$sim_status" "$engine_status" <<'PY'
           import json,sys
           from datetime import datetime,timezone
-          status=int(sys.argv[1])
-          try:
-              output=open('/tmp/allen-social.txt').read()[-6000:]
-          except Exception:
-              output=''
+          sim_status=int(sys.argv[1]); engine_status=int(sys.argv[2])
+          def read(path):
+              try:return open(path).read()[-6000:]
+              except Exception:return ''
           payload={
               'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
-              'pass':status==0,
-              'exit_code':status,
-              'output':output,
+              'pass':sim_status==0 and engine_status==0,
+              'sim_exit_code':sim_status,
+              'engine_selftest_exit_code':engine_status,
+              'sim_output':read('/tmp/allen-social.txt'),
+              'engine_selftest_output':read('/tmp/engine-selftest.txt'),
           }
           open('room/allen-social-sim-diagnostic.json','w').write(json.dumps(payload,indent=2)+'\n')
+          if not payload['pass']:
+              print(json.dumps(payload,indent=2))
+              raise SystemExit(1)
+          print(json.dumps(payload,indent=2))
           PY
-      - name: Record diagnostic on tested branch
+      - name: Record validated candidate on tested branch
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'allen-social-simulator'
           git config user.email 'actions@users.noreply.github.com'
-          git add room/allen-social-sim-diagnostic.json
-          git commit -m 'Record Allen social boundary simulator' || exit 0
+          git add scripts/room_social_v5.py room/allen-social-sim-diagnostic.json
+          git commit -m 'fix: recognize Allen throughout Room social state' || exit 0
           branch="${GITHUB_REF_NAME}"
           for n in 1 2 3 4 5; do
             if git push origin "HEAD:${branch}"; then exit 0; fi
@@ -62,5 +72,3 @@ jobs:
             sleep "$n"
           done
           exit 1
-
-# baseline-trigger: 2026-08-19T23:29Z
