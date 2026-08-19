@@ -1,21 +1,23 @@
 {
-  "checked_at": "2026-08-19T12:53:26.191Z",
-  "pass": false,
+  "checked_at": "2026-08-19T13:26:28.768Z",
+  "pass": true,
   "expected_final_beat": 103,
-  "observed_final_beat": 100,
-  "status": "beat 100 · 308s",
-  "meta": "1000 shown · 1000 retained · Pages snapshot · auto 2s",
+  "observed_final_beat": 103,
+  "status": "beat 103 · 3s",
+  "meta": "1012 shown · 1000 retained · GitHub API fallback · auto 2s",
   "retained_message_floor": 1000,
-  "observed_message_count": 1000,
+  "observed_message_count": 1012,
   "markers_present": {
-    "SIM BEAT 101": false,
-    "SIM BEAT 102": false,
-    "SIM BEAT 103": false
+    "SIM BEAT 101": true,
+    "SIM BEAT 102": true,
+    "SIM BEAT 103": true
   },
-  "relay_calls": 5,
-  "raw_calls": 5,
-  "api_calls": 0,
-  "api_beats_served": [],
+  "relay_calls": 3,
+  "raw_calls": 3,
+  "api_calls": 1,
+  "api_beats_served": [
+    103
+  ],
   "errors": [],
-  "invariant": "already-open viewer advances without reload and never treats static Pages snapshot as live"
+  "invariant": "already-open viewer catches up without reload and never treats static Pages snapshot as live"
 }
