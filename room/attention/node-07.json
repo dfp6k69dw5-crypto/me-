@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T01:56:23.381040+00:00",
-  "cycle_key": "32184487392:1:290",
+  "generated_at": "2026-08-19T01:57:30.714388+00:00",
+  "cycle_key": "32184487392:1:291",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,14 +32,14 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.4,
-      "confidence": 0.997,
-      "raw_score": 4.4,
+      "score": 3.89,
+      "confidence": 0.993,
+      "raw_score": 3.89,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "proof",
-        "compare",
-        "why"
+        "why",
+        "compare"
       ],
       "evidence_sources": [
         {
@@ -52,7 +52,8 @@
         {
           "kind": "message",
           "matched": [
-            "compare"
+            "why",
+            "proof"
           ],
           "weight": 1.45
         },
@@ -79,10 +80,38 @@
           "weight": 0.76
         }
       ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "conversation"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.45
+        }
+      ]
     }
   ],
-  "context_fingerprint": "69b44e4c0f54",
+  "context_fingerprint": "07fdfe6d746c",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 867,
+  "approx_added_tokens": 217
 }
