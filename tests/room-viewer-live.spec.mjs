@@ -22,7 +22,7 @@ function beatMessages(beat) {
   }));
 }
 
-function feed(beat, generatedOffsetSeconds = 0) {
+function feed(beat, generatedOffsetSeconds = 0, conversation = null) {
   return {
     generated_at: iso(generatedOffsetSeconds),
     state: {
@@ -39,7 +39,7 @@ function feed(beat, generatedOffsetSeconds = 0) {
         jules: { name: 'Jules' },
       },
     },
-    conversation: beatMessages(beat),
+    conversation: conversation || beatMessages(beat),
   };
 }
 
@@ -67,7 +67,7 @@ function githubContentsPayload(value) {
   };
 }
 
-test('open Room viewer must advance across live beats when Pages is only a stale snapshot', async ({ page }) => {
+test('open Room viewer must catch up from an independent live fallback when Pages is stale', async ({ page }) => {
   const errors = [];
   page.on('pageerror', e => errors.push(`pageerror: ${e.message}`));
   page.on('console', msg => {
@@ -76,7 +76,6 @@ test('open Room viewer must advance across live beats when Pages is only a stale
 
   const history = retainedHistory();
   const staticPagesFeed = feed(100, -300);
-  let apiBeat = 100;
   let apiCalls = 0;
   let relayCalls = 0;
   let rawCalls = 0;
@@ -94,12 +93,16 @@ test('open Room viewer must advance across live beats when Pages is only a stale
 
   await page.route(`${API_FEED}*`, async route => {
     apiCalls++;
-    apiBeat = Math.min(103, apiBeat + 1);
-    observedApiBeats.push(apiBeat);
+    observedApiBeats.push(103);
+    const catchUp = feed(103, 0, [
+      ...beatMessages(101),
+      ...beatMessages(102),
+      ...beatMessages(103),
+    ]);
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(githubContentsPayload(feed(apiBeat, 0))),
+      body: JSON.stringify(githubContentsPayload(catchUp)),
     });
   });
 
@@ -132,9 +135,8 @@ test('open Room viewer must advance across live beats when Pages is only a stale
   await expect(page.locator('.msg')).toHaveCount(1000, { timeout: 12000 });
   await expect(page.locator('#status')).toContainText('beat 100', { timeout: 12000 });
 
-  // Keep the same page open while the independently mocked GitHub API advances.
-  // Current broken viewer never consults this source, reproducing the user's
-  // "history + last Pages beat + rising age" screenshots.
+  // Keep the same page open. An emergency API read represents the latest
+  // production feed tail and can contain several completed beats at once.
   await page.waitForTimeout(8500);
 
   const status = await page.locator('#status').innerText();
@@ -147,7 +149,7 @@ test('open Room viewer must advance across live beats when Pages is only a stale
   const requiredMarkers = [101, 102, 103].map(n => `SIM BEAT ${n}`);
   const markersPresent = requiredMarkers.map(marker => bodyText.includes(marker));
   const pass = observedBeat !== null && observedBeat >= 103 &&
-    markersPresent.every(Boolean) && messageCount >= 1000 && errors.length === 0;
+    markersPresent.every(Boolean) && messageCount >= 1000 && apiCalls >= 1 && errors.length === 0;
 
   const diagnostic = {
     checked_at: new Date().toISOString(),
@@ -164,7 +166,7 @@ test('open Room viewer must advance across live beats when Pages is only a stale
     api_calls: apiCalls,
     api_beats_served: observedApiBeats,
     errors,
-    invariant: 'already-open viewer advances without reload and never treats static Pages snapshot as live',
+    invariant: 'already-open viewer catches up without reload and never treats static Pages snapshot as live',
   };
 
   fs.writeFileSync('room/viewer-simulator-diagnostic.json', JSON.stringify(diagnostic, null, 2) + '\n');
