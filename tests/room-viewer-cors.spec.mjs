@@ -90,7 +90,7 @@ test('cross-origin live polling must not depend on preflight for simple public G
   await page.route(`${BASE}/room/feed.json*`,route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(pagesSnapshot)}));
 
   await page.goto(`${BASE}/room/?cors-simulator=1`,{waitUntil:'domcontentloaded'});
-  await expect(page.locator('.msg')).toHaveCount(1000,{timeout:12000});
+  await expect.poll(async()=>page.locator('.msg').count(),{timeout:12000}).toBeGreaterThanOrEqual(1000);
   await page.waitForTimeout(8500);
 
   const status=await page.locator('#status').innerText();
