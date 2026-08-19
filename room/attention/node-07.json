@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T04:44:35.475264+00:00",
-  "cycle_key": "32208320454:1:233",
+  "generated_at": "2026-08-19T04:45:09.838233+00:00",
+  "cycle_key": "32208320454:1:234",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.8,
-      "confidence": 0.779,
+      "score": 1.52,
+      "confidence": 0.68,
       "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "idea"
       ],
@@ -55,6 +55,20 @@
           "weight": 1.45
         },
         {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 0.64
+        },
+        {
           "kind": "topic",
           "matched": [
             "idea"
@@ -62,31 +76,10 @@
           "weight": 0.58
         }
       ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "conversation"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 1.45
-        }
-      ]
     }
   ],
-  "context_fingerprint": "5a51c42400c6",
+  "context_fingerprint": "919aeaa94682",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 826,
-  "approx_added_tokens": 206
+  "temporary_skill_chars": 488,
+  "approx_added_tokens": 122
 }
