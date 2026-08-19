@@ -1,8 +1,6 @@
 {
-  "checked_at": "2026-08-19T23:49:11.775611Z",
-  "pass": true,
-  "sim_exit_code": 0,
-  "engine_selftest_exit_code": 0,
-  "sim_output": "PASS: autonomous generator iteration remains exactly four entities\nPASS: Allen is not generated as an autonomous entity\nPASS: engine participant set contains Allen\nPASS: social participant set contains Allen\nPASS: social generator order remains exactly four\nPASS: relationship migration creates Allen for every autonomous entity\nPASS: social event classifier recognizes Allen as Sarah's direct addressee partner\nPASS: topic participant state contains Allen\nPASS: direct Allen turn updates Sarah-to-Allen relationship state\nPASS: expression schema can target Allen\nPASS: thought schema can choose Allen\nPASS: latest Allen turn remains active engine partner\nPASS: Allen engine partner has a usable relationship view\nPASS: Allen social participation boundary is green\n",
-  "engine_selftest_output": "PASS: sequential four-voice engine with repetition-loop breakout and no deterministic public language\n"
+  "checked_at": "2026-08-19T23:34:43.953862Z",
+  "pass": false,
+  "exit_code": 1,
+  "output": "PASS: autonomous generator iteration remains exactly four entities\nPASS: Allen is not generated as an autonomous entity\nPASS: engine participant set contains Allen\nTraceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 117, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 32, in main\n    require(\"social participant set contains Allen\", social_participants == PARTICIPANTS, social_participants)\n  File \"/home/runner/work/me-/me-/scripts/room_allen_response_sim.py\", line 21, in require\n    raise AssertionError(f\"{name}: {detail}\")\nAssertionError: social participant set contains Allen: ()\n"
 }
