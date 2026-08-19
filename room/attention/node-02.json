@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T07:53:51.017375+00:00",
-  "cycle_key": "32208320454:1:543",
+  "generated_at": "2026-08-19T07:56:18.111001+00:00",
+  "cycle_key": "32229993977:1:1",
   "node": 2,
   "entity": "sarah",
   "role": "expression",
@@ -29,29 +29,45 @@
   },
   "selected_skills": [
     {
-      "name": "social-grounding",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.746,
-      "raw_score": 1.8,
+      "domain": "memory-callback",
+      "score": 3.6,
+      "confidence": 0.987,
+      "raw_score": 3.6,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "conversation"
+        "history",
+        "past"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "conversation"
+            "history",
+            "past"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "history"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "history"
+          ],
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "4b2a07065bb2",
+  "context_fingerprint": "01daefa70595",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 521,
-  "approx_added_tokens": 130
+  "temporary_skill_chars": 515,
+  "approx_added_tokens": 129
 }
