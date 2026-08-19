@@ -1,5 +1,5 @@
 name: Room relay transport probe
-# validate-and-publish Worker reboot ordering fix: 2026-08-19b
+# source-only publish after green simulator: 2026-08-19
 
 on:
   push:
@@ -28,29 +28,22 @@ jobs:
       - name: Execute actual patched RoomState.putLatest
         id: worker_sim
         continue-on-error: true
-        run: |
-          rm -f room/worker-ingest-simulator-diagnostic.json
-          node scripts/room_worker_ingest_sim.mjs
+        run: node scripts/room_worker_ingest_sim.mjs
 
-      - name: Publish source only if simulator passed
-        if: always()
-        env:
-          SIMULATOR_OUTCOME: ${{ steps.worker_sim.outcome }}
+      - name: Publish only validated Worker source
+        if: steps.worker_sim.outcome == 'success'
         run: |
-          test -f room/worker-ingest-simulator-diagnostic.json || printf '%s\n' '{"pass":false,"error":"worker ingest simulator produced no diagnostic"}' > room/worker-ingest-simulator-diagnostic.json
           git config user.name "room-relay-probe"
           git config user.email "actions@users.noreply.github.com"
-          git add room/worker-ingest-simulator-diagnostic.json
-          if [ "$SIMULATOR_OUTCOME" = success ]; then
-            git add cloudflare/room-worker/src/index.js
-          else
-            git restore cloudflare/room-worker/src/index.js
-          fi
-          git commit -m "Validate and apply Room Worker reboot ordering" || exit 0
+          git add cloudflare/room-worker/src/index.js
+          git commit -m "Apply Room Worker boot-aware feed ordering" || exit 0
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
-            git rebase origin/main || { git rebase --abort || true; }
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
             sleep "$n"
           done
           exit 1
