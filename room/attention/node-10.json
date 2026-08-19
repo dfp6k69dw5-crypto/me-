@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T07:27:11.840866+00:00",
-  "cycle_key": "32208320454:1:500",
+  "generated_at": "2026-08-19T07:27:51.291942+00:00",
+  "cycle_key": "32208320454:1:501",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,45 +29,84 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "affect",
-      "score": 1.32,
-      "confidence": 0.598,
-      "raw_score": 1.6,
-      "repeat_penalty": 0.28,
+      "domain": "concrete-specificity",
+      "score": 5.05,
+      "confidence": 0.999,
+      "raw_score": 5.05,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "feeling",
-        "relationship",
-        "trust"
+        "concrete",
+        "example",
+        "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "example",
+            "concrete"
           ],
-          "weight": 0.76
+          "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "relationship"
+            "specific",
+            "concrete"
           ],
-          "weight": 0.46
+          "weight": 1.45
         },
         {
-          "kind": "topic_support",
+          "kind": "message",
           "matched": [
-            "trust"
+            "specific",
+            "concrete"
           ],
-          "weight": 0.38
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific",
+            "concrete"
+          ],
+          "weight": 0.92
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "sure"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 0.92
         }
       ]
     }
   ],
-  "context_fingerprint": "b2728269ac04",
+  "context_fingerprint": "cfcbdc0f3293",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 839,
+  "approx_added_tokens": 210
 }

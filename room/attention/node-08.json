@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T07:27:23.923345+00:00",
-  "cycle_key": "32208320454:1:500",
+  "generated_at": "2026-08-19T07:28:02.684697+00:00",
+  "cycle_key": "32208320454:1:501",
   "node": 8,
   "entity": "owen",
   "role": "expression",
@@ -29,45 +29,56 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "affect",
-      "score": 1.32,
-      "confidence": 0.554,
-      "raw_score": 1.6,
-      "repeat_penalty": 0.28,
+      "domain": "concrete-specificity",
+      "score": 5.05,
+      "confidence": 0.999,
+      "raw_score": 5.05,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "feeling",
-        "relationship",
-        "trust"
+        "concrete",
+        "example",
+        "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "example",
+            "concrete"
           ],
-          "weight": 0.76
+          "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "relationship"
+            "specific",
+            "concrete"
           ],
-          "weight": 0.46
+          "weight": 1.45
         },
         {
-          "kind": "topic_support",
+          "kind": "message",
           "matched": [
-            "trust"
+            "specific",
+            "concrete"
           ],
-          "weight": 0.38
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific",
+            "concrete"
+          ],
+          "weight": 0.92
         }
       ]
     }
   ],
-  "context_fingerprint": "b2728269ac04",
+  "context_fingerprint": "cfcbdc0f3293",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 493,
+  "approx_added_tokens": 123
 }
