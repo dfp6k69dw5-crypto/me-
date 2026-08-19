@@ -1,5 +1,5 @@
 name: Room relay transport probe
-# verify auto-deployed boot-aware Worker: 2026-08-19 15:38 CDT
+# verify live relay plus Allen auth fallback: 2026-08-19
 
 on:
   push:
@@ -65,12 +65,33 @@ jobs:
             -H 'Origin: https://maaronfanberg-lab.github.io' \
             "${ROOM_RELAY_URL}/api/feed?fresh=$(date +%s)" > /tmp/relay-live.json
 
+      - name: Probe live Allen auth without a credential
+        id: allen_auth
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          code=$(curl -sS --connect-timeout 3 --max-time 8 \
+            -o /tmp/allen-auth-response.json \
+            -w '%{http_code}' \
+            "${ROOM_RELAY_URL}/api/allen/auth")
+          rc=$?
+          set -e
+          echo "http_code=${code}" >> "$GITHUB_OUTPUT"
+          echo "curl_rc=${rc}" >> "$GITHUB_OUTPUT"
+          cat /tmp/allen-auth-response.json 2>/dev/null || true
+          test "$rc" -eq 0
+
       - name: Write live deployment diagnosis
         if: always()
         env:
           VALIDATE_OUTCOME: ${{ steps.validate.outcome }}
           INGEST_OUTCOME: ${{ steps.ingest.outcome }}
           READBACK_OUTCOME: ${{ steps.readback.outcome }}
+          ALLEN_AUTH_OUTCOME: ${{ steps.allen_auth.outcome }}
+          ALLEN_AUTH_HTTP: ${{ steps.allen_auth.outputs.http_code }}
+          ALLEN_AUTH_CURL_RC: ${{ steps.allen_auth.outputs.curl_rc }}
         run: |
           python3 - <<'PY'
           import json,os,subprocess
@@ -85,10 +106,15 @@ jobs:
           except Exception: pass
           remote=raw.get('feed',raw) if isinstance(raw,dict) else {}
           rs=remote.get('state',{}) if isinstance(remote,dict) else {}
+          auth={}
+          try: auth=json.load(open('/tmp/allen-auth-response.json'))
+          except Exception: pass
           same_boot=bool(ls.get('boot_id') and ls.get('boot_id')==rs.get('boot_id'))
           accepted=bool(ingest.get('accepted'))
           reason=ingest.get('reason')
           fixed_live = accepted and same_boot
+          auth_http=str(os.environ.get('ALLEN_AUTH_HTTP') or '')
+          allen_fallback_live=(auth_http=='401' and auth.get('error')=='unauthorized')
           out={
             'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
             'source_sha':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
@@ -103,8 +129,13 @@ jobs:
             'relay_cycle':rs.get('cycle'),
             'same_boot':same_boot,
             'validated_fix_is_live':fixed_live,
+            'allen_auth_transport':os.environ.get('ALLEN_AUTH_OUTCOME') or 'skipped',
+            'allen_auth_http':auth_http,
+            'allen_auth_error':auth.get('error'),
+            'allen_auth_fallback_live':allen_fallback_live,
           }
-          if fixed_live: out['state']='validated-worker-fix-live'
+          if fixed_live and allen_fallback_live: out['state']='relay-and-allen-auth-live'
+          elif fixed_live: out['state']='relay-live-allen-auth-not-yet-live'
           elif reason=='older-cycle': out['state']='live-worker-still-old-cycle-only-build'
           elif not same_boot: out['state']='live-worker-still-on-older-room-boot'
           else: out['state']='live-worker-needs-deployment-or-further-inspection'
@@ -122,8 +153,7 @@ jobs:
           for n in 1 2 3 4 5 6; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
-            git reset --hard origin/main
-            git cherry-pick HEAD@{1} 2>/dev/null || true
+            git rebase origin/main || { git rebase --abort || true; }
             sleep "$n"
           done
           exit 0
