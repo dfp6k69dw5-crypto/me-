@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Bronze Bass Machine</title>
+<style>
+  :root{
+    --bg:#0b0b0c; --panel:#151518; --panel2:#1c1c21; --text:#f0efe9; --muted:#aaa69c;
+    --bronze:#b9894a; --bronze2:#e3b76b; --line:#39363a; --danger:#bf5b54;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:radial-gradient(circle at 50% -10%,#242126 0,#101013 42%,#09090b 100%);color:var(--text);font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100%;}
+  body{padding:max(14px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom));}
+  .app{max-width:1100px;margin:auto}
+  header{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin:8px 0 18px}
+  h1{font-size:clamp(25px,4vw,44px);margin:0;letter-spacing:.03em;font-weight:700}
+  .subtitle{color:var(--muted);font-size:13px;max-width:650px;margin-top:5px}
+  .status{font-size:12px;color:var(--muted);white-space:nowrap}
+  .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+  .panel{background:linear-gradient(180deg,rgba(29,29,34,.96),rgba(18,18,22,.96));border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+  .instrument{min-height:480px;display:flex;flex-direction:column;gap:15px}
+  .orbWrap{display:grid;place-items:center;min-height:260px}
+  .orb{width:min(58vw,260px);aspect-ratio:1;border-radius:50%;border:1px solid #62503b;position:relative;display:grid;place-items:center;user-select:none;touch-action:manipulation;cursor:pointer;background:
+    radial-gradient(circle at 40% 34%,rgba(244,190,103,.18),transparent 24%),
+    radial-gradient(circle at 50% 58%,#7f5c31 0,#4a3420 33%,#211913 64%,#0d0c0d 78%);
+    box-shadow:inset 0 0 45px rgba(233,177,92,.08),0 0 80px rgba(185,137,74,.06)}
+  .orb:before{content:"";position:absolute;inset:10%;border-radius:50%;border:1px solid rgba(232,187,112,.19);box-shadow:inset 0 0 35px rgba(255,220,160,.04)}
+  .orb.active{animation:pulse .55s ease-out}
+  @keyframes pulse{0%{transform:scale(.985);filter:brightness(1.5)}40%{transform:scale(1.018)}100%{transform:scale(1)}}
+  .strikeLabel{text-align:center;font-size:28px;letter-spacing:.12em;font-weight:700;text-shadow:0 2px 15px #000}
+  .strikeHint{position:absolute;bottom:20%;font-size:11px;color:#d8c3a1;letter-spacing:.15em}
+  .noteRow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+  select,button{appearance:none;background:#141418;color:var(--text);border:1px solid #454249;border-radius:12px;padding:11px 13px;font:inherit}
+  button{cursor:pointer}
+  button:hover{border-color:#6c655e}
+  .noteSel{font-size:20px;font-weight:700;min-width:118px;text-align:center}
+  .panic{font-size:12px;color:#e6c9c6;border-color:#69423f}
+  .controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .control{background:rgba(11,11,14,.45);border:1px solid #2d2b30;border-radius:14px;padding:10px}
+  .control label{display:flex;justify-content:space-between;gap:8px;font-size:12px;letter-spacing:.08em;color:#d0ccc3;margin-bottom:7px}
+  .control output{color:var(--bronze2);font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%;accent-color:var(--bronze);touch-action:pan-y}
+  .sectionTitle{font-size:12px;text-transform:uppercase;letter-spacing:.17em;color:#bdb8ae;margin:0 0 10px}
+  .meters{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:3px}
+  .meter{height:72px;border:1px solid #323037;border-radius:10px;position:relative;overflow:hidden;background:#0c0c0f}
+  .meter i{position:absolute;left:0;right:0;bottom:0;height:5%;background:linear-gradient(0deg,#8b673e,#d7a85c);transition:height .05s linear}
+  .meter span{position:absolute;inset:auto 5px 5px;text-align:center;font-size:9px;letter-spacing:.11em;color:#c7c0b5;z-index:2}
+  .presets{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .presets button{font-size:12px;padding:10px}
+  .info{color:#aaa69c;font-size:12px;line-height:1.45;margin-top:12px}
+  .kbd{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;margin-top:auto}
+  .key{padding:12px 2px;border-radius:10px;background:#101014;border:1px solid #333139;text-align:center;font-size:11px;color:#aaa69c;cursor:pointer;user-select:none;touch-action:manipulation}
+  .key strong{display:block;color:#eee7dc;font-size:12px;margin-bottom:2px}
+  .key:hover{border-color:#725b42}
+  footer{color:#77737a;font-size:11px;text-align:center;margin:14px 0 0}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}.instrument{min-height:520px}.controls{grid-template-columns:repeat(2,1fr)}header{align-items:flex-start;flex-direction:column}.status{white-space:normal}.kbd{grid-template-columns:repeat(6,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div><h1>BRONZE BASS MACHINE</h1><div class="subtitle">A giant struck bronze resonator that settles into a deep harmonic hum, with a protected low core and controlled grind.</div></div>
+  <div class="status" id="status">Tap the bronze to start audio</div>
+</header>
+<div class="grid">
+  <section class="panel instrument">
+    <div class="orbWrap"><div class="orb" id="orb"><div class="strikeLabel">STRIKE</div><div class="strikeHint">SOFT MALLET</div></div></div>
+    <div class="noteRow">
+      <button id="down">−</button>
+      <select class="noteSel" id="noteSel"></select>
+      <button id="up">+</button>
+      <button class="panic" id="panic">STOP ALL</button>
+    </div>
+    <div class="kbd" id="kbd"></div>
+  </section>
+
+  <aside class="panel">
+    <div class="sectionTitle">Resonator</div>
+    <div class="controls" id="controls"></div>
+    <div class="sectionTitle" style="margin-top:16px">Energy</div>
+    <div class="meters">
+      <div class="meter"><i id="m1"></i><span>CORE</span></div>
+      <div class="meter"><i id="m2"></i><span>BRONZE</span></div>
+      <div class="meter"><i id="m3"></i><span>HUM</span></div>
+      <div class="meter"><i id="m4"></i><span>GRIND</span></div>
+    </div>
+    <div class="sectionTitle" style="margin-top:16px">Voices</div>
+    <div class="presets">
+      <button data-preset="cathedral">CATHEDRAL</button>
+      <button data-preset="bronzeChoir">BRONZE CHOIR</button>
+      <button data-preset="ancient">ANCIENT</button>
+      <button data-preset="monolith">MONOLITH</button>
+    </div>
+    <div class="info">Headphones or large speakers are strongly recommended. The sub remains mono; upper bronze modes are spread through the stereo field. HUM can approach self-sustaining resonance, so use STOP ALL whenever you want silence.</div>
+  </aside>
+</div>
+<footer>Web Audio physical-model prototype • no samples</footer>
+</div>
+<script>
+(() => {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  let ctx, master, limiter, convolver, airSend, active = [], noiseBuffer;
+  const controls = {
+    strike:{label:'STRIKE',min:0,max:1,val:.58,step:.01},
+    bronze:{label:'BRONZE',min:0,max:1,val:.72,step:.01},
+    depth:{label:'DEPTH',min:0,max:1,val:.82,step:.01},
+    hum:{label:'HUM',min:0,max:1,val:.70,step:.01},
+    bloom:{label:'BLOOM',min:0,max:1,val:.64,step:.01},
+    mood:{label:'DARK ↔ NOBLE',min:-1,max:1,val:.25,step:.01},
+    weight:{label:'WEIGHT',min:0,max:1,val:.82,step:.01},
+    grind:{label:'GRIND',min:0,max:1,val:.34,step:.01},
+    air:{label:'AIR',min:0,max:1,val:.32,step:.01},
+    damp:{label:'DAMP',min:0,max:1,val:.40,step:.01},
+    size:{label:'SIZE',min:1,max:30,val:18,step:.1}
+  };
+
+  const controlRoot = document.getElementById('controls');
+  for (const [id,c] of Object.entries(controls)) {
+    const el = document.createElement('div'); el.className='control';
+    el.innerHTML = `<label>${c.label}<output id="${id}Out"></output></label><input id="${id}" type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.val}">`;
+    controlRoot.appendChild(el);
+    const inp = el.querySelector('input'), out=el.querySelector('output');
+    const fmt=()=> out.value = id==='size' ? `${(+inp.value).toFixed(1)} m` : (id==='mood' ? `${(+inp.value).toFixed(2)}` : `${Math.round(+inp.value*100)}%`);
+    fmt(); inp.oninput=()=>{controls[id].val=+inp.value;fmt()};
+  }
+
+  const notes=[];
+  for(let midi=24;midi<=47;midi++){
+    const names=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+    const oct=Math.floor(midi/12)-1; notes.push({midi,name:names[midi%12]+oct,f:440*Math.pow(2,(midi-69)/12)});
+  }
+  const noteSel=document.getElementById('noteSel');
+  notes.forEach((n,i)=>{const o=document.createElement('option');o.value=i;o.textContent=n.name;noteSel.appendChild(o)}); noteSel.value=12;
+  document.getElementById('down').onclick=()=>noteSel.value=Math.max(0,+noteSel.value-1);
+  document.getElementById('up').onclick=()=>noteSel.value=Math.min(notes.length-1,+noteSel.value+1);
+  const kbd=document.getElementById('kbd');
+  notes.slice(0,12).forEach((n,i)=>{const k=document.createElement('div');k.className='key';k.innerHTML=`<strong>${n.name}</strong>${n.f.toFixed(1)} Hz`;k.onpointerdown=async()=>{try{await init();await strike(notes[i].f,.72)}catch(err){document.getElementById('status').textContent='Audio error: '+(err?.message||err)}};kbd.appendChild(k)});
+
+  function makeNoise(){
+    noiseBuffer=ctx.createBuffer(1,ctx.sampleRate*.3,ctx.sampleRate);
+    const d=noiseBuffer.getChannelData(0); let brown=0;
+    for(let i=0;i<d.length;i++){const w=Math.random()*2-1;brown=(brown+.02*w)/1.02;d[i]=brown*3.5}
+  }
+  function impulse(seconds=1.9, decay=3.3){
+    const len=Math.floor(ctx.sampleRate*seconds), b=ctx.createBuffer(2,len,ctx.sampleRate);
+    for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let i=0;i<len;i++){const t=i/len;d[i]=(Math.random()*2-1)*Math.pow(1-t,decay)*(0.55+0.45*Math.sin(i*.0009+ch));}}
+    return b;
+  }
+  async function init(){
+    if(!AC) throw new Error('Web Audio is not available in this browser');
+    if(ctx){if(ctx.state==='suspended')await ctx.resume();return}
+    ctx=new AC();
+    try { await ctx.resume(); } catch(e) {}
+    master=ctx.createGain(); master.gain.value=.95;
+    limiter=ctx.createDynamicsCompressor(); limiter.threshold.value=-7; limiter.knee.value=8; limiter.ratio.value=10; limiter.attack.value=.002; limiter.release.value=.18;
+    convolver=ctx.createConvolver(); convolver.buffer=impulse(); airSend=ctx.createGain(); airSend.gain.value=.16;
+    airSend.connect(convolver); convolver.connect(master); master.connect(limiter); limiter.connect(ctx.destination); makeNoise();
+    document.getElementById('status').textContent = ctx.state === 'running' ? 'Audio ready' : 'Tap STRIKE again to unlock audio';
+    ctx.onstatechange=()=>{document.getElementById('status').textContent = ctx.state === 'running' ? 'Audio ready' : 'Audio suspended — tap STRIKE';};
+  }
+  function curve(amount=4){
+    const n=2048,c=new Float32Array(n);for(let i=0;i<n;i++){let x=i*2/n-1;c[i]=(1+amount)*x/(1+amount*Math.abs(x))}return c;
+  }
+  function env(g,t0,a,peak,hold,rel,end=.0001){
+    g.cancelScheduledValues(t0);g.setValueAtTime(.0001,t0);g.exponentialRampToValueAtTime(Math.max(.0002,peak),t0+a);g.setValueAtTime(Math.max(.0002,peak),t0+a+hold);g.exponentialRampToValueAtTime(end,t0+a+hold+rel);
+  }
+  function modalRatios(){
+    return [1,1.497,2.01,2.54,3.02,3.76,4.19,5.08,6.10,7.41,8.13,9.68,10.7,12.2,13.9,15.1,17.7,19.3,21.8,24.6,27.1,30.5,34.2,38.7,43.3,48.8,54.9,61.4,68.8,77.2,86.4,96.8];
+  }
+  function pannerFor(index,total){
+    const p=ctx.createStereoPanner();
+    if(index<4)p.pan.value=0; else p.pan.value=Math.max(-.82,Math.min(.82,Math.sin(index*1.73)*.72));
+    return p;
+  }
+  function mkOsc(freq,type='sine') {const o=ctx.createOscillator();o.type=type;o.frequency.value=freq;return o}
+
+  async function strike(freq, velocity=.7){
+    if(!ctx) await init();
+    if(ctx.state==='suspended') await ctx.resume();
+    const t=ctx.currentTime+.02;
+    const size=controls.size.val, sizeNorm=(size-1)/29;
+    const depth=controls.depth.val, strike=controls.strike.val, bronze=controls.bronze.val, damp=controls.damp.val;
+    const hum=controls.hum.val,bloom=controls.bloom.val,weight=controls.weight.val,grind=controls.grind.val,mood=controls.mood.val,air=controls.air.val;
+    const voice={nodes:[],stops:[]}; active.push(voice);
+
+    const bronzeBus=ctx.createGain(), coreBus=ctx.createGain(), humBus=ctx.createGain(), grindBus=ctx.createGain(), sum=ctx.createGain();
+    bronzeBus.gain.value=.62*bronze; coreBus.gain.value=.60*weight; humBus.gain.value=.42*hum; grindBus.gain.value=.26*grind;
+    bronzeBus.connect(sum);coreBus.connect(sum);humBus.connect(sum);grindBus.connect(sum);
+    const airG=ctx.createGain();airG.gain.value=.24*air;sum.connect(master);sum.connect(airG);airG.connect(airSend);
+
+    const th=mkOsc(freq*.48,'sine'), thg=ctx.createGain(); th.connect(thg); thg.connect(coreBus); env(thg.gain,t,.004,.35*velocity,0,.10+.11*sizeNorm); th.start(t);th.stop(t+.5);
+    const ns=ctx.createBufferSource();ns.buffer=noiseBuffer;const nf=ctx.createBiquadFilter();nf.type='lowpass';nf.frequency.value=450+2200*strike*velocity;nf.Q.value=.55;const ng=ctx.createGain();ns.connect(nf);nf.connect(ng);ng.connect(bronzeBus);env(ng.gain,t,.002,.18*velocity*(.35+.65*strike),0,.045+.075*(1-strike));ns.start(t);ns.stop(t+.25);
+
+    const core=mkOsc(freq,'sine'), coreG=ctx.createGain(); core.connect(coreG);coreG.connect(coreBus);
+    core.detune.setValueAtTime(-2,t);core.detune.linearRampToValueAtTime(0,t+.45);
+    env(coreG.gain,t,.018,.34*velocity*(.25+.75*depth),.05,Math.max(3,8+10*sizeNorm-3*damp));core.start(t);core.stop(t+22);
+    voice.stops.push(core);
+
+    const ratios=modalRatios();
+    ratios.forEach((r,i)=>{
+      const high=i/(ratios.length-1), jitter=(Math.sin(i*12.9898+freq)*43758.5453)%1;
+      let ratio=r;
+      if(i>2) ratio*=1 + mood*(0.0015*Math.sin(i*2.21));
+      const f=freq*ratio; if(f>15000)return;
+      const o=mkOsc(f,'sine');
+      const g=ctx.createGain(); const p=pannerFor(i,ratios.length);
+      o.connect(g);g.connect(p);p.connect(bronzeBus);
+      const det=(Math.sin(i*4.73)*(.4+1.8*high)*(1-sizeNorm*.5));
+      o.detune.setValueAtTime(det,t);o.detune.linearRampToValueAtTime(det*.06,t+.4+2.2*sizeNorm);
+      const spectral=Math.exp(-i*(.115-.05*bronze));
+      const excite=(.25+.75*depth)*(1-high*.35)+strike*high*.55;
+      const amp=.19*velocity*spectral*excite*(.72+0.28*Math.abs(jitter));
+      const decay=Math.max(.35,(2.0+11*sizeNorm)*(1-high*.75)*(1.1-.72*damp) + (i<4?4.5*hum:0));
+      env(g.gain,t,.003+.006*high,amp,0,decay);
+      o.start(t);o.stop(t+decay+1);voice.stops.push(o);
+    });
+
+    const harmonicSets = window._harmonicSet || [1,2,3,5];
+    harmonicSets.forEach((mul,i)=>{
+      const f=freq*mul;if(f>8000)return;
+      const o=mkOsc(f,i===0?'sine':'triangle'),g=ctx.createGain(),p=pannerFor(i,8);
+      o.connect(g);g.connect(p);p.connect(humBus);
+      const delay=.25+i*.33, pk=(i===0?.23:.11)*velocity*(i===0?1:bloom)*Math.pow(.72,i);
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.0001,t+delay);g.gain.exponentialRampToValueAtTime(Math.max(.0002,pk),t+delay+.35+sizeNorm*.6);
+      const sustain=4+13*hum+7*sizeNorm;g.gain.setValueAtTime(Math.max(.0002,pk),t+delay+sustain*.45);g.gain.exponentialRampToValueAtTime(.0001,t+delay+sustain);
+      const b=mkOsc(f*(1+(0.0005+0.0007*i)*(1-sizeNorm*.35)),'sine'),bg=ctx.createGain();b.connect(bg);bg.connect(p);bg.gain.setValueAtTime(.0001,t);bg.gain.exponentialRampToValueAtTime(Math.max(.0002,pk*.32),t+delay+.8);bg.gain.exponentialRampToValueAtTime(.0001,t+delay+sustain);
+      o.start(t);b.start(t);o.stop(t+delay+sustain+.3);b.stop(t+delay+sustain+.3);voice.stops.push(o,b);
+    });
+
+    const authority=ctx.createGain(); const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=105;hp.Q.value=.7;
+    const sh=ctx.createWaveShaper();sh.curve=curve(2+grind*12);sh.oversample='4x';
+    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2800+2200*bronze;
+    bronzeBus.connect(hp);hp.connect(sh);sh.connect(lp);lp.connect(authority);authority.connect(grindBus);authority.gain.value=.75;
+
+    const orb=document.getElementById('orb');orb.classList.remove('active');void orb.offsetWidth;orb.classList.add('active');
+    meters([weight*.85,bronze*.9,hum*.8,grind*.75]);
+    setTimeout(()=>{active=active.filter(v=>v!==voice)},26000);
+  }
+
+  function meters(v){['m1','m2','m3','m4'].forEach((id,i)=>{document.getElementById(id).style.height=`${Math.max(4,v[i]*100)}%`});setTimeout(()=>['m1','m2','m3','m4'].forEach(id=>document.getElementById(id).style.height='5%'),900)}
+  function stopAll(){if(!ctx)return;const now=ctx.currentTime;active.forEach(v=>v.stops.forEach(o=>{try{o.stop(now+.03)}catch{}}));active=[];meters([0,0,0,0])}
+
+  const doStrike = async (e)=>{
+    e.preventDefault();
+    const n=notes[+noteSel.value];
+    const rect=e.currentTarget.getBoundingClientRect();
+    const y=((e.clientY ?? (e.touches&&e.touches[0]?.clientY) ?? rect.top+rect.height*.5)-rect.top)/rect.height;
+    const vel=Math.max(.28,Math.min(1,1.08-y*.5));
+    try {
+      await init();
+      if(ctx.state!=='running') await ctx.resume();
+      await strike(n.f,vel);
+    } catch(err) {
+      console.error(err);
+      document.getElementById('status').textContent='Audio error: '+(err?.message||err);
+    }
+  };
+  const orb=document.getElementById('orb');
+  orb.addEventListener('pointerdown',doStrike,{passive:false});
+  orb.addEventListener('touchstart',doStrike,{passive:false});
+  document.getElementById('panic').onclick=stopAll;
+
+  const presets={
+    cathedral:{harm:[1,2,3,4], mood:.45, bronze:.68, hum:.72, bloom:.60, damp:.42, grind:.25, size:22},
+    bronzeChoir:{harm:[1,2,3,5], mood:.28, bronze:.78, hum:.78, bloom:.78, damp:.36, grind:.32, size:18},
+    ancient:{harm:[1,2,2.97,4.76], mood:-.62, bronze:.84, hum:.66, bloom:.55, damp:.28, grind:.28, size:25},
+    monolith:{harm:[1,2], mood:-.18, bronze:.48, hum:.88, bloom:.22, damp:.55, grind:.42, size:30}
+  };
+  function applyPreset(name){const p=presets[name];window._harmonicSet=p.harm;for(const [k,v] of Object.entries(p)){if(k==='harm')continue;controls[k].val=v;const input=document.getElementById(k);input.value=v;input.dispatchEvent(new Event('input'))}}
+  document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>applyPreset(b.dataset.preset));
+  applyPreset('bronzeChoir');
+})();
+</script>
+</body>
+</html>
