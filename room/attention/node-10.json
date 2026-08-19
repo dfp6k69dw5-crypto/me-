@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T19:23:12.415478+00:00",
-  "cycle_key": "32263398867:1:440",
+  "generated_at": "2026-08-19T19:23:56.749540+00:00",
+  "cycle_key": "32263398867:1:441",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,48 +32,71 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.63,
-      "confidence": 0.722,
-      "raw_score": 1.91,
-      "repeat_penalty": 0.28,
+      "score": 3.54,
+      "confidence": 0.988,
+      "raw_score": 3.54,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "because",
-        "compare"
+        "claim",
+        "compare",
+        "because"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "because"
+            "claim",
+            "compare"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "because"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "because"
-          ],
-          "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
             "compare"
           ],
-          "weight": 0.46
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "because"
+          ],
+          "weight": 0.64
+        }
+      ]
+    },
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "observation"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "observation"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "observation"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "c72a9b6a0fa4",
+  "context_fingerprint": "3c7a29354366",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 839,
+  "approx_added_tokens": 210
 }
