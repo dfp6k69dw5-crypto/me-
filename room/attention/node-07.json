@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T17:29:25.597154+00:00",
-  "cycle_key": "32263398867:1:269",
+  "generated_at": "2026-08-19T17:30:04.198850+00:00",
+  "cycle_key": "32263398867:1:270",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,30 +32,30 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.7,
-      "confidence": 0.998,
-      "raw_score": 4.7,
+      "score": 4.36,
+      "confidence": 0.997,
+      "raw_score": 4.36,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "because",
         "claim",
-        "reason"
+        "reason",
+        "because"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "because"
+            "claim",
+            "reason"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "claim",
-            "reason"
+            "because"
           ],
-          "weight": 1.45
+          "weight": 0.76
         },
         {
           "kind": "message",
@@ -63,15 +63,7 @@
             "claim",
             "reason"
           ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "claim",
-            "reason"
-          ],
-          "weight": 0.92
+          "weight": 0.64
         },
         {
           "kind": "message",
@@ -80,6 +72,14 @@
             "reason"
           ],
           "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "claim",
+            "reason"
+          ],
+          "weight": 0.46
         }
       ]
     },
@@ -87,9 +87,9 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
       "repeat_penalty": 0.28,
       "matched_triggers": [
         "specific"
@@ -100,28 +100,7 @@
           "matched": [
             "specific"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.76
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -129,11 +108,32 @@
             "specific"
           ],
           "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.46
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "0a196c5f2639",
+  "context_fingerprint": "c160c4cfa2ab",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 839,
   "approx_added_tokens": 210
