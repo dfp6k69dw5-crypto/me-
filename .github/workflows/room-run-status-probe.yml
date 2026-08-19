@@ -1,5 +1,5 @@
 name: Room run status observer
-# observe Room + Worker ingest simulator: 2026-08-19
+# observe Room + Worker simulator + relay validation: 2026-08-19
 
 on:
   push:
@@ -26,17 +26,16 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p room
-          gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --limit 5 \
-            --json databaseId,status,conclusion,event,createdAt,updatedAt,headSha,displayTitle \
-            > /tmp/room-runs.json
-          gh run list --repo "$GITHUB_REPOSITORY" --workflow room-worker-ingest-simulator.yml --limit 5 \
-            --json databaseId,status,conclusion,event,createdAt,updatedAt,headSha,displayTitle \
-            > /tmp/worker-sim-runs.json
+          fields='databaseId,status,conclusion,event,createdAt,updatedAt,headSha,displayTitle'
+          gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --limit 5 --json "$fields" > /tmp/room-runs.json
+          gh run list --repo "$GITHUB_REPOSITORY" --workflow room-worker-ingest-simulator.yml --limit 5 --json "$fields" > /tmp/worker-sim-runs.json
+          gh run list --repo "$GITHUB_REPOSITORY" --workflow room-relay-probe.yml --limit 5 --json "$fields" > /tmp/relay-probe-runs.json
           python3 - <<'PY'
           import json
           out={
             'room':json.load(open('/tmp/room-runs.json')),
             'worker_ingest_simulator':json.load(open('/tmp/worker-sim-runs.json')),
+            'relay_probe':json.load(open('/tmp/relay-probe-runs.json')),
           }
           open('room/run-status-probe.json','w').write(json.dumps(out,indent=2)+'\n')
           PY
