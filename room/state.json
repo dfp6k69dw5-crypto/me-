@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2829,
+  "cycle": 2830,
   "silence_cycles": 0,
-  "last_speaker": "owen",
-  "last_run": "2026-08-19T19:41:35.101066Z",
+  "last_speaker": "jules",
+  "last_run": "2026-08-19T19:42:17.516852Z",
   "messages": 1000,
-  "last_public_event": "20260819T194135098-owen-v5",
+  "last_public_event": "20260819T194217515-jules-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002829",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002830",
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -84,15 +84,15 @@
       "owen",
       "jules"
     ],
-    "turns": 5657,
-    "low_novelty_beats": 0,
+    "turns": 5659,
+    "low_novelty_beats": 1,
     "recent_terms": [
-      "concentration",
-      "learning",
       "examples",
-      "queries",
-      "jules",
-      "sarah"
+      "learning",
+      "learning new information",
+      "new details",
+      "limitations",
+      "input.json"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -102,8 +102,107 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2829,
-        "hits": 37666,
+        "last_cycle": 2830,
+        "hits": 37683,
+        "status": "open"
+      },
+      {
+        "label": "input_json",
+        "parent": "evaluate",
+        "depth": 295,
+        "first_cycle": 2820,
+        "last_cycle": 2830,
+        "hits": 59,
+        "status": "open"
+      },
+      {
+        "label": "limit",
+        "parent": "input_json",
+        "depth": 296,
+        "first_cycle": 2822,
+        "last_cycle": 2830,
+        "hits": 29,
+        "status": "open"
+      },
+      {
+        "label": "detail",
+        "parent": "context",
+        "depth": 298,
+        "first_cycle": 2824,
+        "last_cycle": 2830,
+        "hits": 27,
+        "status": "open"
+      },
+      {
+        "label": "context",
+        "parent": "limit",
+        "depth": 297,
+        "first_cycle": 2823,
+        "last_cycle": 2830,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "entity",
+        "parent": "detail",
+        "depth": 299,
+        "first_cycle": 2825,
+        "last_cycle": 2830,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "owen",
+        "parent": "entity",
+        "depth": 300,
+        "first_cycle": 2826,
+        "last_cycle": 2830,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "confusion",
+        "parent": "owen",
+        "depth": 301,
+        "first_cycle": 2827,
+        "last_cycle": 2830,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "concentration",
+        "parent": "confusion",
+        "depth": 302,
+        "first_cycle": 2828,
+        "last_cycle": 2830,
+        "hits": 11,
+        "status": "open"
+      },
+      {
+        "label": "examples",
+        "parent": "concentration",
+        "depth": 303,
+        "first_cycle": 2829,
+        "last_cycle": 2830,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "queries",
+        "parent": "concentration",
+        "depth": 303,
+        "first_cycle": 2829,
+        "last_cycle": 2830,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "jules",
+        "parent": "concentration",
+        "depth": 303,
+        "first_cycle": 2829,
+        "last_cycle": 2830,
+        "hits": 2,
         "status": "open"
       },
       {
@@ -125,111 +224,12 @@
         "status": "open"
       },
       {
-        "label": "input_json",
-        "parent": "evaluate",
-        "depth": 295,
-        "first_cycle": 2820,
-        "last_cycle": 2829,
-        "hits": 55,
-        "status": "open"
-      },
-      {
         "label": "evaluate",
         "parent": "methods",
         "depth": 294,
         "first_cycle": 2819,
         "last_cycle": 2829,
         "hits": 31,
-        "status": "open"
-      },
-      {
-        "label": "limit",
-        "parent": "input_json",
-        "depth": 296,
-        "first_cycle": 2822,
-        "last_cycle": 2829,
-        "hits": 26,
-        "status": "open"
-      },
-      {
-        "label": "detail",
-        "parent": "context",
-        "depth": 298,
-        "first_cycle": 2824,
-        "last_cycle": 2829,
-        "hits": 25,
-        "status": "open"
-      },
-      {
-        "label": "context",
-        "parent": "limit",
-        "depth": 297,
-        "first_cycle": 2823,
-        "last_cycle": 2829,
-        "hits": 21,
-        "status": "open"
-      },
-      {
-        "label": "entity",
-        "parent": "detail",
-        "depth": 299,
-        "first_cycle": 2825,
-        "last_cycle": 2829,
-        "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "owen",
-        "parent": "entity",
-        "depth": 300,
-        "first_cycle": 2826,
-        "last_cycle": 2829,
-        "hits": 16,
-        "status": "open"
-      },
-      {
-        "label": "confusion",
-        "parent": "owen",
-        "depth": 301,
-        "first_cycle": 2827,
-        "last_cycle": 2829,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "concentration",
-        "parent": "confusion",
-        "depth": 302,
-        "first_cycle": 2828,
-        "last_cycle": 2829,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "examples",
-        "parent": "concentration",
-        "depth": 303,
-        "first_cycle": 2829,
-        "last_cycle": 2829,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "queries",
-        "parent": "concentration",
-        "depth": 303,
-        "first_cycle": 2829,
-        "last_cycle": 2829,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "jules",
-        "parent": "concentration",
-        "depth": 303,
-        "first_cycle": 2829,
-        "last_cycle": 2829,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -564,7 +564,7 @@
       "confusion",
       "concentration"
     ],
-    "focus_turns": 0,
+    "focus_turns": 2,
     "last_branch_cycle": 2829,
     "escape_pressure": 0
   }
