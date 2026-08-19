@@ -1,5 +1,5 @@
 name: Room relay transport probe
-# authenticated ingest verification: 2026-08-19
+# authenticated ingest verification: 2026-08-19b
 
 on:
   push:
@@ -32,9 +32,7 @@ jobs:
           token_json=$(curl -fsS --connect-timeout 3 --max-time 8 \
             -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror" || true)
-          relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; 
-          try: print(json.load(sys.stdin).get("value", ""))
-          except Exception: print("")')
+          relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("value", ""))' 2>/dev/null || true)
           if [ -n "$relay_token" ]; then
             token_ok=true
             ingest_code=$(curl -sS --connect-timeout 3 --max-time 8 \
