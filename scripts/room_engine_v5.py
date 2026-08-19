@@ -84,5 +84,13 @@ globals()["fresh_minds"] = fresh_minds
 globals()["minds"] = minds
 
 
+def main():
+    # room_private_commit.py replaces `room_engine_v5.commit` at runtime. The
+    # preserved core's main() resolves globals in the core module, so forward
+    # that override before dispatching the command.
+    _core.commit = globals().get("commit", _core.commit)
+    return _core.main()
+
+
 if __name__ == "__main__":
-    _core.main()
+    main()
