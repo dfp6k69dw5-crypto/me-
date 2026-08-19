@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T11:19:46.307225+00:00",
-  "cycle_key": "32229993977:1:348",
+  "generated_at": "2026-08-19T11:20:20.848268+00:00",
+  "cycle_key": "32229993977:1:349",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,56 +32,85 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.48,
-      "confidence": 0.986,
-      "raw_score": 3.48,
+      "score": 3.36,
+      "confidence": 0.983,
+      "raw_score": 3.36,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "cause",
         "evidence",
-        "sure"
+        "because",
+        "cause"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "cause"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "cause"
+            "evidence"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "evidence"
+            "because"
           ],
-          "weight": 0.92
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "cause"
           ],
           "weight": 0.76
         },
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "cause"
           ],
-          "weight": 0.54
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "evidence"
+          ],
+          "weight": 0.46
+        }
+      ]
+    },
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.53,
+      "confidence": 0.684,
+      "raw_score": 1.53,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "feel",
+        "trust"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "topic_support",
+          "matched": [
+            "trust"
+          ],
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "420b483e708e",
+  "context_fingerprint": "90a17a60c082",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }
