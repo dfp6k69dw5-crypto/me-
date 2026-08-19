@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T22:51:46.019106+00:00",
-  "cycle_key": "32308826226:1:38",
+  "generated_at": "2026-08-19T22:52:28.845886+00:00",
+  "cycle_key": "32308826226:1:39",
   "node": 2,
   "entity": "sarah",
   "role": "expression",
@@ -29,38 +29,52 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.84,
-      "confidence": 0.76,
-      "raw_score": 1.84,
+      "domain": "critical-testing",
+      "score": 2.37,
+      "confidence": 0.891,
+      "raw_score": 2.37,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "earlier",
-        "remember"
+        "sure",
+        "claim"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "remember",
-            "earlier"
+            "sure"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "claim",
+            "sure"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "remember"
+            "sure"
           ],
-          "weight": 0.46
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "609cf29069eb",
+  "context_fingerprint": "4cd9d3d12737",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 515,
-  "approx_added_tokens": 129
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
