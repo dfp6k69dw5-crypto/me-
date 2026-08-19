@@ -19,7 +19,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-      - name: Probe deployed relay
+      - name: Probe deployed relay and persisted Allen state
         env:
           ROOM_RELAY_URL: https://room-live-mirror.dfp6k69dw5.workers.dev
         run: |
@@ -37,12 +37,33 @@ jobs:
           def text(path):
               try:return open(path).read()[:500]
               except:return ''
+          def load(path, default):
+              try:return json.load(open(path))
+              except:return default
+          minds=load('room/cognitive_state.json',{})
+          state=load('room/state.json',{})
+          conv=load('room/conversation.json',[])
+          entities=(minds.get('entities') or {}) if isinstance(minds,dict) else {}
+          ai=('sarah','mara','owen','jules')
+          relationships={
+              e: ('allen' in ((entities.get(e) or {}).get('people') or {}))
+              for e in ai
+          }
+          topic=((state.get('topic_episode') or {}) if isinstance(state,dict) else {})
+          recent_allen=[m for m in conv[-1000:] if isinstance(m,dict) and m.get('speaker')=='allen'] if isinstance(conv,list) else []
           out={
               'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
               'pending_status':int(ps or 0),
               'pending_body':text(pb),
               'allen_auth_status':int(as_ or 0),
               'allen_auth_body':text(ab),
+              'topic_participants':list(topic.get('participants') or []),
+              'allen_relationship_present':relationships,
+              'allen_relationship_present_for_all':all(relationships.values()),
+              'retained_allen_turn_count':len(recent_allen),
+              'latest_allen_turn':recent_allen[-1] if recent_allen else None,
+              'room_cycle':state.get('cycle') if isinstance(state,dict) else None,
+              'room_last_run':state.get('last_run') if isinstance(state,dict) else None,
           }
           open('room/private-allen-live-probe.json','w').write(json.dumps(out,indent=2)+'\n')
           PY
@@ -57,4 +78,4 @@ jobs:
             sleep $attempt
           done
 
-# probe-trigger: 2026-08-19T23:24Z
+# social-state-probe-trigger: 2026-08-19T23:54Z
