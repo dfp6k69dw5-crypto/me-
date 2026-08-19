@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T01:28:37.551602+00:00",
-  "cycle_key": "32184487392:1:263",
+  "generated_at": "2026-08-19T01:29:46.070002+00:00",
+  "cycle_key": "32184487392:1:264",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,21 +32,19 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 5.4,
-      "confidence": 1.0,
-      "raw_score": 5.4,
+      "score": 4.7,
+      "confidence": 0.998,
+      "raw_score": 4.7,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "proof",
         "reason",
+        "proof",
         "why"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "why",
-            "proof",
             "reason"
           ],
           "weight": 1.8
@@ -55,18 +53,9 @@
           "kind": "message",
           "matched": [
             "why",
-            "proof",
-            "reason"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why",
             "proof"
           ],
-          "weight": 1.15
+          "weight": 1.45
         },
         {
           "kind": "message",
@@ -85,33 +74,49 @@
             "reason"
           ],
           "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why",
+            "proof",
+            "reason"
+          ],
+          "weight": 0.64
         }
       ]
     },
     {
-      "name": "concrete-specificity",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "specific"
+        "asked"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "asked"
           ],
-          "weight": 1.15
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "asked"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "bc69bf983aa5",
+  "context_fingerprint": "7ebf6332993e",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 839,
-  "approx_added_tokens": 210
+  "temporary_skill_chars": 867,
+  "approx_added_tokens": 217
 }
