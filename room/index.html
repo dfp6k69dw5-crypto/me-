@@ -18,27 +18,50 @@
 <script>
 const RELAY='https://room-live-mirror.dfp6k69dw5.workers.dev/api/feed';
 const RAW='https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/feed.json';
+const API='https://api.github.com/repos/maaronfanberg-lab/me-/contents/room/feed.json?ref=main';
 const LOCAL='feed.json';
 const HISTORY_RAW='https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/conversation.json';
 const HISTORY_LOCAL='conversation.json';
-const LIVE_TIMEOUT_MS=1800,HISTORY_TIMEOUT_MS=9000,RELAY_FRESH_MS=50000;
+const LIVE_TIMEOUT_MS=1800,HISTORY_TIMEOUT_MS=9000,RELAY_FRESH_MS=50000,API_TIMEOUT_MS=2400,API_COOLDOWN_MS=60000;
 const $=s=>document.querySelector(s);
 let liveData=null,lastGoodLive=null,lastGoodStamp=0,lastSource='',historyData=[],historyLoaded=false;
-let renderedIds=new Set(),liveBusy=false,historyBusy=false;
+let renderedIds=new Set(),liveBusy=false,historyBusy=false,lastApiAt=0,lastApiCandidate=null;
 function when(s){try{return new Date(s).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'})}catch{return''}}
 function stamp(s){const t=Date.parse(s?.generated_at||s?.state?.last_run||'');return Number.isFinite(t)?t:0}
 function setStatus(txt,ok){const e=$('#status');e.textContent=txt;e.classList.toggle('live',!!ok)}
-async function timedFetch(url,timeout){const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),timeout);try{return await fetch(url,{cache:'no-store',headers:{'Cache-Control':'no-cache','Pragma':'no-cache'},signal:ctrl.signal})}finally{clearTimeout(timer)}}
-async function fetchJson(url,timeout){const sep=url.includes('?')?'&':'?';const r=await timedFetch(url+sep+'fresh='+Date.now()+'-'+Math.random().toString(36).slice(2),timeout);if(!r.ok)throw new Error(String(r.status));return r.json()}
+async function timedFetch(url,timeout,opts={}){const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),timeout);try{return await fetch(url,{cache:'no-store',...opts,signal:ctrl.signal})}finally{clearTimeout(timer)}}
+async function fetchJson(url,timeout,opts={}){const sep=url.includes('?')?'&':'?';const r=await timedFetch(url+sep+'fresh='+Date.now()+'-'+Math.random().toString(36).slice(2),timeout,opts);if(!r.ok)throw new Error(String(r.status));return r.json()}
 function unwrap(raw){return raw?.feed||raw}
 function validLive(raw){const s=unwrap(raw);if(!s||!s.state||!Array.isArray(s.conversation))throw new Error('bad feed');return s}
 async function liveCandidate(source,url,timeout=LIVE_TIMEOUT_MS){try{const data=validLive(await fetchJson(url,timeout));return {source,data,stamp:stamp(data)}}catch{return null}}
-async function getLive(){
+async function fetchApiLive(){
+  const sep=API.includes('?')?'&':'?';
+  const r=await timedFetch(API+sep+'fresh='+Date.now()+'-'+Math.random().toString(36).slice(2),API_TIMEOUT_MS,{headers:{Accept:'application/vnd.github+json'}});
+  if(!r.ok)throw new Error(String(r.status));
+  const obj=await r.json();
+  if(!obj?.content)throw new Error('no api content');
+  const bytes=Uint8Array.from(atob(String(obj.content).replace(/\s/g,'')),c=>c.charCodeAt(0));
+  return validLive(JSON.parse(new TextDecoder().decode(bytes)));
+}
+async function apiCandidate(force=false){
+  const now=Date.now();
+  if(!force&&now-lastApiAt<API_COOLDOWN_MS)return lastApiCandidate;
+  lastApiAt=now;
+  try{const data=await fetchApiLive();lastApiCandidate={source:'GitHub API fallback',data,stamp:stamp(data)};return lastApiCandidate}catch{return lastApiCandidate}
+}
+async function getLive(forceApi=false){
   const relay=await liveCandidate('Cloudflare relay',RELAY,1200);
   if(relay&&Date.now()-relay.stamp<=RELAY_FRESH_MS)return relay;
+
   const raw=await liveCandidate('GitHub Raw',RAW,1800);
-  if(raw&&(!relay||raw.stamp>=relay.stamp))return raw;
-  if(relay)return relay;
+  const candidates=[relay,raw].filter(Boolean);
+  candidates.sort((a,b)=>b.stamp-a.stamp);
+  const freshest=candidates[0]||null;
+  const needFallback=forceApi||!freshest||Date.now()-freshest.stamp>RELAY_FRESH_MS;
+
+  if(needFallback){const api=await apiCandidate(forceApi);if(api)candidates.push(api)}
+  if(candidates.length){candidates.sort((a,b)=>b.stamp-a.stamp);return candidates[0]}
+
   const pages=await liveCandidate('Pages snapshot',LOCAL,1500);
   if(pages)return pages;
   throw new Error('no live source');
@@ -51,8 +74,8 @@ function renderPeople(){const people=$('#people'),frag=document.createDocumentFr
 function rebuildTranscript(){const conv=mergedConversation(),chat=$('#chat'),wasEmpty=renderedIds.size===0,nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-220,frag=document.createDocumentFragment(),ids=new Set();if(!conv.length){const e=document.createElement('div');e.className='empty';e.textContent='The room is quiet.';frag.appendChild(e)}for(const m of conv){if(!m?.id||ids.has(m.id))continue;ids.add(m.id);frag.appendChild(makeMessage(m))}chat.replaceChildren(frag);renderedIds=ids;renderMeta();if(wasEmpty||nearBottom)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'auto'}),30)}
 function appendLive(){const chat=$('#chat'),nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-220,frag=document.createDocumentFragment();let added=0;for(const m of liveData?.conversation||[]){if(!m?.id||renderedIds.has(m.id))continue;renderedIds.add(m.id);frag.appendChild(makeMessage(m));added++}if(added){chat.querySelector('.empty')?.remove();chat.appendChild(frag);if(nearBottom)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'auto'}),20)}renderMeta()}
 function renderMeta(){const retained=historyLoaded?historyData.length+' retained':'history loading';const shown=renderedIds.size;$('#meta').textContent=shown+' shown · '+retained+' · '+(lastSource||'live source')+' · auto 2s'}
-function renderStatus(){if(!liveData){setStatus('retry',false);return}const t=stamp(liveData),age=t?Math.max(0,Math.floor((Date.now()-t)/1000)):0,beat=liveData?.state?.cycle??'—';setStatus('beat '+beat+' · '+age+'s',age<90)}
-async function refreshLive(manual=false){if(liveBusy)return;liveBusy=true;const btn=$('#status');if(manual){btn.disabled=true;setStatus('checking…',false)}try{const candidate=await getLive();if(candidate.stamp>=lastGoodStamp||!lastGoodLive){lastGoodLive=candidate.data;lastGoodStamp=candidate.stamp;lastSource=candidate.source}liveData=lastGoodLive;renderPeople();if(renderedIds.size)appendLive();else rebuildTranscript();renderStatus()}catch{if(lastGoodLive){liveData=lastGoodLive;renderStatus();setStatus('retry · kept',false)}else setStatus('retry',false)}finally{btn.disabled=false;liveBusy=false}}
+function renderStatus(){if(!liveData){setStatus('retry',false);return}const t=stamp(liveData),age=t?Math.max(0,Math.floor((Date.now()-t)/1000)):0,beat=liveData?.state?.cycle??'—',snapshot=lastSource==='Pages snapshot';setStatus((snapshot?'snapshot beat ':'beat ')+beat+' · '+age+'s',!snapshot&&age<90)}
+async function refreshLive(manual=false){if(liveBusy)return;liveBusy=true;const btn=$('#status');if(manual){btn.disabled=true;setStatus('checking…',false)}try{const candidate=await getLive(manual);if(candidate.stamp>=lastGoodStamp||!lastGoodLive){lastGoodLive=candidate.data;lastGoodStamp=candidate.stamp;lastSource=candidate.source}liveData=lastGoodLive;renderPeople();if(renderedIds.size)appendLive();else rebuildTranscript();renderStatus()}catch{if(lastGoodLive){liveData=lastGoodLive;renderStatus();setStatus('retry · kept',false)}else setStatus('retry',false)}finally{btn.disabled=false;liveBusy=false}}
 async function loadHistory(force=false){if(historyBusy||(historyLoaded&&!force))return;historyBusy=true;try{let best=await historyCandidate('GitHub history',HISTORY_RAW);if(!best)best=await historyCandidate('Pages history',HISTORY_LOCAL);if(best){historyData=best.data;historyLoaded=true;rebuildTranscript();renderPeople()}}finally{historyBusy=false;renderMeta()}}
 $('#status').onclick=()=>{refreshLive(true);loadHistory(true)};
 refreshLive(false);loadHistory(false);
