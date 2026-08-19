@@ -1,5 +1,5 @@
 name: Room viewer simulator
-# baseline kick: 2026-08-19T07:36-05:00
+# instrumented baseline: 2026-08-19
 
 on:
   push:
@@ -29,12 +29,17 @@ jobs:
           fetch-depth: 0
 
       - name: Install Playwright test runner and WebKit
+        id: install
+        continue-on-error: true
         run: |
-          npm init -y >/dev/null 2>&1
+          npm init -y
           npm install --no-save @playwright/test@latest
           npx playwright install --with-deps webkit
 
       - name: Start deterministic local site
+        id: server
+        if: steps.install.outcome == 'success'
+        continue-on-error: true
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/room-viewer-http.log 2>&1 &
           echo $! > /tmp/room-viewer-http.pid
@@ -47,6 +52,7 @@ jobs:
 
       - name: Run WebKit iPhone Room viewer simulator
         id: simulator
+        if: steps.install.outcome == 'success' && steps.server.outcome == 'success'
         continue-on-error: true
         run: npx playwright test --config tests/room-viewer.playwright.config.mjs
 
@@ -58,13 +64,30 @@ jobs:
           path: |
             room/viewer-simulator-diagnostic.json
             test-results/
+            /tmp/room-viewer-http.log
           if-no-files-found: ignore
           retention-days: 14
 
       - name: Publish simulator diagnostic
         if: always()
+        env:
+          INSTALL_OUTCOME: ${{ steps.install.outcome }}
+          SERVER_OUTCOME: ${{ steps.server.outcome }}
+          SIMULATOR_OUTCOME: ${{ steps.simulator.outcome }}
         run: |
-          test -f room/viewer-simulator-diagnostic.json || printf '%s\n' '{"pass":false,"error":"simulator produced no diagnostic"}' > room/viewer-simulator-diagnostic.json
+          if [ ! -f room/viewer-simulator-diagnostic.json ]; then
+            python3 - <<'PY'
+          import json,os
+          out={
+            'pass':False,
+            'error':'simulator produced no diagnostic',
+            'install_outcome':os.environ.get('INSTALL_OUTCOME',''),
+            'server_outcome':os.environ.get('SERVER_OUTCOME',''),
+            'simulator_outcome':os.environ.get('SIMULATOR_OUTCOME',''),
+          }
+          open('room/viewer-simulator-diagnostic.json','w').write(json.dumps(out,indent=2)+'\n')
+          PY
+          fi
           git config user.name "room-viewer-simulator"
           git config user.email "actions@users.noreply.github.com"
           git add room/viewer-simulator-diagnostic.json
@@ -78,5 +101,11 @@ jobs:
           exit 1
 
       - name: Enforce simulator result
-        if: steps.simulator.outcome != 'success'
-        run: exit 1
+        if: always()
+        env:
+          INSTALL_OUTCOME: ${{ steps.install.outcome }}
+          SERVER_OUTCOME: ${{ steps.server.outcome }}
+          SIMULATOR_OUTCOME: ${{ steps.simulator.outcome }}
+        run: |
+          echo "install=$INSTALL_OUTCOME server=$SERVER_OUTCOME simulator=$SIMULATOR_OUTCOME"
+          test "$SIMULATOR_OUTCOME" = success
