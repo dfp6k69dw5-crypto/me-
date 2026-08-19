@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T19:00:38.842118+00:00",
-  "cycle_key": "32263398867:1:406",
+  "generated_at": "2026-08-19T19:01:20.575114+00:00",
+  "cycle_key": "32263398867:1:407",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,30 +29,34 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.897,
-      "confidence": 0.808,
-      "raw_score": 1.897,
+      "domain": "concrete-specificity",
+      "score": 3.22,
+      "confidence": 0.978,
+      "raw_score": 3.22,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "used to"
+        "concrete",
+        "specific",
+        "example"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "used to"
+            "specific",
+            "concrete"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "used to"
+            "example",
+            "concrete"
           ],
-          "weight": 0.46
+          "weight": 0.92
         }
       ]
     },
@@ -60,22 +64,15 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.55,
-      "confidence": 0.692,
-      "raw_score": 1.83,
+      "score": 1.25,
+      "confidence": 0.567,
+      "raw_score": 1.53,
       "repeat_penalty": 0.28,
       "matched_triggers": [
         "relationship",
         "trust"
       ],
       "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "relationship"
-          ],
-          "weight": 1.45
-        },
         {
           "kind": "message",
           "matched": [
@@ -95,7 +92,7 @@
           "matched": [
             "relationship"
           ],
-          "weight": 0.46
+          "weight": 0.54
         },
         {
           "kind": "topic_support",
@@ -107,8 +104,8 @@
       ]
     }
   ],
-  "context_fingerprint": "1cb608d2234e",
+  "context_fingerprint": "a83ee378624d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 876,
-  "approx_added_tokens": 219
+  "temporary_skill_chars": 854,
+  "approx_added_tokens": 214
 }
