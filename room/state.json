@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2417,
+  "cycle": 2418,
   "silence_cycles": 0,
-  "last_speaker": "owen",
-  "last_run": "2026-08-19T15:00:28.695972Z",
+  "last_speaker": "jules",
+  "last_run": "2026-08-19T15:01:07.963078Z",
   "messages": 1000,
-  "last_public_event": "20260819T150028694-owen-v5",
+  "last_public_event": "20260819T150107961-jules-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002417",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002418",
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "progressive",
+    "current_facet": "interest",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "curious and skeptical",
       "better understand",
       "abstract example",
       "term",
@@ -71,7 +70,8 @@
       "importance",
       "fully understand",
       "relatable",
-      "progressive"
+      "progressive",
+      "interest"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,16 +84,18 @@
       "owen",
       "jules"
     ],
-    "turns": 4833,
+    "turns": 4835,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "relatable",
+      "progressive",
       "learning",
-      "specific detail",
+      "skepticism",
+      "progression",
       "topic",
-      "new information goal",
-      "test exception",
-      "progressive"
+      "interest",
+      "topic progress",
+      "fully understand",
+      "topic progression"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +105,17 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2417,
-        "hits": 30974,
+        "last_cycle": 2418,
+        "hits": 30990,
+        "status": "open"
+      },
+      {
+        "label": "skepticism",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 2418,
+        "hits": 8750,
         "status": "open"
       },
       {
@@ -112,8 +123,8 @@
         "parent": "contextual options",
         "depth": 317,
         "first_cycle": 2323,
-        "last_cycle": 2417,
-        "hits": 290,
+        "last_cycle": 2418,
+        "hits": 300,
         "status": "open"
       },
       {
@@ -121,8 +132,8 @@
         "parent": "progression",
         "depth": 290,
         "first_cycle": 2407,
-        "last_cycle": 2417,
-        "hits": 126,
+        "last_cycle": 2418,
+        "hits": 127,
         "status": "open"
       },
       {
@@ -130,8 +141,89 @@
         "parent": "mara",
         "depth": 289,
         "first_cycle": 2405,
-        "last_cycle": 2417,
-        "hits": 52,
+        "last_cycle": 2418,
+        "hits": 55,
+        "status": "open"
+      },
+      {
+        "label": "opponent",
+        "parent": "opposed",
+        "depth": 292,
+        "first_cycle": 2411,
+        "last_cycle": 2418,
+        "hits": 23,
+        "status": "open"
+      },
+      {
+        "label": "opinion",
+        "parent": "opponent",
+        "depth": 293,
+        "first_cycle": 2412,
+        "last_cycle": 2418,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "aim",
+        "parent": "opinion",
+        "depth": 294,
+        "first_cycle": 2413,
+        "last_cycle": 2418,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "importance",
+        "parent": "aim",
+        "depth": 295,
+        "first_cycle": 2414,
+        "last_cycle": 2418,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "fully understand",
+        "parent": "importance",
+        "depth": 296,
+        "first_cycle": 2415,
+        "last_cycle": 2418,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "specific active detail",
+        "parent": "progression",
+        "depth": 290,
+        "first_cycle": 2407,
+        "last_cycle": 2418,
+        "hits": 14,
+        "status": "open"
+      },
+      {
+        "label": "relatable",
+        "parent": "fully understand",
+        "depth": 297,
+        "first_cycle": 2416,
+        "last_cycle": 2418,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "progressive",
+        "parent": "relatable",
+        "depth": 298,
+        "first_cycle": 2417,
+        "last_cycle": 2418,
+        "hits": 5,
+        "status": "open"
+      },
+      {
+        "label": "interest",
+        "parent": "progressive",
+        "depth": 299,
+        "first_cycle": 2418,
+        "last_cycle": 2418,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -153,93 +245,12 @@
         "status": "open"
       },
       {
-        "label": "opponent",
-        "parent": "opposed",
-        "depth": 292,
-        "first_cycle": 2411,
-        "last_cycle": 2417,
-        "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "opinion",
-        "parent": "opponent",
-        "depth": 293,
-        "first_cycle": 2412,
-        "last_cycle": 2417,
-        "hits": 21,
-        "status": "open"
-      },
-      {
-        "label": "aim",
-        "parent": "opinion",
-        "depth": 294,
-        "first_cycle": 2413,
-        "last_cycle": 2417,
-        "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "importance",
-        "parent": "aim",
-        "depth": 295,
-        "first_cycle": 2414,
-        "last_cycle": 2417,
-        "hits": 16,
-        "status": "open"
-      },
-      {
-        "label": "specific active detail",
-        "parent": "progression",
-        "depth": 290,
-        "first_cycle": 2407,
-        "last_cycle": 2417,
-        "hits": 12,
-        "status": "open"
-      },
-      {
-        "label": "fully understand",
-        "parent": "importance",
-        "depth": 296,
-        "first_cycle": 2415,
-        "last_cycle": 2417,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "relatable",
-        "parent": "fully understand",
-        "depth": 297,
-        "first_cycle": 2416,
-        "last_cycle": 2417,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "progressive",
-        "parent": "relatable",
-        "depth": 298,
-        "first_cycle": 2417,
-        "last_cycle": 2417,
-        "hits": 1,
-        "status": "open"
-      },
-      {
         "label": "understandability",
         "parent": "fully understand",
         "depth": 297,
         "first_cycle": 2416,
         "last_cycle": 2416,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "skepticism",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 2414,
-        "hits": 8748,
         "status": "open"
       },
       {
@@ -520,19 +531,9 @@
         "last_cycle": 2381,
         "hits": 177,
         "status": "open"
-      },
-      {
-        "label": "clear and concise",
-        "parent": "views",
-        "depth": 348,
-        "first_cycle": 2373,
-        "last_cycle": 2381,
-        "hits": 45,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "public expression tool",
       "speak",
       "views",
       "clear and concise",
@@ -563,10 +564,11 @@
       "aim",
       "importance",
       "fully understand",
-      "relatable"
+      "relatable",
+      "progressive"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 2417,
+    "last_branch_cycle": 2418,
     "escape_pressure": 0
   }
 }
