@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T02:55:32.541807+00:00",
-  "cycle_key": "32208320454:1:51",
+  "generated_at": "2026-08-19T02:56:05.012452+00:00",
+  "cycle_key": "32208320454:1:52",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,9 +32,9 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 5.27,
-      "confidence": 0.999,
-      "raw_score": 5.27,
+      "score": 3.4,
+      "confidence": 0.984,
+      "raw_score": 3.4,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "concrete",
@@ -47,10 +47,18 @@
           "kind": "message",
           "matched": [
             "example",
+            "concrete"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "example",
             "specific",
             "concrete"
           ],
-          "weight": 1.45
+          "weight": 0.64
         },
         {
           "kind": "message",
@@ -60,44 +68,41 @@
             "concrete",
             "observation"
           ],
-          "weight": 0.92
+          "weight": 0.46
         }
       ]
     },
     {
-      "name": "critical-testing",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 3.75,
-      "confidence": 0.992,
-      "raw_score": 3.75,
+      "domain": "affect",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "compare",
-        "claim",
-        "reason"
+        "trust"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "compare"
+            "trust"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
-          "kind": "message",
+          "kind": "topic_support",
           "matched": [
-            "claim",
-            "reason"
+            "trust"
           ],
-          "weight": 1.15
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "bce8aed49f1e",
+  "context_fingerprint": "5fa61e8620bc",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 839,
-  "approx_added_tokens": 210
+  "temporary_skill_chars": 854,
+  "approx_added_tokens": 214
 }
