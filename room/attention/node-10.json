@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T02:28:46.136568+00:00",
-  "cycle_key": "32208320454:1:8",
+  "generated_at": "2026-08-19T02:29:22.305241+00:00",
+  "cycle_key": "32208320454:1:9",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,88 +29,54 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "memory-callback",
+      "domain": "concrete-specificity",
+      "score": 5.4,
+      "confidence": 1.0,
+      "raw_score": 5.4,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "concrete",
+        "example",
+        "specific"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "example",
+            "specific",
+            "concrete"
+          ],
+          "weight": 1.8
+        }
+      ]
+    },
+    {
+      "name": "creative-bridge",
+      "tier": "project",
+      "domain": "creative-bridge",
       "score": 1.8,
       "confidence": 0.779,
       "raw_score": 1.8,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "past"
+        "idea"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "past"
+            "idea"
           ],
           "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "past"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "past"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "past"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "past"
-          ],
-          "weight": 0.64
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 1.62,
-      "confidence": 0.718,
-      "raw_score": 1.9,
-      "repeat_penalty": 0.28,
-      "matched_triggers": [
-        "feel",
-        "feeling",
-        "trust"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "feel",
-            "feeling"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "topic_support",
-          "matched": [
-            "trust"
-          ],
-          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "476ff6f94218",
+  "context_fingerprint": "f08c4ad3f577",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 876,
-  "approx_added_tokens": 219
+  "temporary_skill_chars": 798,
+  "approx_added_tokens": 200
 }
