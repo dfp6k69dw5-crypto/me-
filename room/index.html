@@ -9,28 +9,32 @@
 <meta http-equiv="Expires" content="0">
 <title>The Room</title>
 <style>
-:root{--b:#08090d;--p:#11141b;--l:#2b3240;--t:#f5f3ee;--m:#969daa;--g:#d7c18a;--live:#98dfc8;--warn:#e0bf79}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--b);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{background:radial-gradient(900px 600px at 10% -15%,#1a2130 0,transparent 58%),var(--b)}.app{max-width:900px;margin:auto;min-height:100dvh}.top{position:sticky;top:0;z-index:3;padding:calc(12px + env(safe-area-inset-top)) 14px 11px;background:#08090df2;border-bottom:1px solid var(--l);display:flex;gap:9px;align-items:center}.brand{font-weight:850;font-size:22px;letter-spacing:-.04em}.brand small{display:block;color:var(--g);font:700 9px ui-monospace,monospace;letter-spacing:.15em}.sp{flex:1}.status{border:1px solid var(--l);background:var(--p);color:var(--warn);border-radius:12px;padding:9px 11px;font-size:11px;font-weight:750}.status.live{color:var(--live)}.people{display:flex;gap:7px;overflow:auto;padding:12px 14px;border-bottom:1px solid #181d26}.person{white-space:nowrap;border:1px solid var(--l);background:#0c0f15;border-radius:999px;padding:8px 11px;color:#c8cdd5;font-size:12px}.person b{color:var(--g);margin-right:5px}.chat{padding:19px 14px 90px}.empty{color:var(--m);text-align:center;padding:20vh 25px;line-height:1.6}.msg{max-width:92%;margin:0 0 18px;padding:12px 14px 13px;background:var(--p);border:1px solid var(--l);border-radius:18px;line-height:1.5;white-space:pre-wrap}.who{font:800 9px ui-monospace,monospace;letter-spacing:.14em;color:var(--g);margin-bottom:7px}.when{color:#69717f;font-size:9px;margin-top:8px}.meta{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(92%,620px);padding:9px 12px;background:#0d1016ee;border:1px solid var(--l);border-radius:999px;text-align:center;color:var(--m);font-size:10px;backdrop-filter:blur(12px)}
+:root{--b:#08090d;--p:#11141b;--l:#2b3240;--t:#f5f3ee;--m:#969daa;--g:#d7c18a;--live:#98dfc8;--warn:#e0bf79}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--b);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{background:radial-gradient(900px 600px at 10% -15%,#1a2130 0,transparent 58%),var(--b)}.app{max-width:900px;margin:auto;min-height:100dvh}.top{position:sticky;top:0;z-index:3;padding:calc(12px + env(safe-area-inset-top)) 14px 11px;background:#08090df2;border-bottom:1px solid var(--l);display:flex;gap:9px;align-items:center}.brand{font-weight:850;font-size:22px;letter-spacing:-.04em}.brand small{display:block;color:var(--g);font:700 9px ui-monospace,monospace;letter-spacing:.15em}.sp{flex:1}.status{border:1px solid var(--l);background:var(--p);color:var(--warn);border-radius:12px;padding:9px 11px;font-size:11px;font-weight:750;min-width:104px}.status.live{color:var(--live)}.status:disabled{opacity:.75}.people{display:flex;gap:7px;overflow:auto;padding:12px 14px;border-bottom:1px solid #181d26}.person{white-space:nowrap;border:1px solid var(--l);background:#0c0f15;border-radius:999px;padding:8px 11px;color:#c8cdd5;font-size:12px}.person b{color:var(--g);margin-right:5px}.chat{padding:19px 14px 90px}.empty{color:var(--m);text-align:center;padding:20vh 25px;line-height:1.6}.msg{max-width:92%;margin:0 0 18px;padding:12px 14px 13px;background:var(--p);border:1px solid var(--l);border-radius:18px;line-height:1.5;white-space:pre-wrap}.msg.allen{border-color:#665a38}.who{font:800 9px ui-monospace,monospace;letter-spacing:.14em;color:var(--g);margin-bottom:7px}.when{color:#69717f;font-size:9px;margin-top:8px}.meta{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(92%,680px);padding:9px 12px;background:#0d1016ee;border:1px solid var(--l);border-radius:999px;text-align:center;color:var(--m);font-size:10px;backdrop-filter:blur(12px)}
 </style>
 </head>
 <body>
-<div class="app"><header class="top"><div class="brand">The Room<small>SARAH + MARA + OWEN + JULES</small></div><div class="sp"></div><button id="status" class="status" type="button">loading</button></header><div id="people" class="people"></div><main id="chat" class="chat"><div class="empty">Loading the room…</div></main></div>
-<div id="meta" class="meta">Timeout-safe viewer · checking every second</div>
+<div class="app"><header class="top"><div class="brand">The Room<small>SARAH + MARA + OWEN + JULES + ALLEN</small></div><div class="sp"></div><button id="status" class="status" type="button" aria-label="Refresh the Room">loading</button></header><div id="people" class="people"></div><main id="chat" class="chat"><div class="empty">Loading the room…</div></main></div>
+<div id="meta" class="meta">Loading retained conversation…</div>
 <script>
 const RELAY='https://room-live-mirror.dfp6k69dw5.workers.dev/api/feed';
 const RAW='https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/feed.json';
 const LOCAL='feed.json';
 const API='https://api.github.com/repos/maaronfanberg-lab/me-/contents/room/feed.json?ref=main';
-const STALE_MS=45000,API_COOLDOWN_MS=90000,FETCH_TIMEOUT_MS=2500;
+const HISTORY_RAW='https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/conversation.json';
+const HISTORY_LOCAL='conversation.json';
+const STALE_MS=45000,API_COOLDOWN_MS=90000,FETCH_TIMEOUT_MS=3000,HISTORY_TIMEOUT_MS=8000;
 const $=s=>document.querySelector(s);
 let last=null,lastSource='',lastApiAt=0,lastApiCandidate=null,lastGoodData=null,lastGoodSource='',lastGoodStamp=0,refreshing=false;
+let historyCache=null,historySource='',historyStamp=0,historyLoadedAt=0;
 function when(s){try{return new Date(s).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'})}catch{return''}}
 function setStatus(txt,ok){const e=$('#status');e.textContent=txt;e.classList.toggle('live',!!ok)}
-async function timedFetch(url,opts={}){const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),FETCH_TIMEOUT_MS);try{return await fetch(url,{...opts,signal:ctrl.signal})}finally{clearTimeout(timer)}}
-async function fetchJson(url){const sep=url.includes('?')?'&':'?';const r=await timedFetch(url+sep+'fresh='+Date.now()+'-'+Math.random().toString(36).slice(2),{cache:'no-store',headers:{'Cache-Control':'no-cache','Pragma':'no-cache'}});if(!r.ok)throw new Error(String(r.status));return r.json()}
+async function timedFetch(url,opts={},timeout=FETCH_TIMEOUT_MS){const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),timeout);try{return await fetch(url,{...opts,signal:ctrl.signal})}finally{clearTimeout(timer)}}
+async function fetchJson(url,timeout=FETCH_TIMEOUT_MS){const sep=url.includes('?')?'&':'?';const r=await timedFetch(url+sep+'fresh='+Date.now()+'-'+Math.random().toString(36).slice(2),{cache:'no-store',headers:{'Cache-Control':'no-cache','Pragma':'no-cache'}},timeout);if(!r.ok)throw new Error(String(r.status));return r.json()}
 async function fetchApiFeed(){const sep=API.includes('?')?'&':'?';const r=await timedFetch(API+sep+'fresh='+Date.now(),{cache:'no-store',headers:{Accept:'application/vnd.github+json','Cache-Control':'no-cache'}});if(!r.ok)throw new Error(String(r.status));const obj=await r.json();if(!obj?.content)throw new Error('no api content');const bytes=Uint8Array.from(atob(String(obj.content).replace(/\s/g,'')),c=>c.charCodeAt(0));return JSON.parse(new TextDecoder().decode(bytes))}
 function unwrap(raw){return raw?.feed||raw}
 function valid(s){if(!s||!s.state||!Array.isArray(s.conversation))throw new Error('bad feed');return s}
 function stamp(s){const t=Date.parse(s?.generated_at||s?.state?.last_run||'');return Number.isFinite(t)?t:0}
+function historyTime(list){if(!Array.isArray(list)||!list.length)return 0;const t=Date.parse(list[list.length-1]?.at||'');return Number.isFinite(t)?t:0}
 async function candidate(source,url){try{return {source,data:valid(unwrap(await fetchJson(url)))}}catch{return null}}
 async function apiCandidate(force=false){const now=Date.now();if(!force&&now-lastApiAt<API_COOLDOWN_MS)return lastApiCandidate;lastApiAt=now;try{lastApiCandidate={source:'api',data:valid(unwrap(await fetchApiFeed()))};return lastApiCandidate}catch{return lastApiCandidate}}
 async function getLive(forceApi=false){
@@ -46,8 +50,69 @@ async function getLive(forceApi=false){
   if(lastGoodData&&bestStamp<lastGoodStamp){lastSource=lastGoodSource;return lastGoodData}
   lastGoodData=best.data;lastGoodSource=best.source;lastGoodStamp=bestStamp;lastSource=best.source;return best.data
 }
-function render(s){const minds=s?.minds?.entities||{};const people=$('#people');people.innerHTML='';for(const [id,m] of Object.entries(minds)){const p=document.createElement('div');p.className='person';p.innerHTML='<b>'+(m.name||id)+'</b> 3 nodes';people.appendChild(p)}const conv=Array.isArray(s?.conversation)?s.conversation:[];const sig=conv.map(x=>x.id).join('|');if(sig!==last){const nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-180;last=sig;const chat=$('#chat');chat.innerHTML='';if(!conv.length)chat.innerHTML='<div class="empty">The room is quiet.</div>';for(const m of conv){const d=document.createElement('div');d.className='msg';const who=minds[m.speaker]?.name||m.speaker;d.innerHTML='<div class="who"></div><div class="text"></div><div class="when"></div>';d.querySelector('.who').textContent=who;d.querySelector('.text').textContent=m.text;d.querySelector('.when').textContent=when(m.at);chat.appendChild(d)}if(nearBottom||!conv.length)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'auto'}),20)}const t=stamp(s);const age=t?Math.max(0,Math.floor((Date.now()-t)/1000)):0;const beat=s?.state?.cycle??'—';setStatus('beat '+beat+' · '+age+'s',age<90);const label=lastSource==='relay'?'Cloudflare relay':lastSource==='raw'?'GitHub Raw':lastSource==='api'?'GitHub API direct':'Pages snapshot';$('#meta').textContent='Timeout-safe · '+label+' · 1s checks'}
-async function refresh(forceApi=false){if(refreshing)return;refreshing=true;try{render(await getLive(forceApi))}catch(e){setStatus('retry',false)}finally{refreshing=false}}
-$('#status').onclick=()=>refresh(true);refresh(true);setInterval(()=>refresh(false),1000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh(true)});window.addEventListener('pageshow',()=>refresh(true));
+async function historyCandidate(source,url){try{const data=await fetchJson(url,HISTORY_TIMEOUT_MS);if(!Array.isArray(data))throw new Error('bad history');return {source,data,stamp:historyTime(data)}}catch{return null}}
+async function getHistory(force=false){
+  if(!force&&historyCache&&Date.now()-historyLoadedAt<60000)return historyCache;
+  const results=(await Promise.all([historyCandidate('GitHub history',HISTORY_RAW),historyCandidate('Pages history',HISTORY_LOCAL)])).filter(Boolean);
+  results.sort((a,b)=>(b.stamp-a.stamp)||(b.data.length-a.data.length));
+  const best=results[0];
+  if(best&&(!historyCache||best.stamp>=historyStamp||best.data.length>historyCache.length)){
+    historyCache=best.data;historySource=best.source;historyStamp=best.stamp;historyLoadedAt=Date.now();
+  }
+  return historyCache||[]
+}
+function mergedConversation(live,history){
+  const base=Array.isArray(history)?history:[];
+  const tail=Array.isArray(live?.conversation)?live.conversation:[];
+  const out=[],seen=new Set();
+  for(const m of base){if(!m||!m.id||seen.has(m.id))continue;seen.add(m.id);out.push(m)}
+  for(const m of tail){if(!m||!m.id||seen.has(m.id))continue;seen.add(m.id);out.push(m)}
+  return out
+}
+function render(s,history){
+  const minds=s?.minds?.entities||{};
+  const conv=mergedConversation(s,history);
+  const people=$('#people');
+  const peopleFrag=document.createDocumentFragment();
+  const shown=new Set();
+  for(const [id,m] of Object.entries(minds)){const p=document.createElement('div');p.className='person';const b=document.createElement('b');b.textContent=m.name||id;p.appendChild(b);p.append(' 3 nodes');peopleFrag.appendChild(p);shown.add(id)}
+  if(conv.some(m=>m?.speaker==='allen')&&!shown.has('allen')){const p=document.createElement('div');p.className='person';const b=document.createElement('b');b.textContent='Allen';p.appendChild(b);p.append(' participant');peopleFrag.appendChild(p)}
+  people.replaceChildren(peopleFrag);
+  const firstId=conv[0]?.id||'';const lastId=conv[conv.length-1]?.id||'';const sig=conv.length+'|'+firstId+'|'+lastId;
+  if(sig!==last){
+    const chat=$('#chat');
+    const existingMessages=chat.querySelectorAll('.msg').length;
+    if(conv.length||!existingMessages){
+      const nearBottom=window.scrollY+window.innerHeight>document.documentElement.scrollHeight-180;
+      const frag=document.createDocumentFragment();
+      if(!conv.length){const e=document.createElement('div');e.className='empty';e.textContent='The room is quiet.';frag.appendChild(e)}
+      for(const m of conv){const d=document.createElement('div');d.className='msg'+(m.speaker==='allen'?' allen':'');const w=document.createElement('div');w.className='who';w.textContent=m.speaker==='allen'?'Allen':(minds[m.speaker]?.name||m.speaker||'');const t=document.createElement('div');t.className='text';t.textContent=m.text||'';const q=document.createElement('div');q.className='when';q.textContent=when(m.at);d.appendChild(w);d.appendChild(t);d.appendChild(q);frag.appendChild(d)}
+      chat.replaceChildren(frag);last=sig;
+      if(nearBottom||existingMessages===0)setTimeout(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'auto'}),20)
+    }
+  }
+  const t=stamp(s);const age=t?Math.max(0,Math.floor((Date.now()-t)/1000)):0;const beat=s?.state?.cycle??'—';setStatus('beat '+beat+' · '+age+'s',age<90);
+  const label=lastSource==='relay'?'Cloudflare relay':lastSource==='raw'?'GitHub Raw':lastSource==='api'?'GitHub API direct':'Pages snapshot';
+  const historyLabel=historyCache?historyCache.length+' retained messages via '+historySource:'live tail only';
+  $('#meta').textContent=historyLabel+' · '+label+' · auto 2s';
+}
+async function refresh(forceApi=false){
+  if(refreshing)return;
+  refreshing=true;
+  const btn=$('#status');
+  if(forceApi){btn.disabled=true;setStatus('checking…',false)}
+  try{
+    const [live,history]=await Promise.all([getLive(forceApi),getHistory(forceApi||!historyCache)]);
+    render(live,history)
+  }catch(e){
+    if(lastGoodData){render(lastGoodData,historyCache||[]);setStatus('retry · kept',false)}
+    else setStatus('retry',false)
+  }finally{btn.disabled=false;refreshing=false}
+}
+$('#status').onclick=()=>refresh(true);
+refresh(true);
+setInterval(()=>refresh(false),2000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh(true)});
+window.addEventListener('pageshow',()=>refresh(true));
 </script>
 </body></html>
