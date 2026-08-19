@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2428,
+  "cycle": 2429,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-19T15:08:13.484466Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-19T15:08:52.306350Z",
   "messages": 1000,
-  "last_public_event": "20260819T150813483-mara-v5",
+  "last_public_event": "20260819T150852304-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002428",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002429",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "skew",
+    "current_facet": "surprise",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "conclusion",
       "new idea",
       "improve our understanding",
       "imply",
@@ -71,7 +70,8 @@
       "arguments",
       "other-reasons",
       "other reasons",
-      "skew"
+      "skew",
+      "surprise"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,13 +84,17 @@
       "owen",
       "jules"
     ],
-    "turns": 4855,
-    "low_novelty_beats": 1,
+    "turns": 4857,
+    "low_novelty_beats": 0,
     "recent_terms": [
       "skew",
       "learning",
-      "critical thinking",
-      "skepticism"
+      "specific",
+      "skepticism",
+      "surprise",
+      "skeptic",
+      "surprising",
+      "surprised"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -100,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2428,
-        "hits": 31152,
+        "last_cycle": 2429,
+        "hits": 31168,
         "status": "open"
       },
       {
@@ -109,8 +113,17 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 2428,
-        "hits": 8853,
+        "last_cycle": 2429,
+        "hits": 8865,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "curious",
+        "depth": 281,
+        "first_cycle": 1640,
+        "last_cycle": 2429,
+        "hits": 1157,
         "status": "open"
       },
       {
@@ -118,8 +131,89 @@
         "parent": "contextual options",
         "depth": 317,
         "first_cycle": 2323,
-        "last_cycle": 2428,
-        "hits": 335,
+        "last_cycle": 2429,
+        "hits": 336,
+        "status": "open"
+      },
+      {
+        "label": "critical thinking",
+        "parent": "topic",
+        "depth": 318,
+        "first_cycle": 2423,
+        "last_cycle": 2429,
+        "hits": 42,
+        "status": "open"
+      },
+      {
+        "label": "other-reasons",
+        "parent": "arguments",
+        "depth": 320,
+        "first_cycle": 2425,
+        "last_cycle": 2429,
+        "hits": 23,
+        "status": "open"
+      },
+      {
+        "label": "specific active detail",
+        "parent": "progression",
+        "depth": 290,
+        "first_cycle": 2407,
+        "last_cycle": 2429,
+        "hits": 23,
+        "status": "open"
+      },
+      {
+        "label": "arguments",
+        "parent": "critical thinking",
+        "depth": 319,
+        "first_cycle": 2424,
+        "last_cycle": 2429,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "other reasons",
+        "parent": "other-reasons",
+        "depth": 321,
+        "first_cycle": 2426,
+        "last_cycle": 2429,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "skew",
+        "parent": "other reasons",
+        "depth": 322,
+        "first_cycle": 2427,
+        "last_cycle": 2429,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "tool",
+        "parent": "arguments",
+        "depth": 320,
+        "first_cycle": 2425,
+        "last_cycle": 2429,
+        "hits": 8,
+        "status": "open"
+      },
+      {
+        "label": "surprise",
+        "parent": "skew",
+        "depth": 323,
+        "first_cycle": 2429,
+        "last_cycle": 2429,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "surprising",
+        "parent": "skew",
+        "depth": 323,
+        "first_cycle": 2429,
+        "last_cycle": 2429,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -129,69 +223,6 @@
         "first_cycle": 2419,
         "last_cycle": 2428,
         "hits": 67,
-        "status": "open"
-      },
-      {
-        "label": "critical thinking",
-        "parent": "topic",
-        "depth": 318,
-        "first_cycle": 2423,
-        "last_cycle": 2428,
-        "hits": 35,
-        "status": "open"
-      },
-      {
-        "label": "arguments",
-        "parent": "critical thinking",
-        "depth": 319,
-        "first_cycle": 2424,
-        "last_cycle": 2428,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "other-reasons",
-        "parent": "arguments",
-        "depth": 320,
-        "first_cycle": 2425,
-        "last_cycle": 2428,
-        "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "other reasons",
-        "parent": "other-reasons",
-        "depth": 321,
-        "first_cycle": 2426,
-        "last_cycle": 2428,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "tool",
-        "parent": "arguments",
-        "depth": 320,
-        "first_cycle": 2425,
-        "last_cycle": 2428,
-        "hits": 7,
-        "status": "open"
-      },
-      {
-        "label": "skew",
-        "parent": "other reasons",
-        "depth": 322,
-        "first_cycle": 2427,
-        "last_cycle": 2428,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "curious",
-        "depth": 281,
-        "first_cycle": 1640,
-        "last_cycle": 2427,
-        "hits": 1156,
         "status": "open"
       },
       {
@@ -273,15 +304,6 @@
         "first_cycle": 2416,
         "last_cycle": 2423,
         "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "specific active detail",
-        "parent": "progression",
-        "depth": 290,
-        "first_cycle": 2407,
-        "last_cycle": 2423,
-        "hits": 21,
         "status": "open"
       },
       {
@@ -508,28 +530,9 @@
         "last_cycle": 2397,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "term",
-        "parent": "abstract example",
-        "depth": 357,
-        "first_cycle": 2385,
-        "last_cycle": 2394,
-        "hits": 44,
-        "status": "open"
-      },
-      {
-        "label": "exploration",
-        "parent": "term",
-        "depth": 358,
-        "first_cycle": 2387,
-        "last_cycle": 2394,
-        "hits": 24,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "meaningful example",
       "curious and skeptical",
       "better understand",
       "abstract example",
@@ -560,10 +563,11 @@
       "critical thinking",
       "arguments",
       "other-reasons",
-      "other reasons"
+      "other reasons",
+      "skew"
     ],
-    "focus_turns": 2,
-    "last_branch_cycle": 2427,
+    "focus_turns": 0,
+    "last_branch_cycle": 2429,
     "escape_pressure": 0
   }
 }
