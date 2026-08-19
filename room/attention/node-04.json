@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T22:09:39.166080+00:00",
-  "cycle_key": "32295508468:1:128",
+  "generated_at": "2026-08-19T22:10:40.284377+00:00",
+  "cycle_key": "32295508468:1:129",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,44 +29,65 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.33,
-      "confidence": 0.602,
-      "raw_score": 1.61,
-      "repeat_penalty": 0.28,
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "sure",
-        "reason"
+        "question"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "question"
           ],
-          "weight": 1.15
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "sure"
-          ],
-          "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "reason"
+            "question"
           ],
           "weight": 0.46
         }
       ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.18,
+      "confidence": 0.536,
+      "raw_score": 1.46,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "whether",
+        "sure"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "whether"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 0.54
+        }
+      ]
     }
   ],
-  "context_fingerprint": "e6ca0e8b4c7f",
+  "context_fingerprint": "d8a242d491f7",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 867,
+  "approx_added_tokens": 217
 }
