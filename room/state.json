@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2830,
+  "cycle": 2831,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-19T19:42:17.516852Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-19T19:43:00.270301Z",
   "messages": 1000,
-  "last_public_event": "20260819T194217515-jules-v5",
+  "last_public_event": "20260819T194300267-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002830",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002831",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "examples",
+    "current_facet": "query",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "challenge",
       "view",
       "funtequotation",
       "famous",
@@ -71,7 +70,8 @@
       "owen",
       "confusion",
       "concentration",
-      "examples"
+      "examples",
+      "query"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,14 +84,16 @@
       "owen",
       "jules"
     ],
-    "turns": 5659,
-    "low_novelty_beats": 1,
+    "turns": 5661,
+    "low_novelty_beats": 0,
     "recent_terms": [
       "examples",
       "learning",
-      "learning new information",
-      "new details",
-      "limitations",
+      "query",
+      "entities",
+      "new input",
+      "no",
+      "no doubt",
       "input.json"
     ],
     "last_shift_cycle": 1,
@@ -102,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2830,
-        "hits": 37683,
+        "last_cycle": 2831,
+        "hits": 37700,
         "status": "open"
       },
       {
@@ -111,8 +113,17 @@
         "parent": "evaluate",
         "depth": 295,
         "first_cycle": 2820,
-        "last_cycle": 2830,
-        "hits": 59,
+        "last_cycle": 2831,
+        "hits": 62,
+        "status": "open"
+      },
+      {
+        "label": "new",
+        "parent": "open mind",
+        "depth": 286,
+        "first_cycle": 2808,
+        "last_cycle": 2831,
+        "hits": 42,
         "status": "open"
       },
       {
@@ -120,8 +131,8 @@
         "parent": "input_json",
         "depth": 296,
         "first_cycle": 2822,
-        "last_cycle": 2830,
-        "hits": 29,
+        "last_cycle": 2831,
+        "hits": 32,
         "status": "open"
       },
       {
@@ -129,8 +140,98 @@
         "parent": "context",
         "depth": 298,
         "first_cycle": 2824,
-        "last_cycle": 2830,
-        "hits": 27,
+        "last_cycle": 2831,
+        "hits": 29,
+        "status": "open"
+      },
+      {
+        "label": "entity",
+        "parent": "detail",
+        "depth": 299,
+        "first_cycle": 2825,
+        "last_cycle": 2831,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "owen",
+        "parent": "entity",
+        "depth": 300,
+        "first_cycle": 2826,
+        "last_cycle": 2831,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "confusion",
+        "parent": "owen",
+        "depth": 301,
+        "first_cycle": 2827,
+        "last_cycle": 2831,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "concentration",
+        "parent": "confusion",
+        "depth": 302,
+        "first_cycle": 2828,
+        "last_cycle": 2831,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "examples",
+        "parent": "concentration",
+        "depth": 303,
+        "first_cycle": 2829,
+        "last_cycle": 2831,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "queries",
+        "parent": "concentration",
+        "depth": 303,
+        "first_cycle": 2829,
+        "last_cycle": 2831,
+        "hits": 3,
+        "status": "open"
+      },
+      {
+        "label": "knowledge",
+        "parent": "goal",
+        "depth": 292,
+        "first_cycle": 2817,
+        "last_cycle": 2831,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "query",
+        "parent": "examples",
+        "depth": 304,
+        "first_cycle": 2831,
+        "last_cycle": 2831,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "entities",
+        "parent": "examples",
+        "depth": 304,
+        "first_cycle": 2831,
+        "last_cycle": 2831,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "no doubt",
+        "parent": "examples",
+        "depth": 304,
+        "first_cycle": 2831,
+        "last_cycle": 2831,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -140,60 +241,6 @@
         "first_cycle": 2823,
         "last_cycle": 2830,
         "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "entity",
-        "parent": "detail",
-        "depth": 299,
-        "first_cycle": 2825,
-        "last_cycle": 2830,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "owen",
-        "parent": "entity",
-        "depth": 300,
-        "first_cycle": 2826,
-        "last_cycle": 2830,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "confusion",
-        "parent": "owen",
-        "depth": 301,
-        "first_cycle": 2827,
-        "last_cycle": 2830,
-        "hits": 16,
-        "status": "open"
-      },
-      {
-        "label": "concentration",
-        "parent": "confusion",
-        "depth": 302,
-        "first_cycle": 2828,
-        "last_cycle": 2830,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "examples",
-        "parent": "concentration",
-        "depth": 303,
-        "first_cycle": 2829,
-        "last_cycle": 2830,
-        "hits": 6,
-        "status": "open"
-      },
-      {
-        "label": "queries",
-        "parent": "concentration",
-        "depth": 303,
-        "first_cycle": 2829,
-        "last_cycle": 2830,
-        "hits": 2,
         "status": "open"
       },
       {
@@ -368,30 +415,12 @@
         "status": "open"
       },
       {
-        "label": "new",
-        "parent": "open mind",
-        "depth": 286,
-        "first_cycle": 2808,
-        "last_cycle": 2818,
-        "hits": 41,
-        "status": "open"
-      },
-      {
         "label": "skepticity",
         "parent": "familiar term",
         "depth": 285,
         "first_cycle": 2807,
         "last_cycle": 2817,
         "hits": 3,
-        "status": "open"
-      },
-      {
-        "label": "knowledge",
-        "parent": "goal",
-        "depth": 292,
-        "first_cycle": 2817,
-        "last_cycle": 2817,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -501,37 +530,9 @@
         "last_cycle": 2808,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "fancy",
-        "parent": "famous",
-        "depth": 284,
-        "first_cycle": 2806,
-        "last_cycle": 2807,
-        "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "fanciful",
-        "parent": "famous",
-        "depth": 284,
-        "first_cycle": 2806,
-        "last_cycle": 2807,
-        "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "topic",
-        "parent": "changing",
-        "depth": 357,
-        "first_cycle": 2735,
-        "last_cycle": 2806,
-        "hits": 88,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "public sphere",
       "conversation history",
       "very popular",
       "mara",
@@ -562,10 +563,11 @@
       "entity",
       "owen",
       "confusion",
-      "concentration"
+      "concentration",
+      "examples"
     ],
-    "focus_turns": 2,
-    "last_branch_cycle": 2829,
+    "focus_turns": 0,
+    "last_branch_cycle": 2831,
     "escape_pressure": 0
   }
 }
