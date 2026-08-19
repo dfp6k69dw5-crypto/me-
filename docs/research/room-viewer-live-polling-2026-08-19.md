@@ -27,11 +27,11 @@ Primary/current technical sources consulted 2026-08-19:
 - Playwright Browsers: https://playwright.dev/docs/browsers — Playwright supports WebKit and mobile Safari-style device projects for browser regression testing.
 - WHATWG Fetch Standard: https://fetch.spec.whatwg.org/ — the CORS-safelisted request-header set is narrow; `Cache-Control` and `Pragma` are not safelisted request headers. Requests with CORS-unsafe request-header names can require a CORS preflight.
 
-This matters because the current viewer adds `Cache-Control` and `Pragma` request headers to every fetch, including cross-origin public GETs to Cloudflare and GitHub Raw. That can turn what should be a simple GET into an OPTIONS preflight dependency. The viewer already uses `cache:'no-store'` plus a unique query parameter, so those custom request headers are not required to create a fresh request.
+This matters because the pre-change viewer added `Cache-Control` and `Pragma` request headers to every fetch, including cross-origin public GETs to Cloudflare and GitHub Raw. That could turn what should be a simple GET into an OPTIONS preflight dependency. The viewer already used `cache:'no-store'` plus a unique query parameter, so those custom request headers were not required to create a fresh request.
 
 ## 4. Natural-behavior evidence
 
-Not applicable: no human conversational behavior is being changed. The Room's cognition and dialogue engine must remain untouched.
+Not applicable: no human conversational behavior is being changed. The Room's cognition and dialogue engine remains untouched.
 
 ## 5. Mechanism evidence
 
@@ -50,17 +50,17 @@ The deterministic baseline also separates source-selection failure from renderin
 
 Playwright WebKit is not branded iOS Safari and cannot reproduce every OS-level networking policy, VPN behavior, or background-tab throttle. Therefore passing the simulator is necessary but not sufficient. Post-deploy validation still requires observing a production page remain open across several real Room beats.
 
-The GitHub REST API is rate-limited, so it must be an emergency/bounded fallback rather than the normal two-second transport.
+The GitHub REST API is rate-limited, so it is an emergency/bounded fallback rather than the normal two-second transport.
 
 ## 8. Context transfer
 
-The tests run against the actual `room/index.html` viewer code, not a rewritten toy implementation. Network responses alone are simulated. This keeps the test close to production while avoiding dependence on real Cloudflare/GitHub timing during diagnosis.
+The tests run against the actual `room/index.html` viewer code, not a rewritten toy implementation. Network responses alone are simulated. A second fast simulator extracts and executes the actual committed viewer script in a Node VM against deterministic transports. This keeps validation close to production while avoiding dependence on real Cloudflare/GitHub timing during diagnosis.
 
 ## 9. Implementation mapping
 
 ### Phase A — baseline, completed before production change
 
-A WebKit/iPhone-style Playwright simulator loads the real `room/index.html`, supplies 1000 retained messages, forces Cloudflare relay and GitHub Raw to fail, keeps local Pages `feed.json` fixed at beat 100, exposes an advancing GitHub API source through beats 101–103, and keeps the page open throughout.
+A WebKit/iPhone-style Playwright simulator loaded the real `room/index.html`, supplied 1000 retained messages, forced Cloudflare relay and GitHub Raw to fail, kept local Pages `feed.json` fixed at beat 100, exposed an advancing GitHub API source, and kept the page open throughout.
 
 Observed baseline diagnostic:
 
@@ -73,32 +73,58 @@ Observed baseline diagnostic:
 - API calls 0;
 - no page errors.
 
-This reproduces the user's failure while proving the history/render path itself is functioning.
+This reproduced the user's failure while proving the history/render path itself was functioning.
 
-### Phase B — permitted production change
+### Phase B — production change
 
-Change **only `room/index.html` viewer-network behavior**:
+Changed **only `room/index.html` viewer-network behavior**:
 
-- remove unnecessary `Cache-Control` / `Pragma` request headers from browser fetches while retaining `cache:'no-store'` and unique query parameters;
-- restore a GitHub Contents API fallback with a cooldown so it is not polled every two seconds;
-- choose the freshest candidate monotonically;
-- never label/accept a stale Pages snapshot as equivalent to a live transport when a fresher independent source exists.
+- removed unnecessary `Cache-Control` / `Pragma` request headers from browser fetches while retaining `cache:'no-store'` and unique query parameters;
+- restored a GitHub Contents API fallback with a 60-second cooldown so it is not polled every two seconds;
+- chose the freshest candidate monotonically;
+- preserved the last known freshest beat so an older response cannot move the viewer backward;
+- labeled a Pages-only state as `snapshot beat` rather than presenting it as live.
 
-No Room cognition, conversation generation, persistence, Allen injection, or scheduling code is in scope.
+No Room cognition, conversation generation, persistence, Allen injection, or scheduling code was changed.
 
 ## 10. Post-change validation
 
-### Required simulator pass
+### Fast exact-script simulator — PASS
 
-Without reload:
+`room/viewer-fast-simulator-diagnostic.json`, checked 2026-08-19T13:20:20.705Z:
 
-1. the viewer advances monotonically from beat 100 to at least beat 103;
-2. messages from beats 101, 102, and 103 appear in the existing transcript;
-3. the 1000-message retained history remains present;
-4. a stale Pages snapshot is never accepted over a newer live/API beat;
-5. no page exception or unhandled rejection occurs;
-6. public cross-origin live reads do not depend on unnecessary preflight-triggering request headers;
-7. diagnostic output records source and beat progression.
+- overall `pass: true`;
+- stale Pages + failed relay/raw -> one GitHub API fallback call -> beat 103;
+- 1000 retained messages preserved and 12 live messages appended (`1012 shown`);
+- simple cross-origin scenario advanced to beat 103 using three relay GETs with zero unsafe request headers;
+- monotonic scenario stayed on beat 103 when later offered an older beat 102.
+
+### WebKit/iPhone fallback simulator — PASS
+
+`room/viewer-simulator-diagnostic.json`, checked 2026-08-19T13:26:28.768Z:
+
+- `pass: true`;
+- expected beat 103, observed beat 103;
+- status `beat 103 · 3s`;
+- meta `1012 shown · 1000 retained · GitHub API fallback · auto 2s`;
+- beat 101, 102, and 103 markers all present;
+- relay calls 3, raw calls 3, API calls 1;
+- zero browser errors.
+
+### WebKit/iPhone simple-GET / CORS simulator — PASS
+
+`room/viewer-cors-simulator-diagnostic.json`, checked 2026-08-19T13:26:23.333Z:
+
+- `pass: true`;
+- expected beat 103, observed beat 103;
+- `1012 shown · 1000 retained · Cloudflare relay · auto 2s`;
+- preflight calls 0;
+- live GET calls 5;
+- request methods were GET only;
+- beat 101, 102, and 103 markers all present;
+- zero browser errors.
+
+All predeclared simulator criteria therefore pass. The remaining required validation is production behavior on a real iPhone.
 
 ### Production validation after deployment
 
