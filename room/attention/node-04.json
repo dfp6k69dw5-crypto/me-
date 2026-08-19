@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T06:02:37.042054+00:00",
-  "cycle_key": "32208320454:1:361",
+  "generated_at": "2026-08-19T06:03:12.407874+00:00",
+  "cycle_key": "32208320454:1:362",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -52,6 +52,13 @@
           "matched": [
             "idea"
           ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
           "weight": 1.15
         },
         {
@@ -69,10 +76,31 @@
           "weight": 0.76
         }
       ]
+    },
+    {
+      "name": "memory-callback",
+      "tier": "project",
+      "domain": "memory-callback",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "past"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "past"
+          ],
+          "weight": 1.15
+        }
+      ]
     }
   ],
-  "context_fingerprint": "7b55b123f8ec",
+  "context_fingerprint": "012a0ab18d45",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 488,
-  "approx_added_tokens": 122
+  "temporary_skill_chars": 820,
+  "approx_added_tokens": 205
 }
