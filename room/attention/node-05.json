@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T04:09:51.749531+00:00",
-  "cycle_key": "32208320454:1:175",
+  "generated_at": "2026-08-19T04:10:30.257365+00:00",
+  "cycle_key": "32208320454:1:176",
   "node": 5,
   "entity": "mara",
   "role": "expression",
@@ -32,18 +32,24 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.52,
-      "confidence": 0.64,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.28,
+      "score": 7.2,
+      "confidence": 1.0,
+      "raw_score": 7.2,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "concrete"
+        "concrete",
+        "example",
+        "observation",
+        "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "concrete"
+            "example",
+            "specific",
+            "concrete",
+            "observation"
           ],
           "weight": 1.8
         },
@@ -52,7 +58,14 @@
           "matched": [
             "concrete"
           ],
-          "weight": 1.15
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "concrete"
+          ],
+          "weight": 0.92
         },
         {
           "kind": "message",
@@ -60,11 +73,18 @@
             "concrete"
           ],
           "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "concrete"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "8231d0962ae5",
+  "context_fingerprint": "50bacbf37a89",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 493,
   "approx_added_tokens": 123
