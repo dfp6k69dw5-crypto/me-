@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T13:21:52.541278+00:00",
-  "cycle_key": "32229993977:1:548",
+  "generated_at": "2026-08-19T13:22:27.468553+00:00",
+  "cycle_key": "32229993977:1:549",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,57 +29,51 @@
   },
   "selected_skills": [
     {
-      "name": "social-grounding",
+      "name": "creative-bridge",
       "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "creative-bridge",
+      "score": 1.22,
+      "confidence": 0.554,
+      "raw_score": 1.22,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "asked"
+        "music",
+        "novel"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "asked"
+            "music"
           ],
-          "weight": 1.8
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
-            "asked"
+            "music"
           ],
-          "weight": 0.92
-        }
-      ]
-    },
-    {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "sure"
-      ],
-      "evidence_sources": [
+          "weight": 0.54
+        },
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "music"
           ],
-          "weight": 1.45
+          "weight": 0.46
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "novel"
+          ],
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "817549e9e650",
+  "context_fingerprint": "f6997107d654",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 867,
-  "approx_added_tokens": 217
+  "temporary_skill_chars": 488,
+  "approx_added_tokens": 122
 }

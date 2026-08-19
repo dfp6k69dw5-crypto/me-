@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T13:22:00.595237+00:00",
-  "cycle_key": "32229993977:1:548",
+  "generated_at": "2026-08-19T13:22:41.582795+00:00",
+  "cycle_key": "32229993977:1:549",
   "node": 2,
   "entity": "sarah",
   "role": "expression",
@@ -29,36 +29,51 @@
   },
   "selected_skills": [
     {
-      "name": "social-grounding",
+      "name": "creative-bridge",
       "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.746,
-      "raw_score": 1.8,
+      "domain": "creative-bridge",
+      "score": 1.22,
+      "confidence": 0.509,
+      "raw_score": 1.22,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "asked"
+        "music",
+        "novel"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "asked"
+            "music"
           ],
-          "weight": 1.8
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
-            "asked"
+            "music"
           ],
-          "weight": 0.92
+          "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "music"
+          ],
+          "weight": 0.46
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "novel"
+          ],
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "817549e9e650",
+  "context_fingerprint": "f6997107d654",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 521,
-  "approx_added_tokens": 130
+  "temporary_skill_chars": 488,
+  "approx_added_tokens": 122
 }
