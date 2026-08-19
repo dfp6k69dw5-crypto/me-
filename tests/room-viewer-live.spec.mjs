@@ -132,12 +132,11 @@ test('open Room viewer must catch up from an independent live fallback when Page
 
   await page.goto(`${BASE}/room/?viewer-simulator=1`, { waitUntil: 'domcontentloaded' });
 
+  // History must survive regardless of whether the independent fallback catches
+  // up immediately or on a later poll. The old viewer fails this test because it
+  // never queries the API at all and stays on the Pages snapshot at beat 100.
   await expect(page.locator('.msg')).toHaveCount(1000, { timeout: 12000 });
-  await expect(page.locator('#status')).toContainText('beat 100', { timeout: 12000 });
-
-  // Keep the same page open. An emergency API read represents the latest
-  // production feed tail and can contain several completed beats at once.
-  await page.waitForTimeout(8500);
+  await page.waitForTimeout(4500);
 
   const status = await page.locator('#status').innerText();
   const meta = await page.locator('#meta').innerText();
