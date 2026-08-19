@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T11:06:08.864863+00:00",
-  "cycle_key": "32229993977:1:324",
+  "generated_at": "2026-08-19T11:06:41.591983+00:00",
+  "cycle_key": "32229993977:1:325",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,26 +32,65 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "score": 3.82,
+      "confidence": 0.993,
+      "raw_score": 3.82,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "why"
+        "sure",
+        "why",
+        "whether"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "why",
+            "sure"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "whether",
+            "sure"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
             "why"
+          ],
+          "weight": 0.64
+        }
+      ]
+    },
+    {
+      "name": "creative-bridge",
+      "tier": "project",
+      "domain": "creative-bridge",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "idea"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
           ],
           "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "1424d57f857b",
+  "context_fingerprint": "80bf20c21efd",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 834,
+  "approx_added_tokens": 208
 }
