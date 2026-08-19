@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1125,
+  "cycle": 1126,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-18T23:59:53.453117Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-19T00:00:49.032639Z",
   "messages": 1000,
-  "last_public_event": "20260818T235953450-mara-v5",
+  "last_public_event": "20260819T000049028-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001125",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001126",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "excited",
+    "current_facet": "initial intent",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "public speech",
       "idea",
       "private speech",
       "test and verification",
@@ -71,7 +70,8 @@
       "shift",
       "conversation end",
       "sarah",
-      "excited"
+      "excited",
+      "initial intent"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,15 +84,16 @@
       "owen",
       "jules"
     ],
-    "turns": 2249,
+    "turns": 2251,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "sarah",
-      "learning",
       "excited",
-      "excitement",
-      "curiosity",
-      "skepticism"
+      "learning",
+      "conversation",
+      "initial intent",
+      "current intention",
+      "exciting about conversation",
+      "beginning"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -102,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 1125,
-        "hits": 9808,
+        "last_cycle": 1126,
+        "hits": 9824,
         "status": "open"
       },
       {
@@ -111,8 +112,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 1125,
-        "hits": 3826,
+        "last_cycle": 1126,
+        "hits": 3828,
         "status": "open"
       },
       {
@@ -120,8 +121,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 1125,
-        "hits": 1061,
+        "last_cycle": 1126,
+        "hits": 1063,
         "status": "open"
       },
       {
@@ -129,8 +130,98 @@
         "parent": "clear and unambiguous",
         "depth": 98,
         "first_cycle": 1080,
-        "last_cycle": 1125,
-        "hits": 117,
+        "last_cycle": 1126,
+        "hits": 120,
+        "status": "open"
+      },
+      {
+        "label": "shift",
+        "parent": "skepticity",
+        "depth": 109,
+        "first_cycle": 1119,
+        "last_cycle": 1126,
+        "hits": 56,
+        "status": "open"
+      },
+      {
+        "label": "conversation end",
+        "parent": "shift",
+        "depth": 110,
+        "first_cycle": 1122,
+        "last_cycle": 1126,
+        "hits": 38,
+        "status": "open"
+      },
+      {
+        "label": "skepticity",
+        "parent": "over time",
+        "depth": 108,
+        "first_cycle": 1118,
+        "last_cycle": 1126,
+        "hits": 36,
+        "status": "open"
+      },
+      {
+        "label": "nervous",
+        "parent": "shift",
+        "depth": 110,
+        "first_cycle": 1122,
+        "last_cycle": 1126,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "sarah",
+        "parent": "conversation end",
+        "depth": 111,
+        "first_cycle": 1124,
+        "last_cycle": 1126,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "excited",
+        "parent": "sarah",
+        "depth": 112,
+        "first_cycle": 1125,
+        "last_cycle": 1126,
+        "hits": 7,
+        "status": "open"
+      },
+      {
+        "label": "initial intent",
+        "parent": "excited",
+        "depth": 113,
+        "first_cycle": 1126,
+        "last_cycle": 1126,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "current intention",
+        "parent": "excited",
+        "depth": 113,
+        "first_cycle": 1126,
+        "last_cycle": 1126,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "exciting about conversation",
+        "parent": "excited",
+        "depth": 113,
+        "first_cycle": 1126,
+        "last_cycle": 1126,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "beginning",
+        "parent": "excited",
+        "depth": 113,
+        "first_cycle": 1126,
+        "last_cycle": 1126,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -143,66 +234,12 @@
         "status": "open"
       },
       {
-        "label": "shift",
-        "parent": "skepticity",
-        "depth": 109,
-        "first_cycle": 1119,
-        "last_cycle": 1125,
-        "hits": 55,
-        "status": "open"
-      },
-      {
         "label": "over time",
         "parent": "public discourse",
         "depth": 107,
         "first_cycle": 1116,
         "last_cycle": 1125,
         "hits": 48,
-        "status": "open"
-      },
-      {
-        "label": "skepticity",
-        "parent": "over time",
-        "depth": 108,
-        "first_cycle": 1118,
-        "last_cycle": 1125,
-        "hits": 35,
-        "status": "open"
-      },
-      {
-        "label": "conversation end",
-        "parent": "shift",
-        "depth": 110,
-        "first_cycle": 1122,
-        "last_cycle": 1125,
-        "hits": 28,
-        "status": "open"
-      },
-      {
-        "label": "nervous",
-        "parent": "shift",
-        "depth": 110,
-        "first_cycle": 1122,
-        "last_cycle": 1125,
-        "hits": 8,
-        "status": "open"
-      },
-      {
-        "label": "sarah",
-        "parent": "conversation end",
-        "depth": 111,
-        "first_cycle": 1124,
-        "last_cycle": 1125,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "excited",
-        "parent": "sarah",
-        "depth": 112,
-        "first_cycle": 1125,
-        "last_cycle": 1125,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -492,46 +529,9 @@
         "last_cycle": 1097,
         "hits": 24,
         "status": "open"
-      },
-      {
-        "label": "do you have the ability to make a judgement on a particular question or claim?",
-        "parent": "skeptical thinking",
-        "depth": 115,
-        "first_cycle": 1050,
-        "last_cycle": 1096,
-        "hits": 41,
-        "status": "open"
-      },
-      {
-        "label": "scope",
-        "parent": "clarification",
-        "depth": 103,
-        "first_cycle": 1089,
-        "last_cycle": 1096,
-        "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "clarification",
-        "parent": "test and verification",
-        "depth": 102,
-        "first_cycle": 1086,
-        "last_cycle": 1095,
-        "hits": 55,
-        "status": "open"
-      },
-      {
-        "label": "understanding",
-        "parent": "universe",
-        "depth": 105,
-        "first_cycle": 1091,
-        "last_cycle": 1092,
-        "hits": 2,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "foster",
       "solve",
       "agree",
       "jules",
@@ -562,10 +562,11 @@
       "skepticity",
       "shift",
       "conversation end",
-      "sarah"
+      "sarah",
+      "excited"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 1125,
+    "last_branch_cycle": 1126,
     "escape_pressure": 0
   }
 }
