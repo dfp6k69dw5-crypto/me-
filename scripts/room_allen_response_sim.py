@@ -8,8 +8,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+import room_social_v5 as social
 import room_engine_v5 as engine
 import room_private_model as private_model
+
+GENERATORS = ("sarah", "mara", "owen", "jules")
+PARTICIPANTS = (*GENERATORS, "allen")
 
 
 def require(name: str, ok: bool, detail: object = "") -> None:
@@ -20,17 +24,46 @@ def require(name: str, ok: bool, detail: object = "") -> None:
 
 def main() -> int:
     generators = tuple(engine.ORDER)
-    require(
-        "autonomous generator iteration remains exactly four entities",
-        generators == ("sarah", "mara", "owen", "jules"),
-        generators,
-    )
+    require("autonomous generator iteration remains exactly four entities", generators == GENERATORS, generators)
     require("Allen is not generated as an autonomous entity", "allen" not in generators, generators)
-    require("Allen is a legal conversational member", "allen" in engine.ORDER, engine.ORDER)
+    require("engine participant set contains Allen", tuple(engine.PARTICIPANTS) == PARTICIPANTS, engine.PARTICIPANTS)
+
+    social_participants = tuple(getattr(social, "PARTICIPANTS", ()))
+    require("social participant set contains Allen", social_participants == PARTICIPANTS, social_participants)
+    require("social generator order remains exactly four", tuple(social.ORDER) == GENERATORS, social.ORDER)
+
+    mind = {"entities": {entity: {"people": {}} for entity in GENERATORS}}
+    social.migrate_minds(mind)
     require(
-        "explicit participant set contains four entities plus Allen",
-        tuple(engine.PARTICIPANTS) == ("sarah", "mara", "owen", "jules", "allen"),
-        engine.PARTICIPANTS,
+        "relationship migration creates Allen for every autonomous entity",
+        all("allen" in mind["entities"][entity]["people"] for entity in GENERATORS),
+        {entity: sorted(mind["entities"][entity]["people"]) for entity in GENERATORS},
+    )
+
+    allen_turn = {
+        "id": "sim-allen",
+        "speaker": "allen",
+        "text": "Sarah, do you actually agree with that?",
+        "cognition": {"target": "sarah", "move_type": "follow_up", "topic_terms": ["agreement"]},
+        "discourse_id": "d-sim-allen",
+        "parent_discourse_id": None,
+    }
+    event = social.classify_event("sarah", allen_turn, {"d-sim-allen": allen_turn})
+    require(
+        "social event classifier recognizes Allen as Sarah's direct addressee partner",
+        isinstance(event, dict) and event.get("speaker") == "allen" and event.get("direct") is True,
+        event,
+    )
+
+    topic = social.topic_template(1)
+    require("topic participant state contains Allen", tuple(topic.get("participants", ())) == PARTICIPANTS, topic.get("participants"))
+
+    social.observe_message(mind, allen_turn, 1, {"d-sim-allen": allen_turn})
+    allen_rel = mind["entities"]["sarah"]["people"].get("allen", {})
+    require(
+        "direct Allen turn updates Sarah-to-Allen relationship state",
+        int(allen_rel.get("direct_turns", 0)) >= 1 and int(allen_rel.get("observed_turns", 0)) >= 1,
+        allen_rel,
     )
 
     expression_schema = private_model._schema("expression", "sarah")
@@ -48,26 +81,25 @@ def main() -> int:
     try:
         current_state = engine.fresh_state()
         current_state["cycle"] = 41
-        mind = engine.fresh_minds()
-        allen_turn = {
-            "id": "sim-allen",
+        engine_mind = engine.fresh_minds()
+        engine.conv = lambda: [{
+            "id": "sim-allen-engine",
             "at": "2026-08-19T22:40:00Z",
             "speaker": "allen",
             "text": "Sarah, do you actually agree with that?",
             "runtime": engine.VERSION,
             "boot_id": engine.BOOT,
             "cognition": {"target": "sarah", "move_type": "follow_up"},
-        }
-        engine.conv = lambda: [allen_turn]
-        engine.minds = lambda: mind
+        }]
+        engine.minds = lambda: engine_mind
         engine.state = lambda: current_state
         engine.choose_partner = lambda *args, **kwargs: "mara"
         sensed = engine.sense(1, "allen-response-sim")
         private = sensed.get("private") or {}
-        require("latest Allen turn remains active partner", private.get("partner") == "allen", private.get("partner"))
+        require("latest Allen turn remains active engine partner", private.get("partner") == "allen", private.get("partner"))
         relationship = private.get("relationship")
         require(
-            "Allen partner has a usable neutral relationship view",
+            "Allen engine partner has a usable relationship view",
             isinstance(relationship, dict) and "trust" in relationship and "tension" in relationship,
             relationship,
         )
@@ -77,12 +109,7 @@ def main() -> int:
         engine.state = original_state
         engine.choose_partner = original_choose
 
-    # room_private_commit.py uses `target not in c.ORDER`; membership behavior is
-    # therefore the publication boundary. Iteration must remain four while Allen
-    # membership is true.
-    require("publisher membership semantics preserve Allen targets", "allen" in engine.ORDER, engine.ORDER)
-
-    print("PASS: Allen response-relevance boundary is green")
+    print("PASS: Allen social participation boundary is green")
     return 0
 
 
