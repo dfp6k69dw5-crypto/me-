@@ -20,13 +20,14 @@ This is a browser/network reliability problem rather than a human-behavior mecha
 
 ## 3. Current evidence
 
-Primary/current tool documentation consulted 2026-08-19:
+Primary/current technical sources consulted 2026-08-19:
 
 - Playwright Network: https://playwright.dev/docs/network — browser-context/page routing can intercept, abort, fulfill, and modify fetch/XHR responses.
 - Playwright Mock APIs: https://playwright.dev/docs/mock — API responses can be mocked deterministically without contacting the real service.
 - Playwright Browsers: https://playwright.dev/docs/browsers — Playwright supports WebKit and mobile Safari-style device projects for browser regression testing.
+- WHATWG Fetch Standard: https://fetch.spec.whatwg.org/ — the CORS-safelisted request-header set is narrow; `Cache-Control` and `Pragma` are not safelisted request headers. Requests with CORS-unsafe request-header names can require a CORS preflight.
 
-These capabilities map directly to the observed failure because the simulator can make Cloudflare and GitHub Raw fail while keeping a static Pages snapshot available and independently advancing a GitHub API source.
+This matters because the current viewer adds `Cache-Control` and `Pragma` request headers to every fetch, including cross-origin public GETs to Cloudflare and GitHub Raw. That can turn what should be a simple GET into an OPTIONS preflight dependency. The viewer already uses `cache:'no-store'` plus a unique query parameter, so those custom request headers are not required to create a fresh request.
 
 ## 4. Natural-behavior evidence
 
@@ -34,45 +35,60 @@ Not applicable: no human conversational behavior is being changed. The Room's co
 
 ## 5. Mechanism evidence
 
-The current viewer has multiple read paths. A static deployment artifact is valid as a boot/history fallback but is not a live transport. The mechanism to validate is source freshness and failover: when a live transport is unavailable, the viewer must use another transport whose payload can advance independently of the deployed HTML artifact; it must never regress to an older beat.
+Two mechanisms exist in the same viewer-network layer:
+
+1. **Request construction:** live public cross-origin reads should remain simple GETs where possible instead of requiring preflight for unnecessary custom request headers.
+2. **Source failover:** a static deployment artifact is valid as a boot/history fallback but is not a live transport. When relay/raw are unavailable, the viewer needs a bounded independent fallback whose payload can advance without a Pages redeploy. It must never regress to an older beat.
 
 ## 6. Competing explanations
 
-The screenshots could superficially be explained by a frozen Room, slow generation, a stuck JavaScript timer, stale browser cache, or a network outage. The screenshots distinguish these possibilities because reopening later exposes newer beats while the open page's source label remains `Pages snapshot`. The simulator must still cover timer continuity and source failures so a future regression cannot hide behind a different cause.
+The screenshots could superficially be explained by a frozen Room, slow generation, a stuck JavaScript timer, stale browser cache, or a network outage. The screenshots distinguish these possibilities because reopening later exposes newer beats while the open page's source label remains `Pages snapshot`.
+
+The deterministic baseline also separates source-selection failure from rendering failure: the viewer successfully retained and rendered 1000 messages while repeatedly polling, but stayed at beat 100 because all live paths failed and the independent API path was not consulted.
 
 ## 7. Replication / correction / limitations
 
 Playwright WebKit is not branded iOS Safari and cannot reproduce every OS-level networking policy, VPN behavior, or background-tab throttle. Therefore passing the simulator is necessary but not sufficient. Post-deploy validation still requires observing a production page remain open across several real Room beats.
 
+The GitHub REST API is rate-limited, so it must be an emergency/bounded fallback rather than the normal two-second transport.
+
 ## 8. Context transfer
 
-The test will run against the actual `room/index.html` viewer code, not a rewritten toy implementation. Network responses alone are simulated. This keeps the test close to production while avoiding dependence on the real Cloudflare/GitHub timing during diagnosis.
+The tests run against the actual `room/index.html` viewer code, not a rewritten toy implementation. Network responses alone are simulated. This keeps the test close to production while avoiding dependence on real Cloudflare/GitHub timing during diagnosis.
 
 ## 9. Implementation mapping
 
-Phase A — baseline only, no production viewer change:
+### Phase A — baseline, completed before production change
 
-- add a WebKit/iPhone-style Playwright simulator;
-- load the real `room/index.html`;
-- provide 1000 retained history messages;
-- force Cloudflare relay and GitHub Raw to fail;
-- keep local Pages `feed.json` fixed at beat 100;
-- expose a GitHub API feed that advances through beats 101, 102, 103;
-- keep the page open throughout.
+A WebKit/iPhone-style Playwright simulator loads the real `room/index.html`, supplies 1000 retained messages, forces Cloudflare relay and GitHub Raw to fail, keeps local Pages `feed.json` fixed at beat 100, exposes an advancing GitHub API source through beats 101–103, and keeps the page open throughout.
 
-Only after that simulator fails on the current viewer may the viewer's source-selection/failover layer be changed. No cognition, conversation, persistence, or workflow-generation code may be changed for this bug.
+Observed baseline diagnostic:
+
+- `pass: false`;
+- expected beat 103, observed beat 100;
+- status `beat 100 · 308s`;
+- meta `1000 shown · 1000 retained · Pages snapshot · auto 2s`;
+- relay calls 5;
+- raw calls 5;
+- API calls 0;
+- no page errors.
+
+This reproduces the user's failure while proving the history/render path itself is functioning.
+
+### Phase B — permitted production change
+
+Change **only `room/index.html` viewer-network behavior**:
+
+- remove unnecessary `Cache-Control` / `Pragma` request headers from browser fetches while retaining `cache:'no-store'` and unique query parameters;
+- restore a GitHub Contents API fallback with a cooldown so it is not polled every two seconds;
+- choose the freshest candidate monotonically;
+- never label/accept a stale Pages snapshot as equivalent to a live transport when a fresher independent source exists.
+
+No Room cognition, conversation generation, persistence, Allen injection, or scheduling code is in scope.
 
 ## 10. Post-change validation
 
-### Pre-change baseline expected failure
-
-Within an already-open simulated viewer:
-
-- history count reaches at least 1000;
-- current code remains at beat 100 / `Pages snapshot`;
-- the simulator records that the available advancing API source was never consumed.
-
-### Required post-change pass
+### Required simulator pass
 
 Without reload:
 
@@ -81,7 +97,8 @@ Without reload:
 3. the 1000-message retained history remains present;
 4. a stale Pages snapshot is never accepted over a newer live/API beat;
 5. no page exception or unhandled rejection occurs;
-6. the diagnostic output records the observed source and beat sequence.
+6. public cross-origin live reads do not depend on unnecessary preflight-triggering request headers;
+7. diagnostic output records source and beat progression.
 
 ### Production validation after deployment
 
