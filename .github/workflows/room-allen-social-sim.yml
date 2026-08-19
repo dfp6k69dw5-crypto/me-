@@ -1,0 +1,64 @@
+name: Allen social boundary simulator
+
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'scripts/room_allen_response_sim.py'
+      - 'scripts/room_social_v5.py'
+      - 'scripts/room_engine_v5.py'
+      - 'scripts/room_private_model.py'
+      - 'scripts/room_private_commit.py'
+      - '.github/workflows/room-allen-social-sim.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - name: Run exact Allen social boundary simulator
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/room_allen_response_sim.py > /tmp/allen-social.txt 2>&1
+          status=$?
+          set -e
+          python3 - "$status" <<'PY'
+          import json,sys
+          from datetime import datetime,timezone
+          status=int(sys.argv[1])
+          try:
+              output=open('/tmp/allen-social.txt').read()[-6000:]
+          except Exception:
+              output=''
+          payload={
+              'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
+              'pass':status==0,
+              'exit_code':status,
+              'output':output,
+          }
+          open('room/allen-social-sim-diagnostic.json','w').write(json.dumps(payload,indent=2)+'\n')
+          PY
+      - name: Record diagnostic on tested branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'allen-social-simulator'
+          git config user.email 'actions@users.noreply.github.com'
+          git add room/allen-social-sim-diagnostic.json
+          git commit -m 'Record Allen social boundary simulator' || exit 0
+          branch="${GITHUB_REF_NAME}"
+          for n in 1 2 3 4 5; do
+            if git push origin "HEAD:${branch}"; then exit 0; fi
+            git fetch origin "$branch"
+            git rebase "origin/$branch" || { git rebase --abort || true; exit 1; }
+            sleep "$n"
+          done
+          exit 1
