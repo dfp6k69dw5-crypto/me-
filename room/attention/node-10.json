@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T16:22:03.205974+00:00",
-  "cycle_key": "32263398867:1:171",
+  "generated_at": "2026-08-19T16:22:46.627424+00:00",
+  "cycle_key": "32263398867:1:172",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,34 +32,28 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "score": 1.4,
+      "confidence": 0.632,
+      "raw_score": 1.68,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "example",
         "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "example"
           ],
-          "weight": 1.8
+          "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
             "specific"
           ],
-          "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.54
+          "weight": 0.76
         }
       ]
     },
@@ -67,21 +61,14 @@
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.617,
-      "confidence": 0.717,
-      "raw_score": 1.897,
+      "score": 1.238,
+      "confidence": 0.562,
+      "raw_score": 1.518,
       "repeat_penalty": 0.28,
       "matched_triggers": [
         "used to"
       ],
       "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "used to"
-          ],
-          "weight": 1.15
-        },
         {
           "kind": "message",
           "matched": [
@@ -94,12 +81,19 @@
           "matched": [
             "used to"
           ],
-          "weight": 0.76
+          "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "used to"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "92606668e508",
+  "context_fingerprint": "12691e574e55",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 825,
   "approx_added_tokens": 206
