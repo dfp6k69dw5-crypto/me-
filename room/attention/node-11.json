@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T15:46:08.651710+00:00",
-  "cycle_key": "32263398867:1:119",
+  "generated_at": "2026-08-19T15:47:01.878350+00:00",
+  "cycle_key": "32263398867:1:120",
   "node": 11,
   "entity": "jules",
   "role": "expression",
@@ -37,22 +37,21 @@
       "raw_score": 3.25,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "cause",
-        "sure"
+        "sure",
+        "cause"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "cause"
+            "sure"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "cause",
-            "sure"
+            "cause"
           ],
           "weight": 1.45
         },
@@ -61,12 +60,27 @@
           "matched": [
             "cause"
           ],
-          "weight": 1.15
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "cause",
+            "sure"
+          ],
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "cause"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "f89ed8b53369",
+  "context_fingerprint": "4423db7b9fe7",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 529,
   "approx_added_tokens": 132
