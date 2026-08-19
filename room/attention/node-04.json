@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T19:45:30.197249+00:00",
-  "cycle_key": "32263398867:1:473",
+  "generated_at": "2026-08-19T19:46:08.763622+00:00",
+  "cycle_key": "32263398867:1:474",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -56,13 +56,6 @@
           "weight": 0.76
         },
         {
-          "kind": "topic",
-          "matched": [
-            "excited"
-          ],
-          "weight": 0.58
-        },
-        {
           "kind": "topic_support",
           "matched": [
             "trust"
@@ -72,36 +65,29 @@
       ]
     },
     {
-      "name": "creative-bridge",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.17,
-      "confidence": 0.531,
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
       "raw_score": 1.45,
-      "repeat_penalty": 0.28,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "idea"
+        "question"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "idea"
+            "question"
           ],
           "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "idea"
-          ],
-          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "7da0683c08d4",
+  "context_fingerprint": "caac89a61ba3",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 849,
-  "approx_added_tokens": 212
+  "temporary_skill_chars": 882,
+  "approx_added_tokens": 220
 }
