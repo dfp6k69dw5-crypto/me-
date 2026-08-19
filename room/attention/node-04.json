@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T05:58:46.076122+00:00",
-  "cycle_key": "32208320454:1:355",
+  "generated_at": "2026-08-19T05:59:24.595535+00:00",
+  "cycle_key": "32208320454:1:356",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 2.95,
-      "confidence": 0.965,
-      "raw_score": 2.95,
-      "repeat_penalty": 0.0,
+      "score": 2.06,
+      "confidence": 0.849,
+      "raw_score": 2.34,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "conversation",
         "question"
@@ -53,7 +53,14 @@
           "matched": [
             "conversation"
           ],
-          "weight": 1.45
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.64
         },
         {
           "kind": "message",
@@ -61,20 +68,62 @@
             "question",
             "conversation"
           ],
-          "weight": 1.15
+          "weight": 0.54
         },
         {
           "kind": "message",
           "matched": [
             "conversation"
           ],
-          "weight": 0.92
+          "weight": 0.46
+        }
+      ]
+    },
+    {
+      "name": "creative-bridge",
+      "tier": "project",
+      "domain": "creative-bridge",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "idea"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "9eceefc8432b",
+  "context_fingerprint": "86b3aec77293",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 521,
-  "approx_added_tokens": 130
+  "temporary_skill_chars": 826,
+  "approx_added_tokens": 206
 }
