@@ -74,15 +74,20 @@ def main() -> int:
     thought_targets = thought_schema["properties"]["preferred_partner"].get("enum", [])
     require("thought schema can choose Allen", "allen" in thought_targets, thought_targets)
 
-    original_conv = engine.conv
-    original_minds = engine.minds
-    original_state = engine.state
-    original_choose = engine.choose_partner
+    # room_engine_v5 is a compatibility wrapper; sense() remains bound to the
+    # preserved core module. Patch the bindings that sense() actually resolves,
+    # otherwise this simulator would accidentally read the live Room conversation.
+    core = getattr(engine, "_core", engine)
+    owners = (engine,) if core is engine else (engine, core)
+    originals = {
+        owner: (owner.conv, owner.minds, owner.state, owner.choose_partner)
+        for owner in owners
+    }
     try:
         current_state = engine.fresh_state()
         current_state["cycle"] = 41
         engine_mind = engine.fresh_minds()
-        engine.conv = lambda: [{
+        simulated_history = [{
             "id": "sim-allen-engine",
             "at": "2026-08-19T22:40:00Z",
             "speaker": "allen",
@@ -91,9 +96,11 @@ def main() -> int:
             "boot_id": engine.BOOT,
             "cognition": {"target": "sarah", "move_type": "follow_up"},
         }]
-        engine.minds = lambda: engine_mind
-        engine.state = lambda: current_state
-        engine.choose_partner = lambda *args, **kwargs: "mara"
+        for owner in owners:
+            owner.conv = lambda history=simulated_history: history
+            owner.minds = lambda value=engine_mind: value
+            owner.state = lambda value=current_state: value
+            owner.choose_partner = lambda *args, **kwargs: "mara"
         sensed = engine.sense(1, "allen-response-sim")
         private = sensed.get("private") or {}
         require("latest Allen turn remains active engine partner", private.get("partner") == "allen", private.get("partner"))
@@ -104,10 +111,8 @@ def main() -> int:
             relationship,
         )
     finally:
-        engine.conv = original_conv
-        engine.minds = original_minds
-        engine.state = original_state
-        engine.choose_partner = original_choose
+        for owner, values in originals.items():
+            owner.conv, owner.minds, owner.state, owner.choose_partner = values
 
     print("PASS: Allen social participation boundary is green")
     return 0
