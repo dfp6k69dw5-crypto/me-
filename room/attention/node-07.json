@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T23:45:58.034412+00:00",
-  "cycle_key": "32311652079:1:67",
+  "generated_at": "2026-08-19T23:46:30.882881+00:00",
+  "cycle_key": "32311652079:1:68",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,11 +32,12 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 2.6,
-      "confidence": 0.937,
-      "raw_score": 2.6,
-      "repeat_penalty": 0.0,
+      "score": 1.82,
+      "confidence": 0.785,
+      "raw_score": 2.1,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "sure",
         "reason",
         "why"
       ],
@@ -44,57 +45,29 @@
         {
           "kind": "message",
           "matched": [
+            "sure"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
             "reason"
           ],
-          "weight": 1.45
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
             "why"
           ],
-          "weight": 1.15
-        }
-      ]
-    },
-    {
-      "name": "technical-systems",
-      "tier": "project",
-      "domain": "technical-systems",
-      "score": 1.52,
-      "confidence": 0.68,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.28,
-      "matched_triggers": [
-        "data"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "data"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "data"
-          ],
-          "weight": 0.64
-        },
-        {
-          "kind": "topic",
-          "matched": [
-            "data"
-          ],
-          "weight": 0.58
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "0741426b0fb8",
+  "context_fingerprint": "8fd3bc78d46b",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 915,
-  "approx_added_tokens": 229
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
