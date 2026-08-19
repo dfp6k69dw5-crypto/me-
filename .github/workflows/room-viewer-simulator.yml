@@ -1,5 +1,5 @@
 name: Room viewer simulator
-# instrumented baseline: 2026-08-19
+# fast deterministic browser harness: 2026-08-19
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
       - 'room/index.html'
       - 'tests/room-viewer-live.spec.mjs'
       - 'tests/room-viewer.playwright.config.mjs'
+      - 'tests/room-viewer-static-server.mjs'
       - '.github/workflows/room-viewer-simulator.yml'
   workflow_dispatch:
 
@@ -21,7 +22,9 @@ concurrency:
 jobs:
   simulate:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    container:
+      image: mcr.microsoft.com/playwright:v1.57.0-noble
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v6
         with:
@@ -31,23 +34,20 @@ jobs:
       - name: Clear prior simulator result
         run: rm -f room/viewer-simulator-diagnostic.json
 
-      - name: Install Playwright test runner and WebKit
+      - name: Install matching Playwright test package
         id: install
         continue-on-error: true
-        run: |
-          npm init -y
-          npm install --no-save @playwright/test@latest
-          npx playwright install --with-deps webkit
+        run: npm install --no-save @playwright/test@1.57.0
 
       - name: Start deterministic local site
         id: server
         if: steps.install.outcome == 'success'
         continue-on-error: true
         run: |
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/room-viewer-http.log 2>&1 &
+          node tests/room-viewer-static-server.mjs > /tmp/room-viewer-http.log 2>&1 &
           echo $! > /tmp/room-viewer-http.pid
           for n in $(seq 1 30); do
-            curl -fsS http://127.0.0.1:4173/room/ >/dev/null && exit 0
+            node -e "fetch('http://127.0.0.1:4173/room/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))" && exit 0
             sleep 1
           done
           cat /tmp/room-viewer-http.log
@@ -79,17 +79,17 @@ jobs:
           SIMULATOR_OUTCOME: ${{ steps.simulator.outcome }}
         run: |
           if [ ! -f room/viewer-simulator-diagnostic.json ]; then
-            python3 - <<'PY'
-          import json,os
-          out={
-            'pass':False,
-            'error':'simulator produced no diagnostic',
-            'install_outcome':os.environ.get('INSTALL_OUTCOME',''),
-            'server_outcome':os.environ.get('SERVER_OUTCOME',''),
-            'simulator_outcome':os.environ.get('SIMULATOR_OUTCOME',''),
-          }
-          open('room/viewer-simulator-diagnostic.json','w').write(json.dumps(out,indent=2)+'\n')
-          PY
+            node - <<'NODE'
+          const fs=require('fs');
+          const out={
+            pass:false,
+            error:'simulator produced no diagnostic',
+            install_outcome:process.env.INSTALL_OUTCOME||'',
+            server_outcome:process.env.SERVER_OUTCOME||'',
+            simulator_outcome:process.env.SIMULATOR_OUTCOME||'',
+          };
+          fs.writeFileSync('room/viewer-simulator-diagnostic.json',JSON.stringify(out,null,2)+'\n');
+          NODE
           fi
           git config user.name "room-viewer-simulator"
           git config user.email "actions@users.noreply.github.com"
@@ -106,9 +106,5 @@ jobs:
       - name: Enforce simulator result
         if: always()
         env:
-          INSTALL_OUTCOME: ${{ steps.install.outcome }}
-          SERVER_OUTCOME: ${{ steps.server.outcome }}
           SIMULATOR_OUTCOME: ${{ steps.simulator.outcome }}
-        run: |
-          echo "install=$INSTALL_OUTCOME server=$SERVER_OUTCOME simulator=$SIMULATOR_OUTCOME"
-          test "$SIMULATOR_OUTCOME" = success
+        run: test "$SIMULATOR_OUTCOME" = success
