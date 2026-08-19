@@ -8,6 +8,7 @@ on:
       - 'scripts/room_engine_v5.py'
       - 'scripts/room_social_v5.py'
       - 'scripts/room_private_model.py'
+      - 'scripts/room_allen_response_sim.py'
       - '.github/workflows/sarah-society.yml'
       - '.github/workflows/pages.yml'
       - '.github/workflows/room-architecture-smoke.yml'
@@ -24,3 +25,4 @@ jobs:
         run: |
           python3 -m py_compile scripts/room_engine_v5.py scripts/room_social_v5.py scripts/room_private_model.py
           python3 scripts/room_engine_v5.py selftest
+          python3 scripts/room_allen_response_sim.py
