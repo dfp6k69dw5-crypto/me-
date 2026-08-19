@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T05:03:46.097329+00:00",
-  "cycle_key": "32208320454:1:263",
+  "generated_at": "2026-08-19T05:04:18.952581+00:00",
+  "cycle_key": "32208320454:1:264",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,50 +32,56 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.78,
-      "confidence": 0.999,
-      "raw_score": 4.78,
-      "repeat_penalty": 0.0,
+      "score": 1.79,
+      "confidence": 0.776,
+      "raw_score": 2.07,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "sure",
-        "why",
-        "because",
-        "compare"
+        "why"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 1.15
+        },
         {
           "kind": "message",
           "matched": [
             "why",
             "sure"
           ],
-          "weight": 1.8
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why",
+            "sure"
+          ],
+          "weight": 0.76
         },
         {
           "kind": "message",
           "matched": [
             "sure"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "because"
-          ],
           "weight": 0.64
         },
         {
-          "kind": "message",
+          "kind": "topic",
           "matched": [
-            "compare"
+            "sure"
           ],
-          "weight": 0.54
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "3b82658552c7",
+  "context_fingerprint": "10280ab248f4",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 529,
   "approx_added_tokens": 132
