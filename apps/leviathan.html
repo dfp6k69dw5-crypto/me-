@@ -47,6 +47,21 @@
   </div>
 </div>
 
+<div id="workpieceQuick" style="margin:12px;padding:12px;border:1px solid #5B45A8;background:#0C111C">
+  <div style="font-family:Oswald,sans-serif;font-size:15px;letter-spacing:.16em;color:#C9D3E6;margin-bottom:3px">ORIGINAL WORK MUSIC</div>
+  <div style="font-size:10px;color:#68758F;margin-bottom:4px">Aluminum modal piano · cathedral reverb · LEVIATHAN · trance lead · electronic percussion · dubstep bass</div>
+  <div id="workpieceSection" style="font-size:10px;color:#8C6BF0;margin-bottom:10px">I · Nave — aluminum piano alone</div>
+  <button class="btn" id="workpiecePlay" style="width:100%;text-align:left;padding:14px">▶ PLAY — THE CATHEDRAL MACHINE · 30:00</button>
+  <div style="display:flex;gap:7px;margin-top:7px">
+    <button class="btn wide" id="workpiecePause">PAUSE</button>
+    <button class="btn wide" id="workpieceStop">STOP</button>
+  </div>
+  <div style="height:7px;border:1px solid #232D45;background:#080B12;margin-top:11px;overflow:hidden"><div id="workpieceFill" style="height:100%;width:0%;background:#8C6BF0"></div></div>
+  <div style="display:flex;justify-content:space-between;gap:8px;margin-top:7px;font-size:10px;color:#68758F">
+    <span id="workpieceStatus">Ready</span><span id="workpieceClock">0:00 / 30:00</span>
+  </div>
+</div>
+
 <div class="kbwrap" id="kbwrap" style="display:none">
   <div class="kbrow kb-acc" id="kbAcc"></div>
   <div class="kbrow kb-nat" id="kbNat"></div>
@@ -73,5 +88,6 @@
 <script src="leviathan-ui.js?v=20260819b"></script>
 <script src="leviathan-checks.js?v=20260819b"></script>
 <script src="leviathan-classics.js?v=20260819d"></script>
+<script src="leviathan-workpiece.js?v=20260819e"></script>
 </body>
 </html>
