@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T07:12:12.235611+00:00",
-  "cycle_key": "32208320454:1:476",
+  "generated_at": "2026-08-19T07:12:47.608834+00:00",
+  "cycle_key": "32208320454:1:477",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "score": 1.17,
+      "confidence": 0.531,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "conversation"
       ],
@@ -45,21 +45,14 @@
           "matched": [
             "conversation"
           ],
-          "weight": 1.8
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
             "conversation"
           ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 0.54
+          "weight": 0.76
         },
         {
           "kind": "message",
@@ -67,33 +60,40 @@
             "conversation"
           ],
           "weight": 0.46
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.58
         }
       ]
     },
     {
-      "name": "critical-testing",
+      "name": "creative-bridge",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "domain": "creative-bridge",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "sure"
+        "idea"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "idea"
           ],
-          "weight": 1.45
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "ddb4a64dbb15",
+  "context_fingerprint": "5f36737a4578",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 867,
-  "approx_added_tokens": 217
+  "temporary_skill_chars": 826,
+  "approx_added_tokens": 206
 }
