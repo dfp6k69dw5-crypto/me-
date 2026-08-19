@@ -1,0 +1,81 @@
+name: Room viewer simulator
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'room/index.html'
+      - 'tests/room-viewer-live.spec.mjs'
+      - 'tests/room-viewer.playwright.config.mjs'
+      - '.github/workflows/room-viewer-simulator.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: room-viewer-simulator
+  cancel-in-progress: true
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Install Playwright test runner and WebKit
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save @playwright/test@latest
+          npx playwright install --with-deps webkit
+
+      - name: Start deterministic local site
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/room-viewer-http.log 2>&1 &
+          echo $! > /tmp/room-viewer-http.pid
+          for n in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:4173/room/ >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/room-viewer-http.log
+          exit 1
+
+      - name: Run WebKit iPhone Room viewer simulator
+        id: simulator
+        continue-on-error: true
+        run: npx playwright test --config tests/room-viewer.playwright.config.mjs
+
+      - name: Preserve browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: room-viewer-simulator-evidence
+          path: |
+            room/viewer-simulator-diagnostic.json
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Publish simulator diagnostic
+        if: always()
+        run: |
+          test -f room/viewer-simulator-diagnostic.json || printf '%s\n' '{"pass":false,"error":"simulator produced no diagnostic"}' > room/viewer-simulator-diagnostic.json
+          git config user.name "room-viewer-simulator"
+          git config user.email "actions@users.noreply.github.com"
+          git add room/viewer-simulator-diagnostic.json
+          git commit -m "Record Room viewer simulator diagnostic" || exit 0
+          for n in 1 2 3 4 5; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort || true; }
+            sleep "$n"
+          done
+          exit 1
+
+      - name: Enforce simulator result
+        if: steps.simulator.outcome != 'success'
+        run: exit 1
