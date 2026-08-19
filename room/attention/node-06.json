@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T03:03:03.338640+00:00",
-  "cycle_key": "32208320454:1:65",
+  "generated_at": "2026-08-19T03:03:40.362535+00:00",
+  "cycle_key": "32208320454:1:66",
   "node": 6,
   "entity": "owen",
   "role": "comprehension",
@@ -32,15 +32,22 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 3.032,
-      "confidence": 0.97,
-      "raw_score": 3.032,
+      "score": 4.12,
+      "confidence": 0.996,
+      "raw_score": 4.12,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "who said",
-        "question"
+        "conversation"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "who said"
+          ],
+          "weight": 1.8
+        },
         {
           "kind": "message",
           "matched": [
@@ -51,21 +58,29 @@
         {
           "kind": "message",
           "matched": [
+            "conversation",
             "who said"
           ],
-          "weight": 0.76
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "question"
+            "who said"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "who said"
           ],
           "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "fbb610d8d6cd",
+  "context_fingerprint": "fbdfaaa13db6",
   "base_prompt_chars": 2277,
   "temporary_skill_chars": 521,
   "approx_added_tokens": 130
