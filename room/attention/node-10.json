@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T22:05:50.370712+00:00",
-  "cycle_key": "32295508468:1:124",
+  "generated_at": "2026-08-19T22:06:48.408848+00:00",
+  "cycle_key": "32295508468:1:125",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,11 +32,12 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.25,
-      "confidence": 0.98,
-      "raw_score": 3.25,
+      "score": 3.2,
+      "confidence": 0.978,
+      "raw_score": 3.2,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "compare",
         "why",
         "reason"
       ],
@@ -44,9 +45,16 @@
         {
           "kind": "message",
           "matched": [
-            "why"
+            "compare"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 0.76
         },
         {
           "kind": "message",
@@ -54,33 +62,12 @@
             "why",
             "reason"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why"
-          ],
           "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why"
-          ],
-          "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why"
-          ],
-          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "dfee32996ffe",
+  "context_fingerprint": "5fe78f0ef6c2",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 529,
   "approx_added_tokens": 132
