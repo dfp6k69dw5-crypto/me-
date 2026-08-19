@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: '.',
-  testMatch: 'room-viewer-live.spec.mjs',
+  testMatch: ['room-viewer-live.spec.mjs','room-viewer-cors.spec.mjs'],
   timeout: 30000,
   expect: { timeout: 10000 },
   retries: 0,
