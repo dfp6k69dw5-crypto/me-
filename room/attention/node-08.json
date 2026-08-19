@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T05:05:34.930746+00:00",
-  "cycle_key": "32208320454:1:266",
+  "generated_at": "2026-08-19T05:06:17.472853+00:00",
+  "cycle_key": "32208320454:1:267",
   "node": 8,
   "entity": "owen",
   "role": "expression",
@@ -29,46 +29,57 @@
   },
   "selected_skills": [
     {
-      "name": "social-grounding",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "interaction",
-      "score": 4.36,
-      "confidence": 0.997,
-      "raw_score": 4.36,
+      "domain": "concrete-specificity",
+      "score": 1.8,
+      "confidence": 0.746,
+      "raw_score": 1.8,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "answer",
-        "question",
-        "conversation"
+        "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "question",
-            "answer"
+            "specific"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "answer"
+            "specific"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "conversation"
+            "specific"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
           ],
           "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "d940c31b86f4",
+  "context_fingerprint": "b3908491cdab",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 521,
-  "approx_added_tokens": 130
+  "temporary_skill_chars": 493,
+  "approx_added_tokens": 123
 }

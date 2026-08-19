@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T05:05:27.008689+00:00",
-  "cycle_key": "32208320454:1:266",
+  "generated_at": "2026-08-19T05:06:03.459972+00:00",
+  "cycle_key": "32208320454:1:267",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -28,44 +28,6 @@
     "min_score": 1.1
   },
   "selected_skills": [
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 4.36,
-      "confidence": 0.997,
-      "raw_score": 4.36,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "answer",
-        "question",
-        "conversation"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "question",
-            "answer"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "answer"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 0.76
-        }
-      ]
-    },
     {
       "name": "concrete-specificity",
       "tier": "project",
@@ -104,19 +66,49 @@
           "matched": [
             "specific"
           ],
-          "weight": 0.76
+          "weight": 0.92
         },
         {
-          "kind": "topic",
+          "kind": "message",
           "matched": [
             "specific"
           ],
-          "weight": 0.58
+          "weight": 0.76
+        }
+      ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.24,
+      "confidence": 0.563,
+      "raw_score": 1.52,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "answer",
+        "question"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "question",
+            "answer"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "answer"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "d940c31b86f4",
+  "context_fingerprint": "b3908491cdab",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 831,
   "approx_added_tokens": 208
