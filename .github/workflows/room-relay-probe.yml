@@ -1,0 +1,84 @@
+name: Room relay transport probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/room-relay-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Probe public relay feed and browser CORS
+        run: |
+          rm -f room/relay-transport-diagnostic.json
+          http_code=$(curl -sS --connect-timeout 3 --max-time 8 \
+            -H 'Origin: https://maaronfanberg-lab.github.io' \
+            -D /tmp/relay-headers.txt -o /tmp/relay-body.json \
+            -w '%{http_code}' \
+            https://room-live-mirror.dfp6k69dw5.workers.dev/api/feed || true)
+          HTTP_CODE="$http_code" python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          local=json.load(open('room/feed.json'))
+          local_cycle=int(local.get('state',{}).get('cycle') or 0)
+          headers={}
+          p=Path('/tmp/relay-headers.txt')
+          if p.exists():
+              for line in p.read_text(errors='replace').splitlines():
+                  if ':' in line:
+                      k,v=line.split(':',1); headers[k.strip().lower()]=v.strip()
+          remote=None; parse_error=''
+          b=Path('/tmp/relay-body.json')
+          if b.exists():
+              try:
+                  raw=json.loads(b.read_text(errors='replace'))
+                  remote=raw.get('feed',raw) if isinstance(raw,dict) else None
+              except Exception as e: parse_error=str(e)
+          remote_cycle=int((remote or {}).get('state',{}).get('cycle') or 0)
+          acao=headers.get('access-control-allow-origin','')
+          http=int(os.environ.get('HTTP_CODE') or 0)
+          out={
+            'http_status':http,
+            'local_cycle':local_cycle,
+            'relay_cycle':remote_cycle,
+            'cycle_lag':local_cycle-remote_cycle if remote_cycle else None,
+            'access_control_allow_origin':acao,
+            'content_type':headers.get('content-type',''),
+            'cache_control':headers.get('cache-control',''),
+            'parse_error':parse_error,
+            'browser_cors_ok':acao in ('*','https://maaronfanberg-lab.github.io'),
+            'relay_reachable':http==200 and remote_cycle>0,
+            'relay_current':remote_cycle>=local_cycle-1 if remote_cycle else False,
+          }
+          out['pass']=out['relay_reachable'] and out['browser_cors_ok'] and out['relay_current']
+          Path('room/relay-transport-diagnostic.json').write_text(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out,indent=2))
+          PY
+
+      - name: Publish relay diagnostic
+        if: always()
+        run: |
+          test -f room/relay-transport-diagnostic.json || printf '%s\n' '{"pass":false,"error":"relay probe produced no diagnostic"}' > room/relay-transport-diagnostic.json
+          git config user.name "room-relay-probe"
+          git config user.email "actions@users.noreply.github.com"
+          git add room/relay-transport-diagnostic.json
+          git commit -m "Record Room relay transport diagnostic" || exit 0
+          for n in 1 2 3 4 5; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort || true; }
+            sleep "$n"
+          done
+          exit 1
