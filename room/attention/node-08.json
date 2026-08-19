@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T17:30:11.204098+00:00",
-  "cycle_key": "32263398867:1:270",
+  "generated_at": "2026-08-19T17:30:57.042509+00:00",
+  "cycle_key": "32263398867:1:271",
   "node": 8,
   "entity": "owen",
   "role": "expression",
@@ -32,59 +32,62 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.36,
-      "confidence": 0.997,
-      "raw_score": 4.36,
+      "score": 4.67,
+      "confidence": 0.998,
+      "raw_score": 4.67,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "claim",
         "reason",
-        "because"
+        "claim",
+        "evidence",
+        "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "claim",
             "reason"
           ],
-          "weight": 1.8
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "because"
+            "evidence",
+            "claim",
+            "reason"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "evidence",
+            "claim",
+            "reason",
+            "sure"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "claim",
+            "reason"
           ],
           "weight": 0.76
         },
         {
-          "kind": "message",
+          "kind": "topic",
           "matched": [
-            "claim",
             "reason"
           ],
-          "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "claim",
-            "reason"
-          ],
-          "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "claim",
-            "reason"
-          ],
-          "weight": 0.46
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "c160c4cfa2ab",
+  "context_fingerprint": "16e7c9d0d570",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 529,
   "approx_added_tokens": 132

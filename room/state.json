@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2632,
+  "cycle": 2633,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-19T17:30:19.369390Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-19T17:30:59.660677Z",
   "messages": 1000,
-  "last_public_event": "20260819T173019368-mara-v5",
+  "last_public_event": "20260819T173059658-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002632",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002633",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "reason",
+    "current_facet": "current context",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "testing",
       "call back",
       "problem",
       "issue",
@@ -71,7 +70,8 @@
       "specific details",
       "confidence",
       "active detail",
-      "reason"
+      "reason",
+      "current context"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -84,14 +84,17 @@
       "owen",
       "jules"
     ],
-    "turns": 5263,
+    "turns": 5265,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "specific details",
+      "reason",
       "learning",
-      "test",
-      "challenge",
-      "reason"
+      "claim",
+      "exception",
+      "testing or challenging one claim with a reason, exception, or piece of evidence",
+      "current context",
+      "evidence",
+      "piece of evidence"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -101,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 2632,
-        "hits": 34449,
+        "last_cycle": 2633,
+        "hits": 34465,
         "status": "open"
       },
       {
@@ -110,8 +113,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 2632,
-        "hits": 9740,
+        "last_cycle": 2633,
+        "hits": 9741,
         "status": "open"
       },
       {
@@ -119,8 +122,8 @@
         "parent": "focus",
         "depth": 311,
         "first_cycle": 2623,
-        "last_cycle": 2632,
-        "hits": 145,
+        "last_cycle": 2633,
+        "hits": 156,
         "status": "open"
       },
       {
@@ -128,8 +131,8 @@
         "parent": "challenge one claim with a reason, exception, or piece of evidence",
         "depth": 287,
         "first_cycle": 2592,
-        "last_cycle": 2632,
-        "hits": 97,
+        "last_cycle": 2633,
+        "hits": 101,
         "status": "open"
       },
       {
@@ -137,8 +140,17 @@
         "parent": "specific details",
         "depth": 312,
         "first_cycle": 2624,
-        "last_cycle": 2632,
-        "hits": 74,
+        "last_cycle": 2633,
+        "hits": 78,
+        "status": "open"
+      },
+      {
+        "label": "search for evidence",
+        "parent": "seek more evidence",
+        "depth": 290,
+        "first_cycle": 2595,
+        "last_cycle": 2633,
+        "hits": 49,
         "status": "open"
       },
       {
@@ -146,8 +158,8 @@
         "parent": "public expression ability",
         "depth": 330,
         "first_cycle": 2481,
-        "last_cycle": 2632,
-        "hits": 45,
+        "last_cycle": 2633,
+        "hits": 46,
         "status": "open"
       },
       {
@@ -155,8 +167,8 @@
         "parent": "sarah",
         "depth": 300,
         "first_cycle": 2607,
-        "last_cycle": 2632,
-        "hits": 31,
+        "last_cycle": 2633,
+        "hits": 34,
         "status": "open"
       },
       {
@@ -164,8 +176,8 @@
         "parent": "search for evidence",
         "depth": 291,
         "first_cycle": 2597,
-        "last_cycle": 2632,
-        "hits": 28,
+        "last_cycle": 2633,
+        "hits": 33,
         "status": "open"
       },
       {
@@ -173,7 +185,25 @@
         "parent": "specific details",
         "depth": 312,
         "first_cycle": 2632,
-        "last_cycle": 2632,
+        "last_cycle": 2633,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "claim",
+        "parent": "reason",
+        "depth": 313,
+        "first_cycle": 2633,
+        "last_cycle": 2633,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "current context",
+        "parent": "reason",
+        "depth": 313,
+        "first_cycle": 2633,
+        "last_cycle": 2633,
         "hits": 1,
         "status": "open"
       },
@@ -500,37 +530,9 @@
         "last_cycle": 2605,
         "hits": 22,
         "status": "open"
-      },
-      {
-        "label": "historical",
-        "parent": "unskepteness",
-        "depth": 297,
-        "first_cycle": 2604,
-        "last_cycle": 2604,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "unseen",
-        "parent": "unskepteness",
-        "depth": 297,
-        "first_cycle": 2604,
-        "last_cycle": 2604,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "search for evidence",
-        "parent": "seek more evidence",
-        "depth": 290,
-        "first_cycle": 2595,
-        "last_cycle": 2603,
-        "hits": 47,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "dialogue",
       "discussion",
       "public debate",
       "ability",
@@ -561,10 +563,11 @@
       "two people",
       "focus",
       "specific details",
-      "confidence"
+      "confidence",
+      "reason"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 2632,
+    "last_branch_cycle": 2633,
     "escape_pressure": 0
   }
 }
