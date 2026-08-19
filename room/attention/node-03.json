@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T19:43:02.556791+00:00",
-  "cycle_key": "32263398867:1:470",
+  "generated_at": "2026-08-19T19:43:43.634242+00:00",
+  "cycle_key": "32263398867:1:471",
   "node": 3,
   "entity": "mara",
   "role": "comprehension",
@@ -29,36 +29,44 @@
   },
   "selected_skills": [
     {
-      "name": "social-grounding",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "interaction",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
+      "domain": "affect",
+      "score": 1.83,
+      "confidence": 0.788,
+      "raw_score": 1.83,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "conversation"
+        "excited",
+        "trust"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "conversation"
+            "excited"
           ],
-          "weight": 1.15
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "conversation"
+            "excited"
           ],
-          "weight": 0.92
+          "weight": 1.15
+        },
+        {
+          "kind": "topic_support",
+          "matched": [
+            "trust"
+          ],
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "b0a38fd58763",
+  "context_fingerprint": "90ffa40d29b4",
   "base_prompt_chars": 2277,
-  "temporary_skill_chars": 521,
-  "approx_added_tokens": 130
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }

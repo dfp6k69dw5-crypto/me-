@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-19T19:43:22.377107+00:00",
-  "cycle_key": "32263398867:1:470",
+  "generated_at": "2026-08-19T19:44:09.192745+00:00",
+  "cycle_key": "32263398867:1:471",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,67 +29,72 @@
   },
   "selected_skills": [
     {
-      "name": "concrete-specificity",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.24,
-      "confidence": 0.563,
-      "raw_score": 1.52,
-      "repeat_penalty": 0.28,
+      "domain": "affect",
+      "score": 1.83,
+      "confidence": 0.788,
+      "raw_score": 1.83,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "example",
-        "specific"
+        "excited",
+        "trust"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "example",
-            "specific"
+            "excited"
           ],
-          "weight": 0.76
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "example",
-            "specific"
-          ],
-          "weight": 0.64
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "conversation"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
+            "excited"
           ],
           "weight": 1.15
         },
         {
+          "kind": "topic_support",
+          "matched": [
+            "trust"
+          ],
+          "weight": 0.38
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "sure"
+      ],
+      "evidence_sources": [
+        {
           "kind": "message",
           "matched": [
-            "conversation"
+            "sure"
           ],
-          "weight": 0.92
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "b0a38fd58763",
+  "context_fingerprint": "90ffa40d29b4",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 831,
-  "approx_added_tokens": 208
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }
