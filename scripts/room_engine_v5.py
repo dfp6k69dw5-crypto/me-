@@ -38,9 +38,28 @@ _MODEL_INPUT_KEYS = frozenset({
     "relationship",
     "social_observation",
     "deliberation",
+})
+_INTERNAL_MODEL_KEYS = frozenset({
     "conversation_job",
     "mandatory_speech",
+    "must_respond",
+    "decision",
+    "generation_rank",
+    "angle",
 })
+
+
+def _strip_internal_model_keys(value):
+    if isinstance(value, dict):
+        return {
+            key: _strip_internal_model_keys(item)
+            for key, item in value.items()
+            if key not in _INTERNAL_MODEL_KEYS
+        }
+    if isinstance(value, list):
+        return [_strip_internal_model_keys(item) for item in value]
+    return value
+
 
 # Keep personality computation outside the LLM. The private model receives a
 # compact, situation-relevant view of the fixed profile rather than 19 fields of
@@ -51,14 +70,14 @@ _original_compact_payload = _private_model._compact_payload
 def _personality_compact_payload(payload, role, self_entity=None):
     source = payload if isinstance(payload, dict) else {}
     safe_payload = {key: source[key] for key in _MODEL_INPUT_KEYS if key in source}
-    compact = _original_compact_payload(safe_payload, role, self_entity)
+    compact = _strip_internal_model_keys(_original_compact_payload(safe_payload, role, self_entity))
 
-    # Forced-turn machinery is useful to the runner, not to cognition. Keep it
-    # outside the model boundary. A diversity hint may survive, but only as an
-    # ordinary optional conversational direction rather than an assigned job.
-    compact.pop("must_respond", None)
-    if "angle" in compact:
-        compact["possible_direction"] = compact.pop("angle")
+    # Preserve the useful diversity cue only as an ordinary optional direction;
+    # its runner/job identity never crosses the cognition boundary.
+    if role == "expression":
+        direction = str(source.get("conversation_job") or "").strip()
+        if direction:
+            compact["possible_direction"] = direction
 
     profile = source.get("profile") if isinstance(source.get("profile"), dict) else {}
     fixed = profile.get("psychology_v2") if isinstance(profile.get("psychology_v2"), dict) else None
