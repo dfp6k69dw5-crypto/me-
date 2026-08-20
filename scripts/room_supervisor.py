@@ -50,7 +50,24 @@ def decide(state: dict, control: dict | None = None, *, now: datetime | None = N
 
     cycle = int((state or {}).get("cycle") or 0)
     last_run = _parse_time((state or {}).get("last_run"))
+    has_baseline = isinstance(control, dict) and "last_observed_cycle" in control
     ctl = _base_control(control)
+
+    # The first observation is not evidence of progress; it establishes the
+    # reference point that later scheduled checks compare against. Returning a
+    # non-healthy action makes the workflow persist this control state once.
+    if not has_baseline:
+        ctl.update({
+            "last_observed_cycle": cycle,
+            "restart_cycle": 0,
+            "restart_attempts": 0,
+            "circuit_open": False,
+            "circuit_opened_at": "",
+            "last_action": "initialize",
+            "last_checked_at": _stamp(current),
+        })
+        return {"action": "initialize", "reason": "baseline_created", "control": ctl}
+
     previous_cycle = ctl["last_observed_cycle"]
     progressed = cycle > previous_cycle
 
