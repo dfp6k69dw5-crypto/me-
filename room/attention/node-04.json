@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T03:28:36.258244+00:00",
-  "cycle_key": "32327734424:1:8",
+  "generated_at": "2026-08-20T03:29:45.881415+00:00",
+  "cycle_key": "32327734424:1:9",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -59,13 +59,48 @@
           "matched": [
             "idea"
           ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
           "weight": 0.64
+        }
+      ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "conversation"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "4fd8a98d5155",
+  "context_fingerprint": "482ecac5496f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 488,
-  "approx_added_tokens": 122
+  "temporary_skill_chars": 826,
+  "approx_added_tokens": 206
 }
