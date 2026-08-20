@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3150,
+  "cycle": 3151,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-20T00:11:06.673052Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-20T00:11:45.577150Z",
   "messages": 1000,
-  "last_public_event": "20260820T001106672-mara-v5",
+  "last_public_event": "20260820T001145575-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003150",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003151",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "discuss",
+    "current_facet": "move",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "true",
       "easiest example",
       "topic",
       "support",
@@ -71,7 +70,8 @@
       "overwhelm",
       "passion",
       "overcome",
-      "discuss"
+      "discuss",
+      "move"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,15 +85,17 @@
       "jules",
       "allen"
     ],
-    "turns": 6299,
+    "turns": 6301,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "overcome",
+      "discuss",
       "learning",
-      "overwhelm",
-      "learn",
-      "learned",
-      "discuss"
+      "curiosity",
+      "skepticism",
+      "test",
+      "move",
+      "social-perception",
+      "personality"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +105,35 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3150,
-        "hits": 42949,
+        "last_cycle": 3151,
+        "hits": 42966,
+        "status": "open"
+      },
+      {
+        "label": "skepticism",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 3151,
+        "hits": 11432,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "curious",
+        "depth": 281,
+        "first_cycle": 1640,
+        "last_cycle": 3151,
+        "hits": 2382,
+        "status": "open"
+      },
+      {
+        "label": "test new information goal",
+        "parent": "united states",
+        "depth": 300,
+        "first_cycle": 3010,
+        "last_cycle": 3151,
+        "hits": 227,
         "status": "open"
       },
       {
@@ -112,8 +141,107 @@
         "parent": "apply",
         "depth": 354,
         "first_cycle": 3084,
-        "last_cycle": 3150,
-        "hits": 104,
+        "last_cycle": 3151,
+        "hits": 105,
+        "status": "open"
+      },
+      {
+        "label": "opinion",
+        "parent": "mara",
+        "depth": 288,
+        "first_cycle": 3144,
+        "last_cycle": 3151,
+        "hits": 49,
+        "status": "open"
+      },
+      {
+        "label": "personality profile",
+        "parent": "converse",
+        "depth": 284,
+        "first_cycle": 3137,
+        "last_cycle": 3151,
+        "hits": 39,
+        "status": "open"
+      },
+      {
+        "label": "opposed",
+        "parent": "opinion",
+        "depth": 289,
+        "first_cycle": 3145,
+        "last_cycle": 3151,
+        "hits": 32,
+        "status": "open"
+      },
+      {
+        "label": "overwhelm",
+        "parent": "owen",
+        "depth": 291,
+        "first_cycle": 3147,
+        "last_cycle": 3151,
+        "hits": 26,
+        "status": "open"
+      },
+      {
+        "label": "owen",
+        "parent": "opposed",
+        "depth": 290,
+        "first_cycle": 3146,
+        "last_cycle": 3151,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "passion",
+        "parent": "overwhelm",
+        "depth": 292,
+        "first_cycle": 3148,
+        "last_cycle": 3151,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "context",
+        "parent": "opinion",
+        "depth": 289,
+        "first_cycle": 3145,
+        "last_cycle": 3151,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "overcome",
+        "parent": "passion",
+        "depth": 293,
+        "first_cycle": 3149,
+        "last_cycle": 3151,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "discuss",
+        "parent": "overcome",
+        "depth": 294,
+        "first_cycle": 3150,
+        "last_cycle": 3151,
+        "hits": 5,
+        "status": "open"
+      },
+      {
+        "label": "move",
+        "parent": "discuss",
+        "depth": 295,
+        "first_cycle": 3151,
+        "last_cycle": 3151,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "social-perception",
+        "parent": "discuss",
+        "depth": 295,
+        "first_cycle": 3151,
+        "last_cycle": 3151,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -126,24 +254,6 @@
         "status": "open"
       },
       {
-        "label": "opinion",
-        "parent": "mara",
-        "depth": 288,
-        "first_cycle": 3144,
-        "last_cycle": 3150,
-        "hits": 46,
-        "status": "open"
-      },
-      {
-        "label": "opposed",
-        "parent": "opinion",
-        "depth": 289,
-        "first_cycle": 3145,
-        "last_cycle": 3150,
-        "hits": 30,
-        "status": "open"
-      },
-      {
         "label": "mara",
         "parent": "motivating",
         "depth": 287,
@@ -153,66 +263,12 @@
         "status": "open"
       },
       {
-        "label": "owen",
-        "parent": "opposed",
-        "depth": 290,
-        "first_cycle": 3146,
-        "last_cycle": 3150,
-        "hits": 21,
-        "status": "open"
-      },
-      {
-        "label": "overwhelm",
-        "parent": "owen",
-        "depth": 291,
-        "first_cycle": 3147,
-        "last_cycle": 3150,
-        "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "passion",
-        "parent": "overwhelm",
-        "depth": 292,
-        "first_cycle": 3148,
-        "last_cycle": 3150,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "context",
-        "parent": "opinion",
-        "depth": 289,
-        "first_cycle": 3145,
-        "last_cycle": 3150,
-        "hits": 9,
-        "status": "open"
-      },
-      {
-        "label": "overcome",
-        "parent": "passion",
-        "depth": 293,
-        "first_cycle": 3149,
-        "last_cycle": 3150,
-        "hits": 5,
-        "status": "open"
-      },
-      {
         "label": "learned information goal",
         "parent": "understood",
         "depth": 288,
         "first_cycle": 3129,
         "last_cycle": 3150,
         "hits": 3,
-        "status": "open"
-      },
-      {
-        "label": "discuss",
-        "parent": "overcome",
-        "depth": 294,
-        "first_cycle": 3150,
-        "last_cycle": 3150,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -261,30 +317,12 @@
         "status": "open"
       },
       {
-        "label": "skepticism",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 3147,
-        "hits": 11431,
-        "status": "open"
-      },
-      {
         "label": "open questions",
         "parent": "personality profile",
         "depth": 285,
         "first_cycle": 3139,
         "last_cycle": 3146,
         "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "personality profile",
-        "parent": "converse",
-        "depth": 284,
-        "first_cycle": 3137,
-        "last_cycle": 3145,
-        "hits": 38,
         "status": "open"
       },
       {
@@ -303,15 +341,6 @@
         "first_cycle": 3145,
         "last_cycle": 3145,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "curious",
-        "depth": 281,
-        "first_cycle": 1640,
-        "last_cycle": 3144,
-        "hits": 2381,
         "status": "open"
       },
       {
@@ -339,15 +368,6 @@
         "first_cycle": 3137,
         "last_cycle": 3143,
         "hits": 7,
-        "status": "open"
-      },
-      {
-        "label": "test new information goal",
-        "parent": "united states",
-        "depth": 300,
-        "first_cycle": 3010,
-        "last_cycle": 3142,
-        "hits": 226,
         "status": "open"
       },
       {
@@ -511,28 +531,9 @@
         "last_cycle": 3129,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "easiest example",
-        "parent": "true",
-        "depth": 286,
-        "first_cycle": 3118,
-        "last_cycle": 3127,
-        "hits": 63,
-        "status": "open"
-      },
-      {
-        "label": "adventurous",
-        "parent": "offer an example",
-        "depth": 285,
-        "first_cycle": 3125,
-        "last_cycle": 3126,
-        "hits": 2,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "new situation",
       "explaining",
       "situational relevance",
       "sage",
@@ -563,10 +564,11 @@
       "owen",
       "overwhelm",
       "passion",
-      "overcome"
+      "overcome",
+      "discuss"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 3150,
+    "last_branch_cycle": 3151,
     "escape_pressure": 0
   }
 }
