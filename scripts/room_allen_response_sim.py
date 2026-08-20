@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -75,9 +76,6 @@ def main() -> int:
     thought_targets = thought_schema["properties"]["preferred_partner"].get("enum", [])
     require("thought schema can choose Allen", "allen" in thought_targets, thought_targets)
 
-    # room_engine_v5 is a compatibility wrapper; sense() remains bound to the
-    # preserved core module. Patch the bindings that sense() actually resolves,
-    # otherwise this simulator would accidentally read the live Room conversation.
     core = getattr(engine, "_core", engine)
     owners = (engine,) if core is engine else (engine, core)
     originals = {
@@ -115,9 +113,6 @@ def main() -> int:
         for owner, values in originals.items():
             owner.conv, owner.minds, owner.state, owner.choose_partner = values
 
-    # Behavioral regression: live history showed Allen turns followed by four AI
-    # turns with zero Allen targets. Reproduce that exact routing failure without a
-    # model by making rank 0 return an otherwise-valid turn aimed at another AI.
     captured: dict = {}
     original_model_run = core.model_run
     original_prior = core.prior_expression_messages
@@ -187,6 +182,11 @@ def main() -> int:
         require("rank-0 Allen interruption becomes an answer", str(expr.get("move") or "").lower() == "answer", expr)
         require("rank-0 Allen interruption does not inject a competing conversation job", not payload.get("conversation_job"), payload.get("conversation_job"))
         require("rank-0 Allen interruption deliberation is answer-oriented", str(((payload.get("deliberation") or {}).get("action") or "")).upper() == "ANSWER", payload.get("deliberation"))
+        require(
+            "rank-0 direct Allen reply says Allen in the spoken sentence",
+            bool(re.search(r"\ballen\b", str(expr.get("utterance") or ""), re.I)),
+            expr.get("utterance"),
+        )
     finally:
         core.model_run = original_model_run
         core.prior_expression_messages = original_prior
