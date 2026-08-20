@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T00:49:50.095811+00:00",
-  "cycle_key": "32316483770:1:71",
+  "generated_at": "2026-08-20T00:50:13.589236+00:00",
+  "cycle_key": "32316483770:1:72",
   "node": 2,
   "entity": "sarah",
   "role": "expression",
@@ -32,15 +32,14 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 4.56,
-      "confidence": 0.998,
-      "raw_score": 4.56,
-      "repeat_penalty": 0.0,
+      "score": 1.36,
+      "confidence": 0.572,
+      "raw_score": 1.64,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "music",
-        "connection",
-        "experiment",
-        "idea"
+        "idea",
+        "connection"
       ],
       "evidence_sources": [
         {
@@ -48,36 +47,29 @@
           "matched": [
             "music"
           ],
-          "weight": 1.8
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
+            "idea",
             "music"
           ],
-          "weight": 1.15
+          "weight": 0.54
         },
         {
           "kind": "message",
           "matched": [
             "idea",
             "music",
-            "connection",
-            "experiment"
+            "connection"
           ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "music"
-          ],
-          "weight": 0.64
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "843fba17eaa9",
+  "context_fingerprint": "a5c1bef1ed7f",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 488,
   "approx_added_tokens": 122
