@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T11:25:33.898356+00:00",
-  "cycle_key": "32350827191:1:142",
+  "generated_at": "2026-08-20T11:26:51.314776+00:00",
+  "cycle_key": "32350827191:1:143",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,12 +32,13 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.52,
-      "confidence": 0.68,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.28,
+      "score": 2.72,
+      "confidence": 0.949,
+      "raw_score": 2.72,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "whether"
+        "whether",
+        "sure"
       ],
       "evidence_sources": [
         {
@@ -64,7 +65,8 @@
         {
           "kind": "message",
           "matched": [
-            "whether"
+            "whether",
+            "sure"
           ],
           "weight": 0.92
         },
@@ -76,10 +78,38 @@
           "weight": 0.76
         }
       ]
+    },
+    {
+      "name": "technical-systems",
+      "tier": "project",
+      "domain": "technical-systems",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "model"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "model"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "model"
+          ],
+          "weight": 0.58
+        }
+      ]
     }
   ],
-  "context_fingerprint": "b0e3f400cf25",
+  "context_fingerprint": "255dc6807d81",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 915,
+  "approx_added_tokens": 229
 }
