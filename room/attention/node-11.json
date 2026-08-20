@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T01:59:08.233088+00:00",
-  "cycle_key": "32320379323:1:38",
+  "generated_at": "2026-08-20T01:59:55.133671+00:00",
+  "cycle_key": "32320379323:1:39",
   "node": 11,
   "entity": "jules",
   "role": "expression",
@@ -29,29 +29,37 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.8,
-      "confidence": 0.746,
-      "raw_score": 1.8,
+      "domain": "affect",
+      "score": 1.83,
+      "confidence": 0.757,
+      "raw_score": 1.83,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "why"
+        "feel",
+        "trust"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "why"
+            "feel"
           ],
-          "weight": 1.8
+          "weight": 1.45
+        },
+        {
+          "kind": "topic_support",
+          "matched": [
+            "trust"
+          ],
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "6c63497ec865",
+  "context_fingerprint": "a68abe7cecff",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
