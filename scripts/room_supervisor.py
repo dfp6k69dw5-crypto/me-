@@ -8,6 +8,7 @@ from pathlib import Path
 
 STALE_AFTER_SECONDS = 10 * 60
 MAX_RESTARTS_PER_CYCLE = 2
+CIRCUIT_COOLDOWN_SECONDS = 30 * 60
 
 
 def _parse_time(value: object) -> datetime | None:
@@ -23,6 +24,10 @@ def _parse_time(value: object) -> datetime | None:
     return parsed.astimezone(timezone.utc)
 
 
+def _stamp(value: datetime) -> str:
+    return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
 def _base_control(control: dict | None) -> dict:
     source = control if isinstance(control, dict) else {}
     return {
@@ -31,6 +36,7 @@ def _base_control(control: dict | None) -> dict:
         "restart_cycle": int(source.get("restart_cycle") or 0),
         "restart_attempts": int(source.get("restart_attempts") or 0),
         "circuit_open": bool(source.get("circuit_open", False)),
+        "circuit_opened_at": str(source.get("circuit_opened_at") or ""),
         "last_action": str(source.get("last_action") or ""),
         "last_checked_at": str(source.get("last_checked_at") or ""),
     }
@@ -54,8 +60,9 @@ def decide(state: dict, control: dict | None = None, *, now: datetime | None = N
             "restart_cycle": 0,
             "restart_attempts": 0,
             "circuit_open": False,
+            "circuit_opened_at": "",
             "last_action": "healthy",
-            "last_checked_at": current.isoformat().replace("+00:00", "Z"),
+            "last_checked_at": _stamp(current),
         })
         return {"action": "healthy", "reason": "cycle_progress", "control": ctl}
 
@@ -67,21 +74,42 @@ def decide(state: dict, control: dict | None = None, *, now: datetime | None = N
             "restart_cycle": 0,
             "restart_attempts": 0,
             "circuit_open": False,
+            "circuit_opened_at": "",
             "last_action": "healthy",
-            "last_checked_at": current.isoformat().replace("+00:00", "Z"),
+            "last_checked_at": _stamp(current),
         })
         return {"action": "healthy", "reason": "recent_beat", "age_seconds": age, "control": ctl}
 
     same_stalled_cycle = ctl["restart_cycle"] == cycle
     attempts = ctl["restart_attempts"] if same_stalled_cycle else 0
+
+    if ctl["circuit_open"] and same_stalled_cycle:
+        opened = _parse_time(ctl.get("circuit_opened_at"))
+        cooled = opened is not None and (current - opened).total_seconds() >= CIRCUIT_COOLDOWN_SECONDS
+        if cooled:
+            ctl.update({
+                "last_observed_cycle": max(previous_cycle, cycle),
+                "restart_cycle": cycle,
+                "restart_attempts": 1,
+                "circuit_open": False,
+                "circuit_opened_at": "",
+                "last_action": "probe_restart",
+                "last_checked_at": _stamp(current),
+            })
+            return {"action": "probe_restart", "reason": "circuit_cooldown_probe", "age_seconds": age, "control": ctl}
+        ctl["last_checked_at"] = _stamp(current)
+        ctl["last_action"] = "circuit_open"
+        return {"action": "circuit_open", "reason": "cooldown", "age_seconds": age, "control": ctl}
+
     if attempts >= MAX_RESTARTS_PER_CYCLE:
         ctl.update({
             "last_observed_cycle": max(previous_cycle, cycle),
             "restart_cycle": cycle,
             "restart_attempts": MAX_RESTARTS_PER_CYCLE,
             "circuit_open": True,
+            "circuit_opened_at": _stamp(current),
             "last_action": "circuit_open",
-            "last_checked_at": current.isoformat().replace("+00:00", "Z"),
+            "last_checked_at": _stamp(current),
         })
         return {"action": "circuit_open", "reason": "same_cycle_failed_replacements", "age_seconds": age, "control": ctl}
 
@@ -90,8 +118,9 @@ def decide(state: dict, control: dict | None = None, *, now: datetime | None = N
         "restart_cycle": cycle,
         "restart_attempts": attempts + 1,
         "circuit_open": False,
+        "circuit_opened_at": "",
         "last_action": "restart",
-        "last_checked_at": current.isoformat().replace("+00:00", "Z"),
+        "last_checked_at": _stamp(current),
     })
     return {"action": "restart", "reason": "stale_room", "age_seconds": age, "control": ctl}
 
