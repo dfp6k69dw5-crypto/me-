@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3878,
+  "cycle": 3879,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-20T16:00:13.862358Z",
-  "messages": 60,
-  "last_public_event": "20260820T160013858-mara-v5",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-20T16:09:02.091377Z",
+  "messages": 64,
+  "last_public_event": "20260820T160902087-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003878",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003879",
   "beat_contributors": [
+    "mara",
     "owen",
     "jules",
-    "sarah",
-    "mara"
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-003864",
     "root": "books",
-    "current_facet": "garden",
+    "current_facet": "projects",
     "facets": [
       "to kill a mockingbird",
       "harper lee",
@@ -62,9 +62,10 @@
       "most_impressive_works",
       "interests",
       "detailed explanations",
-      "garden"
+      "garden",
+      "projects"
     ],
-    "facet_index": 14,
+    "facet_index": 15,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -76,19 +77,19 @@
       "jules",
       "allen"
     ],
-    "turns": 29,
+    "turns": 31,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "detailed explanations",
-      "books",
-      "latest book",
-      "latest talk",
-      "i don't want to go back and try to recapture the most recent line",
-      "humor",
       "garden",
+      "books",
+      "relaxed",
       "gardens",
-      "encourages the speaker to learn about harper lee's work",
-      "gives helpful advice to the speaker"
+      "expansion",
+      "book",
+      "projects",
+      "explore the garden",
+      "project",
+      "animals"
     ],
     "last_shift_cycle": 3864,
     "status": "active",
@@ -98,8 +99,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 3864,
-        "last_cycle": 3878,
-        "hits": 228,
+        "last_cycle": 3879,
+        "hits": 245,
         "status": "open"
       },
       {
@@ -107,8 +108,134 @@
         "parent": "books",
         "depth": 1,
         "first_cycle": 3864,
-        "last_cycle": 3878,
-        "hits": 29,
+        "last_cycle": 3879,
+        "hits": 30,
+        "status": "open"
+      },
+      {
+        "label": "new book",
+        "parent": "broadly expands",
+        "depth": 6,
+        "first_cycle": 3869,
+        "last_cycle": 3879,
+        "hits": 28,
+        "status": "open"
+      },
+      {
+        "label": "certainly",
+        "parent": "let's",
+        "depth": 9,
+        "first_cycle": 3872,
+        "last_cycle": 3879,
+        "hits": 23,
+        "status": "open"
+      },
+      {
+        "label": "closeness",
+        "parent": "certainly",
+        "depth": 10,
+        "first_cycle": 3873,
+        "last_cycle": 3879,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "objection",
+        "parent": "closeness",
+        "depth": 11,
+        "first_cycle": 3874,
+        "last_cycle": 3879,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "most_impressive_works",
+        "parent": "objection",
+        "depth": 12,
+        "first_cycle": 3875,
+        "last_cycle": 3879,
+        "hits": 19,
+        "status": "open"
+      },
+      {
+        "label": "interests",
+        "parent": "most_impressive_works",
+        "depth": 13,
+        "first_cycle": 3876,
+        "last_cycle": 3879,
+        "hits": 17,
+        "status": "open"
+      },
+      {
+        "label": "objects",
+        "parent": "new book",
+        "depth": 7,
+        "first_cycle": 3870,
+        "last_cycle": 3879,
+        "hits": 14,
+        "status": "open"
+      },
+      {
+        "label": "detailed explanations",
+        "parent": "interests",
+        "depth": 14,
+        "first_cycle": 3877,
+        "last_cycle": 3879,
+        "hits": 10,
+        "status": "open"
+      },
+      {
+        "label": "garden",
+        "parent": "detailed explanations",
+        "depth": 15,
+        "first_cycle": 3878,
+        "last_cycle": 3879,
+        "hits": 8,
+        "status": "open"
+      },
+      {
+        "label": "latest",
+        "parent": "certainly",
+        "depth": 10,
+        "first_cycle": 3873,
+        "last_cycle": 3879,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "i don't want to go back and try to recapture the most recent line",
+        "parent": "detailed explanations",
+        "depth": 15,
+        "first_cycle": 3878,
+        "last_cycle": 3879,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "projects",
+        "parent": "garden",
+        "depth": 16,
+        "first_cycle": 3879,
+        "last_cycle": 3879,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "relaxed",
+        "parent": "garden",
+        "depth": 16,
+        "first_cycle": 3879,
+        "last_cycle": 3879,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "animals",
+        "parent": "garden",
+        "depth": 16,
+        "first_cycle": 3879,
+        "last_cycle": 3879,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -121,111 +248,12 @@
         "status": "open"
       },
       {
-        "label": "new book",
-        "parent": "broadly expands",
-        "depth": 6,
-        "first_cycle": 3869,
-        "last_cycle": 3878,
-        "hits": 27,
-        "status": "open"
-      },
-      {
-        "label": "certainly",
-        "parent": "let's",
-        "depth": 9,
-        "first_cycle": 3872,
-        "last_cycle": 3878,
-        "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "closeness",
-        "parent": "certainly",
-        "depth": 10,
-        "first_cycle": 3873,
-        "last_cycle": 3878,
-        "hits": 21,
-        "status": "open"
-      },
-      {
-        "label": "objection",
-        "parent": "closeness",
-        "depth": 11,
-        "first_cycle": 3874,
-        "last_cycle": 3878,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "most_impressive_works",
-        "parent": "objection",
-        "depth": 12,
-        "first_cycle": 3875,
-        "last_cycle": 3878,
-        "hits": 15,
-        "status": "open"
-      },
-      {
-        "label": "objects",
-        "parent": "new book",
-        "depth": 7,
-        "first_cycle": 3870,
-        "last_cycle": 3878,
-        "hits": 13,
-        "status": "open"
-      },
-      {
-        "label": "interests",
-        "parent": "most_impressive_works",
-        "depth": 13,
-        "first_cycle": 3876,
-        "last_cycle": 3878,
-        "hits": 12,
-        "status": "open"
-      },
-      {
-        "label": "detailed explanations",
-        "parent": "interests",
-        "depth": 14,
-        "first_cycle": 3877,
-        "last_cycle": 3878,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "latest",
-        "parent": "certainly",
-        "depth": 10,
-        "first_cycle": 3873,
-        "last_cycle": 3878,
-        "hits": 4,
-        "status": "open"
-      },
-      {
         "label": "travel",
         "parent": "interests",
         "depth": 14,
         "first_cycle": 3877,
         "last_cycle": 3878,
         "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "garden",
-        "parent": "detailed explanations",
-        "depth": 15,
-        "first_cycle": 3878,
-        "last_cycle": 3878,
-        "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "i don't want to go back and try to recapture the most recent line",
-        "parent": "detailed explanations",
-        "depth": 15,
-        "first_cycle": 3878,
-        "last_cycle": 3878,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -497,33 +525,6 @@
         "last_cycle": 3871,
         "hits": 42,
         "status": "open"
-      },
-      {
-        "label": "find",
-        "parent": "exciting new work",
-        "depth": 8,
-        "first_cycle": 3871,
-        "last_cycle": 3871,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "creative thinking",
-        "parent": "exciting new work",
-        "depth": 8,
-        "first_cycle": 3871,
-        "last_cycle": 3871,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "explore",
-        "parent": "exciting new work",
-        "depth": 8,
-        "first_cycle": 3871,
-        "last_cycle": 3871,
-        "hits": 1,
-        "status": "open"
       }
     ],
     "branch_history": [
@@ -540,10 +541,11 @@
       "objection",
       "most_impressive_works",
       "interests",
-      "detailed explanations"
+      "detailed explanations",
+      "garden"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 3878,
+    "last_branch_cycle": 3879,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,

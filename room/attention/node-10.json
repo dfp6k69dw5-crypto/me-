@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T15:59:30.299667+00:00",
-  "cycle_key": "32388532637:1:6",
+  "generated_at": "2026-08-20T16:08:06.618142+00:00",
+  "cycle_key": "32389990405:1:1",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,36 +32,43 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.1,
-      "confidence": 0.973,
-      "raw_score": 3.1,
+      "score": 3.18,
+      "confidence": 0.977,
+      "raw_score": 3.18,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "excited",
         "feeling",
-        "love",
-        "excited"
+        "love"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "excited"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "love"
+            "feeling"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "love"
+            "feeling"
           ],
           "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "love"
+          ],
+          "weight": 0.46
         },
         {
           "kind": "topic_support",
@@ -73,29 +80,44 @@
       ]
     },
     {
-      "name": "memory-callback",
+      "name": "creative-bridge",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "domain": "creative-bridge",
+      "score": 2.18,
+      "confidence": 0.875,
+      "raw_score": 2.18,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "remember"
+        "beautiful",
+        "novel"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "remember"
+            "beautiful"
           ],
-          "weight": 1.45
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "beautiful"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "topic_support",
+          "matched": [
+            "novel"
+          ],
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "fe33858f676d",
+  "context_fingerprint": "ebcff4dd9889",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 876,
-  "approx_added_tokens": 219
+  "temporary_skill_chars": 849,
+  "approx_added_tokens": 212
 }
