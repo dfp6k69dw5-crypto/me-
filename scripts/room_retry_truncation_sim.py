@@ -41,23 +41,28 @@ def main() -> None:
     }
 
     prompts: list[str] = []
-    original = engine._private_model._request
+    quality = engine._expression_quality
+    wrapped_request = engine._private_model._request
+    assert getattr(wrapped_request, "_room_retry_boundary", False), "production retry boundary is not installed"
+    original_underlying = quality._original_request
     old_prompt = os.environ.get("ROOM_NODE_PROMPT")
     old_url = os.environ.get("ROOM_MODEL_URL")
 
     def fake_request(_url, prompt, _role, _temperature, _timeout, _self_entity=None, attempt=0):
+        # Capture what would actually cross the network boundary, after the
+        # production wrapper has removed internal retry-control language.
         prompts.append(prompt)
         if attempt == 0:
             return expression(allen_words)
         return expression("Allen, their bills contain electroreceptors that help them locate prey underwater.")
 
-    engine._private_model._request = fake_request
+    quality._original_request = fake_request
     os.environ["ROOM_NODE_PROMPT"] = "enabled-for-simulator"
     os.environ["ROOM_MODEL_URL"] = "http://simulator.invalid"
     try:
         result = engine._private_run("expression", payload, timeout=1)
     finally:
-        engine._private_model._request = original
+        quality._original_request = original_underlying
         if old_prompt is None:
             os.environ.pop("ROOM_NODE_PROMPT", None)
         else:
@@ -71,8 +76,9 @@ def main() -> None:
     assert len(prompts) >= 2, "retry probe did not force a second expression attempt"
     first_prefix = prompts[0].split("\nCONVERSATION\n", 1)[0]
     second_prefix = prompts[1].split("\nCONVERSATION\n", 1)[0]
-    assert first_prefix == second_prefix, "RED: rejection added model-visible retry prose"
-    assert "use a different idea" not in prompts[1].lower(), "RED: retry instruction can be echoed into dialogue"
+    assert first_prefix == second_prefix, "retry control changed the model-visible instruction prefix"
+    assert "use a different idea" not in prompts[1].lower(), "retry instruction can be echoed into dialogue"
+    assert "keep the reply concise" not in prompts[1].lower(), "retry quality instruction can be echoed into dialogue"
     assert allen_words in prompts[1], "Allen's newest words were lost during retry recovery"
 
     print("ROOM RETRY/TRUNCATION BOUNDARY SIM: GREEN")
