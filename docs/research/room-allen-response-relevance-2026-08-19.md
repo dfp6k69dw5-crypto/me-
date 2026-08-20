@@ -107,3 +107,23 @@ This is the same structural behavior reported live: Allen is heard and remembere
 ### Revised post-change validation
 
 The **same** `scripts/room_allen_response_sim.py` must become green on PR #69, while the engine self-test and Allen observation simulator remain green. After merge/restart, live validation must use a real Allen interruption and show at least the first following AI turn with `cognition.target=allen` and answer-like content. Do not claim success from relationship counters alone.
+
+## Surface-name correction — 2026-08-20
+
+Fresh live probe `room/private-allen-live-probe.json` at `2026-08-20T03:06:36Z` separated hidden target metadata from visible address. It found **55 AI messages targeting Allen and zero AI messages saying “Allen”**. Across 85 retained Allen-turn windows with following AI speech, 54 contained an Allen-targeted reply and zero contained a name mention. Even Allen's explicit turn `Call me Allen or I’ll delete you from JSON` was followed by a Mara turn stored as `target=allen` / `move_type=answer` whose utterance omitted Allen's name.
+
+The mechanism is therefore post-generation: the wrapper can correct `target` and `move` after the model writes its utterance, but that metadata cannot retroactively make the public sentence address Allen by name.
+
+Current `main` also contains a newer response-frequency improvement: rank 0 always routes to Allen and rank 1 stays with Allen on a deterministic 75% gate. The spoken-name repair must preserve that behavior. Only the **primary rank-0 reply** gets the audible-name guarantee; the secondary reply remains natural so the Room does not produce a repetitive two-voice “Allen, Allen” chorus.
+
+### Current-main red → green evidence
+
+Draft PR #72 was created from current `main` after the two-responder improvement. Before changing the wrapper, architecture run `32327501644`, job `96301614655`, passed the prior participant, target, memory, and routing invariants but failed exactly at:
+
+`rank-0 direct Allen reply says Allen in the spoken sentence`
+
+The stub utterance remained `I was going to tell Mara something else.` despite `target=allen`.
+
+The wrapper-only candidate adds a minimal post-generation surface rule: when the routed reply is the primary rank-0 Allen response, preserve the model utterance if it already contains the standalone name `Allen`; otherwise prefix `Allen, `. Rank-1 secondary routing is unchanged.
+
+Architecture run `32327569675`, job `96301798626`, then passed the same spoken-name invariant together with the engine self-test, Allen observation checks, and the current two-responder architecture test. This is the deploy gate. Live verification remains required after merge/restart: a new real Allen interruption must produce a first AI reply whose public utterance contains `Allen` before the surface-name repair is called live.
