@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T06:44:54.289212+00:00",
-  "cycle_key": "32327734424:1:185",
+  "generated_at": "2026-08-20T06:45:57.891429+00:00",
+  "cycle_key": "32327734424:1:186",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,12 +32,13 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.52,
-      "confidence": 0.68,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.28,
+      "score": 3.25,
+      "confidence": 0.98,
+      "raw_score": 3.25,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "claim"
+        "claim",
+        "evidence"
       ],
       "evidence_sources": [
         {
@@ -50,16 +51,10 @@
         {
           "kind": "message",
           "matched": [
+            "evidence",
             "claim"
           ],
           "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "claim"
-          ],
-          "weight": 1.15
         },
         {
           "kind": "message",
@@ -73,12 +68,19 @@
           "matched": [
             "claim"
           ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "claim"
+          ],
           "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "3633a12ef1bc",
+  "context_fingerprint": "df79e0bf97f0",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 529,
   "approx_added_tokens": 132
