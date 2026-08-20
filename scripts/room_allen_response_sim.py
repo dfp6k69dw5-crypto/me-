@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -114,7 +115,87 @@ def main() -> int:
         for owner, values in originals.items():
             owner.conv, owner.minds, owner.state, owner.choose_partner = values
 
-    print("PASS: Allen social participation boundary is green")
+    # Behavioral regression: live history showed Allen turns followed by four AI
+    # turns with zero Allen targets. Reproduce that exact routing failure without a
+    # model by making rank 0 return an otherwise-valid turn aimed at another AI.
+    captured: dict = {}
+    original_model_run = core.model_run
+    original_prior = core.prior_expression_messages
+    old_rank = os.environ.get("ROOM_EXPRESSION_RANK")
+    try:
+        os.environ["ROOM_EXPRESSION_RANK"] = "0"
+        core.prior_expression_messages = lambda node: []
+
+        def fake_model_run(role, payload):
+            if role != "expression":
+                return None
+            captured["payload"] = payload
+            return {
+                "decision": "SPEAK",
+                "target": "mara",
+                "move": "deepen",
+                "utterance": "I was going to tell Mara something else.",
+                "semantic_terms": ["elsewhere"],
+            }
+
+        core.model_run = fake_model_run
+        latest_allen = {
+            "id": "sim-allen-hi",
+            "speaker": "allen",
+            "text": "Will one of you please just say hi to me?",
+            "runtime": engine.VERSION,
+            "boot_id": engine.BOOT,
+            "cognition": {"target": None, "move_type": "follow_up"},
+            "discourse_id": "d-sim-allen-hi",
+        }
+        base = {
+            "event": latest_allen,
+            "context": [latest_allen],
+            "keywords": ["please", "say", "hi"],
+            "topic": {"id": "topic-sim", "root": "conversation", "current_facet": "greeting", "facets": [], "visited_facets": [], "status": "active", "shared_references": [], "unresolved": []},
+            "partner": "allen",
+            "relationship": {"exposure": .3, "direct_familiarity": .1, "trust": .1, "predictability": .1, "reciprocity": .1, "warmth": .1, "respect": .1, "disclosure_depth": 0, "tension": 0},
+        }
+        bus_data = {
+            "private": {
+                "sarah": [
+                    {"role": "comprehension", "private": {**base, "social_observation": {"participation": "PARTICIPANT"}}, "public": {"readiness": .1}},
+                    {"role": "thought", "private": base, "public": {"readiness": .2}},
+                    {"role": "expression", "private": base, "public": {"readiness": .8}},
+                ]
+            },
+            "recurrent": {
+                "sarah": {
+                    "thought": {
+                        "private": {
+                            "deliberation": {
+                                "action": "DEEPEN",
+                                "preferred_partner": "mara",
+                                "focus": "greeting",
+                                "new_information_goal": "change the subject",
+                            }
+                        }
+                    }
+                }
+            },
+        }
+        routed = core.recurrent(2, "allen-direct-reply-sim", bus_data)
+        expr = (routed.get("private") or {}).get("expression") or {}
+        payload = captured.get("payload") or {}
+        require("rank-0 expression still sees Allen as the newest event", ((payload.get("event") or {}).get("speaker") == "allen"), payload.get("event"))
+        require("rank-0 Allen interruption is routed back to Allen", expr.get("target") == "allen", expr)
+        require("rank-0 Allen interruption becomes an answer", str(expr.get("move") or "").lower() == "answer", expr)
+        require("rank-0 Allen interruption does not inject a competing conversation job", not payload.get("conversation_job"), payload.get("conversation_job"))
+        require("rank-0 Allen interruption deliberation is answer-oriented", str(((payload.get("deliberation") or {}).get("action") or "")).upper() == "ANSWER", payload.get("deliberation"))
+    finally:
+        core.model_run = original_model_run
+        core.prior_expression_messages = original_prior
+        if old_rank is None:
+            os.environ.pop("ROOM_EXPRESSION_RANK", None)
+        else:
+            os.environ["ROOM_EXPRESSION_RANK"] = old_rank
+
+    print("PASS: Allen social participation and direct-reply boundary is green")
     return 0
 
 
