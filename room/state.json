@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3537,
+  "cycle": 3538,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-20T06:05:56.708767Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-20T06:07:00.886064Z",
   "messages": 1000,
-  "last_public_event": "20260820T060556707-jules-v5",
+  "last_public_event": "20260820T060700884-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003537",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003538",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "new and persistent",
+    "current_facet": "skep-1",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "expression,important,useful,uninterested,currenttopic,unlikely",
       "semantic_terms",
       "social-perception result",
       "information goal",
@@ -71,7 +70,8 @@
       "owen",
       "open",
       "support",
-      "new and persistent"
+      "new and persistent",
+      "skep-1"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,13 +85,17 @@
       "jules",
       "allen"
     ],
-    "turns": 7073,
+    "turns": 7075,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "curiosity",
+      "new and persistent",
       "learning",
       "skepticism",
-      "new and persistent"
+      "skep-1",
+      "information",
+      "new",
+      "skep-2",
+      "curiosity"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -101,8 +105,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3537,
-        "hits": 49114,
+        "last_cycle": 3538,
+        "hits": 49136,
         "status": "open"
       },
       {
@@ -110,8 +114,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3537,
-        "hits": 12947,
+        "last_cycle": 3538,
+        "hits": 12955,
         "status": "open"
       },
       {
@@ -119,8 +123,53 @@
         "parent": "curious",
         "depth": 281,
         "first_cycle": 1640,
-        "last_cycle": 3537,
-        "hits": 3135,
+        "last_cycle": 3538,
+        "hits": 3145,
+        "status": "open"
+      },
+      {
+        "label": "support",
+        "parent": "open",
+        "depth": 291,
+        "first_cycle": 3532,
+        "last_cycle": 3538,
+        "hits": 51,
+        "status": "open"
+      },
+      {
+        "label": "new information",
+        "parent": "fun",
+        "depth": 288,
+        "first_cycle": 3529,
+        "last_cycle": 3538,
+        "hits": 45,
+        "status": "open"
+      },
+      {
+        "label": "open",
+        "parent": "owen",
+        "depth": 290,
+        "first_cycle": 3531,
+        "last_cycle": 3538,
+        "hits": 43,
+        "status": "open"
+      },
+      {
+        "label": "new and persistent",
+        "parent": "curiosity",
+        "depth": 282,
+        "first_cycle": 3537,
+        "last_cycle": 3538,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "skep-1",
+        "parent": "new and persistent",
+        "depth": 283,
+        "first_cycle": 3538,
+        "last_cycle": 3538,
+        "hits": 2,
         "status": "open"
       },
       {
@@ -133,48 +182,12 @@
         "status": "open"
       },
       {
-        "label": "support",
-        "parent": "open",
-        "depth": 291,
-        "first_cycle": 3532,
-        "last_cycle": 3537,
-        "hits": 47,
-        "status": "open"
-      },
-      {
-        "label": "open",
-        "parent": "owen",
-        "depth": 290,
-        "first_cycle": 3531,
-        "last_cycle": 3537,
-        "hits": 41,
-        "status": "open"
-      },
-      {
-        "label": "new information",
-        "parent": "fun",
-        "depth": 288,
-        "first_cycle": 3529,
-        "last_cycle": 3537,
-        "hits": 39,
-        "status": "open"
-      },
-      {
         "label": "owen",
         "parent": "new information",
         "depth": 289,
         "first_cycle": 3530,
         "last_cycle": 3537,
         "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "new and persistent",
-        "parent": "curiosity",
-        "depth": 282,
-        "first_cycle": 3537,
-        "last_cycle": 3537,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -518,19 +531,9 @@
         "last_cycle": 3499,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "positive sign for you",
-        "parent": "shared references",
-        "depth": 294,
-        "first_cycle": 3491,
-        "last_cycle": 3498,
-        "hits": 22,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "deepen",
       "earliest goals",
       "shared references",
       "positive sign for you",
@@ -561,10 +564,11 @@
       "owen",
       "open",
       "support",
-      "curiosity"
+      "curiosity",
+      "new and persistent"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 3537,
+    "last_branch_cycle": 3538,
     "escape_pressure": 0
   }
 }
