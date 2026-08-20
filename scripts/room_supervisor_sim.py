@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import room_supervisor as supervisor
 
@@ -35,11 +36,33 @@ def main() -> None:
     assert third["control"]["restart_attempts"] == 2, third
     assert third["control"]["circuit_open"] is True, third
 
-    recovered_state = {"cycle": 4001, "last_run": iso(now + timedelta(minutes=11))}
-    recovered = supervisor.decide(recovered_state, third["control"], now=now + timedelta(minutes=12))
+    held = supervisor.decide(stale_state, third["control"], now=now + timedelta(minutes=25))
+    assert held["action"] == "circuit_open", held
+    assert held["control"]["restart_attempts"] == 2, held
+
+    probe = supervisor.decide(stale_state, held["control"], now=now + timedelta(minutes=41))
+    assert probe["action"] == "probe_restart", probe
+    assert probe["control"]["restart_attempts"] == 1, probe
+    assert probe["control"]["circuit_open"] is False, probe
+
+    recovered_state = {"cycle": 4001, "last_run": iso(now + timedelta(minutes=41))}
+    recovered = supervisor.decide(recovered_state, probe["control"], now=now + timedelta(minutes=42))
     assert recovered["action"] == "healthy", recovered
     assert recovered["control"]["circuit_open"] is False, recovered
     assert recovered["control"]["restart_attempts"] == 0, recovered
+
+    supervisor_workflow = Path('.github/workflows/room-supervisor.yml').read_text()
+    assert "cron: '*/5 * * * *'" in supervisor_workflow, 'supervisor is not scheduled independently'
+    assert 'python3 scripts/room_supervisor.py check' in supervisor_workflow, 'workflow bypasses deterministic supervisor'
+    assert 'gh workflow run sarah-society.yml' in supervisor_workflow, 'supervisor cannot launch a bounded replacement'
+    assert 'probe_restart' in supervisor_workflow, 'cooldown probe is not wired to replacement launch'
+
+    room_workflow = Path('.github/workflows/sarah-society.yml').read_text()
+    failure_mark = room_workflow.index('runner_exit_reason="repeated_beat_failure"')
+    failure_guard = room_workflow.index('if [ "$runner_exit_reason" = "repeated_beat_failure" ]')
+    normal_handoff = room_workflow.index('gh workflow run sarah-society.yml')
+    assert failure_mark < failure_guard < normal_handoff, 'failed runner can still self-restart before supervisor guard'
+    assert 'supervisor owns recovery' in room_workflow, 'failure ownership was not transferred to supervisor'
 
     print("ROOM SUPERVISOR SIM: GREEN")
 
