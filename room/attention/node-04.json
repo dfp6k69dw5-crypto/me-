@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T01:18:06.378571+00:00",
-  "cycle_key": "32320379323:1:1",
+  "generated_at": "2026-08-20T01:19:29.217598+00:00",
+  "cycle_key": "32320379323:1:2",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 3.6,
-      "confidence": 0.989,
-      "raw_score": 3.6,
-      "repeat_penalty": 0.0,
+      "score": 1.56,
+      "confidence": 0.696,
+      "raw_score": 1.84,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "concrete",
         "example"
@@ -47,7 +47,7 @@
             "example",
             "concrete"
           ],
-          "weight": 1.8
+          "weight": 0.92
         },
         {
           "kind": "message",
@@ -55,11 +55,12 @@
             "example",
             "concrete"
           ],
-          "weight": 0.92
+          "weight": 0.76
         },
         {
           "kind": "message",
           "matched": [
+            "example",
             "concrete"
           ],
           "weight": 0.46
@@ -70,33 +71,33 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.51,
-      "confidence": 0.677,
-      "raw_score": 1.79,
+      "score": 1.41,
+      "confidence": 0.636,
+      "raw_score": 1.69,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "because",
-        "compare"
+        "why",
+        "because"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "because"
+            "why"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "compare"
+            "because"
           ],
-          "weight": 0.64
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "5c3c858ae6f4",
+  "context_fingerprint": "366f5f8e062d",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 839,
   "approx_added_tokens": 210
