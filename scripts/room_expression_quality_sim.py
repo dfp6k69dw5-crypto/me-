@@ -64,7 +64,16 @@ def require_retry(label: str, bad: str, good: str, source: dict | None = None):
     assert actual == good, f"{label}: retry did not return clean expression: {actual!r}"
 
 
+def require_first_try(label: str, text: str):
+    result, calls = run_sequence([expression(text)])
+    assert calls == 1, f"{label}: natural expression was over-rejected ({calls} attempts)"
+    assert result.get("utterance") == text
+
+
 def main():
+    schema = engine._private_model._schema("expression", "sarah")
+    assert schema["properties"]["utterance"]["maxLength"] <= 420, "expression schema still permits rambling output"
+
     require_retry(
         "malformed pronoun grammar",
         "I r excited to read more about it, and we r all looking forward to another novel.",
@@ -89,6 +98,12 @@ def main():
         "I like the moral ambiguity more than the book's reputation as a classic.",
     )
 
+    require_retry(
+        "dangling truncation fragment",
+        "The trial scene is the part I keep thinking about,",
+        "The trial scene is the part I keep thinking about because Scout notices how adults rationalize unfairness.",
+    )
+
     previous = (
         "To Kill a Mockingbird is an excellent classic novel, and I am excited to read more about Harper Lee. "
         "I was surprised to discover it has a more prominent role in my collection. It is a good choice for "
@@ -106,10 +121,18 @@ def main():
         payload(previous),
     )
 
-    clean = "I liked the ambiguity at the end because it leaves the moral judgment less tidy."
-    result, calls = run_sequence([expression(clean)])
-    assert calls == 1, f"natural expression was over-rejected ({calls} attempts)"
-    assert result.get("utterance") == clean
+    require_first_try(
+        "ordinary natural expression",
+        "I liked the ambiguity at the end because it leaves the moral judgment less tidy.",
+    )
+    require_first_try(
+        "literal R programming reference",
+        "R is the programming language I use when I want to inspect a dataset quickly.",
+    )
+    require_first_try(
+        "natural colon ending setup",
+        "I keep coming back to one question: what did Scout understand that the adults missed?",
+    )
 
     print("ROOM EXPRESSION QUALITY SIM: GREEN")
 
