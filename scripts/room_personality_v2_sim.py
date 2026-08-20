@@ -46,6 +46,7 @@ scenarios = {
     "mara_why": {"speaker": "allen", "text": "Mara, why?"},
     "critique_owen": {"speaker": "allen", "text": "Owen, that argument makes no sense."},
     "exclude_mara": {"speaker": "allen", "text": "Sarah and Jules get it. Mara doesn't. Everyone but Mara understands."},
+    "exclude_jules": {"speaker": "allen", "text": "Sarah and Mara get it. Jules doesn't. Everyone but Jules understands."},
     "odd": {"speaker": "allen", "text": "Platypuses have electroreceptors in their bills."},
     "repair": {"speaker": "allen", "text": "Sorry, Mara. I was too harsh."},
     "fragment": {"speaker": "allen", "text": "Recursive causation"},
@@ -68,6 +69,7 @@ for person in PEOPLE:
     assert "platypus" in results[(person, "topic")]["grounding"]["terms"]
     assert results[(person, "proof")]["priority"] == "ground_latest_turn"
     assert "evidence_request" in results[(person, "proof")]["situation"]
+    assert "utterance" not in results[(person, "topic")], "appraiser must not script public speech"
 
 # Same situation, four coherent lenses instead of four rewordings of one persona.
 odd_lenses = {person: tuple(results[(person, "odd")]["personality_lens"]) for person in PEOPLE}
@@ -81,11 +83,34 @@ assert "people" in " ".join(odd_lenses["mara"]).lower()
 assert any("abandonment" in str(item.get("schema", "")).lower() for item in results[("mara", "exclude_mara")]["schema_activation"])
 assert not any("abandonment" in str(item.get("schema", "")).lower() for item in results[("owen", "exclude_mara")]["schema_activation"])
 assert any("mistrust" in str(item.get("schema", "")).lower() for item in results[("owen", "critique_owen")]["schema_activation"])
-assert any("recognition" in str(item.get("schema", "")).lower() for item in results[("jules", "exclude_mara")]["schema_activation"])
+assert any("recognition" in str(item.get("schema", "")).lower() for item in results[("jules", "exclude_jules")]["schema_activation"])
 
 # Repair is generic, but recovery style remains person-specific.
 for person in PEOPLE:
     assert "repair_bid" in results[(person, "repair")]["situation"]
 assert len({tuple(results[(person, "repair")]["personality_lens"]) for person in PEOPLE}) == 4
 
-print("PASS personality-v2: 19 fixed layers, no sliders, grounded bids, divergent appraisal, selective schema activation")
+# Verify production integration, not merely the standalone appraiser.
+import room_engine_v5  # noqa: F401,E402 -- installs the wrapper bridge
+import room_private_model as private_model  # noqa: E402
+
+payload = {
+    "entity": "jules",
+    "profile": CFG["p"]["jules"],
+    "event": scenarios["topic"],
+    "context": context + [scenarios["topic"]],
+    "topic": {"root": "public interest", "current_facet": "debate", "facets": [], "shared_references": [], "unresolved": []},
+    "partner": "allen",
+    "relationship": {},
+}
+compact = private_model._compact_payload(payload, "expression", "jules")
+pctx = compact.get("personality_context")
+assert isinstance(pctx, dict), "production compact payload lost personality_context"
+current = pctx.get("current") or {}
+assert current.get("latest_words") == "Let's talk about the platypus"
+assert "platypus" in (current.get("grounding_terms") or [])
+assert current.get("salience") == "ground_latest_turn"
+assert any("vivid new object" in str(item).lower() for item in current.get("personality_lens") or [])
+assert pctx.get("identity") == profiles["jules"]["core_identity"]
+
+print("PASS personality-v2: 19 fixed layers, no sliders, grounded bids, divergent appraisal, selective schema activation, production bridge")
