@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T04:16:12.055205+00:00",
-  "cycle_key": "32327734424:1:48",
+  "generated_at": "2026-08-20T04:17:27.599422+00:00",
+  "cycle_key": "32327734424:1:49",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -27,9 +27,61 @@
     "max_chars": 1080,
     "min_score": 1.1
   },
-  "selected_skills": [],
-  "context_fingerprint": "3b5b7f0577be",
+  "selected_skills": [
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 3.6,
+      "confidence": 0.989,
+      "raw_score": 3.6,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "show",
+        "specific"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "specific",
+            "show"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.92
+        }
+      ]
+    },
+    {
+      "name": "creative-bridge",
+      "tier": "project",
+      "domain": "creative-bridge",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "idea"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 1.8
+        }
+      ]
+    }
+  ],
+  "context_fingerprint": "64a0d64b950d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 0,
-  "approx_added_tokens": 0
+  "temporary_skill_chars": 798,
+  "approx_added_tokens": 200
 }
