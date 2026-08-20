@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T13:32:38.932679+00:00",
-  "cycle_key": "32373880847:1:5",
+  "generated_at": "2026-08-20T14:33:37.118484+00:00",
+  "cycle_key": "32380529243:1:2",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,19 +32,19 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.6,
-      "confidence": 0.989,
-      "raw_score": 3.6,
+      "score": 3.71,
+      "confidence": 0.991,
+      "raw_score": 3.71,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "excited",
+        "love",
         "feel"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feel",
             "excited"
           ],
           "weight": 1.8
@@ -59,15 +59,14 @@
         {
           "kind": "message",
           "matched": [
-            "feel",
-            "excited"
+            "excited",
+            "love"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "feel",
             "excited"
           ],
           "weight": 0.92
@@ -83,57 +82,59 @@
       ]
     },
     {
-      "name": "creative-bridge",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "critical-testing",
+      "score": 2.95,
+      "confidence": 0.965,
+      "raw_score": 2.95,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "novel"
+        "because",
+        "why"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "novel"
+            "because"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "novel"
+            "because"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "novel"
+            "why",
+            "because"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "novel"
+            "because"
           ],
-          "weight": 0.76
+          "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "novel"
+            "because"
           ],
-          "weight": 0.54
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "b1ff229cb766",
+  "context_fingerprint": "78b50c75853f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 849,
-  "approx_added_tokens": 212
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }
