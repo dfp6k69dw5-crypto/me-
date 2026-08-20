@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T01:38:53.708530+00:00",
-  "cycle_key": "32320379323:1:19",
+  "generated_at": "2026-08-20T01:39:57.667192+00:00",
+  "cycle_key": "32320379323:1:20",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -27,9 +27,52 @@
     "max_chars": 1080,
     "min_score": 1.1
   },
-  "selected_skills": [],
-  "context_fingerprint": "b080d883b1b6",
+  "selected_skills": [
+    {
+      "name": "creative-bridge",
+      "tier": "project",
+      "domain": "creative-bridge",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "idea"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 1.8
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "whether"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "whether"
+          ],
+          "weight": 1.45
+        }
+      ]
+    }
+  ],
+  "context_fingerprint": "d8b6b3ff36ce",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 0,
-  "approx_added_tokens": 0
+  "temporary_skill_chars": 834,
+  "approx_added_tokens": 208
 }
