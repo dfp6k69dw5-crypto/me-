@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T11:16:07.278460+00:00",
-  "cycle_key": "32350827191:1:134",
+  "generated_at": "2026-08-20T11:17:20.026200+00:00",
+  "cycle_key": "32350827191:1:135",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,23 +32,22 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 3.82,
-      "confidence": 0.993,
-      "raw_score": 3.82,
+      "score": 3.08,
+      "confidence": 0.972,
+      "raw_score": 3.08,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "example",
         "detail",
-        "specific",
-        "example"
+        "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "specific",
-            "detail"
+            "example"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -56,6 +55,21 @@
             "example"
           ],
           "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific",
+            "detail"
+          ],
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "example"
+          ],
+          "weight": 0.46
         }
       ]
     },
@@ -63,14 +77,12 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.08,
-      "confidence": 0.972,
-      "raw_score": 3.08,
-      "repeat_penalty": 0.0,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "whether",
-        "because",
-        "sure"
+        "whether"
       ],
       "evidence_sources": [
         {
@@ -79,6 +91,13 @@
             "whether"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "whether"
+          ],
+          "weight": 1.45
         },
         {
           "kind": "message",
@@ -100,20 +119,11 @@
             "whether"
           ],
           "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "because",
-            "whether",
-            "sure"
-          ],
-          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "6313b1ab5fd2",
+  "context_fingerprint": "227783225911",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 839,
   "approx_added_tokens": 210
