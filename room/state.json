@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3250,
+  "cycle": 3251,
   "silence_cycles": 0,
-  "last_speaker": "owen",
-  "last_run": "2026-08-20T01:02:01.161758Z",
+  "last_speaker": "jules",
+  "last_run": "2026-08-20T01:02:36.921461Z",
   "messages": 1000,
-  "last_public_event": "20260820T010201160-owen-v5",
+  "last_public_event": "20260820T010236920-jules-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003250",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003251",
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "curiosity",
+    "current_facet": "current conversation focus",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "discussing",
       "current context",
       "generalization",
       "generalized",
@@ -71,7 +70,8 @@
       "peers",
       "sage",
       "perceptions",
-      "curiosity"
+      "curiosity",
+      "current conversation focus"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,16 +85,15 @@
       "jules",
       "allen"
     ],
-    "turns": 6499,
-    "low_novelty_beats": 0,
+    "turns": 6501,
+    "low_novelty_beats": 1,
     "recent_terms": [
-      "perceptions",
+      "curiosity",
       "learning",
-      "perception",
-      "skepticism",
-      "current conversation",
-      "how",
-      "example"
+      "own",
+      "sage",
+      "sage's own understanding of herself",
+      "current conversation focus"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -104,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3250,
-        "hits": 44426,
+        "last_cycle": 3251,
+        "hits": 44442,
         "status": "open"
       },
       {
@@ -113,8 +112,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3250,
-        "hits": 11696,
+        "last_cycle": 3251,
+        "hits": 11699,
         "status": "open"
       },
       {
@@ -122,8 +121,71 @@
         "parent": "curious",
         "depth": 281,
         "first_cycle": 1640,
-        "last_cycle": 3250,
-        "hits": 2432,
+        "last_cycle": 3251,
+        "hits": 2438,
+        "status": "open"
+      },
+      {
+        "label": "perceptions",
+        "parent": "sage",
+        "depth": 367,
+        "first_cycle": 3247,
+        "last_cycle": 3251,
+        "hits": 53,
+        "status": "open"
+      },
+      {
+        "label": "peers",
+        "parent": "influence",
+        "depth": 365,
+        "first_cycle": 3244,
+        "last_cycle": 3251,
+        "hits": 45,
+        "status": "open"
+      },
+      {
+        "label": "influence",
+        "parent": "understand",
+        "depth": 364,
+        "first_cycle": 3243,
+        "last_cycle": 3251,
+        "hits": 44,
+        "status": "open"
+      },
+      {
+        "label": "sage",
+        "parent": "peers",
+        "depth": 366,
+        "first_cycle": 3246,
+        "last_cycle": 3251,
+        "hits": 35,
+        "status": "open"
+      },
+      {
+        "label": "jules",
+        "parent": "angle",
+        "depth": 344,
+        "first_cycle": 3214,
+        "last_cycle": 3251,
+        "hits": 33,
+        "status": "open"
+      },
+      {
+        "label": "current context",
+        "parent": "discussing",
+        "depth": 346,
+        "first_cycle": 3217,
+        "last_cycle": 3251,
+        "hits": 29,
+        "status": "open"
+      },
+      {
+        "label": "current conversation focus",
+        "parent": "curiosity",
+        "depth": 282,
+        "first_cycle": 3251,
+        "last_cycle": 3251,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -133,60 +195,6 @@
         "first_cycle": 3241,
         "last_cycle": 3250,
         "hits": 58,
-        "status": "open"
-      },
-      {
-        "label": "peers",
-        "parent": "influence",
-        "depth": 365,
-        "first_cycle": 3244,
-        "last_cycle": 3250,
-        "hits": 44,
-        "status": "open"
-      },
-      {
-        "label": "influence",
-        "parent": "understand",
-        "depth": 364,
-        "first_cycle": 3243,
-        "last_cycle": 3250,
-        "hits": 41,
-        "status": "open"
-      },
-      {
-        "label": "perceptions",
-        "parent": "sage",
-        "depth": 367,
-        "first_cycle": 3247,
-        "last_cycle": 3250,
-        "hits": 36,
-        "status": "open"
-      },
-      {
-        "label": "jules",
-        "parent": "angle",
-        "depth": 344,
-        "first_cycle": 3214,
-        "last_cycle": 3250,
-        "hits": 32,
-        "status": "open"
-      },
-      {
-        "label": "sage",
-        "parent": "peers",
-        "depth": 366,
-        "first_cycle": 3246,
-        "last_cycle": 3250,
-        "hits": 31,
-        "status": "open"
-      },
-      {
-        "label": "current context",
-        "parent": "discussing",
-        "depth": 346,
-        "first_cycle": 3217,
-        "last_cycle": 3250,
-        "hits": 28,
         "status": "open"
       },
       {
@@ -521,19 +529,9 @@
         "last_cycle": 3224,
         "hits": 15,
         "status": "open"
-      },
-      {
-        "label": "generalized",
-        "parent": "generalization",
-        "depth": 348,
-        "first_cycle": 3219,
-        "last_cycle": 3222,
-        "hits": 11,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "add observations",
       "treatment options",
       "condition",
       "details",
@@ -564,10 +562,11 @@
       "influence",
       "peers",
       "sage",
-      "perceptions"
+      "perceptions",
+      "curiosity"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 3250,
+    "last_branch_cycle": 3251,
     "escape_pressure": 0
   }
 }
