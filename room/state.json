@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3197,
+  "cycle": 3198,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-20T00:36:40.316810Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-20T00:37:10.153138Z",
   "messages": 1000,
-  "last_public_event": "20260820T003640315-mara-v5",
+  "last_public_event": "20260820T003710152-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003197",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003198",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -85,18 +85,16 @@
       "jules",
       "allen"
     ],
-    "turns": 6393,
-    "low_novelty_beats": 1,
+    "turns": 6395,
+    "low_novelty_beats": 0,
     "recent_terms": [
-      "open-minded",
-      "learning",
-      "知识",
-      "医学",
-      "diagnosis",
-      "owen",
       "knowledge of the medical field",
-      "medical field",
-      "test open-mindedness"
+      "learning",
+      "skepticism",
+      "curiosity",
+      "medical diagnosis",
+      "owen",
+      "new information goal"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -106,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3197,
-        "hits": 43710,
+        "last_cycle": 3198,
+        "hits": 43726,
         "status": "open"
       },
       {
@@ -115,8 +113,89 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3197,
-        "hits": 11529,
+        "last_cycle": 3198,
+        "hits": 11533,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "curious",
+        "depth": 281,
+        "first_cycle": 1640,
+        "last_cycle": 3198,
+        "hits": 2405,
+        "status": "open"
+      },
+      {
+        "label": "medical diagnosis",
+        "parent": "new topic",
+        "depth": 327,
+        "first_cycle": 3194,
+        "last_cycle": 3198,
+        "hits": 42,
+        "status": "open"
+      },
+      {
+        "label": "new topic",
+        "parent": "new information goal",
+        "depth": 326,
+        "first_cycle": 3193,
+        "last_cycle": 3198,
+        "hits": 23,
+        "status": "open"
+      },
+      {
+        "label": "new information goal",
+        "parent": "skepticity",
+        "depth": 325,
+        "first_cycle": 3192,
+        "last_cycle": 3198,
+        "hits": 22,
+        "status": "open"
+      },
+      {
+        "label": "skepticity",
+        "parent": "specific active detail",
+        "depth": 324,
+        "first_cycle": 3191,
+        "last_cycle": 3198,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "understood",
+        "parent": "medical diagnosis",
+        "depth": 328,
+        "first_cycle": 3195,
+        "last_cycle": 3198,
+        "hits": 16,
+        "status": "open"
+      },
+      {
+        "label": "open-minded",
+        "parent": "understood",
+        "depth": 329,
+        "first_cycle": 3196,
+        "last_cycle": 3198,
+        "hits": 14,
+        "status": "open"
+      },
+      {
+        "label": "owen",
+        "parent": "understood",
+        "depth": 329,
+        "first_cycle": 3196,
+        "last_cycle": 3198,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "knowledge of the medical field",
+        "parent": "open-minded",
+        "depth": 330,
+        "first_cycle": 3197,
+        "last_cycle": 3198,
+        "hits": 6,
         "status": "open"
       },
       {
@@ -126,78 +205,6 @@
         "first_cycle": 3189,
         "last_cycle": 3197,
         "hits": 47,
-        "status": "open"
-      },
-      {
-        "label": "medical diagnosis",
-        "parent": "new topic",
-        "depth": 327,
-        "first_cycle": 3194,
-        "last_cycle": 3197,
-        "hits": 33,
-        "status": "open"
-      },
-      {
-        "label": "new topic",
-        "parent": "new information goal",
-        "depth": 326,
-        "first_cycle": 3193,
-        "last_cycle": 3197,
-        "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "skepticity",
-        "parent": "specific active detail",
-        "depth": 324,
-        "first_cycle": 3191,
-        "last_cycle": 3197,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "new information goal",
-        "parent": "skepticity",
-        "depth": 325,
-        "first_cycle": 3192,
-        "last_cycle": 3197,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "understood",
-        "parent": "medical diagnosis",
-        "depth": 328,
-        "first_cycle": 3195,
-        "last_cycle": 3197,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "open-minded",
-        "parent": "understood",
-        "depth": 329,
-        "first_cycle": 3196,
-        "last_cycle": 3197,
-        "hits": 8,
-        "status": "open"
-      },
-      {
-        "label": "owen",
-        "parent": "understood",
-        "depth": 329,
-        "first_cycle": 3196,
-        "last_cycle": 3197,
-        "hits": 3,
-        "status": "open"
-      },
-      {
-        "label": "knowledge of the medical field",
-        "parent": "open-minded",
-        "depth": 330,
-        "first_cycle": 3197,
-        "last_cycle": 3197,
-        "hits": 2,
         "status": "open"
       },
       {
@@ -306,15 +313,6 @@
         "first_cycle": 3193,
         "last_cycle": 3193,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "curious",
-        "depth": 281,
-        "first_cycle": 1640,
-        "last_cycle": 3192,
-        "hits": 2404,
         "status": "open"
       },
       {
@@ -568,7 +566,7 @@
       "understood",
       "open-minded"
     ],
-    "focus_turns": 0,
+    "focus_turns": 2,
     "last_branch_cycle": 3197,
     "escape_pressure": 0
   }
