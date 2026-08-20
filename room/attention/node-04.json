@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T01:39:43.136178+00:00",
-  "cycle_key": "32320379323:1:20",
+  "generated_at": "2026-08-20T01:40:45.221198+00:00",
+  "cycle_key": "32320379323:1:21",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.8,
-      "confidence": 0.779,
+      "score": 1.52,
+      "confidence": 0.68,
       "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "idea"
       ],
@@ -46,33 +46,33 @@
             "idea"
           ],
           "weight": 1.8
-        }
-      ]
-    },
-    {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "whether"
-      ],
-      "evidence_sources": [
+        },
         {
           "kind": "message",
           "matched": [
-            "whether"
+            "idea"
           ],
           "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "idea"
+          ],
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "d8b6b3ff36ce",
+  "context_fingerprint": "0d45cf0599c4",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 834,
-  "approx_added_tokens": 208
+  "temporary_skill_chars": 488,
+  "approx_added_tokens": 122
 }
