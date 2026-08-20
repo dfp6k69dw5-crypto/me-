@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T03:27:45.193087+00:00",
-  "cycle_key": "32327734424:1:7",
+  "generated_at": "2026-08-20T03:28:49.949544+00:00",
+  "cycle_key": "32327734424:1:8",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,15 +32,21 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.71,
-      "confidence": 0.75,
-      "raw_score": 1.99,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "idea",
-        "creative"
+        "idea"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "idea"
+          ],
+          "weight": 1.8
+        },
         {
           "kind": "message",
           "matched": [
@@ -53,50 +59,13 @@
           "matched": [
             "idea"
           ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "idea",
-            "creative"
-          ],
-          "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "idea",
-            "creative"
-          ],
-          "weight": 0.46
-        }
-      ]
-    },
-    {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "because"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "because"
-          ],
-          "weight": 1.45
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "fbf66de226fa",
+  "context_fingerprint": "4fd8a98d5155",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 834,
-  "approx_added_tokens": 208
+  "temporary_skill_chars": 488,
+  "approx_added_tokens": 122
 }
