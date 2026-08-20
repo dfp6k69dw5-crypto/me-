@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T10:45:17.816593+00:00",
-  "cycle_key": "32350827191:1:105",
+  "generated_at": "2026-08-20T10:46:21.973868+00:00",
+  "cycle_key": "32350827191:1:106",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,18 +32,27 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.71,
-      "confidence": 0.75,
-      "raw_score": 1.99,
-      "repeat_penalty": 0.28,
+      "score": 4.7,
+      "confidence": 0.998,
+      "raw_score": 4.7,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "claim",
-        "proof"
+        "why",
+        "because",
+        "claim"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "why"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "because",
             "claim"
           ],
           "weight": 1.45
@@ -60,41 +69,20 @@
           "matched": [
             "claim"
           ],
-          "weight": 0.76
+          "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "proof"
+            "claim"
           ],
           "weight": 0.54
         }
       ]
-    },
-    {
-      "name": "creative-bridge",
-      "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "idea"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "idea"
-          ],
-          "weight": 1.15
-        }
-      ]
     }
   ],
-  "context_fingerprint": "d2fedf62ceb0",
+  "context_fingerprint": "56a0fb494c3f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 834,
-  "approx_added_tokens": 208
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
