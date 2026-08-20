@@ -17,10 +17,60 @@ import os
 import re
 
 import room_private_model as _private_model
+import room_personality_v2 as _personality_v2
 
 # Structured model output must be allowed to refer directly to Allen.
 if "allen" not in _private_model.PEOPLE:
     _private_model.PEOPLE = [*_private_model.PEOPLE, "allen"]
+
+# Keep personality computation outside the LLM. The private model receives a
+# compact, situation-relevant view of the fixed profile rather than 19 fields of
+# undifferentiated persona prose on every turn.
+_original_compact_payload = _private_model._compact_payload
+
+
+def _personality_compact_payload(payload, role, self_entity=None):
+    compact = _original_compact_payload(payload, role, self_entity)
+    profile = payload.get("profile") if isinstance(payload.get("profile"), dict) else {}
+    fixed = profile.get("psychology_v2") if isinstance(profile.get("psychology_v2"), dict) else None
+    entity = str(self_entity or payload.get("entity") or "").lower()
+    if not fixed or entity not in {"sarah", "mara", "owen", "jules"}:
+        return compact
+
+    appraisal = _personality_v2.appraise(
+        entity,
+        fixed,
+        payload.get("event") if isinstance(payload.get("event"), dict) else None,
+        payload.get("context") if isinstance(payload.get("context"), list) else [],
+    )
+    activated = []
+    for item in appraisal.get("schema_activation", [])[:2]:
+        if not isinstance(item, dict):
+            continue
+        activated.append({
+            "pattern": item.get("schema"),
+            "interpretation": item.get("interpretation_bias"),
+            "coping": item.get("coping_bias"),
+        })
+    compact["personality_context"] = {
+        "identity": fixed.get("core_identity"),
+        "values": list(fixed.get("values") or [])[:4],
+        "motives": list(fixed.get("motives") or [])[:3],
+        "interpersonal": appraisal.get("interpersonal_style"),
+        "current": {
+            "situation": appraisal.get("situation"),
+            "latest_words": (appraisal.get("grounding") or {}).get("source_text"),
+            "grounding_terms": (appraisal.get("grounding") or {}).get("terms"),
+            "salience": appraisal.get("priority"),
+            "personality_lens": appraisal.get("personality_lens"),
+            "activated_sensitivities": activated,
+            "usual_coping": list(appraisal.get("coping_patterns") or [])[:4],
+        },
+    }
+    return compact
+
+
+_private_model._compact_payload = _personality_compact_payload
 
 import room_engine_v5_core as _core
 
