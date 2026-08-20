@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T19:29:25.304837+00:00",
-  "cycle_key": "32408388941:1:3",
+  "generated_at": "2026-08-20T19:31:15.591788+00:00",
+  "cycle_key": "32408388941:1:4",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -37,78 +37,64 @@
       "raw_score": 2.09,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "nature",
-        "idea"
+        "imagine",
+        "nature"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "nature"
+            "imagine"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "idea"
+            "nature"
           ],
           "weight": 0.64
         },
         {
-          "kind": "message",
+          "kind": "topic_support",
           "matched": [
             "nature"
           ],
-          "weight": 0.54
+          "weight": 0.38
         }
       ]
     },
     {
-      "name": "social-grounding",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "memory-callback",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "conversation"
+        "memory"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "conversation"
+            "memory"
           ],
-          "weight": 1.8
+          "weight": 1.15
         },
         {
-          "kind": "message",
+          "kind": "topic_support",
           "matched": [
-            "conversation"
+            "memory"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 0.64
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "5a6f24609996",
+  "context_fingerprint": "3de63a8b622a",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 826,
-  "approx_added_tokens": 206
+  "temporary_skill_chars": 820,
+  "approx_added_tokens": 205
 }
