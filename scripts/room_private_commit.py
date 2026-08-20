@@ -5,6 +5,23 @@ import re
 from datetime import datetime, timezone
 
 import room_engine_v5 as c
+import room_social_v5 as _social
+import room_topic_bounded as _bounded_topic
+
+# Topic state is a bounded working-conversation episode. Keep the relationship
+# machinery in room_social_v5, but replace its recursive topic functions at the
+# commit boundary so old depth-N state is flattened before it can be published
+# again. Patch both exports because tests/importers may hold either module.
+for _topic_name in (
+    "topic_template",
+    "topic_terms_from_messages",
+    "update_topic",
+    "new_topic_from_terms",
+    "should_shift_topic",
+):
+    _topic_fn = getattr(_bounded_topic, _topic_name)
+    setattr(c, _topic_name, _topic_fn)
+    setattr(_social, _topic_name, _topic_fn)
 
 ALLOWED_MOVES = {
     "answer", "deepen", "disclose", "compare", "disagree",
@@ -67,34 +84,6 @@ def semantic_values(expr: dict) -> list:
     return expr.get("semantic_terms") if isinstance(expr, dict) and isinstance(expr.get("semantic_terms"), list) else []
 
 
-def clean_terms(expr: dict, topic: dict) -> list[str]:
-    out: list[str] = []
-    for value in (topic.get("root"), topic.get("current_facet")):
-        s = norm(value)
-        if not bad_term(s) and s not in out:
-            out.append(s)
-    for value in semantic_values(expr):
-        s = norm(value)
-        if not bad_term(s) and s not in out:
-            out.append(s)
-    return out[:4]
-
-
-def seed_topic(expressions: dict, order: list[str], cycle: int, prior: dict) -> dict:
-    terms: list[str] = []
-    for entity in order:
-        for value in semantic_values(expressions.get(entity, {})):
-            s = norm(value)
-            if not bad_term(s) and s not in terms:
-                terms.append(s)
-    if not terms:
-        raise RuntimeError("private Room clean start produced no publishable semantic terms")
-    seeded = clean_topic(c.new_topic_from_terms(terms[:8], cycle, prior))
-    if not seeded.get("root"):
-        raise RuntimeError("private Room clean start could not establish a subject")
-    return seeded
-
-
 def grounded(text: str, terms: list[str]) -> bool:
     words = set(re.findall(r"[a-z][a-z'-]{2,}", norm(text)))
     for term in terms:
@@ -102,6 +91,51 @@ def grounded(text: str, terms: list[str]) -> bool:
         if any(word in words for word in significant):
             return True
     return False
+
+
+def clean_terms(expr: dict, topic: dict, text: str) -> list[str]:
+    """Return only semantic terms supported by the actual public sentence."""
+    out: list[str] = []
+    for value in semantic_values(expr):
+        s = norm(value)
+        if not bad_term(s) and grounded(text, [s]) and s not in out:
+            out.append(s)
+    # Existing topic labels may remain only when the speaker actually used them.
+    for value in (topic.get("root"), topic.get("current_facet")):
+        s = norm(value)
+        if not bad_term(s) and grounded(text, [s]) and s not in out:
+            out.append(s)
+    # A model may emit poor semantic metadata while speaking a useful new idea.
+    # Derive a bounded fallback from the sentence itself rather than stale state.
+    if not out:
+        for value in c.toks(text)[:4]:
+            s = norm(value)
+            if not bad_term(s) and s not in out:
+                out.append(s)
+    return out[:4]
+
+
+def seed_topic(expressions: dict, order: list[str], cycle: int, prior: dict) -> dict:
+    terms: list[str] = []
+    for entity in order:
+        expr = expressions.get(entity, {})
+        text = c.model_text(expr) or ""
+        local: list[str] = []
+        for value in semantic_values(expr):
+            s = norm(value)
+            if not bad_term(s) and grounded(text, [s]) and s not in local:
+                local.append(s)
+        if not local:
+            local.extend(norm(value) for value in c.toks(text)[:4] if not bad_term(value))
+        for value in local:
+            if value and value not in terms:
+                terms.append(value)
+    if not terms:
+        raise RuntimeError("private Room clean start produced no publishable grounded semantic terms")
+    seeded = clean_topic(c.new_topic_from_terms(terms[:8], cycle, prior))
+    if not seeded.get("root"):
+        raise RuntimeError("private Room clean start could not establish a subject")
+    return seeded
 
 
 def validate_public_expression(entity: str, text: str, terms: list[str]) -> None:
@@ -147,7 +181,9 @@ def private_commit(parts: list[dict], key: str):
         if not text:
             raise RuntimeError(f"private Room expression invalid for {entity}; no public fallback is permitted")
 
-        terms = clean_terms(expr, topic)
+        terms = clean_terms(expr, topic, text)
+        if not terms:
+            terms = [norm(value) for value in c.toks(text)[:2] if not bad_term(value)]
         if not terms:
             terms = [norm(topic.get("root")) or "conversation"]
         validate_public_expression(entity, text, terms)
@@ -189,10 +225,10 @@ def private_commit(parts: list[dict], key: str):
     if c.should_shift_topic(topic):
         declared = c.topic_terms_from_messages(spoken, limit=12, episode_id=topic.get("id"))
         novel = [norm(x) for x in declared if not bad_term(x) and norm(x) not in previous_vocabulary]
-        if novel:
-            candidate = clean_topic(c.new_topic_from_terms(novel, cycle, topic))
-            if candidate.get("root") and not bad_term(candidate.get("root")):
-                topic = candidate
+        candidate_terms = novel or [c.breakout_subject(key)]
+        candidate = clean_topic(c.new_topic_from_terms(candidate_terms, cycle, topic))
+        if candidate.get("root") and not bad_term(candidate.get("root")):
+            topic = candidate
 
     S["topic_episode"] = topic
     for entity in c.ORDER:
@@ -220,7 +256,7 @@ def private_commit(parts: list[dict], key: str):
         "beat_contributors": speakers,
         "beat_message_count": 4,
         "silence_cycles": 0,
-        "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
+        "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; no public fallback; privacy gate retained",
     })
 
     c.audit_invariants(M, topic)
