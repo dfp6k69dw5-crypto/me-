@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T00:11:27.151861+00:00",
-  "cycle_key": "32314982507:1:31",
+  "generated_at": "2026-08-20T00:12:03.966268+00:00",
+  "cycle_key": "32314982507:1:32",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,27 +32,38 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 2.3,
-      "confidence": 0.897,
-      "raw_score": 2.3,
+      "score": 4.89,
+      "confidence": 0.999,
+      "raw_score": 4.89,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "claim",
-        "reason"
+        "compare",
+        "reason",
+        "why",
+        "claim"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "why",
+            "reason",
+            "compare"
+          ],
+          "weight": 1.45
+        },
         {
           "kind": "message",
           "matched": [
             "claim",
             "reason"
           ],
-          "weight": 1.15
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "1cf820a882e8",
+  "context_fingerprint": "012a3a7b34d5",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 529,
   "approx_added_tokens": 132
