@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3358,
+  "cycle": 3359,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-20T02:43:32.834690Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-20T02:44:32.493280Z",
   "messages": 1000,
-  "last_public_event": "20260820T024332831-mara-v5",
+  "last_public_event": "20260820T024432490-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003358",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003359",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "public expression of agreement",
+    "current_facet": "specific details",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "science",
       "benefit",
       "new discoveries",
       "friend like",
@@ -71,7 +70,8 @@
       "add a new term to the conversation",
       "siri",
       "solar system",
-      "public expression of agreement"
+      "public expression of agreement",
+      "specific details"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,15 +85,15 @@
       "jules",
       "allen"
     ],
-    "turns": 6715,
+    "turns": 6717,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "solar system",
-      "learning",
-      "public expression",
-      "solar system description of the universe",
       "public expression of agreement",
-      "scientific description"
+      "learning",
+      "skepticism",
+      "specific details",
+      "message",
+      "do that"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +103,17 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3358,
-        "hits": 46072,
+        "last_cycle": 3359,
+        "hits": 46085,
+        "status": "open"
+      },
+      {
+        "label": "skepticism",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 3359,
+        "hits": 12178,
         "status": "open"
       },
       {
@@ -112,8 +121,107 @@
         "parent": "temperature",
         "depth": 337,
         "first_cycle": 3353,
-        "last_cycle": 3358,
-        "hits": 35,
+        "last_cycle": 3359,
+        "hits": 37,
+        "status": "open"
+      },
+      {
+        "label": "current information",
+        "parent": "current state",
+        "depth": 338,
+        "first_cycle": 3354,
+        "last_cycle": 3359,
+        "hits": 17,
+        "status": "open"
+      },
+      {
+        "label": "add a new term to the conversation",
+        "parent": "current information",
+        "depth": 339,
+        "first_cycle": 3355,
+        "last_cycle": 3359,
+        "hits": 17,
+        "status": "open"
+      },
+      {
+        "label": "siri",
+        "parent": "add a new term to the conversation",
+        "depth": 340,
+        "first_cycle": 3356,
+        "last_cycle": 3359,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "universe",
+        "parent": "temperature",
+        "depth": 337,
+        "first_cycle": 3353,
+        "last_cycle": 3359,
+        "hits": 12,
+        "status": "open"
+      },
+      {
+        "label": "solar system",
+        "parent": "siri",
+        "depth": 341,
+        "first_cycle": 3357,
+        "last_cycle": 3359,
+        "hits": 11,
+        "status": "open"
+      },
+      {
+        "label": "public expression of agreement",
+        "parent": "solar system",
+        "depth": 342,
+        "first_cycle": 3358,
+        "last_cycle": 3359,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "public expression process",
+        "parent": "description of the topic",
+        "depth": 331,
+        "first_cycle": 3347,
+        "last_cycle": 3359,
+        "hits": 3,
+        "status": "open"
+      },
+      {
+        "label": "scientific description",
+        "parent": "solar system",
+        "depth": 342,
+        "first_cycle": 3358,
+        "last_cycle": 3359,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "speak",
+        "parent": "add a new term to the conversation",
+        "depth": 340,
+        "first_cycle": 3356,
+        "last_cycle": 3359,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "specific details",
+        "parent": "public expression of agreement",
+        "depth": 343,
+        "first_cycle": 3359,
+        "last_cycle": 3359,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "message",
+        "parent": "public expression of agreement",
+        "depth": 343,
+        "first_cycle": 3359,
+        "last_cycle": 3359,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -123,51 +231,6 @@
         "first_cycle": 3352,
         "last_cycle": 3358,
         "hits": 25,
-        "status": "open"
-      },
-      {
-        "label": "current information",
-        "parent": "current state",
-        "depth": 338,
-        "first_cycle": 3354,
-        "last_cycle": 3358,
-        "hits": 16,
-        "status": "open"
-      },
-      {
-        "label": "add a new term to the conversation",
-        "parent": "current information",
-        "depth": 339,
-        "first_cycle": 3355,
-        "last_cycle": 3358,
-        "hits": 16,
-        "status": "open"
-      },
-      {
-        "label": "universe",
-        "parent": "temperature",
-        "depth": 337,
-        "first_cycle": 3353,
-        "last_cycle": 3358,
-        "hits": 11,
-        "status": "open"
-      },
-      {
-        "label": "siri",
-        "parent": "add a new term to the conversation",
-        "depth": 340,
-        "first_cycle": 3356,
-        "last_cycle": 3358,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "solar system",
-        "parent": "siri",
-        "depth": 341,
-        "first_cycle": 3357,
-        "last_cycle": 3358,
-        "hits": 6,
         "status": "open"
       },
       {
@@ -189,34 +252,7 @@
         "status": "open"
       },
       {
-        "label": "public expression process",
-        "parent": "description of the topic",
-        "depth": 331,
-        "first_cycle": 3347,
-        "last_cycle": 3358,
-        "hits": 2,
-        "status": "open"
-      },
-      {
         "label": "who",
-        "parent": "solar system",
-        "depth": 342,
-        "first_cycle": 3358,
-        "last_cycle": 3358,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "public expression of agreement",
-        "parent": "solar system",
-        "depth": 342,
-        "first_cycle": 3358,
-        "last_cycle": 3358,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "scientific description",
         "parent": "solar system",
         "depth": 342,
         "first_cycle": 3358,
@@ -279,15 +315,6 @@
         "status": "open"
       },
       {
-        "label": "skepticism",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 3356,
-        "hits": 12176,
-        "status": "open"
-      },
-      {
         "label": "concept behind",
         "parent": "explain",
         "depth": 334,
@@ -307,15 +334,6 @@
       },
       {
         "label": "sir",
-        "parent": "add a new term to the conversation",
-        "depth": 340,
-        "first_cycle": 3356,
-        "last_cycle": 3356,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "speak",
         "parent": "add a new term to the conversation",
         "depth": 340,
         "first_cycle": 3356,
@@ -511,28 +529,9 @@
         "last_cycle": 3348,
         "hits": 167,
         "status": "open"
-      },
-      {
-        "label": "learn more",
-        "parent": "interester",
-        "depth": 286,
-        "first_cycle": 3290,
-        "last_cycle": 3348,
-        "hits": 63,
-        "status": "open"
-      },
-      {
-        "label": "aspect",
-        "parent": "brief description of what this turn should add",
-        "depth": 332,
-        "first_cycle": 3348,
-        "last_cycle": 3348,
-        "hits": 1,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "talking",
       "way",
       "here",
       "thanks",
@@ -563,10 +562,11 @@
       "current information",
       "add a new term to the conversation",
       "siri",
-      "solar system"
+      "solar system",
+      "public expression of agreement"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 3358,
+    "last_branch_cycle": 3359,
     "escape_pressure": 0
   }
 }
