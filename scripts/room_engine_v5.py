@@ -47,10 +47,11 @@ def _personality_compact_payload(payload, role, self_entity=None):
     for item in appraisal.get("schema_activation", [])[:2]:
         if not isinstance(item, dict):
             continue
+        # Clinical/schema names stay inside the deterministic appraiser. The
+        # language model receives only their current perceptual and coping pull.
         activated.append({
-            "pattern": item.get("schema"),
-            "interpretation": item.get("interpretation_bias"),
-            "coping": item.get("coping_bias"),
+            "interpretive_pull": item.get("interpretation_bias"),
+            "coping_pull": item.get("coping_bias"),
         })
     compact["personality_context"] = {
         "identity": fixed.get("core_identity"),
