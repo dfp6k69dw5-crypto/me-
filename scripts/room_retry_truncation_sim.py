@@ -17,6 +17,17 @@ def expression(text: str) -> str:
 
 
 def main() -> None:
+    truncated = (
+        "I think we could explore different themes and use Harper Lee's writing as a foundation for a different genre. "
+        "What themes do you have in mind for your next books or what"
+    )
+    repaired = engine._expression_quality.repair_expression(truncated, "sarah")
+    assert repaired != truncated, "RED: mid-sentence truncation survived repair"
+    assert not repaired.lower().endswith("or what"), "RED: dangling final clause survived repair"
+    assert repaired[-1:] in ".!?", "repaired expression is not grammatically closed"
+    assert engine._expression_quality.repair_expression("Guess what?", "sarah") == "Guess what?"
+    assert engine._expression_quality.repair_expression("I think the ending matters.", "sarah") == "I think the ending matters."
+
     allen_words = "Why do platypuses have bills?"
     payload = {
         "entity": "sarah",
@@ -63,21 +74,6 @@ def main() -> None:
     assert first_prefix == second_prefix, "RED: rejection added model-visible retry prose"
     assert "use a different idea" not in prompts[1].lower(), "RED: retry instruction can be echoed into dialogue"
     assert allen_words in prompts[1], "Allen's newest words were lost during retry recovery"
-
-    # Live cycle 3902 ended in this shape: a complete sentence followed by a
-    # model-truncated question fragment. Mechanical repair should retain only
-    # complete public language instead of publishing the dangling tail.
-    truncated = (
-        "I think we could explore different themes and use Harper Lee's writing as a foundation for a different genre. "
-        "What themes do you have in mind for your next books or what"
-    )
-    repaired = engine._expression_quality.repair_expression(truncated, "sarah")
-    assert repaired != truncated, "RED: mid-sentence truncation survived repair"
-    assert not repaired.lower().endswith("or what"), "RED: dangling final clause survived repair"
-    assert repaired[-1:] in ".!?", "repaired expression is not grammatically closed"
-
-    assert engine._expression_quality.repair_expression("Guess what?", "sarah") == "Guess what?"
-    assert engine._expression_quality.repair_expression("I think the ending matters.", "sarah") == "I think the ending matters."
 
     print("ROOM RETRY/TRUNCATION BOUNDARY SIM: GREEN")
 
