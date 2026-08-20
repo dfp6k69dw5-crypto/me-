@@ -32,20 +32,20 @@ This is an implementation-persistence correction under the same behavioral evide
 4. **Natural-behavior evidence — PASS WITH LIMITATION.** Interaction history should update familiarity; no forced replies are added.
 5. **Mechanism evidence — PASS.** Reuse the existing `observe_message()` relationship mechanism rather than inventing a separate Allen-specific social model.
 6. **Competing explanations — PASS.** Transcript delivery and participant representation are independently confirmed; persistence remains the missing layer.
-7. **Replication/correction/limitations — PASS.** A new simulator must reproduce the missing update before deployment.
+7. **Replication/correction/limitations — PASS.** A new simulator reproduces the missing update on the frozen pre-fix code.
 8. **Context transfer — PASS WITH LIMITATION.** Allen remains a non-generating participant; only listener observation is generalized.
-9. **Implementation mapping — PASS.** The injector will idempotently observe retained/new Allen turns and persist the resulting four listener minds.
-10. **Post-change validation — DEFINED BEFORE PATCH.** Exact simulator must move red→green, existing response simulator and engine self-test must remain green, then live state must show nonzero Allen observation counters.
+9. **Implementation mapping — PASS.** The injector idempotently observes retained/new Allen turns and persists the resulting four listener minds.
+10. **Post-change validation — PASS PRE-MERGE.** Exact red→green simulator pair plus the existing response and engine tests are recorded below; live persistence remains the final post-merge check.
 
 ## Pre-change failing invariant
 
 Given one valid Allen message and a fresh four-mind social state:
 
 1. the message can be appended to conversation/discourse — PASS already;
-2. every autonomous entity should record one observed Allen turn — FAIL currently;
-3. the explicitly addressed entity should record one direct Allen turn — FAIL currently;
-4. repeating the persistence step should be idempotent — not implemented currently;
-5. Allen must not become an autonomous entity — must remain true.
+2. every autonomous entity should record one observed Allen turn — FAIL pre-fix;
+3. the explicitly addressed entity should record one direct Allen turn — FAIL pre-fix;
+4. repeating the persistence step should be idempotent — absent pre-fix;
+5. Allen must not become an autonomous entity — remained true.
 
 ## Implementation mapping
 
@@ -55,3 +55,24 @@ Given one valid Allen message and a fresh four-mind social state:
 - Derive the original message cycle from its beat ID when possible so historical direct-turn recency is not rewritten as the current cycle.
 - Persist `room/cognitive_state.json` whenever unseen Allen history was observed, even if the pending queue is empty.
 - Keep Allen out of generator iteration, entity profiles, node ownership, and self-history.
+
+## Simulator-first validation
+
+### Red baseline
+
+A test-only branch froze the pre-fix injector and added only the observation simulator to the existing architecture smoke. Pull request 68 / workflow run `32316291483` failed exactly at the intended boundary:
+
+`AssertionError: participant observation helper exists: None`
+
+Before that failure, the existing engine self-test and Allen response-participant simulator both passed, isolating the missing layer to participant social-observation persistence rather than generation or response recognition.
+
+### Green candidate
+
+Pull request 67 / workflow run `32316227149` passed the combined architecture smoke after the injector patch. The run executed:
+
+- Python compile checks for the engine, social module, private model, participant injector, and observation simulator;
+- `room_engine_v5.py selftest`;
+- `room_allen_response_sim.py`;
+- `room_allen_observation_sim.py`.
+
+All completed successfully. The observation simulator verifies one unseen Allen turn increments all four listeners' observed-turn counters, increments direct-turn state only for the explicitly addressed listener, stores Allen as an observed room memory, records the processed message ID, is idempotent on replay, and does not create an Allen autonomous entity.
