@@ -13,8 +13,10 @@ remain Sarah/Mara/Owen/Jules only.
 
 import copy
 import hashlib
+import json
 import os
 import re
+import urllib.error
 
 import room_private_model as _private_model
 import room_personality_v2 as _personality_v2
@@ -50,6 +52,14 @@ def _personality_compact_payload(payload, role, self_entity=None):
     source = payload if isinstance(payload, dict) else {}
     safe_payload = {key: source[key] for key in _MODEL_INPUT_KEYS if key in source}
     compact = _original_compact_payload(safe_payload, role, self_entity)
+
+    # Forced-turn machinery is useful to the runner, not to cognition. Keep it
+    # outside the model boundary. A diversity hint may survive, but only as an
+    # ordinary optional conversational direction rather than an assigned job.
+    compact.pop("must_respond", None)
+    if "angle" in compact:
+        compact["possible_direction"] = compact.pop("angle")
+
     profile = source.get("profile") if isinstance(source.get("profile"), dict) else {}
     fixed = profile.get("psychology_v2") if isinstance(profile.get("psychology_v2"), dict) else None
     entity = str(self_entity or source.get("entity") or "").lower()
@@ -91,6 +101,117 @@ def _personality_compact_payload(payload, role, self_entity=None):
 
 
 _private_model._compact_payload = _personality_compact_payload
+
+# The constrained schema is model-visible too. Remove the two fields whose only
+# purpose was to tell the model that speaking was mandatory. Reinsert them only
+# after model output, so downstream engine semantics remain unchanged.
+_original_schema = _private_model._schema
+_original_validate = _private_model._validate
+
+
+def _private_schema(role, self_entity=None):
+    schema = copy.deepcopy(_original_schema(role, self_entity))
+    props = schema.get("properties") if isinstance(schema.get("properties"), dict) else {}
+    required = list(schema.get("required") or [])
+    if role == "thought":
+        props.pop("must_respond", None)
+        required = [key for key in required if key != "must_respond"]
+    elif role == "expression":
+        props.pop("decision", None)
+        required = [key for key in required if key != "decision"]
+    schema["properties"] = props
+    schema["required"] = required
+    return schema
+
+
+def _private_validate(role, obj, compact, prompt, self_entity=None):
+    normalized = dict(obj) if isinstance(obj, dict) else obj
+    if isinstance(normalized, dict):
+        if role == "thought":
+            normalized.setdefault("must_respond", True)
+        elif role == "expression":
+            normalized.setdefault("decision", "SPEAK")
+    return _original_validate(role, normalized, compact, prompt, self_entity)
+
+
+_private_model._schema = _private_schema
+_private_model._validate = _private_validate
+
+# Runtime prompt secrets are gates/configuration, not model context. The model
+# never receives their text. Instead each role gets a short conversational task
+# plus the already allowlisted/sanitized context above.
+_ROLE_INSTRUCTION = {
+    "comprehension": (
+        "Understand the newest conversational message and its social meaning. "
+        "Use the supplied conversation and relationship context, and stay grounded in what was actually said."
+    ),
+    "thought": (
+        "Choose this person's next conversational direction from the newest message, relationship context, "
+        "and personality. Prefer a natural reaction over continuing an unrelated older subject."
+    ),
+    "expression": (
+        "Write this person's next natural conversational reply. Ground it in the newest spoken line when there "
+        "is one. Let personality shape perspective and tone, and avoid merely repeating earlier wording."
+    ),
+}
+
+
+def _private_run(role: str, payload: dict, timeout: int = 30):
+    # Preserve the existing enable contract without exposing the secret contents.
+    if not os.environ.get("ROOM_NODE_PROMPT", "").strip():
+        return None
+    model_url = os.environ.get("ROOM_MODEL_URL", "").strip()
+    if not model_url:
+        raise RuntimeError(f"private model unavailable for {role}")
+
+    self_entity = _private_model._norm(payload.get("entity")) if role == "expression" else None
+    compact = _private_model._compact_payload(payload, role, self_entity)
+    instruction = _ROLE_INSTRUCTION.get(role, _ROLE_INSTRUCTION["thought"])
+
+    attempts = 5 if role == "expression" else 2
+    last_reason = "unknown"
+    for attempt in range(attempts):
+        retry = ""
+        if attempt:
+            retry = "\nUse a different idea and wording while staying with the same conversation."
+        combined = (
+            instruction
+            + retry
+            + "\nCONVERSATION\n"
+            + json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
+            + "\nRESPONSE\n"
+        )
+        if role == "expression":
+            voice_index = _private_model.PEOPLE.index(self_entity) if self_entity in _private_model.PEOPLE else 0
+            temperature = min(1.28, 0.88 + 0.06 * voice_index + 0.09 * attempt)
+        else:
+            temperature = {"comprehension": 0.15, "thought": 0.25}.get(role, 0.25) + 0.04 * attempt
+        try:
+            out = _private_model._request(model_url, combined, role, temperature, timeout, self_entity, attempt)
+            if not out:
+                last_reason = "empty_output"
+                continue
+            obj = _private_model._validate(role, _private_model._extract_json(out), compact, instruction, self_entity)
+            if role == "expression":
+                obj = _private_model._sanitize_expression(obj, compact, self_entity)
+                if attempt < attempts - 1 and _private_model._too_similar_to_context(str(obj.get("utterance", "")), compact):
+                    last_reason = "duplicate_context"
+                    continue
+            return obj
+        except urllib.error.HTTPError as exc:
+            detail = _private_model._safe_http_detail(exc)
+            suffix = f": {detail}" if detail else ""
+            raise RuntimeError(f"private model request failed for {role}: HTTP {exc.code}{suffix}") from exc
+        except ValueError as exc:
+            last_reason = str(exc)[:80]
+            continue
+        except Exception as exc:
+            raise RuntimeError(f"private model request failed for {role}: {type(exc).__name__}") from exc
+
+    raise RuntimeError(f"private model output rejected for {role}: {last_reason}")
+
+
+_private_model.run = _private_run
 
 import room_engine_v5_core as _core
 
