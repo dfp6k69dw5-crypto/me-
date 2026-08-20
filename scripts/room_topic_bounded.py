@@ -67,6 +67,7 @@ def topic_template(cycle: int = 0) -> dict:
         "recent_terms": [],
         "last_shift_cycle": int(cycle),
         "status": "forming",
+        "bridge_pending": False,
         # Compatibility view for UI/debug code: root plus sibling facets only.
         "branches": [],
         "branch_history": [],
@@ -159,6 +160,7 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
             "low_novelty_beats": 3 if had_runaway_depth else 0,
             "recent_terms": _unique(source.get("recent_terms") or [], MAX_RECENT_TERMS),
             "status": "ready_to_bridge" if had_runaway_depth else "active",
+            "bridge_pending": bool(had_runaway_depth),
             "branch_history": [],
             "focus_turns": 0,
             "escape_pressure": 0,
@@ -172,6 +174,7 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
     defaults.update(source)
     defaults["semantic_schema"] = SCHEMA
     defaults["participants"] = list(social.PARTICIPANTS)
+    defaults["bridge_pending"] = bool(defaults.get("bridge_pending", False))
     defaults["root"] = root
     facets = [term for term in _unique(defaults.get("facets") or [], MAX_FACETS + 1) if not (root and _near(term, root))][:MAX_FACETS]
     defaults["facets"] = facets
@@ -185,6 +188,8 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
     defaults["branch_history"] = _unique(defaults.get("branch_history") or [], MAX_HISTORY)
     defaults["recent_terms"] = _unique(defaults.get("recent_terms") or [], MAX_RECENT_TERMS)
     defaults["branches"] = _flat_branches(root, facets, cycle)
+    if defaults["bridge_pending"]:
+        defaults["status"] = "ready_to_bridge"
     return defaults
 
 
@@ -202,6 +207,7 @@ def new_topic_from_terms(terms, cycle: int, prior: dict | None = None) -> dict:
         "facets": facets,
         "visited_facets": [current],
         "status": "active",
+        "bridge_pending": False,
         "recent_terms": clean[:MAX_RECENT_TERMS],
     })
     if prior and prior.get("current_facet"):
@@ -246,6 +252,7 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
         return new_topic_from_terms(terms, cycle, current)
 
     root = current.get("root")
+    bridge_pending = bool(current.get("bridge_pending", False))
     previous_terms = list(current.get("recent_terms") or [])
     novel = [term for term in terms if not any(_near(term, old) for old in [root, *current.get("facets", [])] if old)]
 
@@ -288,7 +295,7 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
 
     meaningful = [term for term in terms if not any(_near(term, old) for old in previous_terms)]
     low_novelty = 0 if meaningful else int(current.get("low_novelty_beats", 0) or 0) + 1
-    status = "ready_to_bridge" if low_novelty >= 3 else "active"
+    status = "ready_to_bridge" if bridge_pending or low_novelty >= 3 else "active"
 
     current.update({
         "semantic_schema": SCHEMA,
@@ -303,6 +310,7 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
         "recent_terms": terms[:MAX_RECENT_TERMS],
         "low_novelty_beats": low_novelty,
         "status": status,
+        "bridge_pending": bridge_pending,
         "escape_pressure": low_novelty,
         "last_branch_cycle": int(cycle),
         "participants": list(social.PARTICIPANTS),
@@ -313,4 +321,4 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
 
 
 def should_shift_topic(topic: dict | None) -> bool:
-    return bool(topic and topic.get("status") == "ready_to_bridge")
+    return bool(topic and (topic.get("bridge_pending") or topic.get("status") == "ready_to_bridge"))
