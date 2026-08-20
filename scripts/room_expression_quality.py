@@ -16,6 +16,15 @@ _RECOVERY_SUBJECTS = (
 )
 _PRONOUN_R = re.compile(r"\b(?:i|we|you|they)\s+r\b", re.I)
 _TRAILING_FRAGMENT = re.compile(r",\s*$")
+_DANGLING_END = re.compile(
+    r"\b(?:and|or|but|because|so|to|for|with|about|if|when|while|which|who|what|how|why|where|whether|than)\b"
+    r"(?:\s+\b(?:what|which|who|how|why|where|whether|to)\b)?\s*$",
+    re.I,
+)
+_RETRY_PROSE = (
+    "\nUse a different idea and wording while staying with the same conversation. "
+    "Keep the reply concise and grammatically complete."
+)
 
 
 def _tokens(value: object) -> list[str]:
@@ -130,6 +139,18 @@ def _cap_complete(text: str) -> str:
     return (cut + ".") if cut else ""
 
 
+def _drop_incomplete_tail(text: str) -> str:
+    """Drop only a dangling final clause when an earlier sentence is complete."""
+    text = text.strip()
+    if not text or text[-1:] in ".!?" or not _DANGLING_END.search(text):
+        return text
+    endings = list(re.finditer(r"[.!?]", text))
+    if not endings:
+        return text
+    candidate = text[: endings[-1].end()].strip()
+    return candidate or text
+
+
 def repair_expression(utterance: object, self_entity: str | None = None) -> str:
     """Repair mechanical generation damage without inventing new content."""
     text = re.sub(r"\s+", " ", str(utterance or "")).strip()
@@ -140,6 +161,7 @@ def repair_expression(utterance: object, self_entity: str | None = None) -> str:
     text = _dedupe_sentences(text)
     text = _truncate_before_repeated_ngram(text)
     text = _cap_complete(text)
+    text = _drop_incomplete_tail(text)
     if _TRAILING_FRAGMENT.search(text):
         text = _TRAILING_FRAGMENT.sub(".", text)
     return text.strip()
@@ -222,6 +244,8 @@ def quality_issue(utterance: object, compact: dict, self_entity: str | None, sim
         return "self_address"
     if _TRAILING_FRAGMENT.search(text):
         return "trailing_fragment"
+    if text[-1:] not in ".!?" and _DANGLING_END.search(text):
+        return "trailing_fragment"
     if _has_repeated_ngram(text):
         _escape_stale_context(compact, self_entity)
         return "self_repetition"
@@ -229,6 +253,11 @@ def quality_issue(utterance: object, compact: dict, self_entity: str | None, sim
         _escape_stale_context(compact, self_entity)
         return "duplicate_context"
     return None
+
+
+def _strip_retry_prose(prompt: object) -> str:
+    """Retry control is internal state; never expose it as model-visible prose."""
+    return str(prompt or "").replace(_RETRY_PROSE, "")
 
 
 # Install a mechanical repair stage into the already-existing private-model
@@ -246,3 +275,25 @@ if not getattr(_private_model._sanitize_expression, "_room_quality_repair", Fals
 
     _quality_sanitize_expression._room_quality_repair = True
     _private_model._sanitize_expression = _quality_sanitize_expression
+
+
+# The engine may retry a rejected generation with a higher sampling temperature,
+# but the reason/revision instruction stays outside cognition. Strip the legacy
+# retry sentence at the final network boundary so every attempt receives the same
+# conversational instruction prefix.
+if not getattr(_private_model._request, "_room_retry_boundary", False):
+    _original_request = _private_model._request
+
+    def _quality_request(model_url, prompt, role, temperature, timeout, self_entity=None, attempt=0):
+        return _original_request(
+            model_url,
+            _strip_retry_prose(prompt),
+            role,
+            temperature,
+            timeout,
+            self_entity,
+            attempt,
+        )
+
+    _quality_request._room_retry_boundary = True
+    _private_model._request = _quality_request
