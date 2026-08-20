@@ -1,8 +1,10 @@
 {
-  "checked_at": "2026-08-19T23:54:22.044619Z",
-  "pass": true,
-  "sim_exit_code": 0,
+  "checked_at": "2026-08-20T00:08:38.865747Z",
+  "pass": false,
+  "response_sim_exit_code": 0,
+  "observation_sim_exit_code": 1,
   "engine_selftest_exit_code": 0,
-  "sim_output": "PASS: autonomous generator iteration remains exactly four entities\nPASS: Allen is not generated as an autonomous entity\nPASS: engine participant set contains Allen\nPASS: social participant set contains Allen\nPASS: social generator order remains exactly four\nPASS: relationship migration creates Allen for every autonomous entity\nPASS: social event classifier recognizes Allen as Sarah's direct addressee partner\nPASS: topic participant state contains Allen\nPASS: direct Allen turn updates Sarah-to-Allen relationship state\nPASS: expression schema can target Allen\nPASS: thought schema can choose Allen\nPASS: latest Allen turn remains active engine partner\nPASS: Allen engine partner has a usable relationship view\nPASS: Allen social participation boundary is green\n",
+  "response_sim_output": "PASS: autonomous generator iteration remains exactly four entities\nPASS: Allen is not generated as an autonomous entity\nPASS: engine participant set contains Allen\nPASS: social participant set contains Allen\nPASS: social generator order remains exactly four\nPASS: relationship migration creates Allen for every autonomous entity\nPASS: social event classifier recognizes Allen as Sarah's direct addressee partner\nPASS: topic participant state contains Allen\nPASS: direct Allen turn updates Sarah-to-Allen relationship state\nPASS: expression schema can target Allen\nPASS: thought schema can choose Allen\nPASS: latest Allen turn remains active engine partner\nPASS: Allen engine partner has a usable relationship view\nPASS: Allen social participation boundary is green\n",
+  "observation_sim_output": "Traceback (most recent call last):\n  File \"/home/runner/work/me-/me-/scripts/room_allen_observation_sim.py\", line 104, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/runner/work/me-/me-/scripts/room_allen_observation_sim.py\", line 25, in main\n    require(\"participant observation helper exists\", callable(observe), observe)\n  File \"/home/runner/work/me-/me-/scripts/room_allen_observation_sim.py\", line 19, in require\n    raise AssertionError(f\"{name}: {detail}\")\nAssertionError: participant observation helper exists: None\n",
   "engine_selftest_output": "PASS: sequential four-voice engine with repetition-loop breakout and no deterministic public language\n"
 }
