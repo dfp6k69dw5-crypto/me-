@@ -100,6 +100,7 @@ jobs:
               'allen_relationship_present':relationships,
               'allen_relationship_present_for_all':all(relationships.values()),
               'allen_relationship_stats':relationship_stats,
+              'participant_observation_id_count':len(list(minds.get('participant_observation_ids') or [])) if isinstance(minds,dict) else 0,
               'retained_allen_turn_count':len(recent_allen),
               'latest_allen_turn':recent_allen[-1] if recent_allen else None,
               'response_baseline':{
@@ -126,4 +127,4 @@ jobs:
             sleep $attempt
           done
 
-# response-baseline-probe-trigger: 2026-08-20T00:02Z
+# backfill-verification-trigger: 2026-08-20T00:17Z
