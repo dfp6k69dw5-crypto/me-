@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T05:13:42.621743+00:00",
-  "cycle_key": "32327734424:1:101",
+  "generated_at": "2026-08-20T05:14:55.980759+00:00",
+  "cycle_key": "32327734424:1:102",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,36 +29,50 @@
   },
   "selected_skills": [
     {
-      "name": "creative-bridge",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "domain": "memory-callback",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "idea"
+        "history"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "idea"
+            "history"
           ],
-          "weight": 1.45
-        },
+          "weight": 1.8
+        }
+      ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "conversation"
+      ],
+      "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "idea"
+            "conversation"
           ],
-          "weight": 0.92
+          "weight": 1.8
         }
       ]
     }
   ],
-  "context_fingerprint": "5b1574589327",
+  "context_fingerprint": "e2f919e7b043",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 488,
-  "approx_added_tokens": 122
+  "temporary_skill_chars": 853,
+  "approx_added_tokens": 213
 }
