@@ -14,6 +14,7 @@ remain Sarah/Mara/Owen/Jules only.
 import copy
 import hashlib
 import os
+import re
 
 import room_private_model as _private_model
 
@@ -160,6 +161,13 @@ def _participant_recurrent(node, key, bus_data):
             expression = dict(expression)
             expression["target"] = "allen"
             expression["move"] = "answer" if primary_allen_reply else "deepen"
+            # Hidden targeting is not enough for the participant-facing primary
+            # response: live data showed dozens of Allen targets with zero spoken
+            # uses of his name. Preserve model wording when it already names Allen;
+            # otherwise make the primary addressee audible with a minimal prefix.
+            utterance = str(expression.get("utterance") or "").strip()
+            if primary_allen_reply and utterance and not re.search(r"\ballen\b", utterance, re.I):
+                expression["utterance"] = f"Allen, {utterance}"
             private["expression"] = expression
             result["private"] = private
     return result
