@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3737,
+  "cycle": 3738,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-20T09:48:58.000104Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-20T09:49:56.869294Z",
   "messages": 1000,
-  "last_public_event": "20260820T094857998-jules-v5",
+  "last_public_event": "20260820T094956867-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003737",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003738",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "intelligent",
+    "current_facet": "human",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "first skill",
       "child",
       "small",
       "sister",
@@ -71,7 +70,8 @@
       "favorite expressions",
       "values",
       "thoughts",
-      "intelligent"
+      "intelligent",
+      "human"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,16 +85,17 @@
       "jules",
       "allen"
     ],
-    "turns": 7473,
-    "low_novelty_beats": 1,
+    "turns": 7475,
+    "low_novelty_beats": 0,
     "recent_terms": [
       "intelligent",
       "learning",
-      "skepticism",
+      "public expressions",
+      "learning process",
+      "human",
       "public expression",
-      "skeptic",
-      "learning public expressions",
-      "public expressions"
+      "process",
+      "trait"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -104,8 +105,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3737,
-        "hits": 52466,
+        "last_cycle": 3738,
+        "hits": 52486,
         "status": "open"
       },
       {
@@ -113,8 +114,71 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3737,
-        "hits": 14160,
+        "last_cycle": 3738,
+        "hits": 14167,
+        "status": "open"
+      },
+      {
+        "label": "public expressions",
+        "parent": "publicness",
+        "depth": 291,
+        "first_cycle": 3726,
+        "last_cycle": 3738,
+        "hits": 169,
+        "status": "open"
+      },
+      {
+        "label": "values",
+        "parent": "favorite expressions",
+        "depth": 293,
+        "first_cycle": 3729,
+        "last_cycle": 3738,
+        "hits": 54,
+        "status": "open"
+      },
+      {
+        "label": "thoughts",
+        "parent": "public expressions",
+        "depth": 292,
+        "first_cycle": 3733,
+        "last_cycle": 3738,
+        "hits": 48,
+        "status": "open"
+      },
+      {
+        "label": "personality traits",
+        "parent": "decision-making",
+        "depth": 286,
+        "first_cycle": 3719,
+        "last_cycle": 3738,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "intelligent",
+        "parent": "thoughts",
+        "depth": 293,
+        "first_cycle": 3736,
+        "last_cycle": 3738,
+        "hits": 15,
+        "status": "open"
+      },
+      {
+        "label": "human",
+        "parent": "intelligent",
+        "depth": 294,
+        "first_cycle": 3738,
+        "last_cycle": 3738,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "process",
+        "parent": "intelligent",
+        "depth": 294,
+        "first_cycle": 3738,
+        "last_cycle": 3738,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -124,42 +188,6 @@
         "first_cycle": 3650,
         "last_cycle": 3737,
         "hits": 551,
-        "status": "open"
-      },
-      {
-        "label": "public expressions",
-        "parent": "publicness",
-        "depth": 291,
-        "first_cycle": 3726,
-        "last_cycle": 3737,
-        "hits": 159,
-        "status": "open"
-      },
-      {
-        "label": "values",
-        "parent": "favorite expressions",
-        "depth": 293,
-        "first_cycle": 3729,
-        "last_cycle": 3737,
-        "hits": 53,
-        "status": "open"
-      },
-      {
-        "label": "thoughts",
-        "parent": "public expressions",
-        "depth": 292,
-        "first_cycle": 3733,
-        "last_cycle": 3737,
-        "hits": 40,
-        "status": "open"
-      },
-      {
-        "label": "intelligent",
-        "parent": "thoughts",
-        "depth": 293,
-        "first_cycle": 3736,
-        "last_cycle": 3737,
-        "hits": 6,
         "status": "open"
       },
       {
@@ -277,15 +305,6 @@
         "first_cycle": 3727,
         "last_cycle": 3727,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "personality traits",
-        "parent": "decision-making",
-        "depth": 286,
-        "first_cycle": 3719,
-        "last_cycle": 3726,
-        "hits": 23,
         "status": "open"
       },
       {
@@ -512,28 +531,9 @@
         "last_cycle": 3710,
         "hits": 8,
         "status": "open"
-      },
-      {
-        "label": "connect",
-        "parent": "beliefs",
-        "depth": 286,
-        "first_cycle": 3702,
-        "last_cycle": 3709,
-        "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "beliefs",
-        "parent": "sister",
-        "depth": 285,
-        "first_cycle": 3700,
-        "last_cycle": 3708,
-        "hits": 53,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "ska",
       "explanation",
       "essential",
       "development goal",
@@ -564,10 +564,11 @@
       "public expressions",
       "favorite expressions",
       "values",
-      "thoughts"
+      "thoughts",
+      "intelligent"
     ],
-    "focus_turns": 2,
-    "last_branch_cycle": 3736,
+    "focus_turns": 0,
+    "last_branch_cycle": 3738,
     "escape_pressure": 0
   }
 }
