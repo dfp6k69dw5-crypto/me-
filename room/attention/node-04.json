@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T07:03:23.777391+00:00",
-  "cycle_key": "32327734424:1:203",
+  "generated_at": "2026-08-20T07:04:23.104812+00:00",
+  "cycle_key": "32327734424:1:204",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -28,6 +28,27 @@
     "min_score": 1.1
   },
   "selected_skills": [
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "sure"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 1.8
+        }
+      ]
+    },
     {
       "name": "concrete-specificity",
       "tier": "project",
@@ -59,6 +80,13 @@
           "matched": [
             "detail"
           ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "detail"
+          ],
           "weight": 0.92
         },
         {
@@ -67,61 +95,12 @@
             "detail"
           ],
           "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "detail"
-          ],
-          "weight": 0.64
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "conversation"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "73e77b4520f9",
+  "context_fingerprint": "4a5cd42a1441",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 831,
-  "approx_added_tokens": 208
+  "temporary_skill_chars": 839,
+  "approx_added_tokens": 210
 }
