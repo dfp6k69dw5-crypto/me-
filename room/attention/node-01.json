@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T18:17:55.744417+00:00",
-  "cycle_key": "32401708714:1:4",
+  "generated_at": "2026-08-20T18:19:56.293114+00:00",
+  "cycle_key": "32401708714:1:5",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,11 +32,12 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 2.95,
-      "confidence": 0.965,
-      "raw_score": 2.95,
+      "score": 3.26,
+      "confidence": 0.98,
+      "raw_score": 3.26,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "nature",
         "novel",
         "connection"
       ],
@@ -44,9 +45,23 @@
         {
           "kind": "message",
           "matched": [
-            "novel"
+            "nature"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "novel"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "novel"
+          ],
+          "weight": 0.76
         },
         {
           "kind": "message",
@@ -54,14 +69,7 @@
             "connection",
             "novel"
           ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "novel"
-          ],
-          "weight": 0.64
+          "weight": 0.54
         },
         {
           "kind": "topic_support",
@@ -73,47 +81,37 @@
       ]
     },
     {
-      "name": "critical-testing",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 2.38,
-      "confidence": 0.909,
-      "raw_score": 2.38,
+      "domain": "affect",
+      "score": 1.83,
+      "confidence": 0.788,
+      "raw_score": 1.83,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "evidence",
-        "why",
-        "cause",
-        "true"
+        "feel",
+        "excited"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "evidence"
+            "feel"
           ],
-          "weight": 0.92
+          "weight": 1.45
         },
         {
-          "kind": "message",
+          "kind": "topic_support",
           "matched": [
-            "why"
+            "excited"
           ],
-          "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "cause",
-            "true"
-          ],
-          "weight": 0.46
+          "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "0fc59c63d86a",
+  "context_fingerprint": "c841f664c416",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 834,
-  "approx_added_tokens": 208
+  "temporary_skill_chars": 849,
+  "approx_added_tokens": 212
 }
