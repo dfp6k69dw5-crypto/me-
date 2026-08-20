@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T10:49:52.609770+00:00",
-  "cycle_key": "32350827191:1:110",
+  "generated_at": "2026-08-20T10:50:47.753629+00:00",
+  "cycle_key": "32350827191:1:111",
   "node": 0,
   "entity": "sarah",
   "role": "comprehension",
@@ -32,25 +32,33 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "score": 1.28,
+      "confidence": 0.58,
+      "raw_score": 1.56,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "conversation",
         "answer"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "conversation"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
             "answer"
           ],
-          "weight": 1.8
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "89c4ba54f427",
+  "context_fingerprint": "ec40d3da2127",
   "base_prompt_chars": 2277,
   "temporary_skill_chars": 521,
   "approx_added_tokens": 130

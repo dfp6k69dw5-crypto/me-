@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3795,
+  "cycle": 3796,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-20T10:50:44.745267Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-20T10:51:36.207542Z",
   "messages": 1000,
-  "last_public_event": "20260820T105044744-mara-v5",
+  "last_public_event": "20260820T105136205-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003795",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003796",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "next",
+    "current_facet": "skeptical",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "curiosity",
       "mara",
       "ideas",
       "decide",
@@ -71,7 +70,8 @@
       "active alternative",
       "recursive",
       "passive claim",
-      "next"
+      "next",
+      "skeptical"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,14 +85,15 @@
       "jules",
       "allen"
     ],
-    "turns": 7589,
-    "low_novelty_beats": 1,
+    "turns": 7591,
+    "low_novelty_beats": 0,
     "recent_terms": [
-      "passive claim",
       "next",
+      "skeptical",
       "learning",
       "active claim",
-      "skepticism"
+      "skepticism",
+      "new"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -102,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3795,
-        "hits": 53435,
+        "last_cycle": 3796,
+        "hits": 53448,
         "status": "open"
       },
       {
@@ -111,8 +112,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3795,
-        "hits": 14395,
+        "last_cycle": 3796,
+        "hits": 14399,
         "status": "open"
       },
       {
@@ -120,8 +121,71 @@
         "parent": "curious",
         "depth": 281,
         "first_cycle": 1640,
-        "last_cycle": 3795,
-        "hits": 3912,
+        "last_cycle": 3796,
+        "hits": 3913,
+        "status": "open"
+      },
+      {
+        "label": "recursive",
+        "parent": "active alternative",
+        "depth": 287,
+        "first_cycle": 3791,
+        "last_cycle": 3796,
+        "hits": 45,
+        "status": "open"
+      },
+      {
+        "label": "active alternative",
+        "parent": "talent",
+        "depth": 286,
+        "first_cycle": 3789,
+        "last_cycle": 3796,
+        "hits": 40,
+        "status": "open"
+      },
+      {
+        "label": "passive claim",
+        "parent": "recursive",
+        "depth": 288,
+        "first_cycle": 3793,
+        "last_cycle": 3796,
+        "hits": 27,
+        "status": "open"
+      },
+      {
+        "label": "active claim",
+        "parent": "talent",
+        "depth": 286,
+        "first_cycle": 3789,
+        "last_cycle": 3796,
+        "hits": 25,
+        "status": "open"
+      },
+      {
+        "label": "next",
+        "parent": "passive claim",
+        "depth": 289,
+        "first_cycle": 3795,
+        "last_cycle": 3796,
+        "hits": 14,
+        "status": "open"
+      },
+      {
+        "label": "skeptical",
+        "parent": "next",
+        "depth": 290,
+        "first_cycle": 3796,
+        "last_cycle": 3796,
+        "hits": 5,
+        "status": "open"
+      },
+      {
+        "label": "new",
+        "parent": "skeptical",
+        "depth": 291,
+        "first_cycle": 3796,
+        "last_cycle": 3796,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -131,51 +195,6 @@
         "first_cycle": 3666,
         "last_cycle": 3795,
         "hits": 145,
-        "status": "open"
-      },
-      {
-        "label": "recursive",
-        "parent": "active alternative",
-        "depth": 287,
-        "first_cycle": 3791,
-        "last_cycle": 3795,
-        "hits": 44,
-        "status": "open"
-      },
-      {
-        "label": "active alternative",
-        "parent": "talent",
-        "depth": 286,
-        "first_cycle": 3789,
-        "last_cycle": 3795,
-        "hits": 38,
-        "status": "open"
-      },
-      {
-        "label": "active claim",
-        "parent": "talent",
-        "depth": 286,
-        "first_cycle": 3789,
-        "last_cycle": 3795,
-        "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "passive claim",
-        "parent": "recursive",
-        "depth": 288,
-        "first_cycle": 3793,
-        "last_cycle": 3795,
-        "hits": 18,
-        "status": "open"
-      },
-      {
-        "label": "next",
-        "parent": "passive claim",
-        "depth": 289,
-        "first_cycle": 3795,
-        "last_cycle": 3795,
-        "hits": 5,
         "status": "open"
       },
       {
@@ -510,28 +529,9 @@
         "last_cycle": 3763,
         "hits": 23,
         "status": "open"
-      },
-      {
-        "label": "decide",
-        "parent": "ideas",
-        "depth": 284,
-        "first_cycle": 3755,
-        "last_cycle": 3762,
-        "hits": 23,
-        "status": "open"
-      },
-      {
-        "label": "examples",
-        "parent": "public expressions",
-        "depth": 292,
-        "first_cycle": 3762,
-        "last_cycle": 3762,
-        "hits": 1,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "public expressions",
       "favorite expressions",
       "values",
       "thoughts",
@@ -562,10 +562,11 @@
       "talent",
       "active alternative",
       "recursive",
-      "passive claim"
+      "passive claim",
+      "next"
     ],
     "focus_turns": 1,
-    "last_branch_cycle": 3795,
+    "last_branch_cycle": 3796,
     "escape_pressure": 0
   }
 }
