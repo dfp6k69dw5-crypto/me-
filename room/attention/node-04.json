@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T02:43:52.086228+00:00",
-  "cycle_key": "32320379323:1:83",
+  "generated_at": "2026-08-20T02:44:56.410886+00:00",
+  "cycle_key": "32320379323:1:84",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,64 +29,58 @@
   },
   "selected_skills": [
     {
-      "name": "technical-systems",
-      "tier": "project",
-      "domain": "technical-systems",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "system"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "system"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "system"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "system"
-          ],
-          "weight": 0.76
-        }
-      ]
-    },
-    {
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.33,
+      "confidence": 0.602,
+      "raw_score": 1.61,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "asked",
         "question"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "asked"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
             "question"
+          ],
+          "weight": 0.46
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "compare"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "compare"
           ],
           "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "18ea828bca0c",
+  "context_fingerprint": "652a1fdd9a10",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 907,
-  "approx_added_tokens": 227
+  "temporary_skill_chars": 867,
+  "approx_added_tokens": 217
 }
