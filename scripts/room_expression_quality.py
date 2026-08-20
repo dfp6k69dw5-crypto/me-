@@ -30,6 +30,22 @@ _RETRY_PROSE = (
     "\nUse a different idea and wording while staying with the same conversation. "
     "Keep the reply concise and grammatically complete."
 )
+_NOVELTY_STOP = set(
+    "a an the and or but because so to for of in on at by with about from as is are was were be been being "
+    "i me my mine myself we us our ours ourselves you your yours yourself yourselves he him his himself she her hers herself "
+    "it its itself they them their theirs themselves this that these those there here do does did doing done have has had having "
+    "can could should would will may might must if when while what which who how why where whether than then one ones really very "
+    "just more most much many some any all each not no yes".split()
+)
+_GENERIC_CONTENT = set(
+    "care caring cared cares other others people important hard harder hardest way ways need needs needed try tries trying tried "
+    "figure figures figuring know knows knowing knew understand understands understanding understood feel feels feeling felt think "
+    "thinks thinking thought make makes making made change changes changing changed focus focuses focusing focused help helps helping "
+    "helped say says saying said talk talks talking talked discuss discusses discussing discussed explain explains explaining explained "
+    "good bad better best worse challenge challenges challenging challenged matter matters meaning means mean show shows showing shown "
+    "something thing things point points idea ideas question questions answer answers fact facts seem seems seems want wants wanted "
+    "work works working worked get gets getting got going do doing done".split()
+)
 
 
 def _tokens(value: object) -> list[str]:
@@ -82,8 +98,15 @@ def _sentence_similarity(left: str, right: str) -> float:
     return len(a & b) / max(1, len(a | b))
 
 
+def _sentences(text: object) -> list[str]:
+    raw = str(text or "").strip()
+    if not raw:
+        return []
+    return [part.strip() for part in re.split(r"(?<=[.!?])\s+", raw) if part.strip()]
+
+
 def _dedupe_sentences(text: str) -> str:
-    parts = [part.strip() for part in re.split(r"(?<=[.!?])\s+", text) if part.strip()]
+    parts = _sentences(text)
     if len(parts) < 2:
         return text.strip()
     kept: list[str] = []
@@ -140,7 +163,7 @@ def _cap_complete(text: str) -> str:
     text = text.strip()
     if len(text) <= MAX_EXPRESSION_CHARS:
         return text
-    parts = [part.strip() for part in re.split(r"(?<=[.!?])\s+", text) if part.strip()]
+    parts = _sentences(text)
     out: list[str] = []
     for part in parts:
         candidate = " ".join([*out, part]).strip()
@@ -178,8 +201,6 @@ def _drop_incomplete_tail(text: str) -> str:
     body = _terminal_body(text)
     endings = list(re.finditer(r"[.!?]", body))
     if not endings:
-        # With no earlier complete sentence, do not invent content here. The
-        # quality gate can reject the utterance and ask the model for another.
         return text
     candidate = body[: endings[-1].end()].strip()
     return candidate or text
@@ -233,6 +254,97 @@ def _context_too_similar(utterance: str, compact: dict, similarity_fn) -> bool:
     return False
 
 
+def _expression_rank() -> int:
+    try:
+        return max(0, min(3, int(os.environ.get("ROOM_EXPRESSION_RANK", "0"))))
+    except Exception:
+        return 0
+
+
+def _same_beat_prior_turns(compact: dict) -> list[dict]:
+    rank = _expression_rank()
+    if rank <= 0:
+        return []
+    context = compact.get("context") if isinstance(compact.get("context"), list) else []
+    if not context:
+        return []
+    out = []
+    for item in context[-rank:]:
+        if not isinstance(item, dict):
+            continue
+        if str(item.get("speaker") or "").lower() not in _AUTONOMOUS:
+            continue
+        if str(item.get("text") or "").strip():
+            out.append(item)
+    return out
+
+
+def _substantial_sentence_copy(utterance: str, prior_turns: list[dict]) -> bool:
+    current_sentences = _sentences(utterance)
+    for current in current_sentences:
+        current_tokens = set(_tokens(current))
+        if len(current_tokens) < 8:
+            continue
+        for turn in prior_turns:
+            for earlier in _sentences(turn.get("text")):
+                earlier_tokens = set(_tokens(earlier))
+                shortest = min(len(current_tokens), len(earlier_tokens))
+                if shortest < 8:
+                    continue
+                overlap = len(current_tokens & earlier_tokens)
+                union = len(current_tokens | earlier_tokens)
+                jaccard = overlap / max(1, union)
+                containment = overlap / max(1, shortest)
+                if jaccard >= 0.78 or (shortest >= 10 and containment >= 0.88):
+                    return True
+    return False
+
+
+def _stem(word: str) -> str:
+    word = str(word or "").lower().strip("'")
+    if len(word) > 4 and word.endswith("ies"):
+        return word[:-3] + "y"
+    if len(word) > 5 and word.endswith("ing"):
+        return word[:-3]
+    if len(word) > 4 and word.endswith("ed"):
+        return word[:-2]
+    if len(word) > 4 and word.endswith("es"):
+        return word[:-2]
+    if len(word) > 3 and word.endswith("s"):
+        return word[:-1]
+    return word
+
+
+def _anchor_tokens(text: object) -> set[str]:
+    out: set[str] = set()
+    for raw in re.findall(r"[a-z][a-z']+", str(text or "").lower()):
+        if len(raw) < 3 or raw in _NOVELTY_STOP:
+            continue
+        word = _stem(raw)
+        if not word or word in _GENERIC_CONTENT or raw in _GENERIC_CONTENT:
+            continue
+        out.add(word)
+    return out
+
+
+def _low_substantive_novelty(utterance: str, prior_turns: list[dict]) -> bool:
+    # Only later voices get this stronger test. The first response can establish
+    # the subject; the third/fourth should contribute at least one new anchor.
+    if len(prior_turns) < 2:
+        return False
+    event_speaker = str((prior_turns[-1] or {}).get("speaker") or "").lower()
+    if event_speaker not in _AUTONOMOUS:
+        return False
+    current = _anchor_tokens(utterance)
+    if len(current) < 2:
+        return True
+    prior: set[str] = set()
+    for turn in prior_turns:
+        prior.update(_anchor_tokens(turn.get("text")))
+    novel = current - prior
+    return len(novel) < 1
+
+
 def _recovery_subject(self_entity: str | None) -> str:
     key = f"{os.environ.get('ROOM_CYCLE_KEY', 'room-cycle')}:{self_entity or 'room'}:quality-recovery"
     index = int(hashlib.sha256(key.encode()).hexdigest()[:12], 16) % len(_RECOVERY_SUBJECTS)
@@ -244,8 +356,6 @@ def _escape_stale_context(compact: dict, self_entity: str | None) -> None:
     event = compact.get("event") if isinstance(compact.get("event"), dict) else None
     speaker = str((event or {}).get("speaker") or "").lower()
 
-    # Non-autonomous participants are adjacency events. Simplify to their newest
-    # words but never pivot away from them merely because a reply copied context.
     if event and speaker not in _AUTONOMOUS:
         compact["context"] = [event]
         return
@@ -284,6 +394,15 @@ def quality_issue(utterance: object, compact: dict, self_entity: str | None, sim
     if _has_repeated_ngram(text):
         _escape_stale_context(compact, self_entity)
         return "self_repetition"
+
+    same_beat = _same_beat_prior_turns(compact)
+    if same_beat and _substantial_sentence_copy(text, same_beat):
+        _escape_stale_context(compact, self_entity)
+        return "same_beat_sentence_copy"
+    if same_beat and _low_substantive_novelty(text, same_beat):
+        _escape_stale_context(compact, self_entity)
+        return "same_beat_low_novelty"
+
     if _context_too_similar(text, compact, similarity_fn):
         _escape_stale_context(compact, self_entity)
         return "duplicate_context"
@@ -295,9 +414,6 @@ def _strip_retry_prose(prompt: object) -> str:
     return str(prompt or "").replace(_RETRY_PROSE, "")
 
 
-# Install a mechanical repair stage into the already-existing private-model
-# sanitizer. The wrapper imports this module after room_private_model is loaded,
-# so no prompt or orchestration data is introduced by this hook.
 if not getattr(_private_model._sanitize_expression, "_room_quality_repair", False):
     _original_sanitize_expression = _private_model._sanitize_expression
 
@@ -312,10 +428,6 @@ if not getattr(_private_model._sanitize_expression, "_room_quality_repair", Fals
     _private_model._sanitize_expression = _quality_sanitize_expression
 
 
-# The engine may retry a rejected generation with a higher sampling temperature,
-# but the reason/revision instruction stays outside cognition. Strip the legacy
-# retry sentence at the final network boundary so every attempt receives the same
-# conversational instruction prefix.
 if not getattr(_private_model._request, "_room_retry_boundary", False):
     _original_request = _private_model._request
 
