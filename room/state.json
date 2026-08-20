@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3831,
+  "cycle": 3832,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-20T11:30:47.815493Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-20T11:31:50.196178Z",
   "messages": 1000,
-  "last_public_event": "20260820T113047813-mara-v5",
+  "last_public_event": "20260820T113150194-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003831",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003832",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "context",
+    "current_facet": "speak",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "presentation",
       "presenting",
       "skepticity",
       "perspective",
@@ -71,7 +70,8 @@
       "language model",
       "confidence",
       "nuance",
-      "context"
+      "context",
+      "speak"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,18 +85,16 @@
       "jules",
       "allen"
     ],
-    "turns": 7661,
+    "turns": 7663,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "nuance",
-      "learning",
-      "public expression concepts",
-      "expression, public",
-      "public expression",
       "context",
-      "effective, useful",
-      "powerful tool for understanding the language of public expression concepts",
-      "language of public expression concepts"
+      "learning",
+      "skepticism",
+      "public expression concepts",
+      "public expression",
+      "ask",
+      "speak"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -106,8 +104,17 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3831,
-        "hits": 54008,
+        "last_cycle": 3832,
+        "hits": 54024,
+        "status": "open"
+      },
+      {
+        "label": "skepticism",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 3832,
+        "hits": 14650,
         "status": "open"
       },
       {
@@ -115,8 +122,71 @@
         "parent": "factor",
         "depth": 304,
         "first_cycle": 3814,
-        "last_cycle": 3831,
-        "hits": 213,
+        "last_cycle": 3832,
+        "hits": 225,
+        "status": "open"
+      },
+      {
+        "label": "friends",
+        "parent": "expression might be useful",
+        "depth": 312,
+        "first_cycle": 3825,
+        "last_cycle": 3832,
+        "hits": 37,
+        "status": "open"
+      },
+      {
+        "label": "confidence",
+        "parent": "language model",
+        "depth": 314,
+        "first_cycle": 3828,
+        "last_cycle": 3832,
+        "hits": 31,
+        "status": "open"
+      },
+      {
+        "label": "ask",
+        "parent": "who",
+        "depth": 292,
+        "first_cycle": 3799,
+        "last_cycle": 3832,
+        "hits": 24,
+        "status": "open"
+      },
+      {
+        "label": "language model",
+        "parent": "friends",
+        "depth": 313,
+        "first_cycle": 3827,
+        "last_cycle": 3832,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "nuance",
+        "parent": "confidence",
+        "depth": 315,
+        "first_cycle": 3830,
+        "last_cycle": 3832,
+        "hits": 11,
+        "status": "open"
+      },
+      {
+        "label": "context",
+        "parent": "nuance",
+        "depth": 316,
+        "first_cycle": 3831,
+        "last_cycle": 3832,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "speak",
+        "parent": "context",
+        "depth": 317,
+        "first_cycle": 3832,
+        "last_cycle": 3832,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -129,24 +199,6 @@
         "status": "open"
       },
       {
-        "label": "friends",
-        "parent": "expression might be useful",
-        "depth": 312,
-        "first_cycle": 3825,
-        "last_cycle": 3831,
-        "hits": 36,
-        "status": "open"
-      },
-      {
-        "label": "confidence",
-        "parent": "language model",
-        "depth": 314,
-        "first_cycle": 3828,
-        "last_cycle": 3831,
-        "hits": 23,
-        "status": "open"
-      },
-      {
         "label": "expression might be useful",
         "parent": "expressions",
         "depth": 311,
@@ -156,39 +208,12 @@
         "status": "open"
       },
       {
-        "label": "language model",
-        "parent": "friends",
-        "depth": 313,
-        "first_cycle": 3827,
-        "last_cycle": 3831,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "nuance",
-        "parent": "confidence",
-        "depth": 315,
-        "first_cycle": 3830,
-        "last_cycle": 3831,
-        "hits": 6,
-        "status": "open"
-      },
-      {
         "label": "effective",
         "parent": "decision",
         "depth": 303,
         "first_cycle": 3812,
         "last_cycle": 3831,
         "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "context",
-        "parent": "nuance",
-        "depth": 316,
-        "first_cycle": 3831,
-        "last_cycle": 3831,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -243,15 +268,6 @@
         "first_cycle": 3666,
         "last_cycle": 3827,
         "hits": 152,
-        "status": "open"
-      },
-      {
-        "label": "skepticism",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 3826,
-        "hits": 14648,
         "status": "open"
       },
       {
@@ -444,15 +460,6 @@
         "status": "open"
       },
       {
-        "label": "ask",
-        "parent": "who",
-        "depth": 292,
-        "first_cycle": 3799,
-        "last_cycle": 3806,
-        "hits": 23,
-        "status": "open"
-      },
-      {
         "label": "who",
         "parent": "skeptical",
         "depth": 291,
@@ -523,19 +530,9 @@
         "last_cycle": 3798,
         "hits": 47,
         "status": "open"
-      },
-      {
-        "label": "active alternative",
-        "parent": "talent",
-        "depth": 286,
-        "first_cycle": 3789,
-        "last_cycle": 3797,
-        "hits": 41,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "public-views",
       "public views",
       "talent",
       "active alternative",
@@ -566,10 +563,11 @@
       "friends",
       "language model",
       "confidence",
-      "nuance"
+      "nuance",
+      "context"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 3831,
+    "last_branch_cycle": 3832,
     "escape_pressure": 0
   }
 }
