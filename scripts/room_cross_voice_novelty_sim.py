@@ -27,7 +27,8 @@ def source(messages: list[tuple[str, str]], *, same_beat: bool = True) -> dict:
         "profile": {"traits": {"curiosity": 0.88, "skepticism": 0.84}},
         "event": event,
         "context": context,
-        # Internal-only quality metadata. It must never cross the model allowlist.
+        # Simulator-only marker used to select the same production rank semantics.
+        # It is not part of the model input allowlist.
         "same_beat_prior_turns": context if same_beat else [],
         "topic": {
             "root": "themes",
@@ -47,6 +48,7 @@ def run(items: list[str], payload: dict):
     original = engine._private_model._request
     old_prompt = os.environ.get("ROOM_NODE_PROMPT")
     old_url = os.environ.get("ROOM_MODEL_URL")
+    old_rank = os.environ.get("ROOM_EXPRESSION_RANK")
 
     def fake_request(_url, prompt, _role, _temperature, _timeout, _self_entity=None, _attempt=0):
         prompts.append(prompt)
@@ -55,6 +57,7 @@ def run(items: list[str], payload: dict):
     engine._private_model._request = fake_request
     os.environ["ROOM_NODE_PROMPT"] = "enabled-for-simulator"
     os.environ["ROOM_MODEL_URL"] = "http://simulator.invalid"
+    os.environ["ROOM_EXPRESSION_RANK"] = str(min(3, len(payload.get("same_beat_prior_turns") or [])))
     try:
         result = engine._private_run("expression", payload, timeout=1)
     finally:
@@ -67,6 +70,10 @@ def run(items: list[str], payload: dict):
             os.environ.pop("ROOM_MODEL_URL", None)
         else:
             os.environ["ROOM_MODEL_URL"] = old_url
+        if old_rank is None:
+            os.environ.pop("ROOM_EXPRESSION_RANK", None)
+        else:
+            os.environ["ROOM_EXPRESSION_RANK"] = old_rank
     return result, prompts
 
 
@@ -104,7 +111,7 @@ def main():
         "I am trying to figure out how to do that and I am doing it the hard way because I need to."
     )
     require_retry(
-        "low novel content after three same-beat voices",
+        "low substantive novelty after three same-beat voices",
         sarah_low_novelty,
         "I would separate intention from evidence: what action actually helped, and what sign would show that it did?",
         source(prior),
