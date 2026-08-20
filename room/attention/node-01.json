@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T18:32:58.361697+00:00",
-  "cycle_key": "32403573972:1:1",
+  "generated_at": "2026-08-20T18:38:22.139989+00:00",
+  "cycle_key": "32403962929:1:1",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,9 +32,9 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 4.52,
-      "confidence": 0.998,
-      "raw_score": 4.52,
+      "score": 2.67,
+      "confidence": 0.944,
+      "raw_score": 2.67,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "nature",
@@ -45,10 +45,16 @@
         {
           "kind": "message",
           "matched": [
-            "nature",
-            "novel"
+            "nature"
           ],
-          "weight": 1.8
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "nature"
+          ],
+          "weight": 0.92
         },
         {
           "kind": "message",
@@ -56,7 +62,15 @@
             "nature",
             "novel"
           ],
-          "weight": 1.15
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "nature",
+            "novel"
+          ],
+          "weight": 0.54
         },
         {
           "kind": "message",
@@ -64,48 +78,13 @@
             "imagine",
             "novel"
           ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "nature"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "novel"
-          ],
           "weight": 0.46
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "conversation"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "conversation"
-          ],
-          "weight": 1.8
         }
       ]
     }
   ],
-  "context_fingerprint": "8b6af4f8c9e9",
+  "context_fingerprint": "957bd3f40b6b",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 826,
-  "approx_added_tokens": 206
+  "temporary_skill_chars": 488,
+  "approx_added_tokens": 122
 }
