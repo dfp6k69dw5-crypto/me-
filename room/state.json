@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3212,
+  "cycle": 3213,
   "silence_cycles": 0,
-  "last_speaker": "sarah",
-  "last_run": "2026-08-20T00:43:43.670598Z",
+  "last_speaker": "mara",
+  "last_run": "2026-08-20T00:44:09.268342Z",
   "messages": 1000,
-  "last_public_event": "20260820T004343669-sarah-v5",
+  "last_public_event": "20260820T004409267-mara-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003212",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003213",
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "process",
+    "current_facet": "angle",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "group",
       "beliefs",
       "conflict",
       "allen",
@@ -71,7 +70,8 @@
       "details",
       "test results",
       "testing",
-      "process"
+      "process",
+      "angle"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,12 +85,18 @@
       "jules",
       "allen"
     ],
-    "turns": 6423,
+    "turns": 6425,
     "low_novelty_beats": 0,
     "recent_terms": [
       "process",
       "learning",
-      "do you learn about medical diagnosis?"
+      "skepticism",
+      "new question",
+      "new topic",
+      "angle",
+      "change",
+      "diagnosis",
+      "curiosity"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -100,8 +106,26 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3212,
-        "hits": 43909,
+        "last_cycle": 3213,
+        "hits": 43919,
+        "status": "open"
+      },
+      {
+        "label": "skepticism",
+        "parent": "learning",
+        "depth": 1,
+        "first_cycle": 530,
+        "last_cycle": 3213,
+        "hits": 11544,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "curious",
+        "depth": 281,
+        "first_cycle": 1640,
+        "last_cycle": 3213,
+        "hits": 2407,
         "status": "open"
       },
       {
@@ -109,17 +133,8 @@
         "parent": "new topic",
         "depth": 327,
         "first_cycle": 3194,
-        "last_cycle": 3212,
-        "hits": 94,
-        "status": "open"
-      },
-      {
-        "label": "test results",
-        "parent": "details",
-        "depth": 340,
-        "first_cycle": 3208,
-        "last_cycle": 3212,
-        "hits": 36,
+        "last_cycle": 3213,
+        "hits": 97,
         "status": "open"
       },
       {
@@ -127,8 +142,17 @@
         "parent": "skepticity",
         "depth": 325,
         "first_cycle": 3192,
-        "last_cycle": 3212,
-        "hits": 33,
+        "last_cycle": 3213,
+        "hits": 41,
+        "status": "open"
+      },
+      {
+        "label": "test results",
+        "parent": "details",
+        "depth": 340,
+        "first_cycle": 3208,
+        "last_cycle": 3213,
+        "hits": 38,
         "status": "open"
       },
       {
@@ -136,8 +160,53 @@
         "parent": "new information goal",
         "depth": 326,
         "first_cycle": 3193,
-        "last_cycle": 3212,
-        "hits": 29,
+        "last_cycle": 3213,
+        "hits": 36,
+        "status": "open"
+      },
+      {
+        "label": "process",
+        "parent": "testing",
+        "depth": 342,
+        "first_cycle": 3211,
+        "last_cycle": 3213,
+        "hits": 14,
+        "status": "open"
+      },
+      {
+        "label": "testing",
+        "parent": "test results",
+        "depth": 341,
+        "first_cycle": 3210,
+        "last_cycle": 3213,
+        "hits": 12,
+        "status": "open"
+      },
+      {
+        "label": "choose",
+        "parent": "process",
+        "depth": 343,
+        "first_cycle": 3212,
+        "last_cycle": 3213,
+        "hits": 7,
+        "status": "open"
+      },
+      {
+        "label": "time",
+        "parent": "process",
+        "depth": 343,
+        "first_cycle": 3212,
+        "last_cycle": 3213,
+        "hits": 7,
+        "status": "open"
+      },
+      {
+        "label": "angle",
+        "parent": "process",
+        "depth": 343,
+        "first_cycle": 3213,
+        "last_cycle": 3213,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -147,42 +216,6 @@
         "first_cycle": 3207,
         "last_cycle": 3212,
         "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "testing",
-        "parent": "test results",
-        "depth": 341,
-        "first_cycle": 3210,
-        "last_cycle": 3212,
-        "hits": 10,
-        "status": "open"
-      },
-      {
-        "label": "process",
-        "parent": "testing",
-        "depth": 342,
-        "first_cycle": 3211,
-        "last_cycle": 3212,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "choose",
-        "parent": "process",
-        "depth": 343,
-        "first_cycle": 3212,
-        "last_cycle": 3212,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "time",
-        "parent": "process",
-        "depth": 343,
-        "first_cycle": 3212,
-        "last_cycle": 3212,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -237,15 +270,6 @@
         "first_cycle": 3211,
         "last_cycle": 3211,
         "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "skepticism",
-        "parent": "learning",
-        "depth": 1,
-        "first_cycle": 530,
-        "last_cycle": 3210,
-        "hits": 11542,
         "status": "open"
       },
       {
@@ -508,28 +532,9 @@
         "last_cycle": 3200,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "brain",
-        "parent": "medical professionals",
-        "depth": 332,
-        "first_cycle": 3200,
-        "last_cycle": 3200,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "curious",
-        "depth": 281,
-        "first_cycle": 1640,
-        "last_cycle": 3199,
-        "hits": 2406,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "conversations",
       "strokes of truth",
       "moral",
       "aspect",
@@ -560,10 +565,11 @@
       "condition",
       "details",
       "test results",
-      "testing"
+      "testing",
+      "process"
     ],
-    "focus_turns": 2,
-    "last_branch_cycle": 3211,
+    "focus_turns": 0,
+    "last_branch_cycle": 3213,
     "escape_pressure": 0
   }
 }
