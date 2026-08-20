@@ -49,3 +49,9 @@ Observed event was Mara's first same-beat reply, proving that current rank 1 dri
 5. The deterministic gate samples near 75% over a large key set.
 6. Existing engine, rank-0 Allen response, and Allen social-observation tests remain green.
 7. Live Room is restarted only after the green merge.
+
+## Post-change validation
+
+PR #70 architecture run `32327219741`, job `96300795554`, passed after the wrapper-only routing change. The same simulator that failed before now verifies that a selected rank-1 voice sees Allen as the expression event, targets Allen, uses a deepen move, and receives no competing conversation job. It also verifies the negative case: an unselected rank-1 voice remains free to follow the first AI reply and is not forced back to Allen. The deterministic sample gate remained within the expected 72–78% validation band around the 75% design target.
+
+The engine self-test, existing rank-0 Allen direct-reply simulator, and Allen social-observation/idempotence simulator all remained green in the same job. The research gate is therefore complete for merge; live behavior still requires restart on the merged code and observation of fresh Allen turns.
