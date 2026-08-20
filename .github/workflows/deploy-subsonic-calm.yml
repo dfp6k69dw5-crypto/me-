@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: deploy-subsonic-calm
@@ -25,6 +25,8 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.CF_API_TOKEN }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Check Cloudflare token
         shell: bash
@@ -68,7 +70,7 @@ jobs:
       - name: Validate Worker syntax
         run: node --check cloudflare/subsonic-calm/src/index.js
 
-      - name: Run signal-sum smoke test
+      - name: Run PSW10 signal smoke test
         run: node scripts/subsonic-calm-signal-smoke.mjs
 
       - name: Deploy to Cloudflare Workers
@@ -82,7 +84,7 @@ jobs:
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Deployed URL: $url"
 
-      - name: Verify live app
+      - name: Verify live PSW10 app
         env:
           APP_URL: ${{ steps.deploy.outputs.url }}
         shell: bash
@@ -93,16 +95,54 @@ jobs:
           d=json.load(open('/tmp/health.json'))
           assert d.get('ok') is True
           assert d.get('app') == 'subsonic-calm'
-          assert d.get('version') == '2'
-          assert d.get('signal_path') == 'normalized-clean'
-          print('Live version-2 normalized signal path verified.')
+          assert d.get('version') == '3'
+          assert d.get('speaker') == 'Polk PSW10'
+          assert d.get('signal_path') == 'normalized-clean-psw10'
+          assert d.get('diagnostic_80hz') is True
+          print('Live PSW10 version 3 verified.')
           PY
-          curl -fsS "$APP_URL/" | grep -q 'SUBSONIC CALM'
+          curl -fsS "$APP_URL/" > /tmp/live-app.html
+          grep -q 'Polk PSW10 profile' /tmp/live-app.html
+          grep -q '80 HZ TEST' /tmp/live-app.html
           echo "SUBSONIC_CALM_URL=$APP_URL" >> "$GITHUB_ENV"
+
+      - name: Record exact verified deployment
+        shell: bash
+        run: |
+          mkdir -p status
+          python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          d={
+            'verified_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
+            'app':'subsonic-calm',
+            'version':'3',
+            'speaker':'Polk PSW10',
+            'cloudflare_account':os.environ.get('CLOUDFLARE_ACCOUNT_NAME'),
+            'url':os.environ.get('SUBSONIC_CALM_URL'),
+            'health':'passed',
+            'signal_smoke':'passed',
+            'diagnostic_80hz':True,
+          }
+          open('status/subsonic-calm.json','w').write(json.dumps(d,indent=2)+'\n')
+          print(json.dumps(d,indent=2))
+          PY
+          git config user.name "subsonic-calm-deployer"
+          git config user.email "actions@users.noreply.github.com"
+          git add status/subsonic-calm.json
+          git commit -m "Record verified Subsonic Calm deployment" || exit 0
+          for n in 1 2 3 4; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort || true; exit 1; }
+            sleep "$n"
+          done
+          exit 1
 
       - name: Summary
         run: |
-          echo "### Subsonic Calm deployed" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Subsonic Calm PSW10 v3 deployed" >> "$GITHUB_STEP_SUMMARY"
           echo "Cloudflare account: $CLOUDFLARE_ACCOUNT_NAME" >> "$GITHUB_STEP_SUMMARY"
-          echo "Signal sum test: passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "Signal smoke test: passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "80 Hz diagnostic: present" >> "$GITHUB_STEP_SUMMARY"
           echo "$SUBSONIC_CALM_URL" >> "$GITHUB_STEP_SUMMARY"
