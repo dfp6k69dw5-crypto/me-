@@ -85,6 +85,11 @@ assert not any("abandonment" in str(item.get("schema", "")).lower() for item in 
 assert any("mistrust" in str(item.get("schema", "")).lower() for item in results[("owen", "critique_owen")]["schema_activation"])
 assert any("recognition" in str(item.get("schema", "")).lower() for item in results[("jules", "exclude_jules")]["schema_activation"])
 
+# Social schema triggers must belong to the person actually targeted, not every named observer.
+assert not any("recognition" in str(item.get("schema", "")).lower() for item in results[("jules", "exclude_mara")]["schema_activation"]), results[("jules", "exclude_mara")]
+assert not any("emotional-inhibition" in str(item.get("schema", "")).lower() for item in results[("sarah", "exclude_mara")]["schema_activation"]), results[("sarah", "exclude_mara")]
+assert not any("abandonment" in str(item.get("schema", "")).lower() for item in results[("mara", "exclude_jules")]["schema_activation"]), results[("mara", "exclude_jules")]
+
 # Repair is generic, but recovery style remains person-specific.
 for person in PEOPLE:
     assert "repair_bid" in results[(person, "repair")]["situation"]
@@ -113,4 +118,22 @@ assert current.get("salience") == "ground_latest_turn"
 assert any("vivid new object" in str(item).lower() for item in current.get("personality_lens") or [])
 assert pctx.get("identity") == profiles["jules"]["core_identity"]
 
-print("PASS personality-v2: 19 fixed layers, no sliders, grounded bids, divergent appraisal, selective schema activation, production bridge")
+# Clinical/schema labels are internal mechanics, never language-model vocabulary.
+mara_payload = {
+    "entity": "mara",
+    "profile": CFG["p"]["mara"],
+    "event": scenarios["exclude_mara"],
+    "context": context + [scenarios["exclude_mara"]],
+    "topic": {"root": "public interest", "current_facet": "debate", "facets": [], "shared_references": [], "unresolved": []},
+    "partner": "allen",
+    "relationship": {},
+}
+mara_compact = private_model._compact_payload(mara_payload, "expression", "mara")
+mara_current = ((mara_compact.get("personality_context") or {}).get("current") or {})
+assert mara_current.get("activated_sensitivities"), "targeted vulnerability should still shape appraisal"
+serialized = json.dumps(mara_compact.get("personality_context") or {}, ensure_ascii=False).lower()
+for forbidden in ("schema", "abandonment", "mistrust", "unrelenting", "insufficient-self-control"):
+    assert forbidden not in serialized, f"clinical/internal label leaked into private-model payload: {forbidden}"
+assert "pushed out" in serialized or "reassurance" in serialized
+
+print("PASS personality-v2: 19 fixed layers, no sliders, grounded bids, divergent appraisal, selective schema activation, target precision, label isolation, production bridge")
