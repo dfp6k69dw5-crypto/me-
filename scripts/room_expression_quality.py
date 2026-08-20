@@ -21,6 +21,7 @@ _DANGLING_END = re.compile(
     r"(?:\s+\b(?:what|which|who|how|why|where|whether|to)\b)?\s*$",
     re.I,
 )
+_PUNCTUATED_DANGLING_END = re.compile(r"\b(?:a|an|the|to)\s*$", re.I)
 _LOCAL_REPEAT = re.compile(
     r"\b(?P<phrase>[A-Za-z][A-Za-z']*(?:\s+[A-Za-z][A-Za-z']*){1,4})\s+and\s+(?P=phrase)\b",
     re.I,
@@ -160,8 +161,13 @@ def _terminal_body(text: str) -> str:
 
 
 def _terminal_incomplete(text: str) -> bool:
-    body = _terminal_body(text)
-    return bool(body and _DANGLING_END.search(body))
+    raw = str(text or "").strip()
+    body = _terminal_body(raw)
+    if not body:
+        return False
+    if raw[-1:] in ".!?":
+        return bool(_PUNCTUATED_DANGLING_END.search(body))
+    return bool(_DANGLING_END.search(body))
 
 
 def _drop_incomplete_tail(text: str) -> str:
