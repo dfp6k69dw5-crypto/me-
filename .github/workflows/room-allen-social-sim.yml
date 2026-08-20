@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
       - name: Run Allen simulators and existing engine self-test
         shell: bash
@@ -52,6 +52,7 @@ jobs:
               'response_sim_output':read('/tmp/allen-response.txt'),
               'observation_sim_output':read('/tmp/allen-observation.txt'),
               'engine_selftest_output':read('/tmp/engine-selftest.txt'),
+              'tested_sha':'${{ github.sha }}',
           }
           open('room/allen-social-sim-diagnostic.json','w').write(json.dumps(payload,indent=2)+'\n')
           print(json.dumps(payload,indent=2))
