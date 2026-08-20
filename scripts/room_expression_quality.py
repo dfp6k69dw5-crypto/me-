@@ -5,7 +5,7 @@ import re
 MAX_EXPRESSION_CHARS = 420
 
 _PRONOUN_R = re.compile(r"\b(?:i|we|you|they)\s+r\b", re.I)
-_TRAILING_FRAGMENT = re.compile(r"[,;:]\s*$")
+_TRAILING_FRAGMENT = re.compile(r",\s*$")
 
 
 def _tokens(value: object) -> list[str]:
@@ -19,7 +19,7 @@ def _self_address(utterance: str, self_entity: str | None) -> bool:
     return bool(re.match(rf"^\s*(?:hey\s*[,!]?\s*)?{re.escape(name)}\b\s*[,!:.-]", utterance, re.I))
 
 
-def _has_repeated_ngram(utterance: str, n: int = 7) -> bool:
+def _has_repeated_ngram(utterance: str, n: int = 6) -> bool:
     words = _tokens(utterance)
     if len(words) < n * 2:
         return False
