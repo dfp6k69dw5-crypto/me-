@@ -23,6 +23,23 @@ import room_personality_v2 as _personality_v2
 if "allen" not in _private_model.PEOPLE:
     _private_model.PEOPLE = [*_private_model.PEOPLE, "allen"]
 
+# The language model boundary is allowlist-only. New internal/debug/research
+# fields are invisible by default unless they are explicitly promoted here.
+_MODEL_INPUT_KEYS = frozenset({
+    "entity",
+    "profile",
+    "event",
+    "context",
+    "keywords",
+    "topic",
+    "partner",
+    "relationship",
+    "social_observation",
+    "deliberation",
+    "conversation_job",
+    "mandatory_speech",
+})
+
 # Keep personality computation outside the LLM. The private model receives a
 # compact, situation-relevant view of the fixed profile rather than 19 fields of
 # undifferentiated persona prose on every turn.
@@ -30,18 +47,20 @@ _original_compact_payload = _private_model._compact_payload
 
 
 def _personality_compact_payload(payload, role, self_entity=None):
-    compact = _original_compact_payload(payload, role, self_entity)
-    profile = payload.get("profile") if isinstance(payload.get("profile"), dict) else {}
+    source = payload if isinstance(payload, dict) else {}
+    safe_payload = {key: source[key] for key in _MODEL_INPUT_KEYS if key in source}
+    compact = _original_compact_payload(safe_payload, role, self_entity)
+    profile = source.get("profile") if isinstance(source.get("profile"), dict) else {}
     fixed = profile.get("psychology_v2") if isinstance(profile.get("psychology_v2"), dict) else None
-    entity = str(self_entity or payload.get("entity") or "").lower()
+    entity = str(self_entity or source.get("entity") or "").lower()
     if not fixed or entity not in {"sarah", "mara", "owen", "jules"}:
         return compact
 
     appraisal = _personality_v2.appraise(
         entity,
         fixed,
-        payload.get("event") if isinstance(payload.get("event"), dict) else None,
-        payload.get("context") if isinstance(payload.get("context"), list) else [],
+        source.get("event") if isinstance(source.get("event"), dict) else None,
+        source.get("context") if isinstance(source.get("context"), list) else [],
     )
     activated = []
     for item in appraisal.get("schema_activation", [])[:2]:
