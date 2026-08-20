@@ -10,6 +10,7 @@ import room_engine_v5  # noqa: F401,E402
 import room_private_model as private_model  # noqa: E402
 
 captured: list[tuple[str, str]] = []
+SECRET_SENTINEL = "ROOM_SECRET_SENTINEL_6F2A9C"
 
 
 def fake_request(model_url, prompt, role, temperature, timeout, self_entity=None, attempt=0):
@@ -52,6 +53,7 @@ def fake_request(model_url, prompt, role, temperature, timeout, self_entity=None
 private_model._request = fake_request
 os.environ["ROOM_MODEL_URL"] = "http://unused.invalid"
 os.environ["ROOM_NODE_PROMPT"] = (
+    SECRET_SENTINEL + " "
     "public-expression in INPUT_JSON is already a deliberation plan. "
     "All four entities are REQUIRED to speak every beat. mandatory_speech is true. "
     "Use conversation_job as the required contribution angle. Return decision SPEAK. "
@@ -106,6 +108,7 @@ forbidden = (
 )
 for role, prompt in captured:
     low = prompt.lower()
+    assert SECRET_SENTINEL not in prompt, f"RED: runtime prompt secret crossed into {role} cognition"
     for pattern in forbidden:
         assert not re.search(pattern, low), f"RED: orchestration language reached {role} prompt: {pattern}"
 
@@ -119,4 +122,4 @@ assert "must_respond" not in thought_props, "RED: thought schema still exposes m
 for role, prompt in captured:
     assert "platypus" in prompt.lower(), f"{role}: latest conversational subject was lost"
 
-print("PASS: private model sees conversation and personality context, not orchestration machinery")
+print("PASS: runtime prompt secrets and orchestration stay outside cognition; conversation grounding survives")
