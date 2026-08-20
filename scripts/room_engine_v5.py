@@ -119,9 +119,40 @@ def _clean_stale_model_value(value, current_text=""):
     return value
 
 
+def _internal_diversity_strings(source):
+    """Return exact runner-generated diversity text that must stay private."""
+    hidden = []
+    deliberation = source.get("deliberation") if isinstance(source.get("deliberation"), dict) else {}
+    for value in (source.get("conversation_job"), deliberation.get("conversation_job")):
+        text = str(value or "").strip()
+        if text and text not in hidden:
+            hidden.append(text)
+    return hidden
+
+
+def _clean_internal_deliberation(value, hidden):
+    """Remove runner contribution machinery while preserving genuine thought aims."""
+    if not isinstance(value, dict):
+        return value
+    out = copy.deepcopy(value)
+    out.pop("conversation_job", None)
+    goal = str(out.get("new_information_goal") or "")
+    for private_text in hidden:
+        goal = goal.replace(private_text, " ")
+    goal = re.sub(r"(?i)\bdistinct\s+contribution\s*:\s*", " ", goal)
+    goal = re.sub(r"\s+([,.;:!?])", r"\1", goal)
+    goal = re.sub(r"\s+", " ", goal).strip(" \t,.;:-")
+    if goal:
+        out["new_information_goal"] = goal
+    else:
+        out.pop("new_information_goal", None)
+    return out
+
+
 def _history_safe_payload(source):
     event = source.get("event") if isinstance(source.get("event"), dict) else None
     current_text = str((event or {}).get("text") or "")
+    hidden_diversity = _internal_diversity_strings(source)
     safe = {}
     for key in _MODEL_INPUT_KEYS:
         if key not in source:
@@ -133,6 +164,8 @@ def _history_safe_payload(source):
             safe[key] = value
         elif key in {"context", "keywords", "topic", "social_observation", "deliberation"}:
             cleaned = _clean_stale_model_value(value, current_text)
+            if key == "deliberation" and cleaned is not None:
+                cleaned = _clean_internal_deliberation(cleaned, hidden_diversity)
             if cleaned is not None:
                 safe[key] = cleaned
         else:
@@ -148,16 +181,11 @@ _original_compact_payload = _private_model._compact_payload
 
 def _personality_compact_payload(payload, role, self_entity=None):
     source = payload if isinstance(payload, dict) else {}
-    safe_payload, current_text = _history_safe_payload(source)
+    safe_payload, _current_text = _history_safe_payload(source)
     compact = _strip_internal_model_keys(_original_compact_payload(safe_payload, role, self_entity))
 
-    # Preserve the useful diversity cue only as an ordinary optional direction;
-    # its runner/job identity never crosses the cognition boundary.
-    if role == "expression":
-        direction = str(source.get("conversation_job") or "").strip()
-        if direction and not _stale_machine_text(direction, current_text):
-            compact["possible_direction"] = direction
-
+    # Runner-level diversity jobs never cross into cognition. Variation is now
+    # produced by personality, the natural thought aim, and the quality/retry path.
     profile = source.get("profile") if isinstance(source.get("profile"), dict) else {}
     fixed = profile.get("psychology_v2") if isinstance(profile.get("psychology_v2"), dict) else None
     entity = str(self_entity or source.get("entity") or "").lower()
