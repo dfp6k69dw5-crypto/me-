@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T00:45:38.425177+00:00",
-  "cycle_key": "32316483770:1:62",
+  "generated_at": "2026-08-20T00:46:07.115087+00:00",
+  "cycle_key": "32316483770:1:63",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,6 +29,44 @@
   },
   "selected_skills": [
     {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 4.75,
+      "confidence": 0.999,
+      "raw_score": 4.75,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "example",
+        "specific",
+        "describe"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "example",
+            "specific"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "describe"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.54
+        }
+      ]
+    },
+    {
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
@@ -52,7 +90,7 @@
           "matched": [
             "conversation"
           ],
-          "weight": 1.15
+          "weight": 0.64
         },
         {
           "kind": "message",
@@ -62,30 +100,9 @@
           "weight": 0.54
         }
       ]
-    },
-    {
-      "name": "concrete-specificity",
-      "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "specific"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 1.15
-        }
-      ]
     }
   ],
-  "context_fingerprint": "c3c881b50074",
+  "context_fingerprint": "c2bc93067c10",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 831,
   "approx_added_tokens": 208
