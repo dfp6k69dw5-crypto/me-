@@ -16,7 +16,7 @@ def expression(text: str) -> str:
     })
 
 
-def source(messages: list[tuple[str, str]]) -> dict:
+def source(messages: list[tuple[str, str]], *, same_beat: bool = True) -> dict:
     context = [
         {"speaker": speaker, "text": text, "cognition": {"target": "sarah"}}
         for speaker, text in messages
@@ -27,6 +27,8 @@ def source(messages: list[tuple[str, str]]) -> dict:
         "profile": {"traits": {"curiosity": 0.88, "skepticism": 0.84}},
         "event": event,
         "context": context,
+        # Internal-only quality metadata. It must never cross the model allowlist.
+        "same_beat_prior_turns": context if same_beat else [],
         "topic": {
             "root": "themes",
             "current_facet": "care",
@@ -86,7 +88,7 @@ def main():
         "I am trying to figure out if I could explain better or if it is just a fact that I need to focus on. What do you think?"
     )
     require_retry(
-        "substantial copied sentence",
+        "substantial copied sentence in one beat",
         owen_echo,
         "One distinction matters to me: caring is not the same as agreeing, and boundaries can make care more sustainable.",
         source([("mara", mara)]),
@@ -102,7 +104,7 @@ def main():
         "I am trying to figure out how to do that and I am doing it the hard way because I need to."
     )
     require_retry(
-        "low novel content after three voices",
+        "low novel content after three same-beat voices",
         sarah_low_novelty,
         "I would separate intention from evidence: what action actually helped, and what sign would show that it did?",
         source(prior),
@@ -113,12 +115,19 @@ def main():
     assert len(prompts) == 1, "specific same-topic contribution was over-rejected"
     assert accepted.get("utterance") == fresh
 
+    # Similarity to older conversation is continuity, not a same-beat echo.
+    historical = source([("mara", mara)], same_beat=False)
+    accepted, prompts = run([expression(owen_echo)], historical)
+    assert len(prompts) == 1, "historical topic continuity was incorrectly treated as same-beat copying"
+    assert accepted.get("utterance") == owen_echo
+
     participant_words = "Why do platypuses have bills?"
-    participant_source = source([("allen", participant_words)])
+    participant_source = source([("allen", participant_words)], same_beat=False)
     participant_reply = "The bill contains electroreceptors that help a platypus locate prey underwater."
     accepted, prompts = run([expression(participant_reply)], participant_source)
     assert len(prompts) == 1, "grounded participant reply was over-rejected"
     assert participant_words in prompts[0], "participant words disappeared from the generation context"
+    assert "same_beat_prior_turns" not in prompts[0], "internal same-beat quality metadata crossed into model cognition"
 
     print("ROOM CROSS-VOICE NOVELTY SIM: GREEN")
 
