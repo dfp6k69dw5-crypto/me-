@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3219,
+  "cycle": 3220,
   "silence_cycles": 0,
-  "last_speaker": "jules",
-  "last_run": "2026-08-20T00:46:54.809655Z",
+  "last_speaker": "sarah",
+  "last_run": "2026-08-20T00:47:19.751744Z",
   "messages": 1000,
-  "last_public_event": "20260820T004654808-jules-v5",
+  "last_public_event": "20260820T004719750-sarah-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003219",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003220",
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "generalized",
+    "current_facet": "food",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "new information goal",
       "new topic",
       "medical diagnosis",
       "understood",
@@ -71,7 +70,8 @@
       "discussing",
       "current context",
       "generalization",
-      "generalized"
+      "generalized",
+      "food"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,14 +85,14 @@
       "jules",
       "allen"
     ],
-    "turns": 6437,
+    "turns": 6439,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "skepticism",
-      "generalization",
-      "learning",
+      "food",
       "generalized",
-      "specific context"
+      "learning",
+      "restaurant",
+      "sarcasm"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -102,8 +102,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3219,
-        "hits": 43987,
+        "last_cycle": 3220,
+        "hits": 43995,
         "status": "open"
       },
       {
@@ -111,8 +111,98 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3219,
-        "hits": 11586,
+        "last_cycle": 3220,
+        "hits": 11599,
+        "status": "open"
+      },
+      {
+        "label": "discussing",
+        "parent": "jules",
+        "depth": 345,
+        "first_cycle": 3215,
+        "last_cycle": 3220,
+        "hits": 30,
+        "status": "open"
+      },
+      {
+        "label": "current context",
+        "parent": "discussing",
+        "depth": 346,
+        "first_cycle": 3217,
+        "last_cycle": 3220,
+        "hits": 14,
+        "status": "open"
+      },
+      {
+        "label": "generalization",
+        "parent": "current context",
+        "depth": 347,
+        "first_cycle": 3218,
+        "last_cycle": 3220,
+        "hits": 9,
+        "status": "open"
+      },
+      {
+        "label": "absurdism",
+        "parent": "generalization",
+        "depth": 348,
+        "first_cycle": 3219,
+        "last_cycle": 3220,
+        "hits": 9,
+        "status": "open"
+      },
+      {
+        "label": "generalized",
+        "parent": "generalization",
+        "depth": 348,
+        "first_cycle": 3219,
+        "last_cycle": 3220,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "focus",
+        "parent": "jules",
+        "depth": 345,
+        "first_cycle": 3215,
+        "last_cycle": 3220,
+        "hits": 3,
+        "status": "open"
+      },
+      {
+        "label": "current conversation goal",
+        "parent": "discussing",
+        "depth": 346,
+        "first_cycle": 3217,
+        "last_cycle": 3220,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "food",
+        "parent": "generalized",
+        "depth": 349,
+        "first_cycle": 3220,
+        "last_cycle": 3220,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "restaurant",
+        "parent": "generalized",
+        "depth": 349,
+        "first_cycle": 3220,
+        "last_cycle": 3220,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "sarcasm",
+        "parent": "generalized",
+        "depth": 349,
+        "first_cycle": 3220,
+        "last_cycle": 3220,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -152,57 +242,12 @@
         "status": "open"
       },
       {
-        "label": "discussing",
-        "parent": "jules",
-        "depth": 345,
-        "first_cycle": 3215,
-        "last_cycle": 3219,
-        "hits": 29,
-        "status": "open"
-      },
-      {
         "label": "jules",
         "parent": "angle",
         "depth": 344,
         "first_cycle": 3214,
         "last_cycle": 3219,
         "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "current context",
-        "parent": "discussing",
-        "depth": 346,
-        "first_cycle": 3217,
-        "last_cycle": 3219,
-        "hits": 12,
-        "status": "open"
-      },
-      {
-        "label": "generalization",
-        "parent": "current context",
-        "depth": 347,
-        "first_cycle": 3218,
-        "last_cycle": 3219,
-        "hits": 5,
-        "status": "open"
-      },
-      {
-        "label": "absurdism",
-        "parent": "generalization",
-        "depth": 348,
-        "first_cycle": 3219,
-        "last_cycle": 3219,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "generalized",
-        "parent": "generalization",
-        "depth": 348,
-        "first_cycle": 3219,
-        "last_cycle": 3219,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -221,24 +266,6 @@
         "first_cycle": 3211,
         "last_cycle": 3217,
         "hits": 22,
-        "status": "open"
-      },
-      {
-        "label": "focus",
-        "parent": "jules",
-        "depth": 345,
-        "first_cycle": 3215,
-        "last_cycle": 3217,
-        "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "current conversation goal",
-        "parent": "discussing",
-        "depth": 346,
-        "first_cycle": 3217,
-        "last_cycle": 3217,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -501,37 +528,9 @@
         "last_cycle": 3205,
         "hits": 1,
         "status": "open"
-      },
-      {
-        "label": "symptoms",
-        "parent": "add observations",
-        "depth": 337,
-        "first_cycle": 3205,
-        "last_cycle": 3205,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "medical professionals",
-        "parent": "knowledge of the medical field",
-        "depth": 331,
-        "first_cycle": 3199,
-        "last_cycle": 3204,
-        "hits": 15,
-        "status": "open"
-      },
-      {
-        "label": "medical records",
-        "parent": "medical professionals",
-        "depth": 332,
-        "first_cycle": 3200,
-        "last_cycle": 3204,
-        "hits": 6,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "expressions",
       "important",
       "believe",
       "group",
@@ -562,10 +561,11 @@
       "jules",
       "discussing",
       "current context",
-      "generalization"
+      "generalization",
+      "generalized"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 3219,
+    "last_branch_cycle": 3220,
     "escape_pressure": 0
   }
 }
