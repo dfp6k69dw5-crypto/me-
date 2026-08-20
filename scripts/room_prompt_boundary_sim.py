@@ -11,6 +11,7 @@ import room_private_model as private_model  # noqa: E402
 
 captured: list[tuple[str, str]] = []
 SECRET_SENTINEL = "ROOM_SECRET_SENTINEL_6F2A9C"
+DIVERSITY_SENTINEL = "DIVERSITY_SENTINEL_91B7_ADD_ONE_UNSEEN_EXAMPLE"
 
 
 def fake_request(model_url, prompt, role, temperature, timeout, self_entity=None, attempt=0):
@@ -86,10 +87,10 @@ payload = {
         "action": "ANSWER",
         "preferred_partner": "allen",
         "focus": "platypus",
-        "new_information_goal": "",
-        "conversation_job": "Add one concrete example",
+        "new_information_goal": "respond about the animal. Distinct contribution: " + DIVERSITY_SENTINEL,
+        "conversation_job": DIVERSITY_SENTINEL,
     },
-    "conversation_job": "Add one concrete example",
+    "conversation_job": DIVERSITY_SENTINEL,
     "mandatory_speech": True,
 }
 
@@ -121,6 +122,7 @@ forbidden = (
 for role, prompt in captured:
     low = prompt.lower()
     assert SECRET_SENTINEL not in prompt, f"RED: runtime prompt secret crossed into {role} cognition"
+    assert DIVERSITY_SENTINEL not in prompt, f"RED: internal diversity instruction crossed into {role} cognition"
     for pattern in forbidden:
         assert not re.search(pattern, low), f"RED: orchestration language reached {role} prompt: {pattern}"
     # These are historical machine-self-reference terms, not part of Allen's new turn.
@@ -138,4 +140,4 @@ for role, prompt in captured:
     assert "platypus" in low, f"{role}: latest conversational subject was lost"
     assert "why do platypuses have bills" in low, f"{role}: legitimate unresolved discussion material was lost"
 
-print("PASS: runtime secrets, orchestration, and stale machine-self-reference stay outside cognition; real conversation survives")
+print("PASS: runtime secrets, internal diversity instructions, orchestration, and stale machine-self-reference stay outside cognition; real conversation survives")
