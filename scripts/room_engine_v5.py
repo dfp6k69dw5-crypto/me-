@@ -20,6 +20,7 @@ import urllib.error
 
 import room_private_model as _private_model
 import room_personality_v2 as _personality_v2
+import room_expression_quality as _expression_quality
 
 # Structured model output must be allowed to refer directly to Allen.
 if "allen" not in _private_model.PEOPLE:
@@ -216,6 +217,9 @@ def _private_schema(role, self_entity=None):
     elif role == "expression":
         props.pop("decision", None)
         required = [key for key in required if key != "decision"]
+        utterance = props.get("utterance")
+        if isinstance(utterance, dict):
+            utterance["maxLength"] = _expression_quality.MAX_EXPRESSION_CHARS
     schema["properties"] = props
     schema["required"] = required
     return schema
@@ -248,7 +252,8 @@ _ROLE_INSTRUCTION = {
     ),
     "expression": (
         "Write this person's next natural conversational reply. Ground it in the newest spoken line when there "
-        "is one. Let personality shape perspective and tone, and avoid merely repeating earlier wording."
+        "is one. Let personality shape perspective and tone. Keep it concise, usually one to three sentences, "
+        "and add something that has not already been said."
     ),
 }
 
@@ -270,7 +275,7 @@ def _private_run(role: str, payload: dict, timeout: int = 30):
     for attempt in range(attempts):
         retry = ""
         if attempt:
-            retry = "\nUse a different idea and wording while staying with the same conversation."
+            retry = "\nUse a different idea and wording while staying with the same conversation. Keep the reply concise and grammatically complete."
         combined = (
             instruction
             + retry
@@ -291,9 +296,17 @@ def _private_run(role: str, payload: dict, timeout: int = 30):
             obj = _private_model._validate(role, _private_model._extract_json(out), compact, instruction, self_entity)
             if role == "expression":
                 obj = _private_model._sanitize_expression(obj, compact, self_entity)
-                if attempt < attempts - 1 and _private_model._too_similar_to_context(str(obj.get("utterance", "")), compact):
-                    last_reason = "duplicate_context"
-                    continue
+                issue = _expression_quality.quality_issue(
+                    obj.get("utterance"),
+                    compact,
+                    self_entity,
+                    _private_model._utterance_similarity,
+                )
+                if issue:
+                    last_reason = issue
+                    if attempt < attempts - 1:
+                        continue
+                    raise ValueError(issue)
             return obj
         except urllib.error.HTTPError as exc:
             detail = _private_model._safe_http_detail(exc)
