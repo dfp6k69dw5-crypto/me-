@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T07:06:42.935357+00:00",
-  "cycle_key": "32327734424:1:206",
+  "generated_at": "2026-08-20T07:07:50.767863+00:00",
+  "cycle_key": "32327734424:1:207",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,14 +32,15 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.75,
-      "confidence": 0.992,
-      "raw_score": 3.75,
+      "score": 5.24,
+      "confidence": 0.999,
+      "raw_score": 5.24,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "sure",
-        "claim",
-        "reason"
+        "evidence",
+        "reason",
+        "claim"
       ],
       "evidence_sources": [
         {
@@ -47,20 +48,35 @@
           "matched": [
             "sure"
           ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "evidence",
+            "reason"
+          ],
           "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "reason"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
             "claim",
             "reason"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "sure"
           ],
           "weight": 0.54
         }
@@ -70,19 +86,19 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 3.25,
-      "confidence": 0.98,
-      "raw_score": 3.25,
+      "score": 2.56,
+      "confidence": 0.933,
+      "raw_score": 2.56,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "describe",
-        "detail"
+        "detail",
+        "describe"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "describe"
+            "detail"
           ],
           "weight": 1.8
         },
@@ -103,7 +119,7 @@
         {
           "kind": "message",
           "matched": [
-            "detail"
+            "describe"
           ],
           "weight": 0.76
         },
@@ -117,7 +133,7 @@
       ]
     }
   ],
-  "context_fingerprint": "7eed714afecd",
+  "context_fingerprint": "1bf59caa1eb4",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 839,
   "approx_added_tokens": 210
