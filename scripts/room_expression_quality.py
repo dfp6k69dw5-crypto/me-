@@ -17,8 +17,13 @@ _RECOVERY_SUBJECTS = (
 _PRONOUN_R = re.compile(r"\b(?:i|we|you|they)\s+r\b", re.I)
 _TRAILING_FRAGMENT = re.compile(r",\s*$")
 _DANGLING_END = re.compile(
-    r"\b(?:and|or|but|because|so|to|for|with|about|if|when|while|which|who|what|how|why|where|whether|than)\b"
+    r"\b(?:a|an|the|and|or|but|because|so|to|for|with|about|if|when|while|which|who|what|how|why|where|whether|than)\b"
     r"(?:\s+\b(?:what|which|who|how|why|where|whether|to)\b)?\s*$",
+    re.I,
+)
+_PUNCTUATED_DANGLING_END = re.compile(r"\b(?:a|an|the|to)\s*$", re.I)
+_LOCAL_REPEAT = re.compile(
+    r"\b(?P<phrase>[A-Za-z][A-Za-z']*(?:\s+[A-Za-z][A-Za-z']*){1,4})\s+and\s+(?P=phrase)\b",
     re.I,
 )
 _RETRY_PROSE = (
@@ -98,6 +103,18 @@ def _dedupe_sentences(text: str) -> str:
     return " ".join(kept).strip()
 
 
+def _dedupe_local_phrase(text: str) -> str:
+    """Collapse only exact 2-5 word phrases repeated around 'and'."""
+    previous = None
+    current = text
+    for _ in range(3):
+        if current == previous:
+            break
+        previous = current
+        current = _LOCAL_REPEAT.sub(lambda match: match.group("phrase"), current)
+    return current.strip()
+
+
 def _truncate_before_repeated_ngram(text: str, n: int = 6) -> str:
     matches = list(re.finditer(r"[A-Za-z0-9']+", text))
     if len(matches) < n * 2:
@@ -139,15 +156,32 @@ def _cap_complete(text: str) -> str:
     return (cut + ".") if cut else ""
 
 
+def _terminal_body(text: str) -> str:
+    return re.sub(r"[.!?]+\s*$", "", str(text or "").strip()).strip()
+
+
+def _terminal_incomplete(text: str) -> bool:
+    raw = str(text or "").strip()
+    body = _terminal_body(raw)
+    if not body:
+        return False
+    if raw[-1:] in ".!?":
+        return bool(_PUNCTUATED_DANGLING_END.search(body))
+    return bool(_DANGLING_END.search(body))
+
+
 def _drop_incomplete_tail(text: str) -> str:
-    """Drop only a dangling final clause when an earlier sentence is complete."""
+    """Drop a dangling final sentence/clause only when a complete prefix exists."""
     text = text.strip()
-    if not text or text[-1:] in ".!?" or not _DANGLING_END.search(text):
+    if not text or not _terminal_incomplete(text):
         return text
-    endings = list(re.finditer(r"[.!?]", text))
+    body = _terminal_body(text)
+    endings = list(re.finditer(r"[.!?]", body))
     if not endings:
+        # With no earlier complete sentence, do not invent content here. The
+        # quality gate can reject the utterance and ask the model for another.
         return text
-    candidate = text[: endings[-1].end()].strip()
+    candidate = body[: endings[-1].end()].strip()
     return candidate or text
 
 
@@ -159,6 +193,7 @@ def repair_expression(utterance: object, self_entity: str | None = None) -> str:
     text = _repair_pronoun_fragments(text)
     text = _drop_self_address(text, self_entity)
     text = _dedupe_sentences(text)
+    text = _dedupe_local_phrase(text)
     text = _truncate_before_repeated_ngram(text)
     text = _cap_complete(text)
     text = _drop_incomplete_tail(text)
@@ -244,7 +279,7 @@ def quality_issue(utterance: object, compact: dict, self_entity: str | None, sim
         return "self_address"
     if _TRAILING_FRAGMENT.search(text):
         return "trailing_fragment"
-    if text[-1:] not in ".!?" and _DANGLING_END.search(text):
+    if _terminal_incomplete(text):
         return "trailing_fragment"
     if _has_repeated_ngram(text):
         _escape_stale_context(compact, self_entity)
