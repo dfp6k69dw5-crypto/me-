@@ -5,6 +5,8 @@ on:
     branches: ['**']
     paths:
       - 'scripts/room_allen_response_sim.py'
+      - 'scripts/room_allen_observation_sim.py'
+      - 'scripts/room_participant.py'
       - 'scripts/room_social_v5.py'
       - 'scripts/room_engine_v5.py'
       - 'scripts/room_private_model.py'
@@ -23,36 +25,39 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
-      - name: Run Allen social boundary simulator and existing engine self-test
+      - name: Run Allen simulators and existing engine self-test
         shell: bash
         run: |
           set +e
-          python3 scripts/room_allen_response_sim.py > /tmp/allen-social.txt 2>&1
-          sim_status=$?
+          python3 scripts/room_allen_response_sim.py > /tmp/allen-response.txt 2>&1
+          response_status=$?
+          python3 scripts/room_allen_observation_sim.py > /tmp/allen-observation.txt 2>&1
+          observation_status=$?
           python3 scripts/room_engine_v5.py selftest > /tmp/engine-selftest.txt 2>&1
           engine_status=$?
           set -e
-          python3 - "$sim_status" "$engine_status" <<'PY'
+          python3 - "$response_status" "$observation_status" "$engine_status" <<'PY'
           import json,sys
           from datetime import datetime,timezone
-          sim_status=int(sys.argv[1]); engine_status=int(sys.argv[2])
+          response_status,observation_status,engine_status=map(int,sys.argv[1:])
           def read(path):
               try:return open(path).read()[-6000:]
               except Exception:return ''
           payload={
               'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
-              'pass':sim_status==0 and engine_status==0,
-              'sim_exit_code':sim_status,
+              'pass':response_status==0 and observation_status==0 and engine_status==0,
+              'response_sim_exit_code':response_status,
+              'observation_sim_exit_code':observation_status,
               'engine_selftest_exit_code':engine_status,
-              'sim_output':read('/tmp/allen-social.txt'),
+              'response_sim_output':read('/tmp/allen-response.txt'),
+              'observation_sim_output':read('/tmp/allen-observation.txt'),
               'engine_selftest_output':read('/tmp/engine-selftest.txt'),
           }
           open('room/allen-social-sim-diagnostic.json','w').write(json.dumps(payload,indent=2)+'\n')
           print(json.dumps(payload,indent=2))
-          if not payload['pass']:
-              raise SystemExit(1)
           PY
       - name: Record diagnostic on tested branch
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
@@ -68,3 +73,6 @@ jobs:
             sleep "$n"
           done
           exit 1
+      - name: Enforce simulator result
+        if: always()
+        run: python3 -c 'import json; d=json.load(open("room/allen-social-sim-diagnostic.json")); raise SystemExit(0 if d.get("pass") else 1)'
