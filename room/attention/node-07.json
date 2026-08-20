@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T11:15:12.858782+00:00",
-  "cycle_key": "32350827191:1:133",
+  "generated_at": "2026-08-20T11:16:23.126358+00:00",
+  "cycle_key": "32350827191:1:134",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,12 +29,43 @@
   },
   "selected_skills": [
     {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 3.82,
+      "confidence": 0.993,
+      "raw_score": 3.82,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "detail",
+        "specific",
+        "example"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "specific",
+            "detail"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "example"
+          ],
+          "weight": 0.92
+        }
+      ]
+    },
+    {
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.7,
-      "confidence": 0.998,
-      "raw_score": 4.7,
+      "score": 3.08,
+      "confidence": 0.972,
+      "raw_score": 3.08,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "whether",
@@ -48,15 +79,6 @@
             "whether"
           ],
           "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "because",
-            "whether",
-            "sure"
-          ],
-          "weight": 1.45
         },
         {
           "kind": "message",
@@ -78,12 +100,21 @@
             "whether"
           ],
           "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "because",
+            "whether",
+            "sure"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "078b1fc2805b",
+  "context_fingerprint": "6313b1ab5fd2",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 839,
+  "approx_added_tokens": 210
 }
