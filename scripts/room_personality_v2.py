@@ -5,6 +5,9 @@ from typing import Any
 
 STOP = set("the a an and or but if then than this that these those it its is are was were be been being to of in on for with from by at as about into over under we i you he she they them our your their my me us do does did can could would should will just very really quite more most less few some any all one two what why how when where who which everyone everybody someone somebody".split())
 NAMES = {"sarah", "mara", "owen", "jules", "allen"}
+_SOCIAL_LABELS = {"criticism_or_rejection", "exclusion", "praise_or_alignment"}
+_PRAISE_RE = re.compile(r"\b(winner|great|smart|brilliant|right|best|excellent|good point)\b")
+_CRITICISM_RE = re.compile(r"\b(wrong|nonsense|stupid|bad argument|makes no sense|ridiculous|idiot)\b")
 
 
 def _norm(text: Any) -> str:
@@ -21,10 +24,55 @@ def _terms(text: str) -> list[str]:
     return out[:8]
 
 
+def _sentences(text: str) -> list[str]:
+    return [part.strip() for part in re.split(r"(?<=[.!?])\s+|[;\n]+", _norm(text)) if part.strip()]
+
+
+def _directly_addressed(entity: str, text: str, target: str) -> bool:
+    if target == entity:
+        return True
+    low = _norm(text)
+    name = re.escape(entity)
+    if re.search(rf"^\s*{name}\b(?:\s*[,;:!?-]|\s+(?:why|what|how|do|does|did|are|is|can|could|would|will|please)\b)", low):
+        return True
+    if re.search(rf"(?:what|how|why)\s+(?:do|would|did)\s+you\b[^.!?]*\b{name}\s*[?]?$", low):
+        return True
+    return False
+
+
+def _entity_sentence_has(entity: str, text: str, pattern: re.Pattern[str]) -> bool:
+    name_re = re.compile(rf"\b{re.escape(entity)}\b")
+    return any(name_re.search(sentence) and pattern.search(sentence) for sentence in _sentences(text))
+
+
+def _excluded_entity(entity: str, text: str, target: str) -> bool:
+    if target == entity and re.search(r"\b(exclude|excluded|ignore|ignored|left out|everyone but|without)\b", _norm(text)):
+        return True
+    low = _norm(text)
+    name = re.escape(entity)
+    patterns = (
+        rf"\beveryone\s+but\s+{name}\b",
+        rf"\bwithout\s+{name}\b",
+        rf"\b{name}\b[^.!?]{{0,50}}\b(?:excluded|ignored|left out)\b",
+        rf"\b(?:exclude|excluded|ignore|ignored)\s+{name}\b",
+        rf"\b{name}\b\s+(?:doesn'?t|does not|doesnt|don'?t|isn'?t|is not)\s+(?:get|understand|belong|count|know)\b",
+    )
+    return any(re.search(pattern, low) for pattern in patterns)
+
+
+def _social_targeted(entity: str, label: str, text: str, target: str) -> bool:
+    if label == "exclusion":
+        return _excluded_entity(entity, text, target)
+    if label == "criticism_or_rejection":
+        return target == entity or _entity_sentence_has(entity, text, _CRITICISM_RE)
+    if label == "praise_or_alignment":
+        return target == entity or _entity_sentence_has(entity, text, _PRAISE_RE)
+    return False
+
+
 def classify_event(event: dict | None, context: list[dict] | None = None) -> list[str]:
     event = event or {}
     text = _norm(event.get("text"))
-    target = _norm(((event.get("cognition") or {}).get("target")))
     labels: list[str] = []
     if re.search(r"\b(hi|hello|hey|good morning|good evening)\b", text):
         labels.append("greeting")
@@ -36,17 +84,16 @@ def classify_event(event: dict | None, context: list[dict] | None = None) -> lis
         labels.append("topic_bid")
     if re.search(r"\b(sorry|apologize|apologies|my fault|too harsh|i was wrong)\b", text):
         labels.append("repair_bid")
-    if re.search(r"\b(winner|great|smart|brilliant|right|best|excellent|good point)\b", text):
+    if _PRAISE_RE.search(text):
         labels.append("praise_or_alignment")
-    if re.search(r"\b(wrong|nonsense|stupid|bad argument|makes no sense|ridiculous|idiot)\b", text):
+    if _CRITICISM_RE.search(text):
         labels.append("criticism_or_rejection")
     if re.search(r"\b(left out|exclude|excluded|ignore|ignored|doesn'?t get it|don'?t get it|everyone but|without you)\b", text):
         labels.append("exclusion")
     if re.search(r"\b(platypus|electroreceptor|monotreme|venom|quantum|recursive causation|axolotl|octopus)\b", text):
         labels.append("novel_or_odd_detail")
-    names_in_text = [name for name in NAMES if re.search(rf"\b{re.escape(name)}\b", text)]
-    if target in NAMES or names_in_text:
-        labels.append("direct_address")
+    if any(re.search(rf"\b{re.escape(name)}\b", text) for name in NAMES):
+        labels.append("named_participant")
     terms = _terms(text)
     if len(terms) <= 2 and "greeting" not in labels and "question" not in labels:
         labels.append("fragment_or_ambiguous")
@@ -58,17 +105,13 @@ def classify_event(event: dict | None, context: list[dict] | None = None) -> lis
     return list(dict.fromkeys(labels or ["ordinary_turn"]))
 
 
-def _schema_matches(profile: dict, labels: list[str], self_implicated: bool) -> list[dict]:
+def _schema_matches(profile: dict, trigger_labels: list[str]) -> list[dict]:
     active: list[dict] = []
     for item in profile.get("schema_vulnerabilities", []) or []:
         if not isinstance(item, dict):
             continue
         triggers = {str(x) for x in item.get("triggers", [])}
-        matched = [
-            label for label in labels
-            if label in triggers
-            and (self_implicated or label not in {"criticism_or_rejection", "exclusion", "praise_or_alignment"})
-        ]
+        matched = [label for label in trigger_labels if label in triggers]
         if matched:
             active.append({
                 "schema": item.get("name"),
@@ -82,15 +125,27 @@ def _schema_matches(profile: dict, labels: list[str], self_implicated: bool) -> 
 def appraise(entity: str, profile: dict, event: dict | None, context: list[dict] | None = None) -> dict:
     labels = classify_event(event, context)
     text = str((event or {}).get("text", "")).strip()
+    text_low = _norm(text)
     speaker = str((event or {}).get("speaker") or "").lower() or None
     terms = _terms(text)
-    text_low = _norm(text)
     target = _norm((((event or {}).get("cognition") or {}).get("target")))
-    self_implicated = bool(target == entity or re.search(rf"\b{re.escape(entity)}\b", text_low))
-    schema = _schema_matches(profile, labels, self_implicated)
+    directly_addressed = _directly_addressed(entity, text, target)
+    social_targeting = {
+        label: _social_targeted(entity, label, text, target)
+        for label in _SOCIAL_LABELS
+        if label in labels
+    }
+    trigger_labels = [
+        label for label in labels
+        if label not in _SOCIAL_LABELS or social_targeting.get(label, False)
+    ]
+    self_implicated = bool(directly_addressed or any(social_targeting.values()))
+    schema = _schema_matches(profile, trigger_labels)
+    names_in_text = [name for name in NAMES if re.search(rf"\b{re.escape(name)}\b", text_low)]
 
     lenses: list[str] = []
-    if "greeting" in labels or "direct_address" in labels or "question" in labels:
+    group_question = "question" in labels and not names_in_text
+    if "greeting" in labels or directly_addressed or group_question:
         lenses.append(str(profile.get("reciprocity_style", "")))
     if "topic_bid" in labels:
         lenses.append(str(profile.get("topic_mobility", "")))
@@ -98,11 +153,11 @@ def appraise(entity: str, profile: dict, event: dict | None, context: list[dict]
         lenses.append(str(profile.get("novelty_response", "")))
     if "evidence_request" in labels:
         lenses.append(str(profile.get("evidence_style", "")))
-    if "praise_or_alignment" in labels:
+    if social_targeting.get("praise_or_alignment"):
         lenses.extend([str(profile.get("praise_response", "")), str(profile.get("affiliation_style", ""))])
-    if "criticism_or_rejection" in labels:
+    if social_targeting.get("criticism_or_rejection"):
         lenses.extend([str(profile.get("criticism_response", "")), str(profile.get("disagreement_style", ""))])
-    if "exclusion" in labels:
+    if social_targeting.get("exclusion"):
         lenses.extend([str(profile.get("status_sensitivity", "")), str(profile.get("affiliation_style", ""))])
     if "repair_bid" in labels:
         lenses.extend([str(profile.get("repair_recovery", "")), str(profile.get("affiliation_style", ""))])
@@ -111,8 +166,8 @@ def appraise(entity: str, profile: dict, event: dict | None, context: list[dict]
 
     priority = "ground_latest_turn" if any(
         label in labels
-        for label in ("greeting", "question", "direct_address", "topic_bid", "evidence_request", "repair_bid")
-    ) else "integrate_latest_turn"
+        for label in ("greeting", "question", "topic_bid", "evidence_request", "repair_bid")
+    ) or directly_addressed else "integrate_latest_turn"
     if "fragment_or_ambiguous" in labels and "question" not in labels:
         priority = "clarify_or_interpret_fragment"
 
@@ -120,6 +175,8 @@ def appraise(entity: str, profile: dict, event: dict | None, context: list[dict]
         "entity": entity,
         "partner": speaker,
         "self_implicated": self_implicated,
+        "directly_addressed": directly_addressed,
+        "social_targeting": social_targeting,
         "situation": labels,
         "grounding": {"source_text": text[:500], "terms": terms},
         "priority": priority,
