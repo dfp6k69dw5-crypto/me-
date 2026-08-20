@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3594,
+  "cycle": 3595,
   "silence_cycles": 0,
-  "last_speaker": "sarah",
-  "last_run": "2026-08-20T07:06:20.980108Z",
+  "last_speaker": "mara",
+  "last_run": "2026-08-20T07:07:27.073454Z",
   "messages": 1000,
-  "last_public_event": "20260820T070620978-sarah-v5",
+  "last_public_event": "20260820T070727072-mara-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003594",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003595",
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -85,13 +85,15 @@
       "jules",
       "allen"
     ],
-    "turns": 7187,
-    "low_novelty_beats": 0,
+    "turns": 7189,
+    "low_novelty_beats": 1,
     "recent_terms": [
       "clarification",
       "learning",
-      "challenge",
-      "test"
+      "context",
+      "test",
+      "current context",
+      "new detail"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -101,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3594,
-        "hits": 50108,
+        "last_cycle": 3595,
+        "hits": 50124,
         "status": "open"
       },
       {
@@ -110,8 +112,71 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3594,
-        "hits": 13190,
+        "last_cycle": 3595,
+        "hits": 13191,
+        "status": "open"
+      },
+      {
+        "label": "context",
+        "parent": "less",
+        "depth": 303,
+        "first_cycle": 3585,
+        "last_cycle": 3595,
+        "hits": 131,
+        "status": "open"
+      },
+      {
+        "label": "current",
+        "parent": "dialogue",
+        "depth": 297,
+        "first_cycle": 3577,
+        "last_cycle": 3595,
+        "hits": 46,
+        "status": "open"
+      },
+      {
+        "label": "challenge",
+        "parent": "correct",
+        "depth": 306,
+        "first_cycle": 3459,
+        "last_cycle": 3595,
+        "hits": 39,
+        "status": "open"
+      },
+      {
+        "label": "new detail",
+        "parent": "context",
+        "depth": 304,
+        "first_cycle": 3588,
+        "last_cycle": 3595,
+        "hits": 39,
+        "status": "open"
+      },
+      {
+        "label": "more about this turn",
+        "parent": "new detail",
+        "depth": 305,
+        "first_cycle": 3590,
+        "last_cycle": 3595,
+        "hits": 38,
+        "status": "open"
+      },
+      {
+        "label": "clarify",
+        "parent": "more about this turn",
+        "depth": 306,
+        "first_cycle": 3592,
+        "last_cycle": 3595,
+        "hits": 19,
+        "status": "open"
+      },
+      {
+        "label": "clarification",
+        "parent": "clarify",
+        "depth": 307,
+        "first_cycle": 3593,
+        "last_cycle": 3595,
+        "hits": 15,
         "status": "open"
       },
       {
@@ -121,69 +186,6 @@
         "first_cycle": 1640,
         "last_cycle": 3594,
         "hits": 3215,
-        "status": "open"
-      },
-      {
-        "label": "context",
-        "parent": "less",
-        "depth": 303,
-        "first_cycle": 3585,
-        "last_cycle": 3594,
-        "hits": 123,
-        "status": "open"
-      },
-      {
-        "label": "current",
-        "parent": "dialogue",
-        "depth": 297,
-        "first_cycle": 3577,
-        "last_cycle": 3594,
-        "hits": 45,
-        "status": "open"
-      },
-      {
-        "label": "challenge",
-        "parent": "correct",
-        "depth": 306,
-        "first_cycle": 3459,
-        "last_cycle": 3594,
-        "hits": 38,
-        "status": "open"
-      },
-      {
-        "label": "new detail",
-        "parent": "context",
-        "depth": 304,
-        "first_cycle": 3588,
-        "last_cycle": 3594,
-        "hits": 37,
-        "status": "open"
-      },
-      {
-        "label": "more about this turn",
-        "parent": "new detail",
-        "depth": 305,
-        "first_cycle": 3590,
-        "last_cycle": 3594,
-        "hits": 34,
-        "status": "open"
-      },
-      {
-        "label": "clarify",
-        "parent": "more about this turn",
-        "depth": 306,
-        "first_cycle": 3592,
-        "last_cycle": 3594,
-        "hits": 13,
-        "status": "open"
-      },
-      {
-        "label": "clarification",
-        "parent": "clarify",
-        "depth": 307,
-        "first_cycle": 3593,
-        "last_cycle": 3594,
-        "hits": 6,
         "status": "open"
       },
       {
@@ -563,7 +565,7 @@
       "more about this turn",
       "clarify"
     ],
-    "focus_turns": 2,
+    "focus_turns": 4,
     "last_branch_cycle": 3593,
     "escape_pressure": 0
   }
