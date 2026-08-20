@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T00:21:50.977533+00:00",
-  "cycle_key": "32316483770:1:13",
+  "generated_at": "2026-08-20T00:22:29.076267+00:00",
+  "cycle_key": "32316483770:1:14",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,65 +32,62 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.68,
-      "confidence": 0.99,
-      "raw_score": 3.68,
-      "repeat_penalty": 0.0,
+      "score": 1.81,
+      "confidence": 0.782,
+      "raw_score": 2.09,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "true",
         "compare",
-        "reason",
-        "why"
+        "true"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "true"
+            "compare"
           ],
           "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "true"
+          ],
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
             "compare"
           ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why",
-            "reason"
-          ],
           "weight": 0.54
         }
       ]
     },
     {
-      "name": "creative-bridge",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "domain": "concrete-specificity",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "idea"
+        "show"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "idea"
+            "show"
           ],
-          "weight": 1.45
+          "weight": 1.8
         }
       ]
     }
   ],
-  "context_fingerprint": "dc0faf0e7ec1",
+  "context_fingerprint": "a3209febb114",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 834,
-  "approx_added_tokens": 208
+  "temporary_skill_chars": 839,
+  "approx_added_tokens": 210
 }
