@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3583,
+  "cycle": 3584,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-20T06:54:42.973372Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-20T06:55:46.632303Z",
   "messages": 1000,
-  "last_public_event": "20260820T065442970-mara-v5",
+  "last_public_event": "20260820T065546630-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003583",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003584",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "generalized intent",
+    "current_facet": "less",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "speak",
       "concisness",
       "concealing",
       "expressions",
@@ -71,7 +70,8 @@
       "evidence or connections",
       "back up",
       "argument",
-      "generalized intent"
+      "generalized intent",
+      "less"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,18 +85,18 @@
       "jules",
       "allen"
     ],
-    "turns": 7165,
+    "turns": 7167,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "argument",
-      "learning",
-      "active language",
-      "language",
-      "skepticism",
       "generalized intent",
+      "learning",
+      "learn more",
+      "less",
+      "more",
+      "test exception",
       "open questions",
-      "backed by evidence",
-      "current active claim"
+      "evidence",
+      "skepticism"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -106,8 +106,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3583,
-        "hits": 49932,
+        "last_cycle": 3584,
+        "hits": 49948,
         "status": "open"
       },
       {
@@ -115,8 +115,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3583,
-        "hits": 13149,
+        "last_cycle": 3584,
+        "hits": 13152,
         "status": "open"
       },
       {
@@ -124,8 +124,17 @@
         "parent": "majority of skeptics",
         "depth": 291,
         "first_cycle": 3569,
-        "last_cycle": 3583,
-        "hits": 100,
+        "last_cycle": 3584,
+        "hits": 107,
+        "status": "open"
+      },
+      {
+        "label": "learn more",
+        "parent": "public expression is important",
+        "depth": 284,
+        "first_cycle": 3555,
+        "last_cycle": 3584,
+        "hits": 70,
         "status": "open"
       },
       {
@@ -133,8 +142,8 @@
         "parent": "owen",
         "depth": 290,
         "first_cycle": 3531,
-        "last_cycle": 3583,
-        "hits": 46,
+        "last_cycle": 3584,
+        "hits": 47,
         "status": "open"
       },
       {
@@ -142,8 +151,8 @@
         "parent": "dialogue",
         "depth": 297,
         "first_cycle": 3577,
-        "last_cycle": 3583,
-        "hits": 36,
+        "last_cycle": 3584,
+        "hits": 37,
         "status": "open"
       },
       {
@@ -151,17 +160,8 @@
         "parent": "opinion",
         "depth": 294,
         "first_cycle": 3574,
-        "last_cycle": 3583,
-        "hits": 33,
-        "status": "open"
-      },
-      {
-        "label": "active",
-        "parent": "not backed by evidence",
-        "depth": 295,
-        "first_cycle": 3575,
-        "last_cycle": 3583,
-        "hits": 25,
+        "last_cycle": 3584,
+        "hits": 36,
         "status": "open"
       },
       {
@@ -169,8 +169,62 @@
         "parent": "evidence or connections",
         "depth": 299,
         "first_cycle": 3580,
-        "last_cycle": 3583,
-        "hits": 24,
+        "last_cycle": 3584,
+        "hits": 32,
+        "status": "open"
+      },
+      {
+        "label": "active",
+        "parent": "not backed by evidence",
+        "depth": 295,
+        "first_cycle": 3575,
+        "last_cycle": 3584,
+        "hits": 26,
+        "status": "open"
+      },
+      {
+        "label": "evidence or connections",
+        "parent": "current",
+        "depth": 298,
+        "first_cycle": 3579,
+        "last_cycle": 3584,
+        "hits": 20,
+        "status": "open"
+      },
+      {
+        "label": "argument",
+        "parent": "back up",
+        "depth": 300,
+        "first_cycle": 3582,
+        "last_cycle": 3584,
+        "hits": 11,
+        "status": "open"
+      },
+      {
+        "label": "generalized intent",
+        "parent": "argument",
+        "depth": 301,
+        "first_cycle": 3583,
+        "last_cycle": 3584,
+        "hits": 5,
+        "status": "open"
+      },
+      {
+        "label": "language",
+        "parent": "argument",
+        "depth": 301,
+        "first_cycle": 3583,
+        "last_cycle": 3584,
+        "hits": 2,
+        "status": "open"
+      },
+      {
+        "label": "less",
+        "parent": "generalized intent",
+        "depth": 302,
+        "first_cycle": 3584,
+        "last_cycle": 3584,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -183,57 +237,12 @@
         "status": "open"
       },
       {
-        "label": "evidence or connections",
-        "parent": "current",
-        "depth": 298,
-        "first_cycle": 3579,
-        "last_cycle": 3583,
-        "hits": 19,
-        "status": "open"
-      },
-      {
-        "label": "argument",
-        "parent": "back up",
-        "depth": 300,
-        "first_cycle": 3582,
-        "last_cycle": 3583,
-        "hits": 6,
-        "status": "open"
-      },
-      {
         "label": "public-expression",
         "parent": "back up",
         "depth": 300,
         "first_cycle": 3582,
         "last_cycle": 3583,
         "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "language",
-        "parent": "argument",
-        "depth": 301,
-        "first_cycle": 3583,
-        "last_cycle": 3583,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "generalized intent",
-        "parent": "argument",
-        "depth": 301,
-        "first_cycle": 3583,
-        "last_cycle": 3583,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "learn more",
-        "parent": "public expression is important",
-        "depth": 284,
-        "first_cycle": 3555,
-        "last_cycle": 3582,
-        "hits": 67,
         "status": "open"
       },
       {
@@ -523,19 +532,9 @@
         "last_cycle": 3547,
         "hits": 65,
         "status": "open"
-      },
-      {
-        "label": "new and persistent",
-        "parent": "curiosity",
-        "depth": 282,
-        "first_cycle": 3537,
-        "last_cycle": 3547,
-        "hits": 44,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "owen",
       "open",
       "support",
       "curiosity",
@@ -566,10 +565,11 @@
       "current",
       "evidence or connections",
       "back up",
-      "argument"
+      "argument",
+      "generalized intent"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 3583,
+    "last_branch_cycle": 3584,
     "escape_pressure": 0
   }
 }
