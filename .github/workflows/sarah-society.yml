@@ -48,7 +48,8 @@ jobs:
 
           # Bound every beat-scoped child and relay request. A wedged local model
           # client or half-open relay connection must never freeze the 5.5-hour warm
-          # runner. Repeated failed beats deliberately hand off to a fresh runner.
+          # runner. Repeated failed beats stop this runner; the independent supervisor
+          # decides whether a replacement is warranted instead of restart-looping here.
           ROOM_NODE_TIMEOUT_SECONDS=45
           ROOM_NODE_KILL_GRACE_SECONDS=5
           ROOM_RELAY_CONNECT_TIMEOUT_SECONDS=3
@@ -90,6 +91,7 @@ jobs:
           stop_at=$((SECONDS + 19800))
           beat_seq=0
           consecutive_failures=0
+          runner_exit_reason="warm_expiry"
           relay_token=""
           relay_token_refresh_at=0
 
@@ -253,7 +255,8 @@ jobs:
               consecutive_failures=$((consecutive_failures + 1))
               echo "A Room beat failed internally (${consecutive_failures}/${ROOM_BEAT_FAILURE_LIMIT})"
               if [ "$consecutive_failures" -ge "$ROOM_BEAT_FAILURE_LIMIT" ]; then
-                echo "Repeated beat failures; abandoning this warm runner for a fresh model/runner"
+                echo "Repeated beat failures; stopping this warm runner for supervisor review"
+                runner_exit_reason="repeated_beat_failure"
                 break
               fi
               sleep 3
@@ -288,7 +291,12 @@ jobs:
           done
 
           if [ -n "$model_pid" ]; then kill "$model_pid" 2>/dev/null || true; fi
-          echo "Warm Room runner is handing itself to a fresh runner"
+          if [ "$runner_exit_reason" = "repeated_beat_failure" ]; then
+            echo "Warm Room runner stopped after repeated failures; supervisor owns recovery"
+            exit 1
+          fi
+
+          echo "Warm Room runner completed its warm window; handing itself to a fresh runner"
           for attempt in 1 2 3 4 5; do
             if gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto; then exit 0; fi
             sleep $((attempt * 5))
