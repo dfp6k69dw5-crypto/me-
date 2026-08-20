@@ -1,19 +1,19 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3290,
+  "cycle": 3291,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-20T01:33:24.648401Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-20T01:34:30.525801Z",
   "messages": 1000,
-  "last_public_event": "20260820T013324646-mara-v5",
+  "last_public_event": "20260820T013430524-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003290",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003291",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
@@ -85,17 +85,15 @@
       "jules",
       "allen"
     ],
-    "turns": 6579,
+    "turns": 6581,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "interester",
-      "learning",
       "learn more",
-      "sarah|context|learning",
-      "sarah is a great challenge",
-      "topic",
-      "interesting",
-      "interest"
+      "learning",
+      "new information goal",
+      "test exception",
+      "context",
+      "curiosity"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -105,8 +103,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3290,
-        "hits": 45080,
+        "last_cycle": 3291,
+        "hits": 45096,
         "status": "open"
       },
       {
@@ -114,8 +112,8 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3290,
-        "hits": 12012,
+        "last_cycle": 3291,
+        "hits": 12015,
         "status": "open"
       },
       {
@@ -123,8 +121,17 @@
         "parent": "curious",
         "depth": 281,
         "first_cycle": 1640,
-        "last_cycle": 3290,
-        "hits": 2639,
+        "last_cycle": 3291,
+        "hits": 2641,
+        "status": "open"
+      },
+      {
+        "label": "new information goal",
+        "parent": "skepticity",
+        "depth": 325,
+        "first_cycle": 3192,
+        "last_cycle": 3291,
+        "hits": 97,
         "status": "open"
       },
       {
@@ -132,8 +139,8 @@
         "parent": "test or challenge one claim with a reason, exception, or piece of evidence",
         "depth": 293,
         "first_cycle": 3272,
-        "last_cycle": 3290,
-        "hits": 76,
+        "last_cycle": 3291,
+        "hits": 78,
         "status": "open"
       },
       {
@@ -141,8 +148,53 @@
         "parent": "curiosity",
         "depth": 282,
         "first_cycle": 3283,
-        "last_cycle": 3290,
-        "hits": 67,
+        "last_cycle": 3291,
+        "hits": 69,
+        "status": "open"
+      },
+      {
+        "label": "current context",
+        "parent": "discussing",
+        "depth": 346,
+        "first_cycle": 3217,
+        "last_cycle": 3291,
+        "hits": 37,
+        "status": "open"
+      },
+      {
+        "label": "effective",
+        "parent": "active listening",
+        "depth": 284,
+        "first_cycle": 3287,
+        "last_cycle": 3291,
+        "hits": 32,
+        "status": "open"
+      },
+      {
+        "label": "active listening",
+        "parent": "testing",
+        "depth": 283,
+        "first_cycle": 3286,
+        "last_cycle": 3291,
+        "hits": 21,
+        "status": "open"
+      },
+      {
+        "label": "interester",
+        "parent": "effective",
+        "depth": 285,
+        "first_cycle": 3289,
+        "last_cycle": 3291,
+        "hits": 12,
+        "status": "open"
+      },
+      {
+        "label": "learn more",
+        "parent": "interester",
+        "depth": 286,
+        "first_cycle": 3290,
+        "last_cycle": 3291,
+        "hits": 7,
         "status": "open"
       },
       {
@@ -155,57 +207,12 @@
         "status": "open"
       },
       {
-        "label": "current context",
-        "parent": "discussing",
-        "depth": 346,
-        "first_cycle": 3217,
-        "last_cycle": 3290,
-        "hits": 35,
-        "status": "open"
-      },
-      {
-        "label": "effective",
-        "parent": "active listening",
-        "depth": 284,
-        "first_cycle": 3287,
-        "last_cycle": 3290,
-        "hits": 24,
-        "status": "open"
-      },
-      {
-        "label": "active listening",
-        "parent": "testing",
-        "depth": 283,
-        "first_cycle": 3286,
-        "last_cycle": 3290,
-        "hits": 20,
-        "status": "open"
-      },
-      {
-        "label": "interester",
-        "parent": "effective",
-        "depth": 285,
-        "first_cycle": 3289,
-        "last_cycle": 3290,
-        "hits": 7,
-        "status": "open"
-      },
-      {
         "label": "interests",
         "parent": "effective",
         "depth": 285,
         "first_cycle": 3289,
         "last_cycle": 3290,
         "hits": 2,
-        "status": "open"
-      },
-      {
-        "label": "learn more",
-        "parent": "interester",
-        "depth": 286,
-        "first_cycle": 3290,
-        "last_cycle": 3290,
-        "hits": 1,
         "status": "open"
       },
       {
@@ -377,15 +384,6 @@
         "first_cycle": 3258,
         "last_cycle": 3268,
         "hits": 36,
-        "status": "open"
-      },
-      {
-        "label": "new information goal",
-        "parent": "skepticity",
-        "depth": 325,
-        "first_cycle": 3192,
-        "last_cycle": 3267,
-        "hits": 96,
         "status": "open"
       },
       {
@@ -567,7 +565,7 @@
       "effective",
       "interester"
     ],
-    "focus_turns": 0,
+    "focus_turns": 2,
     "last_branch_cycle": 3290,
     "escape_pressure": 0
   }
