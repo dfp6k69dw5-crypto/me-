@@ -63,9 +63,9 @@ PY
           done
           [ "$published" -eq 1 ] || exit 1
 
-          if [ "$action" = "restart" ]; then
-            echo "Published Room is stale; supervisor is starting one replacement runner"
+          if [ "$action" = "restart" ] || [ "$action" = "probe_restart" ]; then
+            echo "Supervisor is starting one bounded replacement runner"
             gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
           elif [ "$action" = "circuit_open" ]; then
-            echo "Room replacement circuit is open; refusing another identical restart loop"
+            echo "Room replacement circuit is open; refusing another identical restart loop during cooldown"
           fi
