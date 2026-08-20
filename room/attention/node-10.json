@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T18:08:30.933016+00:00",
-  "cycle_key": "32401282451:1:1",
+  "generated_at": "2026-08-20T18:13:27.899756+00:00",
+  "cycle_key": "32401708714:1:1",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,13 +29,48 @@
   },
   "selected_skills": [
     {
+      "name": "creative-bridge",
+      "tier": "project",
+      "domain": "creative-bridge",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "novel"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "novel"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "novel"
+          ],
+          "weight": 0.58
+        },
+        {
+          "kind": "topic_support",
+          "matched": [
+            "novel"
+          ],
+          "weight": 0.38
+        }
+      ]
+    },
+    {
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.6,
-      "confidence": 0.989,
-      "raw_score": 3.6,
-      "repeat_penalty": 0.0,
+      "score": 1.24,
+      "confidence": 0.563,
+      "raw_score": 1.52,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "cause",
         "true"
@@ -47,42 +82,13 @@
             "cause",
             "true"
           ],
-          "weight": 1.8
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 1.83,
-      "confidence": 0.788,
-      "raw_score": 1.83,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "felt",
-        "excited"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "felt"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "topic_support",
-          "matched": [
-            "excited"
-          ],
-          "weight": 0.38
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "876c586b8c1c",
+  "context_fingerprint": "8ef4da2ae167",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 890,
-  "approx_added_tokens": 222
+  "temporary_skill_chars": 834,
+  "approx_added_tokens": 208
 }
