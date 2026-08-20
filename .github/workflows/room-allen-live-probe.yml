@@ -31,7 +31,7 @@ jobs:
           auth_body=$(mktemp)
           auth_status=$(curl -sS -o "$auth_body" -w '%{http_code}' "${ROOM_RELAY_URL%/}/api/allen/auth" || true)
           python3 - "$pending_status" "$auth_status" "$pending_body" "$auth_body" <<'PY'
-          import json,sys
+          import json,re,sys
           from datetime import datetime,timezone
           ps,as_,pb,ab=sys.argv[1:]
           def text(path):
@@ -49,8 +49,47 @@ jobs:
               e: ('allen' in ((entities.get(e) or {}).get('people') or {}))
               for e in ai
           }
+          relationship_stats={}
+          for e in ai:
+              rel=((entities.get(e) or {}).get('people') or {}).get('allen') or {}
+              relationship_stats[e]={
+                  'observed_turns':int(rel.get('observed_turns') or 0),
+                  'direct_turns':int(rel.get('direct_turns') or 0),
+                  'last_direct_cycle':rel.get('last_direct_cycle'),
+              }
           topic=((state.get('topic_episode') or {}) if isinstance(state,dict) else {})
           recent_allen=[m for m in conv[-1000:] if isinstance(m,dict) and m.get('speaker')=='allen'] if isinstance(conv,list) else []
+
+          allen_indices=[i for i,m in enumerate(conv) if isinstance(m,dict) and m.get('speaker')=='allen'] if isinstance(conv,list) else []
+          first_reply_count=0
+          first_reply_target_allen=0
+          windows_with_target_allen=0
+          windows_with_name_mention=0
+          ai_target_allen_total=0
+          ai_name_mentions_total=0
+          for m in conv if isinstance(conv,list) else []:
+              if not isinstance(m,dict) or m.get('speaker') not in ai: continue
+              if ((m.get('cognition') or {}).get('target')=='allen'):
+                  ai_target_allen_total+=1
+              if re.search(r'\ballen\b',str(m.get('text') or ''),re.I):
+                  ai_name_mentions_total+=1
+          for idx in allen_indices:
+              following=[]
+              for m in conv[idx+1:]:
+                  if not isinstance(m,dict): continue
+                  if m.get('speaker')=='allen': break
+                  if m.get('speaker') in ai:
+                      following.append(m)
+                      if len(following)>=4: break
+              if not following: continue
+              first_reply_count+=1
+              if ((following[0].get('cognition') or {}).get('target')=='allen'):
+                  first_reply_target_allen+=1
+              if any(((m.get('cognition') or {}).get('target')=='allen') for m in following):
+                  windows_with_target_allen+=1
+              if any(re.search(r'\ballen\b',str(m.get('text') or ''),re.I) for m in following):
+                  windows_with_name_mention+=1
+
           out={
               'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
               'pending_status':int(ps or 0),
@@ -60,8 +99,17 @@ jobs:
               'topic_participants':list(topic.get('participants') or []),
               'allen_relationship_present':relationships,
               'allen_relationship_present_for_all':all(relationships.values()),
+              'allen_relationship_stats':relationship_stats,
               'retained_allen_turn_count':len(recent_allen),
               'latest_allen_turn':recent_allen[-1] if recent_allen else None,
+              'response_baseline':{
+                  'allen_turns_with_following_ai':first_reply_count,
+                  'first_ai_reply_targeted_allen':first_reply_target_allen,
+                  'allen_turn_windows_with_any_target_allen':windows_with_target_allen,
+                  'allen_turn_windows_with_any_name_mention':windows_with_name_mention,
+                  'ai_messages_targeting_allen_total':ai_target_allen_total,
+                  'ai_messages_mentioning_allen_total':ai_name_mentions_total,
+              },
               'room_cycle':state.get('cycle') if isinstance(state,dict) else None,
               'room_last_run':state.get('last_run') if isinstance(state,dict) else None,
           }
@@ -78,4 +126,4 @@ jobs:
             sleep $attempt
           done
 
-# social-state-probe-trigger: 2026-08-19T23:54Z
+# response-baseline-probe-trigger: 2026-08-20T00:02Z
