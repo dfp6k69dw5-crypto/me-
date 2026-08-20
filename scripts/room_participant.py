@@ -13,6 +13,7 @@ import room_engine_v5 as c
 TARGETS = ("sarah", "mara", "owen", "jules")
 PARTICIPANT = "allen"
 MAX_TEXT = 700
+OBSERVED_IDS_KEY = "participant_observation_ids"
 
 
 def load_json(path: Path, default):
@@ -121,6 +122,68 @@ def inject(item: dict, history: list, discourse: dict, state: dict):
     return source_id
 
 
+def _message_cycle(message: dict, fallback: int) -> int:
+    match = re.search(r"-(\d{6})$", str(message.get("beat_id") or ""))
+    return int(match.group(1)) if match else int(fallback)
+
+
+def _remember_for_listener(mind: dict, listener: str, message: dict) -> None:
+    entity = (mind.get("entities") or {}).get(listener)
+    if not isinstance(entity, dict):
+        return
+    source = str(message.get("id") or "")
+    memories = list(entity.get("room_memories") or [])
+    if source and not any(str(item.get("source") or "") == source for item in memories if isinstance(item, dict)):
+        cognition = message.get("cognition") or {}
+        memories.append({
+            "source": source,
+            "status": "observed",
+            "speaker": PARTICIPANT,
+            "text": str(message.get("text") or "")[:300],
+            "discourse": message.get("discourse_id"),
+            "beat_id": message.get("beat_id"),
+            "topic_episode": cognition.get("topic_episode"),
+        })
+        deduped = {}
+        for item in memories:
+            if not isinstance(item, dict):
+                continue
+            key = str(item.get("source") or "")
+            if key:
+                deduped[key] = item
+        entity["room_memories"] = [deduped[key] for key in sorted(deduped)][-220:]
+    last_event = str(entity.get("last_event") or "")
+    if source and (not last_event or source > last_event):
+        entity["last_event"] = source
+
+
+def observe_allen_history(mind: dict, history: list, discourse: dict, state: dict) -> int:
+    """Persist each retained Allen turn into listener social memory exactly once."""
+    if not isinstance(mind, dict):
+        return 0
+    seen = {str(value) for value in list(mind.get(OBSERVED_IDS_KEY) or []) if str(value)}
+    by = {
+        str(node.get("id")): node
+        for node in list((discourse or {}).get("nodes") or [])
+        if isinstance(node, dict) and node.get("id")
+    }
+    fallback_cycle = int((state or {}).get("cycle", 0))
+    observed = 0
+    for message in list(history or []):
+        if not isinstance(message, dict) or message.get("speaker") != PARTICIPANT:
+            continue
+        source = str(message.get("id") or "")
+        if not source or source in seen:
+            continue
+        for listener in TARGETS:
+            _remember_for_listener(mind, listener, message)
+        c.observe_message(mind, message, _message_cycle(message, fallback_cycle), by)
+        seen.add(source)
+        observed += 1
+    mind[OBSERVED_IDS_KEY] = sorted(seen)[-1000:]
+    return observed
+
+
 def main():
     if len(sys.argv) != 3:
         raise SystemExit("usage: room_participant.py INBOX_JSON ACK_JSON")
@@ -135,6 +198,7 @@ def main():
     history = c.conv()
     discourse = c.tree()
     state = c.state()
+    mind = c.minds()
     ack_ids = []
     for item in pending[:20]:
         if not isinstance(item, dict):
@@ -143,12 +207,18 @@ def main():
         if source_id:
             ack_ids.append(source_id)
 
+    observed_count = observe_allen_history(mind, history, discourse, state)
+
     if ack_ids:
         c.save(c.ROOM / "conversation.json", history[-1000:])
         discourse["nodes"] = discourse.get("nodes", [])[-1200:]
         discourse["roots"] = discourse.get("roots", [])[-300:]
         c.save(c.ROOM / "discourse.json", discourse)
         print(f"Injected {len(ack_ids)} Allen turn(s) into the Room context")
+
+    if observed_count:
+        c.save(c.ROOM / "cognitive_state.json", mind)
+        print(f"Observed {observed_count} previously unseen Allen turn(s) into Room social memory")
 
     ack_path.parent.mkdir(parents=True, exist_ok=True)
     ack_path.write_text(json.dumps({"ids": ack_ids}, separators=(",", ":")) + "\n")
