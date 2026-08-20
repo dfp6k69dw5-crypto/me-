@@ -1,26 +1,26 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 3799,
+  "cycle": 3800,
   "silence_cycles": 0,
-  "last_speaker": "mara",
-  "last_run": "2026-08-20T10:54:50.809399Z",
+  "last_speaker": "owen",
+  "last_run": "2026-08-20T10:56:02.670660Z",
   "messages": 1000,
-  "last_public_event": "20260820T105450807-mara-v5",
+  "last_public_event": "20260820T105602669-owen-v5",
   "note": "research-informed v5 private model active; four mandatory unique speakers; no public fallback; dialogue-quality leaks tolerated; privacy gate retained",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003799",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-003800",
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "beat_message_count": 4,
   "topic_episode": {
     "semantic_schema": 4,
     "id": "topic-000001",
     "root": "learning",
-    "current_facet": "ask",
+    "current_facet": "presentation",
     "facets": [
       "sarah",
       "skepticism",
@@ -48,7 +48,6 @@
       "test"
     ],
     "visited_facets": [
-      "decide",
       "reason",
       "evidence",
       "important",
@@ -71,7 +70,8 @@
       "next",
       "skeptical",
       "who",
-      "ask"
+      "ask",
+      "presentation"
     ],
     "facet_index": 24,
     "unresolved": [],
@@ -85,15 +85,16 @@
       "jules",
       "allen"
     ],
-    "turns": 7597,
+    "turns": 7599,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "skepticism",
-      "who",
-      "learning",
       "ask",
-      "learn more",
-      "topic"
+      "learning",
+      "skepticism",
+      "curiosity",
+      "more",
+      "learn",
+      "presentation"
     ],
     "last_shift_cycle": 1,
     "status": "active",
@@ -103,8 +104,8 @@
         "parent": null,
         "depth": 0,
         "first_cycle": 1,
-        "last_cycle": 3799,
-        "hits": 53493,
+        "last_cycle": 3800,
+        "hits": 53510,
         "status": "open"
       },
       {
@@ -112,8 +113,17 @@
         "parent": "learning",
         "depth": 1,
         "first_cycle": 530,
-        "last_cycle": 3799,
-        "hits": 14423,
+        "last_cycle": 3800,
+        "hits": 14436,
+        "status": "open"
+      },
+      {
+        "label": "curiosity",
+        "parent": "curious",
+        "depth": 281,
+        "first_cycle": 1640,
+        "last_cycle": 3800,
+        "hits": 3917,
         "status": "open"
       },
       {
@@ -121,8 +131,8 @@
         "parent": "decision-making",
         "depth": 286,
         "first_cycle": 3719,
-        "last_cycle": 3799,
-        "hits": 199,
+        "last_cycle": 3800,
+        "hits": 200,
         "status": "open"
       },
       {
@@ -130,8 +140,8 @@
         "parent": "public expression is important",
         "depth": 284,
         "first_cycle": 3555,
-        "last_cycle": 3799,
-        "hits": 153,
+        "last_cycle": 3800,
+        "hits": 159,
         "status": "open"
       },
       {
@@ -139,8 +149,8 @@
         "parent": "talent",
         "depth": 286,
         "first_cycle": 3789,
-        "last_cycle": 3799,
-        "hits": 38,
+        "last_cycle": 3800,
+        "hits": 40,
         "status": "open"
       },
       {
@@ -148,7 +158,16 @@
         "parent": "recursive",
         "depth": 288,
         "first_cycle": 3793,
-        "last_cycle": 3799,
+        "last_cycle": 3800,
+        "hits": 38,
+        "status": "open"
+      },
+      {
+        "label": "who",
+        "parent": "skeptical",
+        "depth": 291,
+        "first_cycle": 3797,
+        "last_cycle": 3800,
         "hits": 37,
         "status": "open"
       },
@@ -157,8 +176,8 @@
         "parent": "passive claim",
         "depth": 289,
         "first_cycle": 3795,
-        "last_cycle": 3799,
-        "hits": 34,
+        "last_cycle": 3800,
+        "hits": 35,
         "status": "open"
       },
       {
@@ -166,17 +185,26 @@
         "parent": "next",
         "depth": 290,
         "first_cycle": 3796,
-        "last_cycle": 3799,
-        "hits": 31,
+        "last_cycle": 3800,
+        "hits": 35,
         "status": "open"
       },
       {
-        "label": "who",
-        "parent": "skeptical",
-        "depth": 291,
-        "first_cycle": 3797,
-        "last_cycle": 3799,
-        "hits": 25,
+        "label": "ask",
+        "parent": "who",
+        "depth": 292,
+        "first_cycle": 3799,
+        "last_cycle": 3800,
+        "hits": 6,
+        "status": "open"
+      },
+      {
+        "label": "presentation",
+        "parent": "ask",
+        "depth": 293,
+        "first_cycle": 3800,
+        "last_cycle": 3800,
+        "hits": 1,
         "status": "open"
       },
       {
@@ -186,24 +214,6 @@
         "first_cycle": 3796,
         "last_cycle": 3799,
         "hits": 4,
-        "status": "open"
-      },
-      {
-        "label": "ask",
-        "parent": "who",
-        "depth": 292,
-        "first_cycle": 3799,
-        "last_cycle": 3799,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "curiosity",
-        "parent": "curious",
-        "depth": 281,
-        "first_cycle": 1640,
-        "last_cycle": 3798,
-        "hits": 3915,
         "status": "open"
       },
       {
@@ -520,19 +530,9 @@
         "last_cycle": 3769,
         "hits": 22,
         "status": "open"
-      },
-      {
-        "label": "mara",
-        "parent": "curiosity",
-        "depth": 282,
-        "first_cycle": 3751,
-        "last_cycle": 3767,
-        "hits": 40,
-        "status": "open"
       }
     ],
     "branch_history": [
-      "thoughts",
       "intelligent",
       "human",
       "social-perception",
@@ -563,10 +563,11 @@
       "passive claim",
       "next",
       "skeptical",
-      "who"
+      "who",
+      "ask"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 3799,
+    "last_branch_cycle": 3800,
     "escape_pressure": 0
   }
 }
