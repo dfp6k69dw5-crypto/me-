@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T03:10:24.956175+00:00",
-  "cycle_key": "32320379323:1:109",
+  "generated_at": "2026-08-20T03:13:45.212024+00:00",
+  "cycle_key": "32327318846:1:1",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,37 +29,43 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "affect",
-      "score": 1.83,
-      "confidence": 0.788,
-      "raw_score": 1.83,
+      "domain": "concrete-specificity",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "afraid",
-        "trust"
+        "example"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "afraid"
+            "example"
           ],
           "weight": 1.45
         },
         {
-          "kind": "topic_support",
+          "kind": "message",
           "matched": [
-            "trust"
+            "example"
           ],
-          "weight": 0.38
+          "weight": 0.54
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "example"
+          ],
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "120eecc20b99",
+  "context_fingerprint": "39b59c1ea011",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 493,
+  "approx_added_tokens": 123
 }
