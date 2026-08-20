@@ -6,11 +6,13 @@ from __future__ import annotations
 The preserved core engine still has exactly four autonomous generators. This
 wrapper changes participant-facing semantics only: Allen may be recognized as a
 recent speaker/target, and the first autonomous speaker after an Allen turn gets
-a real adjacency response opportunity. Iteration, indexing, node ownership, and
-generation remain Sarah/Mara/Owen/Jules only.
+a real adjacency response opportunity. The second voice usually stays with Allen
+for one additional response. Iteration, indexing, node ownership, and generation
+remain Sarah/Mara/Owen/Jules only.
 """
 
 import copy
+import hashlib
 import os
 
 import room_private_model as _private_model
@@ -88,10 +90,16 @@ def _participant_context_collapsed(context):
 
 _core.context_collapsed = _participant_context_collapsed
 
-# The expression phase is sequential and ROOM_EXPRESSION_RANK=0 is the first AI
-# voice after the latest public event. Give exactly that voice a response
-# obligation when Allen is the latest speaker. The language remains model-made;
-# this wrapper changes routing/intent only. Ranks 1-3 remain unconstrained.
+
+def _second_voice_engages_allen(key):
+    """Deterministic 75% gate so beat retries preserve the same routing."""
+    return hashlib.sha256(f"allen-second-voice:{key}".encode()).digest()[0] < 192
+
+
+# The expression phase is sequential. Rank 0 always answers Allen when Allen is
+# the latest public event. Rank 1 stays with Allen on a deterministic 75% gate,
+# which makes two responders usual without turning every interruption into a
+# four-voice chorus. Ranks 2-3 remain unconstrained.
 _original_recurrent = _core.recurrent
 
 
@@ -102,18 +110,22 @@ def _participant_recurrent(node, key, bus_data):
         source = _core.rp(bus_data, entity, role) if role == "expression" else None
         base = (source or {}).get("private") or {}
         latest = base.get("event") if isinstance(base.get("event"), dict) else None
-        direct_allen_reply = bool(
+        allen_latest = bool(
             role == "expression"
-            and rank == 0
             and base.get("partner") == "allen"
             and latest
             and latest.get("speaker") == "allen"
         )
+        primary_allen_reply = bool(allen_latest and rank == 0)
+        secondary_allen_reply = bool(allen_latest and rank == 1 and _second_voice_engages_allen(key))
+        routed_allen_reply = primary_allen_reply or secondary_allen_reply
     except Exception:
-        direct_allen_reply = False
+        routed_allen_reply = False
+        primary_allen_reply = False
+        secondary_allen_reply = False
         entity = None
 
-    if not direct_allen_reply:
+    if not routed_allen_reply:
         return _original_recurrent(node, key, bus_data)
 
     routed_bus = copy.deepcopy(bus_data)
@@ -121,19 +133,24 @@ def _participant_recurrent(node, key, bus_data):
     thought_private = thought.get("private") if isinstance(thought.get("private"), dict) else {}
     deliberation = thought_private.get("deliberation") if isinstance(thought_private.get("deliberation"), dict) else None
     if isinstance(deliberation, dict):
-        deliberation["action"] = "ANSWER"
+        deliberation["action"] = "ANSWER" if primary_allen_reply else "DEEPEN"
         deliberation["preferred_partner"] = "allen"
         deliberation["new_information_goal"] = ""
         deliberation.pop("conversation_job", None)
 
-    # Suppress the ordinary per-voice distinct-contribution job for this single
-    # adjacency response. The core still builds all four expressions normally.
+    # Suppress the ordinary per-voice distinct-contribution job for a routed
+    # Allen response. For selected rank 1, also keep the actual Allen turn as the
+    # expression event instead of replacing it with rank 0's same-beat reply.
     original_job = _core.conversation_job
+    original_prior = _core.prior_expression_messages
     _core.conversation_job = lambda *_args, **_kwargs: ""
+    if secondary_allen_reply:
+        _core.prior_expression_messages = lambda _node: []
     try:
         result = _original_recurrent(node, key, routed_bus)
     finally:
         _core.conversation_job = original_job
+        _core.prior_expression_messages = original_prior
 
     if isinstance(result, dict):
         result = dict(result)
@@ -142,7 +159,7 @@ def _participant_recurrent(node, key, bus_data):
         if isinstance(expression, dict):
             expression = dict(expression)
             expression["target"] = "allen"
-            expression["move"] = "answer"
+            expression["move"] = "answer" if primary_allen_reply else "deepen"
             private["expression"] = expression
             result["private"] = private
     return result
