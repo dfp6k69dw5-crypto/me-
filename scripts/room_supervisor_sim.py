@@ -14,17 +14,34 @@ def iso(dt: datetime) -> str:
 def main() -> None:
     now = datetime(2026, 8, 20, 15, 0, tzinfo=timezone.utc)
 
-    healthy_state = {"cycle": 4000, "last_run": iso(now - timedelta(minutes=2))}
-    healthy_control = {"last_observed_cycle": 3999, "restart_attempts": 1, "restart_cycle": 3999}
-    healthy = supervisor.decide(healthy_state, healthy_control, now=now)
+    # A supervisor with no persisted control state must establish a baseline once.
+    # Calling an arbitrary nonzero cycle "progress" forever makes a frozen Room
+    # impossible to detect because the workflow exits before saving control state.
+    bootstrap_state = {"cycle": 4000, "last_run": iso(now - timedelta(minutes=2))}
+    bootstrap = supervisor.decide(bootstrap_state, None, now=now)
+    assert bootstrap["action"] == "initialize", bootstrap
+    assert bootstrap["control"]["last_observed_cycle"] == 4000, bootstrap
+    assert bootstrap["control"]["restart_attempts"] == 0, bootstrap
+
+    baseline_healthy = supervisor.decide(bootstrap_state, bootstrap["control"], now=now + timedelta(minutes=5))
+    assert baseline_healthy["action"] == "healthy", baseline_healthy
+
+    baseline_stale = supervisor.decide(bootstrap_state, bootstrap["control"], now=now + timedelta(minutes=9))
+    assert baseline_stale["action"] == "restart", baseline_stale
+    assert baseline_stale["control"]["restart_cycle"] == 4000, baseline_stale
+    assert baseline_stale["control"]["restart_attempts"] == 1, baseline_stale
+
+    healthy_state = {"cycle": 4001, "last_run": iso(now + timedelta(minutes=10))}
+    healthy_control = {"last_observed_cycle": 4000, "restart_attempts": 1, "restart_cycle": 4000}
+    healthy = supervisor.decide(healthy_state, healthy_control, now=now + timedelta(minutes=10))
     assert healthy["action"] == "healthy", healthy
     assert healthy["control"]["restart_attempts"] == 0, healthy
-    assert healthy["control"]["last_observed_cycle"] == 4000, healthy
+    assert healthy["control"]["last_observed_cycle"] == 4001, healthy
 
-    stale_state = {"cycle": 4000, "last_run": iso(now - timedelta(minutes=12))}
-    first = supervisor.decide(stale_state, {"last_observed_cycle": 4000}, now=now)
+    stale_state = {"cycle": 4001, "last_run": iso(now - timedelta(minutes=12))}
+    first = supervisor.decide(stale_state, {"last_observed_cycle": 4001}, now=now)
     assert first["action"] == "restart", first
-    assert first["control"]["restart_cycle"] == 4000, first
+    assert first["control"]["restart_cycle"] == 4001, first
     assert first["control"]["restart_attempts"] == 1, first
 
     second = supervisor.decide(stale_state, first["control"], now=now + timedelta(minutes=5))
@@ -45,7 +62,7 @@ def main() -> None:
     assert probe["control"]["restart_attempts"] == 1, probe
     assert probe["control"]["circuit_open"] is False, probe
 
-    recovered_state = {"cycle": 4001, "last_run": iso(now + timedelta(minutes=41))}
+    recovered_state = {"cycle": 4002, "last_run": iso(now + timedelta(minutes=41))}
     recovered = supervisor.decide(recovered_state, probe["control"], now=now + timedelta(minutes=42))
     assert recovered["action"] == "healthy", recovered
     assert recovered["control"]["circuit_open"] is False, recovered
@@ -56,6 +73,7 @@ def main() -> None:
     assert 'python3 scripts/room_supervisor.py check' in supervisor_workflow, 'workflow bypasses deterministic supervisor'
     assert 'gh workflow run sarah-society.yml' in supervisor_workflow, 'supervisor cannot launch a bounded replacement'
     assert 'probe_restart' in supervisor_workflow, 'cooldown probe is not wired to replacement launch'
+    assert 'if [ "$action" = "healthy" ]; then' in supervisor_workflow, 'healthy fast path unexpectedly changed'
 
     room_workflow = Path('.github/workflows/sarah-society.yml').read_text()
     failure_mark = room_workflow.index('runner_exit_reason="repeated_beat_failure"')
