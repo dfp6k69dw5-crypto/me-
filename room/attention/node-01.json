@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-20T00:27:31.868247+00:00",
-  "cycle_key": "32316483770:1:24",
+  "generated_at": "2026-08-20T00:28:03.847993+00:00",
+  "cycle_key": "32316483770:1:25",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,33 +32,40 @@
       "name": "social-grounding",
       "tier": "project",
       "domain": "interaction",
-      "score": 2.44,
-      "confidence": 0.918,
-      "raw_score": 2.44,
-      "repeat_penalty": 0.0,
+      "score": 2.02,
+      "confidence": 0.84,
+      "raw_score": 2.3,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "conversation",
-        "asked"
+        "answer",
+        "conversation"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "answer",
             "conversation"
           ],
-          "weight": 1.8
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
             "conversation"
           ],
-          "weight": 1.45
+          "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "asked",
+            "conversation"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
             "conversation"
           ],
           "weight": 0.64
@@ -66,37 +73,29 @@
       ]
     },
     {
-      "name": "concrete-specificity",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 2.09,
-      "confidence": 0.856,
-      "raw_score": 2.09,
+      "domain": "critical-testing",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "example",
-        "specific"
+        "because"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "example"
+            "because"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "specific"
-          ],
-          "weight": 0.64
+          "weight": 1.8
         }
       ]
     }
   ],
-  "context_fingerprint": "ea55f8010d78",
+  "context_fingerprint": "79b456864105",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 831,
-  "approx_added_tokens": 208
+  "temporary_skill_chars": 867,
+  "approx_added_tokens": 217
 }
