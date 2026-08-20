@@ -1,29 +1,17 @@
 import fs from 'node:fs';
-
-const src=fs.readFileSync('cloudflare/subsonic-calm/src/index.js','utf8');
-const fail=(m)=>{throw new Error(m)};
-if(src.includes('createDynamicsCompressor')) fail('Compressor returned to Subsonic Calm signal path');
-for(const token of [
-  "deep:{name:'Deep Edge',f:35",
-  "velvet:{name:'Velvet',f:40",
-  "warm:{name:'Warm Body',f:44",
-  "80 HZ TEST",
-  "signalRead",
-  "subsonic-calm-v3-psw10",
-  "toneBus.connect(breathGain);breathGain.connect(master)",
-  "linearRampToValueAtTime(v.output,t+.010)"
-]) if(!src.includes(token)) fail(`Missing required PSW10 v3 token: ${token}`);
-
-const capPct=f=>f>=40?22:f>=35?12+(f-35)*2:f>=30?8+(f-30)*.8:4+(f-20)*.4;
-for(const [f,expected] of [[20,4],[30,8],[35,12],[40,22],[48,22]]){
-  const got=capPct(f);
-  if(Math.abs(got-expected)>1e-9) fail(`Unexpected PSW10 cap at ${f} Hz: ${got}`);
-}
-for(let f=20;f<=48;f+=.1){
-  const output=capPct(f)/100;
-  const worst=.92*output*1.08;
-  if(worst>=.25) fail(`Digital ceiling too high at ${f.toFixed(1)} Hz: ${worst}`);
-}
-const maxWorst=.92*.22*1.08;
-if(Math.abs(maxWorst-.218592)>1e-9) fail(`Unexpected maximum peak bound: ${maxWorst}`);
-console.log(JSON.stringify({pass:true,profile:'Polk PSW10',version:3,compressor:false,diagnostic_80hz:true,default_hz:40,deep_edge_hz:35,warm_hz:44,max_digital_peak:maxWorst,headroom_db:20*Math.log10(1/maxWorst)},null,2));
+const app=fs.readFileSync('apps/subsonic-calm.html','utf8');
+const worker=fs.readFileSync('cloudflare/subsonic-calm/src/index.js','utf8');
+const fail=m=>{throw new Error(m)};
+for(const token of ["still:{name:'Still',f:40","tide:{name:'Tide',f:41","warm:{name:'Warm',f:44","noiseHP.type='highpass'","noiseLP.type='lowpass'","noiseHP.frequency.value=35","noiseLP.frequency.value=80","subsonic-calm-v4-calm","80 HZ TEST","linearRampToValueAtTime(v.output,t+1.5)"]) if(!app.includes(token)) fail('Missing v4 app token: '+token);
+if(app.includes('createDynamicsCompressor')) fail('Compressor returned');
+if(!worker.includes('version:\'4\'')||!worker.includes('github-pages')) fail('Worker is not the v4 GitHub Pages front door');
+const defaults=[
+ {f:40,texture:.03,h2:.004,h3:0,swell:0,output:.07},
+ {f:41,texture:.04,h2:.005,h3:.001,swell:.008,output:.07},
+ {f:44,texture:.035,h2:.008,h3:.001,swell:.006,output:.07}
+];
+for(const m of defaults){if(m.f<40)fail('Default below PSW10 -3 dB band');if(m.h2>.01||m.h3>.002)fail('Default harmonic content too high');if(m.swell>.01)fail('Default modulation too high');if(m.output>.08)fail('Default output too high')}
+const max={output:.18,swell:.03,texture:.10};
+const conservative=(.82+Math.min(.07,max.texture*.55))*(1+max.swell)*max.output;
+if(conservative>=.20) fail('Conservative digital ceiling too high: '+conservative);
+console.log(JSON.stringify({pass:true,version:4,profile:'PSW10 low-salience research',defaults,conservative_peak_bound:conservative,headroom_db:20*Math.log10(1/conservative),diagnostic_80hz:true},null,2));
