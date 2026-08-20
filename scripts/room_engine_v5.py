@@ -47,6 +47,22 @@ _INTERNAL_MODEL_KEYS = frozenset({
     "generation_rank",
     "angle",
 })
+_STALE_MACHINE_PATTERNS = (
+    r"\binput[_ ]?json\b",
+    r"\boutput[_ ]?json\b",
+    r"\bpublic[- ]expression\b",
+    r"\bdeliberation plan\b",
+    r"\bmandatory[_ ]speech\b",
+    r"\bconversation_job\b",
+    r"\bmust_respond\b",
+    r"\bgeneration_rank\b",
+    r"\ball four entities\b",
+    r"\bevery beat\b",
+    r"\brequired to speak\b",
+    r"\bdecision\s+speak\b",
+    r"\blanguage model\b",
+    r"^\s*speak\s*$",
+)
 
 
 def _strip_internal_model_keys(value):
@@ -61,6 +77,68 @@ def _strip_internal_model_keys(value):
     return value
 
 
+def _model_norm(value):
+    return re.sub(r"\s+", " ", str(value or "").strip().lower())
+
+
+def _stale_machine_text(value, current_text=""):
+    """True for inherited machine/orchestration prose, not the newest turn."""
+    text = _model_norm(value)
+    if not text:
+        return False
+    current = _model_norm(current_text)
+    # A participant is allowed to deliberately discuss any of these concepts.
+    # Only inherited text absent from the newest turn is treated as residue.
+    if current and text in current:
+        return False
+    return any(re.search(pattern, text) for pattern in _STALE_MACHINE_PATTERNS)
+
+
+def _clean_stale_model_value(value, current_text=""):
+    if isinstance(value, str):
+        return None if _stale_machine_text(value, current_text) else value
+    if isinstance(value, list):
+        out = []
+        for item in value:
+            cleaned = _clean_stale_model_value(item, current_text)
+            if cleaned is not None:
+                out.append(cleaned)
+        return out
+    if isinstance(value, dict):
+        # Conversation messages are atomic. If an older message is machine
+        # residue, remove the whole message instead of leaving fragments behind.
+        if "text" in value and _stale_machine_text(value.get("text"), current_text):
+            return None
+        out = {}
+        for key, item in value.items():
+            cleaned = _clean_stale_model_value(item, current_text)
+            if cleaned is not None:
+                out[key] = cleaned
+        return out
+    return value
+
+
+def _history_safe_payload(source):
+    event = source.get("event") if isinstance(source.get("event"), dict) else None
+    current_text = str((event or {}).get("text") or "")
+    safe = {}
+    for key in _MODEL_INPUT_KEYS:
+        if key not in source:
+            continue
+        value = source[key]
+        if key == "event":
+            # Preserve the newest spoken event exactly. This is what makes the
+            # filter source-aware rather than a forbidden-word system.
+            safe[key] = value
+        elif key in {"context", "keywords", "topic", "social_observation", "deliberation"}:
+            cleaned = _clean_stale_model_value(value, current_text)
+            if cleaned is not None:
+                safe[key] = cleaned
+        else:
+            safe[key] = value
+    return safe, current_text
+
+
 # Keep personality computation outside the LLM. The private model receives a
 # compact, situation-relevant view of the fixed profile rather than 19 fields of
 # undifferentiated persona prose on every turn.
@@ -69,14 +147,14 @@ _original_compact_payload = _private_model._compact_payload
 
 def _personality_compact_payload(payload, role, self_entity=None):
     source = payload if isinstance(payload, dict) else {}
-    safe_payload = {key: source[key] for key in _MODEL_INPUT_KEYS if key in source}
+    safe_payload, current_text = _history_safe_payload(source)
     compact = _strip_internal_model_keys(_original_compact_payload(safe_payload, role, self_entity))
 
     # Preserve the useful diversity cue only as an ordinary optional direction;
     # its runner/job identity never crosses the cognition boundary.
     if role == "expression":
         direction = str(source.get("conversation_job") or "").strip()
-        if direction:
+        if direction and not _stale_machine_text(direction, current_text):
             compact["possible_direction"] = direction
 
     profile = source.get("profile") if isinstance(source.get("profile"), dict) else {}
@@ -88,8 +166,8 @@ def _personality_compact_payload(payload, role, self_entity=None):
     appraisal = _personality_v2.appraise(
         entity,
         fixed,
-        source.get("event") if isinstance(source.get("event"), dict) else None,
-        source.get("context") if isinstance(source.get("context"), list) else [],
+        safe_payload.get("event") if isinstance(safe_payload.get("event"), dict) else None,
+        safe_payload.get("context") if isinstance(safe_payload.get("context"), list) else [],
     )
     activated = []
     for item in appraisal.get("schema_activation", [])[:2]:
