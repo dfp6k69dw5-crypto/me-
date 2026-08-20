@@ -1,0 +1,37 @@
+name: Room Allen direct-reply branch patch
+
+on:
+  push:
+    branches:
+      - fix/allen-direct-reply
+    paths:
+      - 'scripts/apply_room_allen_direct_reply_fix.py'
+      - '.github/workflows/room-allen-direct-reply-patch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: fix/allen-direct-reply
+          fetch-depth: 0
+      - name: Apply one-layer routing patch
+        run: python3 scripts/apply_room_allen_direct_reply_fix.py
+      - name: Run same red simulator plus architecture checks
+        run: |
+          python3 -m py_compile scripts/room_engine_v5_core.py scripts/room_engine_v5.py scripts/room_social_v5.py scripts/room_private_model.py scripts/room_participant.py
+          python3 scripts/room_engine_v5.py selftest
+          python3 scripts/room_allen_response_sim.py
+          python3 scripts/room_allen_observation_sim.py
+      - name: Commit validated production change to isolated branch
+        run: |
+          git config user.name "allen-direct-reply-fix"
+          git config user.email "actions@users.noreply.github.com"
+          git add scripts/room_engine_v5_core.py
+          git commit -m "Route first post-Allen expression back to Allen" || exit 0
+          git push origin HEAD:fix/allen-direct-reply
