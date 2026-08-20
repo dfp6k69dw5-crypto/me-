@@ -90,6 +90,35 @@ jobs:
               if any(re.search(r'\ballen\b',str(m.get('text') or ''),re.I) for m in following):
                   windows_with_name_mention+=1
 
+          def compact_turn(m):
+              cog=(m.get('cognition') or {}) if isinstance(m,dict) else {}
+              return {
+                  'id':m.get('id'),
+                  'at':m.get('at'),
+                  'speaker':m.get('speaker'),
+                  'text':m.get('text'),
+                  'target':cog.get('target'),
+                  'move_type':cog.get('move_type'),
+                  'parent_discourse_id':m.get('parent_discourse_id'),
+                  'derived_from':m.get('derived_from'),
+                  'beat_id':m.get('beat_id') or cog.get('beat_id'),
+              }
+          latest_windows=[]
+          for idx in allen_indices[-8:]:
+              following=[]
+              for m in conv[idx+1:]:
+                  if not isinstance(m,dict): continue
+                  if m.get('speaker')=='allen': break
+                  if m.get('speaker') in ai:
+                      following.append(compact_turn(m))
+                      if len(following)>=4: break
+              latest_windows.append({
+                  'allen':compact_turn(conv[idx]),
+                  'following_ai':following,
+                  'any_target_allen':any(m.get('target')=='allen' for m in following),
+                  'any_name_mention':any(re.search(r'\ballen\b',str(m.get('text') or ''),re.I) for m in following),
+              })
+
           out={
               'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
               'pending_status':int(ps or 0),
@@ -103,6 +132,7 @@ jobs:
               'participant_observation_id_count':len(list(minds.get('participant_observation_ids') or [])) if isinstance(minds,dict) else 0,
               'retained_allen_turn_count':len(recent_allen),
               'latest_allen_turn':recent_allen[-1] if recent_allen else None,
+              'latest_allen_windows':latest_windows,
               'response_baseline':{
                   'allen_turns_with_following_ai':first_reply_count,
                   'first_ai_reply_targeted_allen':first_reply_target_allen,
@@ -127,4 +157,4 @@ jobs:
             sleep $attempt
           done
 
-# idempotence-verification-trigger: 2026-08-20T00:21Z
+# fresh-response-window-trigger: 2026-08-20T00:53Z
