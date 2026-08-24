@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T20:06:39.660118+00:00",
-  "cycle_key": "32768251622:1:23",
+  "generated_at": "2026-08-24T20:08:30.657140+00:00",
+  "cycle_key": "32768251622:1:24",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,27 +32,21 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 3.18,
+      "score": 3.19,
       "confidence": 0.977,
-      "raw_score": 3.18,
+      "raw_score": 3.19,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "music",
         "creative",
-        "experiment",
-        "idea"
+        "idea",
+        "experiment"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "creative"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "experiment"
+            "music"
           ],
           "weight": 1.15
         },
@@ -61,7 +55,21 @@
           "matched": [
             "creative"
           ],
-          "weight": 0.46
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "creative"
+          ],
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "experiment"
+          ],
+          "weight": 0.54
         },
         {
           "kind": "topic",
@@ -69,19 +77,48 @@
             "idea"
           ],
           "weight": 0.58
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 2.95,
+      "confidence": 0.965,
+      "raw_score": 2.95,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "evidence",
+        "reason"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "evidence"
+          ],
+          "weight": 1.8
         },
         {
-          "kind": "topic_support",
+          "kind": "message",
           "matched": [
-            "idea"
+            "reason"
           ],
-          "weight": 0.38
+          "weight": 1.15
+        },
+        {
+          "kind": "topic",
+          "matched": [
+            "evidence"
+          ],
+          "weight": 0.58
         }
       ]
     }
   ],
-  "context_fingerprint": "bf50fd83bfbd",
+  "context_fingerprint": "c459eaa1899c",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 488,
-  "approx_added_tokens": 122
+  "temporary_skill_chars": 834,
+  "approx_added_tokens": 208
 }
