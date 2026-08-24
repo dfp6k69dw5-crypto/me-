@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T20:16:55.780759+00:00",
-  "cycle_key": "32768251622:1:29",
+  "generated_at": "2026-08-24T20:18:37.817069+00:00",
+  "cycle_key": "32768251622:1:30",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,29 +29,65 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "domain": "critical-testing",
+      "score": 3.25,
+      "confidence": 0.98,
+      "raw_score": 3.25,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "remember"
+        "sure",
+        "why"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "remember"
+            "sure"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why"
           ],
           "weight": 1.45
         }
       ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "conversation"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 0.92
+        }
+      ]
     }
   ],
-  "context_fingerprint": "a85c0a9711c4",
+  "context_fingerprint": "1216a1f2330d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 515,
-  "approx_added_tokens": 129
+  "temporary_skill_chars": 867,
+  "approx_added_tokens": 217
 }
