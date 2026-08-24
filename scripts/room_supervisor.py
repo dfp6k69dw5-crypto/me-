@@ -6,9 +6,9 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-STALE_AFTER_SECONDS = 10 * 60
+STALE_AFTER_SECONDS = 3 * 60
 MAX_RESTARTS_PER_CYCLE = 2
-CIRCUIT_COOLDOWN_SECONDS = 30 * 60
+CIRCUIT_COOLDOWN_SECONDS = 15 * 60
 
 
 def _parse_time(value: object) -> datetime | None:
@@ -50,23 +50,27 @@ def decide(state: dict, control: dict | None = None, *, now: datetime | None = N
 
     cycle = int((state or {}).get("cycle") or 0)
     last_run = _parse_time((state or {}).get("last_run"))
+    age = None if last_run is None else max(0.0, (current - last_run).total_seconds())
+    stale = last_run is None or age >= STALE_AFTER_SECONDS
     has_baseline = isinstance(control, dict) and "last_observed_cycle" in control
     ctl = _base_control(control)
 
-    # The first observation is not evidence of progress; it establishes the
-    # reference point that later scheduled checks compare against. Returning a
-    # non-healthy action makes the workflow persist this control state once.
+    # A missing control file must not cost us an extra supervisor interval when
+    # the published Room is already stale. Establish the baseline and launch a
+    # bounded replacement in the same check.
     if not has_baseline:
         ctl.update({
             "last_observed_cycle": cycle,
-            "restart_cycle": 0,
-            "restart_attempts": 0,
+            "restart_cycle": cycle if stale else 0,
+            "restart_attempts": 1 if stale else 0,
             "circuit_open": False,
             "circuit_opened_at": "",
-            "last_action": "initialize",
+            "last_action": "restart" if stale else "initialize",
             "last_checked_at": _stamp(current),
         })
-        return {"action": "initialize", "reason": "baseline_created", "control": ctl}
+        if stale:
+            return {"action": "restart", "reason": "stale_first_observation", "age_seconds": age, "control": ctl}
+        return {"action": "initialize", "reason": "baseline_created", "age_seconds": age, "control": ctl}
 
     previous_cycle = ctl["last_observed_cycle"]
     progressed = cycle > previous_cycle
@@ -83,8 +87,6 @@ def decide(state: dict, control: dict | None = None, *, now: datetime | None = N
         })
         return {"action": "healthy", "reason": "cycle_progress", "control": ctl}
 
-    age = None if last_run is None else max(0.0, (current - last_run).total_seconds())
-    stale = last_run is None or age >= STALE_AFTER_SECONDS
     if not stale:
         ctl.update({
             "last_observed_cycle": max(previous_cycle, cycle),
