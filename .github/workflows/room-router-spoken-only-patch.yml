@@ -1,4 +1,4 @@
-name: Patch Room expression coherence
+name: Patch Room coherent chaos
 
 on:
   push:
@@ -19,31 +19,63 @@ jobs:
         with:
           ref: main
           fetch-depth: 20
-      - name: Patch hot-expression quality checks
+      - name: Preserve wild intent through expression
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p=Path('scripts/room_expression_quality.py')
+          p=Path('scripts/room_private_model/__init__.py')
           s=p.read_text()
-          old='''    if len(text) > MAX_EXPRESSION_CHARS:\n        return "rambling_expression"\n    if _PRONOUN_R.search(text):\n        return "malformed_pronoun"\n'''
-          new='''    if len(text) > MAX_EXPRESSION_CHARS:\n        return "rambling_expression"\n\n    # High-temperature first attempts are allowed to be socially wild, but they\n    # still have to be readable speech. Reject mechanical sampler damage and let\n    # the existing retry path regenerate at a cooler temperature.\n    words = _tokens(text)\n    if re.match(r"^[,.;:)}\\]]", text):\n        return "malformed_opening"\n    if re.search(r"[\\\"'”’]?\\}\\s*,?\\s*\\{", text):\n        return "structured_debris"\n    if re.search(r"\\b([A-Za-z]{3,})-\\1\\b", text, re.I):\n        return "local_word_duplication"\n    if len(words) < 3 and not re.search(r"\\b(?:no|nope|wrong|fuck|shit|bullshit|idiot|moron|damn|hell)\\b", text, re.I):\n        return "empty_fragment"\n    if len(words) > 48:\n        return "wordy_expression"\n    if any(len(_tokens(sentence)) > 36 for sentence in _sentences(text)):\n        return "run_on_expression"\n    if _PRONOUN_R.search(text):\n        return "malformed_pronoun"\n'''
-          if old not in s:
-              if 'return "structured_debris"' in s and 'return "run_on_expression"' in s:
-                  print('already patched')
-              else:
-                  raise SystemExit('expected quality anchor missing')
-          else:
-              p.write_text(s.replace(old,new,1))
+
+          replacements=[]
+          replacements.append((
+          '''_SOCIAL_SUBJECTS = (\n    "trust", "loyalty", "jealousy", "humor", "music", "money", "attraction",\n    "ambition", "envy", "risk", "honesty", "status", "taste", "privacy",\n    "boredom", "fear", "memory", "revenge", "desire", "secrets",\n)''',
+          '''_SOCIAL_SUBJECTS = (\n    "the motel fire nobody agrees happened", "Herman's locked suitcase",\n    "the fake wedding in Duluth", "the night someone stole the church bell",\n    "the abandoned radio-tower dare", "the disputed tattoo pact",\n    "the birthday-cake sabotage", "the secret room behind the laundromat",\n    "the forged apology letter", "the vanished garden statue",\n    "the terrible karaoke blood-feud", "the pact nobody admits making",\n    "the imaginary inheritance fight", "the disastrous midnight road trip",\n    "the suspicious key in Mara's coat", "the restaurant they swear they were banned from",\n    "the ridiculous bet that got too serious", "the fake engagement rumor",\n    "the old grudge over a red umbrella", "the dare involving a hotel roof",\n    "the person everyone insists is named Herman", "the stolen brass flamingo",\n    "the mysterious voicemail from 3 a.m.", "the argument about who betrayed whom first",\n)'''))
+
+          replacements.append((
+          '''    force = stale or (action in _SAFE_ACTIONS and seed % 100 < 88) or (risk < 2 and seed % 100 < 70)''',
+          '''    # Autonomous Room beats should not drift back to bland helper moves.\n    # Participant-response routing can still override this later for Allen.\n    force = stale or action in _SAFE_ACTIONS or risk < 3'''))
+
+          replacements.append((
+          '''    if action in {"DISAGREE", "CALLBACK", "DISCLOSE", "COMPARE", "CLOSE", "BRIDGE"}:\n        out["interpersonal_risk"] = max(risk, risk_floor)''',
+          '''    if action in {"DISAGREE", "CALLBACK", "DISCLOSE", "COMPARE", "CLOSE", "BRIDGE", "REPAIR"}:\n        out["interpersonal_risk"] = max(risk, risk_floor)'''))
+
+          replacements.append((
+          '''            "Follow the deliberated move and relationship. When risk is high, make the line concrete and socially consequential: name the person, make an accusation, "''',
+          '''            "Follow the deliberated move, relationship, and intent aim. The intent aim is binding: enact it directly in the utterance instead of summarizing it. "\n            "When risk is high, do something socially consequential on the page: accuse, confess, taunt, demand, threaten to leave, revive a bizarre shared incident, "\n            "invent a concrete grudge, make a reckless claim, or say the socially dangerous part out loud. Do not turn a wild aim into an abstract hypothetical. "'''))
+
+          replacements.append((
+          '''    return max(1.35, min(4.0, base - 0.42 * max(0, attempt)))''',
+          '''    # Retry for grammar without sanding off the social intensity.\n    if risk >= 4:\n        floor, decay = 2.65, 0.18\n    elif risk >= 3:\n        floor, decay = 2.20, 0.20\n    else:\n        floor, decay = 1.35, 0.32\n    return max(floor, min(4.0, base - decay * max(0, attempt)))'''))
+
+          replacements.append((
+          '''        body.update({\n            "seed": globals()["_sample_seed"](role, self_entity, attempt),\n            "top_k": 80,\n            "top_p": 0.98,\n            "min_p": 0.002,\n        })''',
+          '''        # Later retries narrow the vocabulary distribution for coherence,\n        # while _expression_temperature keeps interpersonal heat high.\n        spread = max(0, attempt)\n        body.update({\n            "seed": globals()["_sample_seed"](role, self_entity, attempt),\n            "top_k": max(32, 80 - 8 * spread),\n            "top_p": max(0.91, 0.98 - 0.01 * spread),\n            "min_p": min(0.03, 0.002 + 0.004 * spread),\n        })'''))
+
+          for old,new in replacements:
+              if old in s:
+                  s=s.replace(old,new,1)
+              elif new not in s:
+                  raise SystemExit('expected coherent-chaos anchor missing: '+old[:80])
+
+          anchor='''    if expected == "disagree" and not re.search(\n        r"\\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|fuck|stupid|idiot|actually)\\b",\n        low,\n    ):\n        raise ValueError("disagreement_not_realized")\n'''
+          insert='''    risk = int(intent.get("risk", 0) or 0)\n    if risk >= 3:\n        charged = re.search(\n            r"\\b(?:lie|lied|lying|betray|betrayed|jealous|want|need|hate|love|angry|furious|pissed|resent|envy|afraid|scared|leave|done|fake|using|used|manipulat\\w*|coward|pathetic|smug|stupid|idiot|bullshit|fuck|damn|secret|promise|stole|steal|cheat\\w*|ignore\\w*|abandon\\w*|obsess\\w*|desire|attract\\w*|mine|owe|trust|grudge|revenge|dare|banned|sabotage)\\b",\n            low, re.I,\n        )\n        history = re.search(\n            r"\\b(?:remember|last time|years ago|that night|when we|the time we|back when|used to|that motel|that wedding|the dare|the bet|the pact|the voicemail)\\b",\n            low, re.I,\n        )\n        if expected == "callback" and not history:\n            raise ValueError("high_risk_callback_not_realized")\n        if expected in {"disagree", "disclose", "compare", "close", "repair"} and not (charged or history):\n            raise ValueError("high_risk_not_realized")\n\n'''
+          if insert not in s:
+              if anchor not in s:
+                  raise SystemExit('expected high-risk validator anchor missing')
+              s=s.replace(anchor, insert+anchor, 1)
+
+          s=s.replace('LIVE_EXPRESSION_OVERLAY = "2026-08-24-chaos-restored-v10"', 'LIVE_EXPRESSION_OVERLAY = "2026-08-24-coherent-chaos-v11"')
+          p.write_text(s)
           PY
-          python3 -m py_compile scripts/room_expression_quality.py
+          python3 -m py_compile scripts/room_private_model/__init__.py
       - name: Commit patch
         shell: bash
         run: |
-          git config user.name 'room-quality-patcher'
+          git config user.name 'room-chaos-patcher'
           git config user.email 'actions@users.noreply.github.com'
-          git add scripts/room_expression_quality.py
-          git commit -m 'Retry incoherent hot Room expressions' || exit 0
+          git add scripts/room_private_model/__init__.py
+          git commit -m 'Preserve wild Room intent through coherent retries' || exit 0
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
