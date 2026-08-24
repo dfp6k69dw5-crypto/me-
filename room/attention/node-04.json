@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T23:03:31.676199+00:00",
-  "cycle_key": "32786757894:1:6",
+  "generated_at": "2026-08-24T23:05:21.504064+00:00",
+  "cycle_key": "32786757894:1:7",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,26 +32,72 @@
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "score": 3.82,
+      "confidence": 0.993,
+      "raw_score": 3.82,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "history",
+        "past",
         "remember"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "history",
+            "past"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
             "remember"
           ],
-          "weight": 1.8
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "remember"
+          ],
+          "weight": 0.76
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.61,
+      "confidence": 0.715,
+      "raw_score": 1.61,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "why",
+        "because"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "because"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "89b0bf138bf6",
+  "context_fingerprint": "731f54531916",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 770,
-  "approx_added_tokens": 192
+  "temporary_skill_chars": 797,
+  "approx_added_tokens": 199
 }
