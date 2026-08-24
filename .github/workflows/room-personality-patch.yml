@@ -85,8 +85,8 @@ jobs:
           elif new_attempts not in s:
               raise SystemExit('retry anchor missing; refusing unsafe patch')
 
-          old_temp = 'temperature = min(2.0, 0.88 + 0.06 * voice_index + 0.09 * attempt)'
-          new_temp = 'temperature = min(4.0, 0.88 + 0.06 * voice_index + 0.09 * attempt)'
+          old_temp = 'temperature = min(4.0, 0.88 + 0.06 * voice_index + 0.09 * attempt)'
+          new_temp = 'temperature = min(4.0, 1.35 + 0.22 * voice_index + 0.30 * attempt)'
           if old_temp in s:
               s = s.replace(old_temp, new_temp, 1)
           elif new_temp not in s:
@@ -99,6 +99,7 @@ jobs:
           assert 'maladaptive interpersonal pattern that may shape attachment' in s
           assert new_attempts in s
           assert new_temp in s
+          assert '"min_p": 0.005' in s
           print('PATCH_OK')
           PY
 
@@ -109,7 +110,7 @@ jobs:
             echo "Already patched"
             exit 0
           fi
-          git commit -m "Raise Room expression temperature ceiling to 4"
+          git commit -m "Make Room expression temperature actually reach 4"
           for attempt in 1 2 3 4; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
