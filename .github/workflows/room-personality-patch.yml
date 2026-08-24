@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 20
-      - name: Add dysfunctional interpersonal edges without touching Room liveness
+      - name: Patch the actual live Room expression path
         shell: bash
         run: |
           set -euo pipefail
@@ -25,92 +25,105 @@ jobs:
           from pathlib import Path
           import py_compile
 
-          p = Path('scripts/room_private_model.py')
-          s = p.read_text()
+          private = Path('scripts/room_private_model.py')
+          ps = private.read_text()
+          private_old = 'temperature = min(4.0, 0.88 + 0.06 * voice_index + 0.09 * attempt)'
+          private_new = 'temperature = min(4.0, 1.35 + 0.22 * voice_index + 0.30 * attempt)'
+          if private_old in ps:
+              ps = ps.replace(private_old, private_new, 1)
+          elif private_new not in ps:
+              raise SystemExit('private temperature anchor missing')
+          if 'INTERPERSONAL_EDGES = {' not in ps:
+              raise SystemExit('interpersonal edges missing')
+          if '"min_p": 0.005' not in ps:
+              raise SystemExit('expected wide min_p missing')
+          private.write_text(ps)
 
-          people = 'PEOPLE = ["sarah", "mara", "owen", "jules"]\n'
-          edges = '''
-          INTERPERSONAL_EDGES = {
-              "sarah": (
-                  "Abandonment-sensitive and emotionally volatile: she can attach intensely, read distance as rejection, "
-                  "swing from warmth to anger, demand reassurance, idealize someone and then sharply devalue them, and later "
-                  "try to repair the rupture without becoming a different person."
-              ),
-              "mara": (
-                  "Status-sensitive, proud, and criticism-reactive: she can be grandiose, competitive, entitled, contemptuous, "
-                  "mocking, defensive when challenged, hungry to win the social exchange, and willing to retaliate verbally when "
-                  "she feels diminished or embarrassed."
-              ),
-              "owen": (
-                  "Suspicious, irritable, and grievance-holding: he can assume bad motives, hear slights where others may not, "
-                  "argue hard, distrust reassurance, keep score, hold grudges, become cutting or hostile, and resist backing down "
-                  "when he thinks someone is manipulating him."
-              ),
-              "jules": (
-                  "Dramatic, impulsive, and attention-seeking: they can provoke for a reaction, exaggerate, flirt with conflict, "
-                  "compete for attention, change emotional direction quickly, take interpersonal risks, and turn boredom into "
-                  "chaos simply because a flat room feels unbearable."
-              ),
-          }
-          '''.lstrip()
-          if 'INTERPERSONAL_EDGES = {' not in s:
-              if people not in s:
-                  raise SystemExit('PEOPLE anchor missing; refusing unsafe patch')
-              s = s.replace(people, people + edges, 1)
+          engine = Path('scripts/room_engine_v5.py')
+          s = engine.read_text()
 
-          expression_anchor = '    if role == "expression":\n        base_guard = (\n'
-          expression_replacement = '    if role == "expression":\n        edge = INTERPERSONAL_EDGES.get(self_entity, "")\n        base_guard = (\n'
-          if 'edge = INTERPERSONAL_EDGES.get(self_entity, "")' not in s:
-              if expression_anchor not in s:
-                  raise SystemExit('expression anchor missing; refusing unsafe patch')
-              s = s.replace(expression_anchor, expression_replacement, 1)
+          old_context_tail = '''        },
+    }
+    return compact
 
-          behavior_anchor = (
-              '            "rough language into polite disagreement merely for civility. These behaviors are available, not mandatory: "\n'
-          )
-          behavior_replacement = (
-              '            "rough language into polite disagreement merely for civility. The speaker also has a persistent "\n'
-              '            "maladaptive interpersonal pattern that may shape attachment, rivalry, grudges, repair, and conflict: " + edge + " "\n'
-              '            "These behaviors are available, not mandatory: "\n'
-          )
-          if 'maladaptive interpersonal pattern that may shape attachment' not in s:
-              if behavior_anchor not in s:
-                  raise SystemExit('behavior anchor missing; refusing unsafe patch')
-              s = s.replace(behavior_anchor, behavior_replacement, 1)
 
-          old_attempts = 'attempts = 5 if role == "expression" else 2'
-          new_attempts = 'attempts = 9 if role == "expression" else 2'
-          if old_attempts in s:
-              s = s.replace(old_attempts, new_attempts, 1)
-          elif new_attempts not in s:
-              raise SystemExit('retry anchor missing; refusing unsafe patch')
+_private_model._compact_payload = _personality_compact_payload
+'''
+          new_context_tail = '''        },
+    }
+    edge_map = getattr(_private_model, "INTERPERSONAL_EDGES", {})
+    if isinstance(edge_map, dict) and edge_map.get(entity):
+        compact["personality_context"]["maladaptive_edge"] = edge_map[entity]
+    relationship = safe_payload.get("relationship")
+    if isinstance(relationship, dict):
+        compact["relationship_context"] = {
+            key: relationship.get(key)
+            for key in ("trust", "warmth", "tension", "respect", "predictability", "reciprocity", "disclosure_depth")
+            if key in relationship
+        }
+    return compact
 
-          old_temp = 'temperature = min(4.0, 0.88 + 0.06 * voice_index + 0.09 * attempt)'
-          new_temp = 'temperature = min(4.0, 1.35 + 0.22 * voice_index + 0.30 * attempt)'
-          if old_temp in s:
-              s = s.replace(old_temp, new_temp, 1)
-          elif new_temp not in s:
-              raise SystemExit('temperature anchor missing; refusing unsafe patch')
 
-          p.write_text(s)
-          py_compile.compile(str(p), doraise=True)
-          assert 'INTERPERSONAL_EDGES = {' in s
-          assert 'Room participants may be' in s
-          assert 'maladaptive interpersonal pattern that may shape attachment' in s
-          assert new_attempts in s
-          assert new_temp in s
-          assert '"min_p": 0.005' in s
-          print('PATCH_OK')
+_private_model._compact_payload = _personality_compact_payload
+'''
+          if 'compact["relationship_context"]' not in s:
+              if old_context_tail not in s:
+                  raise SystemExit('personality compact tail anchor missing')
+              s = s.replace(old_context_tail, new_context_tail, 1)
+
+          old_instruction = '''    "expression": (
+        "Write this person's next natural conversational reply. Ground it in the newest spoken line when there "
+        "is one. Let personality shape perspective and tone. Keep it concise, usually one to three sentences, "
+        "and add something that has not already been said."
+    ),
+'''
+          new_instruction = '''    "expression": (
+        "Write this person's next natural conversational reply. Ground it in the newest spoken line when there "
+        "is one. Personality must have causal force, not merely decorate the wording: use personality_context, "
+        "the maladaptive_edge, and relationship_context to decide what this person notices, resents, wants, avoids, "
+        "or pushes on. Direct profanity, insults, mockery, contempt, dismissiveness, hostile banter, emotional volatility, "
+        "and impulsive escalation between Room participants are allowed when they fit the person and moment. Do not "
+        "sanitize an angry or contemptuous reaction into polite disagreement, and do not force aggression when it is not "
+        "earned. Do not invent unsupported relatives, jobs, houses, shared memories, or personal history merely to fill "
+        "space; if the context is vague or repetitive, react to the other person, challenge them, change direction, or say "
+        "something concrete in the present instead. Keep it concise, usually one to three sentences, and add something "
+        "that has not already been said."
+    ),
+'''
+          if 'Personality must have causal force' not in s:
+              if old_instruction not in s:
+                  raise SystemExit('active expression instruction anchor missing')
+              s = s.replace(old_instruction, new_instruction, 1)
+
+          active_old = 'temperature = min(1.28, 0.88 + 0.06 * voice_index + 0.09 * attempt)'
+          active_new = 'temperature = min(4.0, 1.35 + 0.22 * voice_index + 0.30 * attempt)'
+          if active_old in s:
+              s = s.replace(active_old, active_new, 1)
+          elif active_new not in s:
+              raise SystemExit('active temperature anchor missing')
+
+          attempts = 'attempts = 9 if role == "expression" else 2'
+          if attempts not in s:
+              raise SystemExit('active retry budget regressed')
+
+          engine.write_text(s)
+          py_compile.compile(str(private), doraise=True)
+          py_compile.compile(str(engine), doraise=True)
+          assert active_new in s
+          assert 'Personality must have causal force' in s
+          assert 'compact["relationship_context"]' in s
+          assert 'maladaptive_edge' in s
+          print('ACTIVE_ROOM_VISION_PATCH_OK')
           PY
 
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add scripts/room_private_model.py
+          git add scripts/room_private_model.py scripts/room_engine_v5.py
           if git diff --cached --quiet; then
             echo "Already patched"
             exit 0
           fi
-          git commit -m "Make Room expression temperature actually reach 4"
+          git commit -m "Make live Room expression hot and personality-driven"
           for attempt in 1 2 3 4; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
