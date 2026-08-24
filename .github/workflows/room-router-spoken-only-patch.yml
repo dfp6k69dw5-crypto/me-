@@ -62,7 +62,7 @@ jobs:
 
           def chk(move, utterance, should_pass=True):
               compact={'intent':{'move':move,'risk':4}}
-              obj={'decision':'SPEAK','target':'mara','move':move,'utterance':utterance}
+              obj={'decision':'SPEAK','target':'mara','move':move,'utterance':utterance,'semantic_terms':[]}
               ok=True
               try: rpm._validate('expression',obj,compact,'', 'sarah')
               except ValueError: ok=False
