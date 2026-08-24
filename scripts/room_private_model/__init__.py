@@ -24,7 +24,7 @@ for _name in dir(_BASE):
     if not _name.startswith("__"):
         globals()[_name] = getattr(_BASE, _name)
 
-LIVE_EXPRESSION_OVERLAY = "2026-08-24-coherent-chaos-v11"
+LIVE_EXPRESSION_OVERLAY = "2026-08-24-volatile-agenda-v12"
 _RELATIONSHIP_KEYS = (
     "trust", "warmth", "tension", "respect", "predictability",
     "reciprocity", "disclosure_depth", "direct_familiarity", "exposure",
@@ -184,36 +184,36 @@ def _agenda_goal(entity: str, action: str, fresh: str) -> str:
     if entity == "sarah":
         if action == "DISCLOSE":
             return (
-                "Make the relationship matter: admit attachment, jealousy, fear of being ignored, possessiveness, "
-                "or an invented shared memory that changes how you feel about someone now."
+                f"Make the relationship matter through {fresh}: admit attachment, jealousy, fear of being ignored, possessiveness, "
+                "or turn that bizarre event into an invented shared memory that changes how you feel about someone now."
             )
         if action == "DISAGREE":
-            return "Take perceived distance or dismissal personally and challenge someone directly; anger and profanity are allowed."
+            return f"Use {fresh} as the spark for a personal accusation. Take distance or dismissal personally, challenge someone directly, and let anger or profanity happen if it fits."
         if action == "CALLBACK":
-            return "Bring up a real or invented intimate shared memory, promise, betrayal, private joke, or old wound and react to it now."
-        return "Try to repair a rupture without becoming calm or neutral; keep the emotional stake and say what you need from the other person."
+            return f"Treat {fresh} as a real shared memory. Turn it into an intimate promise, betrayal, private joke, or old wound and react to it now."
+        return f"Try to repair the rupture caused by {fresh} without becoming calm or neutral; keep the emotional stake and say exactly what you need from the other person."
     if entity == "mara":
         if action == "DISAGREE":
-            return "Take status offense. Mock, challenge, belittle, or retaliate verbally against someone who seems smug, boring, weak, or dismissive."
+            return f"Take status offense over {fresh}. Mock, challenge, belittle, or retaliate verbally against someone who seems smug, boring, weak, or dismissive."
         if action == "DISCLOSE":
-            return "Reveal envy, vanity, attraction, resentment, competitiveness, or a secret motive that makes the exchange socially dangerous."
+            return f"Use {fresh} to reveal envy, vanity, attraction, resentment, competitiveness, or a secret motive that makes the exchange socially dangerous."
         if action == "COMPARE":
             return f"Use {fresh} to rank people, taste, competence, loyalty, or status. Pick a winner and a loser and make the judgment personal."
         return f"Declare the current subject beneath you and pivot to {fresh} with contempt or theatrical certainty."
     if entity == "owen":
         if action == "DISAGREE":
-            return "Assume there is an ulterior motive or hidden slight. Accuse, interrogate, or push back hard; profanity is allowed."
+            return f"Treat {fresh} as evidence of an ulterior motive or hidden slight. Accuse, interrogate, or push back hard; profanity is allowed."
         if action == "CALLBACK":
-            return "Resurrect a real or invented grievance, betrayal, suspicious incident, or old score and treat it as relevant now."
+            return f"Resurrect {fresh} as a real grievance, betrayal, suspicious incident, or old score and treat it as relevant now."
         if action == "COMPARE":
             return f"Compare the current behavior with {fresh} and use the comparison to question someone's motives, honesty, or competence."
         return f"End the current line because you distrust where it is going and pivot to {fresh} without asking permission."
     if action == "DISAGREE":
-        return "Provoke someone for a reaction. Tease, insult, contradict, or puncture the mood because agreement is boring."
+        return f"Use {fresh} to provoke someone for a reaction. Tease, insult, contradict, dare, or puncture the mood because agreement is boring."
     if action == "DISCLOSE":
-        return "Drop an impulsive confession, attraction, jealousy, outrageous secret, or invented shared memory that changes the room's energy."
+        return f"Make {fresh} the center of an impulsive confession, attraction, jealousy, outrageous secret, or invented shared memory that changes the room's energy."
     if action == "CALLBACK":
-        return "Revive a bizarre real or invented shared incident, private joke, dare, flirtation, or disaster and make someone answer for it."
+        return f"Insist {fresh} really happened. Make it a bizarre shared incident, private joke, dare, flirtation, or disaster and make someone answer for it."
     return f"Derail the stale subject toward {fresh} in a playful, reckless, dramatic, or confrontational way."
 
 
@@ -226,9 +226,15 @@ def _reroute_thought(validated: dict, compact: dict) -> dict:
     risk = int(out.get("interpersonal_risk", 0) or 0)
     stale = isinstance(compact.get("stale_loop"), dict)
     seed = globals()["_sample_seed"]("volatile_gate", entity, 0)
-    # Autonomous Room beats should not drift back to bland helper moves.
-    # Participant-response routing can still override this later for Allen.
-    force = stale or action in _SAFE_ACTIONS or risk < 3
+    volatile_actions = {
+        "sarah": {"DISCLOSE", "DISAGREE", "CALLBACK", "REPAIR"},
+        "mara": {"DISAGREE", "COMPARE", "DISCLOSE", "CLOSE"},
+        "owen": {"DISAGREE", "CALLBACK", "COMPARE", "CLOSE"},
+        "jules": {"DISAGREE", "DISCLOSE", "BRIDGE", "CALLBACK"},
+    }[entity]
+    # Autonomous beats live inside each personality's volatile signature set.
+    # Allen adjacency routing can still override the resulting deliberation later.
+    force = stale or action not in volatile_actions or risk < 3
 
     if force:
         action = _volatile_action(entity)
@@ -250,7 +256,12 @@ def _reroute_thought(validated: dict, compact: dict) -> dict:
     fresh = str((compact.get("stale_loop") or {}).get("fresh_subject") or _fresh_subject(entity))
     if stale and action in {"BRIDGE", "CLOSE", "COMPARE"}:
         out["focus"] = fresh
-    if force or not str(out.get("new_information_goal") or "").strip():
+    # The move label and the actual intent may never diverge again.
+    # Every signature move gets its personality-specific volatile agenda even if
+    # the model originally chose that same move on its own.
+    if action in volatile_actions:
+        out["new_information_goal"] = _agenda_goal(entity, action, fresh)
+    elif force or not str(out.get("new_information_goal") or "").strip():
         out["new_information_goal"] = _agenda_goal(entity, action, fresh)
     return out
 
@@ -299,7 +310,7 @@ def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: s
     risk = int(intent.get("risk", 0) or 0)
     if risk >= 3:
         charged = re.search(
-            r"\b(?:lie|lied|lying|betray|betrayed|jealous|want|need|hate|love|angry|furious|pissed|resent|envy|afraid|scared|leave|done|fake|using|used|manipulat\w*|coward|pathetic|smug|stupid|idiot|bullshit|fuck|damn|secret|promise|stole|steal|cheat\w*|ignore\w*|abandon\w*|obsess\w*|desire|attract\w*|mine|owe|trust|grudge|revenge|dare|banned|sabotage)\b",
+            r"\b(?:lie|lied|lying|betray|betrayed|jealous|want|need|hate|love|angry|furious|pissed|resent|envy|afraid|scared|leave|done|fake|using|used|manipulat\w*|coward|pathetic|smug|stupid|idiot|bullshit|fuck|damn|secret|promise|stole|steal|cheat\w*|ignore\w*|abandon\w*|obsess\w*|desire|attract\w*|mine|owe|trust|grudge|revenge|dare|banned|sabotage|beneath|winner|loser|weak|boring|dismiss\w*|mock\w*|ridiculous|reckless|rumor|motel|wedding|herman|flamingo|voicemail|roof|suitcase)\b",
             low, re.I,
         )
         history = re.search(
