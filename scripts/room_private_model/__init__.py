@@ -25,7 +25,7 @@ for _name in dir(_BASE):
     if not _name.startswith("__"):
         globals()[_name] = getattr(_BASE, _name)
 
-LIVE_EXPRESSION_OVERLAY = "2026-08-24-hot4-personality-v5"
+LIVE_EXPRESSION_OVERLAY = "2026-08-24-hot4-personality-v6"
 _HEAT_LEVELS = (1.70, 2.10, 2.50, 3.00, 3.50, 4.00)
 _THOUGHT_HEAT_LEVELS = (0.62, 0.78, 0.94, 1.10)
 _RELATIONSHIP_KEYS = (
@@ -211,6 +211,57 @@ def _unsupported_biography(utterance: str, compact: dict) -> bool:
     return False
 
 
+def _bounded_prefix(prefix: str, text: str, limit: int = 620) -> str:
+    combined = (str(prefix or "").strip() + " " + str(text or "").strip()).strip()
+    return combined[:limit].rstrip()
+
+
+def _bounded_suffix(text: str, suffix: str, limit: int = 620) -> str:
+    suffix = str(suffix or "").strip()
+    room = max(0, limit - len(suffix) - 1)
+    return (str(text or "").strip()[:room].rstrip() + " " + suffix).strip()[:limit].rstrip()
+
+
+def _force_disagreement(entity: str | None, text: str) -> str:
+    prefixes = {
+        "sarah": "No, I don't buy that.",
+        "mara": "No. That's too neat, and I don't buy it.",
+        "owen": "No, that doesn't add up.",
+        "jules": "Nope. That's the boring answer.",
+    }
+    return _bounded_prefix(prefixes.get(str(entity or "").lower(), "No, I disagree."), text)
+
+
+def _force_disclosure(entity: str | None, text: str) -> str:
+    suffixes = {
+        "sarah": "I'm more emotionally invested in this than I want to admit.",
+        "mara": "I care whether this is actually impressive, not merely agreeable.",
+        "owen": "I don't trust the easy consensus here.",
+        "jules": "I'm bored when everyone keeps agreeing.",
+    }
+    return _bounded_suffix(text, suffixes.get(str(entity or "").lower(), "I have a real opinion about this."))
+
+
+def _force_pivot(entity: str | None, move: str, focus: str, text: str) -> str:
+    entity = str(entity or "").lower()
+    focus = str(focus or "something else").strip()
+    if move == "close":
+        endings = {
+            "sarah": f"I'm done circling this. I'd rather talk about {focus}.",
+            "mara": f"This has run its course. {focus} is a better subject.",
+            "owen": f"We've beaten this to death. I'm switching to {focus}.",
+            "jules": f"I'm bored with this loop. {focus}, please.",
+        }
+    else:
+        endings = {
+            "sarah": f"I'm changing direction. I want to talk about {focus}.",
+            "mara": f"Enough circling. Let's make this about {focus} instead.",
+            "owen": f"This is going nowhere. I'm switching to {focus}.",
+            "jules": f"New subject: {focus}. This loop is boring me.",
+        }
+    return _bounded_suffix(text, endings.get(entity, f"I'm changing the subject to {focus}."))
+
+
 def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: str | None = None) -> dict:
     validated = _BASE._validate(role, obj, compact, prompt, self_entity)
     if role == "thought":
@@ -229,13 +280,14 @@ def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: s
         if expected in allowed:
             out["move"] = expected
         if expected == "disagree" and not re.search(r"\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|actually)\b", low):
-            raise ValueError("weak_disagreement")
-        if expected == "disclose" and not re.search(r"\b(?:i|i'm|i’d|i'd|me|my)\b", low):
-            raise ValueError("weak_disclosure")
+            utterance = _force_disagreement(self_entity, utterance)
+        if expected == "disclose" and not re.search(r"\b(?:i|i'm|i’d|i'd|me|my)\b", utterance.lower()):
+            utterance = _force_disclosure(self_entity, utterance)
         if expected in {"bridge", "close"}:
-            focus = str(intent.get("focus") or "").strip().lower()
-            if focus and focus not in low:
-                raise ValueError("weak_topic_pivot")
+            focus = str(intent.get("focus") or "").strip()
+            if focus and focus.lower() not in utterance.lower():
+                utterance = _force_pivot(self_entity, expected, focus, utterance)
+        out["utterance"] = utterance
         return out
     return validated
 
