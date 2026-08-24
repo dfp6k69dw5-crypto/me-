@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T20:22:30.946220+00:00",
-  "cycle_key": "32768251622:1:32",
+  "generated_at": "2026-08-24T20:24:25.516383+00:00",
+  "cycle_key": "32768251622:1:33",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,12 +32,15 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 2.72,
-      "confidence": 0.949,
-      "raw_score": 2.72,
+      "score": 5.25,
+      "confidence": 0.999,
+      "raw_score": 5.25,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "design",
+        "connection",
+        "experiment",
+        "creative",
         "idea"
       ],
       "evidence_sources": [
@@ -46,77 +49,43 @@
           "matched": [
             "design"
           ],
-          "weight": 1.8
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "idea"
+            "connection",
+            "experiment"
           ],
-          "weight": 0.92
-        },
-        {
-          "kind": "topic",
-          "matched": [
-            "idea"
-          ],
-          "weight": 0.58
-        },
-        {
-          "kind": "topic_support",
-          "matched": [
-            "idea"
-          ],
-          "weight": 0.38
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 2.72,
-      "confidence": 0.949,
-      "raw_score": 2.72,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "love",
-        "feeling"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "love"
-          ],
-          "weight": 1.8
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "design",
+            "creative"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "love"
+            "design"
           ],
-          "weight": 0.64
+          "weight": 0.76
         },
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "idea"
           ],
-          "weight": 0.54
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "a7cb8ac983f9",
+  "context_fingerprint": "f2fa824d4f91",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 849,
-  "approx_added_tokens": 212
+  "temporary_skill_chars": 488,
+  "approx_added_tokens": 122
 }
