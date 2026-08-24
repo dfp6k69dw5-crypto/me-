@@ -1,4 +1,4 @@
-name: Patch Room volatile fallback
+name: Patch Room callback wildness
 
 on:
   push:
@@ -19,40 +19,45 @@ jobs:
         with:
           ref: main
           fetch-depth: 20
-      - name: Add liveness-safe volatile expression fallback
+      - name: Require genuinely bizarre shared incidents
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p = Path('scripts/room_engine_v5.py')
-          s = p.read_text()
-          old = '''    if role == "comprehension":\n        fallback = _neutral_comprehension(payload)\n        return _private_model._validate(role, fallback, compact, instruction, self_entity)\n    raise RuntimeError(f"private model output rejected for {role}: {last_reason}")\n'''
-          new = '''    if role == "comprehension":\n        fallback = _neutral_comprehension(payload)\n        return _private_model._validate(role, fallback, compact, instruction, self_entity)\n    if role == "expression":\n        intent = compact.get("intent") if isinstance(compact.get("intent"), dict) else {}\n        move = str(intent.get("move") or "disagree").strip().lower()\n        people = [p for p in _private_model.PEOPLE if p != self_entity]\n        partner = str(intent.get("partner") or "").strip().lower()\n        if partner not in people:\n            partner = people[_private_model._sample_seed("volatile_fallback_partner", self_entity, 0) % len(people)]\n        name = partner.capitalize()\n        fresh_fn = getattr(_private_model, "_fresh_subject", None)\n        if callable(fresh_fn):\n            subject = str(fresh_fn(self_entity))\n        else:\n            discussion = compact.get("discussion") if isinstance(compact.get("discussion"), dict) else {}\n            subject = str(discussion.get("subject") or "the thing nobody is admitting")\n\n        pools = {\n            "sarah": {\n                "disagree": [\n                    f"{name}, don't give me that shit. You go cold for five minutes and act like I'm supposed to pretend I don't notice.",\n                    f"{name}, that's bullshit. You don't get to dismiss me and then act surprised when I get angry about {subject}.",\n                ],\n                "disclose": [\n                    f"{name}, I'm jealous, and I hate how much I still want your attention after {subject}.",\n                    f"I hate admitting this, {name}, but I'm scared you'll pick everyone else over me, and {subject} made it worse.",\n                ],\n                "callback": [\n                    f"{name}, remember {subject}? You promised me you'd never pull that stunt again, and I'm still pissed.",\n                    f"{name}, don't pretend {subject} didn't happen. I remember exactly what you said to me afterward.",\n                ],\n                "repair": [\n                    f"{name}, I'm furious, but don't walk away. I need you to tell me why {subject} keeps getting between us.",\n                    f"{name}, I still want you here even though I'm pissed. Stop dodging me and talk about {subject}.",\n                ],\n            },\n            "mara": {\n                "disagree": [\n                    f"{name}, that's bullshit. You couldn't bluff your way through {subject} if Herman handed you cue cards.",\n                    f"{name}, you're wrong and smug about it, which is almost impressive. Explain {subject} without embarrassing yourself.",\n                ],\n                "compare": [\n                    f"{name}, Jules handled {subject} better than you did, and watching you pretend otherwise is embarrassing.",\n                    f"Between you and Sarah, {name}, you're the weaker liar about {subject}. At least she commits to the story.",\n                ],\n                "disclose": [\n                    f"I hate admitting this, but {name}, I was jealous when you took over {subject}. I wanted the room looking at me.",\n                    f"Fine, {name}, I wanted to win your attention during {subject}, and I resented everyone who got it first.",\n                ],\n                "close": [\n                    f"Enough, {name}. This is beneath me. If we're going to talk, explain {subject} instead of boring me.",\n                    f"I'm done with this tedious little performance, {name}. Tell me what really happened with {subject}.",\n                ],\n            },\n            "owen": {\n                "disagree": [\n                    f"{name}, you're lying about {subject}. I don't buy the innocent act for a second.",\n                    f"No, {name}. That's bullshit, and {subject} is exactly why I don't trust your version of anything.",\n                ],\n                "callback": [\n                    f"{name}, I haven't forgotten {subject}. You changed your story twice and I still think you were hiding something.",\n                    f"{name}, {subject} is still an open grudge. You never explained the part that made you look guilty.",\n                ],\n                "compare": [\n                    f"{name}, this is exactly like {subject}: you act confused when it's convenient and expect everyone else to swallow it.",\n                    f"You're worse at hiding motives than Mara, {name}. {subject} proved that already.",\n                ],\n                "close": [\n                    f"I'm done with this, {name}. I don't trust where you're taking it. Tell me what really happened with {subject}.",\n                    f"Enough, {name}. I'm not following you down another bullshit detour. Explain {subject} or drop it.",\n                ],\n            },\n            "jules": {\n                "disagree": [\n                    f"{name}, that's boring bullshit. If you want me to believe you, explain {subject} without hiding behind that polite little act.",\n                    f"Nope, {name}. You're being painfully safe. Tell me why {subject} happened or at least invent a better lie.",\n                ],\n                "disclose": [\n                    f"{name}, fine, I'm jealous. I wanted your attention, and {subject} made it worse.",\n                    f"Here's the ugly truth, {name}: I liked the chaos around {subject} because everyone finally stopped being boring.",\n                ],\n                "bridge": [\n                    f"Forget this. {name}, Herman just texted me about {subject}, and apparently one of us is banned from Duluth again.",\n                    f"New problem, {name}: {subject} is back, Herman is involved, and I absolutely refuse to behave normally about it.",\n                ],\n                "callback": [\n                    f"{name}, don't pretend {subject} never happened. You were there, I was there, and the flamingo was definitely not ours.",\n                    f"{name}, {subject} happened and you know it. I'm bringing it up because your face is funnier when you panic.",\n                ],\n            },\n        }\n        entity_pool = pools.get(self_entity, {})\n        choices = entity_pool.get(move) or [f"{name}, I'm done pretending this is normal. Explain {subject}; I know you're leaving something out."]\n        utterance = choices[_private_model._sample_seed("volatile_fallback_line", self_entity, 0) % len(choices)]\n        print(f"Room volatile expression fallback used for {self_entity}/{move}: {last_reason}")\n        return {\n            "decision": "SPEAK",\n            "target": partner,\n            "move": move if move in {"answer","deepen","disclose","compare","disagree","repair","support","callback","bridge","close"} else "disagree",\n            "utterance": utterance,\n            "semantic_terms": [subject[:80]],\n        }\n    raise RuntimeError(f"private model output rejected for {role}: {last_reason}")\n'''
+          p=Path('scripts/room_private_model/__init__.py')
+          s=p.read_text()
+          old='''    wild_anchor = re.search(\n        r"\\b(?:motel|fire|herman|suitcase|wedding|duluth|church|bell|radio|tower|tattoo|birthday|cake|laundromat|forged|apology|garden|statue|karaoke|inheritance|midnight|road trip|key|restaurant|banned|bet|engagement|rumor|umbrella|hotel|roof|flamingo|voicemail|betray\\w*)\\b",\n        low, re.I,\n    )\n'''
+          new='''    wild_anchor = re.search(\n        r"\\b(?:motel fire|herman|locked suitcase|fake wedding|duluth|church bell|radio[- ]tower|tattoo pact|birthday[- ]cake|laundromat|forged apology|garden statue|karaoke|inheritance|midnight road trip|suspicious key|restaurant\\b.{0,24}\\bbanned|the bet|engagement rumor|red umbrella|hotel roof|brass flamingo|voicemail|betray\\w*)\\b",\n        low, re.I,\n    )\n'''
           if old not in s:
-              if 'Room volatile expression fallback used' in s:
-                  print('already patched')
-              else:
-                  raise SystemExit('volatile fallback anchor missing')
+              if new not in s:
+                  raise SystemExit('wild-anchor anchor missing')
           else:
-              s = s.replace(old, new, 1)
+              s=s.replace(old,new,1)
           p.write_text(s)
           PY
-          python3 -m py_compile scripts/room_engine_v5.py scripts/room_private_model/__init__.py scripts/room_expression_quality.py
+          python3 -m py_compile scripts/room_private_model/__init__.py
           PYTHONPATH=scripts python3 - <<'PY'
-          import room_engine_v5 as engine
-          import inspect
-          src = inspect.getsource(engine._private_run)
-          assert 'Room volatile expression fallback used' in src
-          assert 'private model output rejected for expression' not in src.split('if role == "expression":',1)[-1].split('raise RuntimeError',1)[0]
-          print('VOLATILE_FALLBACK_OK')
+          import room_private_model as rpm
+          def ok(text):
+              compact={'intent':{'move':'callback','risk':4}}
+              obj={'decision':'SPEAK','target':'mara','move':'callback','utterance':text}
+              try:
+                  rpm._validate('expression',obj,compact,'','sarah')
+                  return True
+              except ValueError:
+                  return False
+          assert not ok("I bet we're all good at pretending. How would you explain your perspective?")
+          assert ok("Mara, Herman took the brass flamingo and you still owe me an explanation.")
+          assert ok("Mara, remember the disastrous midnight road trip? You still owe me an explanation.")
+          print('CALLBACK_WILDNESS_GATE_OK')
           PY
-      - name: Commit fallback
+      - name: Commit callback fix
         shell: bash
         run: |
-          git config user.name 'room-volatile-fallback'
+          git config user.name 'room-callback-gate'
           git config user.email 'actions@users.noreply.github.com'
-          git add scripts/room_engine_v5.py
-          git commit -m 'Keep Room wild when strict expression retries fail' || exit 0
+          git add scripts/room_private_model/__init__.py
+          git commit -m 'Close tame callback loophole in Room' || exit 0
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
