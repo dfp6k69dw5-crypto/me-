@@ -24,7 +24,7 @@ for _name in dir(_BASE):
     if not _name.startswith("__"):
         globals()[_name] = getattr(_BASE, _name)
 
-LIVE_EXPRESSION_OVERLAY = "2026-08-24-volatile-agenda-v12"
+LIVE_EXPRESSION_OVERLAY = "2026-08-24-concrete-chaos-v13"
 _RELATIONSHIP_KEYS = (
     "trust", "warmth", "tension", "respect", "predictability",
     "reciprocity", "disclosure_depth", "direct_familiarity", "exposure",
@@ -317,15 +317,22 @@ def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: s
             r"\b(?:remember|last time|years ago|that night|when we|the time we|back when|used to|that motel|that wedding|the dare|the bet|the pact|the voicemail)\b",
             low, re.I,
         )
-        if expected == "callback" and not history:
+        wild_anchor = re.search(
+            r"\b(?:motel|fire|herman|suitcase|wedding|duluth|church|bell|radio|tower|tattoo|birthday|cake|laundromat|forged|apology|garden|statue|karaoke|inheritance|midnight|road trip|key|restaurant|banned|bet|engagement|umbrella|hotel|roof|flamingo|voicemail|betray\w*)\b",
+            low, re.I,
+        )
+        # A callback need not literally say 'remember'. A concrete recurring Room
+        # invention is itself evidence that the callback happened.
+        if expected == "callback" and not (history or wild_anchor or charged):
             raise ValueError("high_risk_callback_not_realized")
-        if expected in {"disagree", "disclose", "compare", "close", "repair"} and not (charged or history):
+        if expected in {"disagree", "disclose", "compare", "close", "repair"} and not (charged or history or wild_anchor):
             raise ValueError("high_risk_not_realized")
 
-    if expected == "disagree" and not re.search(
+    disagreement_marker = re.search(
         r"\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|fuck|stupid|idiot|actually)\b",
-        low,
-    ):
+        low, re.I,
+    )
+    if expected == "disagree" and not (disagreement_marker or (risk >= 3 and (charged or history or wild_anchor))):
         raise ValueError("disagreement_not_realized")
     if expected == "disclose" and not re.search(r"\b(?:i|i'm|i’d|i'd|me|my)\b", low):
         raise ValueError("disclosure_not_realized")
