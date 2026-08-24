@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T19:59:22.757598+00:00",
-  "cycle_key": "32768251622:1:19",
+  "generated_at": "2026-08-24T20:01:05.963323+00:00",
+  "cycle_key": "32768251622:1:20",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,20 +32,19 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 4.75,
-      "confidence": 0.999,
-      "raw_score": 4.75,
+      "score": 3.71,
+      "confidence": 0.991,
+      "raw_score": 3.71,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "creative",
-        "idea",
-        "music"
+        "music",
+        "idea"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "idea",
             "creative"
           ],
           "weight": 1.8
@@ -53,7 +52,6 @@
         {
           "kind": "message",
           "matched": [
-            "idea",
             "music",
             "creative"
           ],
@@ -62,50 +60,53 @@
         {
           "kind": "message",
           "matched": [
-            "music"
+            "creative"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea",
+            "creative"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea",
+            "music",
+            "creative"
           ],
           "weight": 0.54
-        },
-        {
-          "kind": "topic",
-          "matched": [
-            "idea"
-          ],
-          "weight": 0.58
-        },
-        {
-          "kind": "topic_support",
-          "matched": [
-            "idea"
-          ],
-          "weight": 0.38
         }
       ]
     },
     {
-      "name": "social-grounding",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "memory-callback",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "conversation"
+        "past"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "conversation"
+            "past"
           ],
-          "weight": 1.8
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "00cd3aca6768",
+  "context_fingerprint": "07768604c77d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 826,
-  "approx_added_tokens": 206
+  "temporary_skill_chars": 820,
+  "approx_added_tokens": 205
 }
