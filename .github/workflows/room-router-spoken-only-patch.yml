@@ -1,0 +1,53 @@
+name: Patch Room skill routing to spoken context only
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'society/room-router-spoken-only-kick.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 20
+      - name: Patch router exactly
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/room_skill_exec.py')
+          s=p.read_text()
+          old='''    if context is None:\n        segments = recent_context_segments()\n        public_context = _norm(" ".join(segment["text"] for segment in segments))\n    else:\n        segments = _segments_from_text(context)\n        public_context = _norm(context)\n'''
+          new='''    if context is None:\n        segments = recent_context_segments()\n        # Thought and expression skills must be earned by what someone actually\n        # said. Persistent topic bookkeeping is useful for comprehension, but\n        # letting it route generative skills creates a self-reinforcing style loop.\n        if role in {"thought", "expression"}:\n            segments = [segment for segment in segments if segment.get("kind") == "message"]\n        public_context = _norm(" ".join(segment["text"] for segment in segments))\n    else:\n        segments = _segments_from_text(context)\n        public_context = _norm(context)\n'''
+          if old not in s:
+              if 'segments = [segment for segment in segments if segment.get("kind") == "message"]' in s:
+                  print('already patched')
+              else:
+                  raise SystemExit('expected router anchor missing')
+          else:
+              p.write_text(s.replace(old,new,1))
+          PY
+          python3 -m py_compile scripts/room_skill_exec.py
+      - name: Commit patch
+        shell: bash
+        run: |
+          git config user.name 'room-router-patcher'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/room_skill_exec.py
+          git commit -m 'Route Room generation skills from spoken context only' || exit 0
+          for n in 1 2 3 4 5; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort || true; exit 1; }
+            sleep "$n"
+          done
+          exit 1
