@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T19:57:56.984158+00:00",
-  "cycle_key": "32768251622:1:18",
+  "generated_at": "2026-08-24T19:59:41.567862+00:00",
+  "cycle_key": "32768251622:1:19",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,19 +32,30 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.73,
-      "repeat_penalty": 0.28,
+      "score": 4.75,
+      "confidence": 0.999,
+      "raw_score": 4.75,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "music",
-        "idea"
+        "creative",
+        "idea",
+        "music"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "music"
+            "idea",
+            "creative"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea",
+            "music",
+            "creative"
           ],
           "weight": 1.15
         },
@@ -54,13 +65,6 @@
             "music"
           ],
           "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "music"
-          ],
-          "weight": 0.46
         },
         {
           "kind": "topic",
@@ -77,10 +81,31 @@
           "weight": 0.38
         }
       ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "conversation"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "conversation"
+          ],
+          "weight": 1.8
+        }
+      ]
     }
   ],
-  "context_fingerprint": "1c4acccf1d71",
+  "context_fingerprint": "00cd3aca6768",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 488,
-  "approx_added_tokens": 122
+  "temporary_skill_chars": 826,
+  "approx_added_tokens": 206
 }
