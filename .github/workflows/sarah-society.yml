@@ -22,7 +22,6 @@ permissions:
 concurrency:
   group: the-room-world-main
   cancel-in-progress: false
-  queue: max
 
 jobs:
   beat:
@@ -69,10 +68,7 @@ jobs:
                 "$server_bin" -m .room_model/society-brain-q4_0.gguf --host 127.0.0.1 --port 18080 -c 16384 -np 2 >.room_model/server.log 2>&1 &
               model_pid=$!
               for attempt in $(seq 1 120); do
-                if curl -fsS --connect-timeout 1 --max-time 2 http://127.0.0.1:18080/health >/dev/null 2>&1; then
-                  export ROOM_MODEL_URL='http://127.0.0.1:18080/completion'
-                  break
-                fi
+                if curl -fsS --connect-timeout 1 --max-time 2 http://127.0.0.1:18080/health >/dev/null 2>&1; then export ROOM_MODEL_URL='http://127.0.0.1:18080/completion'; break; fi
                 if ! kill -0 "$model_pid" 2>/dev/null; then break; fi
                 sleep 1
               done
