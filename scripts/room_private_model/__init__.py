@@ -24,7 +24,7 @@ for _name in dir(_BASE):
     if not _name.startswith("__"):
         globals()[_name] = getattr(_BASE, _name)
 
-LIVE_EXPRESSION_OVERLAY = "2026-08-24-concrete-chaos-v13"
+LIVE_EXPRESSION_OVERLAY = "2026-08-24-semantic-chaos-v15"
 _RELATIONSHIP_KEYS = (
     "trust", "warmth", "tension", "respect", "predictability",
     "reciprocity", "disclosure_depth", "direct_familiarity", "exposure",
@@ -308,34 +308,59 @@ def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: s
         out["move"] = expected
 
     risk = int(intent.get("risk", 0) or 0)
-    if risk >= 3:
-        charged = re.search(
-            r"\b(?:lie|lied|lying|betray|betrayed|jealous|want|need|hate|love|angry|furious|pissed|resent|envy|afraid|scared|leave|done|fake|using|used|manipulat\w*|coward|pathetic|smug|stupid|idiot|bullshit|fuck|damn|secret|promise|stole|steal|cheat\w*|ignore\w*|abandon\w*|obsess\w*|desire|attract\w*|mine|owe|trust|grudge|revenge|dare|banned|sabotage|beneath|winner|loser|weak|boring|dismiss\w*|mock\w*|ridiculous|reckless|rumor|motel|wedding|herman|flamingo|voicemail|roof|suitcase)\b",
-            low, re.I,
-        )
-        history = re.search(
-            r"\b(?:remember|last time|years ago|that night|when we|the time we|back when|used to|that motel|that wedding|the dare|the bet|the pact|the voicemail)\b",
-            low, re.I,
-        )
-        wild_anchor = re.search(
-            r"\b(?:motel|fire|herman|suitcase|wedding|duluth|church|bell|radio|tower|tattoo|birthday|cake|laundromat|forged|apology|garden|statue|karaoke|inheritance|midnight|road trip|key|restaurant|banned|bet|engagement|umbrella|hotel|roof|flamingo|voicemail|betray\w*)\b",
-            low, re.I,
-        )
-        # A callback need not literally say 'remember'. A concrete recurring Room
-        # invention is itself evidence that the callback happened.
-        if expected == "callback" and not (history or wild_anchor or charged):
-            raise ValueError("high_risk_callback_not_realized")
-        if expected in {"disagree", "disclose", "compare", "close", "repair"} and not (charged or history or wild_anchor):
-            raise ValueError("high_risk_not_realized")
-
-    disagreement_marker = re.search(
-        r"\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|fuck|stupid|idiot|actually)\b",
+    direct = re.search(r"\b(?:you|your|you\'re|sarah|mara|owen|jules|allen)\b", low, re.I)
+    first_person = re.search(r"\b(?:i|i\'m|i’d|i'd|me|my|mine)\b", low, re.I)
+    wild_anchor = re.search(
+        r"\b(?:motel|fire|herman|suitcase|wedding|duluth|church|bell|radio|tower|tattoo|birthday|cake|laundromat|forged|apology|garden|statue|karaoke|inheritance|midnight|road trip|key|restaurant|banned|bet|engagement|rumor|umbrella|hotel|roof|flamingo|voicemail|betray\w*)\b",
         low, re.I,
     )
-    if expected == "disagree" and not (disagreement_marker or (risk >= 3 and (charged or history or wild_anchor))):
-        raise ValueError("disagreement_not_realized")
-    if expected == "disclose" and not re.search(r"\b(?:i|i'm|i’d|i'd|me|my)\b", low):
-        raise ValueError("disclosure_not_realized")
+    history = re.search(
+        r"\b(?:remember|last time|years ago|that night|when we|the time we|back when|used to|that motel|that wedding|the dare|the bet|the pact|the voicemail)\b",
+        low, re.I,
+    )
+    aggression = re.search(
+        r"\b(?:wrong|lie|lied|lying|bullshit|ridiculous|stupid|idiot|pathetic|smug|coward|jealous|using|used me|manipulat\w*|betray\w*|fake|stole|steal|cheat\w*|dismiss\w*|screw you|fuck|hate you|shut up)\b",
+        low, re.I,
+    )
+    comparison = re.search(
+        r"\b(?:better|worse|more|less|than|versus|vs\.?|prefer|rather|winner|loser|stronger|weaker|smarter|dumber|best|worst|superior|inferior)\b",
+        low, re.I,
+    )
+    dismissal = re.search(
+        r"\b(?:enough|done|boring|beneath|drop it|moving on|move on|not worth|waste of|over this|over it|forget it|who cares|don\'t care|sick of|not buying|don\'t trust|distrust|bullshit|stop this)\b",
+        low, re.I,
+    )
+    intimacy = re.search(
+        r"\b(?:jealous|want you|need you|hate|love|afraid|scared|resent|envy|secret|promise|miss you|attract\w*|obsess\w*|possessive|hurt|can\'t stand|cannot stand|desire)\b",
+        low, re.I,
+    )
+    repair = re.search(
+        r"\b(?:sorry|forgive|i was wrong|i shouldn\'t|i should not|need you|want you|don\'t leave|do not leave|stay|miss you|hurt|afraid|scared|can\'t lose|cannot lose|don\'t want to lose|do not want to lose)\b",
+        low, re.I,
+    )
+
+    if risk >= 3:
+        if expected == "disagree" and not (direct and aggression):
+            raise ValueError("high_risk_disagreement_not_realized")
+        if expected == "callback" and not (direct and (history or wild_anchor)):
+            raise ValueError("high_risk_callback_not_realized")
+        if expected == "compare" and not (comparison and (direct or wild_anchor)):
+            raise ValueError("high_risk_comparison_not_realized")
+        if expected == "close" and not (dismissal and (direct or wild_anchor)):
+            raise ValueError("high_risk_close_not_realized")
+        if expected == "disclose" and not (first_person and intimacy):
+            raise ValueError("high_risk_disclosure_not_realized")
+        if expected == "repair" and not (direct and repair):
+            raise ValueError("high_risk_repair_not_realized")
+        if expected == "bridge" and not (wild_anchor or (direct and aggression)):
+            raise ValueError("high_risk_bridge_not_realized")
+    else:
+        if expected == "disagree" and not re.search(
+            r"\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|actually)\b", low, re.I
+        ):
+            raise ValueError("disagreement_not_realized")
+        if expected == "disclose" and not first_person:
+            raise ValueError("disclosure_not_realized")
 
     out["utterance"] = utterance
     return out
@@ -373,30 +398,29 @@ def _expression_temperature(prompt: str, self_entity: str | None, attempt: int) 
     tension = max(0.0, min(1.0, _safe_float(relationship.get("tension"), 0.0)))
     move = str(intent.get("move") or "").lower()
 
-    base = 1.90 + 0.38 * risk + 0.90 * tension
-    if move in {"disagree", "repair"}:
-        base += 0.55
-    elif move in {"disclose", "callback"}:
-        base += 0.40
-    elif move in {"compare", "close"}:
-        base += 0.25
+    # Social wildness comes from the agenda, not token roulette. Keep enough
+    # variance for personality while staying in the coherent range of this model.
+    base = 1.35 + 0.22 * risk + 0.55 * tension
+    if move in {"disagree", "callback"}:
+        base += 0.30
+    elif move in {"disclose", "repair"}:
+        base += 0.24
+    elif move in {"compare", "close", "bridge"}:
+        base += 0.18
     if self_entity == "jules":
-        base += 0.22
-    elif self_entity == "mara":
-        base += 0.14
-    elif self_entity == "owen":
-        base += 0.10
+        base += 0.12
+    elif self_entity in {"mara", "owen"}:
+        base += 0.07
 
-    if risk >= 4 and (tension >= 0.45 or move in {"disagree", "callback"}):
-        base = 4.0
-    # Retry for grammar without sanding off the social intensity.
     if risk >= 4:
-        floor, decay = 2.65, 0.18
+        base = max(base, 2.30)
+        floor, decay = 1.85, 0.12
     elif risk >= 3:
-        floor, decay = 2.20, 0.20
+        base = max(base, 2.00)
+        floor, decay = 1.65, 0.14
     else:
-        floor, decay = 1.35, 0.32
-    return max(floor, min(4.0, base - decay * max(0, attempt)))
+        floor, decay = 1.20, 0.22
+    return max(floor, min(2.65, base - decay * max(0, attempt)))
 
 
 def _thought_temperature(entity: str | None, attempt: int) -> float:
@@ -430,9 +454,27 @@ def _request(
             + "\n" + prompt
         )
     elif role == "expression":
+        payload = _prompt_payload(prompt)
+        intent = payload.get("intent") if isinstance(payload.get("intent"), dict) else {}
+        move = str(intent.get("move") or "").lower()
+        partner = str(intent.get("partner") or payload.get("partner") or "").lower()
+        aim = str(intent.get("aim") or "").strip()
+        action_rules = {
+            "disagree": "Directly contradict or accuse the target. Address them or name them; do not merely discuss disagreement.",
+            "callback": "State the bizarre shared incident as something that happened and make the target answer for it.",
+            "compare": "Make an explicit personal comparison or ranking. Someone must come off better, worse, stronger, weaker, winner, or loser.",
+            "close": "Dismiss the current line with contempt or distrust, then pivot to the concrete wild subject.",
+            "disclose": "Make a first-person socially risky confession: jealousy, desire, resentment, fear, attraction, possessiveness, secret motive, or similar.",
+            "repair": "Try to keep or repair the relationship while still emotionally charged. Say what you need, want, regret, fear, or cannot tolerate.",
+            "bridge": "Introduce the bizarre concrete incident as live shared continuity and provoke a reaction to it.",
+        }
+        contract = action_rules.get(move, "Perform the specified move directly in spoken language.")
         temperature = _expression_temperature(prompt, self_entity, attempt)
         edge = globals().get("INTERPERSONAL_EDGES", {}).get(self_entity, "")
         prompt = (
+            f"THIS TURN: move={move or 'unknown'}; target={partner or 'another person'}. {contract} "
+            + (f"Required social aim: {aim} " if aim else "")
+            + "Do the act; do not explain, summarize, coach, advise, brainstorm, or talk about how to communicate. "
             "LIVE EXPRESSION RULE: Speak as this specific person, never as a generic assistant, adviser, tutor, facilitator, or customer-service voice. "
             "Follow the deliberated move, relationship, and intent aim. The intent aim is binding: enact it directly in the utterance instead of summarizing it. "
             "When risk is high, do something socially consequential on the page: accuse, confess, taunt, demand, threaten to leave, revive a bizarre shared incident, "
@@ -460,9 +502,9 @@ def _request(
         spread = max(0, attempt)
         body.update({
             "seed": globals()["_sample_seed"](role, self_entity, attempt),
-            "top_k": max(32, 80 - 8 * spread),
-            "top_p": max(0.91, 0.98 - 0.01 * spread),
-            "min_p": min(0.03, 0.002 + 0.004 * spread),
+            "top_k": max(30, 64 - 6 * spread),
+            "top_p": max(0.90, 0.96 - 0.01 * spread),
+            "min_p": min(0.04, 0.006 + 0.005 * spread),
         })
     elif role == "thought":
         entity = _entity_from_prompt(prompt)
