@@ -46,6 +46,33 @@ jobs:
           git config user.name "the-room"
           git config user.email "actions@users.noreply.github.com"
 
+          # Preserve the proven liveness repair if a later merge regresses it.
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/room_engine_v5.py')
+          s = p.read_text()
+          old = 'attempts = 5 if role == "expression" else 2'
+          new = 'attempts = 9 if role == "expression" else 2'
+          if old in s:
+              assert s.count(old) == 1
+              p.write_text(s.replace(old, new))
+          else:
+              assert new in s, 'Room expression retry setting is neither known-good nor known regression'
+          PY
+          if ! git diff --quiet -- scripts/room_engine_v5.py; then
+            python3 -m py_compile scripts/room_engine_v5.py scripts/room_private_model.py scripts/room_expression_quality.py || exit 1
+            git add scripts/room_engine_v5.py
+            git commit -m "Restore proven Room expression retry budget"
+            retry_patch_pushed=0
+            for patch_attempt in 1 2 3 4; do
+              if git push origin HEAD:main; then retry_patch_pushed=1; break; fi
+              git fetch origin main || { sleep $((patch_attempt * 2)); continue; }
+              if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+              sleep 1
+            done
+            [ "$retry_patch_pushed" -eq 1 ] || exit 1
+          fi
+
           ROOM_NODE_TIMEOUT_SECONDS=45
           ROOM_NODE_KILL_GRACE_SECONDS=5
           ROOM_RELAY_CONNECT_TIMEOUT_SECONDS=3
