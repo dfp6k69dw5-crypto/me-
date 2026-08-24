@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T21:32:51.843245+00:00",
-  "cycle_key": "32777184993:1:15",
+  "generated_at": "2026-08-24T21:35:31.765914+00:00",
+  "cycle_key": "32777184993:1:16",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,28 +32,26 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 3.44,
-      "confidence": 0.985,
-      "raw_score": 3.44,
-      "repeat_penalty": 0.0,
+      "score": 1.81,
+      "confidence": 0.782,
+      "raw_score": 2.09,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "creative",
         "idea",
-        "connection"
+        "creative"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "idea",
-            "creative"
+            "idea"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "creative"
+            "idea"
           ],
           "weight": 1.15
         },
@@ -62,49 +60,49 @@
           "matched": [
             "idea"
           ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "connection"
-          ],
-          "weight": 0.54
+          "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
             "idea",
-            "connection"
+            "creative"
           ],
-          "weight": 0.46
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "creative"
+          ],
+          "weight": 0.54
         }
       ]
     },
     {
-      "name": "concrete-specificity",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "domain": "memory-callback",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "specific"
+        "before"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "before"
           ],
-          "weight": 1.45
+          "weight": 1.8
         }
       ]
     }
   ],
-  "context_fingerprint": "6f5ebbc521e2",
+  "context_fingerprint": "924eed50a33c",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 798,
-  "approx_added_tokens": 200
+  "temporary_skill_chars": 820,
+  "approx_added_tokens": 205
 }
