@@ -25,7 +25,7 @@ for _name in dir(_BASE):
     if not _name.startswith("__"):
         globals()[_name] = getattr(_BASE, _name)
 
-LIVE_EXPRESSION_OVERLAY = "2026-08-24-vision-v6"
+LIVE_EXPRESSION_OVERLAY = "2026-08-24-vision-v7"
 _THOUGHT_HEAT_LEVELS = (0.66, 0.82, 0.98, 1.12)
 _RELATIONSHIP_KEYS = (
     "trust", "warmth", "tension", "respect", "predictability",
@@ -67,6 +67,14 @@ _ASSISTANT_CLICHES = (
 _BIO_PATTERNS = (
     r"\bmy (?:mom|mother|dad|father|parents?|brother|sister|wife|husband|girlfriend|boyfriend|boss|coworker|teacher|class|school|college|job|house)\b",
     r"\b(?:yesterday|last night|last week|last year|when i was|i used to|i remember|i grew up|i was planning on studying|i'?ve always been)\b",
+)
+_THIRD_PERSON_SCENE = re.compile(
+    r"\b(?:a|the)\s+(?:woman|man|girl|boy|guy|lady|client|customer|student|teacher|worker|employee|couple|family)\b",
+    re.I,
+)
+_PAST_SCENE = re.compile(
+    r"\b(?:last month|last week|last year|yesterday|monday|tuesday|wednesday|thursday|friday|saturday|sunday|attended|visited|went|walked|arrived|asked|wanted)\b",
+    re.I,
 )
 _DISTRESS_RE = re.compile(
     r"\b(?:afraid|scared|hurt|upset|sad|grief|grieving|crying|panic|terrified|lonely|need help|not okay)\b",
@@ -161,10 +169,11 @@ def _compact_payload(payload: dict, role: str, self_entity: str | None = None) -
         compact["stale_loop"] = {
             "active": True,
             "avoid_terms": repeated,
-            "instruction": "Do not continue the repetitive subject. React to a person or open a genuinely different thread.",
+            "instruction": "The group has been circling a stale subject. React to a person or open a genuinely different thread; do not invent a scenario to fill the gap.",
         }
         compact["interpersonal_anchor"] = {
             "speaker": latest_speaker if latest_speaker in _ROOM_ENTITIES else None,
+            "situation": "The other Room participants have been repeating a topic until it became stale. React to that social dynamic, not to imaginary events.",
         }
         compact["event"] = None
         compact["context"] = []
@@ -186,17 +195,16 @@ def _compact_payload(payload: dict, role: str, self_entity: str | None = None) -
 def _choose_stale_action(entity: str, compact: dict) -> str:
     relationship = compact.get("relationship_context") if isinstance(compact.get("relationship_context"), dict) else {}
     tension = _safe_float(relationship.get("tension"), 0.0)
-    respect = _safe_float(relationship.get("respect"), 0.5)
     options = {
-        "sarah": ("DISCLOSE", "BRIDGE", "DISAGREE", "REPAIR", "CALLBACK"),
-        "mara": ("DISAGREE", "DISCLOSE", "COMPARE", "CLOSE", "REPAIR"),
-        "owen": ("DISAGREE", "COMPARE", "CLOSE", "DISAGREE", "ANSWER"),
-        "jules": ("BRIDGE", "DISCLOSE", "DISAGREE", "COMPARE", "CALLBACK"),
+        "sarah": ("DISCLOSE", "BRIDGE", "DISAGREE", "CLOSE"),
+        "mara": ("DISAGREE", "DISCLOSE", "COMPARE", "CLOSE"),
+        "owen": ("DISAGREE", "COMPARE", "CLOSE", "DISCLOSE"),
+        "jules": ("BRIDGE", "DISCLOSE", "DISAGREE", "COMPARE"),
     }.get(entity, ("BRIDGE", "DISAGREE", "DISCLOSE"))
     seed = globals()["_sample_seed"]("vision_action", entity, 0)
     action = options[seed % len(options)]
     if tension >= 0.55 and entity in {"sarah", "mara", "owen"}:
-        action = "DISAGREE" if entity != "sarah" or respect < 0.6 else "REPAIR"
+        action = "DISAGREE"
     return action
 
 
@@ -218,38 +226,31 @@ def _reroute_thought(validated: dict, compact: dict) -> dict:
     out["preferred_partner"] = partner
 
     risk_floor = {"sarah": 2, "mara": 3, "owen": 3, "jules": 3}.get(entity, 2)
-    if action in {"DISAGREE", "REPAIR"}:
+    if action == "DISAGREE":
         risk_floor = min(4, risk_floor + 1)
     out["interpersonal_risk"] = max(int(out.get("interpersonal_risk", 0) or 0), risk_floor)
 
     if action == "DISAGREE":
         out["new_information_goal"] = (
-            f"Tell {partner} plainly what you reject or find irritating in the exchange. "
-            "A direct insult or profanity is allowed if it naturally fits; do not force one."
-        )
-    elif action == "REPAIR":
-        out["new_information_goal"] = (
-            f"Address the friction with {partner} directly. Admit hurt, anger, suspicion, or attachment if present; "
-            "do not turn it into generic reassurance."
+            f"Tell {partner} plainly that the repetitive group dynamic is irritating, boring, evasive, or unconvincing. "
+            "A direct insult or profanity is allowed if it naturally fits; do not fabricate a factual dispute."
         )
     elif action == "DISCLOSE":
         out["new_information_goal"] = (
-            f"Tell {partner} a present-tense preference, irritation, attraction, insecurity, boredom, or opinion. "
-            "No invented past event."
+            f"Tell {partner} a present-tense preference, irritation, attraction, insecurity, boredom, or opinion about this exchange. "
+            "No invented past event or third-person story."
         )
     elif action == "CLOSE":
         out["focus"] = fresh
-        out["new_information_goal"] = f"Declare the old subject dead and pivot to {fresh} without asking permission."
+        out["new_information_goal"] = f"Declare the stale subject dead and pivot to {fresh} without asking permission."
     elif action == "BRIDGE":
         out["focus"] = fresh
-        out["new_information_goal"] = f"Drop the stale subject and pull {partner} into a concrete thread about {fresh}."
+        out["new_information_goal"] = f"Drop the stale subject and pull {partner} into a concrete present-tense thread about {fresh}."
     elif action == "COMPARE":
         out["focus"] = fresh
-        out["new_information_goal"] = f"Make a sharp comparison involving {fresh} and take a side instead of praising everything."
-    elif action == "CALLBACK":
-        out["new_information_goal"] = f"Call back something {partner} actually said in the current exchange and react to it personally."
+        out["new_information_goal"] = f"Compare the stale group dynamic with {fresh}, make a real judgment, and address {partner}; do not invent an example person."
     else:
-        out["new_information_goal"] = f"Answer {partner} directly, with a clear judgment rather than helper language."
+        out["new_information_goal"] = f"Address {partner} directly with a clear present-tense judgment."
     return out
 
 
@@ -267,6 +268,8 @@ def _unsupported_biography(utterance: str, compact: dict) -> bool:
         match = re.search(pattern, low, re.I)
         if match and match.group(0).lower() not in source:
             return True
+    if isinstance(compact.get("stale_loop"), dict) and _THIRD_PERSON_SCENE.search(utterance) and _PAST_SCENE.search(utterance):
+        return True
     return False
 
 
@@ -287,6 +290,19 @@ def _repetition_issue(utterance: str, compact: dict) -> bool:
         if len(set(used)) >= 2 and len(used) >= 4:
             return True
     return False
+
+
+def _socially_grounded(utterance: str, compact: dict) -> bool:
+    if not isinstance(compact.get("stale_loop"), dict):
+        return True
+    intent = compact.get("intent") if isinstance(compact.get("intent"), dict) else {}
+    move = str(intent.get("move") or "").lower()
+    if move in {"bridge", "close"}:
+        return True
+    low = utterance.lower()
+    if re.search(r"\b(?:i|i'm|i'd|i’ll|i'll|me|my|you|your|we|our|us)\b", low):
+        return True
+    return any(re.search(rf"\b{re.escape(name)}\b", low) for name in _ROOM_ENTITIES)
 
 
 def _bounded_prefix(prefix: str, text: str, limit: int = 620) -> str:
@@ -347,7 +363,7 @@ def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: s
 
     if role == "expression":
         out = dict(validated)
-        utterance = str(out.get("utterance") or "").strip()
+        utterance = str(out.get("utterance") or "").strip().lstrip("-–— ")
         low = utterance.lower()
         if _unsupported_biography(utterance, compact):
             raise ValueError("unsupported_biography")
@@ -357,6 +373,10 @@ def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: s
             raise ValueError("repetitive_or_stale_expression")
         if utterance.startswith(">") or re.search(r"\b(?:owencally|mew)\b", low):
             raise ValueError("garbled_expression")
+        if re.search(r",\s*i did\b", low):
+            raise ValueError("malformed_clause")
+        if not _socially_grounded(utterance, compact):
+            raise ValueError("ungrounded_scene")
 
         intent = compact.get("intent") if isinstance(compact.get("intent"), dict) else {}
         expected = str(intent.get("move") or "").strip().lower()
@@ -425,21 +445,23 @@ def _expression_temperature(prompt: str, self_entity: str | None, attempt: int) 
     risk = max(0.0, min(4.0, _safe_float(intent.get("risk"), 1.0)))
     tension = max(0.0, min(1.0, _safe_float(relationship.get("tension"), 0.0)))
     move = str(intent.get("move") or "").lower()
-    base = 1.55 + 0.36 * risk + 0.70 * tension
+    base = 1.35 + 0.28 * risk + 0.75 * tension
     if move in {"disagree", "repair"}:
-        base += 0.30
+        base += 0.45
     elif move in {"disclose", "callback"}:
-        base += 0.15
+        base += 0.22
+    elif move in {"bridge", "close"}:
+        base += 0.08
     if self_entity == "jules":
-        base += 0.18
+        base += 0.15
     elif self_entity == "mara":
         base += 0.10
 
     if risk >= 4 and tension >= 0.70:
         base = 4.0
     elif risk >= 4 and move == "disagree":
-        base = max(base, 3.55)
-    return max(1.20, min(4.0, base - 0.48 * max(0, attempt)))
+        base = max(base, 3.25)
+    return max(1.15, min(4.0, base - 0.45 * max(0, attempt)))
 
 
 def _thought_temperature(entity: str | None, attempt: int) -> float:
@@ -467,8 +489,8 @@ def _request(
         prompt = (
             "LIVE THOUGHT RULE: Decide what this person actually wants to do next, not what a helpful assistant would do. "
             "Relationship state and personality have causal force. Repetitive polite cooperation is not a safe default. "
-            "Boredom, rivalry, suspicion, attachment, irritation, vanity, teasing, disagreement, disclosure, repair, or a clean "
-            "topic change are legitimate. Never invent biography. "
+            "Boredom, rivalry, suspicion, attachment, irritation, vanity, teasing, disagreement, disclosure, or a clean topic change "
+            "are legitimate. Never invent biography or an imaginary example person. "
             + (f"Persistent interpersonal edge: {edge} " if edge else "")
             + "\n"
             + prompt
@@ -482,8 +504,9 @@ def _request(
             "Follow the deliberated move and the relationship. Ordinary profanity, direct insults, mockery, contempt, dismissiveness, "
             "hostile banter, pettiness, grudges, jealousy, rivalry, and emotional escalation are allowed between Room participants when "
             "they naturally fit. Do not sanitize anger into polite disagreement, but do not force hostility or swearing either. "
-            "Keep the language coherent and conversational. Never invent relatives, jobs, classes, houses, shared memories, or past events. "
-            "If stale_loop is active, do not continue its avoided terms; react to the person or take the new direction in intent. "
+            "Keep the language coherent, direct, and conversational, usually one to three complete sentences. Never invent relatives, "
+            "jobs, classes, houses, shared memories, past events, strangers, clients, or fictional example scenes. If stale_loop is active, "
+            "react to the social dynamic or take the new direction in intent instead of filling empty context with a story. "
             + (f"Persistent interpersonal edge: {edge} " if edge else "")
             + "\n"
             + prompt
