@@ -490,7 +490,7 @@ def _request(model_url: str, prompt: str, role: str, temperature: float, timeout
             "seed": _sample_seed(role, self_entity, attempt),
             "top_k": 60,
             "top_p": 0.96,
-            "min_p": 0.02,
+            "min_p": 0.005,
         })
     req = urllib.request.Request(
         _completion_url(model_url),
