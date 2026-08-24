@@ -34,7 +34,9 @@ jobs:
           grep -q '"min_p": 0.005' scripts/room_private_model.py
           grep -q '"top_k": 60' scripts/room_private_model.py
           grep -q '"top_p": 0.96' scripts/room_private_model.py
-          grep -q 'temperature = min(1.28, 0.88 + 0.06 \* voice_index + 0.09 \* attempt)' scripts/room_private_model.py
+          grep -q 'temperature = min(2.0, 0.88 + 0.06 \* voice_index + 0.09 \* attempt)' scripts/room_private_model.py
+          grep -q 'attempts = 9 if role == "expression" else 2' scripts/room_private_model.py
+          grep -q 'volatile, impulsive, crude, profane' scripts/room_private_model.py
           mkdir -p room
           {
             echo "status=PASS"
@@ -43,7 +45,9 @@ jobs:
             echo "min_p=0.005"
             echo "top_p=0.96"
             echo "top_k=60"
-            echo "temperature=unchanged"
+            echo "temperature_ceiling=2.0-preserved"
+            echo "expression_attempts=9-preserved"
+            echo "rough_expression=preserved"
           } > room/min-p-diversity-result.txt
           git add scripts/room_private_model.py room/min-p-diversity-result.txt
           git commit -m "Lower Room min-p for wider expression"
