@@ -383,6 +383,23 @@ def quality_issue(utterance: object, compact: dict, self_entity: str | None, sim
         return "empty_expression"
     if len(text) > MAX_EXPRESSION_CHARS:
         return "rambling_expression"
+
+    # High-temperature first attempts are allowed to be socially wild, but they
+    # still have to be readable speech. Reject mechanical sampler damage and let
+    # the existing retry path regenerate at a cooler temperature.
+    words = _tokens(text)
+    if re.match(r"^[,.;:)}\]]", text):
+        return "malformed_opening"
+    if re.search(r"[\"'”’]?\}\s*,?\s*\{", text):
+        return "structured_debris"
+    if re.search(r"\b([A-Za-z]{3,})-\1\b", text, re.I):
+        return "local_word_duplication"
+    if len(words) < 3 and not re.search(r"\b(?:no|nope|wrong|fuck|shit|bullshit|idiot|moron|damn|hell)\b", text, re.I):
+        return "empty_fragment"
+    if len(words) > 48:
+        return "wordy_expression"
+    if any(len(_tokens(sentence)) > 36 for sentence in _sentences(text)):
+        return "run_on_expression"
     if _PRONOUN_R.search(text):
         return "malformed_pronoun"
     if _self_address(text, self_entity):
