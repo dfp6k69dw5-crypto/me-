@@ -1,0 +1,67 @@
+name: Repair Room wrapper liveness once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'society/room-wrapper-liveness-fix-kick.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 20
+      - name: Prevent stale local beat poisoning
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('.github/workflows/sarah-society.yml')
+          s = p.read_text()
+
+          old_depth = '          fetch-depth: 0\n'
+          new_depth = '          fetch-depth: 20\n'
+          if old_depth in s:
+              assert s.count(old_depth) == 1, 'unexpected checkout-depth occurrences'
+              s = s.replace(old_depth, new_depth)
+          else:
+              assert new_depth in s, 'checkout depth no longer matches known states'
+
+          old_push = '            if [ "$pushed" -eq 0 ]; then sleep 8; fi\n'
+          new_push = '''            if [ "$pushed" -eq 0 ]; then
+              echo "Room publish lost its race; discard unpublished local beat and resync to authoritative main"
+              git fetch origin main || true
+              git reset --hard origin/main || true
+              sleep 8
+            fi
+'''
+          if old_push in s:
+              assert s.count(old_push) == 1, 'unexpected failed-push handler occurrences'
+              s = s.replace(old_push, new_push)
+          else:
+              assert 'discard unpublished local beat and resync to authoritative main' in s, 'known failed-push handler changed'
+
+          p.write_text(s)
+          PY
+          git diff --check
+          grep -F 'fetch-depth: 20' .github/workflows/sarah-society.yml
+          grep -F 'discard unpublished local beat and resync to authoritative main' .github/workflows/sarah-society.yml
+          git rm .github/workflows/room-wrapper-liveness-fix-once.yml
+          git rm society/room-wrapper-liveness-fix-kick.txt
+          git add .github/workflows/sarah-society.yml
+          git commit -m 'Resync Room after unpublished beat conflicts'
+          pushed=0
+          for attempt in 1 2 3 4; do
+            if git push origin HEAD:main; then pushed=1; break; fi
+            git fetch origin main --depth=40 || { sleep 2; continue; }
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+          done
+          [ "$pushed" -eq 1 ]
