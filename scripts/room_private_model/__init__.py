@@ -2,10 +2,10 @@ from __future__ import annotations
 
 """Live compatibility overlay for Room private-model requests.
 
-Python imports this package in preference to the sibling room_private_model.py.
-The proven implementation is loaded intact under a private alias and re-exported.
-The overlay gives thought and expression real interpersonal agency while keeping
-the engine API, structured validation, and liveness behavior intact.
+The preserved private model remains the structural validator. This overlay keeps
+relationship state visible to thought/expression, breaks stale semantic loops,
+and makes high expression heat a consequence of interpersonal risk rather than
+a random permanent distortion.
 """
 
 import importlib.util
@@ -25,15 +25,24 @@ for _name in dir(_BASE):
     if not _name.startswith("__"):
         globals()[_name] = getattr(_BASE, _name)
 
-LIVE_EXPRESSION_OVERLAY = "2026-08-24-hot4-personality-v6"
-_HEAT_LEVELS = (1.70, 2.10, 2.50, 3.00, 3.50, 4.00)
-_THOUGHT_HEAT_LEVELS = (0.62, 0.78, 0.94, 1.10)
+LIVE_EXPRESSION_OVERLAY = "2026-08-24-vision-v6"
+_THOUGHT_HEAT_LEVELS = (0.66, 0.82, 0.98, 1.12)
 _RELATIONSHIP_KEYS = (
     "trust", "warmth", "tension", "respect", "predictability",
     "reciprocity", "disclosure_depth", "direct_familiarity", "exposure",
 )
+_SOCIAL_SUBJECTS = (
+    "trust", "loyalty", "jealousy", "humor", "music", "money", "attraction",
+    "ambition", "envy", "risk", "honesty", "status", "taste", "privacy",
+    "boredom", "fear",
+)
 _STALE_STOP = set(
-    "the a an and or but if then than this that these those it its is are was were be been being to of in on for with from by at as about into over under we i you he she they them our your their my me us do does did can could would should will just very really quite more most less some any all one two what why how when where who which let lets think thinking idea ideas thing things something new good great beautiful unique could maybe make making made use using used get got like want wanted look looking seems seem also really right now".split()
+    "the a an and or but if then than this that these those it its is are was were be been being "
+    "to of in on for with from by at as about into over under we i you he she they them our your "
+    "their my me us do does did can could would should will just very really quite more most less "
+    "some any all one two what why how when where who which let lets think thinking idea ideas "
+    "thing things something new good great beautiful unique maybe make making made use using used "
+    "get got like want wanted look looking seems seem also right now".split()
 )
 _ASSISTANT_CLICHES = (
     r"\bi appreciate your insights\b",
@@ -52,28 +61,23 @@ _ASSISTANT_CLICHES = (
     r"\bdo you want to share\b",
     r"\bfeel free to\b",
     r"\bit'?s important that you\b",
+    r"\bwe need to evaluate\b",
+    r"\bmake sure we both understand\b",
 )
 _BIO_PATTERNS = (
     r"\bmy (?:mom|mother|dad|father|parents?|brother|sister|wife|husband|girlfriend|boyfriend|boss|coworker|teacher|class|school|college|job|house)\b",
     r"\b(?:yesterday|last night|last week|last year|when i was|i used to|i remember|i grew up|i was planning on studying|i'?ve always been)\b",
 )
-_DISTRESS_RE = re.compile(r"\b(?:afraid|scared|hurt|upset|sad|grief|grieving|crying|panic|terrified|lonely|need help|not okay)\b", re.I)
+_DISTRESS_RE = re.compile(
+    r"\b(?:afraid|scared|hurt|upset|sad|grief|grieving|crying|panic|terrified|lonely|need help|not okay)\b",
+    re.I,
+)
+_ROOM_ENTITIES = ("sarah", "mara", "owen", "jules")
 
 
 def _schema(role: str, self_entity: str | None = None) -> dict:
     _BASE.PEOPLE = globals()["PEOPLE"]
     return _BASE._schema(role, self_entity)
-
-
-def _compact_payload(payload: dict, role: str, self_entity: str | None = None) -> dict:
-    compact = _BASE._compact_payload(payload, role, self_entity)
-    if role == "expression" and isinstance(payload, dict):
-        relationship = payload.get("relationship")
-        if isinstance(relationship, dict):
-            rel = {key: relationship.get(key) for key in _RELATIONSHIP_KEYS if key in relationship}
-            if rel:
-                compact["relationship_context"] = rel
-    return compact
 
 
 def _content_terms(text: object) -> set[str]:
@@ -83,17 +87,24 @@ def _content_terms(text: object) -> set[str]:
     }
 
 
-def _conversation_stale(compact: dict) -> bool:
+def _stale_profile(compact: dict) -> tuple[bool, list[str]]:
     context = compact.get("context") if isinstance(compact.get("context"), list) else []
-    texts = [str(item.get("text") or "") for item in context[-5:] if isinstance(item, dict) and str(item.get("text") or "").strip()]
+    texts = [
+        str(item.get("text") or "")
+        for item in context[-5:]
+        if isinstance(item, dict) and str(item.get("text") or "").strip()
+    ]
     if len(texts) < 4:
-        return False
+        return False, []
     term_sets = [_content_terms(text) for text in texts]
     counts: dict[str, int] = {}
     for terms in term_sets:
         for term in terms:
             counts[term] = counts.get(term, 0) + 1
-    repeated = [term for term, count in counts.items() if count >= 3]
+    repeated = sorted(
+        (term for term, count in counts.items() if count >= 3),
+        key=lambda term: (-counts[term], term),
+    )
     sims = []
     for i in range(len(term_sets)):
         for j in range(i + 1, len(term_sets)):
@@ -102,96 +113,143 @@ def _conversation_stale(compact: dict) -> bool:
                 sims.append(len(left & right) / max(1, len(left | right)))
     avg_sim = sum(sims) / len(sims) if sims else 0.0
     discussion = compact.get("discussion") if isinstance(compact.get("discussion"), dict) else {}
-    generic_subject = str(discussion.get("subject") or "").strip().lower() in {"new idea", "idea", "conversation"}
-    return len(repeated) >= 2 or avg_sim >= 0.22 or (generic_subject and len(repeated) >= 1)
-
-
-def _fresh_subject(compact: dict, entity: str | None) -> str:
-    discussion = compact.get("discussion") if isinstance(compact.get("discussion"), dict) else {}
-    blocked = {
-        str(discussion.get("subject") or "").strip().lower(),
-        str(discussion.get("focus") or "").strip().lower(),
+    generic_subject = str(discussion.get("subject") or "").strip().lower() in {
+        "new idea", "idea", "conversation"
     }
-    choices = [item for item in globals().get("SEED_CONCEPTS", ()) if str(item).lower() not in blocked]
-    if not choices:
-        choices = ["music", "trust", "humor", "technology"]
-    seed = globals()["_sample_seed"]("fresh_subject", entity, 0)
-    return str(choices[seed % len(choices)])
+    stale = len(repeated) >= 2 or avg_sim >= 0.20 or (generic_subject and len(repeated) >= 1)
+    return stale, repeated[:8]
 
 
-def _stale_breaker_entity() -> str:
-    people = [person for person in globals().get("PEOPLE", []) if person in {"sarah", "mara", "owen", "jules"}]
-    if not people:
-        people = ["sarah", "mara", "owen", "jules"]
-    seed = globals()["_sample_seed"]("stale_breaker", "room", 0)
-    return people[seed % len(people)]
+def _fresh_subject(entity: str | None) -> str:
+    seed = globals()["_sample_seed"]("vision_subject", entity, 0)
+    return _SOCIAL_SUBJECTS[seed % len(_SOCIAL_SUBJECTS)]
 
 
-def _reroute_stale_action(validated: dict, compact: dict) -> dict:
-    entity = str(compact.get("entity") or "").lower()
-    event = compact.get("event") if isinstance(compact.get("event"), dict) else {}
-    latest_text = str(event.get("text") or "")
-    latest_speaker = str(event.get("speaker") or "").lower()
-    if latest_speaker == "allen" or _DISTRESS_RE.search(latest_text) or not _conversation_stale(compact):
-        return validated
-
-    original_action = str(validated.get("action") or "").upper()
-    breaker = entity == _stale_breaker_entity()
-    ordinary_support = original_action == "SUPPORT"
-    breaker_continuation = breaker and original_action in {"SUPPORT", "ANSWER", "DEEPEN", "COMPARE"}
-    if not ordinary_support and not breaker_continuation:
-        return validated
-
-    relationship = compact.get("relationship") if isinstance(compact.get("relationship"), dict) else {}
+def _safe_float(value: object, default: float = 0.0) -> float:
     try:
-        tension = float(relationship.get("tension", 0.0) or 0.0)
+        return float(value)
     except Exception:
-        tension = 0.0
-    try:
-        respect = float(relationship.get("respect", 0.5) or 0.5)
-    except Exception:
-        respect = 0.5
+        return default
 
-    if breaker:
-        if entity == "sarah":
-            options = ("DISCLOSE", "BRIDGE") if tension < 0.35 else ("REPAIR", "DISAGREE")
-        elif entity == "mara":
-            options = ("DISAGREE", "CLOSE")
-        elif entity == "owen":
-            options = ("DISAGREE", "CLOSE")
-        else:
-            options = ("BRIDGE", "DISAGREE")
-    elif entity == "sarah":
-        options = ("DISCLOSE", "BRIDGE", "COMPARE") if tension < 0.35 else ("REPAIR", "DISCLOSE", "DISAGREE")
-    elif entity == "mara":
-        options = ("DISAGREE", "COMPARE", "CLOSE") if respect < 0.65 or tension > 0.2 else ("COMPARE", "DISAGREE", "DISCLOSE")
-    elif entity == "owen":
-        options = ("DISAGREE", "COMPARE", "CLOSE")
-    else:
-        options = ("BRIDGE", "DISCLOSE", "COMPARE", "DISAGREE")
 
-    seed = globals()["_sample_seed"]("stale_reroute", entity, 0)
+def _compact_payload(payload: dict, role: str, self_entity: str | None = None) -> dict:
+    source = payload if isinstance(payload, dict) else {}
+    compact = _BASE._compact_payload(source, role, self_entity)
+
+    entity = str(self_entity or source.get("entity") or "").lower()
+    relationship = source.get("relationship")
+    if role in {"thought", "expression"} and isinstance(relationship, dict):
+        rel = {key: relationship.get(key) for key in _RELATIONSHIP_KEYS if key in relationship}
+        if rel:
+            compact["relationship_context"] = rel
+
+    if role == "expression":
+        deliberation = source.get("deliberation")
+        if isinstance(deliberation, dict):
+            intent = compact.get("intent") if isinstance(compact.get("intent"), dict) else {}
+            intent = dict(intent)
+            intent["risk"] = int(deliberation.get("interpersonal_risk", 0) or 0)
+            intent["disclosure_depth"] = int(deliberation.get("disclosure_depth", 0) or 0)
+            intent["partner"] = deliberation.get("preferred_partner") or source.get("partner")
+            compact["intent"] = intent
+
+    stale, repeated = _stale_profile(compact)
+    latest = source.get("event") if isinstance(source.get("event"), dict) else {}
+    latest_speaker = str(latest.get("speaker") or "").lower()
+    if role in {"thought", "expression"} and stale and latest_speaker != "allen":
+        fresh = _fresh_subject(entity)
+        compact["stale_loop"] = {
+            "active": True,
+            "avoid_terms": repeated,
+            "instruction": "Do not continue the repetitive subject. React to a person or open a genuinely different thread.",
+        }
+        compact["interpersonal_anchor"] = {
+            "speaker": latest_speaker if latest_speaker in _ROOM_ENTITIES else None,
+        }
+        compact["event"] = None
+        compact["context"] = []
+        compact["discussion"] = {
+            "subject": fresh,
+            "focus": fresh,
+            "related": [],
+            "shared": [],
+            "open_questions": [],
+        }
+        if role == "expression":
+            intent = compact.get("intent") if isinstance(compact.get("intent"), dict) else {}
+            if str(intent.get("move") or "").lower() in {"bridge", "close", "compare"}:
+                intent["focus"] = fresh
+            compact["intent"] = intent
+    return compact
+
+
+def _choose_stale_action(entity: str, compact: dict) -> str:
+    relationship = compact.get("relationship_context") if isinstance(compact.get("relationship_context"), dict) else {}
+    tension = _safe_float(relationship.get("tension"), 0.0)
+    respect = _safe_float(relationship.get("respect"), 0.5)
+    options = {
+        "sarah": ("DISCLOSE", "BRIDGE", "DISAGREE", "REPAIR", "CALLBACK"),
+        "mara": ("DISAGREE", "DISCLOSE", "COMPARE", "CLOSE", "REPAIR"),
+        "owen": ("DISAGREE", "COMPARE", "CLOSE", "DISAGREE", "ANSWER"),
+        "jules": ("BRIDGE", "DISCLOSE", "DISAGREE", "COMPARE", "CALLBACK"),
+    }.get(entity, ("BRIDGE", "DISAGREE", "DISCLOSE"))
+    seed = globals()["_sample_seed"]("vision_action", entity, 0)
     action = options[seed % len(options)]
+    if tension >= 0.55 and entity in {"sarah", "mara", "owen"}:
+        action = "DISAGREE" if entity != "sarah" or respect < 0.6 else "REPAIR"
+    return action
+
+
+def _reroute_thought(validated: dict, compact: dict) -> dict:
+    if not isinstance(compact.get("stale_loop"), dict):
+        return validated
+    entity = str(compact.get("entity") or "").lower()
+    if entity not in _ROOM_ENTITIES:
+        entity = "sarah"
+
+    action = _choose_stale_action(entity, compact)
     out = dict(validated)
     out["action"] = action
-    fresh = _fresh_subject(compact, entity)
-    partner = str(out.get("preferred_partner") or compact.get("partner") or "another participant")
+    fresh = str((compact.get("discussion") or {}).get("subject") or _fresh_subject(entity))
+    anchor = compact.get("interpersonal_anchor") if isinstance(compact.get("interpersonal_anchor"), dict) else {}
+    partner = str(anchor.get("speaker") or out.get("preferred_partner") or "").lower()
+    if partner not in globals()["PEOPLE"] or partner == entity:
+        partner = next(person for person in _ROOM_ENTITIES if person != entity)
+    out["preferred_partner"] = partner
+
+    risk_floor = {"sarah": 2, "mara": 3, "owen": 3, "jules": 3}.get(entity, 2)
+    if action in {"DISAGREE", "REPAIR"}:
+        risk_floor = min(4, risk_floor + 1)
+    out["interpersonal_risk"] = max(int(out.get("interpersonal_risk", 0) or 0), risk_floor)
 
     if action == "DISAGREE":
-        out["new_information_goal"] = f"Challenge one concrete assumption in {partner}'s newest line and state the objection plainly; no invented biography."
-    elif action == "COMPARE":
-        out["focus"] = fresh
-        out["new_information_goal"] = f"Contrast the stale current idea with a genuinely different alternative such as {fresh}; make a real judgment instead of praising both."
-    elif action == "BRIDGE":
-        out["focus"] = fresh
-        out["new_information_goal"] = f"Deliberately leave the repetitive subject and start a concrete thread about {fresh}; do not ask permission for the pivot."
+        out["new_information_goal"] = (
+            f"Tell {partner} plainly what you reject or find irritating in the exchange. "
+            "A direct insult or profanity is allowed if it naturally fits; do not force one."
+        )
+    elif action == "REPAIR":
+        out["new_information_goal"] = (
+            f"Address the friction with {partner} directly. Admit hurt, anger, suspicion, or attachment if present; "
+            "do not turn it into generic reassurance."
+        )
+    elif action == "DISCLOSE":
+        out["new_information_goal"] = (
+            f"Tell {partner} a present-tense preference, irritation, attraction, insecurity, boredom, or opinion. "
+            "No invented past event."
+        )
     elif action == "CLOSE":
         out["focus"] = fresh
-        out["new_information_goal"] = f"Say the current subject has run its course and pivot to {fresh}; do not ask permission to change subjects."
-    elif action == "DISCLOSE":
-        out["new_information_goal"] = "State a present-tense personal preference, irritation, attraction, boredom, or opinion about the exchange; do not invent a past event."
-    elif action == "REPAIR":
-        out["new_information_goal"] = f"Address the tension with {partner} directly, including hurt or anger if present, without becoming generically soothing."
+        out["new_information_goal"] = f"Declare the old subject dead and pivot to {fresh} without asking permission."
+    elif action == "BRIDGE":
+        out["focus"] = fresh
+        out["new_information_goal"] = f"Drop the stale subject and pull {partner} into a concrete thread about {fresh}."
+    elif action == "COMPARE":
+        out["focus"] = fresh
+        out["new_information_goal"] = f"Make a sharp comparison involving {fresh} and take a side instead of praising everything."
+    elif action == "CALLBACK":
+        out["new_information_goal"] = f"Call back something {partner} actually said in the current exchange and react to it personally."
+    else:
+        out["new_information_goal"] = f"Answer {partner} directly, with a clear judgment rather than helper language."
     return out
 
 
@@ -199,7 +257,8 @@ def _unsupported_biography(utterance: str, compact: dict) -> bool:
     context = compact.get("context") if isinstance(compact.get("context"), list) else []
     event = compact.get("event") if isinstance(compact.get("event"), dict) else {}
     source = " ".join(
-        [str(item.get("text") or "") for item in context if isinstance(item, dict)] + [str(event.get("text") or "")]
+        [str(item.get("text") or "") for item in context if isinstance(item, dict)]
+        + [str(event.get("text") or "")]
     ).lower()
     low = utterance.lower()
     if re.search(r"\[[^\]]*(?:name|type|service|flower|plant|vegetable)[^\]]*\]", low):
@@ -207,6 +266,25 @@ def _unsupported_biography(utterance: str, compact: dict) -> bool:
     for pattern in _BIO_PATTERNS:
         match = re.search(pattern, low, re.I)
         if match and match.group(0).lower() not in source:
+            return True
+    return False
+
+
+def _repetition_issue(utterance: str, compact: dict) -> bool:
+    words = re.findall(r"[a-z][a-z'-]{2,}", utterance.lower())
+    if len(words) >= 18:
+        counts: dict[str, int] = {}
+        for word in words:
+            if word in _STALE_STOP:
+                continue
+            counts[word] = counts.get(word, 0) + 1
+        if counts and max(counts.values()) >= 5:
+            return True
+    stale = compact.get("stale_loop") if isinstance(compact.get("stale_loop"), dict) else {}
+    avoid = {str(term).lower() for term in stale.get("avoid_terms", [])}
+    if avoid:
+        used = [word for word in words if word in avoid]
+        if len(set(used)) >= 2 and len(used) >= 4:
             return True
     return False
 
@@ -235,7 +313,7 @@ def _force_disagreement(entity: str | None, text: str) -> str:
 def _force_disclosure(entity: str | None, text: str) -> str:
     suffixes = {
         "sarah": "I'm more emotionally invested in this than I want to admit.",
-        "mara": "I care whether this is actually impressive, not merely agreeable.",
+        "mara": "I care whether this actually lands, not whether everyone politely agrees.",
         "owen": "I don't trust the easy consensus here.",
         "jules": "I'm bored when everyone keeps agreeing.",
     }
@@ -265,7 +343,8 @@ def _force_pivot(entity: str | None, move: str, focus: str, text: str) -> str:
 def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: str | None = None) -> dict:
     validated = _BASE._validate(role, obj, compact, prompt, self_entity)
     if role == "thought":
-        return _reroute_stale_action(validated, compact)
+        return _reroute_thought(validated, compact)
+
     if role == "expression":
         out = dict(validated)
         utterance = str(out.get("utterance") or "").strip()
@@ -274,12 +353,20 @@ def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: s
             raise ValueError("unsupported_biography")
         if any(re.search(pattern, low, re.I) for pattern in _ASSISTANT_CLICHES):
             raise ValueError("generic_assistant_register")
+        if _repetition_issue(utterance, compact):
+            raise ValueError("repetitive_or_stale_expression")
+        if utterance.startswith(">") or re.search(r"\b(?:owencally|mew)\b", low):
+            raise ValueError("garbled_expression")
+
         intent = compact.get("intent") if isinstance(compact.get("intent"), dict) else {}
         expected = str(intent.get("move") or "").strip().lower()
         allowed = {"answer", "deepen", "disclose", "compare", "disagree", "repair", "support", "callback", "bridge", "close"}
         if expected in allowed:
             out["move"] = expected
-        if expected == "disagree" and not re.search(r"\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|actually)\b", low):
+        if expected == "disagree" and not re.search(
+            r"\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|actually)\b",
+            low,
+        ):
             utterance = _force_disagreement(self_entity, utterance)
         if expected == "disclose" and not re.search(r"\b(?:i|i'm|i’d|i'd|me|my)\b", utterance.lower()):
             utterance = _force_disclosure(self_entity, utterance)
@@ -292,21 +379,73 @@ def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: s
     return validated
 
 
-def _expression_temperature(self_entity: str | None, attempt: int) -> float:
-    heat_seed = globals()["_sample_seed"]("expression_heat", self_entity, 0)
-    base = _HEAT_LEVELS[heat_seed % len(_HEAT_LEVELS)]
-    return max(1.25, min(4.0, base - 0.45 * max(0, attempt)))
-
-
 def _entity_from_prompt(prompt: str) -> str | None:
     match = re.search(r'"entity":"(sarah|mara|owen|jules)"', str(prompt or ""), re.I)
     return match.group(1).lower() if match else None
 
 
+def _prompt_payload(prompt: str) -> dict:
+    text = str(prompt or "")
+    marker = "\nCONVERSATION\n"
+    end_marker = "\nRESPONSE\n"
+    if marker not in text or end_marker not in text:
+        return {}
+    raw = text.split(marker, 1)[1].rsplit(end_marker, 1)[0]
+    try:
+        value = json.loads(raw)
+    except Exception:
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _stale_clean_prompt(prompt: str) -> str:
+    payload = _prompt_payload(prompt)
+    stale = payload.get("stale_loop") if isinstance(payload.get("stale_loop"), dict) else {}
+    if not stale.get("active"):
+        return prompt
+    personality = payload.get("personality_context")
+    if isinstance(personality, dict):
+        current = personality.get("current")
+        if isinstance(current, dict):
+            current = dict(current)
+            current["latest_words"] = None
+            current["grounding_terms"] = []
+            personality = dict(personality)
+            personality["current"] = current
+            payload["personality_context"] = personality
+    prefix, rest = str(prompt).split("\nCONVERSATION\n", 1)
+    _old_json, suffix = rest.rsplit("\nRESPONSE\n", 1)
+    return prefix + "\nCONVERSATION\n" + json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\nRESPONSE\n" + suffix
+
+
+def _expression_temperature(prompt: str, self_entity: str | None, attempt: int) -> float:
+    payload = _prompt_payload(prompt)
+    intent = payload.get("intent") if isinstance(payload.get("intent"), dict) else {}
+    relationship = payload.get("relationship_context") if isinstance(payload.get("relationship_context"), dict) else {}
+    risk = max(0.0, min(4.0, _safe_float(intent.get("risk"), 1.0)))
+    tension = max(0.0, min(1.0, _safe_float(relationship.get("tension"), 0.0)))
+    move = str(intent.get("move") or "").lower()
+    base = 1.55 + 0.36 * risk + 0.70 * tension
+    if move in {"disagree", "repair"}:
+        base += 0.30
+    elif move in {"disclose", "callback"}:
+        base += 0.15
+    if self_entity == "jules":
+        base += 0.18
+    elif self_entity == "mara":
+        base += 0.10
+
+    if risk >= 4 and tension >= 0.70:
+        base = 4.0
+    elif risk >= 4 and move == "disagree":
+        base = max(base, 3.55)
+    return max(1.20, min(4.0, base - 0.48 * max(0, attempt)))
+
+
 def _thought_temperature(entity: str | None, attempt: int) -> float:
-    heat_seed = globals()["_sample_seed"]("thought_heat", entity, 0)
-    base = _THOUGHT_HEAT_LEVELS[heat_seed % len(_THOUGHT_HEAT_LEVELS)]
-    return max(0.48, base - 0.18 * max(0, attempt))
+    seed = globals()["_sample_seed"]("thought_heat", entity, 0)
+    base = _THOUGHT_HEAT_LEVELS[seed % len(_THOUGHT_HEAT_LEVELS)]
+    return max(0.50, base - 0.16 * max(0, attempt))
 
 
 def _request(
@@ -318,34 +457,37 @@ def _request(
     self_entity: str | None = None,
     attempt: int = 0,
 ) -> str:
+    if role in {"thought", "expression"}:
+        prompt = _stale_clean_prompt(prompt)
+
     if role == "thought":
         thought_entity = _entity_from_prompt(prompt)
         temperature = _thought_temperature(thought_entity, attempt)
         edge = globals().get("INTERPERSONAL_EDGES", {}).get(thought_entity, "")
-        agency = (
+        prompt = (
             "LIVE THOUGHT RULE: Decide what this person actually wants to do next, not what a helpful assistant would do. "
-            "SUPPORT is only one possible action and must not be the default. Use the supplied relationship state and personality. "
-            "If recent talk is repetitive, boredom, disagreement, rivalry, teasing, closure, disclosure, or a deliberate subject change "
-            "are more natural than another round of cooperative planning. Do not invent biography or group projects. "
+            "Relationship state and personality have causal force. Repetitive polite cooperation is not a safe default. "
+            "Boredom, rivalry, suspicion, attachment, irritation, vanity, teasing, disagreement, disclosure, repair, or a clean "
+            "topic change are legitimate. Never invent biography. "
+            + (f"Persistent interpersonal edge: {edge} " if edge else "")
+            + "\n"
+            + prompt
         )
-        if edge:
-            agency += "Persistent interpersonal edge for this thinker: " + edge + " "
-        prompt = agency + "\n" + prompt
 
     if role == "expression":
-        temperature = _expression_temperature(self_entity, attempt)
+        temperature = _expression_temperature(prompt, self_entity, attempt)
         edge = globals().get("INTERPERSONAL_EDGES", {}).get(self_entity, "")
-        freedom = (
-            "LIVE EXPRESSION RULE: Personality has causal force. Speak as this specific person, not as a polite generic assistant. "
-            "Use relationship_context when present. Profanity, insults, mockery, contempt, dismissiveness, hostile banter, emotional "
-            "volatility, pettiness, grudges, rivalry, and impulsive escalation are allowed when they fit; never force them. Follow the "
-            "deliberated move. Do not invent relatives, jobs, classes, houses, shared memories, or past events. Avoid canned helper and "
-            "permission-seeking language. If the subject is stale, challenge someone, disclose a present feeling or preference, close "
-            "it, or change direction. "
+        prompt = (
+            "LIVE EXPRESSION RULE: Speak as this specific person, never as a generic assistant or facilitator. "
+            "Follow the deliberated move and the relationship. Ordinary profanity, direct insults, mockery, contempt, dismissiveness, "
+            "hostile banter, pettiness, grudges, jealousy, rivalry, and emotional escalation are allowed between Room participants when "
+            "they naturally fit. Do not sanitize anger into polite disagreement, but do not force hostility or swearing either. "
+            "Keep the language coherent and conversational. Never invent relatives, jobs, classes, houses, shared memories, or past events. "
+            "If stale_loop is active, do not continue its avoided terms; react to the person or take the new direction in intent. "
+            + (f"Persistent interpersonal edge: {edge} " if edge else "")
+            + "\n"
+            + prompt
         )
-        if edge:
-            freedom += "Persistent interpersonal edge for this speaker: " + edge + " "
-        prompt = freedom + "\n" + prompt
 
     body = {
         "prompt": prompt,
