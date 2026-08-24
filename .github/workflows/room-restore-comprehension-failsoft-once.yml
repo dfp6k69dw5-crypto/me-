@@ -16,66 +16,67 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: main
-          fetch-depth: 0
+          fetch-depth: 2
 
       - name: Restore proven comprehension fail-soft and test
         run: |
           set -euo pipefail
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git pull --rebase origin main
 
           python3 - <<'PY'
           from pathlib import Path
           p = Path('scripts/room_engine_v5.py')
           s = p.read_text()
-
           marker = '\ndef _private_run(role: str, payload: dict, timeout: int = 30):\n'
-          helper = '''\ndef _neutral_comprehension(payload):
-    """Return a non-inventive observation when structured comprehension is unusable."""
-    source = payload if isinstance(payload, dict) else {}
-    entity = _private_model._norm(source.get("entity"))
-    partner = _private_model._norm(source.get("partner"))
-    if partner not in _private_model.PEOPLE or partner == entity:
-        partner = None
-
-    event = source.get("event") if isinstance(source.get("event"), dict) else {}
-    cognition = event.get("cognition") if isinstance(event.get("cognition"), dict) else {}
-    target = _private_model._norm(cognition.get("target"))
-    participation = "DIRECT_ADDRESSEE" if entity and target == entity else "PARTICIPANT"
-
-    return {
-        "participation": participation,
-        "partner": partner,
-        "move": "other",
-        "grounding": "ambiguous",
-        "focus": None,
-        "new_details": [],
-        "bids": [],
-        "relationship_events": [],
-        "shared_references": [],
-        "confidence": 0.0,
-    }
-'''
-
+          helper = "\n".join([
+              '',
+              'def _neutral_comprehension(payload):',
+              '    """Return a non-inventive observation when structured comprehension is unusable."""',
+              '    source = payload if isinstance(payload, dict) else {}',
+              '    entity = _private_model._norm(source.get("entity"))',
+              '    partner = _private_model._norm(source.get("partner"))',
+              '    if partner not in _private_model.PEOPLE or partner == entity:',
+              '        partner = None',
+              '',
+              '    event = source.get("event") if isinstance(source.get("event"), dict) else {}',
+              '    cognition = event.get("cognition") if isinstance(event.get("cognition"), dict) else {}',
+              '    target = _private_model._norm(cognition.get("target"))',
+              '    participation = "DIRECT_ADDRESSEE" if entity and target == entity else "PARTICIPANT"',
+              '',
+              '    return {',
+              '        "participation": participation,',
+              '        "partner": partner,',
+              '        "move": "other",',
+              '        "grounding": "ambiguous",',
+              '        "focus": None,',
+              '        "new_details": [],',
+              '        "bids": [],',
+              '        "relationship_events": [],',
+              '        "shared_references": [],',
+              '        "confidence": 0.0,',
+              '    }',
+              '',
+          ])
           if 'def _neutral_comprehension(payload):' not in s:
               assert s.count(marker) == 1, 'private run marker changed'
               s = s.replace(marker, helper + marker)
 
           old = '    raise RuntimeError(f"private model output rejected for {role}: {last_reason}")\n\n\n_private_model.run = _private_run'
-          new = '''    if role == "comprehension":
-        fallback = _neutral_comprehension(payload)
-        return _private_model._validate(role, fallback, compact, instruction, self_entity)
-    raise RuntimeError(f"private model output rejected for {role}: {last_reason}")
-
-
-_private_model.run = _private_run'''
+          new = "\n".join([
+              '    if role == "comprehension":',
+              '        fallback = _neutral_comprehension(payload)',
+              '        return _private_model._validate(role, fallback, compact, instruction, self_entity)',
+              '    raise RuntimeError(f"private model output rejected for {role}: {last_reason}")',
+              '',
+              '',
+              '_private_model.run = _private_run',
+          ])
           if old in s:
               assert s.count(old) == 1
               s = s.replace(old, new)
           else:
               assert 'fallback = _neutral_comprehension(payload)' in s, 'known fail-soft insertion point changed'
-
           assert 'attempts = 9 if role == "expression" else 2' in s, '9-retry liveness repair was lost'
           p.write_text(s)
           PY
@@ -86,7 +87,6 @@ _private_model.run = _private_run'''
           import os, sys
           sys.path.insert(0, 'scripts')
           import room_engine_v5 as engine
-
           payload = {
               'entity': 'sarah',
               'profile': {'traits': {'social_sensitivity': 0.9, 'curiosity': 0.8}},
@@ -128,4 +128,12 @@ _private_model.run = _private_run'''
           git add scripts/room_engine_v5.py
           git diff --cached --check
           git commit -m 'Restore Room comprehension fail-soft'
-          git push origin HEAD:main
+
+          pushed=0
+          for attempt in 1 2 3 4; do
+            if git push origin HEAD:main; then pushed=1; break; fi
+            git fetch origin main --depth=20 || { sleep $((attempt * 2)); continue; }
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+            sleep 1
+          done
+          [ "$pushed" -eq 1 ]
