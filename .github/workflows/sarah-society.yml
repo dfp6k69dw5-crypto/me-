@@ -126,7 +126,16 @@ jobs:
           }
 
           while [ "$SECONDS" -lt "$stop_at" ]; do
-            if ! run_beat; then consecutive_failures=$((consecutive_failures + 1)); echo "A Room beat failed internally (${consecutive_failures}/${ROOM_BEAT_FAILURE_LIMIT})"; if [ "$consecutive_failures" -ge "$ROOM_BEAT_FAILURE_LIMIT" ]; then runner_exit_reason="repeated_beat_failure"; break; fi; sleep 3; continue; fi
+            if ! run_beat; then
+              consecutive_failures=$((consecutive_failures + 1))
+              echo "A Room beat failed internally (${consecutive_failures}/${ROOM_BEAT_FAILURE_LIMIT})"
+              if [ "$consecutive_failures" -ge "$ROOM_BEAT_FAILURE_LIMIT" ]; then runner_exit_reason="repeated_beat_failure"; break; fi
+              echo "Resync after internal beat failure before retrying"
+              git fetch origin main || true
+              git reset --hard origin/main || true
+              sleep 3
+              continue
+            fi
             consecutive_failures=0; git add room society/live.json; if git diff --cached --quiet; then continue; fi; git commit -m "Room cognition v5 attention-routed skills beat"
             pushed=0; for attempt in 1 2 3 4; do if git push origin HEAD:main; then pushed=1; publish_relay; ack_allen_turns; break; fi; git fetch origin main || { sleep $((attempt * 2)); continue; }; if ! git rebase origin/main; then git rebase --abort || true; break; fi; sleep 1; done
             if [ "$pushed" -eq 0 ]; then
