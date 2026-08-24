@@ -85,13 +85,20 @@ jobs:
           elif new_attempts not in s:
               raise SystemExit('retry anchor missing; refusing unsafe patch')
 
+          old_temp = 'temperature = min(1.28, 0.88 + 0.06 * voice_index + 0.09 * attempt)'
+          new_temp = 'temperature = min(2.0, 0.88 + 0.06 * voice_index + 0.09 * attempt)'
+          if old_temp in s:
+              s = s.replace(old_temp, new_temp, 1)
+          elif new_temp not in s:
+              raise SystemExit('temperature anchor missing; refusing unsafe patch')
+
           p.write_text(s)
           py_compile.compile(str(p), doraise=True)
           assert 'INTERPERSONAL_EDGES = {' in s
           assert 'Room participants may be' in s
           assert 'maladaptive interpersonal pattern that may shape attachment' in s
           assert new_attempts in s
-          assert 'temperature = min(1.28, 0.88 + 0.06 * voice_index + 0.09 * attempt)' in s
+          assert new_temp in s
           print('PATCH_OK')
           PY
 
