@@ -50,7 +50,7 @@ jobs:
           ROOM_NODE_KILL_GRACE_SECONDS=5
           ROOM_RELAY_CONNECT_TIMEOUT_SECONDS=3
           ROOM_RELAY_MAX_TIME_SECONDS=8
-          ROOM_BEAT_FAILURE_LIMIT=2
+          ROOM_BEAT_FAILURE_LIMIT=4
 
           export ROOM_MODEL_URL=""
           model_pid=""
@@ -105,6 +105,7 @@ jobs:
             if [ "$pushed" -eq 0 ]; then sleep 8; fi
           done
           if [ -n "$model_pid" ]; then kill "$model_pid" 2>/dev/null || true; fi
+          handoff_ok=0
+          for attempt in 1 2 3 4 5; do if gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto; then handoff_ok=1; break; fi; sleep $((attempt * 5)); done
           if [ "$runner_exit_reason" = "repeated_beat_failure" ]; then exit 1; fi
-          for attempt in 1 2 3 4 5; do if gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto; then exit 0; fi; sleep $((attempt * 5)); done
           exit 0
