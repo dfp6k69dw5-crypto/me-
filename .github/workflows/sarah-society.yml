@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: main
-          fetch-depth: 0
+          fetch-depth: 20
 
       - name: Keep all 12 cognitive nodes hot and publish every beat
         env:
@@ -129,7 +129,12 @@ jobs:
             if ! run_beat; then consecutive_failures=$((consecutive_failures + 1)); echo "A Room beat failed internally (${consecutive_failures}/${ROOM_BEAT_FAILURE_LIMIT})"; if [ "$consecutive_failures" -ge "$ROOM_BEAT_FAILURE_LIMIT" ]; then runner_exit_reason="repeated_beat_failure"; break; fi; sleep 3; continue; fi
             consecutive_failures=0; git add room society/live.json; if git diff --cached --quiet; then continue; fi; git commit -m "Room cognition v5 attention-routed skills beat"
             pushed=0; for attempt in 1 2 3 4; do if git push origin HEAD:main; then pushed=1; publish_relay; ack_allen_turns; break; fi; git fetch origin main || { sleep $((attempt * 2)); continue; }; if ! git rebase origin/main; then git rebase --abort || true; break; fi; sleep 1; done
-            if [ "$pushed" -eq 0 ]; then sleep 8; fi
+            if [ "$pushed" -eq 0 ]; then
+              echo "Room publish lost its race; discard unpublished local beat and resync to authoritative main"
+              git fetch origin main || true
+              git reset --hard origin/main || true
+              sleep 8
+            fi
           done
           if [ -n "$model_pid" ]; then kill "$model_pid" 2>/dev/null || true; fi
           handoff_ok=0
