@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T20:30:59.638682+00:00",
-  "cycle_key": "32768251622:1:36",
+  "generated_at": "2026-08-24T20:34:17.019807+00:00",
+  "cycle_key": "32768251622:1:38",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,20 +32,21 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 5.32,
+      "score": 4.72,
       "confidence": 0.999,
-      "raw_score": 5.32,
+      "raw_score": 4.72,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "beautiful",
         "design",
-        "creative",
-        "idea"
+        "idea",
+        "creative"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "design",
             "beautiful"
           ],
           "weight": 1.8
@@ -60,60 +61,50 @@
         {
           "kind": "message",
           "matched": [
-            "creative"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "idea"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "idea",
-            "design"
+            "beautiful"
           ],
           "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "design"
+          ],
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "creative"
+          ],
+          "weight": 0.54
         }
       ]
     },
     {
-      "name": "concrete-specificity",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.81,
-      "confidence": 0.782,
-      "raw_score": 2.09,
-      "repeat_penalty": 0.28,
+      "domain": "critical-testing",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "specific",
-        "example"
+        "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "specific"
+            "sure"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "example",
-            "specific"
-          ],
-          "weight": 0.64
+          "weight": 1.8
         }
       ]
     }
   ],
-  "context_fingerprint": "ac06bb190187",
+  "context_fingerprint": "b7fb4778939a",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 798,
-  "approx_added_tokens": 200
+  "temporary_skill_chars": 834,
+  "approx_added_tokens": 208
 }
