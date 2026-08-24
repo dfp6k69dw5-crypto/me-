@@ -1,0 +1,33 @@
+name: Record wrapper repair status once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'society/wrapper-repair-status-kick.txt'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 5
+      - name: Record wrapper repair run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name room-status
+          git config user.email actions@users.noreply.github.com
+          mkdir -p room
+          gh run list --repo "$GITHUB_REPOSITORY" --workflow room-wrapper-liveness-fix-once.yml --limit 5 --json databaseId,status,conclusion,createdAt,headSha,event > room/wrapper-repair-status.json
+          git rm -f .github/workflows/wrapper-repair-status-once.yml society/wrapper-repair-status-kick.txt
+          git add room/wrapper-repair-status.json
+          git commit -m 'Record Room wrapper repair status'
+          git push origin HEAD:main
