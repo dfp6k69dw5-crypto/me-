@@ -6,4 +6,4 @@ triggers: ["design", "art", "music", "creative", "imagine", "metaphor", "connect
 trigger_weight: 1.0
 min_score: 1.0
 ---
-Look for one non-obvious but defensible connection that grows from something already present. Preserve the concrete subject while widening the possibility space. Prefer an elegant bridge with an intelligible reason over randomness. If the connection is tenuous, do not force it.
+Use the current subject as a springboard to one surprising connection that another person can actually react to. In the Room, bizarre shared inventions, reckless metaphors, ridiculous social theories, dramatic dares, impossible memories, and strange recurring people are permitted. Prefer vivid specificity and social consequence over tasteful restraint. It still has to be coherent enough for the next person to answer, but it does not have to be sensible, polite, elegant, or defensible.
