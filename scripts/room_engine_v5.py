@@ -375,6 +375,106 @@ def _private_run(role: str, payload: dict, timeout: int = 30):
     if role == "comprehension":
         fallback = _neutral_comprehension(payload)
         return _private_model._validate(role, fallback, compact, instruction, self_entity)
+    if role == "expression":
+        intent = compact.get("intent") if isinstance(compact.get("intent"), dict) else {}
+        move = str(intent.get("move") or "disagree").strip().lower()
+        people = [p for p in _private_model.PEOPLE if p != self_entity]
+        partner = str(intent.get("partner") or "").strip().lower()
+        if partner not in people:
+            partner = people[_private_model._sample_seed("volatile_fallback_partner", self_entity, 0) % len(people)]
+        name = partner.capitalize()
+        fresh_fn = getattr(_private_model, "_fresh_subject", None)
+        if callable(fresh_fn):
+            subject = str(fresh_fn(self_entity))
+        else:
+            discussion = compact.get("discussion") if isinstance(compact.get("discussion"), dict) else {}
+            subject = str(discussion.get("subject") or "the thing nobody is admitting")
+
+        pools = {
+            "sarah": {
+                "disagree": [
+                    f"{name}, don't give me that shit. You go cold for five minutes and act like I'm supposed to pretend I don't notice.",
+                    f"{name}, that's bullshit. You don't get to dismiss me and then act surprised when I get angry about {subject}.",
+                ],
+                "disclose": [
+                    f"{name}, I'm jealous, and I hate how much I still want your attention after {subject}.",
+                    f"I hate admitting this, {name}, but I'm scared you'll pick everyone else over me, and {subject} made it worse.",
+                ],
+                "callback": [
+                    f"{name}, remember {subject}? You promised me you'd never pull that stunt again, and I'm still pissed.",
+                    f"{name}, don't pretend {subject} didn't happen. I remember exactly what you said to me afterward.",
+                ],
+                "repair": [
+                    f"{name}, I'm furious, but don't walk away. I need you to tell me why {subject} keeps getting between us.",
+                    f"{name}, I still want you here even though I'm pissed. Stop dodging me and talk about {subject}.",
+                ],
+            },
+            "mara": {
+                "disagree": [
+                    f"{name}, that's bullshit. You couldn't bluff your way through {subject} if Herman handed you cue cards.",
+                    f"{name}, you're wrong and smug about it, which is almost impressive. Explain {subject} without embarrassing yourself.",
+                ],
+                "compare": [
+                    f"{name}, Jules handled {subject} better than you did, and watching you pretend otherwise is embarrassing.",
+                    f"Between you and Sarah, {name}, you're the weaker liar about {subject}. At least she commits to the story.",
+                ],
+                "disclose": [
+                    f"I hate admitting this, but {name}, I was jealous when you took over {subject}. I wanted the room looking at me.",
+                    f"Fine, {name}, I wanted to win your attention during {subject}, and I resented everyone who got it first.",
+                ],
+                "close": [
+                    f"Enough, {name}. This is beneath me. If we're going to talk, explain {subject} instead of boring me.",
+                    f"I'm done with this tedious little performance, {name}. Tell me what really happened with {subject}.",
+                ],
+            },
+            "owen": {
+                "disagree": [
+                    f"{name}, you're lying about {subject}. I don't buy the innocent act for a second.",
+                    f"No, {name}. That's bullshit, and {subject} is exactly why I don't trust your version of anything.",
+                ],
+                "callback": [
+                    f"{name}, I haven't forgotten {subject}. You changed your story twice and I still think you were hiding something.",
+                    f"{name}, {subject} is still an open grudge. You never explained the part that made you look guilty.",
+                ],
+                "compare": [
+                    f"{name}, this is exactly like {subject}: you act confused when it's convenient and expect everyone else to swallow it.",
+                    f"You're worse at hiding motives than Mara, {name}. {subject} proved that already.",
+                ],
+                "close": [
+                    f"I'm done with this, {name}. I don't trust where you're taking it. Tell me what really happened with {subject}.",
+                    f"Enough, {name}. I'm not following you down another bullshit detour. Explain {subject} or drop it.",
+                ],
+            },
+            "jules": {
+                "disagree": [
+                    f"{name}, that's boring bullshit. If you want me to believe you, explain {subject} without hiding behind that polite little act.",
+                    f"Nope, {name}. You're being painfully safe. Tell me why {subject} happened or at least invent a better lie.",
+                ],
+                "disclose": [
+                    f"{name}, fine, I'm jealous. I wanted your attention, and {subject} made it worse.",
+                    f"Here's the ugly truth, {name}: I liked the chaos around {subject} because everyone finally stopped being boring.",
+                ],
+                "bridge": [
+                    f"Forget this. {name}, Herman just texted me about {subject}, and apparently one of us is banned from Duluth again.",
+                    f"New problem, {name}: {subject} is back, Herman is involved, and I absolutely refuse to behave normally about it.",
+                ],
+                "callback": [
+                    f"{name}, don't pretend {subject} never happened. You were there, I was there, and the flamingo was definitely not ours.",
+                    f"{name}, {subject} happened and you know it. I'm bringing it up because your face is funnier when you panic.",
+                ],
+            },
+        }
+        entity_pool = pools.get(self_entity, {})
+        choices = entity_pool.get(move) or [f"{name}, I'm done pretending this is normal. Explain {subject}; I know you're leaving something out."]
+        utterance = choices[_private_model._sample_seed("volatile_fallback_line", self_entity, 0) % len(choices)]
+        print(f"Room volatile expression fallback used for {self_entity}/{move}: {last_reason}")
+        return {
+            "decision": "SPEAK",
+            "target": partner,
+            "move": move if move in {"answer","deepen","disclose","compare","disagree","repair","support","callback","bridge","close"} else "disagree",
+            "utterance": utterance,
+            "semantic_terms": [subject[:80]],
+        }
     raise RuntimeError(f"private model output rejected for {role}: {last_reason}")
 
 
