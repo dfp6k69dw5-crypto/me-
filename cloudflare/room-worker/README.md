@@ -9,17 +9,17 @@ This Worker is the live delivery layer for The Room. GitHub generates the conver
 - Receives Room beats from the `maaronfanberg-lab/me-` GitHub Actions workflow.
 - Verifies GitHub's signed OIDC identity token before accepting a feed update.
 - Stores the newest feed in a SQLite-backed Cloudflare Durable Object.
-- Serves a lightweight mobile viewer and `/api/feed` from Cloudflare instead of GitHub Pages/raw file delivery.
+- Serves `/api/feed` as the live relay for the Room viewer.
 - Keeps the latest accepted feed available even if GitHub's web delivery is temporarily slow.
-- Provides a protected `/allen` view where Allen can enter the conversation.
+- Accepts Allen turns directly at `/api/allen` without a separate Room key.
 - Queues Allen's turns until the warm Room runner consumes them, then removes them only after the resulting Room state is successfully published.
 
 ## Allen access
 
-Set a Cloudflare Worker secret named `ROOM_ALLEN_KEY` to a private passphrase known only to Allen. The `/allen` page asks for that key and keeps it in the local browser. The key itself is never written into Room conversation state.
+Allen is an open Room participant. The main Room viewer includes a `Speak as Allen…` composer and posts directly to `/api/allen`; no browser password, bearer key, or unlock step is required.
 
 The public conversation record represents Allen as `allen` in the same conversational message shape the Room entities receive; it does not include a human, owner, or operator flag.
 
-## After the first deployment
+## Deployment
 
-Copy the Worker's public `https://...workers.dev` URL into the GitHub repository variable named `ROOM_RELAY_URL`. The Room workflow is already wired to use that variable and will then send each successfully published beat to Cloudflare.
+`wrangler.toml` routes the deployed Worker through `src/open-allen.js`, which exposes the keyless Allen input while delegating feed ingestion, signed GitHub access, Durable Object storage, and other relay behavior to the existing validated Worker implementation.
