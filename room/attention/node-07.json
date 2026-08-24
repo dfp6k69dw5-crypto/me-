@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T21:30:45.535144+00:00",
-  "cycle_key": "32777184993:1:14",
+  "generated_at": "2026-08-24T21:33:17.860995+00:00",
+  "cycle_key": "32777184993:1:15",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,11 +32,12 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 2.95,
-      "confidence": 0.965,
-      "raw_score": 2.95,
+      "score": 3.44,
+      "confidence": 0.985,
+      "raw_score": 3.44,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "creative",
         "idea",
         "connection"
       ],
@@ -44,24 +45,17 @@
         {
           "kind": "message",
           "matched": [
-            "idea"
+            "idea",
+            "creative"
           ],
-          "weight": 1.8
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "connection"
+            "creative"
           ],
           "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "idea",
-            "connection"
-          ],
-          "weight": 0.92
         },
         {
           "kind": "message",
@@ -75,42 +69,42 @@
           "matched": [
             "connection"
           ],
+          "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "idea",
+            "connection"
+          ],
           "weight": 0.46
         }
       ]
     },
     {
-      "name": "memory-callback",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 2.44,
-      "confidence": 0.918,
-      "raw_score": 2.44,
+      "domain": "concrete-specificity",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "remember",
-        "before"
+        "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "remember"
+            "specific"
           ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "before"
-          ],
-          "weight": 0.64
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "2c290286eb88",
+  "context_fingerprint": "6f5ebbc521e2",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 820,
-  "approx_added_tokens": 205
+  "temporary_skill_chars": 798,
+  "approx_added_tokens": 200
 }
