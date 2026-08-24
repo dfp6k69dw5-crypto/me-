@@ -1,0 +1,205 @@
+name: One-beat live Room failure probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'society/room-live-probe-kick.txt'
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Run one instrumented Room beat
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ROOM_RELAY_URL: https://room-live-mirror.dfp6k69dw5.workers.dev
+          ROOM_PROMPT_PERCEPTION: ${{ secrets.ROOM_PROMPT_PERCEPTION }}
+          ROOM_PROMPT_DELIBERATION: ${{ secrets.ROOM_PROMPT_DELIBERATION }}
+          ROOM_PROMPT_EXPRESSION: ${{ secrets.ROOM_PROMPT_EXPRESSION }}
+        run: |
+          set -uo pipefail
+          git config user.name "the-room-probe"
+          git config user.email "actions@users.noreply.github.com"
+
+          ROOM_NODE_TIMEOUT_SECONDS=45
+          ROOM_NODE_KILL_GRACE_SECONDS=5
+          stage="startup"
+          failure_code=0
+          result="failure"
+          model_pid=""
+          export ROOM_MODEL_URL=""
+
+          publish_result() {
+            if [ "$result" != "success" ]; then
+              git reset --hard HEAD >/dev/null 2>&1 || true
+            fi
+            rm -rf room_parts room_work
+            mkdir -p room
+            python3 - "$result" "$stage" "$failure_code" "${GITHUB_RUN_ID:-}" "${GITHUB_RUN_ATTEMPT:-}" <<'PY' > room/live-runner-probe.json
+          import json, sys
+          from datetime import datetime, timezone
+          result, stage, code, run_id, attempt = sys.argv[1:]
+          print(json.dumps({
+              "checked_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+              "result": result,
+              "stage": stage,
+              "exit_code": int(code),
+              "run_id": run_id,
+              "run_attempt": attempt,
+              "node_timeout_seconds": 45,
+              "expression_retries_expected": 9,
+          }, indent=2))
+          PY
+            git rm -f .github/workflows/room-live-probe-once.yml society/room-live-probe-kick.txt >/dev/null 2>&1 || true
+            if [ "$result" = "success" ]; then
+              git add room society/live.json
+              commit_message="Room one-beat live probe recovered conversation"
+            else
+              git add room/live-runner-probe.json
+              commit_message="Record Room live failure stage"
+            fi
+            git diff --cached --check || return 1
+            if git diff --cached --quiet; then return 0; fi
+            git commit -m "$commit_message" || return 1
+            pushed=0
+            for push_attempt in 1 2 3 4; do
+              if git push origin HEAD:main; then pushed=1; break; fi
+              git fetch origin main || { sleep $((push_attempt * 2)); continue; }
+              if ! git rebase origin/main; then git rebase --abort || true; return 1; fi
+              sleep 1
+            done
+            [ "$pushed" -eq 1 ]
+          }
+
+          fail_now() {
+            failure_code="$1"
+            publish_result
+            if [ -n "$model_pid" ]; then kill "$model_pid" 2>/dev/null || true; fi
+            exit 1
+          }
+
+          stage="model-download"
+          mkdir -p .room_model/runtime
+          gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'society-brain-q4_0.gguf' --dir .room_model
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+          gh release download society-brain-v1 --repo "$GITHUB_REPOSITORY" --pattern 'llama-runtime-linux-x64.tar.gz' --dir .room_model
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+          echo '7671c0c304e6ce5a7fc577bcb12aba01e2c155cc2efd29b2213c95b18edaf6ed  .room_model/society-brain-q4_0.gguf' | sha256sum -c -
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+          echo '360a5bfab5b8fe562c52e060a998a052f5fc7d98a0448b035c2eedbb6acfbd94  .room_model/llama-runtime-linux-x64.tar.gz' | sha256sum -c -
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+          tar -xzf .room_model/llama-runtime-linux-x64.tar.gz -C .room_model/runtime
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+
+          stage="model-start"
+          server_bin=$(find .room_model/runtime -type f -name 'llama-server' | head -1)
+          [ -n "$server_bin" ] || fail_now 127
+          chmod +x "$server_bin"
+          env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION -u ROOM_NODE_PROMPT \
+            "$server_bin" -m .room_model/society-brain-q4_0.gguf --host 127.0.0.1 --port 18080 -c 16384 -np 2 >.room_model/server.log 2>&1 &
+          model_pid=$!
+          for health_attempt in $(seq 1 120); do
+            if curl -fsS --connect-timeout 1 --max-time 2 http://127.0.0.1:18080/health >/dev/null 2>&1; then
+              export ROOM_MODEL_URL='http://127.0.0.1:18080/completion'
+              break
+            fi
+            if ! kill -0 "$model_pid" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          [ -n "$ROOM_MODEL_URL" ] || fail_now 125
+
+          export ROOM_CYCLE_KEY="probe:${GITHUB_RUN_ID}:${GITHUB_RUN_ATTEMPT}:1"
+          rm -rf room_parts room_work
+          mkdir -p room_parts room_work
+          printf '%s\n' '{"messages":[]}' > room_work/allen-inbox.json
+
+          stage="participant"
+          timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" python3 scripts/room_participant.py room_work/allen-inbox.json room_work/allen-ack.json
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+
+          stage="sense-unprompted"
+          pids=()
+          for n in 1 2 4 5 7 8 10 11; do
+            (timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION ROOM_NODE_PROMPT="" ROOM_NODE_ID="$n" python3 scripts/room_engine_v5.py node --phase sense) &
+            pids+=("$!")
+          done
+          failed=0
+          for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
+          [ "$failed" -eq 0 ] || fail_now 1
+
+          for pair in "0 3" "6 9"; do
+            stage="sense-prompted-${pair// /-}"
+            pids=()
+            for n in $pair; do
+              (timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION ROOM_NODE_PROMPT="${ROOM_PROMPT_PERCEPTION:-}" ROOM_NODE_ID="$n" python3 scripts/room_skill_exec.py scripts/room_engine_v5.py node --phase sense) &
+              pids+=("$!")
+            done
+            failed=0
+            for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
+            [ "$failed" -eq 0 ] || fail_now 1
+          done
+
+          stage="sense-bus"
+          timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION python3 scripts/room_engine_v5.py bus
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+
+          stage="recurrent-unprompted"
+          pids=()
+          for n in 0 3 6 9; do
+            (timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION ROOM_NODE_PROMPT="" ROOM_NODE_ID="$n" python3 scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-sense.json) &
+            pids+=("$!")
+          done
+          failed=0
+          for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
+          [ "$failed" -eq 0 ] || fail_now 1
+
+          for pair in "1 4" "7 10"; do
+            stage="recurrent-prompted-${pair// /-}"
+            pids=()
+            for n in $pair; do
+              (timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION ROOM_NODE_PROMPT="${ROOM_PROMPT_DELIBERATION:-}" ROOM_NODE_ID="$n" python3 scripts/room_skill_exec.py scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-sense.json) &
+              pids+=("$!")
+            done
+            failed=0
+            for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
+            [ "$failed" -eq 0 ] || fail_now 1
+          done
+
+          stage="recurrent-bus"
+          timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION python3 scripts/room_engine_v5.py bus2 --bus room_work/bus-sense.json
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+
+          expr_nodes=(2 5 8 11)
+          shift=1
+          for rank in 0 1 2 3; do
+            idx=$(((rank + shift) % 4))
+            n=${expr_nodes[$idx]}
+            stage="expression-node-${n}-rank-${rank}"
+            timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION ROOM_NODE_PROMPT="${ROOM_PROMPT_EXPRESSION:-}" ROOM_NODE_ID="$n" ROOM_EXPRESSION_RANK="$rank" python3 scripts/room_skill_exec.py scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-recurrent.json
+            rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+          done
+
+          stage="private-commit"
+          timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION python3 scripts/room_private_commit.py commit
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+
+          stage="build-feed"
+          timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" python3 scripts/build_room_feed.py
+          rc=$?; [ "$rc" -eq 0 ] || fail_now "$rc"
+
+          result="success"
+          stage="success"
+          failure_code=0
+          publish_result
+          if [ -n "$model_pid" ]; then kill "$model_pid" 2>/dev/null || true; fi
