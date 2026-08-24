@@ -1,4 +1,4 @@
-name: Patch Room concrete-chaos acceptance
+name: Patch Room live overlay binding
 
 on:
   push:
@@ -19,33 +19,53 @@ jobs:
         with:
           ref: main
           fetch-depth: 20
-      - name: Accept coherent concrete wildness without magic words
+      - name: Bind the live Room overlay to the actual run path
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p=Path('scripts/room_private_model/__init__.py')
-          s=p.read_text()
-          old='''        history = re.search(\n            r"\\b(?:remember|last time|years ago|that night|when we|the time we|back when|used to|that motel|that wedding|the dare|the bet|the pact|the voicemail)\\b",\n            low, re.I,\n        )\n        if expected == "callback" and not history:\n            raise ValueError("high_risk_callback_not_realized")\n        if expected in {"disagree", "disclose", "compare", "close", "repair"} and not (charged or history):\n            raise ValueError("high_risk_not_realized")\n\n    if expected == "disagree" and not re.search(\n        r"\\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|fuck|stupid|idiot|actually)\\b",\n        low,\n    ):\n        raise ValueError("disagreement_not_realized")\n'''
-          new='''        history = re.search(\n            r"\\b(?:remember|last time|years ago|that night|when we|the time we|back when|used to|that motel|that wedding|the dare|the bet|the pact|the voicemail)\\b",\n            low, re.I,\n        )\n        wild_anchor = re.search(\n            r"\\b(?:motel|fire|herman|suitcase|wedding|duluth|church|bell|radio|tower|tattoo|birthday|cake|laundromat|forged|apology|garden|statue|karaoke|inheritance|midnight|road trip|key|restaurant|banned|bet|engagement|umbrella|hotel|roof|flamingo|voicemail|betray\\w*)\\b",\n            low, re.I,\n        )\n        # A callback need not literally say 'remember'. A concrete recurring Room\n        # invention is itself evidence that the callback happened.\n        if expected == "callback" and not (history or wild_anchor or charged):\n            raise ValueError("high_risk_callback_not_realized")\n        if expected in {"disagree", "disclose", "compare", "close", "repair"} and not (charged or history or wild_anchor):\n            raise ValueError("high_risk_not_realized")\n\n    disagreement_marker = re.search(\n        r"\\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|fuck|stupid|idiot|actually)\\b",\n        low, re.I,\n    )\n    if expected == "disagree" and not (disagreement_marker or (risk >= 3 and (charged or history or wild_anchor))):\n        raise ValueError("disagreement_not_realized")\n'''
-          if old not in s:
-              if 'wild_anchor = re.search(' in s:
-                  print('already patched')
-              else:
-                  raise SystemExit('concrete-chaos validator anchor missing')
-          else:
-              s=s.replace(old,new,1)
-          s=s.replace('LIVE_EXPRESSION_OVERLAY = "2026-08-24-volatile-agenda-v12"', 'LIVE_EXPRESSION_OVERLAY = "2026-08-24-concrete-chaos-v13"')
+
+          p = Path('scripts/room_private_model/__init__.py')
+          s = p.read_text()
+
+          old = '''        "n_predict": {"comprehension": 192, "thought": 220, "expression": 220}.get(role, 192),\n'''
+          new = '''        "n_predict": 512 * (2 if attempt and role in {"comprehension", "thought"} else 1),\n'''
+          if old in s:
+              s = s.replace(old, new, 1)
+          elif new not in s:
+              raise SystemExit('live request token-budget anchor missing')
+
+          marker = 'LIVE_OVERLAY_BOUNDARY_V14 = True'
+          if marker not in s:
+              s += '''\n\n# The base run() function was created in _BASE, so copying it into this package\n# left its __globals__ bound to the base module. Rebuild the same function code\n# against this package namespace so the live compacting, validation and request\n# functions above are the functions the Room actually executes.\nimport types as _types\nLIVE_OVERLAY_BOUNDARY_V14 = True\nrun = _types.FunctionType(\n    _BASE.run.__code__,\n    globals(),\n    name="run",\n    argdefs=_BASE.run.__defaults__,\n    closure=_BASE.run.__closure__,\n)\n'''
           p.write_text(s)
+
+          q = Path('scripts/sitecustomize.py')
+          t = q.read_text()
+          old = '''    _rpm._request = _room_request\n    _rpm._extract_json = _room_extract_json\n    _rpm._validate = _room_validate\n'''
+          new = '''    # A live package overlay owns its sampler. The compatibility shim may still\n    # add truncation salvage and rejection diagnostics, but must not replace the\n    # overlay's high-variance request function.\n    if not getattr(_rpm, "LIVE_EXPRESSION_OVERLAY", ""):\n        _rpm._request = _room_request\n    _rpm._extract_json = _room_extract_json\n    _rpm._validate = _room_validate\n'''
+          if old in t:
+              t = t.replace(old, new, 1)
+          elif new not in t:
+              raise SystemExit('sitecustomize request-binding anchor missing')
+          q.write_text(t)
           PY
-          python3 -m py_compile scripts/room_private_model/__init__.py
-      - name: Commit patch
+
+          python3 -m py_compile scripts/room_private_model/__init__.py scripts/sitecustomize.py
+          PYTHONPATH=scripts python3 - <<'PY'
+          import room_private_model as rpm
+          assert getattr(rpm, 'LIVE_OVERLAY_BOUNDARY_V14', False)
+          assert rpm.run.__globals__ is rpm.__dict__, 'Room run() is still bound to the base module'
+          assert getattr(rpm._request, '__module__', '') == 'room_private_model', 'sitecustomize replaced the live sampler'
+          print('LIVE_OVERLAY_BOUNDARY_OK', rpm.LIVE_EXPRESSION_OVERLAY)
+          PY
+      - name: Commit root fix
         shell: bash
         run: |
-          git config user.name 'room-chaos-acceptance-patcher'
+          git config user.name 'room-overlay-patcher'
           git config user.email 'actions@users.noreply.github.com'
-          git add scripts/room_private_model/__init__.py
-          git commit -m 'Accept concrete Room chaos without magic words' || exit 0
+          git add scripts/room_private_model/__init__.py scripts/sitecustomize.py
+          git commit -m 'Bind Room live overlay to actual inference path' || exit 0
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
