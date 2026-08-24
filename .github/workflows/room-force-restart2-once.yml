@@ -1,0 +1,43 @@
+name: Restart The Room after wrapper fix once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'society/room-force-restart2-kick.txt'
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  restart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 5
+      - name: Cancel old Room and dispatch fixed wrapper
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name room-recovery
+          git config user.email actions@users.noreply.github.com
+          ids=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --limit 20 --json databaseId,status --jq '.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending") | .databaseId')
+          cancelled=""
+          for id in $ids; do
+            gh run cancel "$id" --repo "$GITHUB_REPOSITORY" || true
+            cancelled="${cancelled}${id},"
+          done
+          sleep 3
+          gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
+          sleep 2
+          new_id=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --limit 5 --json databaseId,status,createdAt --jq '.[0].databaseId')
+          mkdir -p room
+          printf 'restarted_at=%s\ncancelled_run_ids=%s\nnew_run_id=%s\nsource_run=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$cancelled" "$new_id" "$GITHUB_RUN_ID" > room/wrapper-fixed-restart-result.txt
+          git rm -f .github/workflows/room-force-restart2-once.yml society/room-force-restart2-kick.txt
+          git add room/wrapper-fixed-restart-result.txt
+          git commit -m 'Record wrapper-fixed Room restart'
+          git push origin HEAD:main
