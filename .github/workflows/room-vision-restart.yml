@@ -1,0 +1,33 @@
+name: One-time Room vision restart
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'society/room-vision-restart.txt'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  restart:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Cancel stale runner and start fresh Room
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OLD_RUN_ID: '32768251622'
+        run: |
+          set -euo pipefail
+          gh run cancel "$OLD_RUN_ID" --repo "$GITHUB_REPOSITORY" || true
+          for attempt in 1 2 3 4 5; do
+            if gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto; then
+              echo "fresh Room dispatch accepted"
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "failed to dispatch fresh Room" >&2
+          exit 1
