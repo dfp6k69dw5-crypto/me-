@@ -1,0 +1,43 @@
+name: Restore proven Room retries from pulse once
+on:
+  push:
+    branches: [main]
+    paths: ['society/pulse-kick.txt']
+permissions:
+  contents: write
+jobs:
+  patch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Restore proven retry budget, verify, and restart
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git pull --rebase origin main
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/room_engine_v5.py')
+          s=p.read_text()
+          old='attempts = 5 if role == "expression" else 2'
+          new='attempts = 9 if role == "expression" else 2'
+          if old in s:
+              assert s.count(old) == 1
+              p.write_text(s.replace(old,new))
+          else:
+              assert new in s, 'neither known retry setting is present'
+          PY
+          python3 -m py_compile scripts/room_engine_v5.py scripts/room_private_model.py scripts/room_expression_quality.py
+          if [ -f scripts/room_expression_quality_sim.py ]; then python3 scripts/room_expression_quality_sim.py; fi
+          if [ -f scripts/room_cross_voice_novelty_sim.py ]; then python3 scripts/room_cross_voice_novelty_sim.py; fi
+          git rm .github/workflows/room-restore-nine-retries-pulse-once.yml
+          git rm -f .github/workflows/room-restore-nine-retries-once.yml || true
+          printf 'restored-proven-nine-expression-retries %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > society/pulse-kick.txt
+          git add scripts/room_engine_v5.py society/pulse-kick.txt
+          git diff --cached --check
+          git commit -m 'Restore proven Room expression retry budget'
+          git push origin HEAD:main
