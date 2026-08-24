@@ -130,6 +130,10 @@ if _rpm is not None:
             })
             return str(payload.get("content", ""))
 
-    _rpm._request = _room_request
+    # A live package overlay owns its sampler. The compatibility shim may still
+    # add truncation salvage and rejection diagnostics, but must not replace the
+    # overlay's high-variance request function.
+    if not getattr(_rpm, "LIVE_EXPRESSION_OVERLAY", ""):
+        _rpm._request = _room_request
     _rpm._extract_json = _room_extract_json
     _rpm._validate = _room_validate

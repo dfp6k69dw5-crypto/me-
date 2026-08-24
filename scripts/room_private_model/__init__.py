@@ -449,7 +449,7 @@ def _request(
 
     body = {
         "prompt": prompt,
-        "n_predict": {"comprehension": 192, "thought": 220, "expression": 220}.get(role, 192),
+        "n_predict": 512 * (2 if attempt and role in {"comprehension", "thought"} else 1),
         "temperature": temperature,
         "cache_prompt": True,
         "json_schema": globals()["_schema"](role, self_entity),
@@ -481,3 +481,18 @@ def _request(
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return str(json.loads(resp.read().decode("utf-8", "replace")).get("content", ""))
+
+
+# The base run() function was created in _BASE, so copying it into this package
+# left its __globals__ bound to the base module. Rebuild the same function code
+# against this package namespace so the live compacting, validation and request
+# functions above are the functions the Room actually executes.
+import types as _types
+LIVE_OVERLAY_BOUNDARY_V14 = True
+run = _types.FunctionType(
+    _BASE.run.__code__,
+    globals(),
+    name="run",
+    argdefs=_BASE.run.__defaults__,
+    closure=_BASE.run.__closure__,
+)
