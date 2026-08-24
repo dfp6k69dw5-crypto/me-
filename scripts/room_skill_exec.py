@@ -428,6 +428,11 @@ def prepare_environment(env: dict[str, str] | None = None, context: str | None =
     role = ROLES[node % 3]
     if context is None:
         segments = recent_context_segments()
+        # Thought and expression skills must be earned by what someone actually
+        # said. Persistent topic bookkeeping is useful for comprehension, but
+        # letting it route generative skills creates a self-reinforcing style loop.
+        if role in {"thought", "expression"}:
+            segments = [segment for segment in segments if segment.get("kind") == "message"]
         public_context = _norm(" ".join(segment["text"] for segment in segments))
     else:
         segments = _segments_from_text(context)
