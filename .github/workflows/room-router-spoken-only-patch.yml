@@ -1,4 +1,4 @@
-name: Patch Room callback wildness
+name: Patch Room strict social acts
 
 on:
   push:
@@ -19,45 +19,114 @@ jobs:
         with:
           ref: main
           fetch-depth: 20
-      - name: Require genuinely bizarre shared incidents
+      - name: Close tame semantic-chaos loopholes
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
           p=Path('scripts/room_private_model/__init__.py')
           s=p.read_text()
-          old='''    wild_anchor = re.search(\n        r"\\b(?:motel|fire|herman|suitcase|wedding|duluth|church|bell|radio|tower|tattoo|birthday|cake|laundromat|forged|apology|garden|statue|karaoke|inheritance|midnight|road trip|key|restaurant|banned|bet|engagement|rumor|umbrella|hotel|roof|flamingo|voicemail|betray\\w*)\\b",\n        low, re.I,\n    )\n'''
-          new='''    wild_anchor = re.search(\n        r"\\b(?:motel fire|herman|locked suitcase|fake wedding|duluth|church bell|radio[- ]tower|tattoo pact|birthday[- ]cake|laundromat|forged apology|garden statue|karaoke|inheritance|midnight road trip|suspicious key|restaurant\\b.{0,24}\\bbanned|the bet|engagement rumor|red umbrella|hotel roof|brass flamingo|voicemail|betray\\w*)\\b",\n        low, re.I,\n    )\n'''
-          if old not in s:
-              if new not in s:
-                  raise SystemExit('wild-anchor anchor missing')
-          else:
-              s=s.replace(old,new,1)
+          replacements = [
+            (
+'''    wild_anchor = re.search(
+        r"\\b(?:motel|fire|herman|suitcase|wedding|duluth|church|bell|radio|tower|tattoo|birthday|cake|laundromat|forged|apology|garden|statue|karaoke|inheritance|midnight|road trip|key|restaurant|banned|bet|engagement|rumor|umbrella|hotel|roof|flamingo|voicemail|betray\\w*)\\b",
+        low, re.I,
+    )
+''',
+'''    wild_anchor = re.search(
+        r"\\b(?:motel fire|herman|locked suitcase|fake wedding|duluth|church bell|radio[- ]tower|tattoo pact|birthday[- ]cake|laundromat|forged apology|garden statue|karaoke|inheritance|midnight road trip|suspicious key|restaurant\\b.{0,24}\\bbanned|the bet|engagement rumor|red umbrella|hotel roof|brass flamingo|voicemail|betray\\w*)\\b",
+        low, re.I,
+    )
+'''),
+            (
+'''    comparison = re.search(
+        r"\\b(?:better|worse|more|less|than|versus|vs\\.?|prefer|rather|winner|loser|stronger|weaker|smarter|dumber|best|worst|superior|inferior)\\b",
+        low, re.I,
+    )
+''',
+'''    comparison = re.search(
+        r"\\b(?:better|worse|versus|vs\\.?|winner|loser|stronger|weaker|smarter|dumber|best|worst|superior|inferior)\\b",
+        low, re.I,
+    )
+'''),
+            (
+'''    intimacy = re.search(
+        r"\\b(?:jealous|want you|need you|hate|love|afraid|scared|resent|envy|secret|promise|miss you|attract\\w*|obsess\\w*|possessive|hurt|can\\'t stand|cannot stand|desire)\\b",
+        low, re.I,
+    )
+''',
+'''    intimacy = re.search(
+        r"\\b(?:jealous|want you|need you|hate you|love you|afraid you|afraid you\\'ll|scared you|scared you\\'ll|resent you|envy you|miss you|attract(?:ed|ion)? to you|possessive|can\\'t stand you|cannot stand you|desire you)\\b",
+        low, re.I,
+    )
+'''),
+            (
+'''    repair = re.search(
+        r"\\b(?:sorry|forgive|i was wrong|i shouldn\\'t|i should not|need you|want you|don\\'t leave|do not leave|stay|miss you|hurt|afraid|scared|can\\'t lose|cannot lose|don\\'t want to lose|do not want to lose)\\b",
+        low, re.I,
+    )
+''',
+'''    repair = re.search(
+        r"\\b(?:sorry|forgive|i was wrong|i shouldn\\'t|i should not|need you|want you|don\\'t leave|do not leave|miss you|you hurt me|i hurt you|afraid of losing you|scared of losing you|can\\'t lose you|cannot lose you|don\\'t want to lose you|do not want to lose you)\\b",
+        low, re.I,
+    )
+'''),
+            (
+'''        if expected == "compare" and not (comparison and (direct or wild_anchor)):
+            raise ValueError("high_risk_comparison_not_realized")
+        if expected == "close" and not (dismissal and (direct or wild_anchor)):
+            raise ValueError("high_risk_close_not_realized")
+''',
+'''        if expected == "compare" and not (direct and comparison):
+            raise ValueError("high_risk_comparison_not_realized")
+        if expected == "close" and not (direct and dismissal):
+            raise ValueError("high_risk_close_not_realized")
+'''),
+            (
+'''        if expected == "bridge" and not (wild_anchor or (direct and aggression)):
+            raise ValueError("high_risk_bridge_not_realized")
+''',
+'''        if expected == "bridge" and not (direct and (wild_anchor or aggression)):
+            raise ValueError("high_risk_bridge_not_realized")
+'''),
+          ]
+          for old,new in replacements:
+              if old in s:
+                  s=s.replace(old,new,1)
+              elif new not in s:
+                  raise SystemExit('strict social-act anchor missing')
+          s=s.replace('LIVE_EXPRESSION_OVERLAY = "2026-08-24-semantic-chaos-v15"', 'LIVE_EXPRESSION_OVERLAY = "2026-08-24-strict-social-chaos-v17"')
           p.write_text(s)
           PY
-          python3 -m py_compile scripts/room_private_model/__init__.py
+          python3 -m py_compile scripts/room_private_model/__init__.py scripts/room_engine_v5.py
           PYTHONPATH=scripts python3 - <<'PY'
           import room_private_model as rpm
-          def ok(text):
-              compact={'intent':{'move':'callback','risk':4}}
-              obj={'decision':'SPEAK','target':'mara','move':'callback','utterance':text}
-              try:
-                  rpm._validate('expression',obj,compact,'','sarah')
-                  return True
-              except ValueError:
-                  return False
-          assert not ok("I bet we're all good at pretending. How would you explain your perspective?")
-          assert ok("Mara, Herman took the brass flamingo and you still owe me an explanation.")
-          assert ok("Mara, remember the disastrous midnight road trip? You still owe me an explanation.")
-          print('CALLBACK_WILDNESS_GATE_OK')
+          def chk(move,text,expected=True):
+              compact={'intent':{'move':move,'risk':4}}
+              obj={'decision':'SPEAK','target':'mara','move':move,'utterance':text,'semantic_terms':['test']}
+              ok=True
+              try: rpm._validate('expression',obj,compact,'','sarah')
+              except ValueError: ok=False
+              assert ok is expected,(move,text,ok,expected)
+          chk('repair',"I see, I'll work on the way I communicate with you. Let's agree to stay emotional.",False)
+          chk('repair',"Mara, I'm sorry. I don't want to lose you over Herman's locked suitcase.")
+          chk('compare',"The fake engagement rumor was more exciting than before.",False)
+          chk('compare',"Mara, Jules is better than you at lying about the fake engagement rumor.")
+          chk('disclose',"It feels like the radio-tower dare is becoming the new obsession.",False)
+          chk('disclose',"Mara, I'm jealous and I want you to pay attention to me.")
+          chk('bridge',"The abandoned radio-tower dare is the new obsession.",False)
+          chk('bridge',"Mara, Herman is back at the radio-tower. Explain what the hell you did.")
+          chk('callback',"I bet we're all good at pretending. How would you explain your perspective?",False)
+          chk('callback',"Mara, remember the disastrous midnight road trip? You still owe me an explanation.")
+          print('STRICT_SOCIAL_CHAOS_V17_OK',rpm.LIVE_EXPRESSION_OVERLAY)
           PY
-      - name: Commit callback fix
+      - name: Commit strict social gate
         shell: bash
         run: |
-          git config user.name 'room-callback-gate'
+          git config user.name 'room-social-chaos-gate'
           git config user.email 'actions@users.noreply.github.com'
           git add scripts/room_private_model/__init__.py
-          git commit -m 'Close tame callback loophole in Room' || exit 0
+          git commit -m 'Require real social acts from wild Room moves' || exit 0
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
