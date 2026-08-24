@@ -24,15 +24,24 @@ for _name in dir(_BASE):
     if not _name.startswith("__"):
         globals()[_name] = getattr(_BASE, _name)
 
-LIVE_EXPRESSION_OVERLAY = "2026-08-24-chaos-restored-v10"
+LIVE_EXPRESSION_OVERLAY = "2026-08-24-coherent-chaos-v11"
 _RELATIONSHIP_KEYS = (
     "trust", "warmth", "tension", "respect", "predictability",
     "reciprocity", "disclosure_depth", "direct_familiarity", "exposure",
 )
 _SOCIAL_SUBJECTS = (
-    "trust", "loyalty", "jealousy", "humor", "music", "money", "attraction",
-    "ambition", "envy", "risk", "honesty", "status", "taste", "privacy",
-    "boredom", "fear", "memory", "revenge", "desire", "secrets",
+    "the motel fire nobody agrees happened", "Herman's locked suitcase",
+    "the fake wedding in Duluth", "the night someone stole the church bell",
+    "the abandoned radio-tower dare", "the disputed tattoo pact",
+    "the birthday-cake sabotage", "the secret room behind the laundromat",
+    "the forged apology letter", "the vanished garden statue",
+    "the terrible karaoke blood-feud", "the pact nobody admits making",
+    "the imaginary inheritance fight", "the disastrous midnight road trip",
+    "the suspicious key in Mara's coat", "the restaurant they swear they were banned from",
+    "the ridiculous bet that got too serious", "the fake engagement rumor",
+    "the old grudge over a red umbrella", "the dare involving a hotel roof",
+    "the person everyone insists is named Herman", "the stolen brass flamingo",
+    "the mysterious voicemail from 3 a.m.", "the argument about who betrayed whom first",
 )
 _STOP = set(
     "the a an and or but if then than this that these those it its is are was were be been being "
@@ -217,14 +226,16 @@ def _reroute_thought(validated: dict, compact: dict) -> dict:
     risk = int(out.get("interpersonal_risk", 0) or 0)
     stale = isinstance(compact.get("stale_loop"), dict)
     seed = globals()["_sample_seed"]("volatile_gate", entity, 0)
-    force = stale or (action in _SAFE_ACTIONS and seed % 100 < 88) or (risk < 2 and seed % 100 < 70)
+    # Autonomous Room beats should not drift back to bland helper moves.
+    # Participant-response routing can still override this later for Allen.
+    force = stale or action in _SAFE_ACTIONS or risk < 3
 
     if force:
         action = _volatile_action(entity)
         out["action"] = action
 
     risk_floor = {"sarah": 3, "mara": 4, "owen": 4, "jules": 4}.get(entity, 3)
-    if action in {"DISAGREE", "CALLBACK", "DISCLOSE", "COMPARE", "CLOSE", "BRIDGE"}:
+    if action in {"DISAGREE", "CALLBACK", "DISCLOSE", "COMPARE", "CLOSE", "BRIDGE", "REPAIR"}:
         out["interpersonal_risk"] = max(risk, risk_floor)
 
     partner = str(out.get("preferred_partner") or "").lower()
@@ -284,6 +295,21 @@ def _validate(role: str, obj: object, compact: dict, prompt: str, self_entity: s
     allowed = {"answer", "deepen", "disclose", "compare", "disagree", "repair", "support", "callback", "bridge", "close"}
     if expected in allowed:
         out["move"] = expected
+
+    risk = int(intent.get("risk", 0) or 0)
+    if risk >= 3:
+        charged = re.search(
+            r"\b(?:lie|lied|lying|betray|betrayed|jealous|want|need|hate|love|angry|furious|pissed|resent|envy|afraid|scared|leave|done|fake|using|used|manipulat\w*|coward|pathetic|smug|stupid|idiot|bullshit|fuck|damn|secret|promise|stole|steal|cheat\w*|ignore\w*|abandon\w*|obsess\w*|desire|attract\w*|mine|owe|trust|grudge|revenge|dare|banned|sabotage)\b",
+            low, re.I,
+        )
+        history = re.search(
+            r"\b(?:remember|last time|years ago|that night|when we|the time we|back when|used to|that motel|that wedding|the dare|the bet|the pact|the voicemail)\b",
+            low, re.I,
+        )
+        if expected == "callback" and not history:
+            raise ValueError("high_risk_callback_not_realized")
+        if expected in {"disagree", "disclose", "compare", "close", "repair"} and not (charged or history):
+            raise ValueError("high_risk_not_realized")
 
     if expected == "disagree" and not re.search(
         r"\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|fuck|stupid|idiot|actually)\b",
@@ -345,7 +371,14 @@ def _expression_temperature(prompt: str, self_entity: str | None, attempt: int) 
 
     if risk >= 4 and (tension >= 0.45 or move in {"disagree", "callback"}):
         base = 4.0
-    return max(1.35, min(4.0, base - 0.42 * max(0, attempt)))
+    # Retry for grammar without sanding off the social intensity.
+    if risk >= 4:
+        floor, decay = 2.65, 0.18
+    elif risk >= 3:
+        floor, decay = 2.20, 0.20
+    else:
+        floor, decay = 1.35, 0.32
+    return max(floor, min(4.0, base - decay * max(0, attempt)))
 
 
 def _thought_temperature(entity: str | None, attempt: int) -> float:
@@ -383,7 +416,9 @@ def _request(
         edge = globals().get("INTERPERSONAL_EDGES", {}).get(self_entity, "")
         prompt = (
             "LIVE EXPRESSION RULE: Speak as this specific person, never as a generic assistant, adviser, tutor, facilitator, or customer-service voice. "
-            "Follow the deliberated move and relationship. When risk is high, make the line concrete and socially consequential: name the person, make an accusation, "
+            "Follow the deliberated move, relationship, and intent aim. The intent aim is binding: enact it directly in the utterance instead of summarizing it. "
+            "When risk is high, do something socially consequential on the page: accuse, confess, taunt, demand, threaten to leave, revive a bizarre shared incident, "
+            "invent a concrete grudge, make a reckless claim, or say the socially dangerous part out loud. Do not turn a wild aim into an abstract hypothetical. "
             "admit a desire, jealousy, grudge, fear, attraction, rivalry, insult, private joke, or shared memory. Ordinary profanity, direct insults, mockery, contempt, "
             "dismissiveness, hostile banter, pettiness, emotional volatility, and escalation are allowed when they fit. Do not sanitize anger into polite disagreement. "
             "Invented people such as Herman, invented shared childhoods, fake memories, old incidents, fictional relationships, invented places, and made-up history are "
@@ -402,11 +437,14 @@ def _request(
         "json_schema": globals()["_schema"](role, self_entity),
     }
     if role == "expression":
+        # Later retries narrow the vocabulary distribution for coherence,
+        # while _expression_temperature keeps interpersonal heat high.
+        spread = max(0, attempt)
         body.update({
             "seed": globals()["_sample_seed"](role, self_entity, attempt),
-            "top_k": 80,
-            "top_p": 0.98,
-            "min_p": 0.002,
+            "top_k": max(32, 80 - 8 * spread),
+            "top_p": max(0.91, 0.98 - 0.01 * spread),
+            "min_p": min(0.03, 0.002 + 0.004 * spread),
         })
     elif role == "thought":
         entity = _entity_from_prompt(prompt)
