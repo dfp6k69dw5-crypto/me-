@@ -1,0 +1,131 @@
+name: Restore Room comprehension fail-soft once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'society/comprehension-failsoft-kick.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Restore proven comprehension fail-soft and test
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git pull --rebase origin main
+
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/room_engine_v5.py')
+          s = p.read_text()
+
+          marker = '\ndef _private_run(role: str, payload: dict, timeout: int = 30):\n'
+          helper = '''\ndef _neutral_comprehension(payload):
+    """Return a non-inventive observation when structured comprehension is unusable."""
+    source = payload if isinstance(payload, dict) else {}
+    entity = _private_model._norm(source.get("entity"))
+    partner = _private_model._norm(source.get("partner"))
+    if partner not in _private_model.PEOPLE or partner == entity:
+        partner = None
+
+    event = source.get("event") if isinstance(source.get("event"), dict) else {}
+    cognition = event.get("cognition") if isinstance(event.get("cognition"), dict) else {}
+    target = _private_model._norm(cognition.get("target"))
+    participation = "DIRECT_ADDRESSEE" if entity and target == entity else "PARTICIPANT"
+
+    return {
+        "participation": participation,
+        "partner": partner,
+        "move": "other",
+        "grounding": "ambiguous",
+        "focus": None,
+        "new_details": [],
+        "bids": [],
+        "relationship_events": [],
+        "shared_references": [],
+        "confidence": 0.0,
+    }
+'''
+
+          if 'def _neutral_comprehension(payload):' not in s:
+              assert s.count(marker) == 1, 'private run marker changed'
+              s = s.replace(marker, helper + marker)
+
+          old = '    raise RuntimeError(f"private model output rejected for {role}: {last_reason}")\n\n\n_private_model.run = _private_run'
+          new = '''    if role == "comprehension":
+        fallback = _neutral_comprehension(payload)
+        return _private_model._validate(role, fallback, compact, instruction, self_entity)
+    raise RuntimeError(f"private model output rejected for {role}: {last_reason}")
+
+
+_private_model.run = _private_run'''
+          if old in s:
+              assert s.count(old) == 1
+              s = s.replace(old, new)
+          else:
+              assert 'fallback = _neutral_comprehension(payload)' in s, 'known fail-soft insertion point changed'
+
+          assert 'attempts = 9 if role == "expression" else 2' in s, '9-retry liveness repair was lost'
+          p.write_text(s)
+          PY
+
+          python3 -m py_compile scripts/room_engine_v5.py scripts/room_private_model.py
+
+          python3 - <<'PY'
+          import os, sys
+          sys.path.insert(0, 'scripts')
+          import room_engine_v5 as engine
+
+          payload = {
+              'entity': 'sarah',
+              'profile': {'traits': {'social_sensitivity': 0.9, 'curiosity': 0.8}},
+              'event': {'speaker': 'allen', 'text': 'What do you make of the way people show care?', 'cognition': {'target': 'sarah'}},
+              'context': [{'speaker': 'allen', 'text': 'What do you make of the way people show care?', 'cognition': {'target': 'sarah'}}],
+              'topic': {'root': 'themes', 'current_facet': 'care', 'facets': ['care']},
+              'partner': 'allen',
+              'relationship': {'warmth': 0.2, 'respect': 0.2},
+          }
+          original = engine._private_model._request
+          old_prompt = os.environ.get('ROOM_NODE_PROMPT')
+          old_url = os.environ.get('ROOM_MODEL_URL')
+          calls = []
+          def malformed(_url, _prompt, role, _temperature, _timeout, _self_entity=None, attempt=0):
+              calls.append((role, attempt))
+              return '{"participation":"DIRECT_ADDRESSEE","partner":"allen","move":"answer","grounding":"understood","focus":"care","new_details":["unfinished'
+          engine._private_model._request = malformed
+          os.environ['ROOM_NODE_PROMPT'] = 'test'
+          os.environ['ROOM_MODEL_URL'] = 'http://test.invalid'
+          try:
+              result = engine._private_run('comprehension', payload, timeout=1)
+          finally:
+              engine._private_model._request = original
+              if old_prompt is None: os.environ.pop('ROOM_NODE_PROMPT', None)
+              else: os.environ['ROOM_NODE_PROMPT'] = old_prompt
+              if old_url is None: os.environ.pop('ROOM_MODEL_URL', None)
+              else: os.environ['ROOM_MODEL_URL'] = old_url
+          assert calls == [('comprehension', 0), ('comprehension', 1)], calls
+          assert result == {
+              'participation': 'DIRECT_ADDRESSEE', 'partner': 'allen', 'move': 'other',
+              'grounding': 'ambiguous', 'focus': None, 'new_details': [], 'bids': [],
+              'relationship_events': [], 'shared_references': [], 'confidence': 0.0,
+          }, result
+          print('COMPREHENSION FAIL-SOFT: GREEN')
+          PY
+
+          git rm .github/workflows/room-restore-comprehension-failsoft-once.yml
+          git rm society/comprehension-failsoft-kick.txt
+          git add scripts/room_engine_v5.py
+          git diff --cached --check
+          git commit -m 'Restore Room comprehension fail-soft'
+          git push origin HEAD:main
