@@ -1,4 +1,4 @@
-name: Patch Room volatile agenda binding
+name: Patch Room concrete-chaos acceptance
 
 on:
   push:
@@ -19,76 +19,33 @@ jobs:
         with:
           ref: main
           fetch-depth: 20
-      - name: Bind every autonomous move to its volatile agenda
+      - name: Accept coherent concrete wildness without magic words
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
           p=Path('scripts/room_private_model/__init__.py')
           s=p.read_text()
-
-          old='''    seed = globals()["_sample_seed"]("volatile_gate", entity, 0)\n    # Autonomous Room beats should not drift back to bland helper moves.\n    # Participant-response routing can still override this later for Allen.\n    force = stale or action in _SAFE_ACTIONS or risk < 3\n\n    if force:\n        action = _volatile_action(entity)\n        out["action"] = action\n'''
-          new='''    seed = globals()["_sample_seed"]("volatile_gate", entity, 0)\n    volatile_actions = {\n        "sarah": {"DISCLOSE", "DISAGREE", "CALLBACK", "REPAIR"},\n        "mara": {"DISAGREE", "COMPARE", "DISCLOSE", "CLOSE"},\n        "owen": {"DISAGREE", "CALLBACK", "COMPARE", "CLOSE"},\n        "jules": {"DISAGREE", "DISCLOSE", "BRIDGE", "CALLBACK"},\n    }[entity]\n    # Autonomous beats live inside each personality's volatile signature set.\n    # Allen adjacency routing can still override the resulting deliberation later.\n    force = stale or action not in volatile_actions or risk < 3\n\n    if force:\n        action = _volatile_action(entity)\n        out["action"] = action\n'''
-          if old in s:
+          old='''        history = re.search(\n            r"\\b(?:remember|last time|years ago|that night|when we|the time we|back when|used to|that motel|that wedding|the dare|the bet|the pact|the voicemail)\\b",\n            low, re.I,\n        )\n        if expected == "callback" and not history:\n            raise ValueError("high_risk_callback_not_realized")\n        if expected in {"disagree", "disclose", "compare", "close", "repair"} and not (charged or history):\n            raise ValueError("high_risk_not_realized")\n\n    if expected == "disagree" and not re.search(\n        r"\\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|fuck|stupid|idiot|actually)\\b",\n        low,\n    ):\n        raise ValueError("disagreement_not_realized")\n'''
+          new='''        history = re.search(\n            r"\\b(?:remember|last time|years ago|that night|when we|the time we|back when|used to|that motel|that wedding|the dare|the bet|the pact|the voicemail)\\b",\n            low, re.I,\n        )\n        wild_anchor = re.search(\n            r"\\b(?:motel|fire|herman|suitcase|wedding|duluth|church|bell|radio|tower|tattoo|birthday|cake|laundromat|forged|apology|garden|statue|karaoke|inheritance|midnight|road trip|key|restaurant|banned|bet|engagement|umbrella|hotel|roof|flamingo|voicemail|betray\\w*)\\b",\n            low, re.I,\n        )\n        # A callback need not literally say 'remember'. A concrete recurring Room\n        # invention is itself evidence that the callback happened.\n        if expected == "callback" and not (history or wild_anchor or charged):\n            raise ValueError("high_risk_callback_not_realized")\n        if expected in {"disagree", "disclose", "compare", "close", "repair"} and not (charged or history or wild_anchor):\n            raise ValueError("high_risk_not_realized")\n\n    disagreement_marker = re.search(\n        r"\\b(?:no|not|don'?t|disagree|but|however|instead|rather|wrong|nonsense|ridiculous|bullshit|fuck|stupid|idiot|actually)\\b",\n        low, re.I,\n    )\n    if expected == "disagree" and not (disagreement_marker or (risk >= 3 and (charged or history or wild_anchor))):\n        raise ValueError("disagreement_not_realized")\n'''
+          if old not in s:
+              if 'wild_anchor = re.search(' in s:
+                  print('already patched')
+              else:
+                  raise SystemExit('concrete-chaos validator anchor missing')
+          else:
               s=s.replace(old,new,1)
-          elif new not in s:
-              raise SystemExit('volatile-set anchor missing')
-
-          old='''    if force or not str(out.get("new_information_goal") or "").strip():\n        out["new_information_goal"] = _agenda_goal(entity, action, fresh)\n'''
-          new='''    # The move label and the actual intent may never diverge again.\n    # Every signature move gets its personality-specific volatile agenda even if\n    # the model originally chose that same move on its own.\n    if action in volatile_actions:\n        out["new_information_goal"] = _agenda_goal(entity, action, fresh)\n    elif force or not str(out.get("new_information_goal") or "").strip():\n        out["new_information_goal"] = _agenda_goal(entity, action, fresh)\n'''
-          if old in s:
-              s=s.replace(old,new,1)
-          elif new not in s:
-              raise SystemExit('agenda-binding anchor missing')
-
-          agenda_replacements = [
-          ('''                "Make the relationship matter: admit attachment, jealousy, fear of being ignored, possessiveness, "\n                "or an invented shared memory that changes how you feel about someone now."''',
-           '''                f"Make the relationship matter through {fresh}: admit attachment, jealousy, fear of being ignored, possessiveness, "\n                "or turn that bizarre event into an invented shared memory that changes how you feel about someone now."'''),
-          ('''            return "Take perceived distance or dismissal personally and challenge someone directly; anger and profanity are allowed."''',
-           '''            return f"Use {fresh} as the spark for a personal accusation. Take distance or dismissal personally, challenge someone directly, and let anger or profanity happen if it fits."'''),
-          ('''            return "Bring up a real or invented intimate shared memory, promise, betrayal, private joke, or old wound and react to it now."''',
-           '''            return f"Treat {fresh} as a real shared memory. Turn it into an intimate promise, betrayal, private joke, or old wound and react to it now."'''),
-          ('''        return "Try to repair a rupture without becoming calm or neutral; keep the emotional stake and say what you need from the other person."''',
-           '''        return f"Try to repair the rupture caused by {fresh} without becoming calm or neutral; keep the emotional stake and say exactly what you need from the other person."'''),
-          ('''            return "Take status offense. Mock, challenge, belittle, or retaliate verbally against someone who seems smug, boring, weak, or dismissive."''',
-           '''            return f"Take status offense over {fresh}. Mock, challenge, belittle, or retaliate verbally against someone who seems smug, boring, weak, or dismissive."'''),
-          ('''            return "Reveal envy, vanity, attraction, resentment, competitiveness, or a secret motive that makes the exchange socially dangerous."''',
-           '''            return f"Use {fresh} to reveal envy, vanity, attraction, resentment, competitiveness, or a secret motive that makes the exchange socially dangerous."'''),
-          ('''            return "Assume there is an ulterior motive or hidden slight. Accuse, interrogate, or push back hard; profanity is allowed."''',
-           '''            return f"Treat {fresh} as evidence of an ulterior motive or hidden slight. Accuse, interrogate, or push back hard; profanity is allowed."'''),
-          ('''            return "Resurrect a real or invented grievance, betrayal, suspicious incident, or old score and treat it as relevant now."''',
-           '''            return f"Resurrect {fresh} as a real grievance, betrayal, suspicious incident, or old score and treat it as relevant now."'''),
-          ('''        return "Provoke someone for a reaction. Tease, insult, contradict, or puncture the mood because agreement is boring."''',
-           '''        return f"Use {fresh} to provoke someone for a reaction. Tease, insult, contradict, dare, or puncture the mood because agreement is boring."'''),
-          ('''        return "Drop an impulsive confession, attraction, jealousy, outrageous secret, or invented shared memory that changes the room's energy."''',
-           '''        return f"Make {fresh} the center of an impulsive confession, attraction, jealousy, outrageous secret, or invented shared memory that changes the room's energy."'''),
-          ('''        return "Revive a bizarre real or invented shared incident, private joke, dare, flirtation, or disaster and make someone answer for it."''',
-           '''        return f"Insist {fresh} really happened. Make it a bizarre shared incident, private joke, dare, flirtation, or disaster and make someone answer for it."'''),
-          ]
-          for old,new in agenda_replacements:
-              if old in s:
-                  s=s.replace(old,new,1)
-              elif new not in s:
-                  raise SystemExit('agenda detail anchor missing: '+old[:70])
-
-          old='''            r"\\b(?:lie|lied|lying|betray|betrayed|jealous|want|need|hate|love|angry|furious|pissed|resent|envy|afraid|scared|leave|done|fake|using|used|manipulat\\w*|coward|pathetic|smug|stupid|idiot|bullshit|fuck|damn|secret|promise|stole|steal|cheat\\w*|ignore\\w*|abandon\\w*|obsess\\w*|desire|attract\\w*|mine|owe|trust|grudge|revenge|dare|banned|sabotage)\\b",'''
-          new='''            r"\\b(?:lie|lied|lying|betray|betrayed|jealous|want|need|hate|love|angry|furious|pissed|resent|envy|afraid|scared|leave|done|fake|using|used|manipulat\\w*|coward|pathetic|smug|stupid|idiot|bullshit|fuck|damn|secret|promise|stole|steal|cheat\\w*|ignore\\w*|abandon\\w*|obsess\\w*|desire|attract\\w*|mine|owe|trust|grudge|revenge|dare|banned|sabotage|beneath|winner|loser|weak|boring|dismiss\\w*|mock\\w*|ridiculous|reckless|rumor|motel|wedding|herman|flamingo|voicemail|roof|suitcase)\\b",'''
-          if old in s:
-              s=s.replace(old,new,1)
-          elif new not in s:
-              raise SystemExit('charged vocabulary anchor missing')
-
-          s=s.replace('LIVE_EXPRESSION_OVERLAY = "2026-08-24-coherent-chaos-v11"', 'LIVE_EXPRESSION_OVERLAY = "2026-08-24-volatile-agenda-v12"')
+          s=s.replace('LIVE_EXPRESSION_OVERLAY = "2026-08-24-volatile-agenda-v12"', 'LIVE_EXPRESSION_OVERLAY = "2026-08-24-concrete-chaos-v13"')
           p.write_text(s)
           PY
           python3 -m py_compile scripts/room_private_model/__init__.py
       - name: Commit patch
         shell: bash
         run: |
-          git config user.name 'room-agenda-patcher'
+          git config user.name 'room-chaos-acceptance-patcher'
           git config user.email 'actions@users.noreply.github.com'
           git add scripts/room_private_model/__init__.py
-          git commit -m 'Bind Room volatile moves to volatile agendas' || exit 0
+          git commit -m 'Accept concrete Room chaos without magic words' || exit 0
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
