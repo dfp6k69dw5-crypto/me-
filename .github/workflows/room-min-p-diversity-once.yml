@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  patch-and-verify:
+  verify-current:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -21,11 +21,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Patch and verify
+      - name: Verify current combined expression state
         shell: bash
         run: |
           set -e
-          python scripts/patch_room_min_p.py
           python -m py_compile scripts/room_private_model.py
           python scripts/room_expression_quality_sim.py
           python scripts/room_cross_voice_novelty_sim.py
@@ -34,7 +33,7 @@ jobs:
           grep -q '"min_p": 0.005' scripts/room_private_model.py
           grep -q '"top_k": 60' scripts/room_private_model.py
           grep -q '"top_p": 0.96' scripts/room_private_model.py
-          grep -q 'temperature = min(2.0, 0.88 + 0.06 \* voice_index + 0.09 \* attempt)' scripts/room_private_model.py
+          grep -q 'temperature = min(4.0, 0.88 + 0.06 \* voice_index + 0.09 \* attempt)' scripts/room_private_model.py
           grep -q 'attempts = 9 if role == "expression" else 2' scripts/room_private_model.py
           grep -q 'volatile, impulsive, crude, profane' scripts/room_private_model.py
           mkdir -p room
@@ -45,12 +44,12 @@ jobs:
             echo "min_p=0.005"
             echo "top_p=0.96"
             echo "top_k=60"
-            echo "temperature_ceiling=2.0-preserved"
-            echo "expression_attempts=9-preserved"
+            echo "temperature_ceiling=4.0"
+            echo "expression_attempts=9"
             echo "rough_expression=preserved"
           } > room/min-p-diversity-result.txt
-          git add scripts/room_private_model.py room/min-p-diversity-result.txt
-          git commit -m "Lower Room min-p for wider expression"
+          git add room/min-p-diversity-result.txt
+          git commit -m "Verify Room min-p wider expression"
           for attempt in 1 2 3 4; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
