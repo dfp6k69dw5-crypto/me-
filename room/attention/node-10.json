@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-24T21:06:31.599010+00:00",
-  "cycle_key": "32777184993:1:3",
+  "generated_at": "2026-08-24T21:08:28.814634+00:00",
+  "cycle_key": "32777184993:1:4",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,44 +29,61 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "affect",
-      "score": 2.56,
-      "confidence": 0.933,
-      "raw_score": 2.56,
+      "domain": "concrete-specificity",
+      "score": 3.6,
+      "confidence": 0.989,
+      "raw_score": 3.6,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "feel",
-        "upset"
+        "happened",
+        "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feel"
+            "specific",
+            "happened"
           ],
           "weight": 1.8
-        },
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.84,
+      "confidence": 0.791,
+      "raw_score": 1.84,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "reason",
+        "why"
+      ],
+      "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "upset"
+            "why",
+            "reason"
           ],
-          "weight": 0.76
+          "weight": 0.92
         },
         {
           "kind": "topic_support",
           "matched": [
-            "upset"
+            "reason"
           ],
           "weight": 0.38
         }
       ]
     }
   ],
-  "context_fingerprint": "b18f1dde97a0",
+  "context_fingerprint": "8123b09ccd52",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 839,
+  "approx_added_tokens": 210
 }
