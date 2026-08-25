@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T21:55:00.421373+00:00",
-  "cycle_key": "32900403616:1:13",
+  "generated_at": "2026-08-25T21:58:05.990492+00:00",
+  "cycle_key": "32900403616:1:14",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,87 +29,94 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "critical-testing",
+      "domain": "memory-callback",
       "score": 2.72,
       "confidence": 0.949,
       "raw_score": 2.72,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "why",
-        "because"
+        "remember",
+        "history"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "why"
+            "remember"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "why"
+            "remember"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "history"
+          ],
+          "weight": 0.92
+        }
+      ]
+    },
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 2.07,
+      "confidence": 0.851,
+      "raw_score": 2.07,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "happened",
+        "show"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "because"
+            "show"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "why"
+            "happened"
           ],
-          "weight": 0.46
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 2.44,
-      "confidence": 0.918,
-      "raw_score": 2.44,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "trust",
-        "hurt"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "trust"
-          ],
-          "weight": 1.8
+          "weight": 0.76
         },
         {
           "kind": "message",
           "matched": [
-            "hurt"
+            "happened"
           ],
           "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
-            "trust"
+            "happened"
           ],
           "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "5ac107b58a47",
+  "context_fingerprint": "97ec01e4dbe1",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 890,
-  "approx_added_tokens": 222
+  "temporary_skill_chars": 801,
+  "approx_added_tokens": 200
 }
