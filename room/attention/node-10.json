@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T20:33:54.699256+00:00",
-  "cycle_key": "32871228038:1:89",
+  "generated_at": "2026-08-25T20:37:17.095712+00:00",
+  "cycle_key": "32871228038:1:90",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,18 +29,52 @@
   },
   "selected_skills": [
     {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 2.6,
+      "confidence": 0.937,
+      "raw_score": 2.6,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "because",
+        "why"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "because"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 0.76
+        }
+      ]
+    },
+    {
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.6,
-      "confidence": 0.989,
-      "raw_score": 3.6,
-      "repeat_penalty": 0.0,
+      "score": 1.41,
+      "confidence": 0.636,
+      "raw_score": 1.69,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "trust",
-        "feel",
-        "angry",
-        "love"
+        "feel"
       ],
       "evidence_sources": [
         {
@@ -48,78 +82,26 @@
           "matched": [
             "trust"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feel"
-          ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "angry"
-          ],
-          "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "love"
-          ],
-          "weight": 0.46
-        }
-      ]
-    },
-    {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 3.2,
-      "confidence": 0.978,
-      "raw_score": 3.2,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "why",
-        "sure",
-        "reason"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "why"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why",
-            "sure"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "reason"
+            "trust"
           ],
           "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
-            "why"
+            "feel"
           ],
-          "weight": 0.46
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "359e1965c198",
+  "context_fingerprint": "af43ab7dabc5",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 890,
   "approx_added_tokens": 222
