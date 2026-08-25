@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T13:19:01.052246+00:00",
-  "cycle_key": "32834665302:1:71",
+  "generated_at": "2026-08-25T13:21:08.191212+00:00",
+  "cycle_key": "32834665302:1:72",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,29 +29,58 @@
   },
   "selected_skills": [
     {
-      "name": "creative-bridge",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "critical-testing",
+      "score": 3.25,
+      "confidence": 0.98,
+      "raw_score": 3.25,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "imagine"
+        "evidence",
+        "compare"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "imagine"
+            "evidence"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "compare"
+          ],
+          "weight": 1.45
+        }
+      ]
+    },
+    {
+      "name": "memory-callback",
+      "tier": "project",
+      "domain": "memory-callback",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "memory"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "memory"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "31aeda4723a4",
+  "context_fingerprint": "2a9d64a65b33",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 699,
-  "approx_added_tokens": 175
+  "temporary_skill_chars": 555,
+  "approx_added_tokens": 139
 }
