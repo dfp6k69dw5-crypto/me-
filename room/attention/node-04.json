@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T01:48:37.247235+00:00",
-  "cycle_key": "32786757894:1:88",
+  "generated_at": "2026-08-25T01:50:20.627056+00:00",
+  "cycle_key": "32786757894:1:89",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,74 +29,66 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "affect",
-      "score": 2.37,
-      "confidence": 0.908,
-      "raw_score": 2.37,
+      "domain": "memory-callback",
+      "score": 2.72,
+      "confidence": 0.949,
+      "raw_score": 2.72,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "trust",
-        "angry"
+        "before",
+        "again"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "trust"
+            "before"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "angry"
+            "again"
           ],
           "weight": 0.92
         }
       ]
     },
     {
-      "name": "concrete-specificity",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.63,
-      "confidence": 0.722,
-      "raw_score": 1.91,
-      "repeat_penalty": 0.28,
+      "domain": "critical-testing",
+      "score": 1.56,
+      "confidence": 0.696,
+      "raw_score": 1.56,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "happened",
-        "show"
+        "true",
+        "why"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "happened"
+            "true"
           ],
-          "weight": 1.15
+          "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "happened",
-            "show"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "happened"
+            "why"
           ],
           "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "eb42bbe61b50",
+  "context_fingerprint": "a214f0f20a87",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 575,
-  "approx_added_tokens": 144
+  "temporary_skill_chars": 797,
+  "approx_added_tokens": 199
 }
