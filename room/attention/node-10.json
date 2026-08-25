@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T20:30:34.687485+00:00",
-  "cycle_key": "32871228038:1:88",
+  "generated_at": "2026-08-25T20:33:54.699256+00:00",
+  "cycle_key": "32871228038:1:89",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,84 +29,97 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 5.05,
-      "confidence": 0.999,
-      "raw_score": 5.05,
+      "domain": "affect",
+      "score": 3.6,
+      "confidence": 0.989,
+      "raw_score": 3.6,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "sure",
-        "why",
-        "reason"
+        "trust",
+        "feel",
+        "angry",
+        "love"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "why",
-            "sure"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "reason"
+            "trust"
           ],
           "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "why"
-          ],
-          "weight": 0.92
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 3.15,
-      "confidence": 0.976,
-      "raw_score": 3.15,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "angry",
-        "love",
-        "relationship",
-        "trust"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "angry"
+            "feel"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "love"
+            "angry"
           ],
-          "weight": 0.92
+          "weight": 0.54
         },
         {
           "kind": "message",
           "matched": [
-            "trust",
-            "relationship"
+            "love"
           ],
-          "weight": 0.54
+          "weight": 0.46
+        }
+      ]
+    },
+    {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 3.2,
+      "confidence": 0.978,
+      "raw_score": 3.2,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "why",
+        "sure",
+        "reason"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why",
+            "sure"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "reason"
+          ],
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "aaf8af8cac9a",
+  "context_fingerprint": "359e1965c198",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 890,
   "approx_added_tokens": 222
