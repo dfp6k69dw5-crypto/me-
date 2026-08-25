@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T02:58:29.631547+00:00",
-  "cycle_key": "32786757894:1:119",
+  "generated_at": "2026-08-25T03:00:44.981571+00:00",
+  "cycle_key": "32786757894:1:120",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,33 +29,31 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "memory-callback",
+      "domain": "critical-testing",
       "score": 1.46,
       "confidence": 0.657,
-      "raw_score": 1.74,
-      "repeat_penalty": 0.28,
+      "raw_score": 1.46,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "before",
-        "remember",
-        "earlier"
+        "reason",
+        "because"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "remember",
-            "before"
+            "reason"
           ],
-          "weight": 0.64
+          "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "earlier"
+            "because"
           ],
-          "weight": 0.46
+          "weight": 0.54
         }
       ]
     },
@@ -63,26 +61,34 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.18,
+      "confidence": 0.536,
+      "raw_score": 1.46,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "detail",
         "happened"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "detail"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
             "happened"
           ],
-          "weight": 1.15
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "6c90bee2f390",
+  "context_fingerprint": "9f806cd0af59",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 801,
-  "approx_added_tokens": 200
+  "temporary_skill_chars": 1069,
+  "approx_added_tokens": 267
 }
