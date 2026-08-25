@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T10:29:20.925078+00:00",
-  "cycle_key": "32834665302:1:12",
+  "generated_at": "2026-08-25T10:32:34.708746+00:00",
+  "cycle_key": "32834665302:1:13",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,42 +32,77 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.26,
-      "confidence": 0.98,
-      "raw_score": 3.26,
+      "score": 3.02,
+      "confidence": 0.969,
+      "raw_score": 3.02,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "because",
         "evidence",
-        "sure",
-        "because"
+        "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "evidence"
+            "because"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "evidence"
           ],
-          "weight": 0.92
+          "weight": 0.76
         },
         {
           "kind": "message",
           "matched": [
-            "because"
+            "sure"
+          ],
+          "weight": 0.46
+        }
+      ]
+    },
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "happened"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
           ],
           "weight": 0.54
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "2cddfeb30b0d",
+  "context_fingerprint": "e343d5376288",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 1069,
+  "approx_added_tokens": 267
 }
