@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T22:58:42.876814+00:00",
-  "cycle_key": "32900403616:1:33",
+  "generated_at": "2026-08-25T23:04:11.992457+00:00",
+  "cycle_key": "32900403616:1:36",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,29 +29,58 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
+      "domain": "memory-callback",
+      "score": 3.25,
+      "confidence": 0.98,
+      "raw_score": 3.25,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "why"
+        "memory",
+        "remember"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "why"
+            "memory"
           ],
-          "weight": 1.15
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "remember"
+          ],
+          "weight": 1.45
+        }
+      ]
+    },
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "feeling"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "84226baba9f7",
+  "context_fingerprint": "5a378449e750",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 801,
+  "approx_added_tokens": 200
 }
