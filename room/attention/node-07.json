@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T13:21:28.623741+00:00",
-  "cycle_key": "32834665302:1:72",
+  "generated_at": "2026-08-25T13:24:58.559851+00:00",
+  "cycle_key": "32834665302:1:73",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,11 +32,12 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.25,
-      "confidence": 0.98,
-      "raw_score": 3.25,
+      "score": 3.2,
+      "confidence": 0.978,
+      "raw_score": 3.2,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "because",
         "evidence",
         "compare"
       ],
@@ -44,43 +45,50 @@
         {
           "kind": "message",
           "matched": [
-            "evidence"
+            "because"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
+            "evidence"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
             "compare"
           ],
-          "weight": 1.45
+          "weight": 0.64
         }
       ]
     },
     {
-      "name": "memory-callback",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
+      "domain": "affect",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "memory"
+        "feel"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "memory"
+            "feel"
           ],
-          "weight": 1.15
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "2a9d64a65b33",
+  "context_fingerprint": "7e4c274aed1c",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 555,
-  "approx_added_tokens": 139
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }
