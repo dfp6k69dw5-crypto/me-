@@ -1,4 +1,4 @@
-name: Room brain cutover via diagnostic slot
+name: Room brain dispatch via diagnostic slot
 
 on:
   push:
@@ -11,16 +11,15 @@ permissions:
   contents: read
 
 jobs:
-  cutover:
+  dispatch:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Stop old Room runner and dispatch current Room
+      - name: Dispatch current Room workflow
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          gh run cancel 32871228038 --repo "$GITHUB_REPOSITORY"
           for attempt in 1 2 3 4 5; do
             if gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto; then
               echo "new-room-dispatched"
