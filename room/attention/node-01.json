@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T11:38:42.673512+00:00",
-  "cycle_key": "32834665302:1:35",
+  "generated_at": "2026-08-25T11:44:41.894778+00:00",
+  "cycle_key": "32834665302:1:37",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,11 +32,12 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 2.9,
-      "confidence": 0.962,
-      "raw_score": 2.9,
+      "score": 2.43,
+      "confidence": 0.916,
+      "raw_score": 2.43,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "feeling",
         "relationship",
         "trust"
       ],
@@ -44,52 +45,51 @@
         {
           "kind": "message",
           "matched": [
-            "trust",
-            "relationship"
-          ],
-          "weight": 1.45
-        }
-      ]
-    },
-    {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.79,
-      "confidence": 0.776,
-      "raw_score": 2.07,
-      "repeat_penalty": 0.28,
-      "matched_triggers": [
-        "because",
-        "why"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "because"
+            "feeling"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "why"
+            "trust",
+            "relationship"
           ],
-          "weight": 0.92
+          "weight": 0.64
+        }
+      ]
+    },
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "happened"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
+          ],
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "why"
+            "happened"
           ],
-          "weight": 0.76
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "d1bb42333eb2",
+  "context_fingerprint": "c072a7299102",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 890,
-  "approx_added_tokens": 222
+  "temporary_skill_chars": 575,
+  "approx_added_tokens": 144
 }
