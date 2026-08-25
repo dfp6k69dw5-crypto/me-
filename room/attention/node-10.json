@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T03:20:51.090866+00:00",
-  "cycle_key": "32786757894:1:129",
+  "generated_at": "2026-08-25T03:23:22.275655+00:00",
+  "cycle_key": "32786757894:1:130",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,12 +29,35 @@
   },
   "selected_skills": [
     {
+      "name": "memory-callback",
+      "tier": "project",
+      "domain": "memory-callback",
+      "score": 3.6,
+      "confidence": 0.989,
+      "raw_score": 3.6,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "again",
+        "remember"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "remember",
+            "again"
+          ],
+          "weight": 1.8
+        }
+      ]
+    },
+    {
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.91,
-      "confidence": 0.811,
-      "raw_score": 1.91,
+      "score": 2.6,
+      "confidence": 0.937,
+      "raw_score": 2.6,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "feel",
@@ -53,13 +76,20 @@
           "matched": [
             "trust"
           ],
-          "weight": 0.46
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "25d9d8348a76",
+  "context_fingerprint": "48b718ea4126",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 801,
+  "approx_added_tokens": 200
 }
