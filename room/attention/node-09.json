@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T03:00:34.857040+00:00",
-  "cycle_key": "32786757894:1:120",
+  "generated_at": "2026-08-25T03:02:59.772626+00:00",
+  "cycle_key": "32786757894:1:121",
   "node": 9,
   "entity": "jules",
   "role": "comprehension",
@@ -32,25 +32,33 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.18,
+      "confidence": 0.536,
+      "raw_score": 1.46,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "feel",
         "angry"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "feel"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
             "angry"
           ],
-          "weight": 1.15
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "9186127768b5",
+  "context_fingerprint": "ef364c5e74b7",
   "base_prompt_chars": 2277,
   "temporary_skill_chars": 544,
   "approx_added_tokens": 136
