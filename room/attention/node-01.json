@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T12:04:43.971998+00:00",
-  "cycle_key": "32834665302:1:44",
+  "generated_at": "2026-08-25T12:07:42.226206+00:00",
+  "cycle_key": "32834665302:1:45",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,13 +29,41 @@
   },
   "selected_skills": [
     {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "why"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 1.45
+        }
+      ]
+    },
+    {
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "happened"
       ],
@@ -45,13 +73,27 @@
           "matched": [
             "happened"
           ],
-          "weight": 1.45
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "e15913f2c97b",
+  "context_fingerprint": "3ac010a82ed4",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 723,
-  "approx_added_tokens": 181
+  "temporary_skill_chars": 1069,
+  "approx_added_tokens": 267
 }
