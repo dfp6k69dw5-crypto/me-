@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T02:54:48.444860+00:00",
-  "cycle_key": "32786757894:1:117",
+  "generated_at": "2026-08-25T02:56:38.245022+00:00",
+  "cycle_key": "32786757894:1:118",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,72 +29,60 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 2.44,
-      "confidence": 0.918,
-      "raw_score": 2.44,
+      "domain": "memory-callback",
+      "score": 3.82,
+      "confidence": 0.993,
+      "raw_score": 3.82,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "why",
-        "reason"
+        "before",
+        "remember",
+        "earlier"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "why"
+            "remember",
+            "before"
           ],
-          "weight": 1.8
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "reason"
+            "earlier"
           ],
-          "weight": 0.64
+          "weight": 0.92
         }
       ]
     },
     {
-      "name": "emotional-attunement",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "affect",
-      "score": 1.52,
-      "confidence": 0.68,
+      "domain": "interaction",
+      "score": 1.8,
+      "confidence": 0.779,
       "raw_score": 1.8,
-      "repeat_penalty": 0.28,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "feel"
+        "repair"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feel"
+            "repair"
           ],
           "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feel"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feel"
-          ],
-          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "34e94c4d2aec",
+  "context_fingerprint": "a768dcc1c04c",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 890,
-  "approx_added_tokens": 222
+  "temporary_skill_chars": 797,
+  "approx_added_tokens": 199
 }
