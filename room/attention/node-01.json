@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T17:39:56.408846+00:00",
-  "cycle_key": "32871228038:1:30",
+  "generated_at": "2026-08-25T17:43:18.942038+00:00",
+  "cycle_key": "32871228038:1:31",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,36 +32,53 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 4.52,
-      "confidence": 0.998,
-      "raw_score": 4.52,
+      "score": 6.55,
+      "confidence": 1.0,
+      "raw_score": 6.55,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "because",
+        "compare",
         "why",
-        "compare"
+        "cause"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
             "why",
-            "because"
+            "because",
+            "compare"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "because",
-            "compare"
+            "because"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why",
+            "cause"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "because"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "why"
+            "why",
+            "because"
           ],
           "weight": 0.64
         }
@@ -71,40 +88,56 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 2.95,
-      "confidence": 0.965,
-      "raw_score": 2.95,
+      "score": 4.75,
+      "confidence": 0.999,
+      "raw_score": 4.75,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "love",
-        "relationship"
+        "relationship",
+        "upset"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "love"
+            "love",
+            "relationship"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
+            "upset"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
             "love"
           ],
-          "weight": 1.45
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "love"
+          ],
+          "weight": 0.54
         },
         {
           "kind": "message",
           "matched": [
             "relationship"
           ],
-          "weight": 1.15
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "506bc8cc91b3",
+  "context_fingerprint": "a6c159ede81b",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 890,
   "approx_added_tokens": 222
