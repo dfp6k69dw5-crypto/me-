@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T15:52:15.648098+00:00",
-  "cycle_key": "32865952185:1:9",
+  "generated_at": "2026-08-25T15:55:26.602475+00:00",
+  "cycle_key": "32865952185:1:10",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,50 +29,57 @@
   },
   "selected_skills": [
     {
-      "name": "creative-bridge",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "critical-testing",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "strange"
+        "why"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "strange"
-          ],
-          "weight": 1.8
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.28,
-      "matched_triggers": [
-        "feel"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "feel"
+            "why"
           ],
           "weight": 1.45
         }
       ]
+    },
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "happened"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
+          ],
+          "weight": 0.92
+        }
+      ]
     }
   ],
-  "context_fingerprint": "c79f567c105f",
+  "context_fingerprint": "af9c383d8716",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 1060,
-  "approx_added_tokens": 265
+  "temporary_skill_chars": 1069,
+  "approx_added_tokens": 267
 }
