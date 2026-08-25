@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T14:13:23.177196+00:00",
-  "cycle_key": "32834665302:1:90",
+  "generated_at": "2026-08-25T14:16:09.061067+00:00",
+  "cycle_key": "32834665302:1:91",
   "node": 2,
   "entity": "sarah",
   "role": "expression",
@@ -29,29 +29,44 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.611,
-      "raw_score": 1.45,
+      "domain": "concrete-specificity",
+      "score": 2.34,
+      "confidence": 0.886,
+      "raw_score": 2.34,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "because"
+        "happened",
+        "concrete"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "because"
+            "happened"
           ],
-          "weight": 1.45
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "concrete"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "2078b43b6eda",
+  "context_fingerprint": "77dd352fcc72",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 214,
+  "approx_added_tokens": 54
 }
