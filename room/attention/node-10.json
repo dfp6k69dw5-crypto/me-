@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T15:25:38.075666+00:00",
-  "cycle_key": "32834665302:1:114",
+  "generated_at": "2026-08-25T15:29:08.297667+00:00",
+  "cycle_key": "32865952185:1:1",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,50 +29,36 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "remember"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "remember"
-          ],
-          "weight": 1.8
-        }
-      ]
-    },
-    {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
+      "domain": "concrete-specificity",
       "score": 1.45,
       "confidence": 0.652,
       "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "why"
+        "happened"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "why"
+            "happened"
           ],
           "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "happened"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "4a53774eb790",
+  "context_fingerprint": "63959b2007eb",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 797,
-  "approx_added_tokens": 199
+  "temporary_skill_chars": 723,
+  "approx_added_tokens": 181
 }
