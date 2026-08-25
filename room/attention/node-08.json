@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-25T16:30:20.414495+00:00",
-  "cycle_key": "32871228038:1:5",
+  "generated_at": "2026-08-25T16:32:03.821502+00:00",
+  "cycle_key": "32871228038:1:6",
   "node": 8,
   "entity": "owen",
   "role": "expression",
@@ -29,29 +29,52 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 2.97,
-      "confidence": 0.96,
-      "raw_score": 2.97,
+      "domain": "affect",
+      "score": 3.59,
+      "confidence": 0.987,
+      "raw_score": 3.59,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "last time"
+        "love",
+        "feel",
+        "trust"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "last time"
+            "love"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "trust"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "05d353e3d924",
+  "context_fingerprint": "65ca1ba78897",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 209,
-  "approx_added_tokens": 52
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
