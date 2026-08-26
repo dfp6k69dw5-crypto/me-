@@ -92,13 +92,13 @@ def _rewrite_prompt_data(prompt: str, transform) -> str:
     return before + marker + json.dumps(transformed, ensure_ascii=False, separators=(",", ":")) + end_marker + after
 
 
-def _mask_thought_transcript(prompt: str) -> str:
-    """Compact older transcript text for Llama thought only.
+def _mask_private_context(prompt: str) -> str:
+    """Compact older transcript text for Llama comprehension and thought.
 
-    The latest event remains verbatim and the structured social observation is
-    preserved. Only older context messages are reduced to speaker/target plus
-    sparse semantic cues, removing redundant tokens before two concurrent
-    deliberation calls reach the 1B model.
+    The latest event remains verbatim and structured social/relationship data
+    is preserved. Only older context messages are reduced to speaker/target
+    plus sparse semantic cues, cutting prompt-processing work before concurrent
+    private cognition calls reach the 1B model.
     """
     def transform(data: dict) -> dict:
         context = data.get("context")
@@ -123,10 +123,10 @@ def _mask_expression_transcript(prompt: str) -> str:
     """Hide copyable sentence text from expression generation only.
 
     Validation still receives the original compact payload, so anti-copy checks
-    compare generated speech with the exact transcript. Thought and
-    comprehension still receive the real conversation. Expression keeps
-    speaker/target information, sparse semantic cues, its own intent, topic,
-    identity, and relationship context.
+    compare generated speech with the exact transcript. Private comprehension
+    and thought keep the latest event verbatim while older context is compacted.
+    Expression keeps speaker/target information, sparse semantic cues, its own
+    intent, topic, identity, and relationship context.
     """
     def transform(data: dict) -> dict:
         context = data.get("context")
@@ -178,8 +178,8 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
 
         def _production_request_autonomy(model_url, prompt, request_role, temperature, request_timeout,
                                          self_entity=None, attempt=0, intent=None):
-            if request_role == "thought":
-                prompt = _mask_thought_transcript(prompt)
+            if request_role in {"comprehension", "thought"}:
+                prompt = _mask_private_context(prompt)
             elif request_role == "expression":
                 prompt = _mask_expression_transcript(prompt)
             rejected = [
