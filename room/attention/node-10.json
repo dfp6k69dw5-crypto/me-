@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T02:27:35.865849+00:00",
-  "cycle_key": "32917847282:1:46",
+  "generated_at": "2026-08-26T02:29:26.679738+00:00",
+  "cycle_key": "32917847282:1:47",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,9 +32,9 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 4.05,
-      "confidence": 0.995,
-      "raw_score": 4.05,
+      "score": 3.49,
+      "confidence": 0.987,
+      "raw_score": 3.49,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "feel",
@@ -45,31 +45,31 @@
         {
           "kind": "message",
           "matched": [
-            "feel",
-            "worried"
+            "feel"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "afraid"
+            "worried"
           ],
           "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
+            "feel",
             "worried"
           ],
-          "weight": 0.92
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
-            "worried"
+            "afraid"
           ],
-          "weight": 0.76
+          "weight": 0.54
         },
         {
           "kind": "message",
@@ -81,29 +81,31 @@
       ]
     },
     {
-      "name": "memory-callback",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
+      "domain": "critical-testing",
+      "score": 2.3,
+      "confidence": 0.897,
+      "raw_score": 2.3,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "again"
+        "cause",
+        "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "again"
+            "cause",
+            "sure"
           ],
           "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "48fae3fa5944",
+  "context_fingerprint": "59b9b1e5d048",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 570,
-  "approx_added_tokens": 142
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }

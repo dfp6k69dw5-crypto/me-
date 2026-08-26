@@ -1,33 +1,35 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 653,
+  "cycle": 654,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000653",
     "root": "rank",
-    "current_facet": "others",
+    "current_facet": "plans",
     "facets": [
+      "discuss",
+      "movie",
       "plans",
-      "time",
-      "running",
-      "i need to think before acting",
-      "others",
-      "project",
-      "worried",
-      "bothered"
+      "let",
+      "glad",
+      "allen",
+      "exciting",
+      "i've got some good news, you don't have to sweat it."
     ],
     "visited_facets": [
-      "others"
+      "others",
+      "allen",
+      "plans"
     ],
-    "facet_index": 0,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -41,19 +43,18 @@
       "jules",
       "allen"
     ],
-    "turns": 1,
+    "turns": 3,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "discuss",
+      "movie",
+      "plan",
+      "let",
+      "glad",
       "plans",
-      "time",
-      "running",
-      "i need to think before acting",
-      "i need time to think",
-      "others",
-      "project",
-      "worried",
-      "bothered",
-      "allen"
+      "allen",
+      "exciting",
+      "i've got some good news, you don't have to sweat it."
     ],
     "last_shift_cycle": 653,
     "status": "active",
@@ -63,8 +64,26 @@
         "label": "rank",
         "parent": null,
         "depth": 0,
-        "first_cycle": 653,
-        "last_cycle": 653,
+        "first_cycle": 654,
+        "last_cycle": 654,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "discuss",
+        "parent": "rank",
+        "depth": 1,
+        "first_cycle": 654,
+        "last_cycle": 654,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "movie",
+        "parent": "rank",
+        "depth": 1,
+        "first_cycle": 654,
+        "last_cycle": 654,
         "hits": 1,
         "status": "open"
       },
@@ -72,78 +91,62 @@
         "label": "plans",
         "parent": "rank",
         "depth": 1,
-        "first_cycle": 653,
-        "last_cycle": 653,
+        "first_cycle": 654,
+        "last_cycle": 654,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "time",
+        "label": "let",
         "parent": "rank",
         "depth": 1,
-        "first_cycle": 653,
-        "last_cycle": 653,
+        "first_cycle": 654,
+        "last_cycle": 654,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "running",
+        "label": "glad",
         "parent": "rank",
         "depth": 1,
-        "first_cycle": 653,
-        "last_cycle": 653,
+        "first_cycle": 654,
+        "last_cycle": 654,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "i need to think before acting",
+        "label": "allen",
         "parent": "rank",
         "depth": 1,
-        "first_cycle": 653,
-        "last_cycle": 653,
+        "first_cycle": 654,
+        "last_cycle": 654,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "others",
+        "label": "exciting",
         "parent": "rank",
         "depth": 1,
-        "first_cycle": 653,
-        "last_cycle": 653,
+        "first_cycle": 654,
+        "last_cycle": 654,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "project",
+        "label": "i've got some good news, you don't have to sweat it.",
         "parent": "rank",
         "depth": 1,
-        "first_cycle": 653,
-        "last_cycle": 653,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "worried",
-        "parent": "rank",
-        "depth": 1,
-        "first_cycle": 653,
-        "last_cycle": 653,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "bothered",
-        "parent": "rank",
-        "depth": 1,
-        "first_cycle": 653,
-        "last_cycle": 653,
+        "first_cycle": 654,
+        "last_cycle": 654,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "others"
+    ],
     "focus_turns": 1,
-    "last_branch_cycle": 653,
+    "last_branch_cycle": 654,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -151,12 +154,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T022831629-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000653",
+  "last_public_event": "20260826T023015671-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000654",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T02:28:31.630961Z",
+  "last_run": "2026-08-26T02:30:15.674068Z",
   "context_scope_version": 1
 }
