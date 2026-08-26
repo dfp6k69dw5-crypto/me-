@@ -189,9 +189,13 @@ def _autonomy_schema(role: str, self_entity: str | None = None, intent: dict | N
 
 def _request_autonomy(model_url: str, prompt: str, role: str, temperature: float, timeout: int,
                       self_entity: str | None = None, attempt: int = 0, intent: dict | None = None) -> str:
+    # Keep invisible cognition bounded so two concurrent 1B requests reliably
+    # finish inside the production request timeout even when attention skills add
+    # prompt material. These ceilings are intentionally below the former
+    # comprehension=300 / thought=220 budgets; expression remains unchanged.
     body = {
         "prompt": prompt,
-        "n_predict": {"comprehension": 300, "thought": 220, "expression": 180}.get(role, 180),
+        "n_predict": {"comprehension": 200, "thought": 170, "expression": 180}.get(role, 180),
         "temperature": temperature,
         "cache_prompt": True,
         "json_schema": _autonomy_schema(role, self_entity, intent),
