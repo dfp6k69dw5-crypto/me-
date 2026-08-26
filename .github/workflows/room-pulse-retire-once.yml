@@ -1,0 +1,21 @@
+name: Retire stale Room Pulse once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'society/pulse-retire-kick.txt'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: the-room-pulse-chain
+  cancel-in-progress: true
+
+jobs:
+  retire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - run: echo "Stale Room Pulse retired."
