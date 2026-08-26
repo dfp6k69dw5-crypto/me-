@@ -1,27 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1030,
+  "cycle": 1031,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 7,
     "id": "topic-001027",
     "root": "weather",
-    "current_facet": "hike",
+    "current_facet": "days",
     "facets": [
-      "hike"
+      "hike",
+      "days"
     ],
     "visited_facets": [
       "weather",
-      "hike"
+      "hike",
+      "days"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -33,10 +35,11 @@
       "jules",
       "allen"
     ],
-    "turns": 6,
+    "turns": 8,
     "low_novelty_beats": 1,
     "recent_terms": [
-      "hike"
+      "hike",
+      "days"
     ],
     "last_shift_cycle": 1027,
     "status": "active",
@@ -46,8 +49,8 @@
         "label": "weather",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1030,
-        "last_cycle": 1030,
+        "first_cycle": 1031,
+        "last_cycle": 1031,
         "hits": 1,
         "status": "open"
       },
@@ -55,15 +58,26 @@
         "label": "hike",
         "parent": "weather",
         "depth": 1,
-        "first_cycle": 1030,
-        "last_cycle": 1030,
+        "first_cycle": 1031,
+        "last_cycle": 1031,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "days",
+        "parent": "weather",
+        "depth": 1,
+        "first_cycle": 1031,
+        "last_cycle": 1031,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
-    "focus_turns": 2,
-    "last_branch_cycle": 1030,
+    "branch_history": [
+      "hike"
+    ],
+    "focus_turns": 1,
+    "last_branch_cycle": 1031,
     "escape_pressure": 1
   },
   "semantic_epoch_version": 1,
@@ -71,12 +85,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T192033023-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001030",
+  "last_public_event": "20260826T192211254-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001031",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T19:20:34.486523Z",
+  "last_run": "2026-08-26T19:22:12.690249Z",
   "context_scope_version": 1
 }
