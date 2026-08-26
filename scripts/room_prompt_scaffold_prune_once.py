@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+# One-shot trigger: block internal prompt scaffolding from public speech and durable memory.
 import subprocess
 from pathlib import Path
 
