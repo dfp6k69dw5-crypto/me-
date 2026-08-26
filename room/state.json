@@ -1,29 +1,31 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 730,
+  "cycle": 731,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
-    "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen",
+    "jules"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000729",
     "root": "skills",
-    "current_facet": "what's my expectation?",
+    "current_facet": "plan",
     "facets": [
+      "plan",
       "what's my expectation?",
-      "new skill",
-      "appreciate"
+      "appreciate",
+      "new skill"
     ],
     "visited_facets": [
       "skills",
-      "what's my expectation?"
+      "what's my expectation?",
+      "plan"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -35,12 +37,12 @@
       "jules",
       "allen"
     ],
-    "turns": 2,
+    "turns": 4,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "what's my expectation?",
       "skills",
-      "new skill",
+      "plan",
+      "what's my expectation?",
       "appreciate"
     ],
     "last_shift_cycle": 729,
@@ -51,8 +53,17 @@
         "label": "skills",
         "parent": null,
         "depth": 0,
-        "first_cycle": 730,
-        "last_cycle": 730,
+        "first_cycle": 731,
+        "last_cycle": 731,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "plan",
+        "parent": "skills",
+        "depth": 1,
+        "first_cycle": 731,
+        "last_cycle": 731,
         "hits": 1,
         "status": "open"
       },
@@ -60,17 +71,8 @@
         "label": "what's my expectation?",
         "parent": "skills",
         "depth": 1,
-        "first_cycle": 730,
-        "last_cycle": 730,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "new skill",
-        "parent": "skills",
-        "depth": 1,
-        "first_cycle": 730,
-        "last_cycle": 730,
+        "first_cycle": 731,
+        "last_cycle": 731,
         "hits": 1,
         "status": "open"
       },
@@ -78,17 +80,27 @@
         "label": "appreciate",
         "parent": "skills",
         "depth": 1,
-        "first_cycle": 730,
-        "last_cycle": 730,
+        "first_cycle": 731,
+        "last_cycle": 731,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "new skill",
+        "parent": "skills",
+        "depth": 1,
+        "first_cycle": 731,
+        "last_cycle": 731,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "skills"
+      "skills",
+      "what's my expectation?"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 730,
+    "last_branch_cycle": 731,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -96,12 +108,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T053140652-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000730",
+  "last_public_event": "20260826T053429080-jules-v5",
+  "last_speaker": "jules",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000731",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T05:31:40.652717Z",
+  "last_run": "2026-08-26T05:34:29.081544Z",
   "context_scope_version": 1
 }
