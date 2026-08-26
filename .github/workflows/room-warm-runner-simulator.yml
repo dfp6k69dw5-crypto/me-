@@ -33,7 +33,7 @@ jobs:
           p = Path('scripts/room_topic_bounded.py')
           s = p.read_text()
           old = '''    root = clean[0]\n    facets = [term for term in clean[1:] if not _near(term, root)][:MAX_FACETS]\n    current = facets[0] if facets else root\n    topic.update({\n        "root": root,\n        "current_facet": current,\n        "facets": facets,\n        "visited_facets": [current],\n        "status": "active",\n        "bridge_pending": False,\n        "recent_terms": clean[:MAX_RECENT_TERMS],\n    })\n'''
-          new = '''    root = clean[0]\n    # A new episode gets one defensible subject. Candidate words from the\n    # initiating utterance remain recent context, but they are not ontology\n    # facets until later messages independently support them. This keeps topic\n    # birth under the same MIN_FACET_SUPPORT rule used during continuation.\n    topic.update({\n        "root": root,\n        "current_facet": root,\n        "facets": [],\n        "visited_facets": [root],\n        "status": "active",\n        "bridge_pending": False,\n        "recent_terms": clean[:MAX_RECENT_TERMS],\n    })\n'''
+          new = '''    root = clean[0]\n    # A new episode gets one defensible subject. Candidate words from the\n    # initiating utterance remain recent context, but they are not ontology\n    # facets until later messages independently support them. This keeps topic\n    # birth under the same MIN_FACET_SUPPORT rule used during continuation.\n    facets = []\n    topic.update({\n        "root": root,\n        "current_facet": root,\n        "facets": facets,\n        "visited_facets": [root],\n        "status": "active",\n        "bridge_pending": False,\n        "recent_terms": clean[:MAX_RECENT_TERMS],\n    })\n'''
           if old not in s:
               raise SystemExit('expected newborn-topic block not found')
           s = s.replace(old, new, 1)
@@ -48,11 +48,9 @@ jobs:
           assert born['facets']==[]
           assert [b['label'] for b in born['branches']]==['story']
           assert 'side' in born['recent_terms']
-          # One mention must not promote a facet after birth.
           msg={'speaker':'sarah','text':'side','cognition':{'topic_episode':born['id'],'topic_terms':['side']}}
           once=t.update_topic(born,[msg],920)
           assert once['facets']==[]
-          # Two independent messages may promote it.
           msg2={'speaker':'mara','text':'side','cognition':{'topic_episode':born['id'],'topic_terms':['side']}}
           twice=t.update_topic(once,[msg,msg2],921)
           assert any(t._near(x,'side') for x in twice['facets'])
@@ -68,12 +66,14 @@ jobs:
           git add scripts/room_topic_bounded.py
           if ! git diff --cached --quiet; then
             git commit -m 'Require support before newborn Room facets'
+            pushed=false
             for n in 1 2 3 4 5; do
-              if git push origin HEAD:main; then break; fi
+              if git push origin HEAD:main; then pushed=true; break; fi
               git fetch origin main
               git rebase origin/main || { git rebase --abort || true; exit 1; }
               sleep "$n"
             done
+            $pushed || exit 1
           fi
 
       - name: Controlled Room handoff
