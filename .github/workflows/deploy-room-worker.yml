@@ -42,33 +42,6 @@ jobs:
             echo 'Cloudflare API token is unavailable in CLOUDFLARE_API_TOKEN or CF_API_TOKEN.'
           fi
 
-      - name: Select Fanberg Cloudflare account
-        id: account
-        if: steps.creds.outputs.available == 'true'
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          curl -fsS \
-            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-            -H 'Content-Type: application/json' \
-            'https://api.cloudflare.com/client/v4/accounts?per_page=50' \
-            > /tmp/cf-accounts.json
-          python3 - <<'PY' >> "$GITHUB_ENV"
-          import json
-          d=json.load(open('/tmp/cf-accounts.json'))
-          if not d.get('success'):
-              raise SystemExit('Cloudflare account lookup failed; refusing to guess an account.')
-          matches=[a for a in d.get('result',[]) if 'fanberg' in str(a.get('name','')).lower()]
-          if len(matches) != 1:
-              names=[str(a.get('name','')) for a in d.get('result',[])]
-              raise SystemExit(f'Expected exactly one Cloudflare account containing Fanberg; found {len(matches)}. Accessible account names: {names}')
-          a=matches[0]
-          print(f"CLOUDFLARE_ACCOUNT_ID={a['id']}")
-          print(f"CLOUDFLARE_ACCOUNT_NAME={a['name']}")
-          PY
-          echo 'Selected Fanberg Cloudflare account.'
-
       - name: Probe live Allen auth without a credential
         id: allen_auth
         if: always()
@@ -90,7 +63,7 @@ jobs:
 
       - name: Refuse unvalidated Worker source
         id: validate
-        if: steps.account.outcome == 'success'
+        if: steps.creds.outputs.available == 'true'
         continue-on-error: true
         run: |
           node scripts/room_worker_ingest_sim.mjs
@@ -104,9 +77,17 @@ jobs:
 
       - name: Deploy existing room-live-mirror Worker
         id: deploy_worker
-        if: steps.account.outcome == 'success' && steps.validate.outcome == 'success'
+        if: steps.creds.outputs.available == 'true' && steps.validate.outcome == 'success'
         continue-on-error: true
-        run: npx --yes wrangler@latest deploy --config cloudflare/room-worker/wrangler.toml
+        shell: bash
+        run: |
+          set -o pipefail
+          npx --yes wrangler@latest deploy --config cloudflare/room-worker/wrangler.toml 2>&1 | tee /tmp/room-worker-deploy.txt
+          grep -Fq "$ROOM_RELAY_URL" /tmp/room-worker-deploy.txt || {
+            echo 'Wrangler did not confirm the expected room-live-mirror workers.dev URL; refusing to ingest.'
+            exit 1
+          }
+          echo 'Wrangler confirmed the expected Room Worker deployment target.'
 
       - name: Push current Room feed through deployed Worker
         id: ingest
@@ -167,7 +148,6 @@ jobs:
         if: always()
         env:
           CREDS_AVAILABLE: ${{ steps.creds.outputs.available }}
-          ACCOUNT_OUTCOME: ${{ steps.account.outcome }}
           VALIDATE_OUTCOME: ${{ steps.validate.outcome }}
           DEPLOY_OUTCOME: ${{ steps.deploy_worker.outcome }}
           INGEST_OUTCOME: ${{ steps.ingest.outcome }}
@@ -188,14 +168,11 @@ jobs:
               pass
           auth_http=str(os.environ.get('ALLEN_AUTH_HTTP') or '')
           allen_live=(auth_http=='200')
-          account=os.environ.get('ACCOUNT_OUTCOME') or 'skipped'
           out={
             'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
             'worker':'room-live-mirror',
             'source_sha':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             'token_available':token_available,
-            'cloudflare_account':os.environ.get('CLOUDFLARE_ACCOUNT_NAME'),
-            'account_lookup':account,
             'validate':os.environ.get('VALIDATE_OUTCOME') or 'skipped',
             'deploy':os.environ.get('DEPLOY_OUTCOME') or 'skipped',
             'ingest':os.environ.get('INGEST_OUTCOME') or 'skipped',
@@ -205,15 +182,19 @@ jobs:
             'allen_auth_error':auth.get('error'),
             'allen_live':allen_live,
           }
-          out['pass']=token_available and account=='success' and out['validate']=='success' and out['deploy']=='success' and out['ingest']=='success' and out['verify']=='success'
+          out['pass']=token_available and out['validate']=='success' and out['deploy']=='success' and out['ingest']=='success' and out['verify']=='success'
           if out['pass']:
               out['state']='deployed-and-verified'
           elif not token_available:
               out['state']='missing-cloudflare-api-token'
-          elif account!='success':
-              out['state']='cloudflare-account-lookup-failed'
+          elif out['validate']!='success':
+              out['state']='worker-source-validation-failed'
+          elif out['deploy']!='success':
+              out['state']='wrangler-deploy-failed'
+          elif out['ingest']!='success':
+              out['state']='relay-ingest-failed'
           else:
-              out['state']='deployment-or-verification-failed'
+              out['state']='relay-verification-failed'
           open('room/cloudflare-deploy-status.json','w').write(json.dumps(out,indent=2)+'\n')
           print(json.dumps(out,indent=2))
           PY
