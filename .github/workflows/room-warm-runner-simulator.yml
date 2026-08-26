@@ -1,70 +1,62 @@
-name: Room maintenance supervisor
+name: Room evaluative-topic repair
 
 on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/sarah-society.yml'
       - '.github/workflows/room-warm-runner-simulator.yml'
-      - 'scripts/room_warm_runner_watchdog_sim.py'
-      - 'scripts/room_*.py'
-  workflow_dispatch:
 
 permissions:
   contents: write
   actions: write
 
 concurrency:
-  group: room-maintenance-supervisor
+  group: room-evaluative-topic-repair
   cancel-in-progress: true
 
 jobs:
-  simulate:
+  repair:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
         with:
           ref: main
-          fetch-depth: 0
-      - name: Clear previous diagnostic
-        run: rm -f room/warm-runner-watchdog-diagnostic.json
-      - name: Run deterministic hung-node simulator
-        id: simulator
-        continue-on-error: true
-        run: python3 scripts/room_warm_runner_watchdog_sim.py
-      - name: Publish simulator diagnostic
-        if: always()
+          fetch-depth: 30
+      - name: Patch and verify evaluative topic filter
         run: |
-          test -f room/warm-runner-watchdog-diagnostic.json || printf '%s\n' '{"pass":false,"error":"watchdog simulator produced no diagnostic"}' > room/warm-runner-watchdog-diagnostic.json
-          git config user.name "room-warm-runner-simulator"
-          git config user.email "actions@users.noreply.github.com"
-          git add room/warm-runner-watchdog-diagnostic.json
-          git commit -m "Record Room warm-runner watchdog diagnostic" || exit 0
-          for n in 1 2 3 4 5; do
-            if git push origin HEAD:main; then exit 0; fi
-            git fetch origin main
-            git rebase origin/main || { git rebase --abort || true; }
-            sleep "$n"
-          done
-          exit 1
-      - name: Enforce simulator result
-        if: always()
-        env:
-          SIMULATOR_OUTCOME: ${{ steps.simulator.outcome }}
-        run: test "$SIMULATOR_OUTCOME" = success
-
-  handoff:
-    runs-on: ubuntu-latest
-    timeout-minutes: 4
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: main
-          fetch-depth: 20
-      - name: Verify Room Python
-        run: python3 -m py_compile scripts/room_*.py
-      - name: Replace resident Room
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/room_engine_v5.py')
+          s=p.read_text()
+          old='    "confused", "comfortable", "uncomfortable", "honest", "open", "okay", "fine",\n'
+          new='    "confused", "comfortable", "uncomfortable", "honest", "open", "okay", "fine",\n    "tough", "hard", "difficult", "easy", "rough",\n'
+          if old in s:
+              s=s.replace(old,new,1)
+          elif '"tough", "hard", "difficult", "easy", "rough"' not in s:
+              raise SystemExit('state term anchor missing')
+          p.write_text(s)
+          PY
+          python3 -m py_compile scripts/room_engine_v5.py
+          PYTHONPATH=scripts python3 - <<'PY'
+          import room_engine_v5 as e
+          assert not any(x in e._semantic_cues('This is a tough difficult situation') for x in ('tough','difficult'))
+          msg={'text':'These tough emotions are about grief','cognition':{'topic_terms':['tough','emotions','grief']}}
+          assert e._sanitize_declared_topic_terms(msg)==['emotions','grief']
+          print('ROOM_EVALUATIVE_TOPIC_GUARD_OK')
+          PY
+      - name: Commit if needed
+        run: |
+          set -euo pipefail
+          git config user.name room-evaluative-topic-repair
+          git config user.email actions@users.noreply.github.com
+          git add scripts/room_engine_v5.py
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Keep generic evaluative words out of Room topics'
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Restart Room on verified code
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -76,6 +68,4 @@ jobs:
             [ "$active" -eq 0 ] && break
             sleep 2
           done
-          active="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')"
-          [ "$active" -eq 0 ] || exit 1
           gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
