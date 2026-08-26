@@ -27,7 +27,9 @@ def _clean(value: object) -> str:
 
 def _stem(word: str) -> str:
     word = str(word or "").strip().lower()
-    if len(word) > 5 and word.endswith("ing"):
+    if len(word) > 5 and word.endswith("ies"):
+        word = word[:-3] + "y"
+    elif len(word) > 5 and word.endswith("ing"):
         word = word[:-3]
     elif len(word) > 4 and word.endswith("ed"):
         word = word[:-2]
@@ -67,6 +69,15 @@ def _near(a: object, b: object) -> bool:
         return False
     if len(left) >= 4 and len(right) >= 4 and (left in right or right in left):
         return True
+    if len(a_tokens) == 1 and len(b_tokens) == 1:
+        aw, bw = next(iter(a_tokens)), next(iter(b_tokens))
+        common = 0
+        for ac, bc in zip(aw, bw):
+            if ac != bc:
+                break
+            common += 1
+        if common >= 6 and common / max(1, min(len(aw), len(bw))) >= 0.80:
+            return True
     return len(a_tokens & b_tokens) / max(1, min(len(a_tokens), len(b_tokens))) >= 0.72
 
 
