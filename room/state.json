@@ -1,37 +1,38 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 829,
+  "cycle": 830,
   "messages": 1000,
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000825",
     "root": "travel",
-    "current_facet": "here",
+    "current_facet": "claims",
     "facets": [
+      "claims",
+      "time",
+      "waste",
       "better",
-      "moment",
+      "straightforward",
       "i've",
-      "here",
-      "idea",
-      "why",
-      "amazing",
-      "happened"
+      "moment",
+      "idea"
     ],
     "visited_facets": [
       "travel",
       "happened",
       "moment",
       "better",
-      "here"
+      "here",
+      "claims"
     ],
-    "facet_index": 4,
+    "facet_index": 5,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -43,18 +44,14 @@
       "jules",
       "allen"
     ],
-    "turns": 8,
+    "turns": 10,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "claims",
+      "time",
+      "waste",
       "better",
-      "moment",
-      "i've",
-      "here",
-      "idea",
-      "why",
-      "travel",
-      "moments",
-      "amazing"
+      "straightforward"
     ],
     "last_shift_cycle": 825,
     "status": "active",
@@ -64,8 +61,35 @@
         "label": "travel",
         "parent": null,
         "depth": 0,
-        "first_cycle": 829,
-        "last_cycle": 829,
+        "first_cycle": 830,
+        "last_cycle": 830,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "claims",
+        "parent": "travel",
+        "depth": 1,
+        "first_cycle": 830,
+        "last_cycle": 830,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "time",
+        "parent": "travel",
+        "depth": 1,
+        "first_cycle": 830,
+        "last_cycle": 830,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "waste",
+        "parent": "travel",
+        "depth": 1,
+        "first_cycle": 830,
+        "last_cycle": 830,
         "hits": 1,
         "status": "open"
       },
@@ -73,17 +97,17 @@
         "label": "better",
         "parent": "travel",
         "depth": 1,
-        "first_cycle": 829,
-        "last_cycle": 829,
+        "first_cycle": 830,
+        "last_cycle": 830,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "moment",
+        "label": "straightforward",
         "parent": "travel",
         "depth": 1,
-        "first_cycle": 829,
-        "last_cycle": 829,
+        "first_cycle": 830,
+        "last_cycle": 830,
         "hits": 1,
         "status": "open"
       },
@@ -91,17 +115,17 @@
         "label": "i've",
         "parent": "travel",
         "depth": 1,
-        "first_cycle": 829,
-        "last_cycle": 829,
+        "first_cycle": 830,
+        "last_cycle": 830,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "here",
+        "label": "moment",
         "parent": "travel",
         "depth": 1,
-        "first_cycle": 829,
-        "last_cycle": 829,
+        "first_cycle": 830,
+        "last_cycle": 830,
         "hits": 1,
         "status": "open"
       },
@@ -109,35 +133,8 @@
         "label": "idea",
         "parent": "travel",
         "depth": 1,
-        "first_cycle": 829,
-        "last_cycle": 829,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "why",
-        "parent": "travel",
-        "depth": 1,
-        "first_cycle": 829,
-        "last_cycle": 829,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "amazing",
-        "parent": "travel",
-        "depth": 1,
-        "first_cycle": 829,
-        "last_cycle": 829,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "happened",
-        "parent": "travel",
-        "depth": 1,
-        "first_cycle": 829,
-        "last_cycle": 829,
+        "first_cycle": 830,
+        "last_cycle": 830,
         "hits": 1,
         "status": "open"
       }
@@ -146,10 +143,11 @@
       "travel",
       "happened",
       "moment",
-      "better"
+      "better",
+      "here"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 829,
+    "last_branch_cycle": 830,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -157,12 +155,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T083716389-owen-v5",
-  "last_speaker": "owen",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000829",
+  "last_public_event": "20260826T083919832-jules-v5",
+  "last_speaker": "jules",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000830",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T08:37:16.391473Z",
+  "last_run": "2026-08-26T08:39:19.833577Z",
   "context_scope_version": 1
 }
