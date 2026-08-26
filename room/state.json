@@ -1,28 +1,28 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 814,
+  "cycle": 815,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000809",
     "root": "weather",
-    "current_facet": "clear",
+    "current_facet": "opinion",
     "facets": [
+      "commission",
       "hurt",
       "need",
-      "commission",
       "clear",
-      "feelings",
+      "opinion",
       "sarah",
-      "repair",
-      "way"
+      "feelings",
+      "repair"
     ],
     "visited_facets": [
       "weather",
@@ -30,9 +30,10 @@
       "conflicts",
       "hurt",
       "need",
-      "clear"
+      "clear",
+      "opinion"
     ],
-    "facet_index": 5,
+    "facet_index": 6,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -44,14 +45,14 @@
       "jules",
       "allen"
     ],
-    "turns": 10,
+    "turns": 12,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "commissioning",
       "hurt",
       "need",
-      "commission",
       "clear",
-      "feelings"
+      "opinion"
     ],
     "last_shift_cycle": 809,
     "status": "active",
@@ -61,26 +62,8 @@
         "label": "weather",
         "parent": null,
         "depth": 0,
-        "first_cycle": 814,
-        "last_cycle": 814,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "hurt",
-        "parent": "weather",
-        "depth": 1,
-        "first_cycle": 814,
-        "last_cycle": 814,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "need",
-        "parent": "weather",
-        "depth": 1,
-        "first_cycle": 814,
-        "last_cycle": 814,
+        "first_cycle": 815,
+        "last_cycle": 815,
         "hits": 1,
         "status": "open"
       },
@@ -88,8 +71,26 @@
         "label": "commission",
         "parent": "weather",
         "depth": 1,
-        "first_cycle": 814,
-        "last_cycle": 814,
+        "first_cycle": 815,
+        "last_cycle": 815,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "hurt",
+        "parent": "weather",
+        "depth": 1,
+        "first_cycle": 815,
+        "last_cycle": 815,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "need",
+        "parent": "weather",
+        "depth": 1,
+        "first_cycle": 815,
+        "last_cycle": 815,
         "hits": 1,
         "status": "open"
       },
@@ -97,17 +98,17 @@
         "label": "clear",
         "parent": "weather",
         "depth": 1,
-        "first_cycle": 814,
-        "last_cycle": 814,
+        "first_cycle": 815,
+        "last_cycle": 815,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "feelings",
+        "label": "opinion",
         "parent": "weather",
         "depth": 1,
-        "first_cycle": 814,
-        "last_cycle": 814,
+        "first_cycle": 815,
+        "last_cycle": 815,
         "hits": 1,
         "status": "open"
       },
@@ -115,8 +116,17 @@
         "label": "sarah",
         "parent": "weather",
         "depth": 1,
-        "first_cycle": 814,
-        "last_cycle": 814,
+        "first_cycle": 815,
+        "last_cycle": 815,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "feelings",
+        "parent": "weather",
+        "depth": 1,
+        "first_cycle": 815,
+        "last_cycle": 815,
         "hits": 1,
         "status": "open"
       },
@@ -124,17 +134,8 @@
         "label": "repair",
         "parent": "weather",
         "depth": 1,
-        "first_cycle": 814,
-        "last_cycle": 814,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "way",
-        "parent": "weather",
-        "depth": 1,
-        "first_cycle": 814,
-        "last_cycle": 814,
+        "first_cycle": 815,
+        "last_cycle": 815,
         "hits": 1,
         "status": "open"
       }
@@ -144,10 +145,11 @@
       "sarah",
       "conflicts",
       "hurt",
-      "need"
+      "need",
+      "clear"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 814,
+    "last_branch_cycle": 815,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -155,12 +157,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T080743132-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000814",
+  "last_public_event": "20260826T080920437-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000815",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T08:07:43.133916Z",
+  "last_run": "2026-08-26T08:09:20.439190Z",
   "context_scope_version": 1
 }
