@@ -1,24 +1,34 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 841,
+  "cycle": 842,
   "messages": 1000,
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000841",
     "root": "food",
-    "current_facet": "food",
-    "facets": [],
-    "visited_facets": [
-      "food"
+    "current_facet": "kitchen",
+    "facets": [
+      "kitchen",
+      "new",
+      "show",
+      "let",
+      "relevant",
+      "truly",
+      "interested",
+      "growl"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "food",
+      "kitchen"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -30,10 +40,19 @@
       "jules",
       "allen"
     ],
-    "turns": 0,
+    "turns": 2,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "food"
+      "kitchen",
+      "new",
+      "show",
+      "let",
+      "relevant",
+      "truly",
+      "interested",
+      "growl",
+      "soup",
+      "kale"
     ],
     "last_shift_cycle": 841,
     "status": "active",
@@ -43,15 +62,89 @@
         "label": "food",
         "parent": null,
         "depth": 0,
-        "first_cycle": 841,
-        "last_cycle": 841,
+        "first_cycle": 842,
+        "last_cycle": 842,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "kitchen",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 842,
+        "last_cycle": 842,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "new",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 842,
+        "last_cycle": 842,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "show",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 842,
+        "last_cycle": 842,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "let",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 842,
+        "last_cycle": 842,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "relevant",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 842,
+        "last_cycle": 842,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "truly",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 842,
+        "last_cycle": 842,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "interested",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 842,
+        "last_cycle": 842,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "growl",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 842,
+        "last_cycle": 842,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "food"
+    ],
     "focus_turns": 0,
-    "last_branch_cycle": 841,
+    "last_branch_cycle": 842,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -59,12 +152,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T090254384-owen-v5",
-  "last_speaker": "owen",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000841",
+  "last_public_event": "20260826T090420602-jules-v5",
+  "last_speaker": "jules",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000842",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T09:02:54.385668Z",
+  "last_run": "2026-08-26T09:04:20.603287Z",
   "context_scope_version": 1
 }
