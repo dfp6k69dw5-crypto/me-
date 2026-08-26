@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T18:36:52.383983+00:00",
-  "cycle_key": "33000557608:1:1",
+  "generated_at": "2026-08-26T18:38:24.140358+00:00",
+  "cycle_key": "33000557608:1:2",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,6 +29,41 @@
   },
   "selected_skills": [
     {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "show"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "show"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "show"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "show"
+          ],
+          "weight": 0.64
+        }
+      ]
+    },
+    {
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
@@ -46,39 +81,18 @@
             "reason"
           ],
           "weight": 1.8
-        }
-      ]
-    },
-    {
-      "name": "concrete-specificity",
-      "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "show"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "show"
-          ],
-          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "show"
+            "reason"
           ],
-          "weight": 0.46
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "39199f6553b0",
+  "context_fingerprint": "e9074dd1daaf",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 1069,
   "approx_added_tokens": 267
