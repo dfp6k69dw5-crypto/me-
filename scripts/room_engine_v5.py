@@ -17,6 +17,7 @@ import re
 
 import room_engine_v5_legacy as _legacy
 import room_social_v5 as _social
+import room_topic_bounded as _bounded_topic
 
 # The production workflow verifies the known-good legacy retry budget before
 # starting a warm runner. The real loop remains in room_engine_v5_legacy.py.
@@ -33,6 +34,11 @@ _CUE_STOPWORDS = {
 _TOPIC_SCAFFOLD = {
     "i", "i'm", "i've", "i'll", "i'd", "you", "you're", "you've", "you'll", "you'd",
     "we", "we're", "we've", "we'll", "we'd", "they", "they're", "they've", "they'll", "they'd",
+}
+_TOPIC_FILLER = {
+    "hey", "hi", "hello", "sorry", "thanks", "thank", "please", "okay", "yeah", "yes", "no",
+    "last", "happened", "happen", "help", "stuck", "honey", "today", "tonight", "yesterday",
+    "tomorrow", "really", "just", "maybe", "probably", "actually", "well",
 }
 
 
@@ -158,7 +164,7 @@ def _remember_rejected(autonomy, utterance: object) -> None:
 
 
 def _sanitize_declared_topic_terms(message: object) -> list[str]:
-    """Turn model topic labels into concepts, never conversational sentences."""
+    """Turn model topic labels into stable concepts, never conversational scaffolding."""
     cognition = (message or {}).get("cognition") if isinstance(message, dict) else {}
     cognition = cognition if isinstance(cognition, dict) else {}
     values = cognition.get("topic_terms")
@@ -171,13 +177,15 @@ def _sanitize_declared_topic_terms(message: object) -> list[str]:
             continue
         raw_words = re.findall(r"[a-z][a-z'-]{1,}", raw)
         sentence_like = bool(raw_words and raw_words[0] in _TOPIC_SCAFFOLD) or len(raw_words) > 4
-        if sentence_like:
-            candidates = _social.words(raw)
-        else:
-            candidates = [raw]
+        candidates = _social.words(raw) if sentence_like else [raw]
         for candidate in candidates:
             candidate = str(candidate or "").strip().lower()
-            if not candidate or candidate in participant_names or candidate in _TOPIC_SCAFFOLD:
+            if (
+                not candidate
+                or candidate in participant_names
+                or candidate in _TOPIC_SCAFFOLD
+                or candidate in _TOPIC_FILLER
+            ):
                 continue
             if not _social._term_tokens(candidate):
                 continue
@@ -257,10 +265,11 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
 
 
 if os.environ.get("ROOM_BRAIN_ACTIVE", "").strip() == "llama3.2-1b":
-    # Do not let sentence-shaped model labels masquerade as semantic novelty.
-    # The existing topic tree then sees stable concepts and can correctly build
-    # escape pressure when the conversation is only paraphrasing itself.
+    # Patch both topic implementations. room_private_commit.py swaps in the
+    # bounded implementation at publication time, so filtering only the social
+    # module is insufficient and silently bypasses the sanitizer.
     _social._declared_terms = _sanitize_declared_topic_terms
+    _bounded_topic._declared_terms = _sanitize_declared_topic_terms
     _legacy._private_model.run = _llama_model_run
     _legacy._core.model_run = _llama_model_run
 
