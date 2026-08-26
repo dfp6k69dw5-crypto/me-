@@ -16,6 +16,21 @@ PARTICIPANT = "allen"
 MAX_TEXT = 700
 OBSERVED_IDS_KEY = "participant_observation_ids"
 
+_PARTICIPANT_TOPIC_STOP = {
+    "a", "an", "and", "are", "as", "at", "be", "been", "being", "but", "by",
+    "can", "could", "did", "do", "does", "doing", "for", "from", "had", "has",
+    "have", "he", "her", "here", "hers", "him", "his", "how", "i", "if", "in",
+    "into", "is", "it", "its", "just", "me", "more", "my", "of", "on", "or",
+    "our", "ours", "please", "really", "say", "says", "said", "see", "seem",
+    "seems", "share", "shared", "sharing", "she", "so", "some", "tell", "than",
+    "that", "the", "their", "them", "then", "there", "these", "they", "think",
+    "this", "those", "to", "too", "us", "very", "want", "was", "we", "were",
+    "what", "when", "where", "which", "who", "why", "will", "with", "would",
+    "you", "your", "yours", "notice", "noticed", "noticing", "feel", "feels",
+    "felt", "know", "knows", "knew", "talk", "talking", "discuss", "discussing",
+    "sarah", "mara", "owen", "jules", "allen",
+}
+
 
 def load_json(path: Path, default):
     try:
@@ -40,7 +55,30 @@ def infer_target(text: str):
 
 
 def clean_terms(text: str, topic: dict):
-    terms = c.toks(text)[:4]
+    words = re.findall(r"[a-z][a-z0-9'-]*", str(text or "").lower())
+    terms = []
+    seen = set()
+    for word in words:
+        value = word.strip("'-")
+        if len(value) < 3 or value in _PARTICIPANT_TOPIC_STOP:
+            continue
+        # Collapse simple inflection variants for duplicate suppression while
+        # preserving the participant's original surface word as the topic label.
+        key = value
+        if len(key) > 5 and key.endswith("ies"):
+            key = key[:-3] + "y"
+        elif len(key) > 5 and key.endswith("ing"):
+            key = key[:-3]
+        elif len(key) > 4 and key.endswith("ed"):
+            key = key[:-2]
+        elif len(key) > 3 and key.endswith("s"):
+            key = key[:-1]
+        if key in seen:
+            continue
+        seen.add(key)
+        terms.append(value)
+        if len(terms) >= 4:
+            break
     if not terms:
         for value in (topic.get("current_facet"), topic.get("root")):
             value = str(value or "").strip().lower()
