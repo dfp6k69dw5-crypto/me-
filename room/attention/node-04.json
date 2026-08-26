@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T04:25:28.278313+00:00",
-  "cycle_key": "32927291254:1:27",
+  "generated_at": "2026-08-26T04:27:01.563187+00:00",
+  "cycle_key": "32927291254:1:28",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,23 +29,23 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "interaction",
+      "score": 2.392,
+      "confidence": 0.911,
+      "raw_score": 2.392,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "again"
+        "what do you mean"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "again"
+            "what do you mean"
           ],
-          "weight": 1.8
+          "weight": 1.45
         }
       ]
     },
@@ -53,15 +53,21 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.41,
-      "confidence": 0.636,
-      "raw_score": 1.69,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "feeling",
-        "feel"
+        "feeling"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 1.8
+        },
         {
           "kind": "message",
           "matched": [
@@ -72,15 +78,15 @@
         {
           "kind": "message",
           "matched": [
-            "feel"
+            "feeling"
           ],
           "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "229b477da29b",
+  "context_fingerprint": "11ff07fda2cb",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 801,
-  "approx_added_tokens": 200
+  "temporary_skill_chars": 998,
+  "approx_added_tokens": 250
 }
