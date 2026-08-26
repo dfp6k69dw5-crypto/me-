@@ -225,7 +225,12 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
 
         autonomy.base._too_similar_to_context = _production_too_similar
 
-    return autonomy.run(role, payload, timeout=timeout)
+    return autonomy.run(
+        role,
+        payload,
+        timeout=timeout,
+        min_words=2 if role == "expression" else 5,
+    )
 
 
 if os.environ.get("ROOM_BRAIN_ACTIVE", "").strip() == "llama3.2-1b":
