@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T17:05:47.609520+00:00",
-  "cycle_key": "32983634130:1:55",
+  "generated_at": "2026-08-26T17:08:19.707648+00:00",
+  "cycle_key": "32983634130:1:56",
   "node": 6,
   "entity": "owen",
   "role": "comprehension",
@@ -32,41 +32,56 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 4.4,
-      "confidence": 0.997,
-      "raw_score": 4.4,
+      "score": 4.12,
+      "confidence": 0.996,
+      "raw_score": 4.12,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "relationship",
+        "love",
         "feel",
-        "happy",
-        "love"
+        "happy"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feel"
+            "relationship"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
+            "love"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
             "happy"
           ],
-          "weight": 1.45
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
             "love"
           ],
-          "weight": 1.15
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "75210ade1bd4",
+  "context_fingerprint": "b1e0ddbb05e3",
   "base_prompt_chars": 2277,
   "temporary_skill_chars": 544,
   "approx_added_tokens": 136
