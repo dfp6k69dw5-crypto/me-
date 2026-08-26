@@ -1,5 +1,4 @@
 name: Deploy validated Room Worker
-# self-reporting deployment gate plus live Allen auth probe: 2026-08-19
 
 on:
   push:
@@ -22,29 +21,67 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.CF_API_TOKEN }}
       ROOM_RELAY_URL: https://room-live-mirror.dfp6k69dw5.workers.dev
+      CLOUDFLARE_TOKEN_INPUT: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.CF_API_TOKEN }}
+
     steps:
       - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 1
 
-      - name: Check Cloudflare token without exposing it
+      - name: Normalize Cloudflare token safely
         id: creds
         shell: bash
         run: |
-          if [ -n "$CLOUDFLARE_API_TOKEN" ]; then
-            echo 'available=true' >> "$GITHUB_OUTPUT"
-            echo 'Cloudflare API token is available.'
-          else
+          set -euo pipefail
+          raw="$CLOUDFLARE_TOKEN_INPUT"
+          normalized=$(python3 - <<'PY'
+          import os, re
+          value = os.environ.get('CLOUDFLARE_TOKEN_INPUT', '').strip()
+          if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+              value = value[1:-1].strip()
+          value = re.sub(r'^Authorization\s*:\s*Bearer\s+', '', value, flags=re.I)
+          value = re.sub(r'^Bearer\s+', '', value, flags=re.I)
+          value = value.strip().strip('"').strip("'").strip()
+          value = value.replace('\r', '').replace('\n', '')
+          print(value, end='')
+          PY
+          )
+          if [ -z "$normalized" ]; then
             echo 'available=false' >> "$GITHUB_OUTPUT"
-            echo 'Cloudflare API token is unavailable in CLOUDFLARE_API_TOKEN or CF_API_TOKEN.'
+            echo 'Cloudflare API token is unavailable after normalization.'
+            exit 1
           fi
+          echo "::add-mask::$normalized"
+          printf 'CLOUDFLARE_API_TOKEN=%s\n' "$normalized" >> "$GITHUB_ENV"
+          echo 'available=true' >> "$GITHUB_OUTPUT"
+          echo 'Cloudflare API token normalized without exposing it.'
 
-      - name: Probe live Allen auth without a credential
+      - name: Verify normalized Cloudflare token
+        id: token_verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsS \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H 'Content-Type: application/json' \
+            'https://api.cloudflare.com/client/v4/user/tokens/verify' \
+            > /tmp/cf-token.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/cf-token.json'))
+          if not d.get('success'):
+              raise SystemExit('Cloudflare rejected the normalized API token')
+          result=d.get('result') or {}
+          status=str(result.get('status') or '').lower()
+          if status and status != 'active':
+              raise SystemExit(f'Cloudflare token is not active: {status}')
+          print('Cloudflare accepted the normalized API token.')
+          PY
+
+      - name: Probe live Allen endpoint
         id: allen_auth
-        if: always()
         continue-on-error: true
         shell: bash
         run: |
@@ -61,10 +98,8 @@ jobs:
           cat /tmp/allen-auth-response.json 2>/dev/null || true
           test "$rc" -eq 0
 
-      - name: Refuse unvalidated Worker source
+      - name: Validate Room Worker source
         id: validate
-        if: steps.creds.outputs.available == 'true'
-        continue-on-error: true
         run: |
           node scripts/room_worker_ingest_sim.mjs
           python3 - <<'PY'
@@ -75,26 +110,23 @@ jobs:
           print('Worker source simulator is green.')
           PY
 
-      - name: Deploy existing room-live-mirror Worker
+      - name: Deploy room-live-mirror Worker
         id: deploy_worker
-        if: steps.creds.outputs.available == 'true' && steps.validate.outcome == 'success'
-        continue-on-error: true
         shell: bash
         run: |
-          set -o pipefail
+          set -euo pipefail
           npx --yes wrangler@latest deploy --config cloudflare/room-worker/wrangler.toml 2>&1 | tee /tmp/room-worker-deploy.txt
           grep -Fq "$ROOM_RELAY_URL" /tmp/room-worker-deploy.txt || {
-            echo 'Wrangler did not confirm the expected room-live-mirror workers.dev URL; refusing to ingest.'
+            echo 'Wrangler did not confirm the expected room-live-mirror workers.dev URL.'
             exit 1
           }
           echo 'Wrangler confirmed the expected Room Worker deployment target.'
 
       - name: Push current Room feed through deployed Worker
         id: ingest
-        if: steps.deploy_worker.outcome == 'success'
-        continue-on-error: true
         shell: bash
         run: |
+          set -euo pipefail
           token_json=$(curl -fsS --connect-timeout 3 --max-time 8 \
             -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror")
@@ -110,12 +142,11 @@ jobs:
           accepted=$(printf '%s' "$ingest" | python3 -c 'import json,sys; print(str(bool(json.load(sys.stdin).get("accepted"))).lower())')
           test "$accepted" = true
 
-      - name: Verify live relay now matches the current Room boot
+      - name: Verify live relay matches current Room
         id: verify
-        if: steps.ingest.outcome == 'success'
-        continue-on-error: true
         shell: bash
         run: |
+          set -euo pipefail
           curl -fsS --connect-timeout 3 --max-time 8 \
             -H 'Origin: https://maaronfanberg-lab.github.io' \
             "${ROOM_RELAY_URL}/api/feed?fresh=$(date +%s)" > /tmp/live-relay.json
@@ -124,7 +155,7 @@ jobs:
           from datetime import datetime
           local=json.load(open('room/feed.json'))
           raw=json.load(open('/tmp/live-relay.json'))
-          remote=raw.get('feed',raw)
+          remote=raw.get('feed', raw)
           ls=local.get('state',{}); rs=remote.get('state',{})
           def ts(x):
               return datetime.fromisoformat(str(x).replace('Z','+00:00')).timestamp()
@@ -137,75 +168,39 @@ jobs:
             'local_cycle':ls.get('cycle'),
             'relay_cycle':rs.get('cycle'),
             'timestamp_lag_seconds':lag,
-          },indent=2))
+          }, indent=2))
           if ls.get('boot_id') != rs.get('boot_id'):
-              raise SystemExit('Relay is still on the wrong Room boot')
+              raise SystemExit('Relay is on the wrong Room boot')
           if lag > 90:
-              raise SystemExit('Relay is still stale')
+              raise SystemExit('Relay is stale')
           PY
 
-      - name: Write non-secret deployment status
-        if: always()
-        env:
-          CREDS_AVAILABLE: ${{ steps.creds.outputs.available }}
-          VALIDATE_OUTCOME: ${{ steps.validate.outcome }}
-          DEPLOY_OUTCOME: ${{ steps.deploy_worker.outcome }}
-          INGEST_OUTCOME: ${{ steps.ingest.outcome }}
-          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
-          ALLEN_AUTH_OUTCOME: ${{ steps.allen_auth.outcome }}
-          ALLEN_AUTH_HTTP: ${{ steps.allen_auth.outputs.http_code }}
-          ALLEN_AUTH_CURL_RC: ${{ steps.allen_auth.outputs.curl_rc }}
+      - name: Record verified deployment
+        if: success()
         run: |
           mkdir -p room
           python3 - <<'PY'
-          import json, os, subprocess
+          import json, subprocess
           from datetime import datetime, timezone
-          token_available=os.environ.get('CREDS_AVAILABLE')=='true'
-          auth={}
-          try:
-              auth=json.load(open('/tmp/allen-auth-response.json'))
-          except Exception:
-              pass
-          auth_http=str(os.environ.get('ALLEN_AUTH_HTTP') or '')
-          allen_live=(auth_http=='200')
           out={
             'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
             'worker':'room-live-mirror',
             'source_sha':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-            'token_available':token_available,
-            'validate':os.environ.get('VALIDATE_OUTCOME') or 'skipped',
-            'deploy':os.environ.get('DEPLOY_OUTCOME') or 'skipped',
-            'ingest':os.environ.get('INGEST_OUTCOME') or 'skipped',
-            'verify':os.environ.get('VERIFY_OUTCOME') or 'skipped',
-            'allen_auth_transport':os.environ.get('ALLEN_AUTH_OUTCOME') or 'skipped',
-            'allen_auth_http':auth_http,
-            'allen_auth_error':auth.get('error'),
-            'allen_live':allen_live,
+            'token_normalized':True,
+            'validate':'success',
+            'deploy':'success',
+            'ingest':'success',
+            'verify':'success',
+            'pass':True,
+            'state':'deployed-and-verified',
           }
-          out['pass']=token_available and out['validate']=='success' and out['deploy']=='success' and out['ingest']=='success' and out['verify']=='success'
-          if out['pass']:
-              out['state']='deployed-and-verified'
-          elif not token_available:
-              out['state']='missing-cloudflare-api-token'
-          elif out['validate']!='success':
-              out['state']='worker-source-validation-failed'
-          elif out['deploy']!='success':
-              out['state']='wrangler-deploy-failed'
-          elif out['ingest']!='success':
-              out['state']='relay-ingest-failed'
-          else:
-              out['state']='relay-verification-failed'
           open('room/cloudflare-deploy-status.json','w').write(json.dumps(out,indent=2)+'\n')
           print(json.dumps(out,indent=2))
           PY
-
-      - name: Publish deployment status
-        if: always()
-        run: |
           git config user.name "room-worker-deployer"
           git config user.email "actions@users.noreply.github.com"
           git add room/cloudflare-deploy-status.json
-          git commit -m "Record Room Worker deployment status" || exit 0
+          git commit -m "Record verified Room Worker deployment" || exit 0
           for n in 1 2 3 4 5 6; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
