@@ -30,6 +30,13 @@ _CUE_STOPWORDS = {
     "their", "them", "then", "there", "these", "they", "this", "those", "through", "very",
     "want", "what", "when", "where", "whether", "which", "while", "with", "without", "would",
     "your", "yourselves",
+    # Discourse machinery is not subject matter. Feeding these words back as
+    # semantic cues makes the model repeat them until topic support falsely
+    # promotes them into facets.
+    "notice", "noticed", "noticing", "share", "shared", "sharing", "think", "thinking",
+    "thought", "feel", "feels", "feeling", "felt", "seem", "seems", "seemed", "say", "said",
+    "saying", "tell", "telling", "talk", "talked", "talking", "discuss", "discussed",
+    "discussing",
 }
 _TOPIC_SCAFFOLD = {
     "i", "i'm", "i've", "i'll", "i'd", "you", "you're", "you've", "you'll", "you'd",
@@ -39,6 +46,10 @@ _TOPIC_FILLER = {
     "hey", "hi", "hello", "sorry", "thanks", "thank", "please", "okay", "yeah", "yes", "no",
     "last", "happened", "happen", "help", "stuck", "honey", "today", "tonight", "yesterday",
     "tomorrow", "really", "just", "maybe", "probably", "actually", "well",
+    "notice", "noticed", "noticing", "share", "shared", "sharing", "think", "thinking",
+    "thought", "feel", "feels", "feeling", "felt", "seem", "seems", "seemed", "say", "said",
+    "saying", "tell", "telling", "talk", "talked", "talking", "discuss", "discussed",
+    "discussing",
 }
 
 
