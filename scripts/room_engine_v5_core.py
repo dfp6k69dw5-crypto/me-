@@ -511,7 +511,16 @@ def _memory_content_tokens(text):
 
 def _memory_worthy_text(text, move=None):
     """Speech may be public without automatically becoming durable memory."""
-    lexical = [w.strip("'-") for w in re.findall(r"[a-z][a-z'-]*", str(text or "").lower())]
+    low = str(text or "").lower()
+    scaffold_patterns = (
+        r"\bkeep\s+(?:the|your|its)\s+(?:chosen\s+)?move.{0,32}focus.{0,32}(?:intended\s+)?partner\b",
+        r"\b(?:move|focus)\s*(?:,|and)\s*(?:focus|partner).{0,24}(?:partner|intact)\b",
+        r"\buse\s+only\s+details\s+supported\s+by\s+(?:what|the conversation)\b",
+        r"\bbase\s+(?:the\s+)?reply\s+only\s+on\s+what\s+was\s+actually\s+said\b",
+    )
+    if any(re.search(pattern, low) for pattern in scaffold_patterns):
+        return False
+    lexical = [w.strip("'-") for w in re.findall(r"[a-z][a-z'-]*", low)]
     lexical = [w for w in lexical if w]
     if not lexical:
         return False

@@ -259,6 +259,11 @@ def _public_meta_language(utterance: str, compact: dict) -> bool:
         r"\b(?:prompt|schema|field)\s+(?:says|requires|expects|allows|forces|tells)\b",
         r"\b(?:output|generation|response)\s+(?:format|process|schema)\b",
         r"\b(?:return|output|generate)\s+(?:only\s+)?(?:json|structured\s+(?:data|object))\b",
+        r"\bkeep\s+(?:the|your|its)\s+(?:chosen\s+)?move.{0,32}focus.{0,32}(?:intended\s+)?partner\b",
+        r"\b(?:move|focus)\s*(?:,|and)\s*(?:focus|partner).{0,24}(?:partner|intact)\b",
+        r"\bdo\s+not\s+(?:resolve|invent|copy).{0,48}\b(?:issue|conflict|speech|conversation)\b",
+        r"\buse\s+only\s+details\s+supported\s+by\s+(?:what|the conversation)\b",
+        r"\bbase\s+(?:the\s+)?reply\s+only\s+on\s+what\s+was\s+actually\s+said\b",
     )
     if any(re.search(pattern, low) for pattern in hard_patterns):
         return True
