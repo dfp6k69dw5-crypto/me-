@@ -51,12 +51,25 @@ _TOPIC_FILLER = {
     "saying", "tell", "telling", "talk", "talked", "talking", "discuss", "discussed",
     "discussing",
 }
+_TOPIC_SOCIAL_MOVE_TERMS = {
+    "support", "supporting", "supported",
+    "repair", "repairing", "repaired",
+    "disagree", "disagreeing", "disagreement",
+    "agree", "agreeing", "agreement",
+    "answer", "answering", "answered",
+    "callback", "compare", "comparing", "compared",
+    "disclose", "disclosing", "disclosed",
+    "bridge", "bridging", "close", "closing", "closed",
+    "ask", "asking", "asked", "question", "questioning",
+    "respond", "responding", "response",
+    "apologize", "apologizing", "apology", "reassure", "reassuring",
+}
 
 
 def _semantic_cues(value: object, limit: int = 6) -> list[str]:
     cues: list[str] = []
     for word in re.findall(r"[a-z0-9']+", str(value or "").lower()):
-        if len(word) < 4 or word in _CUE_STOPWORDS or word in cues:
+        if len(word) < 4 or word in _CUE_STOPWORDS or word in _TOPIC_SOCIAL_MOVE_TERMS or word in cues:
             continue
         cues.append(word)
         if len(cues) >= limit:
@@ -196,6 +209,7 @@ def _sanitize_declared_topic_terms(message: object) -> list[str]:
                 or candidate in participant_names
                 or candidate in _TOPIC_SCAFFOLD
                 or candidate in _TOPIC_FILLER
+                or candidate in _TOPIC_SOCIAL_MOVE_TERMS
             ):
                 continue
             if not _social._term_tokens(candidate):
