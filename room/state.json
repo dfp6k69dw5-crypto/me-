@@ -1,34 +1,35 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 842,
+  "cycle": 843,
   "messages": 1000,
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000841",
     "root": "food",
-    "current_facet": "kitchen",
+    "current_facet": "appetite",
     "facets": [
       "kitchen",
-      "new",
       "show",
+      "appetite",
+      "lose",
+      "rusty",
+      "new",
       "let",
-      "relevant",
-      "truly",
-      "interested",
-      "growl"
+      "relevant"
     ],
     "visited_facets": [
       "food",
-      "kitchen"
+      "kitchen",
+      "appetite"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -40,19 +41,14 @@
       "jules",
       "allen"
     ],
-    "turns": 2,
+    "turns": 4,
     "low_novelty_beats": 0,
     "recent_terms": [
       "kitchen",
-      "new",
       "show",
-      "let",
-      "relevant",
-      "truly",
-      "interested",
-      "growl",
-      "soup",
-      "kale"
+      "appetite",
+      "lose",
+      "rusty"
     ],
     "last_shift_cycle": 841,
     "status": "active",
@@ -62,8 +58,8 @@
         "label": "food",
         "parent": null,
         "depth": 0,
-        "first_cycle": 842,
-        "last_cycle": 842,
+        "first_cycle": 843,
+        "last_cycle": 843,
         "hits": 1,
         "status": "open"
       },
@@ -71,17 +67,8 @@
         "label": "kitchen",
         "parent": "food",
         "depth": 1,
-        "first_cycle": 842,
-        "last_cycle": 842,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "new",
-        "parent": "food",
-        "depth": 1,
-        "first_cycle": 842,
-        "last_cycle": 842,
+        "first_cycle": 843,
+        "last_cycle": 843,
         "hits": 1,
         "status": "open"
       },
@@ -89,8 +76,44 @@
         "label": "show",
         "parent": "food",
         "depth": 1,
-        "first_cycle": 842,
-        "last_cycle": 842,
+        "first_cycle": 843,
+        "last_cycle": 843,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "appetite",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 843,
+        "last_cycle": 843,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "lose",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 843,
+        "last_cycle": 843,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "rusty",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 843,
+        "last_cycle": 843,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "new",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 843,
+        "last_cycle": 843,
         "hits": 1,
         "status": "open"
       },
@@ -98,8 +121,8 @@
         "label": "let",
         "parent": "food",
         "depth": 1,
-        "first_cycle": 842,
-        "last_cycle": 842,
+        "first_cycle": 843,
+        "last_cycle": 843,
         "hits": 1,
         "status": "open"
       },
@@ -107,44 +130,18 @@
         "label": "relevant",
         "parent": "food",
         "depth": 1,
-        "first_cycle": 842,
-        "last_cycle": 842,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "truly",
-        "parent": "food",
-        "depth": 1,
-        "first_cycle": 842,
-        "last_cycle": 842,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "interested",
-        "parent": "food",
-        "depth": 1,
-        "first_cycle": 842,
-        "last_cycle": 842,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "growl",
-        "parent": "food",
-        "depth": 1,
-        "first_cycle": 842,
-        "last_cycle": 842,
+        "first_cycle": 843,
+        "last_cycle": 843,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "food"
+      "food",
+      "kitchen"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 842,
+    "last_branch_cycle": 843,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -152,12 +149,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T090420602-jules-v5",
-  "last_speaker": "jules",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000842",
+  "last_public_event": "20260826T090607667-sarah-v5",
+  "last_speaker": "sarah",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000843",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T09:04:20.603287Z",
+  "last_run": "2026-08-26T09:06:07.668312Z",
   "context_scope_version": 1
 }
