@@ -70,6 +70,7 @@ _TOPIC_STATE_TERMS = {
     "glad", "happy", "sad", "sorry", "sure", "unsure", "worried", "worry", "worrying",
     "grateful", "thankful", "overwhelmed", "upset", "angry", "afraid", "scared", "nervous",
     "confused", "comfortable", "uncomfortable", "honest", "open", "okay", "fine",
+    "tough", "hard", "difficult", "easy", "rough",
     # Generic wanting/needing language should yield to the concrete object of
     # that state (for example autonomy, art, a movie, a plan).
     "need", "needs", "needed", "needing", "want", "wants", "wanted", "wanting",
