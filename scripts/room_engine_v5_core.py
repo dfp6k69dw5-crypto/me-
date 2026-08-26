@@ -526,6 +526,42 @@ def _memory_worthy(message):
     return _memory_worthy_text(message.get("text", ""), cognition.get("move_type"))
 
 
+def _memory_relevant_to_listener(message, listener):
+    """Only direct or explicitly mentioned speech becomes another mind's durable memory."""
+    if not isinstance(message, dict) or listener not in ORDER:
+        return False
+    speaker = str(message.get("speaker") or "").strip().lower()
+    if listener == speaker:
+        return False
+    cognition = message.get("cognition") if isinstance(message.get("cognition"), dict) else {}
+    target_entity = str(cognition.get("target") or "").strip().lower()
+    if target_entity == listener:
+        return True
+    listener_name = str(N.get(listener, listener)).strip().lower()
+    words = set(re.findall(r"[a-z][a-z'-]*", str(message.get("text") or "").lower()))
+    return listener in words or listener_name in words
+
+
+def _dedupe_memories(items, limit=220):
+    kept = []
+    for item in reversed(list(items or [])):
+        if not isinstance(item, dict):
+            continue
+        text = str(item.get("text") or "").strip()
+        speaker = str(item.get("speaker") or "").strip().lower()
+        if any(
+            speaker == str(prior.get("speaker") or "").strip().lower()
+            and _sim(text, prior.get("text", "")) >= 0.82
+            for prior in kept
+        ):
+            continue
+        kept.append(item)
+        if len(kept) >= limit:
+            break
+    kept.reverse()
+    return kept
+
+
 def _prune_memory_state(mind):
     for entity in ORDER:
         state = mind.get("entities", {}).get(entity, {})
@@ -533,9 +569,17 @@ def _prune_memory_state(mind):
         for item in state.get("room_memories", []):
             if not isinstance(item, dict):
                 continue
+            # Pre-routing memories were broadcast into every mind and have no
+            # target metadata. Drop that inherited contamination once.
+            target_entity = str(item.get("target") or "").strip().lower()
+            listener_name = str(N.get(entity, entity)).strip().lower()
+            words = set(re.findall(r"[a-z][a-z'-]*", str(item.get("text") or "").lower()))
+            explicitly_relevant = target_entity == entity or entity in words or listener_name in words
+            if not explicitly_relevant:
+                continue
             if _memory_worthy_text(item.get("text", ""), item.get("move")):
                 memories.append(item)
-        state["room_memories"] = memories[-220:]
+        state["room_memories"] = _dedupe_memories(memories, 220)
 
         self_history = []
         for item in state.get("self_history", []):
@@ -543,7 +587,7 @@ def _prune_memory_state(mind):
                 continue
             if _memory_worthy_text(item.get("text", ""), item.get("move")):
                 self_history.append(item)
-        state["self_history"] = self_history[-220:]
+        state["self_history"] = _dedupe_memories(self_history, 220)
 
 
 def record(history, discourse, mind, message, node, cycle):
@@ -571,18 +615,19 @@ def record(history, discourse, mind, message, node, cycle):
 
     for listener in ORDER:
         memories = mind["entities"][listener].setdefault("room_memories", [])
-        if worthy:
+        if worthy and _memory_relevant_to_listener(message, listener):
             memories.append({
                 "source": message["id"],
                 "status": "observed",
                 "speaker": message["speaker"],
+                "target": message["cognition"].get("target"),
                 "text": message["text"][:300],
                 "move": message["cognition"].get("move_type"),
                 "discourse": message["discourse_id"],
                 "beat_id": message["beat_id"],
                 "topic_episode": message["cognition"].get("topic_episode"),
             })
-            mind["entities"][listener]["room_memories"] = memories[-220:]
+            mind["entities"][listener]["room_memories"] = _dedupe_memories(memories, 220)
         mind["entities"][listener]["last_event"] = message["id"]
     observe_message(mind, message, cycle, {item["id"]: item for item in discourse.get("nodes", [])})
 
