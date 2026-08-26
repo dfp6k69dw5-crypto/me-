@@ -1,4 +1,4 @@
-name: Deploy validated Room Worker
+name: Verify native Room Worker deployment
 
 on:
   push:
@@ -10,197 +10,118 @@ on:
 
 permissions:
   contents: write
-  id-token: write
 
 concurrency:
-  group: deploy-room-live-mirror
+  group: verify-room-live-mirror
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     env:
       ROOM_RELAY_URL: https://room-live-mirror.dfp6k69dw5.workers.dev
-      CLOUDFLARE_TOKEN_INPUT: ${{ secrets.CLOUDFLARE_API_TOKEN || secrets.CF_API_TOKEN }}
-
     steps:
       - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 1
 
-      - name: Normalize Cloudflare token safely
-        id: creds
-        shell: bash
+      - name: Validate Room Worker source locally
         run: |
           set -euo pipefail
-          raw="$CLOUDFLARE_TOKEN_INPUT"
-          normalized=$(python3 - <<'PY'
-          import os, re
-          value = os.environ.get('CLOUDFLARE_TOKEN_INPUT', '').strip()
-          if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
-              value = value[1:-1].strip()
-          value = re.sub(r'^Authorization\s*:\s*Bearer\s+', '', value, flags=re.I)
-          value = re.sub(r'^Bearer\s+', '', value, flags=re.I)
-          value = value.strip().strip('"').strip("'").strip()
-          value = value.replace('\r', '').replace('\n', '')
-          print(value, end='')
-          PY
-          )
-          if [ -z "$normalized" ]; then
-            echo 'available=false' >> "$GITHUB_OUTPUT"
-            echo 'Cloudflare API token is unavailable after normalization.'
-            exit 1
-          fi
-          echo "::add-mask::$normalized"
-          printf 'CLOUDFLARE_API_TOKEN=%s\n' "$normalized" >> "$GITHUB_ENV"
-          echo 'available=true' >> "$GITHUB_OUTPUT"
-          echo 'Cloudflare API token normalized without exposing it.'
-
-      - name: Verify normalized Cloudflare token
-        id: token_verify
-        shell: bash
-        run: |
-          set -euo pipefail
-          curl -fsS \
-            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-            -H 'Content-Type: application/json' \
-            'https://api.cloudflare.com/client/v4/user/tokens/verify' \
-            > /tmp/cf-token.json
-          python3 - <<'PY'
-          import json
-          d=json.load(open('/tmp/cf-token.json'))
-          if not d.get('success'):
-              raise SystemExit('Cloudflare rejected the normalized API token')
-          result=d.get('result') or {}
-          status=str(result.get('status') or '').lower()
-          if status and status != 'active':
-              raise SystemExit(f'Cloudflare token is not active: {status}')
-          print('Cloudflare accepted the normalized API token.')
-          PY
-
-      - name: Probe live Allen endpoint
-        id: allen_auth
-        continue-on-error: true
-        shell: bash
-        run: |
-          set +e
-          code=$(curl -sS --connect-timeout 3 --max-time 8 \
-            -o /tmp/allen-auth-response.json \
-            -w '%{http_code}' \
-            "${ROOM_RELAY_URL}/api/allen/auth")
-          rc=$?
-          set -e
-          echo "http_code=${code}" >> "$GITHUB_OUTPUT"
-          echo "curl_rc=${rc}" >> "$GITHUB_OUTPUT"
-          echo "Allen auth HTTP ${code}; curl rc ${rc}"
-          cat /tmp/allen-auth-response.json 2>/dev/null || true
-          test "$rc" -eq 0
-
-      - name: Validate Room Worker source
-        id: validate
-        run: |
           node scripts/room_worker_ingest_sim.mjs
           python3 - <<'PY'
           import json
           d=json.load(open('room/worker-ingest-simulator-diagnostic.json'))
           if not d.get('pass'):
-              raise SystemExit('Worker source simulator is not green; refusing deployment')
+              raise SystemExit('Worker source simulator is not green')
           print('Worker source simulator is green.')
           PY
 
-      - name: Deploy room-live-mirror Worker
-        id: deploy_worker
+      - name: Wait for Cloudflare native Git deployment
+        id: live_source
         shell: bash
         run: |
           set -euo pipefail
-          npx --yes wrangler@latest deploy --config cloudflare/room-worker/wrangler.toml 2>&1 | tee /tmp/room-worker-deploy.txt
-          grep -Fq "$ROOM_RELAY_URL" /tmp/room-worker-deploy.txt || {
-            echo 'Wrangler did not confirm the expected room-live-mirror workers.dev URL.'
-            exit 1
-          }
-          echo 'Wrangler confirmed the expected Room Worker deployment target.'
+          for attempt in $(seq 1 45); do
+            if curl -fsS --connect-timeout 3 --max-time 8 \
+              "${ROOM_RELAY_URL}/?verify=${GITHUB_SHA}-${attempt}" \
+              -o /tmp/room-viewer.html; then
+              if grep -Fq 'roomLastGoodFeedV1' /tmp/room-viewer.html \
+                && grep -Fq 'GITHUB FALLBACK' /tmp/room-viewer.html \
+                && grep -Fq 'The Room history has not been declared empty.' /tmp/room-viewer.html; then
+                echo "Live Worker exposes the resilient Room viewer on attempt ${attempt}."
+                echo 'resilient_viewer=true' >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+            fi
+            sleep 2
+          done
+          echo 'Cloudflare native deployment did not expose the resilient viewer before verification timeout.'
+          exit 1
 
-      - name: Push current Room feed through deployed Worker
-        id: ingest
-        shell: bash
-        run: |
-          set -euo pipefail
-          token_json=$(curl -fsS --connect-timeout 3 --max-time 8 \
-            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=room-live-mirror")
-          relay_token=$(printf '%s' "$token_json" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("value", ""))')
-          test -n "$relay_token"
-          ingest=$(curl -fsS --connect-timeout 3 --max-time 8 \
-            -X POST \
-            -H "Authorization: Bearer ${relay_token}" \
-            -H 'Content-Type: application/json' \
-            --data-binary @room/feed.json \
-            "${ROOM_RELAY_URL}/api/ingest")
-          printf '%s\n' "$ingest"
-          accepted=$(printf '%s' "$ingest" | python3 -c 'import json,sys; print(str(bool(json.load(sys.stdin).get("accepted"))).lower())')
-          test "$accepted" = true
-
-      - name: Verify live relay matches current Room
-        id: verify
+      - name: Verify live Room feed is present
+        id: feed
         shell: bash
         run: |
           set -euo pipefail
           curl -fsS --connect-timeout 3 --max-time 8 \
             -H 'Origin: https://maaronfanberg-lab.github.io' \
-            "${ROOM_RELAY_URL}/api/feed?fresh=$(date +%s)" > /tmp/live-relay.json
+            "${ROOM_RELAY_URL}/api/feed?fresh=$(date +%s)" \
+            > /tmp/live-relay.json
           python3 - <<'PY'
           import json
-          from datetime import datetime
-          local=json.load(open('room/feed.json'))
           raw=json.load(open('/tmp/live-relay.json'))
-          remote=raw.get('feed', raw)
-          ls=local.get('state',{}); rs=remote.get('state',{})
-          def ts(x):
-              return datetime.fromisoformat(str(x).replace('Z','+00:00')).timestamp()
-          lg=local.get('generated_at') or ls.get('last_run')
-          rg=remote.get('generated_at') or rs.get('last_run')
-          lag=ts(lg)-ts(rg)
+          feed=raw.get('feed', raw)
+          state=feed.get('state') or {}
+          conversation=feed.get('conversation') or []
+          brain=feed.get('brain') or {}
+          if not conversation:
+              raise SystemExit('Live Room feed is empty')
+          if not state.get('cycle'):
+              raise SystemExit('Live Room feed has no cycle')
           print(json.dumps({
-            'local_boot':ls.get('boot_id'),
-            'relay_boot':rs.get('boot_id'),
-            'local_cycle':ls.get('cycle'),
-            'relay_cycle':rs.get('cycle'),
-            'timestamp_lag_seconds':lag,
+              'cycle': state.get('cycle'),
+              'messages': len(conversation),
+              'boot_id': state.get('boot_id'),
+              'brain': brain.get('active'),
+              'run_id': brain.get('run_id'),
           }, indent=2))
-          if ls.get('boot_id') != rs.get('boot_id'):
-              raise SystemExit('Relay is on the wrong Room boot')
-          if lag > 90:
-              raise SystemExit('Relay is stale')
           PY
 
-      - name: Record verified deployment
-        if: success()
+      - name: Record verified native deployment
         run: |
+          set -euo pipefail
           mkdir -p room
           python3 - <<'PY'
           import json, subprocess
           from datetime import datetime, timezone
+          raw=json.load(open('/tmp/live-relay.json'))
+          feed=raw.get('feed', raw)
+          state=feed.get('state') or {}
+          brain=feed.get('brain') or {}
           out={
             'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
             'worker':'room-live-mirror',
             'source_sha':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-            'token_normalized':True,
-            'validate':'success',
-            'deploy':'success',
-            'ingest':'success',
-            'verify':'success',
+            'deployment_owner':'cloudflare-github-app',
+            'resilient_viewer':True,
+            'feed_present':True,
+            'cycle':state.get('cycle'),
+            'messages':len(feed.get('conversation') or []),
+            'brain':brain.get('active'),
+            'run_id':brain.get('run_id'),
             'pass':True,
-            'state':'deployed-and-verified',
+            'state':'native-deployed-and-verified',
           }
           open('room/cloudflare-deploy-status.json','w').write(json.dumps(out,indent=2)+'\n')
           print(json.dumps(out,indent=2))
           PY
-          git config user.name "room-worker-deployer"
+          git config user.name "room-worker-verifier"
           git config user.email "actions@users.noreply.github.com"
           git add room/cloudflare-deploy-status.json
-          git commit -m "Record verified Room Worker deployment" || exit 0
+          git commit -m "Record verified native Room Worker deployment" || exit 0
           for n in 1 2 3 4 5 6; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
