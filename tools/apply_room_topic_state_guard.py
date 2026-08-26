@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
 
+# Trigger revision 2: workflow now exists on main.
 p = Path('scripts/room_engine_v5.py')
 s = p.read_text()
 
