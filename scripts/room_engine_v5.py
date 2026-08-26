@@ -11,6 +11,7 @@ Room engine, Allen routing, state transitions, and commit behavior remain the
 preserved production implementation.
 """
 
+import copy
 import json
 import os
 import re
@@ -301,6 +302,81 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
     )
 
 
+def _coherent_recurrent(node, key, bus_data):
+    """Align live event, intended partner, and relationship before expression."""
+    entity, _local, role, _tasks = _legacy._core.ni(node)
+    if role != "expression":
+        return _LLAMA_ORIGINAL_RECURRENT(node, key, bus_data)
+
+    routed = copy.deepcopy(bus_data)
+    source_part = _legacy._core.rp(routed, entity, role)
+    base = source_part.get("private") if isinstance(source_part.get("private"), dict) else {}
+    prior = list(_legacy._core.prior_expression_messages(node))
+
+    thought = ((routed.get("recurrent", {}).get(entity, {}) or {}).get("thought", {}) or {})
+    thought_private = thought.get("private") if isinstance(thought.get("private"), dict) else {}
+    deliberation = thought_private.get("deliberation") if isinstance(thought_private.get("deliberation"), dict) else None
+
+    participants = set(_social.PARTICIPANTS)
+    planned = str((deliberation or {}).get("preferred_partner") or base.get("partner") or "").lower()
+    live_partner = planned if planned in participants and planned != entity else None
+    live_event = None
+    directly_addressed = False
+
+    for message in reversed(prior):
+        cognition = message.get("cognition") if isinstance(message, dict) else {}
+        target = str(cognition.get("target") or "").lower() if isinstance(cognition, dict) else ""
+        speaker = str(message.get("speaker") or "").lower() if isinstance(message, dict) else ""
+        if target == entity and speaker in participants and speaker != entity:
+            live_event = message
+            live_partner = speaker
+            directly_addressed = True
+            break
+
+    if live_event is None and live_partner:
+        for message in reversed(prior):
+            speaker = str(message.get("speaker") or "").lower() if isinstance(message, dict) else ""
+            if speaker == live_partner:
+                live_event = message
+                break
+
+    if live_event is None or not live_partner:
+        return _LLAMA_ORIGINAL_RECURRENT(node, key, routed)
+
+    base["event"] = live_event
+    base["partner"] = live_partner
+    mind = _legacy._core.minds()
+    relationship = (((mind.get("entities") or {}).get(entity) or {}).get("people") or {}).get(live_partner) or {}
+    base["relationship"] = {
+        field: relationship.get(field)
+        for field in (
+            "exposure", "direct_familiarity", "trust", "predictability", "reciprocity",
+            "warmth", "respect", "disclosure_depth", "tension",
+        )
+        if field in relationship
+    }
+    source_part["private"] = base
+
+    if isinstance(deliberation, dict):
+        deliberation["preferred_partner"] = live_partner
+        if directly_addressed:
+            text = str(live_event.get("text") or "").rstrip()
+            deliberation["action"] = "ANSWER" if text.endswith("?") else "DEEPEN"
+            deliberation["new_information_goal"] = (
+                "Respond to the specific message just addressed to you. "
+                "Acknowledge its concrete point before adding one relevant thought."
+            )
+            deliberation.pop("conversation_job", None)
+
+    ordered = [item for item in prior if item is not live_event] + [live_event]
+    original_prior = _legacy._core.prior_expression_messages
+    _legacy._core.prior_expression_messages = lambda _node: ordered
+    try:
+        return _LLAMA_ORIGINAL_RECURRENT(node, key, routed)
+    finally:
+        _legacy._core.prior_expression_messages = original_prior
+
+
 if os.environ.get("ROOM_BRAIN_ACTIVE", "").strip() == "llama3.2-1b":
     # Patch both topic implementations. room_private_commit.py swaps in the
     # bounded implementation at publication time, so filtering only the social
@@ -309,6 +385,9 @@ if os.environ.get("ROOM_BRAIN_ACTIVE", "").strip() == "llama3.2-1b":
     _bounded_topic._declared_terms = _sanitize_declared_topic_terms
     _legacy._private_model.run = _llama_model_run
     _legacy._core.model_run = _llama_model_run
+    _LLAMA_ORIGINAL_RECURRENT = _legacy._core.recurrent
+    _legacy._core.recurrent = _coherent_recurrent
+    _legacy.recurrent = _coherent_recurrent
 
 
 for _name in dir(_legacy):
