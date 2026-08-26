@@ -1,0 +1,50 @@
+name: Room topic state guard once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/apply_room_topic_state_guard.py'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 20
+      - name: Apply topic state guard
+        run: python3 tools/apply_room_topic_state_guard.py
+      - name: Verify topic state guard
+        shell: bash
+        run: |
+          python3 -m py_compile scripts/room_engine_v5.py
+          PYTHONPATH=scripts python3 - <<'PY'
+          import room_engine_v5 as e
+          assert {'glad','need','overwhelmed'} <= e._TOPIC_STATE_TERMS
+          assert 'glad' not in e._semantic_cues("I'm glad you're sure it's really needs")
+          msg={'text':'I am glad but my need for autonomy is threatened','cognition':{'move_type':'disclose','topic_terms':['glad','need','autonomy']}}
+          assert e._sanitize_declared_topic_terms(msg) == ['autonomy']
+          msg={'text':'The museum exhibit explores grief and anxiety','cognition':{'move_type':'discuss','topic_terms':['museum','grief','anxiety']}}
+          assert e._sanitize_declared_topic_terms(msg) == ['museum','grief','anxiety']
+          print('ROOM_TOPIC_STATE_GUARD_OK')
+          PY
+      - name: Commit topic state guard
+        shell: bash
+        run: |
+          git config user.name 'room-topic-state-guard'
+          git config user.email 'actions@users.noreply.github.com'
+          git add scripts/room_engine_v5.py
+          git commit -m 'Keep generic states out of Room topic facets' || exit 0
+          for n in 1 2 3 4 5; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort || true; exit 1; }
+            sleep "$n"
+          done
+          exit 1
