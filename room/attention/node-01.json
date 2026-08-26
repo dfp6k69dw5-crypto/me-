@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T23:13:13.826280+00:00",
-  "cycle_key": "33021820500:1:5",
+  "generated_at": "2026-08-26T23:15:28.831203+00:00",
+  "cycle_key": "33021820500:1:6",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,11 +32,12 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.45,
-      "confidence": 0.986,
-      "raw_score": 3.45,
+      "score": 3.42,
+      "confidence": 0.985,
+      "raw_score": 3.42,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "trust",
         "anxious",
         "feeling",
         "worried"
@@ -45,16 +46,23 @@
         {
           "kind": "message",
           "matched": [
+            "trust"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
             "feeling",
             "worried",
             "anxious"
           ],
-          "weight": 1.15
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "4bf0ec4630ae",
+  "context_fingerprint": "f51e6009bced",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 544,
   "approx_added_tokens": 136
