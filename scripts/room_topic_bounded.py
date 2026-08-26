@@ -18,6 +18,26 @@ _TOPIC_NOISE = {
     "last", "happened", "help", "helping", "stuck", "thing", "things", "really",
     "maybe", "probably", "actually", "well", "just", "again", "today", "tonight",
     "sarah", "mara", "owen", "jules", "allen",
+    # Discourse mechanics, social moves, generic state, and evaluative language
+    # can shape a turn but are not durable subject matter. Keep persistence
+    # aligned with the production expression/topic guards.
+    "notice", "noticed", "noticing", "share", "shared", "sharing",
+    "think", "thinking", "thought", "feel", "feels", "feeling", "felt",
+    "seem", "seems", "seemed", "say", "said", "saying", "tell", "telling",
+    "talk", "talked", "talking", "discuss", "discussed", "discussing",
+    "support", "supporting", "supported", "repair", "repairing", "repaired",
+    "reassure", "reassuring", "reassurance", "agree", "agreeing", "agreement",
+    "disagree", "disagreeing", "disagreement", "answer", "answering", "answered",
+    "callback", "compare", "comparing", "compared", "disclose", "disclosing",
+    "disclosed", "bridge", "bridging", "ask", "asking", "asked",
+    "question", "questioning", "respond", "responding", "response",
+    "apologize", "apologizing", "apology",
+    "glad", "happy", "sad", "sure", "unsure", "worried", "worry", "worrying",
+    "grateful", "thankful", "overwhelmed", "upset", "angry", "afraid",
+    "scared", "nervous", "confused", "comfortable", "uncomfortable",
+    "honest", "open", "fine", "need", "needs", "needed", "needing",
+    "want", "wants", "wanted", "wanting",
+    "tough", "hard", "difficult", "easy", "rough",
 }
 
 
@@ -248,8 +268,19 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
     if current and current != root and not any(_near(current, facet) for facet in facets):
         current = facets[0] if facets else root
     defaults["current_facet"] = current or (facets[0] if facets else root)
-    defaults["visited_facets"] = _unique(defaults.get("visited_facets") or [], MAX_HISTORY)
-    defaults["branch_history"] = _unique(defaults.get("branch_history") or [], MAX_HISTORY)
+    live_labels = [label for label in [root, *facets] if label]
+    visited = [
+        term for term in _unique(defaults.get("visited_facets") or [], MAX_HISTORY)
+        if any(_near(term, live) for live in live_labels)
+    ]
+    current_live = defaults.get("current_facet")
+    if current_live and not any(_near(current_live, term) for term in visited):
+        visited.append(_clean(current_live))
+    defaults["visited_facets"] = _unique(visited, MAX_HISTORY)
+    defaults["branch_history"] = [
+        term for term in _unique(defaults.get("branch_history") or [], MAX_HISTORY)
+        if any(_near(term, facet) for facet in facets)
+    ]
     defaults["recent_terms"] = _unique(defaults.get("recent_terms") or [], MAX_RECENT_TERMS)
     defaults["shared_references"] = _unique(defaults.get("shared_references") or [], 4)
     defaults["branches"] = _flat_branches(root, facets, cycle)
@@ -349,9 +380,16 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
     old_focus = current.get("current_facet")
     if old_focus and active and not _near(old_focus, active):
         history.append(_clean(old_focus))
-    history = _unique(history, MAX_HISTORY)
+    history = [
+        term for term in _unique(history, MAX_HISTORY)
+        if any(_near(term, facet) for facet in facets)
+    ]
 
-    visited = list(current.get("visited_facets") or [])
+    live_labels = [label for label in [root, *facets] if label]
+    visited = [
+        term for term in list(current.get("visited_facets") or [])
+        if any(_near(term, live) for live in live_labels)
+    ]
     if active:
         visited.append(_clean(active))
     visited = _unique(reversed(visited), MAX_HISTORY)
