@@ -498,6 +498,11 @@ _MEMORY_SCAFFOLD = {
     "that's", "there's", "what's", "it's", "this", "that", "these", "those",
 }
 _MEMORY_SALIENT_MOVES = {"disclose", "repair", "callback", "disagree", "answer", "support"}
+_MEMORY_INTERNAL_MOVE_LABELS = {
+    "acknowledge", "appreciate", "support", "repair", "answer",
+    "respond", "response", "disclose", "compare", "disagree",
+    "agree", "bridge", "close", "deepen", "callback",
+}
 
 
 def _memory_content_tokens(text):
@@ -509,6 +514,8 @@ def _memory_worthy_text(text, move=None):
     lexical = [w.strip("'-") for w in re.findall(r"[a-z][a-z'-]*", str(text or "").lower())]
     lexical = [w for w in lexical if w]
     if not lexical:
+        return False
+    if len(lexical) == 1 and lexical[0] in _MEMORY_INTERNAL_MOVE_LABELS:
         return False
     content = _memory_content_tokens(text)
     if not content:
