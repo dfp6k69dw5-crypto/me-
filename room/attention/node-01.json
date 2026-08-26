@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T18:44:09.813858+00:00",
-  "cycle_key": "33001049859:1:2",
+  "generated_at": "2026-08-26T18:45:42.432276+00:00",
+  "cycle_key": "33001049859:1:3",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,20 +32,20 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.18,
-      "confidence": 0.977,
-      "raw_score": 3.18,
+      "score": 3.71,
+      "confidence": 0.991,
+      "raw_score": 3.71,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "feel",
+        "relationship",
         "trust",
-        "feeling"
+        "feel"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feel"
+            "relationship"
           ],
           "weight": 1.8
         },
@@ -54,49 +54,48 @@
           "matched": [
             "trust"
           ],
-          "weight": 0.92
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "feel"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "trust"
           ],
           "weight": 0.46
         }
       ]
     },
     {
-      "name": "critical-testing",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.98,
-      "confidence": 0.83,
-      "raw_score": 2.26,
-      "repeat_penalty": 0.28,
+      "domain": "memory-callback",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "sure",
-        "why"
+        "past"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "past"
           ],
           "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why"
-          ],
-          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "057f5f1d88c1",
+  "context_fingerprint": "a63ed6dd43c5",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 890,
-  "approx_added_tokens": 222
+  "temporary_skill_chars": 570,
+  "approx_added_tokens": 142
 }
