@@ -162,22 +162,30 @@ def _declared_terms(message: dict) -> list[str]:
 
 
 def topic_terms_from_messages(messages, limit: int = 12, episode_id: str | None = None, min_support: int = 1) -> list[str]:
-    counts: Counter = Counter()
-    recency: dict[str, int] = {}
+    groups: list[dict] = []
     serial = 0
     for message in list(messages or [])[-24:]:
         cognition = (message or {}).get("cognition") or {}
         if episode_id and cognition.get("topic_episode") != episode_id:
             continue
+        touched: set[int] = set()
         for term in _declared_terms(message):
-            counts[term] += 1
-            recency[term] = serial
+            group_index = next((i for i, group in enumerate(groups) if _near(term, group["label"])), None)
+            if group_index is None:
+                groups.append({"label": term, "support": 0, "recency": serial})
+                group_index = len(groups) - 1
+            group = groups[group_index]
+            if group_index not in touched:
+                group["support"] += 1
+                touched.add(group_index)
+            group["recency"] = serial
             serial += 1
+    threshold = max(1, int(min_support))
     ranked = sorted(
-        (term for term in counts if counts[term] >= max(1, int(min_support))),
-        key=lambda term: (-counts[term], -recency.get(term, -1), term),
+        (group for group in groups if int(group["support"]) >= threshold),
+        key=lambda group: (-int(group["support"]), -int(group["recency"]), str(group["label"])),
     )
-    return ranked[:limit]
+    return [str(group["label"]) for group in ranked[:limit]]
 
 
 def _normalize(topic: dict | None, cycle: int) -> dict:
@@ -309,17 +317,17 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
     root = current.get("root")
     bridge_pending = bool(current.get("bridge_pending", False))
     previous_terms = list(current.get("recent_terms") or [])
-    novel = [term for term in terms if not any(_near(term, old) for old in [root, *current.get("facets", [])] if old)]
 
-    facets = list(current.get("facets") or [])
+    supported_non_root = [term for term in terms if not (root and _near(term, root))]
+    facets = [
+        facet for facet in list(current.get("facets") or [])
+        if any(_near(facet, term) for term in supported_non_root)
+    ]
+    novel = [term for term in supported_non_root if not any(_near(term, old) for old in facets)]
     for term in novel:
-        if root and _near(term, root):
-            continue
         if not any(_near(term, existing) for existing in facets):
             facets.insert(0, term)
-    for term in reversed(terms):
-        if root and _near(term, root):
-            continue
+    for term in reversed(supported_non_root):
         if any(_near(term, existing) for existing in facets):
             match = next(existing for existing in facets if _near(term, existing))
             facets.remove(match)
