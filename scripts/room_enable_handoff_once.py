@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# One-shot trigger: allow fresh Room runs to replace stale warm code.
 from pathlib import Path
 import subprocess
 
