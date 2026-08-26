@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T07:44:46.907193+00:00",
-  "cycle_key": "32927291254:1:145",
+  "generated_at": "2026-08-26T07:46:08.045358+00:00",
+  "cycle_key": "32927291254:1:146",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,27 +32,19 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.89,
-      "confidence": 0.993,
-      "raw_score": 3.89,
+      "score": 3.01,
+      "confidence": 0.969,
+      "raw_score": 3.01,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "relationship",
-        "worried",
-        "feel"
+        "feel",
+        "worried"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "relationship"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "worried",
             "relationship"
           ],
           "weight": 1.45
@@ -60,43 +52,31 @@
         {
           "kind": "message",
           "matched": [
-            "feel"
+            "feel",
+            "relationship"
           ],
-          "weight": 0.64
+          "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
             "relationship"
           ],
-          "weight": 0.46
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "repair"
-      ],
-      "evidence_sources": [
+          "weight": 0.76
+        },
         {
           "kind": "message",
           "matched": [
-            "repair"
+            "worried",
+            "relationship"
           ],
-          "weight": 1.15
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "a354b1c39122",
+  "context_fingerprint": "06769152b588",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 998,
-  "approx_added_tokens": 250
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
