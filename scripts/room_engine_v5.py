@@ -16,6 +16,7 @@ import os
 import re
 
 import room_engine_v5_legacy as _legacy
+import room_social_v5 as _social
 
 # The production workflow verifies the known-good legacy retry budget before
 # starting a warm runner. The real loop remains in room_engine_v5_legacy.py.
@@ -28,6 +29,10 @@ _CUE_STOPWORDS = {
     "their", "them", "then", "there", "these", "they", "this", "those", "through", "very",
     "want", "what", "when", "where", "whether", "which", "while", "with", "without", "would",
     "your", "yourselves",
+}
+_TOPIC_SCAFFOLD = {
+    "i", "i'm", "i've", "i'll", "i'd", "you", "you're", "you've", "you'll", "you'd",
+    "we", "we're", "we've", "we'll", "we'd", "they", "they're", "they've", "they'll", "they'd",
 }
 
 
@@ -93,13 +98,7 @@ def _rewrite_prompt_data(prompt: str, transform) -> str:
 
 
 def _mask_private_context(prompt: str) -> str:
-    """Compact older transcript text for Llama comprehension and thought.
-
-    The latest event remains verbatim and structured social/relationship data
-    is preserved. Only older context messages are reduced to speaker/target
-    plus sparse semantic cues, cutting prompt-processing work before concurrent
-    private cognition calls reach the 1B model.
-    """
+    """Compact older transcript text for Llama comprehension and thought."""
     def transform(data: dict) -> dict:
         context = data.get("context")
         if isinstance(context, list):
@@ -120,14 +119,7 @@ def _mask_private_context(prompt: str) -> str:
 
 
 def _mask_expression_transcript(prompt: str) -> str:
-    """Hide copyable sentence text from expression generation only.
-
-    Validation still receives the original compact payload, so anti-copy checks
-    compare generated speech with the exact transcript. Private comprehension
-    and thought keep the latest event verbatim while older context is compacted.
-    Expression keeps speaker/target information, sparse semantic cues, its own
-    intent, topic, identity, and relationship context.
-    """
+    """Hide copyable sentence text from expression generation only."""
     def transform(data: dict) -> dict:
         context = data.get("context")
         if isinstance(context, list):
@@ -163,6 +155,37 @@ def _remember_rejected(autonomy, utterance: object) -> None:
     if text and text not in rejected:
         rejected.append(text)
     autonomy._production_rejected_wordings = rejected[-3:]
+
+
+def _sanitize_declared_topic_terms(message: object) -> list[str]:
+    """Turn model topic labels into concepts, never conversational sentences."""
+    cognition = (message or {}).get("cognition") if isinstance(message, dict) else {}
+    cognition = cognition if isinstance(cognition, dict) else {}
+    values = cognition.get("topic_terms")
+    raw_values = values if isinstance(values, list) and values else [str((message or {}).get("text", ""))]
+    out: list[str] = []
+    participant_names = set(_social.PARTICIPANTS)
+    for value in raw_values:
+        raw = re.sub(r"\s+", " ", str(value or "").strip().lower())
+        if not raw:
+            continue
+        raw_words = re.findall(r"[a-z][a-z'-]{1,}", raw)
+        sentence_like = bool(raw_words and raw_words[0] in _TOPIC_SCAFFOLD) or len(raw_words) > 4
+        if sentence_like:
+            candidates = _social.words(raw)
+        else:
+            candidates = [raw]
+        for candidate in candidates:
+            candidate = str(candidate or "").strip().lower()
+            if not candidate or candidate in participant_names or candidate in _TOPIC_SCAFFOLD:
+                continue
+            if not _social._term_tokens(candidate):
+                continue
+            if candidate not in out:
+                out.append(candidate)
+            if len(out) >= 8:
+                return out
+    return out
 
 
 def _llama_model_run(role: str, payload: dict, timeout: int = 30):
@@ -210,8 +233,6 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
             matched = autonomy._production_original_context_echo(utterance, compact, n=max(8, int(n)))
             if matched:
                 _remember_rejected(autonomy, utterance)
-            # Copy detection is advisory. The prompt still discourages copying,
-            # but ordinary overlap can never shut down a Room beat.
             return False
 
         autonomy._has_context_echo = _production_context_echo
@@ -223,7 +244,6 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
             matched = autonomy.base._production_original_too_similar(utterance, compact)
             if matched:
                 _remember_rejected(autonomy, utterance)
-            # Similarity is a quality signal, not a liveness veto.
             return False
 
         autonomy.base._too_similar_to_context = _production_too_similar
@@ -237,6 +257,10 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
 
 
 if os.environ.get("ROOM_BRAIN_ACTIVE", "").strip() == "llama3.2-1b":
+    # Do not let sentence-shaped model labels masquerade as semantic novelty.
+    # The existing topic tree then sees stable concepts and can correctly build
+    # escape pressure when the conversation is only paraphrasing itself.
+    _social._declared_terms = _sanitize_declared_topic_terms
     _legacy._private_model.run = _llama_model_run
     _legacy._core.model_run = _llama_model_run
 
