@@ -1,30 +1,35 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 818,
+  "cycle": 819,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000817",
     "root": "photography",
-    "current_facet": "rooftops",
+    "current_facet": "i've",
     "facets": [
+      "i've",
       "rooftops",
-      "light",
-      "improved",
-      "focus"
+      "reassess",
+      "focus",
+      "look",
+      "closer",
+      "take",
+      "i'll"
     ],
     "visited_facets": [
       "photography",
-      "rooftops"
+      "rooftops",
+      "i've"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -36,14 +41,18 @@
       "jules",
       "allen"
     ],
-    "turns": 2,
+    "turns": 4,
     "low_novelty_beats": 0,
     "recent_terms": [
       "photography",
+      "i've",
       "rooftops",
-      "light",
-      "improved",
-      "focus"
+      "reassess",
+      "focus",
+      "look",
+      "closer",
+      "take",
+      "i'll"
     ],
     "last_shift_cycle": 817,
     "status": "active",
@@ -53,8 +62,17 @@
         "label": "photography",
         "parent": null,
         "depth": 0,
-        "first_cycle": 818,
-        "last_cycle": 818,
+        "first_cycle": 819,
+        "last_cycle": 819,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "i've",
+        "parent": "photography",
+        "depth": 1,
+        "first_cycle": 819,
+        "last_cycle": 819,
         "hits": 1,
         "status": "open"
       },
@@ -62,26 +80,17 @@
         "label": "rooftops",
         "parent": "photography",
         "depth": 1,
-        "first_cycle": 818,
-        "last_cycle": 818,
+        "first_cycle": 819,
+        "last_cycle": 819,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "light",
+        "label": "reassess",
         "parent": "photography",
         "depth": 1,
-        "first_cycle": 818,
-        "last_cycle": 818,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "improved",
-        "parent": "photography",
-        "depth": 1,
-        "first_cycle": 818,
-        "last_cycle": 818,
+        "first_cycle": 819,
+        "last_cycle": 819,
         "hits": 1,
         "status": "open"
       },
@@ -89,17 +98,54 @@
         "label": "focus",
         "parent": "photography",
         "depth": 1,
-        "first_cycle": 818,
-        "last_cycle": 818,
+        "first_cycle": 819,
+        "last_cycle": 819,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "look",
+        "parent": "photography",
+        "depth": 1,
+        "first_cycle": 819,
+        "last_cycle": 819,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "closer",
+        "parent": "photography",
+        "depth": 1,
+        "first_cycle": 819,
+        "last_cycle": 819,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "take",
+        "parent": "photography",
+        "depth": 1,
+        "first_cycle": 819,
+        "last_cycle": 819,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "i'll",
+        "parent": "photography",
+        "depth": 1,
+        "first_cycle": 819,
+        "last_cycle": 819,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "photography"
+      "photography",
+      "rooftops"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 818,
+    "last_branch_cycle": 819,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -107,12 +153,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T081425469-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000818",
+  "last_public_event": "20260826T081622449-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000819",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T08:14:25.470221Z",
+  "last_run": "2026-08-26T08:16:22.451018Z",
   "context_scope_version": 1
 }
