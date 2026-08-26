@@ -6,12 +6,13 @@ from collections import Counter
 
 import room_social_v5 as social
 
-SCHEMA = 7
+SCHEMA = 8
 MAX_FACETS = 8
 MAX_HISTORY = 8
 MAX_RECENT_TERMS = 10
 MAX_EPISODE_UPDATES = 12
 MIN_FACET_SUPPORT = 2
+MIN_ROOT_SUPPORT = 2
 
 _TOPIC_NOISE = {
     "hey", "hi", "hello", "okay", "ok", "sorry", "thanks", "thank", "please",
@@ -40,6 +41,8 @@ _TOPIC_NOISE = {
     "honest", "open", "fine", "need", "needs", "needed", "needing",
     "want", "wants", "wanted", "wanting",
     "tough", "hard", "difficult", "easy", "rough",
+    "get", "gets", "got", "getting", "leave", "leaves", "left", "leaving",
+    "convince", "convinces", "convinced", "convincing",
 }
 
 
@@ -221,6 +224,10 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
 
     if schema < SCHEMA or had_runaway_depth:
         schema_upgrade = schema < SCHEMA
+        if schema_upgrade:
+            # Schema 8 re-forms the subject under the same independent-support
+            # rule used for facets instead of preserving a one-message root.
+            root = None
         candidates = [] if schema_upgrade else [
             source.get("current_facet"),
             *list(source.get("recent_terms") or []),
@@ -345,7 +352,7 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
         return shifted
 
     episode_id = current.get("id")
-    min_support = 1 if current.get("root") is None else MIN_FACET_SUPPORT
+    min_support = MIN_ROOT_SUPPORT if current.get("root") is None else MIN_FACET_SUPPORT
     terms = topic_terms_from_messages(messages, limit=MAX_RECENT_TERMS, episode_id=episode_id, min_support=min_support)
     if current.get("root") is None:
         return new_topic_from_terms(terms, cycle, current)
