@@ -1,35 +1,36 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 640,
+  "cycle": 641,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000638",
     "root": "fried",
-    "current_facet": "understand",
+    "current_facet": "i'm worried about",
     "facets": [
       "food",
+      "i'm worried about",
       "diets",
-      "understand",
-      "intellectually",
-      "help",
+      "problem",
       "movies",
       "idea",
-      "vegetarian diet"
+      "understand",
+      "intellectually"
     ],
     "visited_facets": [
       "fried",
       "diets",
-      "understand"
+      "understand",
+      "i'm worried about"
     ],
-    "facet_index": 2,
+    "facet_index": 3,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -43,15 +44,14 @@
       "jules",
       "allen"
     ],
-    "turns": 5,
+    "turns": 7,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "food",
       "fried",
-      "diets",
-      "understand",
-      "intellectually",
-      "help"
+      "food",
+      "i'm worried about",
+      "diet",
+      "problem"
     ],
     "last_shift_cycle": 638,
     "status": "active",
@@ -61,8 +61,8 @@
         "label": "fried",
         "parent": null,
         "depth": 0,
-        "first_cycle": 640,
-        "last_cycle": 640,
+        "first_cycle": 641,
+        "last_cycle": 641,
         "hits": 1,
         "status": "open"
       },
@@ -70,8 +70,17 @@
         "label": "food",
         "parent": "fried",
         "depth": 1,
-        "first_cycle": 640,
-        "last_cycle": 640,
+        "first_cycle": 641,
+        "last_cycle": 641,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "i'm worried about",
+        "parent": "fried",
+        "depth": 1,
+        "first_cycle": 641,
+        "last_cycle": 641,
         "hits": 1,
         "status": "open"
       },
@@ -79,35 +88,17 @@
         "label": "diets",
         "parent": "fried",
         "depth": 1,
-        "first_cycle": 640,
-        "last_cycle": 640,
+        "first_cycle": 641,
+        "last_cycle": 641,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "understand",
+        "label": "problem",
         "parent": "fried",
         "depth": 1,
-        "first_cycle": 640,
-        "last_cycle": 640,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "intellectually",
-        "parent": "fried",
-        "depth": 1,
-        "first_cycle": 640,
-        "last_cycle": 640,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "help",
-        "parent": "fried",
-        "depth": 1,
-        "first_cycle": 640,
-        "last_cycle": 640,
+        "first_cycle": 641,
+        "last_cycle": 641,
         "hits": 1,
         "status": "open"
       },
@@ -115,8 +106,8 @@
         "label": "movies",
         "parent": "fried",
         "depth": 1,
-        "first_cycle": 640,
-        "last_cycle": 640,
+        "first_cycle": 641,
+        "last_cycle": 641,
         "hits": 1,
         "status": "open"
       },
@@ -124,27 +115,37 @@
         "label": "idea",
         "parent": "fried",
         "depth": 1,
-        "first_cycle": 640,
-        "last_cycle": 640,
+        "first_cycle": 641,
+        "last_cycle": 641,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "vegetarian diet",
+        "label": "understand",
         "parent": "fried",
         "depth": 1,
-        "first_cycle": 640,
-        "last_cycle": 640,
+        "first_cycle": 641,
+        "last_cycle": 641,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "intellectually",
+        "parent": "fried",
+        "depth": 1,
+        "first_cycle": 641,
+        "last_cycle": 641,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
       "fried",
-      "diets"
+      "diets",
+      "understand"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 640,
+    "last_branch_cycle": 641,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -152,12 +153,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T015828159-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000640",
+  "last_public_event": "20260826T020011952-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000641",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T01:58:28.161018Z",
+  "last_run": "2026-08-26T02:00:11.953552Z",
   "context_scope_version": 1
 }
