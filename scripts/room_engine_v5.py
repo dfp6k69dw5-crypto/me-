@@ -179,9 +179,13 @@ def _mask_expression_transcript(prompt: str) -> str:
 
         event = data.get("event")
         if isinstance(event, dict):
+            # Keep the live turn verbatim enough to answer it. Older context
+            # stays cue-only, so coherence does not require exposing a copyable
+            # transcript window to the expression model.
             data["event"] = {
                 "speaker": event.get("speaker"),
                 "target": event.get("target"),
+                "text": str(event.get("text") or "")[:420],
                 "cues": _semantic_cues(event.get("text")),
             }
         elif event:
@@ -340,6 +344,16 @@ def _coherent_recurrent(node, key, bus_data):
                 live_event = message
                 break
 
+    # If the planned partner has not spoken in this beat, join the conversation
+    # that actually exists instead of emitting a parallel remark to an absent
+    # target. Direct addresses above still have first priority.
+    if live_event is None and prior:
+        candidate = prior[-1]
+        speaker = str(candidate.get("speaker") or "").lower() if isinstance(candidate, dict) else ""
+        if speaker in participants and speaker != entity:
+            live_event = candidate
+            live_partner = speaker
+
     if live_event is None or not live_partner:
         return _LLAMA_ORIGINAL_RECURRENT(node, key, routed)
 
@@ -359,14 +373,19 @@ def _coherent_recurrent(node, key, bus_data):
 
     if isinstance(deliberation, dict):
         deliberation["preferred_partner"] = live_partner
+        text = str(live_event.get("text") or "").rstrip()
         if directly_addressed:
-            text = str(live_event.get("text") or "").rstrip()
             deliberation["action"] = "ANSWER" if text.endswith("?") else "DEEPEN"
             deliberation["new_information_goal"] = (
                 "Respond to the specific message just addressed to you. "
                 "Acknowledge its concrete point before adding one relevant thought."
             )
             deliberation.pop("conversation_job", None)
+        else:
+            deliberation["new_information_goal"] = (
+                "Pick up the latest speaker's concrete point before adding your own relevant thought. "
+                "Do not start a separate conversation while another turn is active."
+            )
 
     ordered = [item for item in prior if item is not live_event] + [live_event]
     original_prior = _legacy._core.prior_expression_messages
