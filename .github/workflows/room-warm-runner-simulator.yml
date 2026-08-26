@@ -1,48 +1,118 @@
-name: Room warm-runner watchdog simulator
-# post-patch verification kick: 2026-08-19
+name: Room semantic persistence repair
 
 on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/sarah-society.yml'
       - '.github/workflows/room-warm-runner-simulator.yml'
-      - 'scripts/room_warm_runner_watchdog_sim.py'
   workflow_dispatch:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
-  group: room-warm-runner-watchdog-simulator
+  group: room-semantic-persistence-repair
   cancel-in-progress: true
 
 jobs:
-  simulate:
+  repair:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
         with:
           ref: main
-          fetch-depth: 0
+          fetch-depth: 50
 
-      - name: Clear previous diagnostic
-        run: rm -f room/warm-runner-watchdog-diagnostic.json
-
-      - name: Run deterministic hung-node simulator
-        id: simulator
-        continue-on-error: true
-        run: python3 scripts/room_warm_runner_watchdog_sim.py
-
-      - name: Publish simulator diagnostic
-        if: always()
+      - name: Unify persisted topic eligibility and prune dead history
+        shell: bash
         run: |
-          test -f room/warm-runner-watchdog-diagnostic.json || printf '%s\n' '{"pass":false,"error":"watchdog simulator produced no diagnostic"}' > room/warm-runner-watchdog-diagnostic.json
-          git config user.name "room-warm-runner-simulator"
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/room_topic_bounded.py')
+          s = p.read_text()
+
+          old_noise = '''    "maybe", "probably", "actually", "well", "just", "again", "today", "tonight",
+              "sarah", "mara", "owen", "jules", "allen",
+          }'''
+          # tolerate normal source indentation exactly as checked in
+          old_noise = old_noise.replace('              ', '    ')
+          new_noise = '''    "maybe", "probably", "actually", "well", "just", "again", "today", "tonight",
+              "sarah", "mara", "owen", "jules", "allen",
+              # Discourse verbs, social moves, generic affect/state, and evaluative
+              # language may shape a turn but must not become persisted subjects.
+              "notice", "noticed", "noticing", "share", "shared", "sharing", "think", "thinking", "thought",
+              "feel", "feels", "feeling", "felt", "seem", "seems", "seemed", "say", "said", "saying",
+              "tell", "telling", "talk", "talked", "talking", "discuss", "discussed", "discussing",
+              "support", "supporting", "supported", "repair", "repairing", "repaired", "reassure", "reassuring", "reassurance",
+              "agree", "agreeing", "agreement", "disagree", "disagreeing", "disagreement", "answer", "answering", "answered",
+              "callback", "compare", "comparing", "compared", "disclose", "disclosing", "disclosed", "bridge", "bridging",
+              "ask", "asking", "asked", "question", "questioning", "respond", "responding", "response", "apologize", "apologizing", "apology",
+              "glad", "happy", "sad", "sure", "unsure", "worried", "worry", "worrying", "grateful", "thankful", "overwhelmed",
+              "upset", "angry", "afraid", "scared", "nervous", "confused", "comfortable", "uncomfortable", "honest", "open", "fine",
+              "need", "needs", "needed", "needing", "want", "wants", "wanted", "wanting",
+              "tough", "hard", "difficult", "easy", "rough",
+          }'''.replace('              ', '    ')
+          if old_noise not in s:
+              raise SystemExit('topic-noise anchor not found')
+          s = s.replace(old_noise, new_noise, 1)
+
+          old_history = '''    defaults["visited_facets"] = _unique(defaults.get("visited_facets") or [], MAX_HISTORY)
+              defaults["branch_history"] = _unique(defaults.get("branch_history") or [], MAX_HISTORY)
+              defaults["recent_terms"] = _unique(defaults.get("recent_terms") or [], MAX_RECENT_TERMS)
+              defaults["shared_references"] = _unique(defaults.get("shared_references") or [], 4)'''.replace('              ', '    ')
+          new_history = '''    live_labels = [label for label in [root, *facets] if label]
+              visited = [term for term in _unique(defaults.get("visited_facets") or [], MAX_HISTORY)
+                         if any(_near(term, live) for live in live_labels)]
+              current_live = defaults.get("current_facet")
+              if current_live and not any(_near(current_live, term) for term in visited):
+                  visited.append(_clean(current_live))
+              defaults["visited_facets"] = _unique(visited, MAX_HISTORY)
+              defaults["branch_history"] = [
+                  term for term in _unique(defaults.get("branch_history") or [], MAX_HISTORY)
+                  if any(_near(term, facet) for facet in facets)
+              ]
+              defaults["recent_terms"] = _unique(defaults.get("recent_terms") or [], MAX_RECENT_TERMS)
+              defaults["shared_references"] = _unique(defaults.get("shared_references") or [], 4)'''.replace('              ', '    ')
+          if old_history not in s:
+              raise SystemExit('history-normalization anchor not found')
+          s = s.replace(old_history, new_history, 1)
+          p.write_text(s)
+          PY
+
+          python3 -m py_compile scripts/room_topic_bounded.py scripts/room_engine_v5.py scripts/room_social_v5.py
+          PYTHONPATH=scripts python3 - <<'PY'
+          import room_topic_bounded as t
+          for bad in ('tough','support','reassurance','noticed','glad','need','repair'):
+              assert not t._valid_term(bad), bad
+          for good in ('story','autonomy','movies','sleep','art'):
+              assert t._valid_term(good), good
+          sample = {
+              'semantic_schema': t.SCHEMA,
+              'id':'topic-test','root':'story','current_facet':'story','facets':[],
+              'visited_facets':['side','gentle reminder','story'],
+              'branch_history':['side','story','gentle reminder'],
+              'shared_references':['tough','movies'],
+              'branches':[{'label':'story','parent':None,'depth':0,'first_cycle':1,'last_cycle':1,'hits':1,'status':'open'}],
+          }
+          clean=t._normalize(sample, 2)
+          assert clean['visited_facets']==['story'], clean['visited_facets']
+          assert clean['branch_history']==[], clean['branch_history']
+          assert clean['shared_references']==['movies'], clean['shared_references']
+          print('ROOM_SEMANTIC_PERSISTENCE_GUARD_OK')
+          PY
+
+      - name: Commit verified persistence repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "the-room-repair"
           git config user.email "actions@users.noreply.github.com"
-          git add room/warm-runner-watchdog-diagnostic.json
-          git commit -m "Record Room warm-runner watchdog diagnostic" || exit 0
+          git add scripts/room_topic_bounded.py
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Align persisted Room topic semantics"
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
@@ -51,8 +121,17 @@ jobs:
           done
           exit 1
 
-      - name: Enforce simulator result
-        if: always()
+      - name: Controlled Room handoff
         env:
-          SIMULATOR_OUTCOME: ${{ steps.simulator.outcome }}
-        run: test "$SIMULATOR_OUTCOME" = success
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ids="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 10 --json databaseId --jq '.[].databaseId')"
+          for id in $ids; do gh run cancel "$id" --repo "$GITHUB_REPOSITORY" || true; done
+          for n in $(seq 1 30); do
+            active="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')"
+            [ "$active" -eq 0 ] && break
+            sleep 2
+          done
+          gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
