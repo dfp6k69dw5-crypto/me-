@@ -3,6 +3,7 @@ import base, { RoomState } from "./index.js";
 export { RoomState };
 
 const MAX_TURN = 700;
+const ROOM_HISTORY_URL = "https://raw.githubusercontent.com/maaronfanberg-lab/me-/main/room/feed.json";
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -15,9 +16,42 @@ function json(data, status = 200) {
   });
 }
 
+const RESILIENT_VIEWER = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#08090d"><title>The Room — Live</title><style>
+html,body{margin:0;min-height:100%;background:#08090d;color:#f5f3ee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding:0 12px 70px}.top{position:sticky;top:0;background:#08090df5;padding:calc(14px + env(safe-area-inset-top)) 2px 11px;border-bottom:1px solid #252b36;z-index:2}.title{font-size:24px;font-weight:850}.sub{font-size:11px;color:#a3a9b3;margin-top:4px}.status{margin-top:9px;font-size:12px;color:#e0bf79}.status.live{color:#98dfc8}.chat{max-width:760px;margin:14px auto}.beat{font-size:10px;color:#6f7783;text-align:center;margin:18px 0 10px}.msg{background:#11141b;border:1px solid #2b3240;border-radius:16px;padding:11px 13px;margin:0 0 10px}.who{font-size:10px;font-weight:800;letter-spacing:.1em;color:#d7c18a;margin-bottom:6px}.text{font-size:16px;line-height:1.45}.when{font-size:9px;color:#707887;margin-top:7px}.err{padding:24vh 18px;text-align:center;color:#a3a9b3;line-height:1.5}</style></head><body>
+<div class="top"><div class="title">The Room</div><div class="sub">Sarah · Mara · Owen · Jules · Allen</div><div id="status" class="status">connecting…</div></div><main id="chat" class="chat"><div class="err">Opening the Room…</div></main>
+<script>(function(){
+var status=document.getElementById('status'),chat=document.getElementById('chat'),last='',busy=false,CACHE='roomLastGoodFeedV1',GH=${JSON.stringify(ROOM_HISTORY_URL)};
+function tm(s){try{return new Date(s).toLocaleTimeString([],{hour:'numeric',minute:'2-digit',second:'2-digit'})}catch(e){return''}}
+function nm(x,m){return x.speaker==='allen'?'Allen':((m[x.speaker]&&m[x.speaker].name)||x.speaker||'')}
+function valid(r){var f=r&&r.feed;return !!(f&&f.state&&Array.isArray(f.conversation)&&f.conversation.length)}
+function save(r){try{if(valid(r))localStorage.setItem(CACHE,JSON.stringify(r))}catch(e){}}
+function load(){try{var r=JSON.parse(localStorage.getItem(CACHE)||'null');return valid(r)?r:null}catch(e){return null}}
+function render(r,source){var f=r.feed||{},c=Array.isArray(f.conversation)?f.conversation:[],m=f.minds&&f.minds.entities||{},st=f.state||{},sig=c.length?String(c[c.length-1].id||'')+':'+c.length:'';var stamp=r.receivedAt||f.generated_at||st.last_run||'',age=stamp?Math.max(0,Math.floor((Date.now()-Date.parse(stamp))/1000)):9999;status.className='status'+(source==='relay'&&age<15?' live':'');status.textContent=(source==='relay'?(age<15?'LIVE':'STALE'):source==='github'?'GITHUB FALLBACK':'CACHED')+' · beat '+(st.cycle||'—')+' · '+(st.beat_message_count||0)+' voices · '+age+'s';if(sig===last)return;last=sig;chat.innerHTML='';var start=Math.max(0,c.length-80),prev='';for(var i=start;i<c.length;i++){var x=c[i]||{},b=x.beat_id||'';if(b!==prev){var h=document.createElement('div');h.className='beat';h.textContent='BEAT '+(b?b.slice(-6):'—');chat.appendChild(h);prev=b}var d=document.createElement('div');d.className='msg';var w=document.createElement('div');w.className='who';w.textContent=nm(x,m);var t=document.createElement('div');t.className='text';t.textContent=x.text||'';var q=document.createElement('div');q.className='when';q.textContent=tm(x.at);d.appendChild(w);d.appendChild(t);d.appendChild(q);chat.appendChild(d)}if(c.length&&source==='relay')window.scrollTo(0,document.body.scrollHeight)}
+async function relay(){var r=await fetch('/api/feed?fresh='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('relay '+r.status);var data=await r.json();if(!valid(data))throw new Error('relay invalid');return data}
+async function github(){var r=await fetch(GH+'?fresh='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('github '+r.status);var f=await r.json();var data={feed:f,receivedAt:f.generated_at||(f.state&&f.state.last_run)||new Date().toISOString()};if(!valid(data))throw new Error('github invalid');return data}
+async function refresh(){if(busy)return;busy=true;try{try{var live=await relay();save(live);render(live,'relay');return}catch(e){}try{var gh=await github();save(gh);render(gh,'github');return}catch(e){}var cached=load();if(cached){render(cached,'cache');return}status.className='status';status.textContent='Room sources unavailable';chat.innerHTML='<div class="err">The live relay and GitHub history are temporarily unreachable. The Room history has not been declared empty.</div>'}finally{busy=false}}
+var cached=load();if(cached)render(cached,'cache');refresh();setInterval(refresh,2000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')refresh()});
+})();</script></body></html>`;
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    // Serve a viewer that never interprets a transient relay failure as an
+    // empty Room. It falls back to authoritative GitHub history, then to the
+    // browser's last known-good feed.
+    if (url.pathname === "/" && (request.method === "GET" || request.method === "HEAD")) {
+      return new Response(request.method === "HEAD" ? null : RESILIENT_VIEWER, {
+        status: 200,
+        headers: {
+          "content-type": "text/html; charset=utf-8",
+          "cache-control": "no-store",
+          "x-content-type-options": "nosniff",
+          "referrer-policy": "no-referrer",
+        },
+      });
+    }
 
     // Allen is intentionally an open participant. The Room page itself is the
     // input surface, so no browser key or bearer token is required to speak.
