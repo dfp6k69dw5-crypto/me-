@@ -1,24 +1,27 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 931,
+  "cycle": 932,
   "messages": 1000,
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "topic_episode": {
     "semantic_schema": 7,
     "id": "topic-000929",
     "root": "photography",
-    "current_facet": "photography",
-    "facets": [],
-    "visited_facets": [
-      "photography"
+    "current_facet": "project",
+    "facets": [
+      "project"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "photography",
+      "project"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -30,10 +33,11 @@
       "jules",
       "allen"
     ],
-    "turns": 4,
-    "low_novelty_beats": 2,
+    "turns": 6,
+    "low_novelty_beats": 1,
     "recent_terms": [
-      "photography"
+      "photography",
+      "project"
     ],
     "last_shift_cycle": 929,
     "status": "active",
@@ -43,28 +47,37 @@
         "label": "photography",
         "parent": null,
         "depth": 0,
-        "first_cycle": 931,
-        "last_cycle": 931,
+        "first_cycle": 932,
+        "last_cycle": 932,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "project",
+        "parent": "photography",
+        "depth": 1,
+        "first_cycle": 932,
+        "last_cycle": 932,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
-    "focus_turns": 4,
-    "last_branch_cycle": 931,
-    "escape_pressure": 2
+    "focus_turns": 1,
+    "last_branch_cycle": 932,
+    "escape_pressure": 1
   },
   "semantic_epoch_version": 1,
   "semantic_epoch_started_at": "2026-08-24T16:33:56.351717Z",
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T152918958-jules-v5",
-  "last_speaker": "jules",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000931",
+  "last_public_event": "20260826T153203914-sarah-v5",
+  "last_speaker": "sarah",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000932",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T15:29:20.513018Z",
+  "last_run": "2026-08-26T15:32:05.447083Z",
   "context_scope_version": 1
 }
