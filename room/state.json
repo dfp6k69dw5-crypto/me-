@@ -1,27 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1151,
+  "cycle": 1152,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001148",
     "root": "connection",
-    "current_facet": "wondering",
+    "current_facet": "keeping",
     "facets": [
+      "keeping",
       "wondering"
     ],
     "visited_facets": [
       "connection",
-      "wondering"
+      "wondering",
+      "keeping"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -35,9 +37,10 @@
       "jules",
       "allen"
     ],
-    "turns": 6,
+    "turns": 8,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "keeping",
       "wondering"
     ],
     "last_shift_cycle": 1148,
@@ -48,8 +51,17 @@
         "label": "connection",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1151,
-        "last_cycle": 1151,
+        "first_cycle": 1152,
+        "last_cycle": 1152,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "keeping",
+        "parent": "connection",
+        "depth": 1,
+        "first_cycle": 1152,
+        "last_cycle": 1152,
         "hits": 1,
         "status": "open"
       },
@@ -57,15 +69,17 @@
         "label": "wondering",
         "parent": "connection",
         "depth": 1,
-        "first_cycle": 1151,
-        "last_cycle": 1151,
+        "first_cycle": 1152,
+        "last_cycle": 1152,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "wondering"
+    ],
     "focus_turns": 0,
-    "last_branch_cycle": 1151,
+    "last_branch_cycle": 1152,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -73,12 +87,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T234624841-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001151",
+  "last_public_event": "20260826T234853585-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001152",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T23:46:27.222111Z",
+  "last_run": "2026-08-26T23:48:55.924826Z",
   "context_scope_version": 1
 }
