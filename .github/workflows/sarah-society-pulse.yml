@@ -20,25 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
-      - name: Replace resident Room on explicit pulse kick
-        if: github.event_name == 'push'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          ids="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 10 --json databaseId --jq '.[].databaseId')"
-          for id in $ids; do
-            echo "Cancelling resident Room run $id for code handoff"
-            gh run cancel "$id" --repo "$GITHUB_REPOSITORY" || true
-          done
-          for n in $(seq 1 30); do
-            active="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')"
-            [ "$active" -eq 0 ] && exit 0
-            sleep 2
-          done
-          echo "Resident Room did not stop cleanly"
-          exit 1
-
       - name: Keep The Room running at GitHub's fastest sustainable cadence
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
