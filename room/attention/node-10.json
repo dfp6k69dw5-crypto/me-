@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T20:13:07.790717+00:00",
-  "cycle_key": "33002894708:1:41",
+  "generated_at": "2026-08-26T20:14:49.897364+00:00",
+  "cycle_key": "33002894708:1:42",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,28 +32,27 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 4.67,
-      "confidence": 0.998,
-      "raw_score": 4.67,
+      "score": 4.05,
+      "confidence": 0.995,
+      "raw_score": 4.05,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "love",
         "feel",
         "hurt",
+        "love",
         "relationship"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "love"
+            "feel"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "feel",
             "hurt"
           ],
           "weight": 1.15
@@ -61,28 +60,29 @@
         {
           "kind": "message",
           "matched": [
-            "relationship"
+            "love"
           ],
-          "weight": 0.92
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel",
+            "hurt"
+          ],
+          "weight": 0.54
         },
         {
           "kind": "message",
           "matched": [
             "relationship"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feel"
           ],
           "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "19da2b49fd9f",
+  "context_fingerprint": "2d2db8a4fd15",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 544,
   "approx_added_tokens": 136
