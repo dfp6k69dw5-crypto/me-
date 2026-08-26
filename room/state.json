@@ -1,32 +1,35 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 722,
+  "cycle": 723,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000721",
     "root": "movies",
-    "current_facet": "thoughts",
+    "current_facet": "were",
     "facets": [
+      "were",
+      "life",
+      "i care about you",
+      "support",
       "thoughts",
-      "explain",
-      "talking",
-      "spend",
-      "choosing",
-      "bad"
+      "interest",
+      "understand",
+      "explain"
     ],
     "visited_facets": [
       "movies",
-      "thoughts"
+      "thoughts",
+      "were"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -38,15 +41,17 @@
       "jules",
       "allen"
     ],
-    "turns": 2,
+    "turns": 4,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "were",
+      "life",
+      "movie",
+      "i care about you",
+      "support",
       "thoughts",
-      "explain",
-      "talking",
-      "spend",
-      "choosing",
-      "bad"
+      "interest",
+      "understand"
     ],
     "last_shift_cycle": 721,
     "status": "active",
@@ -56,8 +61,44 @@
         "label": "movies",
         "parent": null,
         "depth": 0,
-        "first_cycle": 722,
-        "last_cycle": 722,
+        "first_cycle": 723,
+        "last_cycle": 723,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "were",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 723,
+        "last_cycle": 723,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "life",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 723,
+        "last_cycle": 723,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "i care about you",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 723,
+        "last_cycle": 723,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "support",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 723,
+        "last_cycle": 723,
         "hits": 1,
         "status": "open"
       },
@@ -65,8 +106,26 @@
         "label": "thoughts",
         "parent": "movies",
         "depth": 1,
-        "first_cycle": 722,
-        "last_cycle": 722,
+        "first_cycle": 723,
+        "last_cycle": 723,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "interest",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 723,
+        "last_cycle": 723,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "understand",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 723,
+        "last_cycle": 723,
         "hits": 1,
         "status": "open"
       },
@@ -74,53 +133,18 @@
         "label": "explain",
         "parent": "movies",
         "depth": 1,
-        "first_cycle": 722,
-        "last_cycle": 722,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "talking",
-        "parent": "movies",
-        "depth": 1,
-        "first_cycle": 722,
-        "last_cycle": 722,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "spend",
-        "parent": "movies",
-        "depth": 1,
-        "first_cycle": 722,
-        "last_cycle": 722,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "choosing",
-        "parent": "movies",
-        "depth": 1,
-        "first_cycle": 722,
-        "last_cycle": 722,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "bad",
-        "parent": "movies",
-        "depth": 1,
-        "first_cycle": 722,
-        "last_cycle": 722,
+        "first_cycle": 723,
+        "last_cycle": 723,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "movies"
+      "movies",
+      "thoughts"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 722,
+    "last_branch_cycle": 723,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -128,12 +152,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T051614304-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000722",
+  "last_public_event": "20260826T051836915-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000723",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T05:16:14.305518Z",
+  "last_run": "2026-08-26T05:18:36.917295Z",
   "context_scope_version": 1
 }
