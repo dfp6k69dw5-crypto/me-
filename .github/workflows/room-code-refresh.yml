@@ -1,0 +1,32 @@
+name: Room code refresh
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/room_*.py'
+      - '.github/workflows/sarah-society.yml'
+
+permissions:
+  actions: write
+  contents: read
+
+# A code push should replace the resident warm runner exactly once. Ordinary
+# Room beat commits touch room/ and society/live.json, so they never enter here.
+concurrency:
+  group: the-room-world-main
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Verify Room Python before handoff
+        run: python3 -m py_compile scripts/room_*.py
+      - name: Dispatch fresh Room runner
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
