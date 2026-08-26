@@ -171,7 +171,6 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
     import room_private_model_autonomy as autonomy
 
     autonomy._production_rejected_wordings = []
-    autonomy._production_expression_attempt = 0
     payload = _episode_scoped_payload(payload)
 
     if not hasattr(autonomy, "_production_original_request_autonomy"):
@@ -182,7 +181,6 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
             if request_role in {"comprehension", "thought"}:
                 prompt = _mask_private_context(prompt)
             elif request_role == "expression":
-                autonomy._production_expression_attempt = int(attempt)
                 prompt = _mask_expression_transcript(prompt)
             rejected = [
                 str(item or "").strip()
@@ -212,11 +210,9 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
             matched = autonomy._production_original_context_echo(utterance, compact, n=max(8, int(n)))
             if matched:
                 _remember_rejected(autonomy, utterance)
-            # Anti-copy is a quality retry, not a liveness veto. On the final
-            # expression attempt, structurally valid speech is allowed through.
-            if getattr(autonomy, "_production_expression_attempt", 0) >= 2:
-                return False
-            return matched
+            # Copy detection is advisory. The prompt still discourages copying,
+            # but ordinary overlap can never shut down a Room beat.
+            return False
 
         autonomy._has_context_echo = _production_context_echo
 
@@ -227,11 +223,8 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
             matched = autonomy.base._production_original_too_similar(utterance, compact)
             if matched:
                 _remember_rejected(autonomy, utterance)
-            # Keep forcing rewrites on the first two tries, but never let this
-            # preference kill the entire Room after the final valid attempt.
-            if getattr(autonomy, "_production_expression_attempt", 0) >= 2:
-                return False
-            return matched
+            # Similarity is a quality signal, not a liveness veto.
+            return False
 
         autonomy.base._too_similar_to_context = _production_too_similar
 
