@@ -20,80 +20,109 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
-      - name: Replace resident Room on explicit pulse kick
-        if: github.event_name == 'push'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          ids="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 10 --json databaseId --jq '.[].databaseId')"
-          for id in $ids; do
-            echo "Cancelling resident Room run $id for code handoff"
-            gh run cancel "$id" --repo "$GITHUB_REPOSITORY" || true
-          done
-          for n in $(seq 1 30); do
-            active="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')"
-            [ "$active" -eq 0 ] && exit 0
-            sleep 2
-          done
-          echo "Resident Room did not stop cleanly"
-          exit 1
-
       - name: Keep The Room running at GitHub's fastest sustainable cadence
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -uo pipefail
+
+          # One Room beat at a time. A successful beat is followed immediately
+          # by the next. GitHub 429/5xx errors are treated as temporary pressure,
+          # never as a reason for the conversation to die.
           stop_at=$((SECONDS + 19800))
           api_backoff=15
           last_cooled_failure=""
           queued_timeout=90
+
           while [ "$SECONDS" -lt "$stop_at" ]; do
-            runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --limit 1 --json databaseId,status,conclusion,createdAt 2>/tmp/room-gh-error)"
+            runs="$(gh run list \
+              --repo "$GITHUB_REPOSITORY" \
+              --workflow sarah-society.yml \
+              --limit 1 \
+              --json databaseId,status,conclusion,createdAt 2>/tmp/room-gh-error)"
             rc=$?
+
             if [ "$rc" -ne 0 ]; then
+              echo "GitHub Actions API is temporarily unavailable; retrying in ${api_backoff}s"
+              cat /tmp/room-gh-error || true
               sleep "$api_backoff"
               api_backoff=$((api_backoff * 2))
               [ "$api_backoff" -gt 120 ] && api_backoff=120
               continue
             fi
+
             api_backoff=15
             latest_id="$(printf '%s' "$runs" | jq -r '.[0].databaseId // empty')"
             latest_status="$(printf '%s' "$runs" | jq -r '.[0].status // "none"')"
             latest_conclusion="$(printf '%s' "$runs" | jq -r '.[0].conclusion // ""')"
             latest_created="$(printf '%s' "$runs" | jq -r '.[0].createdAt // empty')"
+
             case "$latest_status" in
-              in_progress) sleep 8; continue ;;
+              in_progress)
+                echo "Room beat $latest_id is running; checking again shortly"
+                sleep 8
+                continue
+                ;;
               queued|pending|waiting|requested)
                 now_epoch="$(date -u +%s)"
                 created_epoch="$(date -u -d "$latest_created" +%s 2>/dev/null || echo "$now_epoch")"
                 queued_age=$((now_epoch - created_epoch))
+
                 if [ "$queued_age" -ge "$queued_timeout" ]; then
+                  echo "Room beat $latest_id has been '$latest_status' for ${queued_age}s; replacing the stuck run"
                   if gh run cancel "$latest_id" --repo "$GITHUB_REPOSITORY"; then
                     last_cooled_failure="$latest_id"
                     sleep 8
                   else
+                    echo "GitHub did not accept cancellation yet; retrying shortly"
                     sleep "$api_backoff"
+                    api_backoff=$((api_backoff * 2))
+                    [ "$api_backoff" -gt 120 ] && api_backoff=120
                   fi
                 else
+                  echo "Room beat $latest_id is '$latest_status' (${queued_age}s); checking again shortly"
                   sleep 8
                 fi
                 continue
                 ;;
             esac
+
+            # If GitHub itself caused a beat to fail (runner/action download/etc.),
+            # give the platform room to recover once before retrying.
             if [ -n "$latest_id" ] && [ "$latest_conclusion" != "success" ] && [ "$latest_id" != "$last_cooled_failure" ]; then
+              echo "Room beat $latest_id ended '$latest_conclusion'; cooling down for 90s before retry"
               last_cooled_failure="$latest_id"
               sleep 90
               continue
             fi
-            if gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto; then
+
+            echo "Room is free; dispatching the next conversational beat"
+            if gh workflow run sarah-society.yml \
+              --repo "$GITHUB_REPOSITORY" \
+              --ref main \
+              -f entity=auto; then
+              # Give the new run enough time to become visible in the Actions API.
               sleep 12
             else
+              echo "GitHub refused the dispatch temporarily; backing off for ${api_backoff}s"
               sleep "$api_backoff"
+              api_backoff=$((api_backoff * 2))
+              [ "$api_backoff" -gt 120 ] && api_backoff=120
             fi
           done
+
+          echo "Handing The Room pulse to a fresh GitHub runner"
           for attempt in 1 2 3 4 5; do
-            if gh workflow run sarah-society-pulse.yml --repo "$GITHUB_REPOSITORY" --ref main; then exit 0; fi
+            if gh workflow run sarah-society-pulse.yml \
+              --repo "$GITHUB_REPOSITORY" \
+              --ref main; then
+              exit 0
+            fi
+            echo "Pulse handoff attempt $attempt failed; retrying in 30s"
             sleep 30
           done
+
+          # The 5-minute watchdog is the final safety net if GitHub rejects
+          # every handoff attempt during an outage.
+          echo "Pulse handoff unavailable; watchdog will restart the chain"
           exit 0
