@@ -42,38 +42,26 @@ jobs:
             [ "$active" -eq 0 ] && break
             sleep 2
           done
+          active=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')
+          [ "$active" -eq 0 ] || { echo 'resident Room did not stop'; exit 1; }
 
-      - name: Restore full Room workflow and apply pending memory guard
+      - name: Apply pending memory routing guard
         shell: bash
         run: |
           set -euo pipefail
-          # Restore the last known complete Room workflow, changing only the
-          # handoff policy. This repairs any partial workflow rewrite safely.
-          git show b8e35056a6b2d195d0df591c0a6acc36226235e7:.github/workflows/sarah-society.yml > /tmp/sarah-society.yml
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('/tmp/sarah-society.yml')
-          s = p.read_text()
-          old = '  cancel-in-progress: false'
-          new = '  cancel-in-progress: true'
-          if old not in s and new not in s:
-              raise SystemExit('Room concurrency anchor missing')
-          p.write_text(s.replace(old, new, 1))
-          PY
-          mv /tmp/sarah-society.yml .github/workflows/sarah-society.yml
-
           if [ -f tools/apply_room_memory_routing_guard.py ]; then
             python3 tools/apply_room_memory_routing_guard.py
           fi
 
-      - name: Verify repaired Room before handoff
+      - name: Verify Room before handoff
         shell: bash
         run: |
           set -euo pipefail
           python3 -m py_compile scripts/room_*.py
           grep -q 'brain_probe()' .github/workflows/sarah-society.yml
-          grep -q 'cancel-in-progress: true' .github/workflows/sarah-society.yml
-          PYTHONPATH=scripts python3 - <<'PY'
+          grep -q 'cancel-in-progress: false' .github/workflows/sarah-society.yml
+          if [ -f tools/apply_room_memory_routing_guard.py ]; then
+            PYTHONPATH=scripts python3 - <<'PY'
           import room_engine_v5_core as c
           direct = {
               'speaker':'sarah','text':'Owen, the museum plan changed.',
@@ -95,18 +83,19 @@ jobs:
           assert len(c._dedupe_memories(items)) == 2
           print('ROOM_MEMORY_ROUTING_GUARD_OK')
           PY
+          fi
 
-      - name: Commit verified Room repairs
+      - name: Commit verified source repair if present
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'room-code-refresh'
           git config user.email 'actions@users.noreply.github.com'
-          git add scripts/room_engine_v5_core.py .github/workflows/sarah-society.yml
+          git add scripts/room_engine_v5_core.py
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m 'Route memories and restore complete Room handoff'
+          git commit -m 'Route Room memories to relevant minds only'
           for n in 1 2 3 4 5; do
             if git push origin HEAD:main; then exit 0; fi
             git fetch origin main
