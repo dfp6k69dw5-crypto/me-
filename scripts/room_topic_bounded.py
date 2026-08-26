@@ -6,11 +6,12 @@ from collections import Counter
 
 import room_social_v5 as social
 
-SCHEMA = 6
+SCHEMA = 7
 MAX_FACETS = 8
 MAX_HISTORY = 8
 MAX_RECENT_TERMS = 10
 MAX_EPISODE_UPDATES = 12
+MIN_FACET_SUPPORT = 2
 
 _TOPIC_NOISE = {
     "hey", "hi", "hello", "okay", "ok", "sorry", "thanks", "thank", "please",
@@ -149,7 +150,7 @@ def _declared_terms(message: dict) -> list[str]:
     return _unique(social.words((message or {}).get("text", "")), MAX_RECENT_TERMS)
 
 
-def topic_terms_from_messages(messages, limit: int = 12, episode_id: str | None = None) -> list[str]:
+def topic_terms_from_messages(messages, limit: int = 12, episode_id: str | None = None, min_support: int = 1) -> list[str]:
     counts: Counter = Counter()
     recency: dict[str, int] = {}
     serial = 0
@@ -161,7 +162,10 @@ def topic_terms_from_messages(messages, limit: int = 12, episode_id: str | None 
             counts[term] += 1
             recency[term] = serial
             serial += 1
-    ranked = sorted(counts, key=lambda term: (-counts[term], -recency.get(term, -1), term))
+    ranked = sorted(
+        (term for term in counts if counts[term] >= max(1, int(min_support))),
+        key=lambda term: (-counts[term], -recency.get(term, -1), term),
+    )
     return ranked[:limit]
 
 
@@ -175,14 +179,15 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
     schema = int(source.get("semantic_schema", 0) or 0)
 
     if schema < SCHEMA or had_runaway_depth:
-        candidates = [
+        schema_upgrade = schema < SCHEMA
+        candidates = [] if schema_upgrade else [
             source.get("current_facet"),
             *list(source.get("recent_terms") or []),
             *list(source.get("visited_facets") or [])[-MAX_HISTORY:],
             *list(source.get("facets") or []),
         ]
         facets = [term for term in _unique(candidates, MAX_FACETS + 1) if not (root and _near(term, root))][:MAX_FACETS]
-        current = facets[0] if facets else root
+        current = root if schema_upgrade else (facets[0] if facets else root)
         migrated = topic_template(cycle)
         migrated.update({
             "id": str(source.get("id") or migrated["id"]),
@@ -196,11 +201,11 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
             "participants": list(social.PARTICIPANTS),
             "turns": int(source.get("turns", 0) or 0),
             "low_novelty_beats": 3 if had_runaway_depth else int(source.get("low_novelty_beats", 0) or 0),
-            "recent_terms": _unique(source.get("recent_terms") or [], MAX_RECENT_TERMS),
+            "recent_terms": [root] if schema_upgrade and root else _unique(source.get("recent_terms") or [], MAX_RECENT_TERMS),
             "status": "ready_to_bridge" if had_runaway_depth else "active",
             "bridge_pending": bool(had_runaway_depth),
-            "branch_history": _unique(source.get("branch_history") or [], MAX_HISTORY),
-            "focus_turns": int(source.get("focus_turns", 0) or 0),
+            "branch_history": [] if schema_upgrade else _unique(source.get("branch_history") or [], MAX_HISTORY),
+            "focus_turns": 0 if schema_upgrade else int(source.get("focus_turns", 0) or 0),
             "escape_pressure": int(source.get("escape_pressure", 0) or 0),
             "last_shift_cycle": int(source.get("last_shift_cycle", cycle) or cycle),
             "last_branch_cycle": int(cycle),
@@ -285,7 +290,8 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
         return shifted
 
     episode_id = current.get("id")
-    terms = topic_terms_from_messages(messages, limit=MAX_RECENT_TERMS, episode_id=episode_id)
+    min_support = 1 if current.get("root") is None else MIN_FACET_SUPPORT
+    terms = topic_terms_from_messages(messages, limit=MAX_RECENT_TERMS, episode_id=episode_id, min_support=min_support)
     if current.get("root") is None:
         return new_topic_from_terms(terms, cycle, current)
 
