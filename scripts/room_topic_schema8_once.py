@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# One-shot trigger: require independent support for autonomous Room topic roots.
 from pathlib import Path
 import subprocess
 
