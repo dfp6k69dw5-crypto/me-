@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import fcntl
 import importlib.util
 import json
 import os
@@ -187,12 +188,17 @@ def _autonomy_schema(role: str, self_entity: str | None = None, intent: dict | N
     return schema
 
 
+def _read_completion(req: urllib.request.Request, timeout: int) -> str:
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return str(json.loads(resp.read().decode("utf-8", "replace")).get("content", ""))
+
+
 def _request_autonomy(model_url: str, prompt: str, role: str, temperature: float, timeout: int,
                       self_entity: str | None = None, attempt: int = 0, intent: dict | None = None) -> str:
-    # Keep invisible cognition bounded so two concurrent 1B requests reliably
-    # finish inside the production request timeout even when attention skills add
-    # prompt material. These ceilings are intentionally below the former
-    # comprehension=300 / thought=220 budgets; expression remains unchanged.
+    # Keep invisible cognition bounded so 1B requests reliably finish inside
+    # the production request timeout even when attention skills add material.
+    # Thought requests are also serialized across worker processes because the
+    # two-way concurrent pair was repeatedly saturating the tiny local model.
     body = {
         "prompt": prompt,
         "n_predict": {"comprehension": 200, "thought": 170, "expression": 180}.get(role, 180),
@@ -213,8 +219,12 @@ def _request_autonomy(model_url: str, prompt: str, role: str, temperature: float
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return str(json.loads(resp.read().decode("utf-8", "replace")).get("content", ""))
+    if role == "thought":
+        lock_path = Path(os.environ.get("ROOM_LLAMA_THOUGHT_LOCK", "/tmp/room-llama-thought.lock"))
+        with lock_path.open("a+") as lock_file:
+            fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+            return _read_completion(req, timeout)
+    return _read_completion(req, timeout)
 
 
 def _words(value: object) -> list[str]:
