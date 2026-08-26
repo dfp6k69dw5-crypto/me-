@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T06:21:03.281711+00:00",
-  "cycle_key": "32927291254:1:95",
+  "generated_at": "2026-08-26T06:24:10.765382+00:00",
+  "cycle_key": "32927291254:1:97",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,40 +29,38 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 2.439,
-      "confidence": 0.918,
-      "raw_score": 2.439,
+      "domain": "critical-testing",
+      "score": 1.79,
+      "confidence": 0.776,
+      "raw_score": 1.79,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "remember",
-        "past",
-        "used to"
+        "why",
+        "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "remember"
+            "why"
           ],
-          "weight": 0.92
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "past"
+            "sure"
           ],
-          "weight": 0.76
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
-            "remember",
-            "used to"
+            "sure"
           ],
-          "weight": 0.46
+          "weight": 0.54
         }
       ]
     },
@@ -70,13 +68,12 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.93,
-      "confidence": 0.817,
-      "raw_score": 2.21,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "music",
-        "beauty"
+        "music"
       ],
       "evidence_sources": [
         {
@@ -84,7 +81,7 @@
           "matched": [
             "music"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -96,16 +93,22 @@
         {
           "kind": "message",
           "matched": [
-            "music",
-            "beauty"
+            "music"
           ],
-          "weight": 0.76
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "music"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "156800901112",
+  "context_fingerprint": "1529bd2c586b",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 796,
-  "approx_added_tokens": 199
+  "temporary_skill_chars": 1045,
+  "approx_added_tokens": 261
 }
