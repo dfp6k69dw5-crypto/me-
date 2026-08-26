@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T12:32:47.821976+00:00",
-  "cycle_key": "32968956446:1:1",
+  "generated_at": "2026-08-26T12:36:30.995944+00:00",
+  "cycle_key": "32968956446:1:3",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -32,34 +32,70 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 2.56,
-      "confidence": 0.933,
-      "raw_score": 2.56,
+      "score": 3.13,
+      "confidence": 0.975,
+      "raw_score": 3.13,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "anxious",
-        "feeling"
+        "feel",
+        "feeling",
+        "anxious"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "anxious"
+            "feel"
           ],
-          "weight": 1.8
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
             "feeling"
           ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "anxious"
+          ],
           "weight": 0.76
+        }
+      ]
+    },
+    {
+      "name": "memory-callback",
+      "tier": "project",
+      "domain": "memory-callback",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "again"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "again"
+          ],
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "798655499b31",
+  "context_fingerprint": "15525f92d096",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 570,
+  "approx_added_tokens": 142
 }
