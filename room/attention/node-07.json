@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T06:17:27.967063+00:00",
-  "cycle_key": "32927291254:1:93",
+  "generated_at": "2026-08-26T06:19:02.907899+00:00",
+  "cycle_key": "32927291254:1:94",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,23 +29,40 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "memory-callback",
+      "score": 4.238,
+      "confidence": 0.996,
+      "raw_score": 4.238,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "sure"
+        "past",
+        "used to",
+        "remember"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "past"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "remember",
+            "used to"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "past"
+          ],
+          "weight": 0.46
         }
       ]
     },
@@ -53,26 +70,35 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "score": 3.6,
+      "confidence": 0.989,
+      "raw_score": 3.6,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "beauty",
         "music"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "music"
+            "music",
+            "beauty"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "music"
+          ],
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "214ae3ec39ff",
+  "context_fingerprint": "e8236a534928",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 1045,
-  "approx_added_tokens": 261
+  "temporary_skill_chars": 796,
+  "approx_added_tokens": 199
 }
