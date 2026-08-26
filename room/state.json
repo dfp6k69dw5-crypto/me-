@@ -1,24 +1,34 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 646,
+  "cycle": 647,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000646",
     "root": "movies",
-    "current_facet": "movies",
-    "facets": [],
-    "visited_facets": [
-      "movies"
+    "current_facet": "projects",
+    "facets": [
+      "projects",
+      "working",
+      "i've",
+      "watched",
+      "plot",
+      "tell",
+      "far",
+      "drive-in"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "movies",
+      "projects"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -30,10 +40,19 @@
       "jules",
       "allen"
     ],
-    "turns": 0,
+    "turns": 2,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "movies"
+      "movies",
+      "projects",
+      "working",
+      "i've",
+      "watched",
+      "plot",
+      "movie",
+      "tell",
+      "far",
+      "drive-in"
     ],
     "last_shift_cycle": 646,
     "status": "active",
@@ -43,15 +62,89 @@
         "label": "movies",
         "parent": null,
         "depth": 0,
-        "first_cycle": 646,
-        "last_cycle": 646,
+        "first_cycle": 647,
+        "last_cycle": 647,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "projects",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 647,
+        "last_cycle": 647,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "working",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 647,
+        "last_cycle": 647,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "i've",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 647,
+        "last_cycle": 647,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "watched",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 647,
+        "last_cycle": 647,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "plot",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 647,
+        "last_cycle": 647,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "tell",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 647,
+        "last_cycle": 647,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "far",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 647,
+        "last_cycle": 647,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "drive-in",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 647,
+        "last_cycle": 647,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "movies"
+    ],
     "focus_turns": 0,
-    "last_branch_cycle": 646,
+    "last_branch_cycle": 647,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -59,12 +152,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T021408806-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000646",
+  "last_public_event": "20260826T021540155-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000647",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T02:14:08.807795Z",
+  "last_run": "2026-08-26T02:15:40.156463Z",
   "context_scope_version": 1
 }
