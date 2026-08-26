@@ -1,36 +1,37 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 618,
+  "cycle": 619,
   "messages": 1000,
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000614",
     "root": "tell",
-    "current_facet": "concerns",
+    "current_facet": "fake",
     "facets": [
+      "fake",
+      "problem",
+      "i've",
+      "wedding",
+      "issue",
+      "see",
       "herman doesn't live under a rock,",
-      "concerns",
-      "care",
-      "the dare involving a hotel roof",
-      "call",
-      "the restaurant they swear they were banned from",
-      "shit",
-      "give"
+      "the dare involving a hotel roof"
     ],
     "visited_facets": [
       "tell",
       "the dare involving a hotel roof",
       "herman doesn't live under a rock,",
-      "concerns"
+      "concerns",
+      "fake"
     ],
-    "facet_index": 3,
+    "facet_index": 4,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -44,12 +45,16 @@
       "jules",
       "allen"
     ],
-    "turns": 9,
+    "turns": 11,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "herman doesn't live under a rock,",
-      "concerns",
-      "care"
+      "fake",
+      "problem",
+      "i've",
+      "wedding",
+      "issue",
+      "see",
+      "herman"
     ],
     "last_shift_cycle": 614,
     "status": "active",
@@ -59,8 +64,62 @@
         "label": "tell",
         "parent": null,
         "depth": 0,
-        "first_cycle": 618,
-        "last_cycle": 618,
+        "first_cycle": 619,
+        "last_cycle": 619,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "fake",
+        "parent": "tell",
+        "depth": 1,
+        "first_cycle": 619,
+        "last_cycle": 619,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "problem",
+        "parent": "tell",
+        "depth": 1,
+        "first_cycle": 619,
+        "last_cycle": 619,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "i've",
+        "parent": "tell",
+        "depth": 1,
+        "first_cycle": 619,
+        "last_cycle": 619,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "wedding",
+        "parent": "tell",
+        "depth": 1,
+        "first_cycle": 619,
+        "last_cycle": 619,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "issue",
+        "parent": "tell",
+        "depth": 1,
+        "first_cycle": 619,
+        "last_cycle": 619,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "see",
+        "parent": "tell",
+        "depth": 1,
+        "first_cycle": 619,
+        "last_cycle": 619,
         "hits": 1,
         "status": "open"
       },
@@ -68,26 +127,8 @@
         "label": "herman doesn't live under a rock,",
         "parent": "tell",
         "depth": 1,
-        "first_cycle": 618,
-        "last_cycle": 618,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "concerns",
-        "parent": "tell",
-        "depth": 1,
-        "first_cycle": 618,
-        "last_cycle": 618,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "care",
-        "parent": "tell",
-        "depth": 1,
-        "first_cycle": 618,
-        "last_cycle": 618,
+        "first_cycle": 619,
+        "last_cycle": 619,
         "hits": 1,
         "status": "open"
       },
@@ -95,44 +136,8 @@
         "label": "the dare involving a hotel roof",
         "parent": "tell",
         "depth": 1,
-        "first_cycle": 618,
-        "last_cycle": 618,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "call",
-        "parent": "tell",
-        "depth": 1,
-        "first_cycle": 618,
-        "last_cycle": 618,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "the restaurant they swear they were banned from",
-        "parent": "tell",
-        "depth": 1,
-        "first_cycle": 618,
-        "last_cycle": 618,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "shit",
-        "parent": "tell",
-        "depth": 1,
-        "first_cycle": 618,
-        "last_cycle": 618,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "give",
-        "parent": "tell",
-        "depth": 1,
-        "first_cycle": 618,
-        "last_cycle": 618,
+        "first_cycle": 619,
+        "last_cycle": 619,
         "hits": 1,
         "status": "open"
       }
@@ -140,10 +145,11 @@
     "branch_history": [
       "tell",
       "the dare involving a hotel roof",
-      "herman doesn't live under a rock,"
+      "herman doesn't live under a rock,",
+      "concerns"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 618,
+    "last_branch_cycle": 619,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -151,11 +157,11 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T011445320-owen-v5",
-  "last_speaker": "owen",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000618",
+  "last_public_event": "20260826T011639811-jules-v5",
+  "last_speaker": "jules",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000619",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T01:14:45.322286Z"
+  "last_run": "2026-08-26T01:16:39.813579Z"
 }
