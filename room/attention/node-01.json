@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T06:08:48.391667+00:00",
-  "cycle_key": "32927291254:1:88",
+  "generated_at": "2026-08-26T06:10:39.083515+00:00",
+  "cycle_key": "32927291254:1:89",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.25,
-      "confidence": 0.98,
-      "raw_score": 3.25,
-      "repeat_penalty": 0.0,
+      "score": 1.51,
+      "confidence": 0.677,
+      "raw_score": 1.79,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "afraid",
         "feel"
@@ -46,20 +46,6 @@
           "matched": [
             "afraid"
           ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feel"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "afraid"
-          ],
           "weight": 1.15
         },
         {
@@ -67,7 +53,14 @@
           "matched": [
             "afraid"
           ],
-          "weight": 0.92
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 0.64
         },
         {
           "kind": "message",
@@ -75,35 +68,19 @@
             "afraid"
           ],
           "weight": 0.54
-        }
-      ]
-    },
-    {
-      "name": "critical-testing",
-      "tier": "project",
-      "domain": "critical-testing",
-      "score": 2.3,
-      "confidence": 0.897,
-      "raw_score": 2.3,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "because",
-        "why"
-      ],
-      "evidence_sources": [
+        },
         {
           "kind": "message",
           "matched": [
-            "why",
-            "because"
+            "afraid"
           ],
-          "weight": 1.15
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "141c20e1063e",
+  "context_fingerprint": "ae23bb4d9227",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 890,
-  "approx_added_tokens": 222
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
