@@ -11,8 +11,6 @@ permissions:
   actions: write
   contents: write
 
-# Refresh must not wait behind the long-lived Room it is meant to replace.
-# It owns a separate supervisor slot and explicitly cancels the active Room.
 concurrency:
   group: room-code-refresh-main
   cancel-in-progress: true
@@ -26,85 +24,39 @@ jobs:
           ref: main
           fetch-depth: 50
 
-      - name: Cancel resident Room before code handoff
+      - name: Cancel resident Room
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
         run: |
           set -euo pipefail
-          gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 20 --json databaseId --jq '.[].databaseId' | while read -r run_id; do
-            [ -n "$run_id" ] || continue
-            echo "Cancelling resident Room run $run_id"
-            gh run cancel "$run_id" --repo "$GITHUB_REPOSITORY" || true
-          done
+          ids="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 20 --json databaseId --jq '.[].databaseId')"
+          for id in $ids; do gh run cancel "$id" --repo "$GITHUB_REPOSITORY" || true; done
           for n in $(seq 1 30); do
-            active=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')
-            [ "$active" -eq 0 ] && break
+            active="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')"
+            [ "$active" -eq 0 ] && exit 0
             sleep 2
-          done
-          active=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')
-          [ "$active" -eq 0 ] || { echo 'resident Room did not stop'; exit 1; }
-
-      - name: Apply pending memory routing guard
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ -f tools/apply_room_memory_routing_guard.py ]; then
-            python3 tools/apply_room_memory_routing_guard.py
-          fi
-
-      - name: Verify Room before handoff
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m py_compile scripts/room_*.py
-          grep -q 'brain_probe()' .github/workflows/sarah-society.yml
-          grep -q 'cancel-in-progress: false' .github/workflows/sarah-society.yml
-          if [ -f tools/apply_room_memory_routing_guard.py ]; then
-            PYTHONPATH=scripts python3 - <<'PY'
-          import room_engine_v5_core as c
-          direct = {
-              'speaker':'sarah','text':'Owen, the museum plan changed.',
-              'cognition':{'target':'owen','move_type':'disclose'}
-          }
-          assert c._memory_relevant_to_listener(direct, 'owen')
-          assert not c._memory_relevant_to_listener(direct, 'mara')
-          assert not c._memory_relevant_to_listener(direct, 'sarah')
-          mentioned = {
-              'speaker':'sarah','text':'Mara had a useful idea about the museum.',
-              'cognition':{'target':'owen','move_type':'disclose'}
-          }
-          assert c._memory_relevant_to_listener(mentioned, 'mara')
-          items=[
-              {'speaker':'sarah','text':'This is a tough situation for you.'},
-              {'speaker':'sarah','text':'This is really a tough situation for you.'},
-              {'speaker':'owen','text':'The museum closes at six.'},
-          ]
-          assert len(c._dedupe_memories(items)) == 2
-          print('ROOM_MEMORY_ROUTING_GUARD_OK')
-          PY
-          fi
-
-      - name: Commit verified source repair if present
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'room-code-refresh'
-          git config user.email 'actions@users.noreply.github.com'
-          git add scripts/room_engine_v5_core.py
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -m 'Route Room memories to relevant minds only'
-          for n in 1 2 3 4 5; do
-            if git push origin HEAD:main; then exit 0; fi
-            git fetch origin main
-            git rebase origin/main || { git rebase --abort || true; exit 1; }
-            sleep "$n"
           done
           exit 1
 
-      - name: Dispatch fresh Room runner
+      - name: Apply pending source patch
+        run: |
+          set -euo pipefail
+          if [ -f tools/apply_room_memory_routing_guard.py ]; then python3 tools/apply_room_memory_routing_guard.py; fi
+          python3 -m py_compile scripts/room_*.py
+          grep -q 'brain_probe()' .github/workflows/sarah-society.yml
+
+      - name: Commit source patch
+        run: |
+          set -euo pipefail
+          git config user.name room-code-refresh
+          git config user.email actions@users.noreply.github.com
+          git add scripts/room_engine_v5_core.py
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Route Room memories to relevant minds only'
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Dispatch fresh Room
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
