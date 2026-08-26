@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T21:18:48.810236+00:00",
-  "cycle_key": "33013077066:1:8",
+  "generated_at": "2026-08-26T21:21:06.663400+00:00",
+  "cycle_key": "33013077066:1:9",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,62 +32,63 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "because"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "because"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "because"
-          ],
-          "weight": 1.15
-        }
-      ]
-    },
-    {
-      "name": "memory-callback",
-      "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.28,
-      "confidence": 0.58,
-      "raw_score": 1.56,
+      "score": 1.56,
+      "confidence": 0.696,
+      "raw_score": 1.84,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "again",
-        "before"
+        "because",
+        "true"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "again"
+            "because",
+            "true"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "before"
+            "because"
           ],
-          "weight": 0.64
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "because"
+          ],
+          "weight": 0.54
+        }
+      ]
+    },
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "show"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "show"
+          ],
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "c24fe633b921",
+  "context_fingerprint": "560225e3b3c5",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 555,
-  "approx_added_tokens": 139
+  "temporary_skill_chars": 1069,
+  "approx_added_tokens": 267
 }
