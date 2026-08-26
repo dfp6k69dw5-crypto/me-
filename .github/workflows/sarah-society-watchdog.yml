@@ -4,16 +4,31 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/room_memory_label_prune_once.py'
 
 permissions:
-  contents: read
+  contents: write
   actions: write
 
 jobs:
   watchdog:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
+        if: github.event_name == 'push'
+        with:
+          ref: main
+          fetch-depth: 2
+
+      - name: Apply Room memory-label prune
+        if: github.event_name == 'push'
+        run: python3 scripts/room_memory_label_prune_once.py
+
       - name: Restart The Room pulse only if it stopped
+        if: github.event_name != 'push'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
