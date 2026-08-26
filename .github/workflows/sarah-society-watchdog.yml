@@ -10,25 +10,30 @@ on:
       - 'scripts/room_reply_repair_once.py'
 
 permissions:
-  contents: write
+  contents: read
   actions: write
 
 jobs:
   watchdog:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Apply coherent reply repair when armed
-        if: hashFiles('scripts/room_reply_repair_once.py') != ''
+      - name: Replace resident Room for coherent-reply activation
+        if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python3 scripts/room_reply_repair_once.py
+        run: |
+          set -euo pipefail
+          ids="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 20 --json databaseId --jq '.[].databaseId')"
+          for id in $ids; do gh run cancel "$id" --repo "$GITHUB_REPOSITORY" || true; done
+          for n in $(seq 1 30); do
+            active="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')"
+            [ "$active" -eq 0 ] && break
+            sleep 2
+          done
+          gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
 
       - name: Restart The Room pulse only if it stopped
+        if: github.event_name != 'push'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -39,13 +44,7 @@ jobs:
             --limit 20 \
             --json status \
             --jq '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending" or .status == "waiting")] | length')"
-
           echo "Active Room pulse runs: $active"
           if [ "$active" = "0" ]; then
-            echo "The Room pulse is stopped; starting a new one"
-            gh workflow run sarah-society-pulse.yml \
-              --repo "$GITHUB_REPOSITORY" \
-              --ref main
-          else
-            echo "The Room pulse is already alive"
+            gh workflow run sarah-society-pulse.yml --repo "$GITHUB_REPOSITORY" --ref main
           fi
