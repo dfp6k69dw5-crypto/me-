@@ -1,28 +1,32 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 886,
+  "cycle": 887,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 7,
-    "id": "topic-000886",
-    "root": "food",
-    "current_facet": "food",
-    "facets": [],
-    "visited_facets": [
+    "id": "topic-000887",
+    "root": "movies",
+    "current_facet": "movies",
+    "facets": [
       "food"
+    ],
+    "visited_facets": [
+      "movies"
     ],
     "facet_index": 0,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
-    "shared_references": [],
+    "shared_references": [
+      "food"
+    ],
     "participants": [
       "sarah",
       "mara",
@@ -30,28 +34,37 @@
       "jules",
       "allen"
     ],
-    "turns": 0,
+    "turns": 1,
     "low_novelty_beats": 0,
     "recent_terms": [
       "food"
     ],
-    "last_shift_cycle": 886,
+    "last_shift_cycle": 887,
     "status": "active",
     "bridge_pending": false,
     "branches": [
       {
-        "label": "food",
+        "label": "movies",
         "parent": null,
         "depth": 0,
-        "first_cycle": 886,
-        "last_cycle": 886,
+        "first_cycle": 887,
+        "last_cycle": 887,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "food",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 887,
+        "last_cycle": 887,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
-    "focus_turns": 0,
-    "last_branch_cycle": 886,
+    "focus_turns": 1,
+    "last_branch_cycle": 887,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -59,12 +72,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T131928987-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000886",
+  "last_public_event": "20260826T132132571-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000887",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T13:19:28.988690Z",
+  "last_run": "2026-08-26T13:21:32.572081Z",
   "context_scope_version": 1
 }
