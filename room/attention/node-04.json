@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T23:37:14.873023+00:00",
-  "cycle_key": "33021820500:1:15",
+  "generated_at": "2026-08-26T23:39:38.134403+00:00",
+  "cycle_key": "33021820500:1:16",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,18 +32,30 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 6.48,
-      "confidence": 1.0,
-      "raw_score": 6.48,
+      "score": 3.13,
+      "confidence": 0.975,
+      "raw_score": 3.13,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "feeling",
         "relationship",
-        "worried",
-        "anxious",
-        "feel"
+        "worried"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
+          ],
+          "weight": 0.92
+        },
         {
           "kind": "message",
           "matched": [
@@ -51,21 +63,34 @@
             "worried",
             "relationship"
           ],
-          "weight": 1.8
-        },
+          "weight": 0.76
+        }
+      ]
+    },
+    {
+      "name": "creative-bridge",
+      "tier": "project",
+      "domain": "creative-bridge",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "connection"
+      ],
+      "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feel",
-            "anxious"
+            "connection"
           ],
-          "weight": 0.54
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "403fe8486938",
+  "context_fingerprint": "13d1434c2b0d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 1060,
+  "approx_added_tokens": 265
 }
