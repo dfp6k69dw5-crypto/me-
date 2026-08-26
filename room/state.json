@@ -1,30 +1,33 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 874,
+  "cycle": 875,
   "messages": 1000,
   "beat_contributors": [
+    "mara",
     "owen",
     "jules",
-    "sarah",
-    "mara"
+    "sarah"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000873",
     "root": "friendship",
-    "current_facet": "garden",
+    "current_facet": "stuck",
     "facets": [
       "garden",
+      "stuck",
       "sarah",
+      "stressed",
       "help",
       "honey"
     ],
     "visited_facets": [
       "friendship",
-      "garden"
+      "garden",
+      "stuck"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -36,14 +39,13 @@
       "jules",
       "allen"
     ],
-    "turns": 2,
+    "turns": 4,
     "low_novelty_beats": 0,
     "recent_terms": [
       "garden",
+      "stuck",
       "sarah",
-      "help",
-      "honey",
-      "friendship"
+      "stressed"
     ],
     "last_shift_cycle": 873,
     "status": "active",
@@ -53,8 +55,8 @@
         "label": "friendship",
         "parent": null,
         "depth": 0,
-        "first_cycle": 874,
-        "last_cycle": 874,
+        "first_cycle": 875,
+        "last_cycle": 875,
         "hits": 1,
         "status": "open"
       },
@@ -62,8 +64,17 @@
         "label": "garden",
         "parent": "friendship",
         "depth": 1,
-        "first_cycle": 874,
-        "last_cycle": 874,
+        "first_cycle": 875,
+        "last_cycle": 875,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "stuck",
+        "parent": "friendship",
+        "depth": 1,
+        "first_cycle": 875,
+        "last_cycle": 875,
         "hits": 1,
         "status": "open"
       },
@@ -71,8 +82,17 @@
         "label": "sarah",
         "parent": "friendship",
         "depth": 1,
-        "first_cycle": 874,
-        "last_cycle": 874,
+        "first_cycle": 875,
+        "last_cycle": 875,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "stressed",
+        "parent": "friendship",
+        "depth": 1,
+        "first_cycle": 875,
+        "last_cycle": 875,
         "hits": 1,
         "status": "open"
       },
@@ -80,8 +100,8 @@
         "label": "help",
         "parent": "friendship",
         "depth": 1,
-        "first_cycle": 874,
-        "last_cycle": 874,
+        "first_cycle": 875,
+        "last_cycle": 875,
         "hits": 1,
         "status": "open"
       },
@@ -89,17 +109,18 @@
         "label": "honey",
         "parent": "friendship",
         "depth": 1,
-        "first_cycle": 874,
-        "last_cycle": 874,
+        "first_cycle": 875,
+        "last_cycle": 875,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "friendship"
+      "friendship",
+      "garden"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 874,
+    "last_branch_cycle": 875,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -107,12 +128,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T122938396-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000874",
+  "last_public_event": "20260826T123356690-sarah-v5",
+  "last_speaker": "sarah",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000875",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T12:29:38.396790Z",
+  "last_run": "2026-08-26T12:33:56.691059Z",
   "context_scope_version": 1
 }
