@@ -2,8 +2,6 @@ name: Room supervisor
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '*/5 * * * *'
   push:
     branches: [main]
 
@@ -18,56 +16,136 @@ concurrency:
 jobs:
   supervise:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
 
-      - name: Check published Room liveness
+      - name: Patch coherent same-beat replies
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           git config user.name "room-supervisor"
           git config user.email "actions@users.noreply.github.com"
-
-          action=$(python3 scripts/room_supervisor.py check)
-          echo "Room supervisor action: $action"
-
-          if [ "$action" = "healthy" ]; then
-            exit 0
-          fi
-
           python3 - <<'PY'
-import json
-from pathlib import Path
-result=json.loads(Path('.github/room-supervisor-decision.json').read_text())
-Path('.github/room-supervisor-state.json').write_text(json.dumps(result['control'],indent=2,sort_keys=True)+'\n')
-PY
+          from pathlib import Path
 
-          git add .github/room-supervisor-state.json
-          git commit -m "Record Room supervisor decision" || true
+          p = Path('scripts/room_engine_v5.py')
+          s = p.read_text()
+          if 'def _coherent_recurrent(' not in s:
+              s = s.replace('import json\nimport os\n', 'import copy\nimport json\nimport os\n', 1)
+              anchor = '\n\nif os.environ.get("ROOM_BRAIN_ACTIVE", "").strip() == "llama3.2-1b":\n'
+              assert anchor in s
+              block = r'''
 
-          published=0
-          for attempt in 1 2 3 4; do
-            if git push origin HEAD:main; then
-              published=1
-              break
-            fi
-            git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              break
-            fi
-            sleep "$attempt"
-          done
-          [ "$published" -eq 1 ] || exit 1
 
-          if [ "$action" = "restart" ] || [ "$action" = "probe_restart" ]; then
-            echo "Supervisor is starting one bounded replacement runner"
-            gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
-          elif [ "$action" = "circuit_open" ]; then
-            echo "Room replacement circuit is open; refusing another identical restart loop during cooldown"
+def _coherent_recurrent(node, key, bus_data):
+    """Align the live event, partner, relationship, and reply obligation."""
+    entity, _local, role, _tasks = _legacy._core.ni(node)
+    if role != "expression":
+        return _LLAMA_ORIGINAL_RECURRENT(node, key, bus_data)
+
+    routed = copy.deepcopy(bus_data)
+    source = _legacy._core.rp(routed, entity, role)
+    base = source.get("private") if isinstance(source.get("private"), dict) else {}
+    prior = list(_legacy._core.prior_expression_messages(node))
+
+    thought = ((routed.get("recurrent", {}).get(entity, {}) or {}).get("thought", {}) or {})
+    thought_private = thought.get("private") if isinstance(thought.get("private"), dict) else {}
+    deliberation = thought_private.get("deliberation") if isinstance(thought_private.get("deliberation"), dict) else None
+
+    planned = str((deliberation or {}).get("preferred_partner") or base.get("partner") or "").lower()
+    participants = set(_social.PARTICIPANTS)
+    live_partner = planned if planned in participants and planned != entity else None
+    live_event = None
+    directly_addressed = False
+
+    for message in reversed(prior):
+        cognition = message.get("cognition") if isinstance(message, dict) else {}
+        target = str(cognition.get("target") or "").lower() if isinstance(cognition, dict) else ""
+        speaker = str(message.get("speaker") or "").lower() if isinstance(message, dict) else ""
+        if target == entity and speaker in participants and speaker != entity:
+            live_event = message
+            live_partner = speaker
+            directly_addressed = True
+            break
+
+    if live_event is None and live_partner:
+        for message in reversed(prior):
+            speaker = str(message.get("speaker") or "").lower() if isinstance(message, dict) else ""
+            if speaker == live_partner:
+                live_event = message
+                break
+
+    if live_event is not None and live_partner:
+        base["event"] = live_event
+        base["partner"] = live_partner
+        mind = _legacy._core.minds()
+        rel = (((mind.get("entities") or {}).get(entity) or {}).get("people") or {}).get(live_partner) or {}
+        base["relationship"] = {
+            k: rel.get(k) for k in (
+                "exposure", "direct_familiarity", "trust", "predictability", "reciprocity",
+                "warmth", "respect", "disclosure_depth", "tension"
+            ) if k in rel
+        }
+        source["private"] = base
+
+        if isinstance(deliberation, dict):
+            deliberation["preferred_partner"] = live_partner
+            if directly_addressed:
+                text = str(live_event.get("text") or "").rstrip()
+                deliberation["action"] = "ANSWER" if text.endswith("?") else "DEEPEN"
+                deliberation["new_information_goal"] = (
+                    "Respond to the specific message just addressed to you. "
+                    "Acknowledge its concrete point before adding one relevant thought."
+                )
+                deliberation.pop("conversation_job", None)
+
+        ordered = [item for item in prior if item is not live_event] + [live_event]
+        original_prior = _legacy._core.prior_expression_messages
+        _legacy._core.prior_expression_messages = lambda _node: ordered
+        try:
+            return _LLAMA_ORIGINAL_RECURRENT(node, key, routed)
+        finally:
+            _legacy._core.prior_expression_messages = original_prior
+
+    return _LLAMA_ORIGINAL_RECURRENT(node, key, routed)
+'''
+              s = s.replace(anchor, block + anchor, 1)
+
+              old = '''    _legacy._private_model.run = _llama_model_run
+    _legacy._core.model_run = _llama_model_run
+'''
+              new = '''    _legacy._private_model.run = _llama_model_run
+    _legacy._core.model_run = _llama_model_run
+    _LLAMA_ORIGINAL_RECURRENT = _legacy._core.recurrent
+    _legacy._core.recurrent = _coherent_recurrent
+    _legacy.recurrent = _coherent_recurrent
+'''
+              assert old in s
+              s = s.replace(old, new, 1)
+              p.write_text(s)
+          PY
+
+          python3 -m py_compile scripts/room_engine_v5.py scripts/room_engine_v5_legacy.py scripts/room_engine_v5_core.py
+          grep -q 'def _coherent_recurrent' scripts/room_engine_v5.py
+          grep -q '_legacy._core.recurrent = _coherent_recurrent' scripts/room_engine_v5.py
+
+          git add scripts/room_engine_v5.py
+          if ! git diff --cached --quiet; then
+            git commit -m "Align Room replies with live addressees"
+            for n in 1 2 3 4 5; do
+              if git push origin HEAD:main; then break; fi
+              git fetch origin main
+              git rebase origin/main || { git rebase --abort || true; exit 1; }
+              sleep "$n"
+            done
           fi
+
+          ids="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 20 --json databaseId --jq '.[].databaseId')"
+          for id in $ids; do gh run cancel "$id" --repo "$GITHUB_REPOSITORY" || true; done
+          sleep 5
+          gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
