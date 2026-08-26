@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+# One-shot trigger: prune historical bare internal move labels from durable memory.
 import subprocess
 from pathlib import Path
 
