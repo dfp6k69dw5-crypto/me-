@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T23:30:51.843423+00:00",
-  "cycle_key": "33021820500:1:12",
+  "generated_at": "2026-08-26T23:33:56.671992+00:00",
+  "cycle_key": "33021820500:1:13",
   "node": 2,
   "entity": "sarah",
   "role": "expression",
@@ -32,12 +32,13 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 4.05,
-      "confidence": 0.994,
-      "raw_score": 4.05,
+      "score": 4.43,
+      "confidence": 0.997,
+      "raw_score": 4.43,
       "repeat_penalty": 0.0,
       "matched_triggers": [
         "anxious",
+        "worried",
         "happy",
         "feeling"
       ],
@@ -45,10 +46,24 @@
         {
           "kind": "message",
           "matched": [
+            "anxious"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "worried"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
             "happy",
             "anxious"
           ],
-          "weight": 1.45
+          "weight": 0.64
         },
         {
           "kind": "message",
@@ -56,33 +71,19 @@
             "feeling",
             "anxious"
           ],
-          "weight": 1.15
+          "weight": 0.54
         },
         {
           "kind": "message",
           "matched": [
             "feeling"
           ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feeling"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "anxious"
-          ],
-          "weight": 0.64
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "9bdfc2dc3fc8",
+  "context_fingerprint": "b98aa5509cff",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 544,
   "approx_added_tokens": 136
