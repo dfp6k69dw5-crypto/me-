@@ -1,20 +1,23 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 666,
+  "cycle": 667,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000665",
     "root": "work",
-    "current_facet": "progress",
+    "current_facet": "trust",
     "facets": [
+      "trust",
+      "spreading",
+      "helping",
       "progress",
       "repair",
       "project",
@@ -22,9 +25,10 @@
     ],
     "visited_facets": [
       "work",
-      "progress"
+      "progress",
+      "trust"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -36,14 +40,14 @@
       "jules",
       "allen"
     ],
-    "turns": 2,
+    "turns": 4,
     "low_novelty_beats": 0,
     "recent_terms": [
       "work",
-      "progress",
-      "repair",
-      "project",
-      "partner"
+      "trust",
+      "spreading",
+      "helping",
+      "progress"
     ],
     "last_shift_cycle": 665,
     "status": "active",
@@ -53,8 +57,35 @@
         "label": "work",
         "parent": null,
         "depth": 0,
-        "first_cycle": 666,
-        "last_cycle": 666,
+        "first_cycle": 667,
+        "last_cycle": 667,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "trust",
+        "parent": "work",
+        "depth": 1,
+        "first_cycle": 667,
+        "last_cycle": 667,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "spreading",
+        "parent": "work",
+        "depth": 1,
+        "first_cycle": 667,
+        "last_cycle": 667,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "helping",
+        "parent": "work",
+        "depth": 1,
+        "first_cycle": 667,
+        "last_cycle": 667,
         "hits": 1,
         "status": "open"
       },
@@ -62,8 +93,8 @@
         "label": "progress",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 666,
-        "last_cycle": 666,
+        "first_cycle": 667,
+        "last_cycle": 667,
         "hits": 1,
         "status": "open"
       },
@@ -71,8 +102,8 @@
         "label": "repair",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 666,
-        "last_cycle": 666,
+        "first_cycle": 667,
+        "last_cycle": 667,
         "hits": 1,
         "status": "open"
       },
@@ -80,8 +111,8 @@
         "label": "project",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 666,
-        "last_cycle": 666,
+        "first_cycle": 667,
+        "last_cycle": 667,
         "hits": 1,
         "status": "open"
       },
@@ -89,17 +120,18 @@
         "label": "partner",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 666,
-        "last_cycle": 666,
+        "first_cycle": 667,
+        "last_cycle": 667,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "work"
+      "work",
+      "progress"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 666,
+    "last_branch_cycle": 667,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -107,12 +139,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T030044728-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000666",
+  "last_public_event": "20260826T030236449-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000667",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T03:00:44.729221Z",
+  "last_run": "2026-08-26T03:02:36.450234Z",
   "context_scope_version": 1
 }
