@@ -353,6 +353,23 @@ def run(role: str, payload: dict, timeout: int = 30, min_words: int = 5):
                     last_reason = "intent_partner_not_realized"
                     continue
                 utterance = str(obj.get("utterance") or "").strip()
+                # Preserve strange/short speech, but do not mistake an internal
+                # discourse move label for a public utterance. Retry only while
+                # another attempt remains so this quality guard can never freeze
+                # the Room by itself.
+                bare_words = _words(utterance)
+                bare_move_labels = {
+                    "acknowledge", "appreciate", "support", "repair", "answer",
+                    "respond", "response", "disclose", "compare", "disagree",
+                    "agree", "bridge", "close", "deepen", "callback",
+                }
+                if (
+                    attempt < attempts - 1
+                    and len(bare_words) == 1
+                    and bare_words[0] in bare_move_labels
+                ):
+                    last_reason = "bare_move_label"
+                    continue
                 if len(utterance.split()) < max(1, int(min_words)):
                     last_reason = "utterance_too_short"
                     continue
