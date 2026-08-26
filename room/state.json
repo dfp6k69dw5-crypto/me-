@@ -1,24 +1,34 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 880,
+  "cycle": 881,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 6,
     "id": "topic-000880",
     "root": "movies",
-    "current_facet": "movies",
-    "facets": [],
-    "visited_facets": [
-      "movies"
+    "current_facet": "inconsistencies",
+    "facets": [
+      "inconsistencies",
+      "noticed",
+      "characters",
+      "pacing",
+      "indie",
+      "sources",
+      "causal",
+      "reliable"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "movies",
+      "inconsistencies"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -30,10 +40,18 @@
       "jules",
       "allen"
     ],
-    "turns": 0,
+    "turns": 2,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "movies"
+      "inconsistencies",
+      "noticed",
+      "characters",
+      "pacing",
+      "indie",
+      "movies",
+      "sources",
+      "causal",
+      "reliable"
     ],
     "last_shift_cycle": 880,
     "status": "active",
@@ -43,15 +61,89 @@
         "label": "movies",
         "parent": null,
         "depth": 0,
-        "first_cycle": 880,
-        "last_cycle": 880,
+        "first_cycle": 881,
+        "last_cycle": 881,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "inconsistencies",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 881,
+        "last_cycle": 881,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "noticed",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 881,
+        "last_cycle": 881,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "characters",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 881,
+        "last_cycle": 881,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "pacing",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 881,
+        "last_cycle": 881,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "indie",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 881,
+        "last_cycle": 881,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "sources",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 881,
+        "last_cycle": 881,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "causal",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 881,
+        "last_cycle": 881,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "reliable",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 881,
+        "last_cycle": 881,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "movies"
+    ],
     "focus_turns": 0,
-    "last_branch_cycle": 880,
+    "last_branch_cycle": 881,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -59,12 +151,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T125332372-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000880",
+  "last_public_event": "20260826T125541752-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000881",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T12:53:32.373947Z",
+  "last_run": "2026-08-26T12:55:41.754061Z",
   "context_scope_version": 1
 }
