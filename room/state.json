@@ -1,34 +1,35 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 630,
+  "cycle": 631,
   "messages": 1000,
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000628",
     "root": "movies",
-    "current_facet": "girlfriend",
+    "current_facet": "move",
     "facets": [
       "girlfriend",
+      "move",
+      "fake",
       "relationship",
       "watched",
       "new",
       "guy",
-      "fake",
-      "information",
-      "false"
+      "information"
     ],
     "visited_facets": [
       "movies",
-      "girlfriend"
+      "girlfriend",
+      "move"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -40,13 +41,14 @@
       "jules",
       "allen"
     ],
-    "turns": 4,
-    "low_novelty_beats": 2,
+    "turns": 6,
+    "low_novelty_beats": 0,
     "recent_terms": [
       "girlfriend",
-      "movie",
+      "move",
+      "fake",
       "movies",
-      "relationship"
+      "movie"
     ],
     "last_shift_cycle": 628,
     "status": "active",
@@ -56,8 +58,8 @@
         "label": "movies",
         "parent": null,
         "depth": 0,
-        "first_cycle": 630,
-        "last_cycle": 630,
+        "first_cycle": 631,
+        "last_cycle": 631,
         "hits": 1,
         "status": "open"
       },
@@ -65,44 +67,17 @@
         "label": "girlfriend",
         "parent": "movies",
         "depth": 1,
-        "first_cycle": 630,
-        "last_cycle": 630,
+        "first_cycle": 631,
+        "last_cycle": 631,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "relationship",
+        "label": "move",
         "parent": "movies",
         "depth": 1,
-        "first_cycle": 630,
-        "last_cycle": 630,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "watched",
-        "parent": "movies",
-        "depth": 1,
-        "first_cycle": 630,
-        "last_cycle": 630,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "new",
-        "parent": "movies",
-        "depth": 1,
-        "first_cycle": 630,
-        "last_cycle": 630,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "guy",
-        "parent": "movies",
-        "depth": 1,
-        "first_cycle": 630,
-        "last_cycle": 630,
+        "first_cycle": 631,
+        "last_cycle": 631,
         "hits": 1,
         "status": "open"
       },
@@ -110,8 +85,44 @@
         "label": "fake",
         "parent": "movies",
         "depth": 1,
-        "first_cycle": 630,
-        "last_cycle": 630,
+        "first_cycle": 631,
+        "last_cycle": 631,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "relationship",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 631,
+        "last_cycle": 631,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "watched",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 631,
+        "last_cycle": 631,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "new",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 631,
+        "last_cycle": 631,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "guy",
+        "parent": "movies",
+        "depth": 1,
+        "first_cycle": 631,
+        "last_cycle": 631,
         "hits": 1,
         "status": "open"
       },
@@ -119,38 +130,30 @@
         "label": "information",
         "parent": "movies",
         "depth": 1,
-        "first_cycle": 630,
-        "last_cycle": 630,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "false",
-        "parent": "movies",
-        "depth": 1,
-        "first_cycle": 630,
-        "last_cycle": 630,
+        "first_cycle": 631,
+        "last_cycle": 631,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "movies"
+      "movies",
+      "girlfriend"
     ],
-    "focus_turns": 2,
-    "last_branch_cycle": 630,
-    "escape_pressure": 2
+    "focus_turns": 0,
+    "last_branch_cycle": 631,
+    "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
   "semantic_epoch_started_at": "2026-08-24T16:33:56.351717Z",
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T013733150-owen-v5",
-  "last_speaker": "owen",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000630",
+  "last_public_event": "20260826T013923240-jules-v5",
+  "last_speaker": "jules",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000631",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T01:37:33.151801Z"
+  "last_run": "2026-08-26T01:39:23.242041Z"
 }
