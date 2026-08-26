@@ -1,35 +1,36 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 715,
+  "cycle": 716,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000713",
     "root": "weather",
-    "current_facet": "wish",
+    "current_facet": "improve",
     "facets": [
       "wish",
+      "improve",
+      "help",
+      "step",
+      "reassess",
+      "stop",
       "storm",
-      "face",
-      "let",
-      "hey",
-      "experience",
-      "love",
-      "move"
+      "face"
     ],
     "visited_facets": [
       "weather",
       "move",
-      "wish"
+      "wish",
+      "improve"
     ],
-    "facet_index": 2,
+    "facet_index": 3,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -41,17 +42,15 @@
       "jules",
       "allen"
     ],
-    "turns": 4,
+    "turns": 6,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "weather",
       "wish",
-      "storm",
-      "face",
-      "let",
-      "hey",
-      "experience",
-      "love"
+      "improve",
+      "help",
+      "step",
+      "reassess",
+      "stop"
     ],
     "last_shift_cycle": 713,
     "status": "active",
@@ -61,8 +60,8 @@
         "label": "weather",
         "parent": null,
         "depth": 0,
-        "first_cycle": 715,
-        "last_cycle": 715,
+        "first_cycle": 716,
+        "last_cycle": 716,
         "hits": 1,
         "status": "open"
       },
@@ -70,8 +69,53 @@
         "label": "wish",
         "parent": "weather",
         "depth": 1,
-        "first_cycle": 715,
-        "last_cycle": 715,
+        "first_cycle": 716,
+        "last_cycle": 716,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "improve",
+        "parent": "weather",
+        "depth": 1,
+        "first_cycle": 716,
+        "last_cycle": 716,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "help",
+        "parent": "weather",
+        "depth": 1,
+        "first_cycle": 716,
+        "last_cycle": 716,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "step",
+        "parent": "weather",
+        "depth": 1,
+        "first_cycle": 716,
+        "last_cycle": 716,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "reassess",
+        "parent": "weather",
+        "depth": 1,
+        "first_cycle": 716,
+        "last_cycle": 716,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "stop",
+        "parent": "weather",
+        "depth": 1,
+        "first_cycle": 716,
+        "last_cycle": 716,
         "hits": 1,
         "status": "open"
       },
@@ -79,8 +123,8 @@
         "label": "storm",
         "parent": "weather",
         "depth": 1,
-        "first_cycle": 715,
-        "last_cycle": 715,
+        "first_cycle": 716,
+        "last_cycle": 716,
         "hits": 1,
         "status": "open"
       },
@@ -88,63 +132,19 @@
         "label": "face",
         "parent": "weather",
         "depth": 1,
-        "first_cycle": 715,
-        "last_cycle": 715,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "let",
-        "parent": "weather",
-        "depth": 1,
-        "first_cycle": 715,
-        "last_cycle": 715,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "hey",
-        "parent": "weather",
-        "depth": 1,
-        "first_cycle": 715,
-        "last_cycle": 715,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "experience",
-        "parent": "weather",
-        "depth": 1,
-        "first_cycle": 715,
-        "last_cycle": 715,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "love",
-        "parent": "weather",
-        "depth": 1,
-        "first_cycle": 715,
-        "last_cycle": 715,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "move",
-        "parent": "weather",
-        "depth": 1,
-        "first_cycle": 715,
-        "last_cycle": 715,
+        "first_cycle": 716,
+        "last_cycle": 716,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
       "weather",
-      "move"
+      "move",
+      "wish"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 715,
+    "last_branch_cycle": 716,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -152,12 +152,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T050353415-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000715",
+  "last_public_event": "20260826T050549220-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000716",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T05:03:53.416266Z",
+  "last_run": "2026-08-26T05:05:49.222050Z",
   "context_scope_version": 1
 }
