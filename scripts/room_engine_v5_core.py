@@ -567,7 +567,7 @@ def _dedupe_memories(items, limit=220):
         speaker = str(item.get("speaker") or "").strip().lower()
         if any(
             speaker == str(prior.get("speaker") or "").strip().lower()
-            and _sim(text, prior.get("text", "")) >= 0.82
+            and _sim(text, prior.get("text", "")) >= 0.78
             for prior in kept
         ):
             continue
@@ -606,6 +606,22 @@ def _prune_memory_state(mind):
         state["self_history"] = _dedupe_memories(self_history, 220)
 
 
+def _memory_excerpt(text, limit=300):
+    """Bound durable memory without cutting a thought mid-word or mid-sentence."""
+    value = re.sub(r"\s+", " ", str(text or "")).strip()
+    if len(value) <= limit:
+        return value
+    head = value[: limit + 1]
+    sentence_ends = [head.rfind(mark) for mark in (". ", "? ", "! ")]
+    cut = max(sentence_ends)
+    if cut >= max(80, int(limit * 0.45)):
+        return head[: cut + 1].strip()
+    cut = head.rfind(" ", 0, limit + 1)
+    if cut >= max(80, int(limit * 0.70)):
+        return head[:cut].rstrip(" ,;:-") + "…"
+    return value[:limit].rstrip(" ,;:-") + "…"
+
+
 def record(history, discourse, mind, message, node, cycle):
     history.append(message)
     discourse.setdefault("nodes", []).append(node)
@@ -637,7 +653,7 @@ def record(history, discourse, mind, message, node, cycle):
                 "status": "observed",
                 "speaker": message["speaker"],
                 "target": message["cognition"].get("target"),
-                "text": message["text"][:300],
+                "text": _memory_excerpt(message["text"], 300),
                 "move": message["cognition"].get("move_type"),
                 "discourse": message["discourse_id"],
                 "beat_id": message["beat_id"],
