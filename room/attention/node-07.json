@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T06:29:06.686198+00:00",
-  "cycle_key": "32927291254:1:100",
+  "generated_at": "2026-08-26T06:30:36.891119+00:00",
+  "cycle_key": "32927291254:1:101",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,13 +29,42 @@
   },
   "selected_skills": [
     {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.71,
+      "confidence": 0.75,
+      "raw_score": 1.99,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "relationship",
+        "feel"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 0.54
+        }
+      ]
+    },
+    {
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.8,
-      "confidence": 0.779,
+      "score": 1.52,
+      "confidence": 0.68,
       "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "music"
       ],
@@ -59,33 +88,26 @@
           "matched": [
             "music"
           ],
-          "weight": 0.46
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "feel"
-      ],
-      "evidence_sources": [
+          "weight": 0.92
+        },
         {
           "kind": "message",
           "matched": [
-            "feel"
+            "music"
           ],
-          "weight": 1.15
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "music"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "a9b9c81413be",
+  "context_fingerprint": "036cc8790089",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 1060,
   "approx_added_tokens": 265
