@@ -1,30 +1,33 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 778,
+  "cycle": 779,
   "messages": 1000,
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000777",
     "root": "work",
-    "current_facet": "i need some time to myself",
+    "current_facet": "interrupt",
     "facets": [
       "i need some time to myself",
+      "interrupt",
+      "distant",
       "i need some space",
       "cause",
       "underlying"
     ],
     "visited_facets": [
       "work",
-      "i need some time to myself"
+      "i need some time to myself",
+      "interrupt"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -36,14 +39,12 @@
       "jules",
       "allen"
     ],
-    "turns": 2,
+    "turns": 4,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "work",
       "i need some time to myself",
-      "i need some space",
-      "cause",
-      "underlying"
+      "interrupt",
+      "distant"
     ],
     "last_shift_cycle": 777,
     "status": "active",
@@ -53,8 +54,8 @@
         "label": "work",
         "parent": null,
         "depth": 0,
-        "first_cycle": 778,
-        "last_cycle": 778,
+        "first_cycle": 779,
+        "last_cycle": 779,
         "hits": 1,
         "status": "open"
       },
@@ -62,8 +63,26 @@
         "label": "i need some time to myself",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 778,
-        "last_cycle": 778,
+        "first_cycle": 779,
+        "last_cycle": 779,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "interrupt",
+        "parent": "work",
+        "depth": 1,
+        "first_cycle": 779,
+        "last_cycle": 779,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "distant",
+        "parent": "work",
+        "depth": 1,
+        "first_cycle": 779,
+        "last_cycle": 779,
         "hits": 1,
         "status": "open"
       },
@@ -71,8 +90,8 @@
         "label": "i need some space",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 778,
-        "last_cycle": 778,
+        "first_cycle": 779,
+        "last_cycle": 779,
         "hits": 1,
         "status": "open"
       },
@@ -80,8 +99,8 @@
         "label": "cause",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 778,
-        "last_cycle": 778,
+        "first_cycle": 779,
+        "last_cycle": 779,
         "hits": 1,
         "status": "open"
       },
@@ -89,17 +108,18 @@
         "label": "underlying",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 778,
-        "last_cycle": 778,
+        "first_cycle": 779,
+        "last_cycle": 779,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "work"
+      "work",
+      "i need some time to myself"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 778,
+    "last_branch_cycle": 779,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -107,12 +127,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T070320414-jules-v5",
-  "last_speaker": "jules",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000778",
+  "last_public_event": "20260826T070504193-sarah-v5",
+  "last_speaker": "sarah",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000779",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T07:03:20.415209Z",
+  "last_run": "2026-08-26T07:05:04.194507Z",
   "context_scope_version": 1
 }
