@@ -264,13 +264,16 @@ def new_topic_from_terms(terms, cycle: int, prior: dict | None = None) -> dict:
     if not clean:
         return topic
     root = clean[0]
-    facets = [term for term in clean[1:] if not _near(term, root)][:MAX_FACETS]
-    current = facets[0] if facets else root
+    # A new episode gets one defensible subject. Candidate words from the
+    # initiating utterance remain recent context, but they are not ontology
+    # facets until later messages independently support them. This keeps topic
+    # birth under the same MIN_FACET_SUPPORT rule used during continuation.
+    facets = []
     topic.update({
         "root": root,
-        "current_facet": current,
+        "current_facet": root,
         "facets": facets,
-        "visited_facets": [current],
+        "visited_facets": [root],
         "status": "active",
         "bridge_pending": False,
         "recent_terms": clean[:MAX_RECENT_TERMS],
