@@ -4,31 +4,16 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'scripts/room_prompt_scaffold_prune_once.py'
 
 permissions:
-  contents: write
+  contents: read
   actions: write
 
 jobs:
   watchdog:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-        if: github.event_name == 'push'
-        with:
-          ref: main
-          fetch-depth: 2
-
-      - name: Apply Room prompt-scaffold guard
-        if: github.event_name == 'push'
-        run: python3 scripts/room_prompt_scaffold_prune_once.py
-
       - name: Restart The Room pulse only if it stopped
-        if: github.event_name != 'push'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
