@@ -4,15 +4,30 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/room_reply_repair_once.py'
 
 permissions:
-  contents: read
+  contents: write
   actions: write
 
 jobs:
   watchdog:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Apply coherent reply repair when armed
+        if: hashFiles('scripts/room_reply_repair_once.py') != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/room_reply_repair_once.py
+
       - name: Restart The Room pulse only if it stopped
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
