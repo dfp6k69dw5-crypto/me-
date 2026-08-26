@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# trigger: 2026-08-26T22:59Z
 from pathlib import Path
 import subprocess
 
