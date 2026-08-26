@@ -1,9 +1,9 @@
-"""Activation stamp for the verified Room memory guard.
+"""Activation stamp for verified Room source patches.
 
-This file intentionally contains no runtime behavior. Its user-authored push
-lets the permanent Room code-refresh workflow load the already-tested current
-main after an Actions-authored source commit, which GitHub does not recursively
-trigger from.
+This file intentionally contains no runtime behavior. A user-authored update
+lets the permanent Room code-refresh workflow load current main after a source
+patch committed by GitHub Actions, whose own token does not recursively trigger
+new workflows.
 """
 
-MEMORY_GUARD_ACTIVATION = "2026-08-26"
+ROOM_PATCH_ACTIVATION = "2026-08-26-topic-move-guard"
