@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T04:43:50.507399+00:00",
-  "cycle_key": "32927291254:1:38",
+  "generated_at": "2026-08-26T04:45:18.665417+00:00",
+  "cycle_key": "32927291254:1:39",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -52,6 +52,13 @@
           "matched": [
             "relationship"
           ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
+          ],
           "weight": 0.92
         },
         {
@@ -66,13 +73,42 @@
           "matched": [
             "relationship"
           ],
-          "weight": 0.54
+          "weight": 0.46
+        }
+      ]
+    },
+    {
+      "name": "creative-bridge",
+      "tier": "project",
+      "domain": "creative-bridge",
+      "score": 1.38,
+      "confidence": 0.623,
+      "raw_score": 1.38,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "connection",
+        "music"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "connection"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "music"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "37070866eddd",
+  "context_fingerprint": "c45dba613f0f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 1060,
+  "approx_added_tokens": 265
 }
