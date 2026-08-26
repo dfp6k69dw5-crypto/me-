@@ -1,36 +1,37 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 804,
+  "cycle": 805,
   "messages": 1000,
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000801",
     "root": "nature",
-    "current_facet": "miss",
+    "current_facet": "sorry",
     "facets": [
+      "sorry",
       "miss",
       "time",
-      "lot",
-      "we've",
-      "human",
+      "long",
       "influencing",
       "support",
-      "sarah"
+      "human",
+      "lot"
     ],
     "visited_facets": [
       "nature",
       "support",
       "influencing",
-      "miss"
+      "miss",
+      "sorry"
     ],
-    "facet_index": 3,
+    "facet_index": 4,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -42,16 +43,14 @@
       "jules",
       "allen"
     ],
-    "turns": 6,
+    "turns": 8,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "sorry",
       "miss",
+      "nature",
       "time",
-      "lot",
-      "we've",
-      "human",
-      "influencing",
-      "nature"
+      "long"
     ],
     "last_shift_cycle": 801,
     "status": "active",
@@ -61,8 +60,17 @@
         "label": "nature",
         "parent": null,
         "depth": 0,
-        "first_cycle": 804,
-        "last_cycle": 804,
+        "first_cycle": 805,
+        "last_cycle": 805,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "sorry",
+        "parent": "nature",
+        "depth": 1,
+        "first_cycle": 805,
+        "last_cycle": 805,
         "hits": 1,
         "status": "open"
       },
@@ -70,8 +78,8 @@
         "label": "miss",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 804,
-        "last_cycle": 804,
+        "first_cycle": 805,
+        "last_cycle": 805,
         "hits": 1,
         "status": "open"
       },
@@ -79,35 +87,17 @@
         "label": "time",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 804,
-        "last_cycle": 804,
+        "first_cycle": 805,
+        "last_cycle": 805,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "lot",
+        "label": "long",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 804,
-        "last_cycle": 804,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "we've",
-        "parent": "nature",
-        "depth": 1,
-        "first_cycle": 804,
-        "last_cycle": 804,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "human",
-        "parent": "nature",
-        "depth": 1,
-        "first_cycle": 804,
-        "last_cycle": 804,
+        "first_cycle": 805,
+        "last_cycle": 805,
         "hits": 1,
         "status": "open"
       },
@@ -115,8 +105,8 @@
         "label": "influencing",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 804,
-        "last_cycle": 804,
+        "first_cycle": 805,
+        "last_cycle": 805,
         "hits": 1,
         "status": "open"
       },
@@ -124,17 +114,26 @@
         "label": "support",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 804,
-        "last_cycle": 804,
+        "first_cycle": 805,
+        "last_cycle": 805,
         "hits": 1,
         "status": "open"
       },
       {
-        "label": "sarah",
+        "label": "human",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 804,
-        "last_cycle": 804,
+        "first_cycle": 805,
+        "last_cycle": 805,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "lot",
+        "parent": "nature",
+        "depth": 1,
+        "first_cycle": 805,
+        "last_cycle": 805,
         "hits": 1,
         "status": "open"
       }
@@ -142,10 +141,11 @@
     "branch_history": [
       "nature",
       "support",
-      "influencing"
+      "influencing",
+      "miss"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 804,
+    "last_branch_cycle": 805,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -153,12 +153,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T075013860-jules-v5",
-  "last_speaker": "jules",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000804",
+  "last_public_event": "20260826T075155559-sarah-v5",
+  "last_speaker": "sarah",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000805",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T07:50:13.861595Z",
+  "last_run": "2026-08-26T07:51:55.560864Z",
   "context_scope_version": 1
 }
