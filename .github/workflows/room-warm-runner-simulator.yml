@@ -1,5 +1,4 @@
-name: Room warm-runner watchdog simulator
-# post-patch verification kick: 2026-08-19
+name: Room maintenance supervisor
 
 on:
   push:
@@ -8,13 +7,15 @@ on:
       - '.github/workflows/sarah-society.yml'
       - '.github/workflows/room-warm-runner-simulator.yml'
       - 'scripts/room_warm_runner_watchdog_sim.py'
+      - 'scripts/room_*.py'
   workflow_dispatch:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
-  group: room-warm-runner-watchdog-simulator
+  group: room-maintenance-supervisor
   cancel-in-progress: true
 
 jobs:
@@ -26,15 +27,12 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-
       - name: Clear previous diagnostic
         run: rm -f room/warm-runner-watchdog-diagnostic.json
-
       - name: Run deterministic hung-node simulator
         id: simulator
         continue-on-error: true
         run: python3 scripts/room_warm_runner_watchdog_sim.py
-
       - name: Publish simulator diagnostic
         if: always()
         run: |
@@ -50,9 +48,34 @@ jobs:
             sleep "$n"
           done
           exit 1
-
       - name: Enforce simulator result
         if: always()
         env:
           SIMULATOR_OUTCOME: ${{ steps.simulator.outcome }}
         run: test "$SIMULATOR_OUTCOME" = success
+
+  handoff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 20
+      - name: Verify Room Python
+        run: python3 -m py_compile scripts/room_*.py
+      - name: Replace resident Room
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          ids="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 20 --json databaseId --jq '.[].databaseId')"
+          for id in $ids; do gh run cancel "$id" --repo "$GITHUB_REPOSITORY" || true; done
+          for n in $(seq 1 30); do
+            active="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')"
+            [ "$active" -eq 0 ] && break
+            sleep 2
+          done
+          active="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --status in_progress --limit 1 --json databaseId --jq 'length')"
+          [ "$active" -eq 0 ] || exit 1
+          gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
