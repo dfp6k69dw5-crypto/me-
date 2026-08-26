@@ -1,28 +1,28 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 670,
+  "cycle": 671,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
-    "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000665",
     "root": "work",
-    "current_facet": "owen",
+    "current_facet": "need",
     "facets": [
+      "need",
       "trust",
       "owen",
       "sorry",
       "behind",
-      "honest",
       "progress",
-      "falling",
-      "you've noticed me trying to keep you from finding out what's really going on."
+      "honest",
+      "falling"
     ],
     "visited_facets": [
       "work",
@@ -30,9 +30,10 @@
       "trust",
       "relationship",
       "behind",
-      "owen"
+      "owen",
+      "need"
     ],
-    "facet_index": 5,
+    "facet_index": 6,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -44,15 +45,13 @@
       "jules",
       "allen"
     ],
-    "turns": 10,
+    "turns": 12,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "need",
       "work",
       "trust",
-      "owen",
-      "sorry",
-      "behind",
-      "trying to be honest with you"
+      "owen"
     ],
     "last_shift_cycle": 665,
     "status": "active",
@@ -62,8 +61,17 @@
         "label": "work",
         "parent": null,
         "depth": 0,
-        "first_cycle": 670,
-        "last_cycle": 670,
+        "first_cycle": 671,
+        "last_cycle": 671,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "need",
+        "parent": "work",
+        "depth": 1,
+        "first_cycle": 671,
+        "last_cycle": 671,
         "hits": 1,
         "status": "open"
       },
@@ -71,8 +79,8 @@
         "label": "trust",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 670,
-        "last_cycle": 670,
+        "first_cycle": 671,
+        "last_cycle": 671,
         "hits": 1,
         "status": "open"
       },
@@ -80,8 +88,8 @@
         "label": "owen",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 670,
-        "last_cycle": 670,
+        "first_cycle": 671,
+        "last_cycle": 671,
         "hits": 1,
         "status": "open"
       },
@@ -89,8 +97,8 @@
         "label": "sorry",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 670,
-        "last_cycle": 670,
+        "first_cycle": 671,
+        "last_cycle": 671,
         "hits": 1,
         "status": "open"
       },
@@ -98,17 +106,8 @@
         "label": "behind",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 670,
-        "last_cycle": 670,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "honest",
-        "parent": "work",
-        "depth": 1,
-        "first_cycle": 670,
-        "last_cycle": 670,
+        "first_cycle": 671,
+        "last_cycle": 671,
         "hits": 1,
         "status": "open"
       },
@@ -116,8 +115,17 @@
         "label": "progress",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 670,
-        "last_cycle": 670,
+        "first_cycle": 671,
+        "last_cycle": 671,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "honest",
+        "parent": "work",
+        "depth": 1,
+        "first_cycle": 671,
+        "last_cycle": 671,
         "hits": 1,
         "status": "open"
       },
@@ -125,17 +133,8 @@
         "label": "falling",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 670,
-        "last_cycle": 670,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "you've noticed me trying to keep you from finding out what's really going on.",
-        "parent": "work",
-        "depth": 1,
-        "first_cycle": 670,
-        "last_cycle": 670,
+        "first_cycle": 671,
+        "last_cycle": 671,
         "hits": 1,
         "status": "open"
       }
@@ -145,10 +144,11 @@
       "progress",
       "trust",
       "relationship",
-      "behind"
+      "behind",
+      "owen"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 670,
+    "last_branch_cycle": 671,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -156,12 +156,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T034205335-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000670",
+  "last_public_event": "20260826T034524548-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000671",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T03:42:05.336508Z",
+  "last_run": "2026-08-26T03:45:24.549821Z",
   "context_scope_version": 1
 }
