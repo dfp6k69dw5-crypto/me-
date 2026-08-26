@@ -1,29 +1,34 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 802,
+  "cycle": 803,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000801",
     "root": "nature",
-    "current_facet": "support",
+    "current_facet": "influencing",
     "facets": [
+      "influencing",
+      "human",
+      "sarah",
       "support",
+      "long",
       "focus",
       "adventurous"
     ],
     "visited_facets": [
       "nature",
-      "support"
+      "support",
+      "influencing"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -35,13 +40,15 @@
       "jules",
       "allen"
     ],
-    "turns": 2,
+    "turns": 4,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "influencing",
       "nature",
+      "human",
+      "sarah",
       "support",
-      "focus",
-      "adventurous"
+      "long"
     ],
     "last_shift_cycle": 801,
     "status": "active",
@@ -51,8 +58,35 @@
         "label": "nature",
         "parent": null,
         "depth": 0,
-        "first_cycle": 802,
-        "last_cycle": 802,
+        "first_cycle": 803,
+        "last_cycle": 803,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "influencing",
+        "parent": "nature",
+        "depth": 1,
+        "first_cycle": 803,
+        "last_cycle": 803,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "human",
+        "parent": "nature",
+        "depth": 1,
+        "first_cycle": 803,
+        "last_cycle": 803,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "sarah",
+        "parent": "nature",
+        "depth": 1,
+        "first_cycle": 803,
+        "last_cycle": 803,
         "hits": 1,
         "status": "open"
       },
@@ -60,8 +94,17 @@
         "label": "support",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 802,
-        "last_cycle": 802,
+        "first_cycle": 803,
+        "last_cycle": 803,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "long",
+        "parent": "nature",
+        "depth": 1,
+        "first_cycle": 803,
+        "last_cycle": 803,
         "hits": 1,
         "status": "open"
       },
@@ -69,8 +112,8 @@
         "label": "focus",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 802,
-        "last_cycle": 802,
+        "first_cycle": 803,
+        "last_cycle": 803,
         "hits": 1,
         "status": "open"
       },
@@ -78,17 +121,18 @@
         "label": "adventurous",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 802,
-        "last_cycle": 802,
+        "first_cycle": 803,
+        "last_cycle": 803,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "nature"
+      "nature",
+      "support"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 802,
+    "last_branch_cycle": 803,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -96,12 +140,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T074650025-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000802",
+  "last_public_event": "20260826T074839995-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000803",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T07:46:50.026290Z",
+  "last_run": "2026-08-26T07:48:39.996743Z",
   "context_scope_version": 1
 }
