@@ -6,19 +6,53 @@ from collections import Counter
 
 import room_social_v5 as social
 
-SCHEMA = 5
+SCHEMA = 6
 MAX_FACETS = 8
 MAX_HISTORY = 8
 MAX_RECENT_TERMS = 10
-MAX_EPISODE_UPDATES = 16
+MAX_EPISODE_UPDATES = 12
+
+_TOPIC_NOISE = {
+    "hey", "hi", "hello", "okay", "ok", "sorry", "thanks", "thank", "please",
+    "last", "happened", "help", "helping", "stuck", "thing", "things", "really",
+    "maybe", "probably", "actually", "well", "just", "again", "today", "tonight",
+    "sarah", "mara", "owen", "jules", "allen",
+}
 
 
 def _clean(value: object) -> str:
     return re.sub(r"\s+", " ", str(value or "").strip().lower())
 
 
+def _stem(word: str) -> str:
+    word = str(word or "").strip().lower()
+    if len(word) > 5 and word.endswith("ing"):
+        word = word[:-3]
+    elif len(word) > 4 and word.endswith("ed"):
+        word = word[:-2]
+    elif len(word) > 4 and word.endswith("es"):
+        word = word[:-2]
+    elif len(word) > 3 and word.endswith("s"):
+        word = word[:-1]
+    return word
+
+
 def _tokens(value: object) -> set[str]:
-    return {word for word in social.words(value) if len(word) >= 3}
+    out: set[str] = set()
+    for word in social.words(value):
+        stem = _stem(word)
+        if len(stem) >= 3 and stem not in _TOPIC_NOISE:
+            out.add(stem)
+    return out
+
+
+def _valid_term(value: object) -> bool:
+    text = _clean(value)
+    if not text:
+        return False
+    if text in _TOPIC_NOISE or text in social.PARTICIPANTS:
+        return False
+    return bool(_tokens(text))
 
 
 def _near(a: object, b: object) -> bool:
@@ -29,7 +63,7 @@ def _near(a: object, b: object) -> bool:
         return True
     a_tokens, b_tokens = _tokens(left), _tokens(right)
     if not a_tokens or not b_tokens:
-        return left in right or right in left
+        return False
     if len(left) >= 4 and len(right) >= 4 and (left in right or right in left):
         return True
     return len(a_tokens & b_tokens) / max(1, min(len(a_tokens), len(b_tokens))) >= 0.72
@@ -39,7 +73,7 @@ def _unique(values, limit: int) -> list[str]:
     out: list[str] = []
     for value in values:
         text = _clean(value)
-        if not text or not _tokens(text):
+        if not _valid_term(text):
             continue
         if any(_near(text, prior) for prior in out):
             continue
@@ -69,7 +103,6 @@ def topic_template(cycle: int = 0) -> dict:
         "last_shift_cycle": int(cycle),
         "status": "forming",
         "bridge_pending": False,
-        # Compatibility view for UI/debug code: root plus sibling facets only.
         "branches": [],
         "branch_history": [],
         "focus_turns": 0,
@@ -81,7 +114,7 @@ def topic_template(cycle: int = 0) -> dict:
 def _flat_branches(root: str | None, facets: list[str], cycle: int, counts: Counter | None = None) -> list[dict]:
     counts = counts or Counter()
     out: list[dict] = []
-    if root:
+    if root and _valid_term(root):
         out.append({
             "label": root,
             "parent": None,
@@ -92,6 +125,8 @@ def _flat_branches(root: str | None, facets: list[str], cycle: int, counts: Coun
             "status": "open",
         })
     for facet in facets:
+        if not _valid_term(facet):
+            continue
         if root and _near(facet, root):
             continue
         out.append({
@@ -133,6 +168,8 @@ def topic_terms_from_messages(messages, limit: int = 12, episode_id: str | None 
 def _normalize(topic: dict | None, cycle: int) -> dict:
     source = dict(topic or {})
     root = _clean(source.get("root")) or None
+    if root and not _valid_term(root):
+        root = None
     old_branches = source.get("branches") if isinstance(source.get("branches"), list) else []
     had_runaway_depth = any(int((branch or {}).get("depth", 0)) > 1 for branch in old_branches if isinstance(branch, dict))
     schema = int(source.get("semantic_schema", 0) or 0)
@@ -154,17 +191,17 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
             "facets": facets,
             "visited_facets": [current] if current else [],
             "facet_index": 0,
-            "shared_references": list(source.get("shared_references") or [])[-4:],
+            "shared_references": _unique(source.get("shared_references") or [], 4),
             "unresolved": list(source.get("unresolved") or [])[-4:],
             "participants": list(social.PARTICIPANTS),
             "turns": int(source.get("turns", 0) or 0),
-            "low_novelty_beats": 3 if had_runaway_depth else 0,
+            "low_novelty_beats": 3 if had_runaway_depth else int(source.get("low_novelty_beats", 0) or 0),
             "recent_terms": _unique(source.get("recent_terms") or [], MAX_RECENT_TERMS),
             "status": "ready_to_bridge" if had_runaway_depth else "active",
             "bridge_pending": bool(had_runaway_depth),
-            "branch_history": [],
-            "focus_turns": 0,
-            "escape_pressure": 0,
+            "branch_history": _unique(source.get("branch_history") or [], MAX_HISTORY),
+            "focus_turns": int(source.get("focus_turns", 0) or 0),
+            "escape_pressure": int(source.get("escape_pressure", 0) or 0),
             "last_shift_cycle": int(source.get("last_shift_cycle", cycle) or cycle),
             "last_branch_cycle": int(cycle),
         })
@@ -180,6 +217,8 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
     facets = [term for term in _unique(defaults.get("facets") or [], MAX_FACETS + 1) if not (root and _near(term, root))][:MAX_FACETS]
     defaults["facets"] = facets
     current = _clean(defaults.get("current_facet")) or None
+    if current and not _valid_term(current):
+        current = None
     if current and root and _near(current, root):
         current = root
     if current and current != root and not any(_near(current, facet) for facet in facets):
@@ -188,6 +227,7 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
     defaults["visited_facets"] = _unique(defaults.get("visited_facets") or [], MAX_HISTORY)
     defaults["branch_history"] = _unique(defaults.get("branch_history") or [], MAX_HISTORY)
     defaults["recent_terms"] = _unique(defaults.get("recent_terms") or [], MAX_RECENT_TERMS)
+    defaults["shared_references"] = _unique(defaults.get("shared_references") or [], 4)
     defaults["branches"] = _flat_branches(root, facets, cycle)
     if defaults["bridge_pending"]:
         defaults["status"] = "ready_to_bridge"
@@ -211,7 +251,7 @@ def new_topic_from_terms(terms, cycle: int, prior: dict | None = None) -> dict:
         "bridge_pending": False,
         "recent_terms": clean[:MAX_RECENT_TERMS],
     })
-    if prior and prior.get("current_facet"):
+    if prior and prior.get("current_facet") and _valid_term(prior.get("current_facet")):
         topic["shared_references"] = [_clean(prior.get("current_facet"))]
     topic["branches"] = _flat_branches(root, facets, cycle)
     return topic
@@ -231,9 +271,6 @@ def _outside_subject_shift(topic: dict, messages, cycle: int) -> dict | None:
     novel = [term for term in latest_terms if not any(_near(term, existing) for existing in vocabulary if existing)]
     if not novel:
         return None
-    # The outside participant's first declared term anchors the episode when it is
-    # genuinely outside the current vocabulary. This is generic participant logic,
-    # not an Allen-specific exception.
     primary = latest_terms[0]
     if any(_near(primary, existing) for existing in vocabulary if existing):
         primary = novel[0]
@@ -258,13 +295,11 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
     novel = [term for term in terms if not any(_near(term, old) for old in [root, *current.get("facets", [])] if old)]
 
     facets = list(current.get("facets") or [])
-    # New terms are siblings under the episode root. There is no recursive parent=current path.
     for term in novel:
         if root and _near(term, root):
             continue
         if not any(_near(term, existing) for existing in facets):
             facets.insert(0, term)
-    # Keep recent spoken facets ahead of stale ones, but cap working set tightly.
     for term in reversed(terms):
         if root and _near(term, root):
             continue
