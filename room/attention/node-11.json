@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-26T01:56:40.168104+00:00",
-  "cycle_key": "32917847282:1:28",
+  "generated_at": "2026-08-26T01:58:16.475559+00:00",
+  "cycle_key": "32917847282:1:29",
   "node": 11,
   "entity": "jules",
   "role": "expression",
@@ -32,25 +32,34 @@
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.8,
-      "confidence": 0.746,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
+      "score": 1.56,
+      "confidence": 0.657,
+      "raw_score": 1.84,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "past"
+        "past",
+        "remember"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "remember",
             "past"
           ],
-          "weight": 1.8
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "past"
+          ],
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "7cb65d2ce5e3",
+  "context_fingerprint": "568a6155a1e5",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 209,
   "approx_added_tokens": 52
