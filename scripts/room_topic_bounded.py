@@ -25,6 +25,8 @@ _TOPIC_NOISE = {
     "think", "thinking", "thought", "feel", "feels", "feeling", "felt",
     "seem", "seems", "seemed", "say", "said", "saying", "tell", "telling",
     "talk", "talked", "talking", "discuss", "discussed", "discussing",
+    "listen", "listens", "listened", "listening", "focus", "focuses", "focused", "focusing",
+    "interested", "explore", "explores", "explored", "exploring",
     "support", "supporting", "supported", "repair", "repairing", "repaired",
     "reassure", "reassuring", "reassurance", "agree", "agreeing", "agreement",
     "disagree", "disagreeing", "disagreement", "answer", "answering", "answered",
