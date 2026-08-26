@@ -1,24 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 729,
+  "cycle": 730,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 5,
     "id": "topic-000729",
     "root": "skills",
-    "current_facet": "skills",
-    "facets": [],
-    "visited_facets": [
-      "skills"
+    "current_facet": "what's my expectation?",
+    "facets": [
+      "what's my expectation?",
+      "new skill",
+      "appreciate"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "skills",
+      "what's my expectation?"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -30,10 +35,13 @@
       "jules",
       "allen"
     ],
-    "turns": 0,
+    "turns": 2,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "skills"
+      "what's my expectation?",
+      "skills",
+      "new skill",
+      "appreciate"
     ],
     "last_shift_cycle": 729,
     "status": "active",
@@ -43,15 +51,44 @@
         "label": "skills",
         "parent": null,
         "depth": 0,
-        "first_cycle": 729,
-        "last_cycle": 729,
+        "first_cycle": 730,
+        "last_cycle": 730,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "what's my expectation?",
+        "parent": "skills",
+        "depth": 1,
+        "first_cycle": 730,
+        "last_cycle": 730,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "new skill",
+        "parent": "skills",
+        "depth": 1,
+        "first_cycle": 730,
+        "last_cycle": 730,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "appreciate",
+        "parent": "skills",
+        "depth": 1,
+        "first_cycle": 730,
+        "last_cycle": 730,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "skills"
+    ],
     "focus_turns": 0,
-    "last_branch_cycle": 729,
+    "last_branch_cycle": 730,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -59,12 +96,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260826T053010253-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000729",
+  "last_public_event": "20260826T053140652-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-000730",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-26T05:30:10.255781Z",
+  "last_run": "2026-08-26T05:31:40.652717Z",
   "context_scope_version": 1
 }
