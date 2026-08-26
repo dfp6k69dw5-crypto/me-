@@ -64,12 +64,22 @@ _TOPIC_SOCIAL_MOVE_TERMS = {
     "respond", "responding", "response",
     "apologize", "apologizing", "apology", "reassure", "reassuring",
 }
+_TOPIC_STATE_TERMS = {
+    # Generic affect / interpersonal stance. These shape how a turn is said,
+    # but are too weak to define what the conversation is about.
+    "glad", "happy", "sad", "sorry", "sure", "unsure", "worried", "worry", "worrying",
+    "grateful", "thankful", "overwhelmed", "upset", "angry", "afraid", "scared", "nervous",
+    "confused", "comfortable", "uncomfortable", "honest", "open", "okay", "fine",
+    # Generic wanting/needing language should yield to the concrete object of
+    # that state (for example autonomy, art, a movie, a plan).
+    "need", "needs", "needed", "needing", "want", "wants", "wanted", "wanting",
+}
 
 
 def _semantic_cues(value: object, limit: int = 6) -> list[str]:
     cues: list[str] = []
     for word in re.findall(r"[a-z0-9']+", str(value or "").lower()):
-        if len(word) < 4 or word in _CUE_STOPWORDS or word in _TOPIC_SOCIAL_MOVE_TERMS or word in cues:
+        if len(word) < 4 or word in _CUE_STOPWORDS or word in _TOPIC_SOCIAL_MOVE_TERMS or word in _TOPIC_STATE_TERMS or word in cues:
             continue
         cues.append(word)
         if len(cues) >= limit:
@@ -210,6 +220,7 @@ def _sanitize_declared_topic_terms(message: object) -> list[str]:
                 or candidate in _TOPIC_SCAFFOLD
                 or candidate in _TOPIC_FILLER
                 or candidate in _TOPIC_SOCIAL_MOVE_TERMS
+                or candidate in _TOPIC_STATE_TERMS
             ):
                 continue
             if not _social._term_tokens(candidate):
