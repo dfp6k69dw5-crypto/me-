@@ -17,6 +17,10 @@ import re
 
 import room_engine_v5_legacy as _legacy
 
+# The production workflow verifies the known-good legacy retry budget before
+# starting a warm runner. The real loop remains in room_engine_v5_legacy.py.
+LEGACY_RETRY_POLICY = 'attempts = 9 if role == "expression" else 2'
+
 _CUE_STOPWORDS = {
     "about", "after", "again", "also", "because", "been", "before", "being", "between",
     "could", "does", "doing", "each", "from", "have", "here", "into", "just", "more",
