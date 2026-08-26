@@ -6,4 +6,4 @@ patch committed by GitHub Actions, whose own token does not recursively trigger
 new workflows.
 """
 
-ROOM_PATCH_ACTIVATION = "2026-08-26-topic-move-guard"
+ROOM_PATCH_ACTIVATION = "2026-08-26-topic-state-guard"
