@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T02:09:34.037202+00:00",
-  "cycle_key": "33030273616:1:16",
+  "generated_at": "2026-08-27T02:12:13.557109+00:00",
+  "cycle_key": "33030273616:1:17",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,20 +32,28 @@
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "score": 2.56,
+      "confidence": 0.933,
+      "raw_score": 2.56,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "again",
         "past"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "past"
+            "again"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "past"
+          ],
+          "weight": 0.76
         }
       ]
     },
@@ -53,25 +61,33 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 2.06,
+      "confidence": 0.849,
+      "raw_score": 2.34,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "because",
         "why"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "because"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
             "why"
           ],
-          "weight": 1.15
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "50aa155d1b6d",
+  "context_fingerprint": "2706ccd83b48",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 797,
   "approx_added_tokens": 199
