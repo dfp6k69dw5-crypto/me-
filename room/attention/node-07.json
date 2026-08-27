@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T07:34:11.713939+00:00",
-  "cycle_key": "33048097919:1:13",
+  "generated_at": "2026-08-27T07:36:45.533156+00:00",
+  "cycle_key": "33048097919:1:14",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,56 +32,68 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.6,
-      "confidence": 0.989,
-      "raw_score": 3.6,
+      "score": 3.52,
+      "confidence": 0.987,
+      "raw_score": 3.52,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "feel",
-        "love"
+        "felt",
+        "happy",
+        "love",
+        "feel"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "felt",
+            "happy",
+            "love"
+          ],
+          "weight": 0.92
+        },
         {
           "kind": "message",
           "matched": [
             "feel",
             "love"
           ],
-          "weight": 1.8
+          "weight": 0.76
         }
       ]
     },
     {
-      "name": "creative-bridge",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "domain": "interaction",
+      "score": 2.817,
+      "confidence": 0.957,
+      "raw_score": 2.817,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "design"
+        "what do you mean",
+        "repair"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "design"
+            "what do you mean"
           ],
-          "weight": 1.45
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "design"
+            "repair"
           ],
           "weight": 0.92
         }
       ]
     }
   ],
-  "context_fingerprint": "f7ece87bade2",
+  "context_fingerprint": "d5b58990eaa5",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 1060,
-  "approx_added_tokens": 265
+  "temporary_skill_chars": 998,
+  "approx_added_tokens": 250
 }
