@@ -1,24 +1,27 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1421,
+  "cycle": 1422,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001419",
     "root": "novel",
-    "current_facet": "novel",
-    "facets": [],
-    "visited_facets": [
-      "novel"
+    "current_facet": "back",
+    "facets": [
+      "back"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "novel",
+      "back"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -32,10 +35,10 @@
       "jules",
       "allen"
     ],
-    "turns": 5,
-    "low_novelty_beats": 2,
+    "turns": 7,
+    "low_novelty_beats": 1,
     "recent_terms": [
-      "novel"
+      "back"
     ],
     "last_shift_cycle": 1419,
     "status": "active",
@@ -45,28 +48,37 @@
         "label": "novel",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1421,
-        "last_cycle": 1421,
+        "first_cycle": 1422,
+        "last_cycle": 1422,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "back",
+        "parent": "novel",
+        "depth": 1,
+        "first_cycle": 1422,
+        "last_cycle": 1422,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
-    "focus_turns": 5,
-    "last_branch_cycle": 1421,
-    "escape_pressure": 2
+    "focus_turns": 1,
+    "last_branch_cycle": 1422,
+    "escape_pressure": 1
   },
   "semantic_epoch_version": 1,
   "semantic_epoch_started_at": "2026-08-24T16:33:56.351717Z",
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260827T112048950-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001421",
+  "last_public_event": "20260827T112319164-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001422",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-27T11:20:51.648359Z",
+  "last_run": "2026-08-27T11:23:21.941973Z",
   "context_scope_version": 1
 }
