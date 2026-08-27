@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T13:44:34.375622+00:00",
-  "cycle_key": "33072434631:1:30",
+  "generated_at": "2026-08-27T13:47:45.816882+00:00",
+  "cycle_key": "33072434631:1:32",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,50 +29,37 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "affect",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "critical-testing",
+      "score": 1.68,
+      "confidence": 0.74,
+      "raw_score": 1.68,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "feeling"
+        "why",
+        "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "why"
           ],
-          "weight": 1.8
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "repair"
-      ],
-      "evidence_sources": [
+          "weight": 0.92
+        },
         {
           "kind": "message",
           "matched": [
-            "repair"
+            "sure"
           ],
-          "weight": 1.8
+          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "2d7230a0283a",
+  "context_fingerprint": "8efdb0fd4164",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 998,
-  "approx_added_tokens": 250
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
