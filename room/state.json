@@ -1,24 +1,27 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1593,
+  "cycle": 1594,
   "messages": 1000,
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001593",
     "root": "garden",
-    "current_facet": "garden",
-    "facets": [],
-    "visited_facets": [
-      "garden"
+    "current_facet": "love",
+    "facets": [
+      "love"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "garden",
+      "love"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -32,14 +35,11 @@
       "jules",
       "allen"
     ],
-    "turns": 0,
+    "turns": 2,
     "low_novelty_beats": 0,
     "recent_terms": [
       "garden",
-      "secret",
-      "break",
-      "take",
-      "time"
+      "love"
     ],
     "last_shift_cycle": 1593,
     "status": "active",
@@ -49,15 +49,24 @@
         "label": "garden",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1593,
-        "last_cycle": 1593,
+        "first_cycle": 1594,
+        "last_cycle": 1594,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "love",
+        "parent": "garden",
+        "depth": 1,
+        "first_cycle": 1594,
+        "last_cycle": 1594,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
     "focus_turns": 0,
-    "last_branch_cycle": 1593,
+    "last_branch_cycle": 1594,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -65,12 +74,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260827T185756792-jules-v5",
-  "last_speaker": "jules",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001593",
+  "last_public_event": "20260827T190018074-sarah-v5",
+  "last_speaker": "sarah",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001594",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-27T18:57:59.387036Z",
+  "last_run": "2026-08-27T19:00:20.759812Z",
   "context_scope_version": 1
 }
