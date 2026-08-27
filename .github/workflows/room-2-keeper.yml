@@ -32,17 +32,29 @@ jobs:
           try:
               h=json.load(open('vault/runtime/heartbeat.json'))
               stamp=datetime.fromisoformat(str(h.get('at') or '').replace('Z','+00:00'))
-              if stamp.tzinfo is None: stamp=stamp.replace(tzinfo=timezone.utc)
+              if stamp.tzinfo is None:
+                  stamp=stamp.replace(tzinfo=timezone.utc)
               age=(datetime.now(timezone.utc)-stamp.astimezone(timezone.utc)).total_seconds()
-              healthy=(h.get('health') in {'ok','degraded'} and h.get('llm_active') is True)
-              print(1 if healthy and -60 <= age <= 900 else 0)
+              run_id=str(h.get('run_id') or '')
+              size=h.get('conversation_size')
+              healthy=(
+                  h.get('health') == 'ok'
+                  and h.get('llm_active') is True
+                  and h.get('feedback_loop') is True
+                  and run_id.isdigit()
+                  and isinstance(size, int)
+                  and 0 <= size <= 120
+              )
+              print(1 if healthy and -15 <= age <= 600 else 0)
           except Exception:
               print(0)
           PY
             )
           fi
           echo "fresh=$fresh" >> "$GITHUB_OUTPUT"
-          if [ "$fresh" -eq 1 ]; then echo 'ROOM 2 heartbeat is fresh; keeper will not interrupt it.'; fi
+          if [ "$fresh" -eq 1 ]; then
+            echo 'ROOM 2 heartbeat is verified fresh and healthy; keeper will not interrupt it.'
+          fi
       - name: Kick isolated ROOM 2 session
         if: steps.heartbeat.outputs.fresh != '1'
         run: |
