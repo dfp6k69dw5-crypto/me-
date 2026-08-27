@@ -1,0 +1,39 @@
+name: ROOM 2 Keeper
+
+on:
+  schedule:
+    - cron: '17 */4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: room-2-keeper
+  cancel-in-progress: true
+
+jobs:
+  restart-room-2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: vault-room-dynamics
+          fetch-depth: 30
+      - name: Kick isolated ROOM 2 session
+        run: |
+          set -euo pipefail
+          test "$(git branch --show-current)" = "vault-room-dynamics"
+          git config user.name 'room-2-keeper'
+          git config user.email 'actions@users.noreply.github.com'
+          printf 'keeper-%s-%s\n' "$GITHUB_RUN_ID" "$(date -u +%Y%m%dT%H%M%SZ)" > vault/live-kick.txt
+          git add vault/live-kick.txt
+          git commit -m 'Keeper restart ROOM 2'
+          pushed=0
+          for attempt in 1 2 3 4; do
+            if timeout 35s git push origin HEAD:vault-room-dynamics; then pushed=1; break; fi
+            git fetch origin vault-room-dynamics --depth=30
+            git rebase origin/vault-room-dynamics || { git rebase --abort || true; exit 1; }
+            sleep $((attempt * 2))
+          done
+          test "$pushed" -eq 1
