@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T23:43:21.025130+00:00",
-  "cycle_key": "33126876988:1:3",
+  "generated_at": "2026-08-27T23:45:55.820468+00:00",
+  "cycle_key": "33126876988:1:4",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,26 +32,62 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
+      "score": 1.79,
+      "confidence": 0.776,
+      "raw_score": 2.07,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "feel",
         "love"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "feel"
+          ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
             "love"
           ],
-          "weight": 1.45
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "love"
+          ],
+          "weight": 0.64
+        }
+      ]
+    },
+    {
+      "name": "concrete-specificity",
+      "tier": "project",
+      "domain": "concrete-specificity",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "place"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "place"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "90e60933f5c3",
+  "context_fingerprint": "1bf42ef790d0",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 544,
-  "approx_added_tokens": 136
+  "temporary_skill_chars": 575,
+  "approx_added_tokens": 144
 }
