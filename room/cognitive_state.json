@@ -18,28 +18,6 @@
       "noise": {},
       "room_memories": [
         {
-          "source": "20260826T204108405-mara-v5",
-          "status": "observed",
-          "speaker": "mara",
-          "target": "jules",
-          "text": "Hey, Owen, what's going on with you and Sarah?",
-          "move": "repair",
-          "discourse": "d-20260826T204108405-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001077",
-          "topic_episode": "topic-001072"
-        },
-        {
-          "source": "20260826T204110203-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "mara",
-          "text": "I'll appreciate you, Sarah. You understand that we want to clarify, and so we're discussing about Mara.",
-          "move": "repair",
-          "discourse": "d-20260826T204110203-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001077",
-          "topic_episode": "topic-001072"
-        },
-        {
           "source": "20260826T204249497-owen-v5",
           "status": "observed",
           "speaker": "owen",
@@ -2432,18 +2410,31 @@
           "discourse": "d-20260827T044154753-owen-v5",
           "beat_id": "beat-room-sterile-v4-2026-08-18-001267",
           "topic_episode": "topic-001265"
+        },
+        {
+          "source": "20260827T044412140-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "sarah",
+          "text": "I care about your concern and value your input as a partner. I understand that you're worried about... see the specific text below for details about the actual wording.",
+          "move": "support",
+          "discourse": "d-20260827T044412140-owen-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001268",
+          "topic_episode": "topic-001267"
+        },
+        {
+          "source": "20260827T044420146-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "sarah",
+          "text": "I do not know what you meant by what you're saying!",
+          "move": "deepen",
+          "discourse": "d-20260827T044420146-mara-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001268",
+          "topic_episode": "topic-001267"
         }
       ],
       "self_history": [
-        {
-          "source": "20260826T192208378-sarah-v5",
-          "text": "it's really raining, days hiking and I've got a good reason to stay in today",
-          "move": "support",
-          "discourse": "d-20260826T192208378-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001031",
-          "topic_episode": "topic-001027",
-          "topic_facet": "days"
-        },
         {
           "source": "20260826T192519072-sarah-v5",
           "text": "it's really raining days",
@@ -4414,31 +4405,39 @@
           "beat_id": "beat-room-sterile-v4-2026-08-18-001267",
           "topic_episode": "topic-001265",
           "topic_facet": "concerned"
+        },
+        {
+          "source": "20260827T044417423-sarah-v5",
+          "text": "I don't think Owen is actually trying to deepen the conversation, he just wants to get out of it.",
+          "move": "deepen",
+          "discourse": "d-20260827T044417423-sarah-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001268",
+          "topic_episode": "topic-001267",
+          "topic_facet": "jump"
         }
       ],
-      "last_event": "20260827T044200409-sarah-v5",
-      "spoken": 1267,
+      "last_event": "20260827T044420146-mara-v5",
+      "spoken": 1268,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
-          "direct_familiarity": 0.44837597259327305,
+          "exposure": 0.86048284782385,
+          "direct_familiarity": 0.4490379214261611,
           "trust": 0.1,
-          "predictability": 0.18055517294653353,
-          "reciprocity": 0.21341313789207716,
-          "warmth": 0.24465439219332655,
-          "respect": 0.1647674751593297,
+          "predictability": 0.18096489536006027,
+          "reciprocity": 0.2141210660679743,
+          "warmth": 0.24510759955801056,
+          "respect": 0.16514332979550803,
           "disclosure_depth": 0.0,
           "tension": 0.1823459107858194,
-          "direct_turns": 426,
-          "observed_turns": 1267,
+          "direct_turns": 427,
+          "observed_turns": 1268,
           "repair_attempts": 11,
           "repair_successes": 0,
-          "last_direct_cycle": 1266,
+          "last_direct_cycle": 1268,
           "shared_references": [
-            "i wish",
             "/wish",
             "happiness",
             "wish",
@@ -4497,18 +4496,10 @@
             "involved",
             "feel",
             "worried",
-            "didn't"
+            "didn't",
+            "meant"
           ],
           "events": [
-            {
-              "cycle": 941,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260826T155428640-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 945,
               "kind": "support",
@@ -5939,6 +5930,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 1268,
+              "kind": "deepen",
+              "direct": true,
+              "message_id": "20260827T044420146-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -5946,24 +5946,21 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
-          "direct_familiarity": 0.47613410832039954,
+          "exposure": 0.86048284782385,
+          "direct_familiarity": 0.4767627473904151,
           "trust": 0.1,
           "predictability": 0.2815554764168556,
           "reciprocity": 0.344054011721941,
-          "warmth": 0.30009513218139144,
+          "warmth": 0.30156430248942945,
           "respect": 0.19394485538951187,
           "disclosure_depth": 0.0,
           "tension": 0.24183310847755404,
-          "direct_turns": 469,
-          "observed_turns": 1267,
+          "direct_turns": 470,
+          "observed_turns": 1268,
           "repair_attempts": 7,
           "repair_successes": 0,
-          "last_direct_cycle": 1266,
+          "last_direct_cycle": 1268,
           "shared_references": [
-            "wish",
-            "avoid",
-            "staying",
             "chance",
             "we're",
             "yet",
@@ -6020,18 +6017,12 @@
             "writing",
             "helpful",
             "concerned",
-            "example"
+            "example",
+            "care",
+            "concern",
+            "value"
           ],
           "events": [
-            {
-              "cycle": 874,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260826T122938394-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 875,
               "kind": "repair",
@@ -7462,6 +7453,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 1268,
+              "kind": "support",
+              "direct": true,
+              "message_id": "20260827T044412140-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -7469,7 +7469,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
+          "exposure": 0.86048284782385,
           "direct_familiarity": 0.4057433004175046,
           "trust": 0.11434240000000001,
           "predictability": 0.23677861919214493,
@@ -7479,7 +7479,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.24737635161139093,
           "direct_turns": 364,
-          "observed_turns": 1267,
+          "observed_turns": 1268,
           "repair_attempts": 5,
           "repair_successes": 0,
           "last_direct_cycle": 1265,
@@ -11677,15 +11677,6 @@
       ],
       "self_history": [
         {
-          "source": "20260826T192209812-mara-v5",
-          "text": "I want to hike on a sunny day",
-          "move": "deepen",
-          "discourse": "d-20260826T192209812-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001031",
-          "topic_episode": "topic-001027",
-          "topic_facet": "days"
-        },
-        {
           "source": "20260826T192343947-mara-v5",
           "text": "I know it's really raining today, days like this make me want to stay in the house and hike, days like this remind me of the hike we took last week",
           "move": "repair",
@@ -13655,16 +13646,25 @@
           "beat_id": "beat-room-sterile-v4-2026-08-18-001267",
           "topic_episode": "topic-001265",
           "topic_facet": "concerned"
+        },
+        {
+          "source": "20260827T044420146-mara-v5",
+          "text": "I do not know what you meant by what you're saying!",
+          "move": "deepen",
+          "discourse": "d-20260827T044420146-mara-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001268",
+          "topic_episode": "topic-001267",
+          "topic_facet": "jump"
         }
       ],
-      "last_event": "20260827T044200409-sarah-v5",
-      "spoken": 1267,
+      "last_event": "20260827T044420146-mara-v5",
+      "spoken": 1268,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
+          "exposure": 0.86048284782385,
           "direct_familiarity": 0.36517395790896473,
           "trust": 0.1072,
           "predictability": 0.22073614715620923,
@@ -13674,7 +13674,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.30698453824316796,
           "direct_turns": 309,
-          "observed_turns": 1267,
+          "observed_turns": 1268,
           "repair_attempts": 13,
           "repair_successes": 0,
           "last_direct_cycle": 1194,
@@ -15187,7 +15187,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
+          "exposure": 0.86048284782385,
           "direct_familiarity": 0.4356467442564415,
           "trust": 0.1072,
           "predictability": 0.2708672621164313,
@@ -15197,7 +15197,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.22795027755579553,
           "direct_turns": 407,
-          "observed_turns": 1267,
+          "observed_turns": 1268,
           "repair_attempts": 10,
           "repair_successes": 0,
           "last_direct_cycle": 1267,
@@ -16710,7 +16710,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
+          "exposure": 0.86048284782385,
           "direct_familiarity": 0.4007274971938785,
           "trust": 0.1,
           "predictability": 0.24488222822445835,
@@ -16720,7 +16720,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.25517006237688217,
           "direct_turns": 357,
-          "observed_turns": 1267,
+          "observed_turns": 1268,
           "repair_attempts": 7,
           "repair_successes": 0,
           "last_direct_cycle": 1267,
@@ -18548,28 +18548,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260826T205330870-sarah-v5",
-          "status": "observed",
-          "speaker": "sarah",
-          "target": "owen",
-          "text": "That's right, Sara",
-          "move": "repair",
-          "discourse": "d-20260826T205330870-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001084",
-          "topic_episode": "topic-001078"
-        },
-        {
-          "source": "20260826T205710589-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "owen",
-          "text": "what was your favorite childhood memory... really?",
-          "move": "disclose",
-          "discourse": "d-20260826T205710589-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001086",
-          "topic_episode": "topic-001084"
-        },
         {
           "source": "20260826T205712200-sarah-v5",
           "status": "observed",
@@ -20963,18 +20941,31 @@
           "discourse": "d-20260827T044151854-mara-v5",
           "beat_id": "beat-room-sterile-v4-2026-08-18-001267",
           "topic_episode": "topic-001265"
+        },
+        {
+          "source": "20260827T044414878-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "owen",
+          "text": "oh, it's still raining!",
+          "move": "support",
+          "discourse": "d-20260827T044414878-jules-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001268",
+          "topic_episode": "topic-001267"
+        },
+        {
+          "source": "20260827T044417423-sarah-v5",
+          "status": "observed",
+          "speaker": "sarah",
+          "target": "owen",
+          "text": "I don't think Owen is actually trying to deepen the conversation, he just wants to get out of it.",
+          "move": "deepen",
+          "discourse": "d-20260827T044417423-sarah-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001268",
+          "topic_episode": "topic-001267"
         }
       ],
       "self_history": [
-        {
-          "source": "20260826T194207576-owen-v5",
-          "text": "Travelers should prioritize caution when traveling at night",
-          "move": "repair",
-          "discourse": "d-20260826T194207576-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001043",
-          "topic_episode": "topic-001042",
-          "topic_facet": "travel"
-        },
         {
           "source": "20260826T194357467-owen-v5",
           "text": "What, really, is going on with you and jules? We're all experiencing the same problems, but it's like you two are going through some sort of double-sense or whatever. There are some inconsistencies in your story.",
@@ -22945,33 +22936,39 @@
           "beat_id": "beat-room-sterile-v4-2026-08-18-001267",
           "topic_episode": "topic-001265",
           "topic_facet": "concerned"
+        },
+        {
+          "source": "20260827T044412140-owen-v5",
+          "text": "I care about your concern and value your input as a partner. I understand that you're worried about... see the specific text below for details about the actual wording.",
+          "move": "support",
+          "discourse": "d-20260827T044412140-owen-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001268",
+          "topic_episode": "topic-001267",
+          "topic_facet": "jump"
         }
       ],
-      "last_event": "20260827T044200409-sarah-v5",
-      "spoken": 1267,
+      "last_event": "20260827T044420146-mara-v5",
+      "spoken": 1268,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
-          "direct_familiarity": 0.4390247468501946,
+          "exposure": 0.86048284782385,
+          "direct_familiarity": 0.4396979171539744,
           "trust": 0.1,
-          "predictability": 0.25745872309814205,
-          "reciprocity": 0.3076354076877137,
-          "warmth": 0.27941895910095993,
-          "respect": 0.17113405334439102,
+          "predictability": 0.257829993736593,
+          "reciprocity": 0.30825853582079477,
+          "warmth": 0.2798513077254994,
+          "respect": 0.17150704302038605,
           "disclosure_depth": 0.0,
           "tension": 0.11382846880542004,
-          "direct_turns": 412,
-          "observed_turns": 1267,
+          "direct_turns": 413,
+          "observed_turns": 1268,
           "repair_attempts": 22,
           "repair_successes": 0,
-          "last_direct_cycle": 1266,
+          "last_direct_cycle": 1268,
           "shared_references": [
-            "i've",
-            "ask",
-            "disappointed",
             "argument",
             "don't",
             "i've considered",
@@ -23028,18 +23025,12 @@
             "each",
             "understand",
             "i think",
-            "think"
+            "think",
+            "deepen",
+            "owen",
+            "conversation"
           ],
           "events": [
-            {
-              "cycle": 928,
-              "kind": "disclose",
-              "direct": true,
-              "message_id": "20260826T152019738-sarah-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 931,
               "kind": "repair",
@@ -24470,6 +24461,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 1268,
+              "kind": "deepen",
+              "direct": true,
+              "message_id": "20260827T044417423-sarah-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -24477,7 +24477,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
+          "exposure": 0.86048284782385,
           "direct_familiarity": 0.3920302842255901,
           "trust": 0.1,
           "predictability": 0.1665182598792053,
@@ -24487,7 +24487,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.21780462208481058,
           "direct_turns": 345,
-          "observed_turns": 1267,
+          "observed_turns": 1268,
           "repair_attempts": 7,
           "repair_successes": 0,
           "last_direct_cycle": 1193,
@@ -26000,23 +26000,21 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
-          "direct_familiarity": 0.47171243628863224,
+          "exposure": 0.86048284782385,
+          "direct_familiarity": 0.4723463813650859,
           "trust": 0.1,
           "predictability": 0.2549993474871692,
           "reciprocity": 0.30046935203703895,
-          "warmth": 0.2630146454807843,
+          "warmth": 0.26345683669349584,
           "respect": 0.16551901529710006,
           "disclosure_depth": 0.0,
           "tension": 0.1429791197622103,
-          "direct_turns": 462,
-          "observed_turns": 1267,
+          "direct_turns": 463,
+          "observed_turns": 1268,
           "repair_attempts": 12,
           "repair_successes": 0,
-          "last_direct_cycle": 1266,
+          "last_direct_cycle": 1268,
           "shared_references": [
-            "seemed",
-            "different",
             "appreciate",
             "you'd",
             "explore",
@@ -26074,18 +26072,11 @@
             "misinterpretation",
             "paranoid",
             "paintings",
-            "suffocating"
+            "suffocating",
+            "it",
+            "raining"
           ],
           "events": [
-            {
-              "cycle": 963,
-              "kind": "support",
-              "direct": true,
-              "message_id": "20260826T165109445-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 964,
               "kind": "repair",
@@ -27514,6 +27505,15 @@
               "direct": true,
               "message_id": "20260827T043917183-jules-v5",
               "risk": 2,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 1268,
+              "kind": "support",
+              "direct": true,
+              "message_id": "20260827T044414878-jules-v5",
+              "risk": 0,
               "repair": false,
               "disagreement": false
             }
@@ -30129,15 +30129,6 @@
       ],
       "self_history": [
         {
-          "source": "20260826T190947377-jules-v5",
-          "text": "I'm going to meet my old friend, someone I hadn't seen in a while, from the opera last night. That's kind of cool, and focus.",
-          "move": "disclose",
-          "discourse": "d-20260826T190947377-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001024",
-          "topic_episode": "topic-001021",
-          "topic_facet": "nothing"
-        },
-        {
           "source": "20260826T191130405-jules-v5",
           "text": "_Mara's _moving _about_ _in_ _her_ _world_.",
           "move": "deepen",
@@ -32107,16 +32098,25 @@
           "beat_id": "beat-room-sterile-v4-2026-08-18-001267",
           "topic_episode": "topic-001265",
           "topic_facet": "concerned"
+        },
+        {
+          "source": "20260827T044414878-jules-v5",
+          "text": "oh, it's still raining!",
+          "move": "support",
+          "discourse": "d-20260827T044414878-jules-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001268",
+          "topic_episode": "topic-001267",
+          "topic_facet": "jump"
         }
       ],
-      "last_event": "20260827T044200409-sarah-v5",
-      "spoken": 1267,
+      "last_event": "20260827T044420146-mara-v5",
+      "spoken": 1268,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
+          "exposure": 0.86048284782385,
           "direct_familiarity": 0.47107772956410915,
           "trust": 0.1072,
           "predictability": 0.26798964961983923,
@@ -32126,7 +32126,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.20792193491256875,
           "direct_turns": 461,
-          "observed_turns": 1267,
+          "observed_turns": 1268,
           "repair_attempts": 13,
           "repair_successes": 0,
           "last_direct_cycle": 1267,
@@ -33639,7 +33639,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
+          "exposure": 0.86048284782385,
           "direct_familiarity": 0.44171258511542416,
           "trust": 0.1,
           "predictability": 0.18967671304039788,
@@ -33649,7 +33649,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.18829327990722472,
           "direct_turns": 416,
-          "observed_turns": 1267,
+          "observed_turns": 1268,
           "repair_attempts": 12,
           "repair_successes": 0,
           "last_direct_cycle": 1267,
@@ -35162,7 +35162,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.8602732577104156,
+          "exposure": 0.86048284782385,
           "direct_familiarity": 0.373503564009959,
           "trust": 0.1072,
           "predictability": 0.2475133337107271,
@@ -35172,7 +35172,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.20679098066736534,
           "direct_turns": 320,
-          "observed_turns": 1267,
+          "observed_turns": 1268,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 1238,
