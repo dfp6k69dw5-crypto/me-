@@ -501,7 +501,7 @@ _MEMORY_SALIENT_MOVES = {"disclose", "repair", "callback", "disagree", "answer",
 _MEMORY_INTERNAL_MOVE_LABELS = {
     "acknowledge", "appreciate", "support", "repair", "answer",
     "respond", "response", "disclose", "compare", "disagree",
-    "agree", "bridge", "close", "deepen", "callback",
+    "agree", "bridge", "close", "deepen", "callback", "focus",
 }
 
 
@@ -636,14 +636,14 @@ def record(history, discourse, mind, message, node, cycle):
     if worthy:
         entity_state.setdefault("self_history", []).append({
             "source": message["id"],
-            "text": message["text"],
+            "text": _memory_excerpt(message["text"], 300),
             "move": message["cognition"]["move_type"],
             "discourse": message["discourse_id"],
             "beat_id": message["beat_id"],
             "topic_episode": message["cognition"].get("topic_episode"),
             "topic_facet": message["cognition"].get("topic_facet"),
         })
-        entity_state["self_history"] = entity_state["self_history"][-220:]
+        entity_state["self_history"] = _dedupe_memories(entity_state["self_history"], 220)
 
     for listener in ORDER:
         memories = mind["entities"][listener].setdefault("room_memories", [])
