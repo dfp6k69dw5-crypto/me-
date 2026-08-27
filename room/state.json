@@ -1,28 +1,30 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1214,
+  "cycle": 1215,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001213",
     "root": "look",
-    "current_facet": "direction",
+    "current_facet": "improve",
     "facets": [
+      "whole",
       "direction",
-      "whole"
+      "improve"
     ],
     "visited_facets": [
       "look",
-      "direction"
+      "direction",
+      "improve"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -36,11 +38,13 @@
       "jules",
       "allen"
     ],
-    "turns": 3,
+    "turns": 5,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "whole",
       "direction",
-      "whole"
+      "look",
+      "improve"
     ],
     "last_shift_cycle": 1213,
     "status": "active",
@@ -50,17 +54,8 @@
         "label": "look",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1214,
-        "last_cycle": 1214,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "direction",
-        "parent": "look",
-        "depth": 1,
-        "first_cycle": 1214,
-        "last_cycle": 1214,
+        "first_cycle": 1215,
+        "last_cycle": 1215,
         "hits": 1,
         "status": "open"
       },
@@ -68,15 +63,35 @@
         "label": "whole",
         "parent": "look",
         "depth": 1,
-        "first_cycle": 1214,
-        "last_cycle": 1214,
+        "first_cycle": 1215,
+        "last_cycle": 1215,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "direction",
+        "parent": "look",
+        "depth": 1,
+        "first_cycle": 1215,
+        "last_cycle": 1215,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "improve",
+        "parent": "look",
+        "depth": 1,
+        "first_cycle": 1215,
+        "last_cycle": 1215,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "direction"
+    ],
     "focus_turns": 0,
-    "last_branch_cycle": 1214,
+    "last_branch_cycle": 1215,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -84,12 +99,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260827T022455071-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001214",
+  "last_public_event": "20260827T022727395-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001215",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-27T02:24:57.622555Z",
+  "last_run": "2026-08-27T02:27:30.141762Z",
   "context_scope_version": 1
 }
