@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T19:57:00.492773+00:00",
-  "cycle_key": "33101682516:1:44",
+  "generated_at": "2026-08-27T19:59:49.496170+00:00",
+  "cycle_key": "33101682516:1:45",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,31 +32,45 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 6.7,
-      "confidence": 1.0,
-      "raw_score": 6.7,
+      "score": 4.09,
+      "confidence": 0.995,
+      "raw_score": 4.09,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "feeling",
         "relationship",
         "love",
         "feel",
-        "feeling",
         "upset"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "feeling"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
             "relationship"
           ],
-          "weight": 1.8
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
+          ],
+          "weight": 0.76
         },
         {
           "kind": "message",
           "matched": [
             "love"
           ],
-          "weight": 1.45
+          "weight": 0.64
         },
         {
           "kind": "message",
@@ -65,48 +79,34 @@
             "feeling",
             "upset"
           ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feeling"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feel"
-          ],
-          "weight": 0.64
+          "weight": 0.54
         }
       ]
     },
     {
-      "name": "memory-callback",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
+      "domain": "concrete-specificity",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "again"
+        "happened"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "again"
+            "happened"
           ],
-          "weight": 1.8
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "4327936e8d32",
+  "context_fingerprint": "ef2dca8ae09d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 570,
-  "approx_added_tokens": 142
+  "temporary_skill_chars": 575,
+  "approx_added_tokens": 144
 }
