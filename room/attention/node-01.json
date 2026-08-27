@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T07:41:15.055404+00:00",
-  "cycle_key": "33048097919:1:16",
+  "generated_at": "2026-08-27T07:43:50.329400+00:00",
+  "cycle_key": "33048097919:1:17",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,29 +29,37 @@
   },
   "selected_skills": [
     {
-      "name": "creative-bridge",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
+      "domain": "affect",
+      "score": 1.46,
+      "confidence": 0.657,
+      "raw_score": 1.46,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "design"
+        "happy",
+        "feel"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "design"
+            "happy"
           ],
-          "weight": 1.15
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "1318b6906152",
+  "context_fingerprint": "eef88322bff3",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 699,
-  "approx_added_tokens": 175
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
