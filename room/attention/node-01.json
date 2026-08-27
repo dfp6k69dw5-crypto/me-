@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T15:30:45.927281+00:00",
-  "cycle_key": "33072434631:1:74",
+  "generated_at": "2026-08-27T15:33:18.894444+00:00",
+  "cycle_key": "33072434631:1:75",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,15 +32,21 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.71,
-      "confidence": 0.75,
-      "raw_score": 1.99,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "music",
-        "beautiful"
+        "music"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "music"
+          ],
+          "weight": 1.8
+        },
         {
           "kind": "message",
           "matched": [
@@ -51,23 +57,36 @@
         {
           "kind": "message",
           "matched": [
-            "music",
-            "beautiful"
+            "music"
           ],
-          "weight": 0.54
-        },
+          "weight": 0.64
+        }
+      ]
+    },
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "feel"
+      ],
+      "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "music"
+            "feel"
           ],
-          "weight": 0.46
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "2dc0adb7538d",
+  "context_fingerprint": "a23dc9b2f8ab",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 699,
-  "approx_added_tokens": 175
+  "temporary_skill_chars": 1060,
+  "approx_added_tokens": 265
 }
