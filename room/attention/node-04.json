@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T20:33:38.948716+00:00",
-  "cycle_key": "33101682516:1:58",
+  "generated_at": "2026-08-27T20:36:15.401685+00:00",
+  "cycle_key": "33101682516:1:59",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,24 +29,52 @@
   },
   "selected_skills": [
     {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 2.6,
+      "confidence": 0.937,
+      "raw_score": 2.6,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "love",
+        "excited"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "love"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "excited"
+          ],
+          "weight": 1.15
+        }
+      ]
+    },
+    {
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 3.22,
-      "confidence": 0.978,
-      "raw_score": 3.22,
-      "repeat_penalty": 0.0,
+      "score": 1.87,
+      "confidence": 0.8,
+      "raw_score": 2.15,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "memory",
         "remember",
+        "memory",
         "again"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "remember",
-            "memory"
+            "remember"
           ],
           "weight": 1.15
         },
@@ -54,9 +82,9 @@
           "kind": "message",
           "matched": [
             "remember",
-            "again"
+            "memory"
           ],
-          "weight": 0.92
+          "weight": 0.54
         },
         {
           "kind": "message",
@@ -64,20 +92,13 @@
             "remember",
             "again"
           ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "memory"
-          ],
           "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "ca36a891127f",
+  "context_fingerprint": "8f524b16ef4e",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 770,
-  "approx_added_tokens": 192
+  "temporary_skill_chars": 570,
+  "approx_added_tokens": 142
 }
