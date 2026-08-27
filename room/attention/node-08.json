@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T17:14:16.651261+00:00",
-  "cycle_key": "33072434631:1:115",
+  "generated_at": "2026-08-27T17:18:49.592057+00:00",
+  "cycle_key": "33072434631:1:117",
   "node": 8,
   "entity": "owen",
   "role": "expression",
@@ -32,22 +32,19 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 6.16,
-      "confidence": 1.0,
-      "raw_score": 6.16,
+      "score": 4.17,
+      "confidence": 0.995,
+      "raw_score": 4.17,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "beauty",
-        "connection",
         "nature",
-        "music"
+        "beauty",
+        "connection"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "connection",
-            "beauty",
             "nature"
           ],
           "weight": 1.8
@@ -55,6 +52,7 @@
         {
           "kind": "message",
           "matched": [
+            "beauty",
             "nature"
           ],
           "weight": 1.45
@@ -64,26 +62,28 @@
           "matched": [
             "nature"
           ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "connection"
+          ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "music"
+            "connection",
+            "beauty",
+            "nature"
           ],
           "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "music"
-          ],
-          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "f7778baea82a",
+  "context_fingerprint": "f9cd22c34c21",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 699,
   "approx_added_tokens": 175
