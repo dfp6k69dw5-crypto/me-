@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T04:05:10.103590+00:00",
-  "cycle_key": "33030273616:1:63",
+  "generated_at": "2026-08-27T04:07:56.097099+00:00",
+  "cycle_key": "33030273616:1:64",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -32,15 +32,21 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.28,
-      "confidence": 0.58,
-      "raw_score": 1.56,
+      "score": 1.17,
+      "confidence": 0.531,
+      "raw_score": 1.45,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "place",
-        "happened"
+        "place"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "place"
+          ],
+          "weight": 1.45
+        },
         {
           "kind": "message",
           "matched": [
@@ -51,14 +57,14 @@
         {
           "kind": "message",
           "matched": [
-            "happened"
+            "place"
           ],
-          "weight": 0.64
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "f4788562eaf0",
+  "context_fingerprint": "cf8f341ea03e",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 723,
   "approx_added_tokens": 181
