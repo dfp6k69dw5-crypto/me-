@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T12:28:50.216501+00:00",
-  "cycle_key": "33048097919:1:133",
+  "generated_at": "2026-08-27T12:31:33.638122+00:00",
+  "cycle_key": "33048097919:1:134",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,18 +32,19 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.52,
-      "confidence": 0.68,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.28,
+      "score": 2.56,
+      "confidence": 0.933,
+      "raw_score": 2.56,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
+        "feel",
         "feeling"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "feel"
           ],
           "weight": 1.8
         },
@@ -52,69 +53,34 @@
           "matched": [
             "feeling"
           ],
-          "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feeling"
-          ],
-          "weight": 0.46
+          "weight": 0.76
         }
       ]
     },
     {
-      "name": "memory-callback",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.52,
-      "confidence": 0.68,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.28,
+      "domain": "critical-testing",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "remember"
+        "reason"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "remember"
+            "reason"
           ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "remember"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "remember"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "remember"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "remember"
-          ],
-          "weight": 0.64
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "e6e5309a44f0",
+  "context_fingerprint": "726290e9f4b3",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 570,
-  "approx_added_tokens": 142
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }
