@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T11:36:39.774422+00:00",
-  "cycle_key": "33048097919:1:112",
+  "generated_at": "2026-08-27T11:41:11.763562+00:00",
+  "cycle_key": "33048097919:1:114",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,64 +29,67 @@
   },
   "selected_skills": [
     {
-      "name": "creative-bridge",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.52,
-      "confidence": 0.68,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.28,
+      "domain": "memory-callback",
+      "score": 5.05,
+      "confidence": 0.999,
+      "raw_score": 5.05,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "design"
+        "again",
+        "history",
+        "past"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "design"
+            "again",
+            "history"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "design"
+            "past"
           ],
-          "weight": 1.15
+          "weight": 1.45
         },
         {
           "kind": "message",
           "matched": [
-            "design"
+            "history"
           ],
           "weight": 0.64
         }
       ]
     },
     {
-      "name": "emotional-attunement",
+      "name": "social-grounding",
       "tier": "project",
-      "domain": "affect",
+      "domain": "interaction",
       "score": 1.45,
       "confidence": 0.652,
       "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "feeling"
+        "question"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "question"
           ],
           "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "c4f4880be2ef",
+  "context_fingerprint": "883d4ebec73f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 1060,
-  "approx_added_tokens": 265
+  "temporary_skill_chars": 797,
+  "approx_added_tokens": 199
 }
