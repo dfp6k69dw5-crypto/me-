@@ -16,6 +16,51 @@ function json(data, status = 200) {
   });
 }
 
+function marketSymbol(value) {
+  const symbol = String(value || "WMT").trim().toUpperCase();
+  return /^[A-Z0-9.^=-]{1,18}$/.test(symbol) ? symbol : null;
+}
+
+async function marketData(url) {
+  const symbol = marketSymbol(url.searchParams.get("symbol"));
+  if (!symbol) return json({ error: "invalid-symbol" }, 400);
+
+  const allowedIntervals = new Set(["1m", "2m", "5m", "15m", "30m", "60m", "1d"]);
+  const allowedRanges = new Set(["1d", "5d", "1mo", "3mo", "6mo", "1y"]);
+  const interval = allowedIntervals.has(url.searchParams.get("interval")) ? url.searchParams.get("interval") : "1m";
+  const range = allowedRanges.has(url.searchParams.get("range")) ? url.searchParams.get("range") : "1d";
+  const includePrePost = url.searchParams.get("prepost") === "0" ? "false" : "true";
+
+  const yahoo = new URL(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}`);
+  yahoo.searchParams.set("interval", interval);
+  yahoo.searchParams.set("range", range);
+  yahoo.searchParams.set("includePrePost", includePrePost);
+  yahoo.searchParams.set("events", "div,splits");
+
+  try {
+    const upstream = await fetch(yahoo.toString(), {
+      headers: {
+        accept: "application/json,text/plain,*/*",
+        "user-agent": "Mozilla/5.0 CavityField/1.0",
+      },
+      cf: { cacheTtl: 0, cacheEverything: false },
+    });
+    const text = await upstream.text();
+    if (!upstream.ok) {
+      return json({ error: "market-upstream", status: upstream.status, detail: text.slice(0, 240) }, 502);
+    }
+    let payload;
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      return json({ error: "market-invalid-json" }, 502);
+    }
+    return json({ source: "Yahoo Finance chart", fetchedAt: new Date().toISOString(), symbol, interval, range, payload });
+  } catch (error) {
+    return json({ error: "market-fetch-failed", detail: String(error?.message || error) }, 502);
+  }
+}
+
 const RESILIENT_VIEWER = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#08090d"><title>The Room — Live</title><style>
 html,body{margin:0;min-height:100%;background:#08090d;color:#f5f3ee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding:0 12px 70px}.top{position:sticky;top:0;background:#08090df5;padding:calc(14px + env(safe-area-inset-top)) 2px 11px;border-bottom:1px solid #252b36;z-index:2}.title{font-size:24px;font-weight:850}.sub{font-size:11px;color:#a3a9b3;margin-top:4px}.status{margin-top:9px;font-size:12px;color:#e0bf79}.status.live{color:#98dfc8}.chat{max-width:760px;margin:14px auto}.beat{font-size:10px;color:#6f7783;text-align:center;margin:18px 0 10px}.msg{background:#11141b;border:1px solid #2b3240;border-radius:16px;padding:11px 13px;margin:0 0 10px}.who{font-size:10px;font-weight:800;letter-spacing:.1em;color:#d7c18a;margin-bottom:6px}.text{font-size:16px;line-height:1.45}.when{font-size:9px;color:#707887;margin-top:7px}.err{padding:24vh 18px;text-align:center;color:#a3a9b3;line-height:1.5}</style></head><body>
@@ -40,6 +85,10 @@ var cached=load();if(cached)render(cached,'cache');refresh();setInterval(refresh
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    if (url.pathname === "/api/market" && request.method === "GET") {
+      return marketData(url);
+    }
 
     // Compare live relay state with authoritative GitHub history. A successful
     // relay response is not enough: stale or wrong-boot data must not outrank a
