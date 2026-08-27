@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090611">
+<title>Cavity Field Calculator</title>
+<style>
+:root{--bg:#090611;--panel:#120b20;--panel2:#17102a;--line:#3e2464;--text:#faf5ff;--muted:#baa9c9;--violet:#a978ff;--cyan:#56e4ff;--pink:#ff5bbd;--gold:#ffd166;--green:#7df2b1}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{background:radial-gradient(900px 600px at 10% -5%,#241044 0,transparent 60%),radial-gradient(700px 500px at 100% 20%,#0c3142 0,transparent 55%),var(--bg)}
+main{width:min(94vw,900px);margin:auto;padding:28px 0 64px}header{margin-bottom:20px}.eyebrow{font:800 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan)}h1{font-size:clamp(38px,9vw,70px);line-height:.94;letter-spacing:-.055em;margin:10px 0 12px}.sub{max-width:680px;color:var(--muted);line-height:1.5}.inputrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;margin:22px 0 14px}label{display:block;font-size:13px;color:var(--muted);margin-bottom:7px}input{width:100%;font:600 20px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--text);background:#0b0713;border:1px solid var(--line);border-radius:16px;padding:15px 16px;outline:none}input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(169,120,255,.18)}button{min-height:54px;border:0;border-radius:16px;padding:0 20px;background:linear-gradient(135deg,var(--violet),var(--pink));color:#fff;font-weight:800;font-size:15px;cursor:pointer}button:active{transform:scale(.985)}.result{border:1px solid var(--line);border-radius:22px;padding:22px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));margin-top:12px}.result .label{font:800 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)}#output{font:700 clamp(34px,9vw,62px) ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.04em;margin:6px 0 2px;overflow-wrap:anywhere}.minor{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}.cell,.metric{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(18,11,32,.7)}.cell span,.metric span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.cell strong,.metric strong{display:block;margin-top:6px;font:700 16px ui-monospace,SFMono-Regular,Menlo,monospace}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.plotbox{border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:12px;background:rgba(7,5,12,.35)}.plothead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:8px}.plothead b{font-size:14px}.plothead small{color:var(--muted)}svg{display:block;width:100%;height:auto}.error{display:none;margin-top:10px;border:1px solid #7a315f;background:#2a1024;color:#ffd9ee;padding:10px 12px;border-radius:12px;font-size:13px}.foot{color:#6f607d;font-size:12px;line-height:1.5;margin-top:18px}@media(max-width:650px){.inputrow{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.metrics{grid-template-columns:1fr}button{width:100%}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="eyebrow">The Cavity Field System</div><h1>Weird<br>Calculator</h1><div class="sub">One real number enters a 21-mode Fibonacci cavity, four detector cells fight over it, and one deterministic scalar comes back out. A needlessly elaborate way to obtain a number, therefore obviously worth building.</div></header>
+
+<div class="inputrow"><div><label for="x">Input x</label><input id="x" inputmode="decimal" autocomplete="off" value="137.42"></div><button id="run" type="button">DISTURB REALITY</button></div>
+<div id="error" class="error" role="alert"></div>
+
+<section class="result"><div class="label">C(x)</div><div id="output" aria-live="polite">0.000000000000</div><div id="u" class="minor"></div></section>
+
+<div class="grid" aria-label="Macrostate probabilities">
+<div class="cell"><span>p₀ · redundancy</span><strong id="p0">—</strong></div>
+<div class="cell"><span>p₁ · novelty</span><strong id="p1">—</strong></div>
+<div class="cell"><span>p₂ · latent</span><strong id="p2">—</strong></div>
+<div class="cell"><span>p₃ · ambiguity</span><strong id="p3">—</strong></div>
+</div>
+
+<div class="metrics"><div class="metric"><span>Normalized entropy</span><strong id="h">—</strong></div><div class="metric"><span>Global coherence</span><strong id="g">—</strong></div><div class="metric"><span>Fibonacci resonance</span><strong id="f">—</strong></div></div>
+
+<section class="plotbox"><div class="plothead"><div><b>Local field around x</b><br><small>C(x) for nearby inputs</small></div></div><svg viewBox="0 0 700 190" role="img" aria-label="Local response field"><line x1="35" y1="160" x2="680" y2="160" stroke="#3e2464"/><line x1="35" y1="20" x2="35" y2="160" stroke="#3e2464"/><path id="path" fill="none" stroke="#56e4ff" stroke-width="2.5" d=""/><line x1="357.5" y1="20" x2="357.5" y2="160" stroke="#baa9c9" stroke-dasharray="4 4"/><circle id="dot" cx="357.5" cy="90" r="5" fill="#ff5bbd"/></svg></section>
+
+<div class="foot">Exact mapping used here: u=x/(1+|x|); 21 normalized modes; Γ=(0.34,0.73,1.21,2.03); b=(−0.13,0.07,−0.03,0.11); softmax macrostates; C(x)=0.46H+0.24F+0.18(J+1)/2+0.12L, clamped to [0,1].</div>
+</main>
+<script>
+(()=>{
+const PHI=(1+Math.sqrt(5))/2;
+const FIB=[1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765,10946];
+const GAMMA=[0.34,0.73,1.21,2.03],BIAS=[-0.13,0.07,-0.03,0.11];
+const $=id=>document.getElementById(id);
+function sigmoid(z){if(z>=0){const e=Math.exp(-z);return 1/(1+e)}const e=Math.exp(z);return e/(1+e)}
+function evaluate(x){
+ const u=x/(1+Math.abs(x)),raw=[];let normSq=0;
+ for(let k=0;k<=20;k++){const n=k+1,nu=(FIB[k]%97)+1;const r=Math.cos(2*Math.PI*n*u)+0.73*Math.sin(2*Math.PI*(nu/PHI)*u)+0.31*Math.cos(Math.PI*(n+nu)*u*u);raw.push(r);normSq+=r*r}
+ const norm=Math.sqrt(normSq)||1,alpha=raw.map(v=>v/norm);let G=0;
+ for(let k=0;k<=20;k++)for(let j=k+1;j<=20;j++)G+=alpha[k]*alpha[j]*Math.cos(((k-j)*Math.PI*u)/PHI);G/=210;
+ const q=[];
+ for(let a=0;a<4;a++){let S=0;for(let k=0;k<=20;k++){const n=k+1;const detector=GAMMA[a]/Math.sqrt(GAMMA[a]*GAMMA[a]+Math.pow(((n%7)+1)/PHI,2));const phase=Math.cos(((a+1)*n*Math.PI)/PHI+0.017*u*FIB[k]);S+=alpha[k]*phase*detector}const resonance=Math.cos(2*Math.PI*u*(FIB[a+4]/FIB[a+3]));q[a]=1.65*S+0.55*resonance+1.2*G*(a-1.5)+BIAS[a]}
+ const maxQ=Math.max(...q),eq=q.map(v=>Math.exp(Math.max(-60,Math.min(60,v-maxQ)))),z=eq.reduce((s,v)=>s+v,0)||1,p=eq.map(v=>v/z);
+ let H=0;for(const pa of p)H-=pa*Math.log(Math.max(pa,1e-15));H/=Math.log(4);
+ const F=0.5+0.5*Math.cos(2*Math.PI*PHI*u+0.11*Math.sin(x/(1+Math.abs(x)/1000)));
+ const J=Math.tanh(3.2*G+0.8*Math.sin(13*Math.PI*u));const K=(p[1]+p[2])-(p[0]+p[3]);const L=sigmoid(4*K);const C=Math.max(0,Math.min(1,0.46*H+0.24*F+0.18*((J+1)/2)+0.12*L));return{C,u,p,H,G,F}
+}
+function draw(x,r){const count=181,span=Math.max(.01,Math.abs(x)*.03,.5),vals=[];let lo=Infinity,hi=-Infinity;for(let i=0;i<count;i++){const xx=x-span+2*span*i/(count-1),y=evaluate(xx).C;vals.push(y);lo=Math.min(lo,y);hi=Math.max(hi,y)}if(hi-lo<.03){const m=(hi+lo)/2;lo=m-.015;hi=m+.015}const X0=35,X1=680,Y0=20,Y1=160;let d='';vals.forEach((v,i)=>{const px=X0+(X1-X0)*i/(count-1),py=Y1-(v-lo)/(hi-lo)*(Y1-Y0);d+=(i?' L ':'M ')+px.toFixed(2)+' '+py.toFixed(2)});$('path').setAttribute('d',d);const cy=Y1-(r.C-lo)/(hi-lo)*(Y1-Y0);$('dot').setAttribute('cy',String(Math.max(Y0,Math.min(Y1,cy))))}
+function update(){const s=$('x').value.trim().replace(',','.'),x=Number(s);if(!s||!Number.isFinite(x)||Math.abs(x)>1e15){$('error').textContent='Enter a finite real number between −10¹⁵ and 10¹⁵.';$('error').style.display='block';return}$('error').style.display='none';const r=evaluate(x);$('output').textContent=r.C.toFixed(12);$('u').textContent='u(x) = '+r.u.toFixed(12);r.p.forEach((v,i)=>$('p'+i).textContent=v.toFixed(12));$('h').textContent=r.H.toFixed(12);$('g').textContent=r.G.toFixed(12);$('f').textContent=r.F.toFixed(12);draw(x,r)}
+$('run').addEventListener('click',update);$('x').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();update()}});update();
+})();
+</script>
+</body>
+</html>
