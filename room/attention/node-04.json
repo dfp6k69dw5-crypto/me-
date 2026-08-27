@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T10:51:29.965615+00:00",
-  "cycle_key": "33048097919:1:93",
+  "generated_at": "2026-08-27T10:53:57.420838+00:00",
+  "cycle_key": "33048097919:1:94",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,29 +29,67 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
+      "domain": "affect",
+      "score": 3.6,
+      "confidence": 0.989,
+      "raw_score": 3.6,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "before"
+        "anxious",
+        "feeling"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "before"
+            "feeling",
+            "anxious"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 0.92
+        }
+      ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.61,
+      "confidence": 0.715,
+      "raw_score": 1.61,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "question",
+        "repair"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "question"
           ],
           "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "repair"
+          ],
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "dbb6afe653a5",
+  "context_fingerprint": "068b2549ca5f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 770,
-  "approx_added_tokens": 192
+  "temporary_skill_chars": 998,
+  "approx_added_tokens": 250
 }
