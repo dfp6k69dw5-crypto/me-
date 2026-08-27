@@ -1,27 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1562,
+  "cycle": 1563,
   "messages": 1000,
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001558",
     "root": "difference",
-    "current_facet": "appreciate",
+    "current_facet": "opinion",
     "facets": [
-      "appreciate"
+      "appreciate",
+      "opinion"
     ],
     "visited_facets": [
       "difference",
-      "appreciate"
+      "appreciate",
+      "opinion"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -35,10 +37,11 @@
       "jules",
       "allen"
     ],
-    "turns": 8,
+    "turns": 10,
     "low_novelty_beats": 1,
     "recent_terms": [
-      "appreciate"
+      "appreciate",
+      "opinion"
     ],
     "last_shift_cycle": 1558,
     "status": "active",
@@ -48,8 +51,8 @@
         "label": "difference",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1562,
-        "last_cycle": 1562,
+        "first_cycle": 1563,
+        "last_cycle": 1563,
         "hits": 1,
         "status": "open"
       },
@@ -57,15 +60,26 @@
         "label": "appreciate",
         "parent": "difference",
         "depth": 1,
-        "first_cycle": 1562,
-        "last_cycle": 1562,
+        "first_cycle": 1563,
+        "last_cycle": 1563,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "opinion",
+        "parent": "difference",
+        "depth": 1,
+        "first_cycle": 1563,
+        "last_cycle": 1563,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "appreciate"
+    ],
     "focus_turns": 1,
-    "last_branch_cycle": 1562,
+    "last_branch_cycle": 1563,
     "escape_pressure": 1
   },
   "semantic_epoch_version": 1,
@@ -73,12 +87,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260827T173358136-owen-v5",
-  "last_speaker": "owen",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001562",
+  "last_public_event": "20260827T173648456-jules-v5",
+  "last_speaker": "jules",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001563",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-27T17:34:00.804409Z",
+  "last_run": "2026-08-27T17:36:51.302130Z",
   "context_scope_version": 1
 }
