@@ -1,29 +1,32 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1195,
+  "cycle": 1196,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 8,
-    "id": "topic-001195",
-    "root": "consider",
-    "current_facet": "consider",
-    "facets": [],
+    "id": "topic-001196",
+    "root": "anyone",
+    "current_facet": "anyone",
+    "facets": [
+      "considering",
+      "indeed"
+    ],
     "visited_facets": [
-      "consider"
+      "anyone"
     ],
     "facet_index": 0,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
     "shared_references": [
-      "movies"
+      "consider"
     ],
     "participants": [
       "sarah",
@@ -33,38 +36,59 @@
       "allen"
     ],
     "turns": 1,
-    "low_novelty_beats": 1,
-    "recent_terms": [],
-    "last_shift_cycle": 1195,
+    "low_novelty_beats": 0,
+    "recent_terms": [
+      "considering",
+      "indeed"
+    ],
+    "last_shift_cycle": 1196,
     "status": "active",
     "bridge_pending": false,
     "branches": [
       {
-        "label": "consider",
+        "label": "anyone",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1195,
-        "last_cycle": 1195,
+        "first_cycle": 1196,
+        "last_cycle": 1196,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "considering",
+        "parent": "anyone",
+        "depth": 1,
+        "first_cycle": 1196,
+        "last_cycle": 1196,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "indeed",
+        "parent": "anyone",
+        "depth": 1,
+        "first_cycle": 1196,
+        "last_cycle": 1196,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
     "focus_turns": 1,
-    "last_branch_cycle": 1195,
-    "escape_pressure": 1
+    "last_branch_cycle": 1196,
+    "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
   "semantic_epoch_started_at": "2026-08-24T16:33:56.351717Z",
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260827T013513642-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001195",
+  "last_public_event": "20260827T013737836-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001196",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-27T01:35:16.181039Z",
+  "last_run": "2026-08-27T01:37:40.516659Z",
   "context_scope_version": 1
 }
