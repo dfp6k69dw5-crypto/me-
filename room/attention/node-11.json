@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T06:42:31.955346+00:00",
-  "cycle_key": "33030273616:1:124",
+  "generated_at": "2026-08-27T06:44:51.690599+00:00",
+  "cycle_key": "33030273616:1:125",
   "node": 11,
   "entity": "jules",
   "role": "expression",
@@ -29,29 +29,37 @@
   },
   "selected_skills": [
     {
-      "name": "concrete-specificity",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.45,
-      "confidence": 0.611,
-      "raw_score": 1.45,
+      "domain": "critical-testing",
+      "score": 1.99,
+      "confidence": 0.806,
+      "raw_score": 1.99,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "detail"
+        "claim",
+        "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "detail"
+            "claim"
           ],
           "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "ff6f5871969a",
+  "context_fingerprint": "2ca9532bb9fe",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 214,
-  "approx_added_tokens": 54
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }

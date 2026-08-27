@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T06:41:04.735071+00:00",
-  "cycle_key": "33030273616:1:124",
+  "generated_at": "2026-08-27T06:43:31.765087+00:00",
+  "cycle_key": "33030273616:1:125",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,23 +29,31 @@
   },
   "selected_skills": [
     {
-      "name": "concrete-specificity",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "domain": "critical-testing",
+      "score": 1.99,
+      "confidence": 0.832,
+      "raw_score": 1.99,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "detail"
+        "claim",
+        "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "detail"
+            "claim"
           ],
           "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 0.54
         }
       ]
     },
@@ -53,26 +61,34 @@
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.41,
+      "confidence": 0.636,
+      "raw_score": 1.69,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "remember",
         "before"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "before"
+            "remember"
           ],
           "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "before"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "ff6f5871969a",
+  "context_fingerprint": "2ca9532bb9fe",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 749,
-  "approx_added_tokens": 187
+  "temporary_skill_chars": 555,
+  "approx_added_tokens": 139
 }
