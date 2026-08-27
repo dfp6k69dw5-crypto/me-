@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T00:31:30.296876+00:00",
-  "cycle_key": "33021820500:1:37",
+  "generated_at": "2026-08-27T00:33:46.049751+00:00",
+  "cycle_key": "33021820500:1:38",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,50 +29,52 @@
   },
   "selected_skills": [
     {
-      "name": "creative-bridge",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.28,
+      "domain": "memory-callback",
+      "score": 2.014,
+      "confidence": 0.838,
+      "raw_score": 2.014,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "nature"
+        "used to",
+        "remember"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "nature"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "nature"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "nature"
+            "remember",
+            "used to"
           ],
           "weight": 0.76
-        },
+        }
+      ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "repair"
+      ],
+      "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "nature"
+            "repair"
           ],
-          "weight": 0.64
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "a43899f3b5d0",
+  "context_fingerprint": "adc1d6af1032",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 699,
-  "approx_added_tokens": 175
+  "temporary_skill_chars": 797,
+  "approx_added_tokens": 199
 }
