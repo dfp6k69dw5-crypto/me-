@@ -1,26 +1,28 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1235,
+  "cycle": 1236,
   "messages": 1000,
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001233",
     "root": "effort",
-    "current_facet": "focus",
+    "current_facet": "task",
     "facets": [
+      "task",
       "focus"
     ],
     "visited_facets": [
-      "effort"
+      "effort",
+      "task"
     ],
-    "facet_index": 0,
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -34,9 +36,10 @@
       "jules",
       "allen"
     ],
-    "turns": 4,
+    "turns": 6,
     "low_novelty_beats": 0,
     "recent_terms": [
+      "task",
       "focus"
     ],
     "last_shift_cycle": 1233,
@@ -47,15 +50,24 @@
         "label": "effort",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1235,
-        "last_cycle": 1235,
+        "first_cycle": 1236,
+        "last_cycle": 1236,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "task",
+        "parent": "effort",
+        "depth": 1,
+        "first_cycle": 1236,
+        "last_cycle": 1236,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
     "focus_turns": 0,
-    "last_branch_cycle": 1235,
+    "last_branch_cycle": 1236,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -63,12 +75,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260827T031959490-jules-v5",
-  "last_speaker": "jules",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001235",
+  "last_public_event": "20260827T032230505-sarah-v5",
+  "last_speaker": "sarah",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001236",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-27T03:20:02.042706Z",
+  "last_run": "2026-08-27T03:22:33.134438Z",
   "context_scope_version": 1
 }
