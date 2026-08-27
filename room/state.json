@@ -1,28 +1,32 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1575,
+  "cycle": 1576,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 8,
-    "id": "topic-001575",
-    "root": "weather",
-    "current_facet": "weather",
-    "facets": [],
-    "visited_facets": [
+    "id": "topic-001576",
+    "root": "maker",
+    "current_facet": "maker",
+    "facets": [
       "weather"
+    ],
+    "visited_facets": [
+      "maker"
     ],
     "facet_index": 0,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
-    "shared_references": [],
+    "shared_references": [
+      "weather"
+    ],
     "participants": [
       "sarah",
       "mara",
@@ -30,28 +34,37 @@
       "jules",
       "allen"
     ],
-    "turns": 0,
+    "turns": 1,
     "low_novelty_beats": 0,
     "recent_terms": [
       "weather"
     ],
-    "last_shift_cycle": 1575,
+    "last_shift_cycle": 1576,
     "status": "active",
     "bridge_pending": false,
     "branches": [
       {
-        "label": "weather",
+        "label": "maker",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1575,
-        "last_cycle": 1575,
+        "first_cycle": 1576,
+        "last_cycle": 1576,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "weather",
+        "parent": "maker",
+        "depth": 1,
+        "first_cycle": 1576,
+        "last_cycle": 1576,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
-    "focus_turns": 0,
-    "last_branch_cycle": 1575,
+    "focus_turns": 1,
+    "last_branch_cycle": 1576,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -59,12 +72,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260827T180821413-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001575",
+  "last_public_event": "20260827T181039080-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001576",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-27T18:08:24.051065Z",
+  "last_run": "2026-08-27T18:10:41.967806Z",
   "context_scope_version": 1
 }
