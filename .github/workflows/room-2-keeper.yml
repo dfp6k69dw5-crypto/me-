@@ -20,7 +20,31 @@ jobs:
         with:
           ref: vault-room-dynamics
           fetch-depth: 30
+      - name: Check ROOM 2 heartbeat
+        id: heartbeat
+        run: |
+          set -euo pipefail
+          fresh=0
+          if [ -f vault/runtime/heartbeat.json ]; then
+            fresh=$(python3 - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          try:
+              h=json.load(open('vault/runtime/heartbeat.json'))
+              stamp=datetime.fromisoformat(str(h.get('at') or '').replace('Z','+00:00'))
+              if stamp.tzinfo is None: stamp=stamp.replace(tzinfo=timezone.utc)
+              age=(datetime.now(timezone.utc)-stamp.astimezone(timezone.utc)).total_seconds()
+              healthy=(h.get('health') in {'ok','degraded'} and h.get('llm_active') is True)
+              print(1 if healthy and -60 <= age <= 900 else 0)
+          except Exception:
+              print(0)
+          PY
+            )
+          fi
+          echo "fresh=$fresh" >> "$GITHUB_OUTPUT"
+          if [ "$fresh" -eq 1 ]; then echo 'ROOM 2 heartbeat is fresh; keeper will not interrupt it.'; fi
       - name: Kick isolated ROOM 2 session
+        if: steps.heartbeat.outputs.fresh != '1'
         run: |
           set -euo pipefail
           test "$(git branch --show-current)" = "vault-room-dynamics"
@@ -32,8 +56,14 @@ jobs:
           pushed=0
           for attempt in 1 2 3 4; do
             if timeout 35s git push origin HEAD:vault-room-dynamics; then pushed=1; break; fi
-            git fetch origin vault-room-dynamics --depth=30
-            git rebase origin/vault-room-dynamics || { git rebase --abort || true; exit 1; }
+            git fetch origin vault-room-dynamics --depth=30 || true
+            if ! git rebase origin/vault-room-dynamics; then
+              git rebase --abort || true
+              git reset --hard origin/vault-room-dynamics
+              printf 'keeper-%s-%s\n' "$GITHUB_RUN_ID" "$(date -u +%Y%m%dT%H%M%SZ)" > vault/live-kick.txt
+              git add vault/live-kick.txt
+              git commit -m 'Keeper restart ROOM 2 after conflict'
+            fi
             sleep $((attempt * 2))
           done
           test "$pushed" -eq 1
