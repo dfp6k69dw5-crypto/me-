@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T20:38:48.696750+00:00",
-  "cycle_key": "33101682516:1:60",
+  "generated_at": "2026-08-27T20:41:12.556494+00:00",
+  "cycle_key": "33101682516:1:61",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,11 +32,14 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 2.9,
-      "confidence": 0.962,
-      "raw_score": 2.9,
+      "score": 4.5,
+      "confidence": 0.998,
+      "raw_score": 4.5,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "angry",
+        "feel",
+        "relationship",
         "excited",
         "love"
       ],
@@ -44,21 +47,22 @@
         {
           "kind": "message",
           "matched": [
-            "excited",
-            "love"
+            "feel",
+            "angry"
           ],
-          "weight": 1.45
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "love"
+            "relationship"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
+            "excited",
             "love"
           ],
           "weight": 0.64
@@ -66,43 +70,36 @@
         {
           "kind": "message",
           "matched": [
-            "excited"
+            "love"
           ],
-          "weight": 0.54
+          "weight": 0.46
         }
       ]
     },
     {
-      "name": "memory-callback",
+      "name": "technical-systems",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.28,
+      "domain": "technical-systems",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "remember"
+        "computer"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "remember"
+            "computer"
           ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "remember"
-          ],
-          "weight": 0.54
+          "weight": 1.8
         }
       ]
     }
   ],
-  "context_fingerprint": "bf3354fd93b9",
+  "context_fingerprint": "2ba9f8be32dd",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 570,
-  "approx_added_tokens": 142
+  "temporary_skill_chars": 930,
+  "approx_added_tokens": 232
 }

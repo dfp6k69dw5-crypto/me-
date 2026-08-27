@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T20:38:13.701386+00:00",
-  "cycle_key": "33101682516:1:60",
+  "generated_at": "2026-08-27T20:40:30.297365+00:00",
+  "cycle_key": "33101682516:1:61",
   "node": 0,
   "entity": "sarah",
   "role": "comprehension",
@@ -32,11 +32,14 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 2.9,
-      "confidence": 0.962,
-      "raw_score": 2.9,
+      "score": 4.5,
+      "confidence": 0.998,
+      "raw_score": 4.5,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "angry",
+        "feel",
+        "relationship",
         "excited",
         "love"
       ],
@@ -44,21 +47,22 @@
         {
           "kind": "message",
           "matched": [
-            "excited",
-            "love"
+            "feel",
+            "angry"
           ],
-          "weight": 1.45
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
-            "love"
+            "relationship"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
+            "excited",
             "love"
           ],
           "weight": 0.64
@@ -66,14 +70,14 @@
         {
           "kind": "message",
           "matched": [
-            "excited"
+            "love"
           ],
-          "weight": 0.54
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "ade18b9a21f9",
+  "context_fingerprint": "8c39987a7ebf",
   "base_prompt_chars": 2277,
   "temporary_skill_chars": 544,
   "approx_added_tokens": 136
