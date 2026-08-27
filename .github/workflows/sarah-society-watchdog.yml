@@ -4,16 +4,27 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/room_memory_hygiene_once.py'
 
 permissions:
-  contents: read
+  contents: write
   actions: write
 
 jobs:
   watchdog:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 2
+      - name: Apply Room memory hygiene repair
+        run: python3 scripts/room_memory_hygiene_once.py
       - name: Restart The Room pulse only if it stopped
+        if: github.event_name != 'push'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -24,13 +35,6 @@ jobs:
             --limit 20 \
             --json status \
             --jq '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending" or .status == "waiting")] | length')"
-
-          echo "Active Room pulse runs: $active"
           if [ "$active" = "0" ]; then
-            echo "The Room pulse is stopped; starting a new one"
-            gh workflow run sarah-society-pulse.yml \
-              --repo "$GITHUB_REPOSITORY" \
-              --ref main
-          else
-            echo "The Room pulse is already alive"
+            gh workflow run sarah-society-pulse.yml --repo "$GITHUB_REPOSITORY" --ref main
           fi
