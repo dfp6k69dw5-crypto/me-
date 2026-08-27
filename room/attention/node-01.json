@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T14:34:10.328067+00:00",
-  "cycle_key": "33072434631:1:50",
+  "generated_at": "2026-08-27T14:36:27.384203+00:00",
+  "cycle_key": "33072434631:1:51",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,57 +32,36 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 2.48,
-      "confidence": 0.923,
-      "raw_score": 2.48,
-      "repeat_penalty": 0.0,
+      "score": 1.56,
+      "confidence": 0.696,
+      "raw_score": 1.84,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "relationship",
         "feeling",
-        "worried",
-        "relationship"
+        "worried"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feeling",
-            "worried"
+            "relationship"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "relationship"
+            "feeling",
+            "worried"
           ],
-          "weight": 0.64
-        }
-      ]
-    },
-    {
-      "name": "concrete-specificity",
-      "tier": "project",
-      "domain": "concrete-specificity",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "place"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "place"
-          ],
-          "weight": 1.45
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "a7c606463bbb",
+  "context_fingerprint": "69953484e37d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 575,
-  "approx_added_tokens": 144
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
