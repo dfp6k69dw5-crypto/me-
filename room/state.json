@@ -1,24 +1,27 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1606,
+  "cycle": 1607,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001605",
     "root": "skills",
-    "current_facet": "skills",
-    "facets": [],
-    "visited_facets": [
-      "skills"
+    "current_facet": "learn",
+    "facets": [
+      "learn"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "skills",
+      "learn"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -30,10 +33,11 @@
       "jules",
       "allen"
     ],
-    "turns": 2,
+    "turns": 4,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "skills"
+      "skills",
+      "learn"
     ],
     "last_shift_cycle": 1605,
     "status": "active",
@@ -43,15 +47,24 @@
         "label": "skills",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1606,
-        "last_cycle": 1606,
+        "first_cycle": 1607,
+        "last_cycle": 1607,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "learn",
+        "parent": "skills",
+        "depth": 1,
+        "first_cycle": 1607,
+        "last_cycle": 1607,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
-    "focus_turns": 2,
-    "last_branch_cycle": 1606,
+    "focus_turns": 0,
+    "last_branch_cycle": 1607,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -59,12 +72,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260827T193248670-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001606",
+  "last_public_event": "20260827T193525078-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001607",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-27T19:32:51.442989Z",
+  "last_run": "2026-08-27T19:35:27.913350Z",
   "context_scope_version": 1
 }
