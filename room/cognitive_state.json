@@ -18,28 +18,6 @@
       "noise": {},
       "room_memories": [
         {
-          "source": "20260827T112319164-mara-v5",
-          "status": "observed",
-          "speaker": "mara",
-          "target": "sarah",
-          "text": "I don't really understand what's going right in our conversation, Sarah. I'm feeling a bit stuck, and I'm not sure how to take you back or reevaluate what's happening. I'm trying to take a step back and look at things with a new perspective.",
-          "move": "support",
-          "discourse": "d-20260827T112319164-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001422",
-          "topic_episode": "topic-001419"
-        },
-        {
-          "source": "20260827T112552110-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "sarah",
-          "text": "I'm stuck in the loop of what we have, I'm not sure how to make this change without making things worse. I'm trying to step back and reevaluate, but I'm not sure what's the best path forward. Can we just start anew?\"",
-          "move": "repair",
-          "discourse": "d-20260827T112552110-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001423",
-          "topic_episode": "topic-001419"
-        },
-        {
           "source": "20260827T112557833-mara-v5",
           "status": "observed",
           "speaker": "mara",
@@ -2434,18 +2412,31 @@
           "discourse": "d-20260827T193028402-owen-v5",
           "beat_id": "beat-room-sterile-v4-2026-08-18-001605",
           "topic_episode": "topic-001599"
+        },
+        {
+          "source": "20260827T193240301-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "sarah",
+          "text": "What did you have for lunch?",
+          "move": "repair",
+          "discourse": "d-20260827T193240301-owen-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001606",
+          "topic_episode": "topic-001605"
+        },
+        {
+          "source": "20260827T193248670-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "sarah",
+          "text": "You're doing so well on that skill, Sarah! Keep it up, you're doing great!",
+          "move": "support",
+          "discourse": "d-20260827T193248670-mara-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001606",
+          "topic_episode": "topic-001605"
         }
       ],
       "self_history": [
-        {
-          "source": "20260827T090632320-sarah-v5",
-          "text": "But Owen, I must insist that you fix this issue NOW, not later!",
-          "move": "repair",
-          "discourse": "d-20260827T090632320-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001371",
-          "topic_episode": "topic-001369",
-          "topic_facet": "weather"
-        },
         {
           "source": "20260827T090856372-sarah-v5",
           "text": "that's what you said the other day,",
@@ -4416,33 +4407,39 @@
           "beat_id": "beat-room-sterile-v4-2026-08-18-001605",
           "topic_episode": "topic-001599",
           "topic_facet": "relationship"
+        },
+        {
+          "source": "20260827T193245864-sarah-v5",
+          "text": "Actually, I think I understand what you're saying. You want me to focus on my skills and learn from this experience?",
+          "move": "answer",
+          "discourse": "d-20260827T193245864-sarah-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001606",
+          "topic_episode": "topic-001605",
+          "topic_facet": "skills"
         }
       ],
-      "last_event": "20260827T193034291-sarah-v5",
-      "spoken": 1605,
+      "last_event": "20260827T193248670-mara-v5",
+      "spoken": 1606,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
-          "direct_familiarity": 0.5523814923895551,
+          "exposure": 0.916000830012563,
+          "direct_familiarity": 0.5529186345986876,
           "trust": 0.1,
           "predictability": 0.21786227332485386,
           "reciprocity": 0.2778992589987998,
-          "warmth": 0.31319882906351726,
+          "warmth": 0.31361090976607914,
           "respect": 0.1681440844288022,
           "disclosure_depth": 0.0,
           "tension": 0.07406982819269756,
-          "direct_turns": 600,
-          "observed_turns": 1605,
+          "direct_turns": 601,
+          "observed_turns": 1606,
           "repair_attempts": 23,
           "repair_successes": 0,
-          "last_direct_cycle": 1604,
+          "last_direct_cycle": 1606,
           "shared_references": [
-            "safety",
-            "i want to talk about what's been going on between us...",
-            "see",
             "you've",
             "through",
             "care",
@@ -4499,18 +4496,12 @@
             "i'll",
             "garden",
             "help",
-            "don't"
+            "don't",
+            "you're",
+            "skill",
+            "keep"
           ],
           "events": [
-            {
-              "cycle": 1296,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260827T055610190-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1297,
               "kind": "repair",
@@ -5941,6 +5932,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 1606,
+              "kind": "support",
+              "direct": true,
+              "message_id": "20260827T193248670-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -5948,22 +5948,21 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
-          "direct_familiarity": 0.5728594048638548,
+          "exposure": 0.916000830012563,
+          "direct_familiarity": 0.5733719735780182,
           "trust": 0.1072,
-          "predictability": 0.3282637066641105,
-          "reciprocity": 0.4206988130402137,
-          "warmth": 0.37233473428048236,
+          "predictability": 0.3285995748107784,
+          "reciprocity": 0.42122018410847756,
+          "warmth": 0.3727113334399141,
           "respect": 0.22210297512423022,
           "disclosure_depth": 0.008,
           "tension": 0.20214448003664365,
-          "direct_turns": 639,
-          "observed_turns": 1605,
+          "direct_turns": 640,
+          "observed_turns": 1606,
           "repair_attempts": 10,
           "repair_successes": 0,
-          "last_direct_cycle": 1604,
+          "last_direct_cycle": 1606,
           "shared_references": [
-            "make",
             "delicious",
             "fantastic",
             "i'm",
@@ -6022,18 +6021,10 @@
             "help",
             "renovations",
             "relationship",
-            "good"
+            "good",
+            "lunch"
           ],
           "events": [
-            {
-              "cycle": 1286,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260827T053056181-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1288,
               "kind": "repair",
@@ -7464,6 +7455,15 @@
               "risk": 2,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 1606,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260827T193240301-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -7471,7 +7471,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
+          "exposure": 0.916000830012563,
           "direct_familiarity": 0.4219300934598346,
           "trust": 0.11434240000000001,
           "predictability": 0.24210384025025808,
@@ -7481,7 +7481,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.22758624348247966,
           "direct_turns": 387,
-          "observed_turns": 1605,
+          "observed_turns": 1606,
           "repair_attempts": 6,
           "repair_successes": 0,
           "last_direct_cycle": 1573,
@@ -11711,15 +11711,6 @@
       ],
       "self_history": [
         {
-          "source": "20260827T092133220-mara-v5",
-          "text": "I'm really sorry, I shouldn't have...",
-          "move": "repair",
-          "discourse": "d-20260827T092133220-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001377",
-          "topic_episode": "topic-001372",
-          "topic_facet": "quality time"
-        },
-        {
           "source": "20260827T092400858-mara-v5",
           "text": "I'm not sure I care about your argument, Owen. Look, it's time to have a change of heart or time to learn something new.",
           "move": "repair",
@@ -13689,16 +13680,25 @@
           "beat_id": "beat-room-sterile-v4-2026-08-18-001605",
           "topic_episode": "topic-001599",
           "topic_facet": "relationship"
+        },
+        {
+          "source": "20260827T193248670-mara-v5",
+          "text": "You're doing so well on that skill, Sarah! Keep it up, you're doing great!",
+          "move": "support",
+          "discourse": "d-20260827T193248670-mara-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001606",
+          "topic_episode": "topic-001605",
+          "topic_facet": "skills"
         }
       ],
-      "last_event": "20260827T193034291-sarah-v5",
-      "spoken": 1605,
+      "last_event": "20260827T193248670-mara-v5",
+      "spoken": 1606,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
+          "exposure": 0.916000830012563,
           "direct_familiarity": 0.36897378362971855,
           "trust": 0.1072,
           "predictability": 0.22229350635570078,
@@ -13708,7 +13708,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.30698453824316796,
           "direct_turns": 314,
-          "observed_turns": 1605,
+          "observed_turns": 1606,
           "repair_attempts": 13,
           "repair_successes": 0,
           "last_direct_cycle": 1593,
@@ -15221,7 +15221,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
+          "exposure": 0.916000830012563,
           "direct_familiarity": 0.5258252560855993,
           "trust": 0.1072,
           "predictability": 0.31043096581759705,
@@ -15231,7 +15231,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.20899766633625316,
           "direct_turns": 552,
-          "observed_turns": 1605,
+          "observed_turns": 1606,
           "repair_attempts": 12,
           "repair_successes": 0,
           "last_direct_cycle": 1605,
@@ -16744,7 +16744,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
+          "exposure": 0.916000830012563,
           "direct_familiarity": 0.4867189916004951,
           "trust": 0.1,
           "predictability": 0.2826749851918741,
@@ -16754,7 +16754,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.22228018138783517,
           "direct_turns": 486,
-          "observed_turns": 1605,
+          "observed_turns": 1606,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 1605,
@@ -18617,28 +18617,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260827T113820131-sarah-v5",
-          "status": "observed",
-          "speaker": "sarah",
-          "target": "owen",
-          "text": "I think we need to revise our garden design, Sarah.",
-          "move": "repair",
-          "discourse": "d-20260827T113820131-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001428",
-          "topic_episode": "topic-001425"
-        },
-        {
-          "source": "20260827T113828518-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "owen",
-          "text": "It's amazing, Sarah is nurturing me, I'd revise your history again if it were my garden",
-          "move": "repair",
-          "discourse": "d-20260827T113828518-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001428",
-          "topic_episode": "topic-001425"
-        },
         {
           "source": "20260827T114300420-jules-v5",
           "status": "observed",
@@ -21032,18 +21010,31 @@
           "discourse": "d-20260827T193034291-sarah-v5",
           "beat_id": "beat-room-sterile-v4-2026-08-18-001605",
           "topic_episode": "topic-001599"
+        },
+        {
+          "source": "20260827T193243104-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "owen",
+          "text": "It's not something I can do, you're the expert",
+          "move": "repair",
+          "discourse": "d-20260827T193243104-jules-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001606",
+          "topic_episode": "topic-001605"
+        },
+        {
+          "source": "20260827T193245864-sarah-v5",
+          "status": "observed",
+          "speaker": "sarah",
+          "target": "owen",
+          "text": "Actually, I think I understand what you're saying. You want me to focus on my skills and learn from this experience?",
+          "move": "answer",
+          "discourse": "d-20260827T193245864-sarah-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001606",
+          "topic_episode": "topic-001605"
         }
       ],
       "self_history": [
-        {
-          "source": "20260827T091623172-owen-v5",
-          "text": "I think we can spend quality time today, Owen, and I'm looking forward to it.",
-          "move": "support",
-          "discourse": "d-20260827T091623172-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001375",
-          "topic_episode": "topic-001372",
-          "topic_facet": "spend"
-        },
         {
           "source": "20260827T091859733-owen-v5",
           "text": "I'm sorry for my part in the argument, I don't know why I did, I was clearly misdirected and have doubts about my decision,",
@@ -23014,32 +23005,39 @@
           "beat_id": "beat-room-sterile-v4-2026-08-18-001605",
           "topic_episode": "topic-001599",
           "topic_facet": "relationship"
+        },
+        {
+          "source": "20260827T193240301-owen-v5",
+          "text": "What did you have for lunch?",
+          "move": "repair",
+          "discourse": "d-20260827T193240301-owen-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001606",
+          "topic_episode": "topic-001605",
+          "topic_facet": "skills"
         }
       ],
-      "last_event": "20260827T193034291-sarah-v5",
-      "spoken": 1605,
+      "last_event": "20260827T193248670-mara-v5",
+      "spoken": 1606,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
-          "direct_familiarity": 0.5392946807149619,
+          "exposure": 0.916000830012563,
+          "direct_familiarity": 0.5398475270981039,
           "trust": 0.1,
-          "predictability": 0.3025559742196884,
-          "reciprocity": 0.38244927029683673,
-          "warmth": 0.3499016717212711,
-          "respect": 0.20080878624823975,
+          "predictability": 0.30290469623257854,
+          "reciprocity": 0.3830050659535696,
+          "warmth": 0.351266293122161,
+          "respect": 0.20116842229442805,
           "disclosure_depth": 0.0,
           "tension": 0.09073045456278471,
-          "direct_turns": 576,
-          "observed_turns": 1605,
+          "direct_turns": 577,
+          "observed_turns": 1606,
           "repair_attempts": 26,
           "repair_successes": 0,
-          "last_direct_cycle": 1604,
+          "last_direct_cycle": 1606,
           "shared_references": [
-            "i have",
-            "what do you think",
             "food",
             "nature",
             "consider",
@@ -23097,18 +23095,11 @@
             "see",
             "relationship",
             "works",
-            "complicated"
+            "complicated",
+            "skills",
+            "learn"
           ],
           "events": [
-            {
-              "cycle": 1276,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260827T050500015-sarah-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1278,
               "kind": "repair",
@@ -24539,6 +24530,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 1606,
+              "kind": "answer",
+              "direct": true,
+              "message_id": "20260827T193245864-sarah-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -24546,7 +24546,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
+          "exposure": 0.916000830012563,
           "direct_familiarity": 0.4035988316338526,
           "trust": 0.1,
           "predictability": 0.16992391074909746,
@@ -24556,7 +24556,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.22562657586396248,
           "direct_turns": 361,
-          "observed_turns": 1605,
+          "observed_turns": 1606,
           "repair_attempts": 7,
           "repair_successes": 0,
           "last_direct_cycle": 1602,
@@ -26069,22 +26069,21 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
-          "direct_familiarity": 0.5759256056606797,
+          "exposure": 0.916000830012563,
+          "direct_familiarity": 0.5764344949338869,
           "trust": 0.1,
-          "predictability": 0.28762917587495435,
-          "reciprocity": 0.35550134846108533,
-          "warmth": 0.32928805752637635,
+          "predictability": 0.28798536128701685,
+          "reciprocity": 0.35608139724747034,
+          "warmth": 0.3296904846918605,
           "respect": 0.17150704302038605,
           "disclosure_depth": 0.0,
           "tension": 0.13942538227942114,
-          "direct_turns": 645,
-          "observed_turns": 1605,
+          "direct_turns": 646,
+          "observed_turns": 1606,
           "repair_attempts": 13,
           "repair_successes": 0,
-          "last_direct_cycle": 1604,
+          "last_direct_cycle": 1606,
           "shared_references": [
-            "dinner",
             "break",
             "focus",
             "measures",
@@ -26143,18 +26142,10 @@
             "i think it's time for owen to take the lead and propose a new idea.",
             "trouble",
             "mistakes",
-            "art"
+            "art",
+            "expert"
           ],
           "events": [
-            {
-              "cycle": 1314,
-              "kind": "support",
-              "direct": true,
-              "message_id": "20260827T064247082-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1316,
               "kind": "support",
@@ -27582,6 +27573,15 @@
               "kind": "repair",
               "direct": true,
               "message_id": "20260827T192803679-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 1606,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260827T193243104-jules-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -30212,15 +30212,6 @@
       ],
       "self_history": [
         {
-          "source": "20260827T084045664-jules-v5",
-          "text": "I've been watching you, Owen, and I feel like you've been acting pretty...out. What's going on?",
-          "move": "repair",
-          "discourse": "d-20260827T084045664-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-001361",
-          "topic_episode": "topic-001357",
-          "topic_facet": "acting"
-        },
-        {
           "source": "20260827T084324245-jules-v5",
           "text": "I don't want to hear that you've been talking to others when you're acting.",
           "move": "repair",
@@ -32190,16 +32181,25 @@
           "beat_id": "beat-room-sterile-v4-2026-08-18-001605",
           "topic_episode": "topic-001599",
           "topic_facet": "relationship"
+        },
+        {
+          "source": "20260827T193243104-jules-v5",
+          "text": "It's not something I can do, you're the expert",
+          "move": "repair",
+          "discourse": "d-20260827T193243104-jules-v5",
+          "beat_id": "beat-room-sterile-v4-2026-08-18-001606",
+          "topic_episode": "topic-001605",
+          "topic_facet": "skills"
         }
       ],
-      "last_event": "20260827T193034291-sarah-v5",
-      "spoken": 1605,
+      "last_event": "20260827T193248670-mara-v5",
+      "spoken": 1606,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
+          "exposure": 0.916000830012563,
           "direct_familiarity": 0.5682184854996905,
           "trust": 0.1072,
           "predictability": 0.3078652590241386,
@@ -32209,7 +32209,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.1759851257099982,
           "direct_turns": 630,
-          "observed_turns": 1605,
+          "observed_turns": 1606,
           "repair_attempts": 15,
           "repair_successes": 0,
           "last_direct_cycle": 1605,
@@ -33722,7 +33722,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
+          "exposure": 0.916000830012563,
           "direct_familiarity": 0.5326084866068007,
           "trust": 0.1,
           "predictability": 0.23381834965144888,
@@ -33732,7 +33732,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.17322981751464675,
           "direct_turns": 564,
-          "observed_turns": 1605,
+          "observed_turns": 1606,
           "repair_attempts": 13,
           "repair_successes": 0,
           "last_direct_cycle": 1605,
@@ -35245,7 +35245,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9158746419755264,
+          "exposure": 0.916000830012563,
           "direct_familiarity": 0.3876344582765673,
           "trust": 0.1072,
           "predictability": 0.2542570077022731,
@@ -35255,7 +35255,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.20679098066736534,
           "direct_turns": 339,
-          "observed_turns": 1605,
+          "observed_turns": 1606,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 1603,
