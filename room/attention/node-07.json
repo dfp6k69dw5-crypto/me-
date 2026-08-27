@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T08:34:10.870568+00:00",
-  "cycle_key": "33048097919:1:37",
+  "generated_at": "2026-08-27T08:36:50.532915+00:00",
+  "cycle_key": "33048097919:1:38",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,57 +29,65 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 1.51,
-      "confidence": 0.677,
-      "raw_score": 1.79,
-      "repeat_penalty": 0.28,
-      "matched_triggers": [
-        "upset",
-        "feel"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "upset"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feel"
-          ],
-          "weight": 0.64
-        }
-      ]
-    },
-    {
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
+      "score": 1.28,
+      "confidence": 0.58,
+      "raw_score": 1.56,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "because",
         "why"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "because"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
             "why"
           ],
-          "weight": 1.45
+          "weight": 0.64
+        }
+      ]
+    },
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.18,
+      "confidence": 0.536,
+      "raw_score": 1.46,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "feeling",
+        "upset"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "upset"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "cdfbd3f0abf1",
+  "context_fingerprint": "859fd2e3d10e",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 890,
   "approx_added_tokens": 222
