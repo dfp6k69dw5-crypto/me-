@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-27T12:26:10.315204+00:00",
-  "cycle_key": "33048097919:1:132",
+  "generated_at": "2026-08-27T12:28:50.216501+00:00",
+  "cycle_key": "33048097919:1:133",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -28,6 +28,41 @@
     "min_score": 1.1
   },
   "selected_skills": [
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "feeling"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 0.46
+        }
+      ]
+    },
     {
       "name": "memory-callback",
       "tier": "project",
@@ -59,7 +94,14 @@
           "matched": [
             "remember"
           ],
-          "weight": 1.15
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "remember"
+          ],
+          "weight": 0.76
         },
         {
           "kind": "message",
@@ -67,54 +109,12 @@
             "remember"
           ],
           "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "remember"
-          ],
-          "weight": 0.54
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.28,
-      "matched_triggers": [
-        "feeling"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "feeling"
-          ],
-          "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feeling"
-          ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "feeling"
-          ],
-          "weight": 0.76
         }
       ]
     }
   ],
-  "context_fingerprint": "c7b32b7e1ab5",
+  "context_fingerprint": "e6e5309a44f0",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 801,
-  "approx_added_tokens": 200
+  "temporary_skill_chars": 570,
+  "approx_added_tokens": 142
 }
