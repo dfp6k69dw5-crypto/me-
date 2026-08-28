@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T09:49:17.481448+00:00",
-  "cycle_key": "33143935054:1:147",
+  "generated_at": "2026-08-28T09:51:21.168975+00:00",
+  "cycle_key": "33143935054:1:148",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,43 +29,50 @@
   },
   "selected_skills": [
     {
-      "name": "creative-bridge",
+      "name": "concrete-specificity",
       "tier": "project",
-      "domain": "creative-bridge",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.28,
+      "domain": "concrete-specificity",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "music"
+        "specific"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "music"
+            "specific"
+          ],
+          "weight": 1.8
+        }
+      ]
+    },
+    {
+      "name": "technical-systems",
+      "tier": "project",
+      "domain": "technical-systems",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "data"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "data"
           ],
           "weight": 1.45
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "music"
-          ],
-          "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "music"
-          ],
-          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "e0ee6fb7d126",
+  "context_fingerprint": "bf6a8a41703f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 699,
-  "approx_added_tokens": 175
+  "temporary_skill_chars": 751,
+  "approx_added_tokens": 188
 }
