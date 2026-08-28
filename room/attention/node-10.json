@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T19:09:20.468818+00:00",
-  "cycle_key": "33198687221:1:19",
+  "generated_at": "2026-08-28T19:36:35.707065+00:00",
+  "cycle_key": "33204232282:1:2",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,13 +29,34 @@
   },
   "selected_skills": [
     {
+      "name": "critical-testing",
+      "tier": "project",
+      "domain": "critical-testing",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "sure"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 1.8
+        }
+      ]
+    },
+    {
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.45,
-      "confidence": 0.986,
-      "raw_score": 3.45,
-      "repeat_penalty": 0.0,
+      "score": 1.34,
+      "confidence": 0.606,
+      "raw_score": 1.62,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "feel",
         "love",
@@ -49,34 +70,13 @@
             "worried",
             "love"
           ],
-          "weight": 1.15
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.8,
-      "confidence": 0.779,
-      "raw_score": 1.8,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "repair"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "repair"
-          ],
-          "weight": 1.8
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "3759cdcee08c",
+  "context_fingerprint": "d7c4cf3a585f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 998,
-  "approx_added_tokens": 250
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }

@@ -1,27 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-private-self-v1-2026-08-28",
-  "cycle": 17,
+  "cycle": 18,
   "messages": 1000,
   "beat_contributors": [
+    "owen",
     "jules",
     "sarah",
-    "mara",
-    "owen"
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-000013",
     "root": "work",
-    "current_facet": "let's focus",
+    "current_facet": "gardens",
     "facets": [
+      "gardens",
       "let's focus"
     ],
     "visited_facets": [
       "work",
-      "let's focus"
+      "let's focus",
+      "gardens"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -33,11 +35,11 @@
       "jules",
       "allen"
     ],
-    "turns": 8,
-    "low_novelty_beats": 1,
+    "turns": 10,
+    "low_novelty_beats": 0,
     "recent_terms": [
-      "work",
-      "focus"
+      "gardens",
+      "let's focus"
     ],
     "last_shift_cycle": 13,
     "status": "active",
@@ -47,8 +49,17 @@
         "label": "work",
         "parent": null,
         "depth": 0,
-        "first_cycle": 17,
-        "last_cycle": 17,
+        "first_cycle": 18,
+        "last_cycle": 18,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "gardens",
+        "parent": "work",
+        "depth": 1,
+        "first_cycle": 18,
+        "last_cycle": 18,
         "hits": 1,
         "status": "open"
       },
@@ -56,28 +67,30 @@
         "label": "let's focus",
         "parent": "work",
         "depth": 1,
-        "first_cycle": 17,
-        "last_cycle": 17,
+        "first_cycle": 18,
+        "last_cycle": 18,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "let's focus"
+    ],
     "focus_turns": 1,
-    "last_branch_cycle": 17,
-    "escape_pressure": 1
+    "last_branch_cycle": 18,
+    "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
   "semantic_epoch_started_at": "2026-08-28T17:18:26.482457Z",
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-28T17:18:26.482457Z",
-  "last_public_event": "20260828T191046339-owen-v5",
-  "last_speaker": "owen",
-  "last_beat_id": "beat-room-private-self-v1-2026-08-28-000017",
+  "last_public_event": "20260828T193804765-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-private-self-v1-2026-08-28-000018",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
   "context_scope_version": 1,
-  "last_run": "2026-08-28T19:10:48.844706Z"
+  "last_run": "2026-08-28T19:38:07.403659Z"
 }
