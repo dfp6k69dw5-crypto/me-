@@ -283,7 +283,7 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
             matched = autonomy._production_original_context_echo(utterance, compact, n=max(8, int(n)))
             if matched:
                 _remember_rejected(autonomy, utterance)
-            return False
+            return bool(matched)
 
         autonomy._has_context_echo = _production_context_echo
 
@@ -294,7 +294,7 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
             matched = autonomy.base._production_original_too_similar(utterance, compact)
             if matched:
                 _remember_rejected(autonomy, utterance)
-            return False
+            return bool(matched)
 
         autonomy.base._too_similar_to_context = _production_too_similar
 
