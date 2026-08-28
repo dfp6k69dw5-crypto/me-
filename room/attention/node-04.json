@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T15:01:19.031560+00:00",
-  "cycle_key": "33181932853:1:7",
+  "generated_at": "2026-08-28T15:03:42.835931+00:00",
+  "cycle_key": "33181932853:1:8",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,33 +32,63 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
+      "score": 3.36,
+      "confidence": 0.983,
+      "raw_score": 3.36,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "because",
+        "why",
         "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "because"
           ],
-          "weight": 1.45
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
             "sure"
           ],
-          "weight": 0.46
+          "weight": 0.64
+        }
+      ]
+    },
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "feel"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "b1fd6e2612ed",
+  "context_fingerprint": "53e03ec0de54",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }
