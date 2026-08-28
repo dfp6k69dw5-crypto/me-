@@ -25,6 +25,37 @@ jobs:
           ref: main
           fetch-depth: 2
 
+      - name: Apply one-shot bounded comprehension deadline
+        run: |
+          set -euo pipefail
+          git config user.name "room-repair"
+          git config user.email "actions@users.noreply.github.com"
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/room_engine_v5.py')
+          s = p.read_text()
+          old = '''    return autonomy.run(\n        role,\n        payload,\n        timeout=timeout,\n        min_words=1 if role == "expression" else 5,\n    )\n'''
+          new = '''    # Comprehension is advisory and must finish well inside the 45-second\n    # outer node watchdog. A short deadline lets core fail-soft handling take\n    # over instead of letting the operating-system timeout kill the node.\n    effective_timeout = min(int(timeout), 10) if role == "comprehension" else timeout\n    return autonomy.run(\n        role,\n        payload,\n        timeout=effective_timeout,\n        min_words=1 if role == "expression" else 5,\n    )\n'''
+          if old in s:
+              if s.count(old) != 1:
+                  raise SystemExit(f'unexpected model-run anchor count: {s.count(old)}')
+              p.write_text(s.replace(old, new))
+          elif new not in s:
+              raise SystemExit('bounded comprehension deadline anchor not found')
+          PY
+          python3 -m py_compile scripts/room_engine_v5.py
+          if ! git diff --quiet -- scripts/room_engine_v5.py; then
+            git add scripts/room_engine_v5.py
+            git commit -m "Bound Room comprehension below node watchdog"
+            for attempt in 1 2 3 4; do
+              if git push origin HEAD:main; then exit 0; fi
+              git fetch origin main
+              git rebase origin/main || { git rebase --abort || true; exit 1; }
+              sleep "$attempt"
+            done
+            exit 1
+          fi
+
       - name: Check published Room liveness
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -33,9 +64,6 @@ jobs:
           git config user.name "room-supervisor"
           git config user.email "actions@users.noreply.github.com"
 
-          # A stale published feed is expected while a replacement runner is
-          # downloading/loading its local model. Never dispatch another Room
-          # on top of a runner that is already queued or active.
           room_runs="$(gh run list \
             --repo "$GITHUB_REPOSITORY" \
             --workflow sarah-society.yml \
@@ -49,10 +77,7 @@ jobs:
 
           action=$(python3 scripts/room_supervisor.py check)
           echo "Room supervisor action: $action"
-
-          if [ "$action" = "healthy" ]; then
-            exit 0
-          fi
+          if [ "$action" = "healthy" ]; then exit 0; fi
 
           python3 - <<'PY'
           import json
@@ -60,21 +85,14 @@ jobs:
           result=json.loads(Path('.github/room-supervisor-decision.json').read_text())
           Path('.github/room-supervisor-state.json').write_text(json.dumps(result['control'],indent=2,sort_keys=True)+'\n')
           PY
-
           git add .github/room-supervisor-state.json
           git commit -m "Record Room supervisor decision" || true
 
           published=0
           for attempt in 1 2 3 4; do
-            if git push origin HEAD:main; then
-              published=1
-              break
-            fi
+            if git push origin HEAD:main; then published=1; break; fi
             git fetch origin main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              break
-            fi
+            if ! git rebase origin/main; then git rebase --abort || true; break; fi
             sleep "$attempt"
           done
           [ "$published" -eq 1 ] || exit 1
