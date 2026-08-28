@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T13:21:35.665854+00:00",
-  "cycle_key": "33164274484:1:89",
+  "generated_at": "2026-08-28T13:23:26.273905+00:00",
+  "cycle_key": "33164274484:1:90",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,23 +29,23 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "memory-callback",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
+      "domain": "memory-callback",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "sure"
+        "before"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "before"
           ],
-          "weight": 1.15
+          "weight": 1.45
         }
       ]
     },
@@ -53,26 +53,34 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.41,
+      "confidence": 0.636,
+      "raw_score": 1.69,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "relationship",
         "feel"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feel"
+            "relationship"
           ],
           "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "d786485f598c",
+  "context_fingerprint": "11b0b06cfa7d",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 890,
-  "approx_added_tokens": 222
+  "temporary_skill_chars": 801,
+  "approx_added_tokens": 200
 }
