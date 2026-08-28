@@ -9,11 +9,6 @@ import room_private_model as _private_model
 MAX_EXPRESSION_CHARS = 420
 
 _AUTONOMOUS = {"sarah", "mara", "owen", "jules"}
-_RECOVERY_SUBJECTS = (
-    "music", "places", "food", "friendship", "nature", "travel", "books", "art",
-    "work", "home", "weather", "skills", "movies", "gardens", "photography", "humor",
-    "animals", "memory", "cities", "cooking", "objects", "learning",
-)
 _PRONOUN_R = re.compile(r"\b(?:i|we|you|they)\s+r\b", re.I)
 _TRAILING_FRAGMENT = re.compile(r",\s*$")
 _DANGLING_END = re.compile(
@@ -345,24 +340,52 @@ def _low_substantive_novelty(utterance: str, prior_turns: list[dict]) -> bool:
     return len(novel) < 1
 
 
-def _recovery_subject(self_entity: str | None) -> str:
-    key = f"{os.environ.get('ROOM_CYCLE_KEY', 'room-cycle')}:{self_entity or 'room'}:quality-recovery"
-    index = int(hashlib.sha256(key.encode()).hexdigest()[:12], 16) % len(_RECOVERY_SUBJECTS)
-    return _RECOVERY_SUBJECTS[index]
+def _recovery_subject(compact: dict, self_entity: str | None) -> str:
+    """Choose a recovery concept only from the conversation already in evidence."""
+    discussion = compact.get("discussion") if isinstance(compact.get("discussion"), dict) else {}
+    event = compact.get("event") if isinstance(compact.get("event"), dict) else None
+    context = compact.get("context") if isinstance(compact.get("context"), list) else []
+
+    current = set()
+    for value in (discussion.get("subject"), discussion.get("focus")):
+        current.update(_anchor_tokens(value))
+
+    candidates = []
+    for key in ("open_questions", "related", "shared"):
+        values = discussion.get(key)
+        if isinstance(values, list):
+            candidates.extend(values)
+    if event:
+        candidates.append(event.get("text"))
+        candidates.extend(event.get("cues") if isinstance(event.get("cues"), list) else [])
+    for item in reversed(context[-6:]):
+        if isinstance(item, dict):
+            candidates.append(item.get("text"))
+            candidates.extend(item.get("cues") if isinstance(item.get("cues"), list) else [])
+        else:
+            candidates.append(item)
+
+    for value in candidates:
+        anchors = sorted(_anchor_tokens(value))
+        for anchor in anchors:
+            if anchor not in current:
+                return anchor
+
+    for value in (discussion.get("focus"), discussion.get("subject")):
+        anchors = sorted(_anchor_tokens(value))
+        if anchors:
+            return anchors[0]
+    return "conversation"
 
 
 def _escape_stale_context(compact: dict, self_entity: str | None) -> None:
-    """Mutate only the next model attempt after a semantic-copy rejection."""
+    """Retry from one grounded live edge without inventing a replacement subject."""
     event = compact.get("event") if isinstance(compact.get("event"), dict) else None
-    speaker = str((event or {}).get("speaker") or "").lower()
+    fresh = _recovery_subject(compact, self_entity)
 
-    if event and speaker not in _AUTONOMOUS:
-        compact["context"] = [event]
-        return
-
-    fresh = _recovery_subject(self_entity)
-    compact["event"] = None
-    compact["context"] = []
+    # Keep the newest event as the grounding edge. Remove older context only.
+    compact["context"] = [event] if event else []
+    compact["event"] = event
     compact["discussion"] = {
         "subject": fresh,
         "focus": fresh,
@@ -370,12 +393,8 @@ def _escape_stale_context(compact: dict, self_entity: str | None) -> None:
         "shared": [],
         "open_questions": [],
     }
-    compact.pop("intent", None)
-    compact.pop("possible_direction", None)
-    personality = compact.get("personality_context")
-    if isinstance(personality, dict):
-        personality.pop("current", None)
-
+    # Preserve intent and personality state across retries. A quality rejection
+    # should change wording/angle, not erase who is speaking or what they wanted.
 
 def quality_issue(utterance: object, compact: dict, self_entity: str | None, similarity_fn) -> str | None:
     text = str(utterance or "").strip()
