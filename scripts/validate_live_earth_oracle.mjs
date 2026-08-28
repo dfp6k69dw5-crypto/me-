@@ -19,11 +19,11 @@ for (const stream of expectedStreams) {
 
 const requiredReliabilityTokens = [
   'AbortController',
-  "status='stale'",
-  "status='error'",
+  "c.status=c.updated?'stale':'error'",
   'setTimeout(crypto,5000)',
-  'document.visibilityState',
-  'Promise.allSettled',
+  "document.visibilityState==='visible'",
+  'Object.keys(jobs).forEach(k=>jobs[k]())',
+  "if(ttl&&c.updated&&now-c.updated>ttl&&c.status==='live')",
 ];
 for (const token of requiredReliabilityTokens) {
   if (!html.includes(token)) fail(`reliability guard missing: ${token}`);
