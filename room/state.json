@@ -1,27 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 2015,
+  "cycle": 2016,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-002013",
     "root": "nature",
-    "current_facet": "enjoying",
+    "current_facet": "beautiful",
     "facets": [
-      "enjoying"
+      "enjoying",
+      "beautiful"
     ],
     "visited_facets": [
       "nature",
-      "enjoying"
+      "enjoying",
+      "beautiful"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -33,10 +35,11 @@
       "jules",
       "allen"
     ],
-    "turns": 4,
+    "turns": 6,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "enjoying"
+      "enjoying",
+      "beautiful"
     ],
     "last_shift_cycle": 2013,
     "status": "active",
@@ -46,8 +49,8 @@
         "label": "nature",
         "parent": null,
         "depth": 0,
-        "first_cycle": 2015,
-        "last_cycle": 2015,
+        "first_cycle": 2016,
+        "last_cycle": 2016,
         "hits": 1,
         "status": "open"
       },
@@ -55,15 +58,26 @@
         "label": "enjoying",
         "parent": "nature",
         "depth": 1,
-        "first_cycle": 2015,
-        "last_cycle": 2015,
+        "first_cycle": 2016,
+        "last_cycle": 2016,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "beautiful",
+        "parent": "nature",
+        "depth": 1,
+        "first_cycle": 2016,
+        "last_cycle": 2016,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "enjoying"
+    ],
     "focus_turns": 0,
-    "last_branch_cycle": 2015,
+    "last_branch_cycle": 2016,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -71,12 +85,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260828T111226504-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002015",
+  "last_public_event": "20260828T111409267-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-002016",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-28T11:12:28.749055Z",
+  "last_run": "2026-08-28T11:14:11.526559Z",
   "context_scope_version": 1
 }
