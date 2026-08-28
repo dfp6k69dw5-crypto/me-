@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T03:24:16.758738+00:00",
-  "cycle_key": "33126876988:1:93",
+  "generated_at": "2026-08-28T03:27:06.265619+00:00",
+  "cycle_key": "33126876988:1:94",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -29,50 +29,65 @@
   },
   "selected_skills": [
     {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "feel"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 0.92
+        }
+      ]
+    },
+    {
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
+      "score": 1.28,
+      "confidence": 0.58,
+      "raw_score": 1.56,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
+        "remember",
         "past"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "past"
+            "remember"
           ],
-          "weight": 1.45
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "repair"
-      ],
-      "evidence_sources": [
+          "weight": 0.92
+        },
         {
           "kind": "message",
           "matched": [
-            "repair"
+            "past"
           ],
-          "weight": 1.15
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "d09b7bc3e60b",
+  "context_fingerprint": "a56d75474c65",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 797,
-  "approx_added_tokens": 199
+  "temporary_skill_chars": 570,
+  "approx_added_tokens": 142
 }
