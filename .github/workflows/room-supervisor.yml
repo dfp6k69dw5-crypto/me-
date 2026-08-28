@@ -33,6 +33,20 @@ jobs:
           git config user.name "room-supervisor"
           git config user.email "actions@users.noreply.github.com"
 
+          # A stale published feed is expected while a replacement runner is
+          # downloading/loading its local model. Never dispatch another Room
+          # on top of a runner that is already queued or active.
+          room_runs="$(gh run list \
+            --repo "$GITHUB_REPOSITORY" \
+            --workflow sarah-society.yml \
+            --limit 10 \
+            --json databaseId,status,createdAt 2>/dev/null || printf '[]')"
+          active_room="$(printf '%s' "$room_runs" | jq -r '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending" or .status == "waiting" or .status == "requested")] | first | .databaseId // empty')"
+          if [ -n "$active_room" ]; then
+            echo "Room run $active_room is already queued/active; supervisor will not restart it"
+            exit 0
+          fi
+
           action=$(python3 scripts/room_supervisor.py check)
           echo "Room supervisor action: $action"
 
