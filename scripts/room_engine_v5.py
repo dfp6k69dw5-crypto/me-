@@ -301,7 +301,7 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
     # Comprehension is advisory and must finish well inside the 45-second
     # outer node watchdog. A short deadline lets core fail-soft handling take
     # over instead of letting the operating-system timeout kill the node.
-    effective_timeout = min(int(timeout), 10) if role == "comprehension" else timeout
+    effective_timeout = min(int(timeout), 10) if role in {"comprehension", "thought"} else timeout
     return autonomy.run(
         role,
         payload,
