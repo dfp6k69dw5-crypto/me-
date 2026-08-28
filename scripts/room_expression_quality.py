@@ -253,6 +253,22 @@ def _has_repeated_ngram(utterance: str, n: int = 6) -> bool:
     return False
 
 
+def _lexical_degeneracy(utterance: str) -> bool:
+    """Reject sampler collapse around one token before it becomes public speech."""
+    words = [word for word in _tokens(utterance) if word]
+    if len(words) < 4:
+        return False
+    counts: dict[str, int] = {}
+    for word in words:
+        counts[word] = counts.get(word, 0) + 1
+    peak = max(counts.values(), default=0)
+    if peak >= 4 and peak / max(1, len(words)) >= 0.40:
+        return True
+    if len(words) >= 6 and len(set(words)) <= 2:
+        return True
+    return False
+
+
 def _context_too_similar(utterance: str, compact: dict, similarity_fn) -> bool:
     context = compact.get("context") if isinstance(compact.get("context"), list) else []
     current_tokens = len(_tokens(utterance))
@@ -475,6 +491,9 @@ def quality_issue(utterance: object, compact: dict, self_entity: str | None, sim
         return "trailing_fragment"
     if _terminal_incomplete(text):
         return "trailing_fragment"
+    if _lexical_degeneracy(text):
+        _escape_stale_context(compact, self_entity)
+        return "lexical_degeneracy"
     if _has_repeated_ngram(text):
         _escape_stale_context(compact, self_entity)
         return "self_repetition"
