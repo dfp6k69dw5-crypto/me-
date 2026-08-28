@@ -62,6 +62,19 @@ def _self_perspective_leak(utterance: str, self_entity: str | None) -> bool:
     return bool(re.search(rf"\b{re.escape(name)}\b", str(utterance or ""), re.I))
 
 
+_INTERNAL_MOVE_SPEECH = re.compile(
+    r"\b(?:i\s+(?:want|need|plan|try|would\s+like|would\s+really\s+like|['’]?d\s+like)\s+to\s+)?"
+    r"(?:disclose|bridge|deepen|callback)\s+(?:with|to|about)\b"
+    r"|\b(?:i\s+(?:want|need|would\s+like|would\s+really\s+like|['’]?d\s+like)\s+to\s+)?repair\s+with\s+(?:you|sarah|mara|owen|jules|allen)\b",
+    re.I,
+)
+
+
+def _internal_move_speech_leak(utterance: str) -> bool:
+    """Reject public sentences that verbalize internal discourse-action labels."""
+    return bool(_INTERNAL_MOVE_SPEECH.search(str(utterance or "")))
+
+
 def _drop_self_address(text: str, self_entity: str | None) -> str:
     name = str(self_entity or "").strip()
     if not name:
@@ -431,6 +444,8 @@ def quality_issue(utterance: object, compact: dict, self_entity: str | None, sim
         return "malformed_pronoun"
     if _self_perspective_leak(text, self_entity):
         return "self_perspective_leak"
+    if _internal_move_speech_leak(text):
+        return "internal_move_speech_leak"
     if _TRAILING_FRAGMENT.search(text):
         return "trailing_fragment"
     if _terminal_incomplete(text):
