@@ -1,27 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1940,
+  "cycle": 1941,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001936",
     "root": "food",
-    "current_facet": "the table",
+    "current_facet": "reorganizing",
     "facets": [
+      "reorganizing",
       "the table"
     ],
     "visited_facets": [
       "food",
-      "the table"
+      "the table",
+      "reorganizing"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -33,9 +35,10 @@
       "jules",
       "allen"
     ],
-    "turns": 8,
+    "turns": 10,
     "low_novelty_beats": 1,
     "recent_terms": [
+      "reorganizing",
       "the table"
     ],
     "last_shift_cycle": 1936,
@@ -46,8 +49,17 @@
         "label": "food",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1940,
-        "last_cycle": 1940,
+        "first_cycle": 1941,
+        "last_cycle": 1941,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "reorganizing",
+        "parent": "food",
+        "depth": 1,
+        "first_cycle": 1941,
+        "last_cycle": 1941,
         "hits": 1,
         "status": "open"
       },
@@ -55,15 +67,17 @@
         "label": "the table",
         "parent": "food",
         "depth": 1,
-        "first_cycle": 1940,
-        "last_cycle": 1940,
+        "first_cycle": 1941,
+        "last_cycle": 1941,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "the table"
+    ],
     "focus_turns": 1,
-    "last_branch_cycle": 1940,
+    "last_branch_cycle": 1941,
     "escape_pressure": 1
   },
   "semantic_epoch_version": 1,
@@ -71,12 +85,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260828T084800217-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001940",
+  "last_public_event": "20260828T084950576-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001941",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-28T08:48:02.576388Z",
+  "last_run": "2026-08-28T08:49:52.854056Z",
   "context_scope_version": 1
 }
