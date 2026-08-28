@@ -1,28 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1821,
+  "cycle": 1822,
   "messages": 1000,
   "beat_contributors": [
-    "jules",
     "sarah",
     "mara",
-    "owen"
+    "owen",
+    "jules"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001817",
     "root": "friendship",
-    "current_facet": "weird",
+    "current_facet": "since we've been",
     "facets": [
-      "weird",
-      "drifting apart"
+      "since we've been",
+      "weird"
     ],
     "visited_facets": [
       "friendship",
-      "weird"
+      "weird",
+      "since we've been"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -34,11 +35,11 @@
       "jules",
       "allen"
     ],
-    "turns": 8,
+    "turns": 10,
     "low_novelty_beats": 1,
     "recent_terms": [
-      "weird",
-      "drifting"
+      "since we've been",
+      "weird"
     ],
     "last_shift_cycle": 1817,
     "status": "active",
@@ -48,8 +49,17 @@
         "label": "friendship",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1821,
-        "last_cycle": 1821,
+        "first_cycle": 1822,
+        "last_cycle": 1822,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "since we've been",
+        "parent": "friendship",
+        "depth": 1,
+        "first_cycle": 1822,
+        "last_cycle": 1822,
         "hits": 1,
         "status": "open"
       },
@@ -57,24 +67,17 @@
         "label": "weird",
         "parent": "friendship",
         "depth": 1,
-        "first_cycle": 1821,
-        "last_cycle": 1821,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "drifting apart",
-        "parent": "friendship",
-        "depth": 1,
-        "first_cycle": 1821,
-        "last_cycle": 1821,
+        "first_cycle": 1822,
+        "last_cycle": 1822,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
-    "focus_turns": 4,
-    "last_branch_cycle": 1821,
+    "branch_history": [
+      "weird"
+    ],
+    "focus_turns": 1,
+    "last_branch_cycle": 1822,
     "escape_pressure": 1
   },
   "semantic_epoch_version": 1,
@@ -82,12 +85,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260828T045737294-owen-v5",
-  "last_speaker": "owen",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001821",
+  "last_public_event": "20260828T050007598-jules-v5",
+  "last_speaker": "jules",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001822",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-28T04:57:39.994611Z",
+  "last_run": "2026-08-28T05:00:10.243096Z",
   "context_scope_version": 1
 }
