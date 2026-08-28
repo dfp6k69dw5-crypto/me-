@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T01:09:51.517171+00:00",
-  "cycle_key": "33126876988:1:38",
+  "generated_at": "2026-08-28T01:12:41.759896+00:00",
+  "cycle_key": "33126876988:1:39",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,10 +32,10 @@
       "name": "memory-callback",
       "tier": "project",
       "domain": "memory-callback",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "remember"
       ],
@@ -45,7 +45,7 @@
           "matched": [
             "remember"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -59,7 +59,14 @@
           "matched": [
             "remember"
           ],
-          "weight": 0.46
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "remember"
+          ],
+          "weight": 0.54
         }
       ]
     },
@@ -67,10 +74,10 @@
       "name": "concrete-specificity",
       "tier": "project",
       "domain": "concrete-specificity",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "specific"
       ],
@@ -80,12 +87,19 @@
           "matched": [
             "specific"
           ],
-          "weight": 1.15
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "specific"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "fd3c10b47141",
+  "context_fingerprint": "fa1612fb47ea",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 801,
   "approx_added_tokens": 200
