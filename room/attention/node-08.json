@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T14:38:04.114510+00:00",
-  "cycle_key": "33164274484:1:134",
+  "generated_at": "2026-08-28T14:40:23.091054+00:00",
+  "cycle_key": "33164274484:1:135",
   "node": 8,
   "entity": "owen",
   "role": "expression",
@@ -32,11 +32,13 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 3.87,
-      "confidence": 0.992,
-      "raw_score": 3.87,
+      "score": 4.64,
+      "confidence": 0.998,
+      "raw_score": 4.64,
       "repeat_penalty": 0.0,
       "matched_triggers": [
+        "feel",
+        "feeling",
         "relationship",
         "worried",
         "upset"
@@ -45,28 +47,43 @@
         {
           "kind": "message",
           "matched": [
-            "relationship"
+            "feel"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
+            "feeling",
+            "relationship"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "relationship"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
             "worried"
           ],
-          "weight": 1.15
+          "weight": 0.54
         },
         {
           "kind": "message",
           "matched": [
             "upset"
           ],
-          "weight": 0.92
+          "weight": 0.46
         }
       ]
     }
   ],
-  "context_fingerprint": "0b344c60773f",
+  "context_fingerprint": "e02efb22b912",
   "base_prompt_chars": 2782,
   "temporary_skill_chars": 544,
   "approx_added_tokens": 136
