@@ -1,0 +1,64 @@
+name: One-shot Room comprehension fail-soft repair
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'society/room-comprehension-failsoft-kick.txt'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: room-comprehension-failsoft-once
+  cancel-in-progress: true
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 5
+      - name: Make Llama comprehension advisory rather than fatal
+        run: |
+          set -euo pipefail
+          git config user.name "room-repair"
+          git config user.email "actions@users.noreply.github.com"
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/room_engine_v5_core.py')
+          s = p.read_text()
+          old = '''    perception = model_run("comprehension", {"entity": entity, "profile": P[entity], **base}) if role == "comprehension" else None\n    if role == "comprehension":\n'''
+          new = '''    perception = None\n    if role == "comprehension":\n        try:\n            perception = model_run("comprehension", {"entity": entity, "profile": P[entity], **base})\n        except Exception as exc:\n            # Comprehension enriches perception but must never take the Room down.\n            # The deterministic topic/keyword/relationship/private-self state below\n            # is sufficient for the beat to continue when the tiny local model is\n            # saturated, times out, or emits truncated structured output.\n            print(f"Comprehension fail-soft for {entity}: {type(exc).__name__}: {str(exc)[:120]}")\n            perception = None\n    if role == "comprehension":\n'''
+          if old in s:
+              if s.count(old) != 1:
+                  raise SystemExit(f'unexpected comprehension anchor count: {s.count(old)}')
+              p.write_text(s.replace(old, new))
+          elif new not in s:
+              raise SystemExit('comprehension fail-soft anchor not found')
+          PY
+          python3 -m py_compile scripts/room_engine_v5_core.py
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          tree = ast.parse(Path('scripts/room_engine_v5_core.py').read_text())
+          src = Path('scripts/room_engine_v5_core.py').read_text()
+          assert 'Comprehension fail-soft for' in src
+          assert 'except Exception as exc:' in src
+          print('comprehension fail-soft repair verified')
+          PY
+          if git diff --quiet -- scripts/room_engine_v5_core.py; then
+            echo "Comprehension fail-soft already present"
+            exit 0
+          fi
+          git add scripts/room_engine_v5_core.py
+          git commit -m "Make Room comprehension fail soft"
+          for attempt in 1 2 3 4; do
+            if git push origin HEAD:main; then exit 0; fi
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort || true; exit 1; }
+            sleep "$attempt"
+          done
+          exit 1
