@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T12:23:54.933617+00:00",
-  "cycle_key": "33164274484:1:58",
+  "generated_at": "2026-08-28T12:25:36.276920+00:00",
+  "cycle_key": "33164274484:1:59",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -66,20 +66,41 @@
           "matched": [
             "joke"
           ],
-          "weight": 0.76
+          "weight": 0.64
         },
         {
           "kind": "message",
           "matched": [
             "joke"
           ],
-          "weight": 0.64
+          "weight": 0.54
+        }
+      ]
+    },
+    {
+      "name": "memory-callback",
+      "tier": "project",
+      "domain": "memory-callback",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "before"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "before"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "eef3c121135e",
+  "context_fingerprint": "be2c96a0bf71",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 637,
-  "approx_added_tokens": 159
+  "temporary_skill_chars": 663,
+  "approx_added_tokens": 166
 }
