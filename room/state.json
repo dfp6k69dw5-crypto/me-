@@ -1,27 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1786,
+  "cycle": 1787,
   "messages": 1000,
   "beat_contributors": [
-    "owen",
     "jules",
     "sarah",
-    "mara"
+    "mara",
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001783",
     "root": "friendship",
-    "current_facet": "topics",
+    "current_facet": "revisit",
     "facets": [
+      "revisit",
       "topics"
     ],
     "visited_facets": [
       "friendship",
-      "topics"
+      "topics",
+      "revisit"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -33,10 +35,11 @@
       "jules",
       "allen"
     ],
-    "turns": 6,
+    "turns": 8,
     "low_novelty_beats": 1,
     "recent_terms": [
       "friendship",
+      "revisit",
       "topics"
     ],
     "last_shift_cycle": 1783,
@@ -47,8 +50,17 @@
         "label": "friendship",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1786,
-        "last_cycle": 1786,
+        "first_cycle": 1787,
+        "last_cycle": 1787,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "revisit",
+        "parent": "friendship",
+        "depth": 1,
+        "first_cycle": 1787,
+        "last_cycle": 1787,
         "hits": 1,
         "status": "open"
       },
@@ -56,15 +68,17 @@
         "label": "topics",
         "parent": "friendship",
         "depth": 1,
-        "first_cycle": 1786,
-        "last_cycle": 1786,
+        "first_cycle": 1787,
+        "last_cycle": 1787,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
+    "branch_history": [
+      "topics"
+    ],
     "focus_turns": 1,
-    "last_branch_cycle": 1786,
+    "last_branch_cycle": 1787,
     "escape_pressure": 1
   },
   "semantic_epoch_version": 1,
@@ -72,12 +86,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260828T032821522-mara-v5",
-  "last_speaker": "mara",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001786",
+  "last_public_event": "20260828T033109523-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001787",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-28T03:28:24.185998Z",
+  "last_run": "2026-08-28T03:31:12.213609Z",
   "context_scope_version": 1
 }
