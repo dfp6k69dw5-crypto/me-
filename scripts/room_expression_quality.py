@@ -361,6 +361,31 @@ def _low_substantive_novelty(utterance: str, prior_turns: list[dict]) -> bool:
     return len(novel) < 1
 
 
+def _cross_beat_attractor_saturation(utterance: str, compact: dict) -> bool:
+    """Reject replies that only weakly elaborate concepts dominating recent beats."""
+    context = compact.get("context") if isinstance(compact.get("context"), list) else []
+    recent = [item for item in context[-6:] if isinstance(item, dict) and str(item.get("text") or "").strip()]
+    if len(recent) < 4:
+        return False
+    current = _anchor_tokens(utterance)
+    if not current:
+        return False
+    counts: dict[str, int] = {}
+    for item in recent:
+        for anchor in _anchor_tokens(item.get("text")):
+            counts[anchor] = counts.get(anchor, 0) + 1
+    saturated = {anchor for anchor, count in counts.items() if count >= 3}
+    if not saturated:
+        return False
+    dominant = current & saturated
+    if not dominant:
+        return False
+    novel = current - saturated
+    # Once an attractor dominates, staying on it requires two genuinely new
+    # substantive anchors. A cosmetic verb/adjective cannot buy another lap.
+    return len(novel) < 2
+
+
 def _recovery_subject(compact: dict, self_entity: str | None) -> str:
     """Choose a recovery concept only from the conversation already in evidence."""
     discussion = compact.get("discussion") if isinstance(compact.get("discussion"), dict) else {}
@@ -461,6 +486,10 @@ def quality_issue(utterance: object, compact: dict, self_entity: str | None, sim
     if same_beat and _low_substantive_novelty(text, same_beat):
         _escape_stale_context(compact, self_entity)
         return "same_beat_low_novelty"
+
+    if _cross_beat_attractor_saturation(text, compact):
+        _escape_stale_context(compact, self_entity)
+        return "cross_beat_attractor_saturation"
 
     if _context_too_similar(text, compact, similarity_fn):
         _escape_stale_context(compact, self_entity)
