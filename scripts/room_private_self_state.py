@@ -155,7 +155,15 @@ def update(
     if goal:
         state["what_i_want"] = goal
     elif action:
-        state["what_i_want"] = _text(f"I want to {action.lower()} with {partner or 'the active speaker'} about {focus or 'the live issue'}.", 150)
+        # Preserve the conversational aim without storing internal planner labels
+        # such as REPAIR, DISCLOSE, BRIDGE, or SUPPORT in the agent's self-model.
+        # Those labels otherwise become prompt material on the next turn and can
+        # leak back into ordinary speech.
+        subject = focus or "the live issue"
+        if partner:
+            state["what_i_want"] = _text(f"I want to make meaningful progress with {partner} on {subject}.", 150)
+        else:
+            state["what_i_want"] = _text(f"I want to make meaningful progress on {subject}.", 150)
 
     changes = []
     changes.extend(_list(perception.get("new_details"), 2))
