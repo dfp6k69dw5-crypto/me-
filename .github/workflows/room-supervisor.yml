@@ -25,62 +25,6 @@ jobs:
           ref: main
           fetch-depth: 2
 
-      - name: Apply one-shot topic relapse cooldown
-        run: |
-          set -euo pipefail
-          git config user.name "room-repair"
-          git config user.email "actions@users.noreply.github.com"
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('scripts/room_social_v5.py')
-          s=p.read_text()
-          old1="  'branches':[],'branch_history':[],'focus_turns':0,'last_branch_cycle':c,'escape_pressure':0,\n"
-          new1="  'branches':[],'branch_history':[],'focus_turns':0,'last_branch_cycle':c,'escape_pressure':0,\n  'retired_terms':[],'retired_until_cycle':0,\n"
-          if old1 in s:
-              s=s.replace(old1,new1,1)
-          elif new1 not in s:
-              raise SystemExit('topic template anchor missing')
-
-          old2=" t=_upgrade_topic_tree(t or topic_template(cycle),cycle)\n terms=topic_terms_from_messages(ms,episode_id=t.get('id'))\n counts=_recent_term_counts(ms,t.get('id'),12)\n"
-          new2=" t=_upgrade_topic_tree(t or topic_template(cycle),cycle)\n terms=topic_terms_from_messages(ms,episode_id=t.get('id'))\n counts=_recent_term_counts(ms,t.get('id'),12)\n retired=[str(x or '').strip().lower() for x in t.get('retired_terms',[]) if str(x or '').strip()]\n if cycle<=int(t.get('retired_until_cycle',0)) and retired:\n  terms=[x for x in terms if not any(_near_term(x,old) for old in retired)]\n"
-          if old2 in s:
-              s=s.replace(old2,new2,1)
-          elif new2 not in s:
-              raise SystemExit('update_topic anchor missing')
-
-          old3=" if prior and prior.get('current_facet'): t['shared_references']=[prior['current_facet']]\n return t\n"
-          new3=" if prior:\n  retired=[]\n  for x in [prior.get('root'),prior.get('current_facet')]+list(prior.get('facets',[]))+list(prior.get('recent_terms',[]))+list(prior.get('branch_history',[])):\n   x=str(x or '').strip().lower()\n   if x and _term_tokens(x) and not any(_near_term(x,y) for y in retired): retired.append(x)\n  t['retired_terms']=retired[-24:]\n  t['retired_until_cycle']=cycle+4\n  if prior.get('current_facet'): t['shared_references']=[prior['current_facet']]\n return t\n"
-          if old3 in s:
-              s=s.replace(old3,new3,1)
-          elif new3 not in s:
-              raise SystemExit('new_topic anchor missing')
-          p.write_text(s)
-          PY
-          python3 -m py_compile scripts/room_social_v5.py
-          python3 - <<'PY'
-          import sys
-          sys.path.insert(0,'scripts')
-          import room_social_v5 as r
-          prior=r.topic_template(10); prior.update({'root':'food','current_facet':'gardens','facets':['gardens','weather'],'recent_terms':['gardens','food'],'branch_history':['work']})
-          nxt=r.new_topic_from_terms(['music','rhythm'],11,prior)
-          assert 'gardens' in nxt['retired_terms'] and nxt['retired_until_cycle']==15
-          msgs=[{'text':'gardens again','cognition':{'topic_episode':nxt['id'],'topic_terms':['gardens']}}]
-          updated=r.update_topic(nxt,msgs,12)
-          assert not any(r._near_term((b or {}).get('label'),'gardens') for b in updated.get('branches',[]))
-          print('topic relapse cooldown verified')
-          PY
-          if ! git diff --quiet -- scripts/room_social_v5.py; then
-            git add scripts/room_social_v5.py
-            git commit -m "Stop exhausted Room topics immediately relapsing"
-            for attempt in 1 2 3 4; do
-              if git push origin HEAD:main; then exit 0; fi
-              git fetch origin main
-              git rebase origin/main || { git rebase --abort || true; exit 1; }
-              sleep "$attempt"
-            done
-            exit 1
-          fi
-
       - name: Check published Room liveness
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -88,30 +32,56 @@ jobs:
           set -euo pipefail
           git config user.name "room-supervisor"
           git config user.email "actions@users.noreply.github.com"
-          room_runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --limit 10 --json databaseId,status,createdAt 2>/dev/null || printf '[]')"
+
+          # A stale published feed is expected while a replacement runner is
+          # downloading/loading its local model. Never dispatch another Room
+          # on top of a runner that is already queued or active.
+          room_runs="$(gh run list \
+            --repo "$GITHUB_REPOSITORY" \
+            --workflow sarah-society.yml \
+            --limit 10 \
+            --json databaseId,status,createdAt 2>/dev/null || printf '[]')"
           active_room="$(printf '%s' "$room_runs" | jq -r '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending" or .status == "waiting" or .status == "requested")] | first | .databaseId // empty')"
-          if [ -n "$active_room" ]; then echo "Room run $active_room is already queued/active; supervisor will not restart it"; exit 0; fi
+          if [ -n "$active_room" ]; then
+            echo "Room run $active_room is already queued/active; supervisor will not restart it"
+            exit 0
+          fi
+
           action=$(python3 scripts/room_supervisor.py check)
           echo "Room supervisor action: $action"
-          if [ "$action" = "healthy" ]; then exit 0; fi
+
+          if [ "$action" = "healthy" ]; then
+            exit 0
+          fi
+
           python3 - <<'PY'
           import json
           from pathlib import Path
           result=json.loads(Path('.github/room-supervisor-decision.json').read_text())
           Path('.github/room-supervisor-state.json').write_text(json.dumps(result['control'],indent=2,sort_keys=True)+'\n')
           PY
+
           git add .github/room-supervisor-state.json
           git commit -m "Record Room supervisor decision" || true
+
           published=0
           for attempt in 1 2 3 4; do
-            if git push origin HEAD:main; then published=1; break; fi
+            if git push origin HEAD:main; then
+              published=1
+              break
+            fi
             git fetch origin main
-            if ! git rebase origin/main; then git rebase --abort || true; break; fi
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              break
+            fi
             sleep "$attempt"
           done
           [ "$published" -eq 1 ] || exit 1
+
           if [ "$action" = "restart" ] || [ "$action" = "probe_restart" ]; then
+            echo "Supervisor is starting one bounded replacement runner"
             gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
           elif [ "$action" = "circuit_open" ]; then
-            echo "Room replacement circuit is open"
+            echo "Room replacement circuit is open; refusing another identical restart loop during cooldown"
           fi
