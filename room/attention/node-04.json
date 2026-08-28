@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T04:10:32.266259+00:00",
-  "cycle_key": "33126876988:1:112",
+  "generated_at": "2026-08-28T04:13:00.105646+00:00",
+  "cycle_key": "33126876988:1:113",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -29,41 +29,12 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 3.25,
-      "confidence": 0.98,
-      "raw_score": 3.25,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "feeling",
-        "happy"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "feeling"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "happy"
-          ],
-          "weight": 1.45
-        }
-      ]
-    },
-    {
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.52,
-      "confidence": 0.68,
-      "raw_score": 1.8,
+      "score": 1.17,
+      "confidence": 0.531,
+      "raw_score": 1.45,
       "repeat_penalty": 0.28,
       "matched_triggers": [
         "music"
@@ -74,13 +45,6 @@
           "matched": [
             "music"
           ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "music"
-          ],
           "weight": 1.45
         },
         {
@@ -88,7 +52,7 @@
           "matched": [
             "music"
           ],
-          "weight": 0.92
+          "weight": 1.15
         },
         {
           "kind": "message",
@@ -96,11 +60,54 @@
             "music"
           ],
           "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "music"
+          ],
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "music"
+          ],
+          "weight": 0.46
+        }
+      ]
+    },
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.12,
+      "confidence": 0.509,
+      "raw_score": 1.4,
+      "repeat_penalty": 0.28,
+      "matched_triggers": [
+        "feeling",
+        "happy"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feeling"
+          ],
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "happy"
+          ],
+          "weight": 0.64
         }
       ]
     }
   ],
-  "context_fingerprint": "7ccb2e2ac84a",
+  "context_fingerprint": "3014fcde8ac6",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 1060,
   "approx_added_tokens": 265
