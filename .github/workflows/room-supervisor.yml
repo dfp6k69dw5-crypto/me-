@@ -25,34 +25,28 @@ jobs:
           ref: main
           fetch-depth: 2
 
-      - name: Apply one-shot sequential thought-node repair
+      - name: Apply one-shot bounded thought deadline
         run: |
           set -euo pipefail
           git config user.name "room-repair"
           git config user.email "actions@users.noreply.github.com"
           python3 - <<'PY'
           from pathlib import Path
-          p = Path('.github/workflows/sarah-society.yml')
+          p = Path('scripts/room_engine_v5.py')
           s = p.read_text()
-          old = '''            for pair in "1 4" "7 10"; do pids=(); for n in $pair; do (timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION ROOM_NODE_PROMPT="${ROOM_PROMPT_DELIBERATION:-}" ROOM_NODE_ID="$n" python3 scripts/room_skill_exec.py scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-sense.json) & pids+=("$!"); done; wait_batch "${pids[@]}" || return 1; done\n'''
-          new = '''            # Thought calls are intentionally serialized because concurrent Llama\n            # deliberation saturated the tiny local model. Start each process only\n            # when it owns the turn so its 45-second watchdog is not consumed while\n            # waiting on the internal thought lock.\n            for n in 1 4 7 10; do timeout -k "${ROOM_NODE_KILL_GRACE_SECONDS}s" "${ROOM_NODE_TIMEOUT_SECONDS}s" env -u ROOM_PROMPT_PERCEPTION -u ROOM_PROMPT_DELIBERATION -u ROOM_PROMPT_EXPRESSION ROOM_NODE_PROMPT="${ROOM_PROMPT_DELIBERATION:-}" ROOM_NODE_ID="$n" python3 scripts/room_skill_exec.py scripts/room_engine_v5.py node --phase recurrent --bus room_work/bus-sense.json || return 1; done\n'''
+          old = 'effective_timeout = min(int(timeout), 10) if role == "comprehension" else timeout'
+          new = 'effective_timeout = min(int(timeout), 10) if role in {"comprehension", "thought"} else timeout'
           if old in s:
               if s.count(old) != 1:
-                  raise SystemExit(f'unexpected thought-launch anchor count: {s.count(old)}')
+                  raise SystemExit(f'unexpected deadline anchor count: {s.count(old)}')
               p.write_text(s.replace(old, new))
           elif new not in s:
-              raise SystemExit('sequential thought-node anchor not found')
+              raise SystemExit('bounded thought deadline anchor not found')
           PY
-          python3 - <<'PY'
-          from pathlib import Path
-          s=Path('.github/workflows/sarah-society.yml').read_text()
-          assert 'for n in 1 4 7 10; do timeout' in s
-          assert 'for pair in "1 4" "7 10"' not in s
-          print('sequential thought-node repair verified')
-          PY
-          if ! git diff --quiet -- .github/workflows/sarah-society.yml; then
-            git add .github/workflows/sarah-society.yml
-            git commit -m "Give each serialized Room thought its own watchdog"
+          python3 -m py_compile scripts/room_engine_v5.py
+          if ! git diff --quiet -- scripts/room_engine_v5.py; then
+            git add scripts/room_engine_v5.py
+            git commit -m "Bound serialized Room thought below node watchdog"
             for attempt in 1 2 3 4; do
               if git push origin HEAD:main; then exit 0; fi
               git fetch origin main
