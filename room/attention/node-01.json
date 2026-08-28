@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T08:54:21.926758+00:00",
-  "cycle_key": "33143935054:1:118",
+  "generated_at": "2026-08-28T08:56:13.983999+00:00",
+  "cycle_key": "33143935054:1:119",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,55 +32,34 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.61,
-      "confidence": 0.715,
-      "raw_score": 1.61,
-      "repeat_penalty": 0.0,
+      "score": 1.18,
+      "confidence": 0.536,
+      "raw_score": 1.46,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "happy",
-        "love"
+        "feel",
+        "happy"
       ],
       "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feel"
+          ],
+          "weight": 0.92
+        },
         {
           "kind": "message",
           "matched": [
             "happy"
           ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "love"
-          ],
-          "weight": 0.46
-        }
-      ]
-    },
-    {
-      "name": "social-grounding",
-      "tier": "project",
-      "domain": "interaction",
-      "score": 1.45,
-      "confidence": 0.652,
-      "raw_score": 1.45,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "repair"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "repair"
-          ],
-          "weight": 1.45
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "c1a71f08783b",
+  "context_fingerprint": "a98815b10b44",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 998,
-  "approx_added_tokens": 250
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
