@@ -58,6 +58,7 @@ def topic_template(c=0):
   'disagreements':[],'shared_references':[],'participants':list(PARTICIPANTS),'turns':0,
   'low_novelty_beats':0,'recent_terms':[],'last_shift_cycle':c,'status':'forming',
   'branches':[],'branch_history':[],'focus_turns':0,'last_branch_cycle':c,'escape_pressure':0,
+  'retired_terms':[],'retired_until_cycle':0,
  }
 
 
@@ -209,6 +210,9 @@ def update_topic(t,ms,cycle):
  t=_upgrade_topic_tree(t or topic_template(cycle),cycle)
  terms=topic_terms_from_messages(ms,episode_id=t.get('id'))
  counts=_recent_term_counts(ms,t.get('id'),12)
+ retired=[str(x or '').strip().lower() for x in t.get('retired_terms',[]) if str(x or '').strip()]
+ if cycle<=int(t.get('retired_until_cycle',0)) and retired:
+  terms=[x for x in terms if not any(_near_term(x,old) for old in retired)]
 
  if t.get('root') is None and terms:
   t['root']=terms[0]
@@ -278,7 +282,14 @@ def new_topic_from_terms(terms,cycle,prior=None):
   for x in clean[1:8]: _add_branch(t,x,clean[0],cycle,1)
   t['current_facet']=t['facets'][0] if t['facets'] else clean[0]
   t['visited_facets']=[t['current_facet']]; t['status']='active'
- if prior and prior.get('current_facet'): t['shared_references']=[prior['current_facet']]
+ if prior:
+  retired=[]
+  for x in [prior.get('root'),prior.get('current_facet')]+list(prior.get('facets',[]))+list(prior.get('recent_terms',[]))+list(prior.get('branch_history',[])):
+   x=str(x or '').strip().lower()
+   if x and _term_tokens(x) and not any(_near_term(x,y) for y in retired): retired.append(x)
+  t['retired_terms']=retired[-24:]
+  t['retired_until_cycle']=cycle+4
+  if prior.get('current_facet'): t['shared_references']=[prior['current_facet']]
  return t
 
 
