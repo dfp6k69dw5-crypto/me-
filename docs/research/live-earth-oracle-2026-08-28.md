@@ -41,10 +41,10 @@ Can a static GitHub Pages application combine several public real-time/near-real
 7. **Replication/correction/limitations:** limitations are recorded above; fallback parsing exists for NOAA solar wind.
 8. **Context transfer:** passed; implementation is a standalone Pages app and does not alter Room cognition/state behavior.
 9. **Implementation mapping:** one new standalone HTML app; existing market bridge reused unchanged; each feed owns cadence/status/factor; no production relay modifications.
-10. **Post-change validation:** validate file deployment, JavaScript load, independent source statuses, WebSocket reconnect behavior, manual refresh, ticker reload, and that a failed source does not suppress other cards.
+10. **Post-change validation:** deployment and repository-level validation completed successfully; runtime public-feed failures remain isolated and visible by design.
 
 ## Implementation mapping
-`apps/live-earth-oracle.html` contains nine isolated streams: equity market, BTC-USD WebSocket, local aircraft, ISS, USGS earthquakes, NOAA Kp, NOAA solar wind, local Open-Meteo weather and latest GitHub commit. Each source updates its own card and bounded factor. The displayed Ω is a bounded aggregate of only currently available numeric factors. The ceremonial market target is capped to ±8% from the fetched market price.
+`apps/live-earth-oracle.html` contains nine isolated streams: equity market, BTC-USD WebSocket, local aircraft, ISS, USGS earthquakes, NOAA Kp, NOAA solar wind, local Open-Meteo weather and latest GitHub commit. Each source updates its own card and bounded factor. The displayed Ω is a bounded aggregate of available numeric factors. The ceremonial market target is capped to ±8% from the fetched market price.
 
 ## Pre-change baseline
 The prior Oracle had five principal exogenous variables plus manual controls, one-minute market polling, and no true push stream or broad telemetry dashboard.
@@ -61,4 +61,4 @@ The prior Oracle had five principal exogenous variables plus manual controls, on
 - No credentials or private data are added to the repository.
 
 ## Post-change result
-Pending deployment/browser validation at the time this record was created. Update after merge if deployment or a public source reveals a blocking incompatibility.
+PR #179 merged to `main` as commit `26909652fd86e27cd55c8d4550341b62be7672ae`. The repository validation workflow completed successfully and the GitHub Pages deployment for that exact commit completed successfully. Inspection also found that the repository's generic `Validate project apps` workflow only confirms `index.html` exists, so that workflow is not treated as comprehensive application runtime validation. The Live Earth Oracle therefore retains explicit per-source ERROR/STALE states, request timeouts, WebSocket reconnect logic and independent scheduling so an upstream runtime incompatibility is contained rather than allowed to blank the application. No production Room relay/state code was changed.
