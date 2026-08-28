@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T12:37:39.608711+00:00",
-  "cycle_key": "33164274484:1:65",
+  "generated_at": "2026-08-28T12:39:34.614722+00:00",
+  "cycle_key": "33164274484:1:66",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -52,6 +52,7 @@
         {
           "kind": "message",
           "matched": [
+            "music",
             "connection"
           ],
           "weight": 0.92
@@ -59,6 +60,7 @@
         {
           "kind": "message",
           "matched": [
+            "music",
             "connection"
           ],
           "weight": 0.76
@@ -66,9 +68,9 @@
         {
           "kind": "message",
           "matched": [
-            "music"
+            "connection"
           ],
-          "weight": 0.54
+          "weight": 0.46
         }
       ]
     },
@@ -76,25 +78,34 @@
       "name": "emotional-attunement",
       "tier": "project",
       "domain": "affect",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.56,
+      "confidence": 0.696,
+      "raw_score": 1.84,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "feel"
+        "feel",
+        "feeling"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
+            "feel",
+            "feeling"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
             "feel"
           ],
-          "weight": 1.15
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "584f5c9ff01b",
+  "context_fingerprint": "caab5ad73e23",
   "base_prompt_chars": 3349,
   "temporary_skill_chars": 1060,
   "approx_added_tokens": 265
