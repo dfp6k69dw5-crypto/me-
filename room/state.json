@@ -1,27 +1,29 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-sterile-v4-2026-08-18",
-  "cycle": 1843,
+  "cycle": 1844,
   "messages": 1000,
   "beat_contributors": [
-    "mara",
     "owen",
     "jules",
-    "sarah"
+    "sarah",
+    "mara"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-001839",
     "root": "mind",
-    "current_facet": "following",
+    "current_facet": "lead",
     "facets": [
-      "following"
+      "following",
+      "lead"
     ],
     "visited_facets": [
       "mind",
-      "following"
+      "following",
+      "lead"
     ],
-    "facet_index": 1,
+    "facet_index": 2,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -35,10 +37,11 @@
       "jules",
       "allen"
     ],
-    "turns": 8,
+    "turns": 10,
     "low_novelty_beats": 1,
     "recent_terms": [
-      "following"
+      "following",
+      "lead"
     ],
     "last_shift_cycle": 1839,
     "status": "active",
@@ -48,8 +51,8 @@
         "label": "mind",
         "parent": null,
         "depth": 0,
-        "first_cycle": 1843,
-        "last_cycle": 1843,
+        "first_cycle": 1844,
+        "last_cycle": 1844,
         "hits": 1,
         "status": "open"
       },
@@ -57,15 +60,26 @@
         "label": "following",
         "parent": "mind",
         "depth": 1,
-        "first_cycle": 1843,
-        "last_cycle": 1843,
+        "first_cycle": 1844,
+        "last_cycle": 1844,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "lead",
+        "parent": "mind",
+        "depth": 1,
+        "first_cycle": 1844,
+        "last_cycle": 1844,
         "hits": 1,
         "status": "open"
       }
     ],
-    "branch_history": [],
-    "focus_turns": 2,
-    "last_branch_cycle": 1843,
+    "branch_history": [
+      "following"
+    ],
+    "focus_turns": 1,
+    "last_branch_cycle": 1844,
     "escape_pressure": 1
   },
   "semantic_epoch_version": 1,
@@ -73,12 +87,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-24T16:33:56.351717Z",
-  "last_public_event": "20260828T054207100-sarah-v5",
-  "last_speaker": "sarah",
-  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001843",
+  "last_public_event": "20260828T054355716-mara-v5",
+  "last_speaker": "mara",
+  "last_beat_id": "beat-room-sterile-v4-2026-08-18-001844",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
-  "last_run": "2026-08-28T05:42:09.312769Z",
+  "last_run": "2026-08-28T05:43:57.959154Z",
   "context_scope_version": 1
 }
