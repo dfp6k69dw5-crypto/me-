@@ -54,6 +54,14 @@ def _self_address(utterance: str, self_entity: str | None) -> bool:
     return bool(re.match(rf"^\s*(?:hey\s*[,!]?\s*)?{re.escape(name)}\b\s*[,!:.-]", utterance, re.I))
 
 
+def _self_perspective_leak(utterance: str, self_entity: str | None) -> bool:
+    """An autonomous speaker uses I/me/my for self, never its own proper name."""
+    name = str(self_entity or "").strip()
+    if not name:
+        return False
+    return bool(re.search(rf"\b{re.escape(name)}\b", str(utterance or ""), re.I))
+
+
 def _drop_self_address(text: str, self_entity: str | None) -> str:
     name = str(self_entity or "").strip()
     if not name:
@@ -421,8 +429,8 @@ def quality_issue(utterance: object, compact: dict, self_entity: str | None, sim
         return "run_on_expression"
     if _PRONOUN_R.search(text):
         return "malformed_pronoun"
-    if _self_address(text, self_entity):
-        return "self_address"
+    if _self_perspective_leak(text, self_entity):
+        return "self_perspective_leak"
     if _TRAILING_FRAGMENT.search(text):
         return "trailing_fragment"
     if _terminal_incomplete(text):
