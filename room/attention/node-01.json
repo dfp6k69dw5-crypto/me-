@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T14:35:33.309686+00:00",
-  "cycle_key": "33164274484:1:133",
+  "generated_at": "2026-08-28T14:37:24.471322+00:00",
+  "cycle_key": "33164274484:1:134",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -29,37 +29,45 @@
   },
   "selected_skills": [
     {
-      "name": "critical-testing",
+      "name": "emotional-attunement",
       "tier": "project",
-      "domain": "critical-testing",
-      "score": 2.44,
-      "confidence": 0.918,
-      "raw_score": 2.44,
+      "domain": "affect",
+      "score": 3.87,
+      "confidence": 0.993,
+      "raw_score": 3.87,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "sure",
-        "why"
+        "relationship",
+        "worried",
+        "upset"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "sure"
+            "relationship"
           ],
           "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "why"
+            "worried"
           ],
-          "weight": 0.64
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "upset"
+          ],
+          "weight": 0.92
         }
       ]
     }
   ],
-  "context_fingerprint": "4a26f1b8e8d0",
+  "context_fingerprint": "0b344c60773f",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
