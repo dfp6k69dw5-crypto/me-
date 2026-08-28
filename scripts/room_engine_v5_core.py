@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from room_private_model import run as model_run
+import room_private_self_state as _private_self_state
 from room_social_v5 import (
     ORDER,
     audit_invariants,
@@ -149,6 +150,7 @@ def fresh_minds():
             "spoken": 0,
             "silences": 0,
             "people": {},
+            "private_self_state": _private_self_state.initial(P[entity], entity, ORDER),
         }
     return migrate_minds(minds)
 
@@ -242,6 +244,9 @@ def sense(node, key):
     if partner not in ORDER or partner == entity:
         partner = choose_partner(entity, mind, topic, int(current_state.get("cycle", 0)))
     rel = mind["entities"][entity]["people"][partner]
+    private_self_state = _private_self_state.model_slice(
+        mind["entities"][entity].get("private_self_state"), P[entity], entity, ORDER
+    )
     base = {
         "event": last,
         "context": context,
@@ -249,6 +254,7 @@ def sense(node, key):
         "topic": {k: topic.get(k) for k in ("id", "root", "current_facet", "facets", "visited_facets", "status", "shared_references", "unresolved")},
         "partner": partner,
         "relationship": {k: rel.get(k) for k in ("exposure", "direct_familiarity", "trust", "predictability", "reciprocity", "warmth", "respect", "disclosure_depth", "tension")},
+        "private_self_state": private_self_state,
     }
     perception = model_run("comprehension", {"entity": entity, "profile": P[entity], **base}) if role == "comprehension" else None
     if role == "comprehension":
@@ -319,6 +325,7 @@ def recurrent(node, key, bus_data):
             "topic": base.get("topic"),
             "partner": base.get("partner"),
             "relationship": base.get("relationship"),
+            "private_self_state": base.get("private_self_state"),
             "mandatory_speech": True,
         })
     elif role == "expression":
@@ -363,6 +370,7 @@ def recurrent(node, key, bus_data):
             "topic": expression_topic,
             "partner": base.get("partner"),
             "relationship": base.get("relationship"),
+            "private_self_state": base.get("private_self_state"),
             "mandatory_speech": True,
         })
         ready = float(source["public"].get("readiness", 0.5))

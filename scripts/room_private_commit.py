@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 import room_engine_v5 as c
 import room_social_v5 as _social
 import room_topic_bounded as _bounded_topic
+import room_private_self_state as _private_self_state
 
 # Topic state is a bounded working-conversation episode. Keep the relationship
 # machinery in room_social_v5, but replace its recursive topic functions at the
@@ -257,6 +258,23 @@ def private_commit(parts: list[dict], key: str):
 
     S["topic_episode"] = topic
     S["context_scope_version"] = CONTEXT_SCOPE_VERSION
+
+    # Update each person's six-part private self only after all four public
+    # turns passed validation. The next beat receives only a bounded slice.
+    part_index = {(part.get("entity"), part.get("role")): part for part in parts}
+    for entity in c.ORDER:
+        comprehension_part = part_index.get((entity, "comprehension"), {})
+        comprehension_private = comprehension_part.get("private") if isinstance(comprehension_part.get("private"), dict) else {}
+        comprehension_source = comprehension_private.get("source") if isinstance(comprehension_private.get("source"), dict) else {}
+        perception = comprehension_source.get("social_observation") if isinstance(comprehension_source.get("social_observation"), dict) else {}
+        thought_part = part_index.get((entity, "thought"), {})
+        thought_private = thought_part.get("private") if isinstance(thought_part.get("private"), dict) else {}
+        deliberation = thought_private.get("deliberation") if isinstance(thought_private.get("deliberation"), dict) else {}
+        prior_private_self = M["entities"][entity].get("private_self_state")
+        M["entities"][entity]["private_self_state"] = _private_self_state.update(
+            prior_private_self, c.P[entity], entity, c.ORDER, perception, deliberation, V, cycle
+        )
+
     for entity in c.ORDER:
         M["entities"][entity]["medium"] = {
             "topics": [
