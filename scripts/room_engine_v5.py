@@ -298,10 +298,14 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
 
         autonomy.base._too_similar_to_context = _production_too_similar
 
+    # Comprehension is advisory and must finish well inside the 45-second
+    # outer node watchdog. A short deadline lets core fail-soft handling take
+    # over instead of letting the operating-system timeout kill the node.
+    effective_timeout = min(int(timeout), 10) if role == "comprehension" else timeout
     return autonomy.run(
         role,
         payload,
-        timeout=timeout,
+        timeout=effective_timeout,
         min_words=1 if role == "expression" else 5,
     )
 
