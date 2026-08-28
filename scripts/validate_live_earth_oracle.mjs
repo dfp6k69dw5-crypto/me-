@@ -13,31 +13,33 @@ if (!html.includes('<title>The Fast Nonsense Predictor</title>')) fail('fast pre
 if (!html.includes('Experiment, not investment advice.')) fail('experiment disclaimer missing');
 if (!html.includes('F₀(x)=x')) fail('Alex recurrence description missing');
 
-const expectedStreams = ['market','btc','eth','sol','pressure','aircraft','iss','wind','mag','k1m','xray','wiki'];
+const expectedStreams = ['market','btc','eth','sol','doge','ltc','link','avax','bch','xrp','pressure','wiki'];
 for (const stream of expectedStreams) {
   if (!new RegExp(`\\b${stream}\\s*:`).test(html)) fail(`fast stream missing: ${stream}`);
 }
-const retiredSlowStreams = ['air:{','tide:{','buoy:{','river:{','aurora:{','quakes:{','weather:{','github:{'];
-for (const token of retiredSlowStreams) {
-  if (html.includes(token)) fail(`slow stream still configured: ${token}`);
+const retiredStreams = ['aircraft:{','iss:{','wind:{','mag:{','k1m:{','xray:{','air:{','tide:{','buoy:{','river:{','aurora:{','quakes:{','weather:{','github:{'];
+for (const token of retiredStreams) {
+  if (html.includes(token)) fail(`retired/flaky stream still configured: ${token}`);
 }
 
 const requiredSources = [
   'room-live-mirror.dfp6k69dw5.workers.dev/api/market',
   'ws-feed.exchange.coinbase.com',
-  'api.adsb.lol',
-  'api.wheretheiss.at',
-  'services.swpc.noaa.gov/products/summary/solar-wind-speed.json',
-  'services.swpc.noaa.gov/products/summary/solar-wind-mag-field.json',
-  'services.swpc.noaa.gov/json/planetary_k_index_1m.json',
-  'services.swpc.noaa.gov/json/goes/primary/xrays-6-hour.json',
+  'BTC-USD',
+  'ETH-USD',
+  'SOL-USD',
+  'DOGE-USD',
+  'LTC-USD',
+  'LINK-USD',
+  'AVAX-USD',
+  'BCH-USD',
+  'XRP-USD',
   'stream.wikimedia.org/v2/stream/recentchange',
 ];
 for (const source of requiredSources) if (!html.includes(source)) fail(`source missing: ${source}`);
 
 const guards = [
   'AbortController',
-  'async function guarded',
   "document.visibilityState==='visible'",
   'setTimeout(crypto,3500)',
   'localStorage.setItem',
@@ -58,4 +60,4 @@ for (const [i,code] of scripts.entries()) {
 }
 
 if ((html.match(/<script\b/gi)||[]).length !== (html.match(/<\/script>/gi)||[]).length) fail('unbalanced script tags');
-console.log(`Fast Oracle validation passed: ${expectedStreams.length} fast streams, Alex recurrence, prediction settlement, correlation scoring, and JS parse all present.`);
+console.log(`Fast Oracle validation passed: ${expectedStreams.length} fast streams, recurrence, prediction settlement, correlation scoring, and JS parse all present.`);
