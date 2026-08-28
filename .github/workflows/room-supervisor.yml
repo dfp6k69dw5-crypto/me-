@@ -25,37 +25,6 @@ jobs:
           ref: main
           fetch-depth: 2
 
-      - name: Apply one-shot bounded thought deadline
-        run: |
-          set -euo pipefail
-          git config user.name "room-repair"
-          git config user.email "actions@users.noreply.github.com"
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('scripts/room_engine_v5.py')
-          s = p.read_text()
-          old = 'effective_timeout = min(int(timeout), 10) if role == "comprehension" else timeout'
-          new = 'effective_timeout = min(int(timeout), 10) if role in {"comprehension", "thought"} else timeout'
-          if old in s:
-              if s.count(old) != 1:
-                  raise SystemExit(f'unexpected deadline anchor count: {s.count(old)}')
-              p.write_text(s.replace(old, new))
-          elif new not in s:
-              raise SystemExit('bounded thought deadline anchor not found')
-          PY
-          python3 -m py_compile scripts/room_engine_v5.py
-          if ! git diff --quiet -- scripts/room_engine_v5.py; then
-            git add scripts/room_engine_v5.py
-            git commit -m "Bound serialized Room thought below node watchdog"
-            for attempt in 1 2 3 4; do
-              if git push origin HEAD:main; then exit 0; fi
-              git fetch origin main
-              git rebase origin/main || { git rebase --abort || true; exit 1; }
-              sleep "$attempt"
-            done
-            exit 1
-          fi
-
       - name: Check published Room liveness
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,28 +32,53 @@ jobs:
           set -euo pipefail
           git config user.name "room-supervisor"
           git config user.email "actions@users.noreply.github.com"
-          room_runs="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow sarah-society.yml --limit 10 --json databaseId,status,createdAt 2>/dev/null || printf '[]')"
+
+          # A stale published feed is expected while a replacement runner is
+          # downloading/loading its local model. Never dispatch another Room
+          # on top of a runner that is already queued or active.
+          room_runs="$(gh run list \
+            --repo "$GITHUB_REPOSITORY" \
+            --workflow sarah-society.yml \
+            --limit 10 \
+            --json databaseId,status,createdAt 2>/dev/null || printf '[]')"
           active_room="$(printf '%s' "$room_runs" | jq -r '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending" or .status == "waiting" or .status == "requested")] | first | .databaseId // empty')"
-          if [ -n "$active_room" ]; then echo "Room run $active_room is already queued/active; supervisor will not restart it"; exit 0; fi
+          if [ -n "$active_room" ]; then
+            echo "Room run $active_room is already queued/active; supervisor will not restart it"
+            exit 0
+          fi
+
           action=$(python3 scripts/room_supervisor.py check)
           echo "Room supervisor action: $action"
-          if [ "$action" = "healthy" ]; then exit 0; fi
+
+          if [ "$action" = "healthy" ]; then
+            exit 0
+          fi
+
           python3 - <<'PY'
           import json
           from pathlib import Path
           result=json.loads(Path('.github/room-supervisor-decision.json').read_text())
           Path('.github/room-supervisor-state.json').write_text(json.dumps(result['control'],indent=2,sort_keys=True)+'\n')
           PY
+
           git add .github/room-supervisor-state.json
           git commit -m "Record Room supervisor decision" || true
+
           published=0
           for attempt in 1 2 3 4; do
-            if git push origin HEAD:main; then published=1; break; fi
+            if git push origin HEAD:main; then
+              published=1
+              break
+            fi
             git fetch origin main
-            if ! git rebase origin/main; then git rebase --abort || true; break; fi
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              break
+            fi
             sleep "$attempt"
           done
           [ "$published" -eq 1 ] || exit 1
+
           if [ "$action" = "restart" ] || [ "$action" = "probe_restart" ]; then
             echo "Supervisor is starting one bounded replacement runner"
             gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
