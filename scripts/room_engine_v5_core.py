@@ -317,7 +317,17 @@ def sense(node, key):
         "relationship": {k: rel.get(k) for k in ("exposure", "direct_familiarity", "trust", "predictability", "reciprocity", "warmth", "respect", "disclosure_depth", "tension")},
         "private_self_state": private_self_state,
     }
-    perception = model_run("comprehension", {"entity": entity, "profile": P[entity], **base}) if role == "comprehension" else None
+    perception = None
+    if role == "comprehension":
+        try:
+            perception = model_run("comprehension", {"entity": entity, "profile": P[entity], **base})
+        except Exception as exc:
+            # Comprehension enriches perception but must never take the Room down.
+            # The deterministic topic/keyword/relationship/private-self state below
+            # is sufficient for the beat to continue when the tiny local model is
+            # saturated, times out, or emits truncated structured output.
+            print(f"Comprehension fail-soft for {entity}: {type(exc).__name__}: {str(exc)[:120]}")
+            perception = None
     if role == "comprehension":
         ready = 0.1
         attention = clamp(0.45 + 0.35 * trait(entity, "social_sensitivity"))
