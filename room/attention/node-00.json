@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-28T12:07:54.871316+00:00",
-  "cycle_key": "33164274484:1:49",
+  "generated_at": "2026-08-28T12:09:31.204325+00:00",
+  "cycle_key": "33164274484:1:50",
   "node": 0,
   "entity": "sarah",
   "role": "comprehension",
@@ -27,9 +27,41 @@
     "max_chars": 680,
     "min_score": 1.1
   },
-  "selected_skills": [],
-  "context_fingerprint": "eb8452ea38ca",
+  "selected_skills": [
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 4.52,
+      "confidence": 0.998,
+      "raw_score": 4.52,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "excited",
+        "feel",
+        "love"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "feel",
+            "excited"
+          ],
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "love"
+          ],
+          "weight": 0.92
+        }
+      ]
+    }
+  ],
+  "context_fingerprint": "e7303bbe8202",
   "base_prompt_chars": 2277,
-  "temporary_skill_chars": 0,
-  "approx_added_tokens": 0
+  "temporary_skill_chars": 544,
+  "approx_added_tokens": 136
 }
