@@ -75,7 +75,68 @@ def conversation_job(entity, key):
 
 
 def breakout_subject(key):
-    return BREAKOUT_SUBJECTS[rr("breakout-subject", key).randrange(len(BREAKOUT_SUBJECTS))]
+    """Escape a collapsed topic using grounded, low-frequency concepts only.
+
+    Never inject a random generic subject. Prefer unresolved/facet/shared concepts
+    already present in the active episode, then recent public semantic terms.
+    Repetition-heavy attractors are deliberately deprioritized.
+    """
+    try:
+        recent = list(msgs()[-12:])
+    except Exception:
+        recent = []
+    try:
+        topic = dict((state().get("topic_episode") or {}))
+    except Exception:
+        topic = {}
+
+    counts = {}
+    recency = {}
+    for index, message in enumerate(recent):
+        values = []
+        cognition = message.get("cognition") if isinstance(message, dict) else {}
+        cognition = cognition if isinstance(cognition, dict) else {}
+        declared = cognition.get("topic_terms")
+        if isinstance(declared, list):
+            values.extend(declared)
+        values.append(message.get("text", "") if isinstance(message, dict) else "")
+        for value in values:
+            for term in toks(value):
+                counts[term] = counts.get(term, 0) + 1
+                recency[term] = index
+
+    active = set(toks(" ".join(str(topic.get(k) or "") for k in ("root", "current_facet"))))
+    candidates = []
+    for field in ("unresolved", "facets", "shared_references", "recent_terms"):
+        values = topic.get(field)
+        if not isinstance(values, list):
+            continue
+        for value in values:
+            for term in toks(value):
+                if term not in candidates:
+                    candidates.append(term)
+
+    for message in reversed(recent):
+        cognition = message.get("cognition") if isinstance(message, dict) else {}
+        cognition = cognition if isinstance(cognition, dict) else {}
+        for value in cognition.get("topic_terms", []) if isinstance(cognition.get("topic_terms"), list) else []:
+            for term in toks(value):
+                if term not in candidates:
+                    candidates.append(term)
+
+    grounded = [
+        term for term in candidates
+        if term not in active and counts.get(term, 0) <= 2
+    ]
+    if grounded:
+        return max(grounded, key=lambda term: (recency.get(term, -1), -counts.get(term, 0), term))
+
+    alternatives = [term for term in counts if term not in active]
+    if alternatives:
+        return min(alternatives, key=lambda term: (counts.get(term, 0), -recency.get(term, -1), term))
+
+    # Cold-start fallback remains tied to existing episode state; no invented noun.
+    return str(topic.get("current_facet") or topic.get("root") or "conversation").strip().lower()
 
 
 def _simple_norm(text):
