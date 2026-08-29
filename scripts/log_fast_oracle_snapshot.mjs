@@ -8,6 +8,8 @@ const MARKET = 'https://room-live-mirror.dfp6k69dw5.workers.dev/api/market';
 const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
 const SNAPSHOT_MS = 30000;
 const MIN_INTERVAL_MS = 5*60*1000;
+const HISTORY_DIR = path.join('room','oracle-history');
+const LOCK_DIR = path.join('.room_model','fast-oracle-recorder.lock');
 
 function alex(seed){
   let x = BigInt(Math.abs(Math.trunc(seed))) % MOD;
@@ -39,13 +41,49 @@ function buildOracle(e){
   return {r:alex(seed),seed,factors,sourceCount:n,rate,bot,minor,newShare,logShare,meanBytes};
 }
 
+function latestRecordTime(){
+  if(!fs.existsSync(HISTORY_DIR)) return NaN;
+  const files=fs.readdirSync(HISTORY_DIR).filter(v=>/^\d{4}-\d{2}-\d{2}\.jsonl$/.test(v)).sort();
+  if(!files.length) return NaN;
+  const text=fs.readFileSync(path.join(HISTORY_DIR,files.at(-1)),'utf8').trim();
+  if(!text) return NaN;
+  try{return Date.parse(JSON.parse(text.split('\n').filter(Boolean).at(-1)).at||'')}catch{return NaN}
+}
+
+function acquireLock(){
+  fs.mkdirSync('.room_model',{recursive:true});
+  try{
+    fs.mkdirSync(LOCK_DIR);
+    fs.writeFileSync(path.join(LOCK_DIR,'pid'),String(process.pid));
+    return true;
+  }catch(e){
+    if(e?.code!=='EEXIST') throw e;
+    try{
+      const pid=Number(fs.readFileSync(path.join(LOCK_DIR,'pid'),'utf8'));
+      if(Number.isInteger(pid)&&pid>0){
+        process.kill(pid,0);
+        return false;
+      }
+    }catch{}
+    fs.rmSync(LOCK_DIR,{recursive:true,force:true});
+    fs.mkdirSync(LOCK_DIR);
+    fs.writeFileSync(path.join(LOCK_DIR,'pid'),String(process.pid));
+    return true;
+  }
+}
+
+function releaseLock(){
+  try{fs.rmSync(LOCK_DIR,{recursive:true,force:true})}catch{}
+}
+
 async function wikiStreamSample(ms=SNAPSHOT_MS){
   const ctl=new AbortController();
   const timer=setTimeout(()=>ctl.abort(),ms);
   const events=[];
+  const sampleStart=new Date();
   try{
     const r=await fetch(STREAM,{
-      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/2.0'},
+      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/3.0'},
       signal:ctl.signal,
     });
     if(!r.ok) throw new Error(`wiki stream ${r.status}`);
@@ -80,7 +118,7 @@ async function wikiStreamSample(ms=SNAPSHOT_MS){
     clearTimeout(timer);
     ctl.abort();
   }
-  return events;
+  return {events,sampleStart:sampleStart.toISOString(),sampleEnd:new Date().toISOString()};
 }
 
 async function yahoo(symbol){
@@ -101,29 +139,36 @@ async function yahoo(symbol){
   return Number.isFinite(p)?{price:p,marketTs:null}:null;
 }
 
-const at=new Date();
-const day=at.toISOString().slice(0,10);
-const dir=path.join('room','oracle-history');
-const file=path.join(dir,`${day}.jsonl`);
-fs.mkdirSync(dir,{recursive:true});
-if(fs.existsSync(file)){
-  const lines=fs.readFileSync(file,'utf8').trim().split('\n').filter(Boolean);
-  if(lines.length){
-    try{
-      const last=JSON.parse(lines.at(-1));
-      const age=at.getTime()-Date.parse(last.at||'');
-      if(Number.isFinite(age)&&age<MIN_INTERVAL_MS){
-        console.log(JSON.stringify({skipped:true,reason:'interval',ageMs:age}));
-        process.exit(0);
-      }
-    }catch{}
-  }
+fs.mkdirSync(HISTORY_DIR,{recursive:true});
+const lastAt=latestRecordTime();
+const now=Date.now();
+if(Number.isFinite(lastAt)&&now-lastAt<MIN_INTERVAL_MS){
+  console.log(JSON.stringify({skipped:true,reason:'interval',ageMs:now-lastAt}));
+  process.exit(0);
 }
-const events=await wikiStreamSample();
-const oracle=buildOracle(events);
-const results=await Promise.allSettled(MARKETS.map(async s=>[s,await yahoo(s)]));
-const markets={};
-results.forEach((v,i)=>{markets[MARKETS[i]]=v.status==='fulfilled'?v.value[1]:{error:String(v.reason?.message||v.reason)}});
-const record={at:at.toISOString(),model:'nonmarket-wikimedia-r-v2-global-stream',oracle,markets};
-fs.appendFileSync(file,JSON.stringify(record)+'\n');
-console.log(JSON.stringify({at:record.at,r:record.oracle.r,events:events.length,markets:record.markets},null,2));
+if(!acquireLock()){
+  console.log(JSON.stringify({skipped:true,reason:'sampling-in-progress'}));
+  process.exit(0);
+}
+
+try{
+  const sample=await wikiStreamSample();
+  const oracle=buildOracle(sample.events);
+  const results=await Promise.allSettled(MARKETS.map(async s=>[s,await yahoo(s)]));
+  const markets={};
+  results.forEach((v,i)=>{markets[MARKETS[i]]=v.status==='fulfilled'?v.value[1]:{error:String(v.reason?.message||v.reason)}});
+  const at=new Date();
+  const record={
+    at:at.toISOString(),
+    sampleStart:sample.sampleStart,
+    sampleEnd:sample.sampleEnd,
+    model:'nonmarket-wikimedia-r-v3-global-stream-worker-market',
+    oracle,
+    markets,
+  };
+  const file=path.join(HISTORY_DIR,`${at.toISOString().slice(0,10)}.jsonl`);
+  fs.appendFileSync(file,JSON.stringify(record)+'\n');
+  console.log(JSON.stringify({at:record.at,sampleStart:record.sampleStart,sampleEnd:record.sampleEnd,r:record.oracle.r,events:sample.events.length,markets:record.markets},null,2));
+} finally {
+  releaseLock();
+}
