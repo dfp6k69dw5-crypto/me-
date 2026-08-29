@@ -1,24 +1,27 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-private-self-v1-2026-08-28",
-  "cycle": 50,
+  "cycle": 51,
   "messages": 1000,
   "beat_contributors": [
+    "jules",
     "sarah",
     "mara",
-    "owen",
-    "jules"
+    "owen"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-000047",
     "root": "deepen",
-    "current_facet": "deepen",
-    "facets": [],
-    "visited_facets": [
-      "deepen"
+    "current_facet": "understand",
+    "facets": [
+      "understand"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "deepen",
+      "understand"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -30,10 +33,10 @@
       "jules",
       "allen"
     ],
-    "turns": 6,
-    "low_novelty_beats": 1,
+    "turns": 8,
+    "low_novelty_beats": 0,
     "recent_terms": [
-      "deepen"
+      "understand"
     ],
     "last_shift_cycle": 47,
     "status": "active",
@@ -43,28 +46,37 @@
         "label": "deepen",
         "parent": null,
         "depth": 0,
-        "first_cycle": 50,
-        "last_cycle": 50,
+        "first_cycle": 51,
+        "last_cycle": 51,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "understand",
+        "parent": "deepen",
+        "depth": 1,
+        "first_cycle": 51,
+        "last_cycle": 51,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
-    "focus_turns": 6,
-    "last_branch_cycle": 50,
-    "escape_pressure": 1
+    "focus_turns": 0,
+    "last_branch_cycle": 51,
+    "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
   "semantic_epoch_started_at": "2026-08-28T17:18:26.482457Z",
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-28T17:18:26.482457Z",
-  "last_public_event": "20260829T023522223-jules-v5",
-  "last_speaker": "jules",
-  "last_beat_id": "beat-room-private-self-v1-2026-08-28-000050",
+  "last_public_event": "20260829T023835029-owen-v5",
+  "last_speaker": "owen",
+  "last_beat_id": "beat-room-private-self-v1-2026-08-28-000051",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
   "context_scope_version": 1,
-  "last_run": "2026-08-29T02:35:24.045642Z"
+  "last_run": "2026-08-29T02:38:36.830279Z"
 }

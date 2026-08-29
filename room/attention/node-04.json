@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-29T02:33:52.909953+00:00",
-  "cycle_key": "33228402434:1:20",
+  "generated_at": "2026-08-29T02:37:28.463633+00:00",
+  "cycle_key": "33228402434:1:23",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,78 +32,63 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 3.1,
-      "confidence": 0.973,
-      "raw_score": 3.1,
-      "repeat_penalty": 0.0,
+      "score": 1.56,
+      "confidence": 0.696,
+      "raw_score": 1.84,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
-        "why",
-        "because",
-        "true"
+        "sure",
+        "why"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "why"
-          ],
-          "weight": 1.8
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why"
-          ],
-          "weight": 1.15
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "because"
-          ],
-          "weight": 0.76
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "true"
-          ],
-          "weight": 0.54
-        }
-      ]
-    },
-    {
-      "name": "emotional-attunement",
-      "tier": "project",
-      "domain": "affect",
-      "score": 1.38,
-      "confidence": 0.623,
-      "raw_score": 1.38,
-      "repeat_penalty": 0.0,
-      "matched_triggers": [
-        "feeling",
-        "worried"
-      ],
-      "evidence_sources": [
-        {
-          "kind": "message",
-          "matched": [
-            "feeling"
+            "why",
+            "sure"
           ],
           "weight": 0.92
         },
         {
           "kind": "message",
           "matched": [
-            "worried"
+            "why"
           ],
-          "weight": 0.46
+          "weight": 0.76
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "why"
+          ],
+          "weight": 0.54
+        }
+      ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "repair"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "repair"
+          ],
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "b5fb24c85ded",
+  "context_fingerprint": "34646932e1ee",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 890,
-  "approx_added_tokens": 222
+  "temporary_skill_chars": 983,
+  "approx_added_tokens": 246
 }
