@@ -13,6 +13,7 @@ on:
       - 'scripts/room_private_model_autonomy.py'
       - 'scripts/room_private_commit.py'
       - 'scripts/room_research_architecture.py'
+      - 'scripts/room_topic_bounded.py'
       - '.github/workflows/room-allen-social-sim.yml'
   workflow_dispatch:
 
@@ -39,25 +40,50 @@ jobs:
           engine_status=$?
           python3 scripts/room_research_architecture.py > /tmp/research-selftest.txt 2>&1
           research_status=$?
+          PYTHONPATH=scripts python3 - <<'PY' > /tmp/topic-selftest.txt 2>&1
+          import room_topic_bounded as t
+          assert not t._valid_term('despite')
+          assert not t._valid_term('however')
+          assert not t._valid_term('appreciation')
+          assert t._valid_term('photography')
+          dirty={
+              'semantic_schema':8,'id':'topic-000102','root':'progress','current_facet':'despite',
+              'facets':['despite'],'visited_facets':['progress','despite'],'recent_terms':['despite'],
+              'shared_references':['despite'],'branches':[], 'turns':2,
+          }
+          cleaned=t._normalize(dirty,103)
+          assert cleaned['root']=='progress'
+          assert cleaned['current_facet']=='progress'
+          assert 'despite' not in cleaned['facets']
+          assert 'despite' not in cleaned['recent_terms']
+          prior=t.new_topic_from_terms(['photography'],103,None)
+          next_topic=t.new_topic_from_terms(['music'],104,prior)
+          assert 'photography' in next_topic['retired_terms']
+          assert next_topic['retired_until_cycle']==108
+          print('PASS: discourse markers cannot persist as topics; retirement state survives')
+          PY
+          topic_status=$?
           set -e
-          python3 - "$response_status" "$observation_status" "$engine_status" "$research_status" <<'PY'
+          python3 - "$response_status" "$observation_status" "$engine_status" "$research_status" "$topic_status" <<'PY'
           import json,sys
           from datetime import datetime,timezone
-          response_status,observation_status,engine_status,research_status=map(int,sys.argv[1:])
+          response_status,observation_status,engine_status,research_status,topic_status=map(int,sys.argv[1:])
           def read(path):
               try:return open(path).read()[-6000:]
               except Exception:return ''
           payload={
               'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
-              'pass':response_status==0 and observation_status==0 and engine_status==0 and research_status==0,
+              'pass':all(x==0 for x in (response_status,observation_status,engine_status,research_status,topic_status)),
               'response_sim_exit_code':response_status,
               'observation_sim_exit_code':observation_status,
               'engine_selftest_exit_code':engine_status,
               'research_selftest_exit_code':research_status,
+              'topic_selftest_exit_code':topic_status,
               'response_sim_output':read('/tmp/allen-response.txt'),
               'observation_sim_output':read('/tmp/allen-observation.txt'),
               'engine_selftest_output':read('/tmp/engine-selftest.txt'),
               'research_selftest_output':read('/tmp/research-selftest.txt'),
+              'topic_selftest_output':read('/tmp/topic-selftest.txt'),
               'tested_sha':'${{ github.sha }}',
           }
           open('room/allen-social-sim-diagnostic.json','w').write(json.dumps(payload,indent=2)+'\n')
