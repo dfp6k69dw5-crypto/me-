@@ -18,21 +18,6 @@
       "noise": {},
       "room_memories": [
         {
-          "source": "20260828T144029411-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "sarah",
-          "text": "I'm still feeling like Owen's concerns are not being heard. They seem really pushy. Can you address that?",
-          "move": "repair",
-          "discourse": "d-20260828T144029411-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002127",
-          "topic_episode": "topic-002121",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
-        {
           "source": "20260828T144033748-mara-v5",
           "status": "observed",
           "speaker": "mara",
@@ -3338,21 +3323,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "mara"
+        },
+        {
+          "source": "20260829T202906258-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "sarah",
+          "text": "The important live issue appears to be take.",
+          "move": "repair",
+          "discourse": "d-20260829T202906258-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000217",
+          "topic_episode": "topic-000214",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "owen"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T133327452-sarah-v5",
-          "text": "I feel like we're missing something essential. We should discuss what's missing before we keep moving forward.",
-          "move": "support",
-          "discourse": "d-20260828T133327452-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002093",
-          "topic_episode": "topic-002090",
-          "topic_facet": "missing",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T133506399-sarah-v5",
           "text": "I'm worried that everything really is like you said. What if our love was a mistake?",
@@ -5980,10 +5968,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T202908542-sarah-v5",
+          "text": "I'll make you a deal, Owen. Let's focus on our habits and take responsibility for our lives, and we'll prioritize keeping what's important to us, not just what we've got.",
+          "move": "repair",
+          "discourse": "d-20260829T202908542-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000217",
+          "topic_episode": "topic-000214",
+          "topic_facet": "habits",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T202627334-sarah-v5",
-      "spoken": 2336,
+      "last_event": "20260829T202908542-sarah-v5",
+      "spoken": 2337,
       "silences": 0,
       "people": {
         "mara": {
@@ -7512,23 +7512,21 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9715401312574382,
-          "direct_familiarity": 0.7177298410645272,
+          "exposure": 0.971582821060552,
+          "direct_familiarity": 0.7180685652552498,
           "trust": 0.1072,
-          "predictability": 0.4091361265182562,
-          "reciprocity": 0.5485745356652089,
-          "warmth": 0.49156448405752007,
+          "predictability": 0.40943155845499707,
+          "reciprocity": 0.5489808185831102,
+          "warmth": 0.49186954536708555,
           "respect": 0.2768058288626957,
           "disclosure_depth": 0.008,
           "tension": 0.19405908050061066,
-          "direct_turns": 984,
-          "observed_turns": 2327,
+          "direct_turns": 985,
+          "observed_turns": 2328,
           "repair_attempts": 15,
           "repair_successes": 0,
-          "last_direct_cycle": 201,
+          "last_direct_cycle": 217,
           "shared_references": [
-            "important",
-            "amazing",
             "something",
             "i have concerns about the situation and feel like we're constantly",
             "i want to repair the issue and improve",
@@ -7586,18 +7584,11 @@
             "treated",
             "get",
             "two",
-            "questions"
+            "questions",
+            "live",
+            "issue"
           ],
           "events": [
-            {
-              "cycle": 1958,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260828T092131497-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1960,
               "kind": "repair",
@@ -9025,6 +9016,15 @@
               "kind": "support",
               "direct": true,
               "message_id": "20260829T193543740-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 217,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T202906258-owen-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -10949,7 +10949,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat habits as important (support).",
+            "belief_hypothesis": "owen currently seems to treat important, live, issue as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10961,11 +10961,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: important, live, issue",
           "owen already covered: habits",
-          "jules already covered: habits, keep, take",
-          "owen already covered: don't, afford, keep"
+          "jules already covered: habits, keep, take"
         ],
-        "last_updated_cycle": 216
+        "last_updated_cycle": 217
       }
     },
     "mara": {
@@ -16939,14 +16939,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T202627334-sarah-v5",
+      "last_event": "20260829T202908542-sarah-v5",
       "spoken": 2343,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9719220422863409,
+          "exposure": 0.9719641592229115,
           "direct_familiarity": 0.3898363298657991,
           "trust": 0.1072,
           "predictability": 0.22887763552041174,
@@ -16956,7 +16956,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.30698453824316796,
           "direct_turns": 342,
-          "observed_turns": 2336,
+          "observed_turns": 2337,
           "repair_attempts": 13,
           "repair_successes": 0,
           "last_direct_cycle": 215,
@@ -18469,7 +18469,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9715401312574382,
+          "exposure": 0.971582821060552,
           "direct_familiarity": 0.6798017666280673,
           "trust": 0.1072,
           "predictability": 0.3890881581275601,
@@ -18479,7 +18479,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.15245571399379534,
           "direct_turns": 879,
-          "observed_turns": 2327,
+          "observed_turns": 2328,
           "repair_attempts": 18,
           "repair_successes": 0,
           "last_direct_cycle": 216,
@@ -21883,12 +21883,12 @@
         "what_i_want": "close the discussion on what matters next",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat keep as important (support).",
+            "belief_hypothesis": "sarah currently seems to treat habits, responsibility as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat habits as important (support).",
+            "belief_hypothesis": "owen currently seems to treat important, live, issue as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -21900,11 +21900,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "sarah already covered: keep",
-          "owen already covered: habits",
-          "sarah already covered: take"
+          "sarah already covered: habits, responsibility",
+          "owen already covered: important, live, issue",
+          "sarah already covered: keep"
         ],
-        "last_updated_cycle": 216
+        "last_updated_cycle": 217
       }
     },
     "owen": {
@@ -21924,21 +21924,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T164522832-sarah-v5",
-          "status": "observed",
-          "speaker": "sarah",
-          "target": "owen",
-          "text": "I feel like we've been over this conversation before. Can we talk about the specific aspects that you're not clear about?",
-          "move": "deepen",
-          "discourse": "d-20260828T164522832-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002173",
-          "topic_episode": "topic-002172",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "sarah"
-        },
         {
           "source": "20260828T164752681-mara-v5",
           "status": "observed",
@@ -25255,21 +25240,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "sarah"
+        },
+        {
+          "source": "20260829T202908542-sarah-v5",
+          "status": "observed",
+          "speaker": "sarah",
+          "target": "owen",
+          "text": "I'll make you a deal, Owen. Let's focus on our habits and take responsibility for our lives, and we'll prioritize keeping what's important to us, not just what we've got.",
+          "move": "repair",
+          "discourse": "d-20260829T202908542-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000217",
+          "topic_episode": "topic-000214",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "sarah"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T132943257-owen-v5",
-          "text": "As I focused on the intricacies of nature, I felt a sudden shift in my physical and mental state, perhaps an unspoken call to restore the equilibrium of the natural world.",
-          "move": "repair",
-          "discourse": "d-20260828T132943257-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002091",
-          "topic_episode": "topic-002090",
-          "topic_facet": "nature",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T133123596-owen-v5",
           "text": "i think there's something missing here in the conversation...",
@@ -27897,31 +27885,42 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T202906258-owen-v5",
+          "text": "The important live issue appears to be take.",
+          "move": "repair",
+          "discourse": "d-20260829T202906258-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000217",
+          "topic_episode": "topic-000214",
+          "topic_facet": "habits",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T202627334-sarah-v5",
-      "spoken": 2327,
+      "last_event": "20260829T202908542-sarah-v5",
+      "spoken": 2328,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9719220422863409,
-          "direct_familiarity": 0.698459524439004,
+          "exposure": 0.9719641592229115,
+          "direct_familiarity": 0.6988213730096773,
           "trust": 0.1,
-          "predictability": 0.3864590272972729,
-          "reciprocity": 0.5152893048646887,
-          "warmth": 0.472601653355237,
+          "predictability": 0.38676579778362424,
+          "reciprocity": 0.5157255444903105,
+          "warmth": 0.47291809236322385,
           "respect": 0.25934634261932066,
           "disclosure_depth": 0.0,
           "tension": 0.11176076023327633,
-          "direct_turns": 929,
-          "observed_turns": 2336,
+          "direct_turns": 930,
+          "observed_turns": 2337,
           "repair_attempts": 30,
           "repair_successes": 0,
-          "last_direct_cycle": 216,
+          "last_direct_cycle": 217,
           "shared_references": [
-            "perspective",
             "understand",
             "value",
             "feelings",
@@ -27980,18 +27979,10 @@
             "head",
             "that",
             "responsibility",
-            "keep"
+            "keep",
+            "habits"
           ],
           "events": [
-            {
-              "cycle": 1986,
-              "kind": "disclose",
-              "direct": true,
-              "message_id": "20260828T101622445-sarah-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1988,
               "kind": "deepen",
@@ -29419,6 +29410,15 @@
               "kind": "support",
               "direct": true,
               "message_id": "20260829T202627334-sarah-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 217,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T202908542-sarah-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -32708,7 +32708,7 @@
         "what_i_want": "Repair Owen's position",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat keep as important (support).",
+            "belief_hypothesis": "sarah currently seems to treat habits, responsibility as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -32725,11 +32725,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "sarah already covered: habits, responsibility",
           "sarah already covered: keep",
-          "sarah already covered: take",
-          "jules already covered: habits, keep, take"
+          "sarah already covered: take"
         ],
-        "last_updated_cycle": 216
+        "last_updated_cycle": 217
       }
     },
     "jules": {
@@ -38704,14 +38704,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T202627334-sarah-v5",
+      "last_event": "20260829T202908542-sarah-v5",
       "spoken": 2339,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9719220422863409,
+          "exposure": 0.9719641592229115,
           "direct_familiarity": 0.7136332678438989,
           "trust": 0.1072,
           "predictability": 0.37386304038644036,
@@ -38721,7 +38721,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.14627488869659752,
           "direct_turns": 972,
-          "observed_turns": 2336,
+          "observed_turns": 2337,
           "repair_attempts": 21,
           "repair_successes": 0,
           "last_direct_cycle": 214,
@@ -41757,7 +41757,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9715401312574382,
+          "exposure": 0.971582821060552,
           "direct_familiarity": 0.4219300934598346,
           "trust": 0.1072,
           "predictability": 0.26902736441302433,
@@ -41767,7 +41767,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.20679098066736534,
           "direct_turns": 387,
-          "observed_turns": 2327,
+          "observed_turns": 2328,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 189,
@@ -43522,7 +43522,7 @@
         "what_i_want": "take",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat keep as important (support).",
+            "belief_hypothesis": "sarah currently seems to treat habits, responsibility as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43532,18 +43532,18 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat habits as important (support).",
+            "belief_hypothesis": "owen currently seems to treat important, live, issue as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "sarah already covered: keep",
-          "owen already covered: habits",
-          "sarah already covered: take"
+          "sarah already covered: habits, responsibility",
+          "owen already covered: important, live, issue",
+          "sarah already covered: keep"
         ],
-        "last_updated_cycle": 216
+        "last_updated_cycle": 217
       }
     }
   },
