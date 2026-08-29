@@ -79,7 +79,10 @@ jobs:
             if [ -n "$oracle_pid" ] && kill -0 "$oracle_pid" 2>/dev/null; then
               return 0
             fi
-            next_oracle_at=$((now_epoch + 300))
+            # Retry the persisted-history gate frequently. The recorder itself
+            # enforces the real five-minute interval from the last saved row, so
+            # runner restarts can never postpone an eligible sample for 5 minutes.
+            next_oracle_at=$((now_epoch + 30))
             record_oracle &
             oracle_pid=$!
           }
