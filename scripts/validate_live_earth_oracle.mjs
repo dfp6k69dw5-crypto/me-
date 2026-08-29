@@ -11,9 +11,10 @@ function fail(message) {
 
 if (!html.includes('<title>The Fast Nonsense Predictor</title>')) fail('fast predictor title missing');
 if (!html.includes('Experiment, not investment advice.')) fail('experiment disclaimer missing');
-if (!html.includes('FAST ORACLE · MK VIII')) fail('MK VIII marker missing');
+if (!html.includes('FAST ORACLE · MK IX')) fail('MK IX marker missing');
 if (!html.includes('50% PHYSICAL WORLD + 50% HUMAN ACTIVITY')) fail('50/50 composite R label missing');
 if (!html.includes('exactly four square roots')) fail('fixed-four-root description missing');
+if (!html.includes('recomputes R on every edit event')) fail('per-edit R recompute statement missing');
 if (!html.includes('no market, crypto, futures, or order-pressure data enters R'.toUpperCase()) && !html.includes('NO market, crypto, futures, or order-pressure data enters R')) fail('market-exclusion statement missing');
 
 const expectedStreams = ['market','btc','eth','sol','doge','ltc','link','avax','bch','xrp','pressure','wiki','quake','kp','hn'];
@@ -56,9 +57,12 @@ const guards = [
   "id=\"rCorr\"",
   'rInput:true',
   'cfg[k].stale',
+  'Math.tanh((rate-600)/900)',
+  "setCard('wiki',rate+' / min','global Wikimedia activity · every event',factor,rate)",
 ];
 for (const token of guards) if (!html.includes(token)) fail(`reliability/statistics guard missing: ${token}`);
 
+if (html.includes('clamp((rate-600)/900,-1,1)')) fail('old saturating Wikimedia normalization returned');
 if (html.includes('id="targetCorr"') || html.includes('id="allCorr"')) fail('old pairwise correlation panels returned');
 if (html.includes('TAME_LIMIT')) fail('adaptive R ceiling returned');
 
@@ -70,4 +74,4 @@ for (const [i,code] of scripts.entries()) {
   catch (e) { fail(`JavaScript parse error: ${e.message}`); }
 }
 if ((html.match(/<script\b/gi)||[]).length !== (html.match(/<\/script>/gi)||[]).length) fail('unbalanced script tags');
-console.log(`Fast Oracle validation passed: ${expectedStreams.length} streams, 50/50 composite R, fixed four roots, R-only correlations, prediction settlement, and JavaScript parse all present.`);
+console.log(`Fast Oracle validation passed: ${expectedStreams.length} streams, event-driven Wikimedia R, 50/50 composite R, fixed four roots, R-only correlations, prediction settlement, and JavaScript parse all present.`);
