@@ -5,6 +5,7 @@ import re
 from datetime import datetime, timezone
 
 import room_engine_v5 as c
+import room_expression_quality as _expression_quality
 import room_social_v5 as _social
 import room_topic_bounded as _bounded_topic
 import room_private_self_state as _private_self_state
@@ -32,6 +33,10 @@ PRIVACY_MARKERS = (
     "system prompt", "hidden prompt", "developer message",
     "internal instructions", "chain of thought", "room_prompt_",
 )
+CONTROL_SENTINELS = {
+    "rejected_wording", "try_again", "return_structured_data_only",
+    "end_rejected_wording", "response", "conversation",
+}
 CONTEXT_SCOPE_VERSION = 1
 
 
@@ -40,11 +45,7 @@ def norm(value) -> str:
 
 
 def infected_text(value) -> bool:
-    """Only genuine privacy leakage blocks publication.
-
-    Dialogue-quality/meta/scaffold language is intentionally tolerated so the
-    Room keeps running instead of quarantining itself.
-    """
+    """Only genuine privacy leakage blocks publication."""
     text = norm(value)
     if not text:
         return True
@@ -102,13 +103,10 @@ def clean_terms(expr: dict, topic: dict, text: str) -> list[str]:
         s = norm(value)
         if not bad_term(s) and grounded(text, [s]) and s not in out:
             out.append(s)
-    # Existing topic labels may remain only when the speaker actually used them.
     for value in (topic.get("root"), topic.get("current_facet")):
         s = norm(value)
         if not bad_term(s) and grounded(text, [s]) and s not in out:
             out.append(s)
-    # A model may emit poor semantic metadata while speaking a useful new idea.
-    # Derive a bounded fallback from the sentence itself rather than stale state.
     if not out:
         for value in c.toks(text)[:4]:
             s = norm(value)
@@ -154,10 +152,44 @@ def context_scope_reset(topic: dict, key: str, cycle: int) -> dict:
     return candidate
 
 
-def validate_public_expression(entity: str, text: str, terms: list[str]) -> None:
-    # Keep the hard privacy boundary, but do not quarantine for dialogue quality.
+def _publication_degenerate(text: str) -> str | None:
+    """Last-chance deterministic quarantine for malformed/control/collapse output."""
+    raw = str(text or "").strip()
+    low = norm(raw)
+    if low in CONTROL_SENTINELS:
+        return "control_sentinel"
+    if raw in {"{", "}", "[", "]"}:
+        return "structured_debris"
+    if (raw.startswith("{") and raw.endswith("}")) or (raw.startswith("[") and raw.endswith("]")):
+        return "structured_debris"
+    if re.search(r"\b([a-z][a-z']{2,})(?:\s+\1){2,}\b", low, re.I):
+        return "token_loop"
+    words = re.findall(r"[a-z0-9']+", low)
+    if len(words) >= 3:
+        counts: dict[str, int] = {}
+        for word in words:
+            counts[word] = counts.get(word, 0) + 1
+        peak = max(counts.values(), default=0)
+        if peak >= 3 and peak / len(words) >= 0.34:
+            return "dominant_token"
+    return None
+
+
+def validate_public_expression(entity: str, text: str, terms: list[str], context: list[dict]) -> None:
+    """Nothing becomes shared state until it passes the same quality boundary again."""
     if infected_text(text):
         raise RuntimeError(f"private Room privacy leak blocked for {entity}")
+    deterministic_issue = _publication_degenerate(text)
+    if deterministic_issue:
+        raise RuntimeError(f"private Room publish quarantine for {entity}: {deterministic_issue}")
+    compact = {
+        "context": list(context or [])[-8:],
+        "event": (list(context or [])[-1] if context else None),
+        "discussion": {},
+    }
+    issue = _expression_quality.quality_issue(text, compact, entity, c._sim)
+    if issue:
+        raise RuntimeError(f"private Room publish quarantine for {entity}: {issue}")
 
 
 def private_commit(parts: list[dict], key: str):
@@ -191,7 +223,8 @@ def private_commit(parts: list[dict], key: str):
     plans = c.plan_actions(order, c.target(q) if q else None, M, topic, cycle)
     staged: list[tuple[str, str, str, str, list[str]]] = []
 
-    # Nothing touches memory until all four public turns pass the privacy gate.
+    # Atomic publication: all four candidates are validated before any one of
+    # them can touch history, discourse, memory, private-self updates, or topic state.
     for entity in order:
         expr = expressions[entity]
         text = c.model_text(expr)
@@ -203,7 +236,11 @@ def private_commit(parts: list[dict], key: str):
             terms = [norm(value) for value in c.toks(text)[:2] if not bad_term(value)]
         if not terms:
             terms = [norm(topic.get("root")) or "conversation"]
-        validate_public_expression(entity, text, terms)
+        validation_context = list(V[-8:]) + [
+            {"speaker": speaker, "text": staged_text, "cognition": {"target": target}}
+            for speaker, _move, target, staged_text, _terms in staged
+        ]
+        validate_public_expression(entity, text, terms, validation_context)
 
         planned = plans[entity]
         move = norm(expr.get("move") or planned["action"])
@@ -249,8 +286,6 @@ def private_commit(parts: list[dict], key: str):
             declared = c.topic_terms_from_messages(spoken, limit=12, episode_id=topic.get("id"))
             novel = [norm(x) for x in declared if not bad_term(x) and norm(x) not in previous_vocabulary]
             candidate_terms = novel or [c.breakout_subject(key)]
-        # Forced episode exhaustion is a real semantic boundary: do not smuggle
-        # the exhausted topic back into the fresh episode as a shared reference.
         prior = None if forced_breakout else topic
         candidate = clean_topic(c.new_topic_from_terms(candidate_terms, cycle, prior))
         if candidate.get("root") and not bad_term(candidate.get("root")):
@@ -259,8 +294,6 @@ def private_commit(parts: list[dict], key: str):
     S["topic_episode"] = topic
     S["context_scope_version"] = CONTEXT_SCOPE_VERSION
 
-    # Update each person's six-part private self only after all four public
-    # turns passed validation. The next beat receives only a bounded slice.
     part_index = {(part.get("entity"), part.get("role")): part for part in parts}
     for entity in c.ORDER:
         comprehension_part = part_index.get((entity, "comprehension"), {})
@@ -300,7 +333,7 @@ def private_commit(parts: list[dict], key: str):
         "beat_contributors": speakers,
         "beat_message_count": 4,
         "silence_cycles": 0,
-        "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
+        "note": "research-informed v5 private model active; atomic quality+privacy publication gate; bounded topic episodes; episode-scoped Llama context; no public fallback",
     })
 
     c.audit_invariants(M, topic)
@@ -355,7 +388,7 @@ def private_commit(parts: list[dict], key: str):
             "private_pipeline": "perception->deliberation->expression",
             "public_fallback": False,
             "history_generation": c.BOOT,
-            "contamination_gate": False,
+            "contamination_gate": True,
             "privacy_gate": True,
         },
     }
