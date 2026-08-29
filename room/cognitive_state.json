@@ -5982,14 +5982,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T214933135-jules-v5",
+      "last_event": "20260829T215243252-mara-v5",
       "spoken": 2341,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9724232967261569,
+          "exposure": 0.9724646617810677,
           "direct_familiarity": 0.7153473495013413,
           "trust": 0.1,
           "predictability": 0.2956594911052147,
@@ -5999,7 +5999,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.06252885943525939,
           "direct_turns": 977,
-          "observed_turns": 2348,
+          "observed_turns": 2349,
           "repair_attempts": 31,
           "repair_successes": 0,
           "last_direct_cycle": 215,
@@ -9035,7 +9035,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9721737981678222,
+          "exposure": 0.9722155374705705,
           "direct_familiarity": 0.46916903034586727,
           "trust": 0.11434240000000001,
           "predictability": 0.25811116040268706,
@@ -9045,7 +9045,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.23531038104765487,
           "direct_turns": 458,
-          "observed_turns": 2342,
+          "observed_turns": 2343,
           "repair_attempts": 6,
           "repair_successes": 0,
           "last_direct_cycle": 206,
@@ -10944,7 +10944,7 @@
         "what_i_want": "update",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat step, move, forward as important (answer).",
+            "belief_hypothesis": "mara currently seems to treat focusing as important (support).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10954,18 +10954,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat agree as important (support).",
+            "belief_hypothesis": "jules currently seems to treat focusing, step-by-step as important (disagree).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "jules already covered: agree",
-          "mara already covered: step, move, forward",
-          "mara already covered: step, good"
+          "mara already covered: focusing",
+          "jules already covered: focusing, step-by-step",
+          "jules already covered: agree"
         ],
-        "last_updated_cycle": 227
+        "last_updated_cycle": 228
       }
     },
     "mara": {
@@ -14299,18 +14299,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T140252087-mara-v5",
-          "text": "The movies are amazing, isn't he?",
-          "move": "answer",
-          "discourse": "d-20260828T140252087-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002109",
-          "topic_episode": "topic-002108",
-          "topic_facet": "movies",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T140504042-mara-v5",
           "text": "I've watched so many amazing movies, but none have compared to yours. I've been feeling really disconnected from Owen when we've been watching those movies together,",
           "move": "repair",
@@ -16937,10 +16925,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T215243252-mara-v5",
+          "text": "I support focusing and staying on track with a clear plan.",
+          "move": "support",
+          "discourse": "d-20260829T215243252-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000228",
+          "topic_episode": "topic-000222",
+          "topic_facet": "step",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T214933135-jules-v5",
-      "spoken": 2348,
+      "last_event": "20260829T215243252-mara-v5",
+      "spoken": 2349,
       "silences": 0,
       "people": {
         "sarah": {
@@ -19992,7 +19992,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9721737981678222,
+          "exposure": 0.9722155374705705,
           "direct_familiarity": 0.6288416042577565,
           "trust": 0.1,
           "predictability": 0.3507649861285634,
@@ -20002,7 +20002,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.2027020004106831,
           "direct_turns": 756,
-          "observed_turns": 2342,
+          "observed_turns": 2343,
           "repair_attempts": 11,
           "repair_successes": 0,
           "last_direct_cycle": 209,
@@ -21893,18 +21893,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat agree as important (support).",
+            "belief_hypothesis": "jules currently seems to treat focusing, step-by-step as important (disagree).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: focusing, step-by-step",
           "jules already covered: agree",
-          "jules already covered: step",
-          "owen already covered: importance, repair"
+          "jules already covered: step"
         ],
-        "last_updated_cycle": 227
+        "last_updated_cycle": 228
       }
     },
     "owen": {
@@ -21924,36 +21924,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T170959904-sarah-v5",
-          "status": "observed",
-          "speaker": "sarah",
-          "target": "owen",
-          "text": "My mom says, 'Hey, Owen, I've been thinking about our conversation the other day. You mentioned some effort we're both putting in to improve our relationship.",
-          "move": "deepen",
-          "discourse": "d-20260828T170959904-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002183",
-          "topic_episode": "topic-002182",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "sarah"
-        },
-        {
-          "source": "20260828T171233943-sarah-v5",
-          "status": "observed",
-          "speaker": "sarah",
-          "target": "jules",
-          "text": "I've noticed that you've been playing hard to get in our recent conversations, Sarah. You seem more interested in getting your own attention than in supporting Owen. I need to make sure that my support is genuine and not just a way to distract from your own needs.",
-          "move": "support",
-          "discourse": "d-20260828T171233943-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002184",
-          "topic_episode": "topic-002182",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "sarah"
-        },
         {
           "source": "20260828T171529540-jules-v5",
           "status": "observed",
@@ -25255,6 +25225,36 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "jules"
+        },
+        {
+          "source": "20260829T215241041-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "owen",
+          "text": "I think you're doing it wrong. You're only focusing on the initial steps, but the real issue is taking responsibility and moving forward with a good step-by-step plan.",
+          "move": "disagree",
+          "discourse": "d-20260829T215241041-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000228",
+          "topic_episode": "topic-000222",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "jules"
+        },
+        {
+          "source": "20260829T215243252-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "owen",
+          "text": "I support focusing and staying on track with a clear plan.",
+          "move": "support",
+          "discourse": "d-20260829T215243252-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000228",
+          "topic_episode": "topic-000222",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
@@ -27899,7 +27899,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T214933135-jules-v5",
+      "last_event": "20260829T215243252-mara-v5",
       "spoken": 2332,
       "silences": 0,
       "people": {
@@ -29429,22 +29429,21 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9724232967261569,
-          "direct_familiarity": 0.4549598298300736,
+          "exposure": 0.9724646617810677,
+          "direct_familiarity": 0.4556138780342775,
           "trust": 0.1,
           "predictability": 0.19376588753252716,
           "reciprocity": 0.23207732471415293,
-          "warmth": 0.26279693850707014,
+          "warmth": 0.2632392603439659,
           "respect": 0.17001407648846653,
           "disclosure_depth": 0.0,
           "tension": 0.2081737034324654,
-          "direct_turns": 436,
-          "observed_turns": 2348,
+          "direct_turns": 437,
+          "observed_turns": 2349,
           "repair_attempts": 10,
           "repair_successes": 0,
-          "last_direct_cycle": 226,
+          "last_direct_cycle": 228,
           "shared_references": [
-            "failures",
             "event",
             "despite",
             "i appreciate",
@@ -29503,18 +29502,10 @@
             "step",
             "good",
             "move",
-            "forward"
+            "forward",
+            "focusing"
           ],
           "events": [
-            {
-              "cycle": 823,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260826T082621462-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 826,
               "kind": "repair",
@@ -30945,6 +30936,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 228,
+              "kind": "support",
+              "direct": true,
+              "message_id": "20260829T215243252-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -30952,23 +30952,21 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9721737981678222,
-          "direct_familiarity": 0.734815143957385,
+          "exposure": 0.9722155374705705,
+          "direct_familiarity": 0.7351333657846362,
           "trust": 0.1,
-          "predictability": 0.354081712488022,
+          "predictability": 0.35337354906304597,
           "reciprocity": 0.46074287823889787,
           "warmth": 0.4553867487382641,
-          "respect": 0.18994408845634353,
+          "respect": 0.19030861361653817,
           "disclosure_depth": 0.0,
-          "tension": 0.10888452868718322,
-          "direct_turns": 1036,
-          "observed_turns": 2342,
+          "tension": 0.1177956834003114,
+          "direct_turns": 1037,
+          "observed_turns": 2343,
           "repair_attempts": 17,
           "repair_successes": 0,
-          "last_direct_cycle": 227,
+          "last_direct_cycle": 228,
           "shared_references": [
-            "event",
-            "past",
             "failures",
             "/despite/",
             "despite",
@@ -31026,18 +31024,11 @@
             "should",
             "habits",
             "keep",
-            "first"
+            "first",
+            "focusing",
+            "step-by-step"
           ],
           "events": [
-            {
-              "cycle": 2034,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260828T114647849-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 2036,
               "kind": "support",
@@ -32468,6 +32459,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 228,
+              "kind": "disagree",
+              "direct": true,
+              "message_id": "20260829T215241041-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": true
             }
           ],
           "reports": []
@@ -32713,23 +32713,23 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat step, move, forward as important (answer).",
+            "belief_hypothesis": "mara currently seems to treat focusing as important (support).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat agree as important (support).",
+            "belief_hypothesis": "jules currently seems to treat focusing, step-by-step as important (disagree).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "jules already covered: agree",
-          "mara already covered: step, move, forward",
-          "mara already covered: step, good"
+          "mara already covered: focusing",
+          "jules already covered: focusing, step-by-step",
+          "jules already covered: agree"
         ],
-        "last_updated_cycle": 227
+        "last_updated_cycle": 228
       }
     },
     "jules": {
@@ -36064,18 +36064,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T134404175-jules-v5",
-          "text": "I appreciate guidance, really, it makes me feel better",
-          "move": "deepen",
-          "discourse": "d-20260828T134404175-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002099",
-          "topic_episode": "topic-002096",
-          "topic_facet": "skills",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T134544800-jules-v5",
           "text": "I was thinking about our past relationship. It's not easy to know who's being authentic and who's hiding something. I've seen the suspicious activities you've been doing. What's going on, Owen?",
           "move": "repair",
@@ -38702,10 +38690,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T215241041-jules-v5",
+          "text": "I think you're doing it wrong. You're only focusing on the initial steps, but the real issue is taking responsibility and moving forward with a good step-by-step plan.",
+          "move": "disagree",
+          "discourse": "d-20260829T215241041-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000228",
+          "topic_episode": "topic-000222",
+          "topic_facet": "step",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T214933135-jules-v5",
-      "spoken": 2342,
+      "last_event": "20260829T215243252-mara-v5",
+      "spoken": 2343,
       "silences": 0,
       "people": {
         "sarah": {
@@ -40234,7 +40234,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9724232967261569,
+          "exposure": 0.9724646617810677,
           "direct_familiarity": 0.6668595868198149,
           "trust": 0.1,
           "predictability": 0.3049578979929879,
@@ -40244,7 +40244,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.1313338991753774,
           "direct_turns": 846,
-          "observed_turns": 2348,
+          "observed_turns": 2349,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 223,
@@ -43527,7 +43527,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat step, move, forward as important (answer).",
+            "belief_hypothesis": "mara currently seems to treat focusing as important (support).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43539,11 +43539,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: focusing",
           "mara already covered: step, move, forward",
-          "mara already covered: step, good",
-          "owen already covered: importance, repair"
+          "mara already covered: step, good"
         ],
-        "last_updated_cycle": 227
+        "last_updated_cycle": 228
       }
     }
   },
