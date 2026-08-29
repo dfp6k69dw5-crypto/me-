@@ -39,6 +39,13 @@ def _tokens(value: Any) -> set[str]:
     }
 
 
+def _source_actor(item: Any) -> str:
+    """Resolve the author across live-message and migrated-memory schemas."""
+    if not isinstance(item, dict):
+        return ""
+    return _norm(item.get("speaker") or item.get("reported_by"))
+
+
 def _target(item: Any) -> str:
     if not isinstance(item, dict):
         return ""
@@ -50,7 +57,7 @@ def evidence_type(item: Any, self_entity: str | None = None) -> str:
     """Classify what is actually known: the utterance was observed, not its proposition."""
     if not isinstance(item, dict):
         return "legacy_unknown_source"
-    speaker = _norm(item.get("speaker"))
+    speaker = _source_actor(item)
     me = _norm(self_entity)
     if speaker and speaker == me:
         return "self_spoken"
@@ -70,7 +77,7 @@ def autonomous_text_issue(item: Any) -> str | None:
     """
     if not isinstance(item, dict):
         return None
-    speaker = _norm(item.get("speaker"))
+    speaker = _source_actor(item)
     if speaker not in _AUTONOMOUS:
         return None
     text = str(item.get("text") or "").strip()
@@ -126,7 +133,7 @@ def _move(item: Any) -> str:
 
 def _score_message(item: dict, index: int, total: int, entity: str, profile: dict, topic: dict) -> float:
     text = str(item.get("text") or "")
-    speaker = _norm(item.get("speaker"))
+    speaker = _source_actor(item)
     target = _target(item)
     words = _tokens(text)
     traits = profile.get("traits") if isinstance(profile.get("traits"), dict) else {}
@@ -177,7 +184,7 @@ def select_context(payload: dict, role: str, limit: int = 6) -> dict:
     # user speech remains authoritative input even when deliberately pathological.
     context = [item for item in raw_context if not autonomous_text_issue(item)]
     if not context:
-        context = [item for item in raw_context if isinstance(item, dict) and _norm(item.get("speaker")) == "allen"][-1:]
+        context = [item for item in raw_context if isinstance(item, dict) and _source_actor(item) == "allen"][-1:]
     out["context"] = context
 
     if entity not in _AUTONOMOUS or len(context) <= 2:
@@ -219,7 +226,7 @@ def evidence_context(payload: dict, self_entity: str | None = None, limit: int =
             continue
         etype = evidence_type(item, me)
         out.append({
-            "speaker": _norm(item.get("speaker")) or None,
+            "speaker": _source_actor(item) or None,
             "target": _target(item) or None,
             "evidence_type": etype,
             "proposition_status": "unverified_report" if etype in {"heard_allen_claim", "heard_agent_utterance"} else "self_record",
@@ -233,12 +240,10 @@ def guard_private_self_inputs(perception: Any, deliberation: Any, latest_event: 
     p = dict(perception) if isinstance(perception, dict) else {}
     d = dict(deliberation) if isinstance(deliberation, dict) else {}
     etype = evidence_type(latest_event, None)
-    speaker = _norm((latest_event or {}).get("speaker")) if isinstance(latest_event, dict) else ""
+    speaker = _source_actor(latest_event)
 
     if autonomous_text_issue(latest_event):
-        p = {}
-        d = {}
-        return p, d
+        return {}, {}
 
     if etype in {"heard_allen_claim", "heard_agent_utterance"}:
         try:
@@ -274,7 +279,7 @@ def annotate_memory_provenance(mind: dict) -> dict:
         for item in state.get("room_memories", []) if isinstance(state.get("room_memories"), list) else []:
             if not isinstance(item, dict):
                 continue
-            speaker = _norm(item.get("speaker"))
+            speaker = _source_actor(item)
             if "source_type" not in item:
                 if speaker == "allen":
                     item["source_type"] = "heard_allen_claim"
@@ -334,6 +339,15 @@ def selftest() -> None:
     assert autonomous_text_issue(allen_test) is None
     selected = select_context({**base, "context": [base["context"][1], jules_sludge, scaffold]}, "thought", 3)
     assert [x["speaker"] for x in selected["context"]] == ["allen"]
+
+    migrated_bad = {"reported_by": "jules", "text": "despite despite despite despite"}
+    assert autonomous_text_issue(migrated_bad) is not None
+    migrated_allen = {"reported_by": "allen", "text": "despite despite despite despite"}
+    assert autonomous_text_issue(migrated_allen) is None
+    migrated = {"entities": {"sarah": {"room_memories": [migrated_bad, migrated_allen], "self_history": []}}}
+    annotate_memory_provenance(migrated)
+    assert migrated_bad["retrieval_status"] == "quarantined_degenerate"
+    assert "retrieval_status" not in migrated_allen
 
 
 if __name__ == "__main__":
