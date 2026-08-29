@@ -11,21 +11,24 @@ function fail(message) {
 
 if (!html.includes('<title>The Fast Nonsense Predictor</title>')) fail('fast predictor title missing');
 if (!html.includes('Experiment, not investment advice.')) fail('experiment disclaimer missing');
-if (!html.includes('FAST ORACLE · MK IV')) fail('MK IV marker missing');
-if (!html.includes('F₀(x)=x')) fail('Alex recurrence description missing');
+if (!html.includes('FAST ORACLE · MK VIII')) fail('MK VIII marker missing');
+if (!html.includes('50% PHYSICAL WORLD + 50% HUMAN ACTIVITY')) fail('50/50 composite R label missing');
+if (!html.includes('exactly four square roots')) fail('fixed-four-root description missing');
+if (!html.includes('no market, crypto, futures, or order-pressure data enters R'.toUpperCase()) && !html.includes('NO market, crypto, futures, or order-pressure data enters R')) fail('market-exclusion statement missing');
 
-const expectedStreams = ['market','btc','eth','sol','doge','ltc','link','avax','bch','xrp','pressure','wiki'];
+const expectedStreams = ['market','btc','eth','sol','doge','ltc','link','avax','bch','xrp','pressure','wiki','quake','kp','hn'];
 for (const stream of expectedStreams) {
-  if (!new RegExp(`\\b${stream}\\s*:`).test(html)) fail(`fast stream missing: ${stream}`);
+  if (!new RegExp(`\\b${stream}\\s*:`).test(html)) fail(`stream missing: ${stream}`);
 }
-const retiredStreams = ['aircraft:{','iss:{','wind:{','mag:{','k1m:{','xray:{','air:{','tide:{','buoy:{','river:{','aurora:{','quakes:{','weather:{','github:{'];
-for (const token of retiredStreams) if (html.includes(token)) fail(`retired/flaky stream still configured: ${token}`);
 
 const requiredSources = [
   'room-live-mirror.dfp6k69dw5.workers.dev/api/market',
   'ws-feed.exchange.coinbase.com',
-  'BTC-USD','ETH-USD','SOL-USD','DOGE-USD','LTC-USD','LINK-USD','AVAX-USD','BCH-USD','XRP-USD',
   'stream.wikimedia.org/v2/stream/recentchange',
+  'earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson',
+  'services.swpc.noaa.gov/products/noaa-planetary-k-index.json',
+  'hacker-news.firebaseio.com/v0/maxitem.json',
+  'BTC-USD','ETH-USD','SOL-USD','DOGE-USD','LTC-USD','LINK-USD','AVAX-USD','BCH-USD','XRP-USD',
 ];
 for (const source of requiredSources) if (!html.includes(source)) fail(`source missing: ${source}`);
 
@@ -38,18 +41,26 @@ const guards = [
   'function settle',
   'function issuePrediction',
   'function sampleSignals',
-  'function pairStat',
+  'function rStat',
   'function renderCorrelations',
+  'function bucketScores',
+  "meanLive(['quake','kp'])",
+  "meanLive(['wiki','hn'])",
+  '(physical+human)/2',
+  'FIXED_ROOTS=4',
+  'for(let i=1n;i<=1000n;i++)',
   'setInterval(sampleSignals,5000)',
   'state.samples.length>180',
   "id=\"accuracy\"",
   "id=\"inverseAccuracy\"",
-  "id=\"targetCorr\"",
-  "id=\"allCorr\"",
-  'for(let i=1n;i<=1000n;i++)',
+  "id=\"rCorr\"",
+  'rInput:true',
   'cfg[k].stale',
 ];
 for (const token of guards) if (!html.includes(token)) fail(`reliability/statistics guard missing: ${token}`);
+
+if (html.includes('id="targetCorr"') || html.includes('id="allCorr"')) fail('old pairwise correlation panels returned');
+if (html.includes('TAME_LIMIT')) fail('adaptive R ceiling returned');
 
 const scripts = [];
 for (const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)) if (m[1].trim()) scripts.push(m[1]);
@@ -59,4 +70,4 @@ for (const [i,code] of scripts.entries()) {
   catch (e) { fail(`JavaScript parse error: ${e.message}`); }
 }
 if ((html.match(/<script\b/gi)||[]).length !== (html.match(/<\/script>/gi)||[]).length) fail('unbalanced script tags');
-console.log(`Fast Oracle validation passed: ${expectedStreams.length} fast streams, rolling pairwise correlations, prediction accuracy, recurrence, settlement, and JS parse all present.`);
+console.log(`Fast Oracle validation passed: ${expectedStreams.length} streams, 50/50 composite R, fixed four roots, R-only correlations, prediction settlement, and JavaScript parse all present.`);
