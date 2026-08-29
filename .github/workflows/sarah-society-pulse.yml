@@ -8,7 +8,7 @@ on:
       - 'society/pulse-kick.txt'
 
 permissions:
-  contents: read
+  contents: write
   actions: write
 
 concurrency:
@@ -20,11 +20,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
-      - name: Keep The Room running at GitHub's fastest sustainable cadence
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 20
+
+      - name: Keep The Room running and persist Oracle history
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -uo pipefail
+          git config user.name "fast-oracle-recorder"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           # One Room beat at a time. A successful beat is followed immediately
           # by the next. GitHub 429/5xx errors are treated as temporary pressure,
@@ -33,8 +40,45 @@ jobs:
           api_backoff=15
           last_cooled_failure=""
           queued_timeout=90
+          next_oracle_at=0
+
+          record_oracle() {
+            now_epoch="$(date -u +%s)"
+            [ "$now_epoch" -ge "$next_oracle_at" ] || return 0
+            next_oracle_at=$((now_epoch + 300))
+
+            echo "Recording synchronized Fast Oracle snapshot"
+            git fetch origin main || return 0
+            git reset --hard origin/main || return 0
+            node scripts/log_fast_oracle_snapshot.mjs || { echo "Oracle snapshot failed; Room pulse continues"; return 0; }
+
+            if [ -z "$(git status --porcelain -- room/oracle-history)" ]; then
+              echo "Oracle snapshot already current"
+              return 0
+            fi
+
+            git add room/oracle-history
+            git commit -m "Log Fast Oracle snapshot" || return 0
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                echo "Oracle snapshot persisted"
+                return 0
+              fi
+              git fetch origin main || { sleep $((attempt * 2)); continue; }
+              if ! git rebase origin/main; then
+                git rebase --abort || true
+                git reset --hard origin/main || true
+                return 0
+              fi
+              sleep $((attempt * 2))
+            done
+            echo "Oracle snapshot push lost its race; next pulse will retry"
+            git reset --hard origin/main || true
+          }
 
           while [ "$SECONDS" -lt "$stop_at" ]; do
+            record_oracle
+
             runs="$(gh run list \
               --repo "$GITHUB_REPOSITORY" \
               --workflow sarah-society.yml \
