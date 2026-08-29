@@ -83,7 +83,7 @@ async function wikiStreamSample(ms=SNAPSHOT_MS){
   const sampleStart=new Date();
   try{
     const r=await fetch(STREAM,{
-      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/3.0'},
+      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/4.0'},
       signal:ctl.signal,
     });
     if(!r.ok) throw new Error(`wiki stream ${r.status}`);
@@ -133,10 +133,11 @@ async function yahoo(symbol){
   const j=await r.json();
   const c=j?.payload?.chart?.result?.[0], times=c?.timestamp||[], closes=c?.indicators?.quote?.[0]?.close||[];
   for(let i=Math.min(times.length,closes.length)-1;i>=0;i--){
-    if(Number.isFinite(Number(times[i]))&&Number.isFinite(Number(closes[i]))) return {price:Number(closes[i]),marketTs:Number(times[i])};
+    const ts=Number(times[i]), p=Number(closes[i]);
+    if(Number.isFinite(ts)&&Number.isFinite(p)&&p>0) return {price:p,marketTs:ts};
   }
   const p=Number(c?.meta?.regularMarketPrice);
-  return Number.isFinite(p)?{price:p,marketTs:null}:null;
+  return Number.isFinite(p)&&p>0?{price:p,marketTs:null}:null;
 }
 
 fs.mkdirSync(HISTORY_DIR,{recursive:true});
@@ -156,13 +157,16 @@ try{
   const oracle=buildOracle(sample.events);
   const results=await Promise.allSettled(MARKETS.map(async s=>[s,await yahoo(s)]));
   const markets={};
-  results.forEach((v,i)=>{markets[MARKETS[i]]=v.status==='fulfilled'?v.value[1]:{error:String(v.reason?.message||v.reason)}});
+  results.forEach((v,i)=>{
+    if(v.status==='fulfilled'&&v.value[1]) markets[MARKETS[i]]=v.value[1];
+    else markets[MARKETS[i]]={error:v.status==='fulfilled'?'no positive market price':String(v.reason?.message||v.reason)};
+  });
   const at=new Date();
   const record={
     at:at.toISOString(),
     sampleStart:sample.sampleStart,
     sampleEnd:sample.sampleEnd,
-    model:'nonmarket-wikimedia-r-v3-global-stream-worker-market',
+    model:'nonmarket-wikimedia-r-v4-positive-market-prices',
     oracle,
     markets,
   };
