@@ -9,6 +9,8 @@ import re
 import urllib.error
 import urllib.request
 
+import room_research_architecture as _research
+
 # Load the plain structural model directly, bypassing the legacy live overlay.
 _BASE_PATH = Path(__file__).resolve().parent / "room_private_model.py"
 _SPEC = importlib.util.spec_from_file_location("_room_autonomy_structural_base", _BASE_PATH)
@@ -21,18 +23,21 @@ _SPEC.loader.exec_module(base)
 if "allen" not in base.PEOPLE:
     base.PEOPLE = [*base.PEOPLE, "allen"]
 
-AUTONOMY_ENGINE = "structural-base-no-live-overlay-v2"
+AUTONOMY_ENGINE = "structural-base-selective-context-provenance-v3"
 PEOPLE = base.PEOPLE
 
 AUTONOMY_PROMPTS = {
     "comprehension": (
         "Understand the conversation from this participant's point of view. "
-        "Use the supplied conversation, relationship state, and attention lens as evidence. "
+        "Use the supplied conversation, relationship state, attention lens, and evidence_context as evidence. "
+        "Treat observed speech as evidence that the speaker said something, not automatic proof that its proposition is true. "
         "Base your understanding only on details supported by the conversation."
     ),
     "thought": (
         "Decide what this participant personally wants to do next in the conversation. "
-        "Use their own identity, values, motives, attention, relationship state, and what was actually said. "
+        "Use their own identity, values, motives, attention, relationship state, evidence_context, and what was actually said. "
+        "Form this participant's own position rather than inferring a group consensus. "
+        "A reported claim may be questioned, believed weakly, or left unresolved; it is not a witnessed event merely because someone said it. "
         "Choose among ANSWER, DEEPEN, DISCLOSE, COMPARE, DISAGREE, REPAIR, SUPPORT, CALLBACK, BRIDGE, or CLOSE. "
         "No move is preferred. SUPPORT is appropriate only when this participant actually wants to reinforce or affiliate. "
         "Choose another Room participant as the intended partner. Choose for yourself what matters next."
@@ -41,6 +46,7 @@ AUTONOMY_PROMPTS = {
         "Speak as this participant in the ongoing conversation. "
         "Realize the internally generated intent supplied in the situation: keep its move, focus, and intended partner. "
         "Choose the actual wording yourself from the conversation and this participant's speaking identity. "
+        "Use evidence_context to distinguish what was observed from what was merely claimed. "
         "Use only details supported by the conversation and choose your own wording."
     ),
 }
@@ -119,7 +125,9 @@ def _relationship_context(value: object) -> dict:
 
 
 def _autonomy_compact(payload: dict, role: str, self_entity: str | None = None) -> dict:
-    clean_payload = dict(payload or {})
+    # Smallville/AutoGen lesson: retrieval happens before prompt construction.
+    # Each mind receives a bounded, scored subset rather than the same broadcast window.
+    clean_payload = _research.select_context(dict(payload or {}), role, limit=6)
     clean_payload.pop("conversation_job", None)
     deliberation = clean_payload.get("deliberation")
     if isinstance(deliberation, dict):
@@ -143,6 +151,10 @@ def _autonomy_compact(payload: dict, role: str, self_entity: str | None = None) 
     relation = _relationship_context(relationship)
     if role in {"thought", "expression"} and relation:
         compact["relationship_context"] = relation
+
+    evidence = _research.evidence_context(clean_payload, self_entity, limit=6)
+    if evidence:
+        compact["evidence_context"] = evidence
 
     if role == "expression":
         compact.pop("angle", None)
@@ -195,10 +207,6 @@ def _read_completion(req: urllib.request.Request, timeout: int) -> str:
 
 def _request_autonomy(model_url: str, prompt: str, role: str, temperature: float, timeout: int,
                       self_entity: str | None = None, attempt: int = 0, intent: dict | None = None) -> str:
-    # Keep invisible cognition bounded so 1B requests reliably finish inside
-    # the production request timeout even when attention skills add material.
-    # Thought requests are also serialized across worker processes because the
-    # two-way concurrent pair was repeatedly saturating the tiny local model.
     body = {
         "prompt": prompt,
         "n_predict": {"comprehension": 200, "thought": 170, "expression": 180}.get(role, 180),
@@ -308,7 +316,7 @@ def run(role: str, payload: dict, timeout: int = 30, min_words: int = 5):
             "\nAUTONOMY_RULE\n"
             "Respond naturally to the current conversation. Keep the chosen move, focus, and intended partner while choosing your own words. "
             "Use only details supported by what was actually said. Do not invent unsupported conflict, jealousy, secrets, threats, shared memories, "
-            "or dramatic incidents. Avoid copying recent speech. Stay inside the conversation.\n"
+            "or dramatic incidents. Treat reported claims as reports unless independent evidence is present. Avoid copying recent speech. Stay inside the conversation.\n"
         )
 
     attempts = 3 if role == "expression" else 2
@@ -358,10 +366,6 @@ def run(role: str, payload: dict, timeout: int = 30, min_words: int = 5):
                     last_reason = "intent_partner_not_realized"
                     continue
                 utterance = str(obj.get("utterance") or "").strip()
-                # Preserve strange/short speech, but do not mistake an internal
-                # discourse move label for a public utterance. Retry only while
-                # another attempt remains so this quality guard can never freeze
-                # the Room by itself.
                 bare_words = _words(utterance)
                 bare_move_labels = {
                     "acknowledge", "appreciate", "support", "repair", "answer",
