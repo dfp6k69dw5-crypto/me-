@@ -18,21 +18,6 @@
       "noise": {},
       "room_memories": [
         {
-          "source": "20260828T142701262-mara-v5",
-          "status": "observed",
-          "speaker": "mara",
-          "target": "sarah",
-          "text": ". I need to reach out to you, I need to make sure you get something today.",
-          "move": "support",
-          "discourse": "d-20260828T142701262-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002121",
-          "topic_episode": "topic-002119",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "mara"
-        },
-        {
           "source": "20260828T143451543-mara-v5",
           "status": "observed",
           "speaker": "mara",
@@ -3338,21 +3323,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "jules"
+        },
+        {
+          "source": "20260829T195008150-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "sarah",
+          "text": "repaired conversation by agreeing to disagree and taking a stance on what matters next",
+          "move": "repair",
+          "discourse": "d-20260829T195008150-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000207",
+          "topic_episode": "topic-000206",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T132029679-sarah-v5",
-          "text": "I disagree, I believe your art is worth more than just reproducing what is already out there. Your focus on experimentation and exploration is admirable, but to me, it also implies a lack of accountability and a willingness to disregard traditional forms.",
-          "move": "disclose",
-          "discourse": "d-20260828T132029679-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002086",
-          "topic_episode": "topic-002084",
-          "topic_facet": "art",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T132230908-sarah-v5",
           "text": "You're trying really cool like I've",
@@ -5980,31 +5968,42 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T195005648-sarah-v5",
+          "text": "Jules, I care about you, but I don't feel like we're having a meaningful conversation. It feels like we're just talking about the same old stuff over and over again.",
+          "move": "answer",
+          "discourse": "d-20260829T195005648-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000207",
+          "topic_episode": "topic-000206",
+          "topic_facet": "romantic",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T194816020-jules-v5",
-      "spoken": 2329,
+      "last_event": "20260829T195008150-mara-v5",
+      "spoken": 2330,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.972048203664601,
-          "direct_familiarity": 0.7143201356329792,
+          "exposure": 0.972090131359104,
+          "direct_familiarity": 0.7146629514702196,
           "trust": 0.1,
-          "predictability": 0.2955467159206392,
-          "reciprocity": 0.40296367278962847,
-          "warmth": 0.43980910141623436,
+          "predictability": 0.29589894256267885,
+          "reciprocity": 0.4035010054841178,
+          "warmth": 0.44014521595538464,
           "respect": 0.18077743105208552,
           "disclosure_depth": 0.0,
           "tension": 0.05305945397500949,
-          "direct_turns": 974,
-          "observed_turns": 2339,
+          "direct_turns": 975,
+          "observed_turns": 2340,
           "repair_attempts": 31,
           "repair_successes": 0,
-          "last_direct_cycle": 205,
+          "last_direct_cycle": 207,
           "shared_references": [
-            "i'd like to",
             "like, like",
             "work",
             "like",
@@ -6063,18 +6062,10 @@
             "i want to",
             "room",
             "i think",
-            "interested"
+            "interested",
+            "disagree"
           ],
           "events": [
-            {
-              "cycle": 1988,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260828T102026491-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1990,
               "kind": "repair",
@@ -7502,6 +7493,15 @@
               "kind": "repair",
               "direct": true,
               "message_id": "20260829T194513889-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 207,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T195008150-mara-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -10944,7 +10944,7 @@
         "what_i_want": "update",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat let, i'm, interested as important (repair).",
+            "belief_hypothesis": "mara currently seems to treat disagree as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10961,11 +10961,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: disagree",
           "jules already covered: don't, involved, any",
-          "mara already covered: let, i'm, interested",
-          "jules already covered: i'm, pleasure, help"
+          "mara already covered: let, i'm, interested"
         ],
-        "last_updated_cycle": 206
+        "last_updated_cycle": 207
       }
     },
     "mara": {
@@ -14299,18 +14299,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T134549179-mara-v5",
-          "text": "You've been noticing my skills and how they've been appreciated, what's going on with you?",
-          "move": "support",
-          "discourse": "d-20260828T134549179-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002100",
-          "topic_episode": "topic-002096",
-          "topic_facet": "appreciate",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T134757132-mara-v5",
           "text": "I appreciate what you've been willing to focus on and grow, I see you've made an effort, I appreciate your willingness to focus and that makes me appreciate what you've been doing.",
           "move": "answer",
@@ -16937,16 +16925,28 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T195008150-mara-v5",
+          "text": "repaired conversation by agreeing to disagree and taking a stance on what matters next",
+          "move": "repair",
+          "discourse": "d-20260829T195008150-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000207",
+          "topic_episode": "topic-000206",
+          "topic_facet": "romantic",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T194816020-jules-v5",
-      "spoken": 2339,
+      "last_event": "20260829T195008150-mara-v5",
+      "spoken": 2340,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9716254468289612,
+          "exposure": 0.9716680086587178,
           "direct_familiarity": 0.3883692969266354,
           "trust": 0.1072,
           "predictability": 0.22810593442835647,
@@ -16956,7 +16956,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.30698453824316796,
           "direct_turns": 340,
-          "observed_turns": 2329,
+          "observed_turns": 2330,
           "repair_attempts": 13,
           "repair_successes": 0,
           "last_direct_cycle": 198,
@@ -21883,7 +21883,7 @@
         "what_i_want": "to repair the conversation",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat need, room as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat jules, care as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -21900,11 +21900,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "sarah already covered: jules, care",
           "jules already covered: don't, involved, any",
-          "jules already covered: i'm, pleasure, help",
-          "sarah already covered: need, room"
+          "jules already covered: i'm, pleasure, help"
         ],
-        "last_updated_cycle": 206
+        "last_updated_cycle": 207
       }
     },
     "owen": {
@@ -27899,14 +27899,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T194816020-jules-v5",
+      "last_event": "20260829T195008150-mara-v5",
       "spoken": 2323,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9716254468289612,
+          "exposure": 0.9716680086587178,
           "direct_familiarity": 0.6977345225554247,
           "trust": 0.1,
           "predictability": 0.38615210334894734,
@@ -27916,7 +27916,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.11176076023327633,
           "direct_turns": 927,
-          "observed_turns": 2329,
+          "observed_turns": 2330,
           "repair_attempts": 30,
           "repair_successes": 0,
           "last_direct_cycle": 196,
@@ -29429,7 +29429,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.972048203664601,
+          "exposure": 0.972090131359104,
           "direct_familiarity": 0.45233576955858634,
           "trust": 0.1,
           "predictability": 0.19333187919236014,
@@ -29439,7 +29439,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.19209642223494072,
           "direct_turns": 432,
-          "observed_turns": 2339,
+          "observed_turns": 2340,
           "repair_attempts": 10,
           "repair_successes": 0,
           "last_direct_cycle": 193,
@@ -32708,12 +32708,12 @@
         "what_i_want": "Repair Owen's position",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat need, room as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat jules, care as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat let, i'm, interested as important (repair).",
+            "belief_hypothesis": "mara currently seems to treat disagree as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -32725,11 +32725,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "jules already covered: don't, involved, any",
-          "mara already covered: let, i'm, interested",
-          "jules already covered: i'm, pleasure, help"
+          "mara already covered: disagree",
+          "sarah already covered: jules, care",
+          "jules already covered: don't, involved, any"
         ],
-        "last_updated_cycle": 206
+        "last_updated_cycle": 207
       }
     },
     "jules": {
@@ -32749,21 +32749,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T132407861-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "jules",
-          "text": "You're trying really cool like I've",
-          "move": "repair",
-          "discourse": "d-20260828T132407861-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002088",
-          "topic_episode": "topic-002084",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
         {
           "source": "20260828T132412307-sarah-v5",
           "status": "observed",
@@ -36060,6 +36045,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "sarah"
+        },
+        {
+          "source": "20260829T195005648-sarah-v5",
+          "status": "observed",
+          "speaker": "sarah",
+          "target": "jules",
+          "text": "Jules, I care about you, but I don't feel like we're having a meaningful conversation. It feels like we're just talking about the same old stuff over and over again.",
+          "move": "answer",
+          "discourse": "d-20260829T195005648-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000207",
+          "topic_episode": "topic-000206",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "sarah"
         }
       ],
       "self_history": [
@@ -38704,30 +38704,28 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T194816020-jules-v5",
+      "last_event": "20260829T195008150-mara-v5",
       "spoken": 2335,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9716254468289612,
-          "direct_familiarity": 0.7125998684422319,
+          "exposure": 0.9716680086587178,
+          "direct_familiarity": 0.7129447486001013,
           "trust": 0.1072,
-          "predictability": 0.372922894958322,
-          "reciprocity": 0.49068607381969653,
-          "warmth": 0.469904598242612,
-          "respect": 0.1993686222436049,
+          "predictability": 0.37323643351084285,
+          "reciprocity": 0.4911444563532588,
+          "warmth": 0.47022265548366643,
+          "respect": 0.19972890636359528,
           "disclosure_depth": 0.008,
           "tension": 0.14627488869659752,
-          "direct_turns": 969,
-          "observed_turns": 2329,
+          "direct_turns": 970,
+          "observed_turns": 2330,
           "repair_attempts": 21,
           "repair_successes": 0,
-          "last_direct_cycle": 202,
+          "last_direct_cycle": 207,
           "shared_references": [
-            "project",
-            "garden",
             "shares",
             "focus",
             "reform",
@@ -38785,18 +38783,11 @@
             "changed",
             "i've",
             "need",
-            "room"
+            "room",
+            "jules",
+            "care"
           ],
           "events": [
-            {
-              "cycle": 1985,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260828T101412190-sarah-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1987,
               "kind": "support",
@@ -40227,6 +40218,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 207,
+              "kind": "answer",
+              "direct": true,
+              "message_id": "20260829T195005648-sarah-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -40234,7 +40234,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.972048203664601,
+          "exposure": 0.972090131359104,
           "direct_familiarity": 0.666058608355472,
           "trust": 0.1,
           "predictability": 0.3049578979929879,
@@ -40244,7 +40244,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.1313338991753774,
           "direct_turns": 844,
-          "observed_turns": 2339,
+          "observed_turns": 2340,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 201,
@@ -43522,12 +43522,12 @@
         "what_i_want": "I want to make meaningful progress with mara on the live issue.",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat need, room as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat jules, care as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat let, i'm, interested as important (repair).",
+            "belief_hypothesis": "mara currently seems to treat disagree as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43539,11 +43539,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "mara already covered: let, i'm, interested",
-          "mara already covered: room, i think, i've",
-          "sarah already covered: need, room"
+          "mara already covered: disagree",
+          "sarah already covered: jules, care",
+          "mara already covered: let, i'm, interested"
         ],
-        "last_updated_cycle": 206
+        "last_updated_cycle": 207
       }
     }
   },
