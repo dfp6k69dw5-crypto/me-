@@ -43,6 +43,15 @@ _TOPIC_NOISE = {
     "tough", "hard", "difficult", "easy", "rough",
     "get", "gets", "got", "getting", "leave", "leaves", "left", "leaving",
     "convince", "convinces", "convinced", "convincing",
+    # Pragmatic/discourse connectives organize clauses; they are not what the
+    # Room is talking about. Treat the whole family generically rather than
+    # banning the single canary word that exposed the bug.
+    "despite", "although", "though", "however", "nevertheless", "nonetheless",
+    "whereas", "therefore", "thus", "hence", "moreover", "furthermore",
+    "instead", "otherwise", "anyway", "regardless", "meanwhile", "yet",
+    # Evaluative stance verbs can become lexical attractors without naming a
+    # concrete subject. Keep the object of the stance, not the stance verb.
+    "appreciate", "appreciates", "appreciated", "appreciating", "appreciation",
 }
 
 
@@ -145,6 +154,8 @@ def topic_template(cycle: int = 0) -> dict:
         "focus_turns": 0,
         "last_branch_cycle": int(cycle),
         "escape_pressure": 0,
+        "retired_terms": [],
+        "retired_until_cycle": 0,
     }
 
 
@@ -225,8 +236,6 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
     if schema < SCHEMA or had_runaway_depth:
         schema_upgrade = schema < SCHEMA
         if schema_upgrade:
-            # Schema 8 re-forms the subject under the same independent-support
-            # rule used for facets instead of preserving a one-message root.
             root = None
         candidates = [] if schema_upgrade else [
             source.get("current_facet"),
@@ -257,6 +266,8 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
             "escape_pressure": int(source.get("escape_pressure", 0) or 0),
             "last_shift_cycle": int(source.get("last_shift_cycle", cycle) or cycle),
             "last_branch_cycle": int(cycle),
+            "retired_terms": _unique(source.get("retired_terms") or [], MAX_HISTORY),
+            "retired_until_cycle": int(source.get("retired_until_cycle", 0) or 0),
         })
         migrated["branches"] = _flat_branches(root, facets, cycle)
         return migrated
@@ -267,6 +278,8 @@ def _normalize(topic: dict | None, cycle: int) -> dict:
     defaults["participants"] = list(social.PARTICIPANTS)
     defaults["bridge_pending"] = bool(defaults.get("bridge_pending", False))
     defaults["root"] = root
+    defaults["retired_terms"] = _unique(defaults.get("retired_terms") or [], MAX_HISTORY)
+    defaults["retired_until_cycle"] = int(defaults.get("retired_until_cycle", 0) or 0)
     facets = [term for term in _unique(defaults.get("facets") or [], MAX_FACETS + 1) if not (root and _near(term, root))][:MAX_FACETS]
     defaults["facets"] = facets
     current = _clean(defaults.get("current_facet")) or None
@@ -304,10 +317,6 @@ def new_topic_from_terms(terms, cycle: int, prior: dict | None = None) -> dict:
     if not clean:
         return topic
     root = clean[0]
-    # A new episode gets one defensible subject. Candidate words from the
-    # initiating utterance remain recent context, but they are not ontology
-    # facets until later messages independently support them. This keeps topic
-    # birth under the same MIN_FACET_SUPPORT rule used during continuation.
     facets = []
     topic.update({
         "root": root,
@@ -320,6 +329,9 @@ def new_topic_from_terms(terms, cycle: int, prior: dict | None = None) -> dict:
     })
     if prior and prior.get("current_facet") and _valid_term(prior.get("current_facet")):
         topic["shared_references"] = [_clean(prior.get("current_facet"))]
+        retired = [prior.get("root"), prior.get("current_facet"), *list(prior.get("facets") or [])]
+        topic["retired_terms"] = _unique(retired, MAX_HISTORY)
+        topic["retired_until_cycle"] = int(cycle) + 4
     topic["branches"] = _flat_branches(root, facets, cycle)
     return topic
 
@@ -354,6 +366,9 @@ def update_topic(topic: dict | None, messages, cycle: int) -> dict:
     episode_id = current.get("id")
     min_support = MIN_ROOT_SUPPORT if current.get("root") is None else MIN_FACET_SUPPORT
     terms = topic_terms_from_messages(messages, limit=MAX_RECENT_TERMS, episode_id=episode_id, min_support=min_support)
+    retired = list(current.get("retired_terms") or []) if int(cycle) <= int(current.get("retired_until_cycle", 0) or 0) else []
+    if retired:
+        terms = [term for term in terms if not any(_near(term, old) for old in retired)]
     if current.get("root") is None:
         return new_topic_from_terms(terms, cycle, current)
 
