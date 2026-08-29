@@ -1,7 +1,7 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-private-self-v1-2026-08-28",
-  "cycle": 89,
+  "cycle": 90,
   "messages": 1000,
   "beat_contributors": [
     "sarah",
@@ -13,12 +13,15 @@
     "semantic_schema": 8,
     "id": "topic-000089",
     "root": "room",
-    "current_facet": "room",
-    "facets": [],
-    "visited_facets": [
-      "room"
+    "current_facet": "despite",
+    "facets": [
+      "despite"
     ],
-    "facet_index": 0,
+    "visited_facets": [
+      "room",
+      "despite"
+    ],
+    "facet_index": 1,
     "unresolved": [],
     "examples": [],
     "disagreements": [],
@@ -32,10 +35,10 @@
       "jules",
       "allen"
     ],
-    "turns": 0,
+    "turns": 2,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "room"
+      "despite"
     ],
     "last_shift_cycle": 89,
     "status": "active",
@@ -45,15 +48,24 @@
         "label": "room",
         "parent": null,
         "depth": 0,
-        "first_cycle": 89,
-        "last_cycle": 89,
+        "first_cycle": 90,
+        "last_cycle": 90,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "despite",
+        "parent": "room",
+        "depth": 1,
+        "first_cycle": 90,
+        "last_cycle": 90,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [],
     "focus_turns": 0,
-    "last_branch_cycle": 89,
+    "last_branch_cycle": 90,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -61,12 +73,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-28T17:18:26.482457Z",
-  "last_public_event": "20260829T074812308-jules-v5",
+  "last_public_event": "20260829T085241611-jules-v5",
   "last_speaker": "jules",
-  "last_beat_id": "beat-room-private-self-v1-2026-08-28-000089",
+  "last_beat_id": "beat-room-private-self-v1-2026-08-28-000090",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
   "context_scope_version": 1,
-  "last_run": "2026-08-29T07:48:14.938594Z"
+  "last_run": "2026-08-29T08:52:44.286317Z"
 }
