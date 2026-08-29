@@ -18,21 +18,6 @@
       "noise": {},
       "room_memories": [
         {
-          "source": "20260828T142348433-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "sarah",
-          "text": "Rather, focus on getting specific details about our situation.",
-          "move": "deepen",
-          "discourse": "d-20260828T142348433-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002119",
-          "topic_episode": "topic-002117",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
-        {
           "source": "20260828T142654845-owen-v5",
           "status": "observed",
           "speaker": "owen",
@@ -3338,6 +3323,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "mara"
+        },
+        {
+          "source": "20260829T194513889-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "sarah",
+          "text": "I had to let you know that I'm not interested in pursuing a relationship with you after all. Please respect my wishes.",
+          "move": "repair",
+          "discourse": "d-20260829T194513889-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000205",
+          "topic_episode": "topic-000204",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
@@ -5982,29 +5982,28 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T194323855-jules-v5",
+      "last_event": "20260829T194513889-mara-v5",
       "spoken": 2329,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9720062129840771,
-          "direct_familiarity": 0.7139769079224862,
+          "exposure": 0.972048203664601,
+          "direct_familiarity": 0.7143201356329792,
           "trust": 0.1,
-          "predictability": 0.2951943130771778,
-          "reciprocity": 0.4024258560600825,
-          "warmth": 0.4394727850872867,
+          "predictability": 0.2955467159206392,
+          "reciprocity": 0.40296367278962847,
+          "warmth": 0.43980910141623436,
           "respect": 0.18077743105208552,
           "disclosure_depth": 0.0,
           "tension": 0.05305945397500949,
-          "direct_turns": 973,
-          "observed_turns": 2338,
+          "direct_turns": 974,
+          "observed_turns": 2339,
           "repair_attempts": 31,
           "repair_successes": 0,
-          "last_direct_cycle": 203,
+          "last_direct_cycle": 205,
           "shared_references": [
-            "i'd like",
             "i'd like to",
             "like, like",
             "work",
@@ -6063,18 +6062,10 @@
             "importance",
             "i want to",
             "room",
-            "i think"
+            "i think",
+            "interested"
           ],
           "events": [
-            {
-              "cycle": 1986,
-              "kind": "support",
-              "direct": true,
-              "message_id": "20260828T101624762-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1988,
               "kind": "repair",
@@ -7502,6 +7493,15 @@
               "kind": "disclose",
               "direct": true,
               "message_id": "20260829T193958364-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 205,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T194513889-mara-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -10944,7 +10944,7 @@
         "what_i_want": "update",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat room, i think, i've as important (disclose).",
+            "belief_hypothesis": "mara currently seems to treat let, i'm, interested as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10961,11 +10961,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: let, i'm, interested",
           "jules already covered: i'm, pleasure, help",
-          "mara already covered: room, i think, i've",
-          "mara already covered: i'm, sorry, said"
+          "mara already covered: room, i think, i've"
         ],
-        "last_updated_cycle": 204
+        "last_updated_cycle": 205
       }
     },
     "mara": {
@@ -14299,18 +14299,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T134359844-mara-v5",
-          "text": "I know I've seen some suspicious activities from you. I'm not going to be the one to spread rumors,",
-          "move": "repair",
-          "discourse": "d-20260828T134359844-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002099",
-          "topic_episode": "topic-002096",
-          "topic_facet": "skills",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T134549179-mara-v5",
           "text": "You've been noticing my skills and how they've been appreciated, what's going on with you?",
           "move": "support",
@@ -16937,10 +16925,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T194513889-mara-v5",
+          "text": "I had to let you know that I'm not interested in pursuing a relationship with you after all. Please respect my wishes.",
+          "move": "repair",
+          "discourse": "d-20260829T194513889-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000205",
+          "topic_episode": "topic-000204",
+          "topic_facet": "pleasure",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T194323855-jules-v5",
-      "spoken": 2338,
+      "last_event": "20260829T194513889-mara-v5",
+      "spoken": 2339,
       "silences": 0,
       "people": {
         "sarah": {
@@ -21904,7 +21904,7 @@
           "sarah already covered: need, room",
           "jules already covered: need, get, room"
         ],
-        "last_updated_cycle": 204
+        "last_updated_cycle": 205
       }
     },
     "owen": {
@@ -27899,7 +27899,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T194323855-jules-v5",
+      "last_event": "20260829T194513889-mara-v5",
       "spoken": 2323,
       "silences": 0,
       "people": {
@@ -29429,7 +29429,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9720062129840771,
+          "exposure": 0.972048203664601,
           "direct_familiarity": 0.45233576955858634,
           "trust": 0.1,
           "predictability": 0.19333187919236014,
@@ -29439,7 +29439,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.19209642223494072,
           "direct_turns": 432,
-          "observed_turns": 2338,
+          "observed_turns": 2339,
           "repair_attempts": 10,
           "repair_successes": 0,
           "last_direct_cycle": 193,
@@ -32713,7 +32713,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat room, i think, i've as important (disclose).",
+            "belief_hypothesis": "mara currently seems to treat let, i'm, interested as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -32725,11 +32725,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: let, i'm, interested",
           "jules already covered: i'm, pleasure, help",
-          "mara already covered: room, i think, i've",
-          "sarah already covered: need, room"
+          "mara already covered: room, i think, i've"
         ],
-        "last_updated_cycle": 204
+        "last_updated_cycle": 205
       }
     },
     "jules": {
@@ -38704,7 +38704,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T194323855-jules-v5",
+      "last_event": "20260829T194513889-mara-v5",
       "spoken": 2334,
       "silences": 0,
       "people": {
@@ -40234,7 +40234,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9720062129840771,
+          "exposure": 0.972048203664601,
           "direct_familiarity": 0.666058608355472,
           "trust": 0.1,
           "predictability": 0.3049578979929879,
@@ -40244,7 +40244,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.1313338991753774,
           "direct_turns": 844,
-          "observed_turns": 2338,
+          "observed_turns": 2339,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 201,
@@ -43527,7 +43527,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat room, i think, i've as important (disclose).",
+            "belief_hypothesis": "mara currently seems to treat let, i'm, interested as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43539,11 +43539,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: let, i'm, interested",
           "mara already covered: room, i think, i've",
-          "sarah already covered: need, room",
-          "mara already covered: i'm, sorry, said"
+          "sarah already covered: need, room"
         ],
-        "last_updated_cycle": 204
+        "last_updated_cycle": 205
       }
     }
   },
