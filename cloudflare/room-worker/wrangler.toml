@@ -1,14 +1,25 @@
 name = "room-live-mirror"
-main = "src/open-allen.js"
+main = "src/oracle-logger.js"
 compatibility_date = "2026-08-17"
 workers_dev = true
 # keyless Allen participant wrapper 2026-08-24
+
+[triggers]
+crons = ["* * * * *"]
 
 [[durable_objects.bindings]]
 name = "ROOM"
 class_name = "RoomState"
 
+[[durable_objects.bindings]]
+name = "ORACLE"
+class_name = "OracleState"
+
 [exports.RoomState]
+type = "durable-object"
+storage = "sqlite"
+
+[exports.OracleState]
 type = "durable-object"
 storage = "sqlite"
 
