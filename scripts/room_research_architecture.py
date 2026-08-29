@@ -18,10 +18,18 @@ _STOP = {
     "would", "could", "should", "about", "just", "really", "still", "into", "because",
     "think", "thinking", "thought", "know", "knows", "knowing", "said", "says", "say",
 }
+_FILLER = {
+    "like", "really", "just", "well", "okay", "yeah", "maybe", "actually", "basically",
+    "literally", "kind", "sort", "thing", "things", "something", "anyway", "so",
+}
 
 
 def _norm(value: Any) -> str:
     return re.sub(r"\s+", " ", str(value or "")).strip().lower()
+
+
+def _word_list(value: Any) -> list[str]:
+    return re.findall(r"[a-z0-9']+", _norm(value))
 
 
 def _tokens(value: Any) -> set[str]:
@@ -51,6 +59,62 @@ def evidence_type(item: Any, self_entity: str | None = None) -> str:
     if speaker in _AUTONOMOUS:
         return "heard_agent_utterance"
     return "legacy_unknown_source"
+
+
+def autonomous_text_issue(item: Any) -> str | None:
+    """Identify autonomous output that must not become another mind's evidence.
+
+    This is deliberately source-sensitive: Allen's text is never hidden by this guard,
+    even when it is repetitive, malformed, adversarial, or testing the Room. The guard
+    applies only to model-authored speech and preserves the persisted history unchanged.
+    """
+    if not isinstance(item, dict):
+        return None
+    speaker = _norm(item.get("speaker"))
+    if speaker not in _AUTONOMOUS:
+        return None
+    text = str(item.get("text") or "").strip()
+    low = _norm(text)
+    if not low:
+        return "empty"
+    if low in {"rejected_wording", "try_again", "return_structured_data_only"}:
+        return "control_sentinel"
+    if text in {"{", "}", "[", "]"}:
+        return "structured_debris"
+    if (text.startswith("{") and text.endswith("}")) or (text.startswith("[") and text.endswith("]")):
+        return "structured_debris"
+
+    words = _word_list(text)
+    if not words:
+        return "empty"
+    if re.search(r"\b([a-z][a-z']{2,})(?:\s+\1){2,}\b", low, re.I):
+        return "token_loop"
+
+    counts: dict[str, int] = {}
+    for word in words:
+        counts[word] = counts.get(word, 0) + 1
+    peak = max(counts.values(), default=0)
+    if len(words) >= 3 and peak >= 3 and peak / len(words) >= 0.30:
+        return "dominant_token"
+
+    filler_count = sum(1 for word in words if word in _FILLER)
+    if len(words) >= 8 and filler_count >= 5 and filler_count / len(words) >= 0.28:
+        return "filler_collapse"
+
+    # Process-language is not rejected merely for containing one ordinary word.
+    # It becomes suspect when several implementation/scaffold concepts appear in a
+    # model-authored public utterance without a user having introduced that subject.
+    process_hits = sum(
+        1 for token in (
+            "grounding", "semantic", "schema", "prompt", "topic", "facet", "noun",
+            "structured", "generation", "response format", "move type",
+        )
+        if token in low
+    )
+    conversation_hits = sum(1 for token in ("conversation", "discussion", "subject", "utterance", "reply") if token in low)
+    if process_hits >= 2 or (process_hits >= 1 and conversation_hits >= 1):
+        return "process_scaffold"
+    return None
 
 
 def _move(item: Any) -> str:
@@ -104,14 +168,24 @@ def _score_message(item: dict, index: int, total: int, entity: str, profile: dic
 def select_context(payload: dict, role: str, limit: int = 6) -> dict:
     """Give each agent a bounded, individually scored view instead of one broadcast transcript."""
     out = dict(payload or {})
-    context = out.get("context") if isinstance(out.get("context"), list) else []
+    raw_context = out.get("context") if isinstance(out.get("context"), list) else []
     entity = _norm(out.get("entity"))
     profile = out.get("profile") if isinstance(out.get("profile"), dict) else {}
     topic = out.get("topic") if isinstance(out.get("topic"), dict) else {}
+
+    # Do not let one bad model line become the next minds' evidence. Allen is exempt:
+    # user speech remains authoritative input even when deliberately pathological.
+    context = [item for item in raw_context if not autonomous_text_issue(item)]
+    if not context:
+        context = [item for item in raw_context if isinstance(item, dict) and _norm(item.get("speaker")) == "allen"][-1:]
+    out["context"] = context
+
     if entity not in _AUTONOMOUS or len(context) <= 2:
+        if context:
+            out["event"] = context[-1]
         return out
 
-    # The newest event is always available. Older items compete for a small
+    # The newest clean event is always available. Older items compete for a small
     # agent-specific working-memory budget.
     newest = context[-1]
     candidates = context[:-1]
@@ -125,9 +199,13 @@ def select_context(payload: dict, role: str, limit: int = 6) -> dict:
     selected.append(newest)
     out["context"] = selected[-limit:]
 
+    # Event follows the clean working context. A quarantined autonomous event cannot
+    # sneak back in through a separate payload field after being removed above.
     event = out.get("event")
-    if isinstance(event, dict) and event not in out["context"]:
-        out["context"] = (out["context"] + [event])[-limit:]
+    if isinstance(event, dict) and autonomous_text_issue(event):
+        event = None
+    if not isinstance(event, dict) or event not in out["context"]:
+        out["event"] = out["context"][-1] if out["context"] else None
     return out
 
 
@@ -137,7 +215,7 @@ def evidence_context(payload: dict, self_entity: str | None = None, limit: int =
     me = _norm(self_entity or payload.get("entity"))
     out: list[dict] = []
     for item in context[-limit:]:
-        if not isinstance(item, dict):
+        if not isinstance(item, dict) or autonomous_text_issue(item):
             continue
         etype = evidence_type(item, me)
         out.append({
@@ -156,6 +234,11 @@ def guard_private_self_inputs(perception: Any, deliberation: Any, latest_event: 
     d = dict(deliberation) if isinstance(deliberation, dict) else {}
     etype = evidence_type(latest_event, None)
     speaker = _norm((latest_event or {}).get("speaker")) if isinstance(latest_event, dict) else ""
+
+    if autonomous_text_issue(latest_event):
+        p = {}
+        d = {}
+        return p, d
 
     if etype in {"heard_allen_claim", "heard_agent_utterance"}:
         try:
@@ -203,6 +286,10 @@ def annotate_memory_provenance(mind: dict) -> dict:
             item.setdefault("observed_object", "utterance")
             if speaker:
                 item.setdefault("reported_by", speaker)
+            issue = autonomous_text_issue(item)
+            if issue:
+                item.setdefault("retrieval_status", "quarantined_degenerate")
+                item.setdefault("quarantine_reason", issue)
     return mind
 
 
@@ -214,6 +301,7 @@ def memory_public_slice(item: Any) -> dict:
         "source_type": str(item.get("source_type") or "legacy_unknown_source"),
         "proposition_status": str(item.get("proposition_status") or "unknown"),
         "reported_by": item.get("reported_by") or item.get("speaker"),
+        "retrieval_status": item.get("retrieval_status") or "available",
     }
 
 
@@ -237,6 +325,15 @@ def selftest() -> None:
     mind = {"entities": {"owen": {"room_memories": [{"speaker": "allen", "text": "X"}], "self_history": [{"text": "Y"}]}}}
     annotate_memory_provenance(mind)
     assert mind["entities"]["owen"]["room_memories"][0]["source_type"] == "heard_allen_claim"
+
+    jules_sludge = {"speaker": "jules", "text": "i see like it's like like you said the subject is change, subject, and like it's like it's really like it's like, like, huh?"}
+    assert autonomous_text_issue(jules_sludge) in {"dominant_token", "filler_collapse"}
+    scaffold = {"speaker": "sarah", "text": "Grounding is changing, but it's not in the new noun, it's like in the old one."}
+    assert autonomous_text_issue(scaffold) == "process_scaffold"
+    allen_test = {"speaker": "allen", "text": "like like like like like"}
+    assert autonomous_text_issue(allen_test) is None
+    selected = select_context({**base, "context": [base["context"][1], jules_sludge, scaffold]}, "thought", 3)
+    assert [x["speaker"] for x in selected["context"]] == ["allen"]
 
 
 if __name__ == "__main__":
