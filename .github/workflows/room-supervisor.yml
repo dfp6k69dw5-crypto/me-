@@ -33,9 +33,9 @@ jobs:
           git config user.name "room-supervisor"
           git config user.email "actions@users.noreply.github.com"
 
-          # A stale published feed is expected while a replacement runner is
-          # downloading/loading its local model. Never dispatch another Room
-          # on top of a runner that is already queued or active.
+          # The pulse chain is the sole Room launch authority. The supervisor
+          # observes and records liveness, but never starts a competing Room run.
+          # This avoids launch races with the pulse chain and Room self-handoff.
           room_runs="$(gh run list \
             --repo "$GITHUB_REPOSITORY" \
             --workflow sarah-society.yml \
@@ -43,7 +43,7 @@ jobs:
             --json databaseId,status,createdAt 2>/dev/null || printf '[]')"
           active_room="$(printf '%s' "$room_runs" | jq -r '[.[] | select(.status == "in_progress" or .status == "queued" or .status == "pending" or .status == "waiting" or .status == "requested")] | first | .databaseId // empty')"
           if [ -n "$active_room" ]; then
-            echo "Room run $active_room is already queued/active; supervisor will not restart it"
+            echo "Room run $active_room is already queued/active; supervisor will not interfere"
             exit 0
           fi
 
@@ -79,9 +79,11 @@ jobs:
           done
           [ "$published" -eq 1 ] || exit 1
 
-          if [ "$action" = "restart" ] || [ "$action" = "probe_restart" ]; then
-            echo "Supervisor is starting one bounded replacement runner"
-            gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto
-          elif [ "$action" = "circuit_open" ]; then
-            echo "Room replacement circuit is open; refusing another identical restart loop during cooldown"
-          fi
+          case "$action" in
+            restart|probe_restart)
+              echo "Supervisor recorded '$action'; pulse chain owns restart dispatch"
+              ;;
+            circuit_open)
+              echo "Room replacement circuit is open; pulse chain remains authoritative"
+              ;;
+          esac
