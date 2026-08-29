@@ -5983,14 +5983,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T195235794-jules-v5",
+      "last_event": "20260829T195504158-mara-v5",
       "spoken": 2330,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9721319961620654,
+          "exposure": 0.9721737981678222,
           "direct_familiarity": 0.7150053559284554,
           "trust": 0.1,
           "predictability": 0.2953071446775535,
@@ -6000,7 +6000,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.06252885943525939,
           "direct_turns": 976,
-          "observed_turns": 2341,
+          "observed_turns": 2342,
           "repair_attempts": 31,
           "repair_successes": 0,
           "last_direct_cycle": 208,
@@ -9036,7 +9036,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9719220422863409,
+          "exposure": 0.9719641592229115,
           "direct_familiarity": 0.46916903034586727,
           "trust": 0.11434240000000001,
           "predictability": 0.25811116040268706,
@@ -9046,7 +9046,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.23531038104765487,
           "direct_turns": 458,
-          "observed_turns": 2336,
+          "observed_turns": 2337,
           "repair_attempts": 6,
           "repair_successes": 0,
           "last_direct_cycle": 206,
@@ -10945,7 +10945,7 @@
         "what_i_want": "update",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat don't, please, remember as important (disagree).",
+            "belief_hypothesis": "mara currently seems to treat i take a stance as important (support).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10955,18 +10955,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat don't, take, burden as important (support).",
+            "belief_hypothesis": "jules currently seems to treat i take a stance as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "jules already covered: don't, take, burden",
-          "owen already covered: i take a stance, i take",
-          "mara already covered: don't, please, remember"
+          "mara already covered: i take a stance",
+          "jules already covered: i take a stance",
+          "jules already covered: don't, take, burden"
         ],
-        "last_updated_cycle": 208
+        "last_updated_cycle": 209
       }
     },
     "mara": {
@@ -10987,21 +10987,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T132945452-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "mara",
-          "text": "I love the feeling of walking in the woods when the seasons change. There's something about the transition that just feels right.",
-          "move": "answer",
-          "discourse": "d-20260828T132945452-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002091",
-          "topic_episode": "topic-002090",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
         {
           "source": "20260828T133657535-owen-v5",
           "status": "observed",
@@ -14297,21 +14282,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "jules"
+        },
+        {
+          "source": "20260829T195501690-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "mara",
+          "text": "I refuse to change my stance",
+          "move": "repair",
+          "discourse": "d-20260829T195501690-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000209",
+          "topic_episode": "topic-000206",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "jules"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T134952147-mara-v5",
-          "text": "You've appreciated me, Mara,",
-          "move": "support",
-          "discourse": "d-20260828T134952147-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002102",
-          "topic_episode": "topic-002096",
-          "topic_facet": "coherence",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T135146331-mara-v5",
           "text": "I just wanted to share the truth, and I'm not going to sugarcoat it. Honestly, I've felt really uneasy about the way our home environment has been changing,",
@@ -16939,10 +16927,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T195504158-mara-v5",
+          "text": "don't, take, burden",
+          "move": "support",
+          "discourse": "d-20260829T195504158-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000209",
+          "topic_episode": "topic-000206",
+          "topic_facet": "i take a stance",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T195235794-jules-v5",
-      "spoken": 2341,
+      "last_event": "20260829T195504158-mara-v5",
+      "spoken": 2342,
       "silences": 0,
       "people": {
         "sarah": {
@@ -19994,22 +19994,21 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9719220422863409,
-          "direct_familiarity": 0.6283956790726436,
+          "exposure": 0.9719641592229115,
+          "direct_familiarity": 0.6288416042577565,
           "trust": 0.1,
-          "predictability": 0.3504402062316792,
-          "reciprocity": 0.44979098351230246,
-          "warmth": 0.38942234520527624,
+          "predictability": 0.3507649861285634,
+          "reciprocity": 0.4502861716271414,
+          "warmth": 0.38978869179815306,
           "respect": 0.25264885919881414,
           "disclosure_depth": 0.0,
           "tension": 0.2027020004106831,
-          "direct_turns": 755,
-          "observed_turns": 2336,
+          "direct_turns": 756,
+          "observed_turns": 2337,
           "repair_attempts": 11,
           "repair_successes": 0,
-          "last_direct_cycle": 208,
+          "last_direct_cycle": 209,
           "shared_references": [
-            "shared work",
             "gardens",
             "can't",
             "dismiss",
@@ -20068,18 +20067,10 @@
             "pleasure",
             "help",
             "take",
-            "burden"
+            "burden",
+            "i take a stance"
           ],
           "events": [
-            {
-              "cycle": 1905,
-              "kind": "disclose",
-              "direct": true,
-              "message_id": "20260828T074216516-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1907,
               "kind": "deepen",
@@ -21510,6 +21501,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 209,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T195501690-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -21895,18 +21895,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat don't, take, burden as important (support).",
+            "belief_hypothesis": "jules currently seems to treat i take a stance as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: i take a stance",
           "jules already covered: don't, take, burden",
-          "owen already covered: i take a stance, i take",
-          "sarah already covered: jules, care"
+          "owen already covered: i take a stance, i take"
         ],
-        "last_updated_cycle": 208
+        "last_updated_cycle": 209
       }
     },
     "owen": {
@@ -27902,7 +27902,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T195235794-jules-v5",
+      "last_event": "20260829T195504158-mara-v5",
       "spoken": 2324,
       "silences": 0,
       "people": {
@@ -29432,7 +29432,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9721319961620654,
+          "exposure": 0.9721737981678222,
           "direct_familiarity": 0.45233576955858634,
           "trust": 0.1,
           "predictability": 0.19333187919236014,
@@ -29442,7 +29442,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.19209642223494072,
           "direct_turns": 432,
-          "observed_turns": 2341,
+          "observed_turns": 2342,
           "repair_attempts": 10,
           "repair_successes": 0,
           "last_direct_cycle": 193,
@@ -30955,7 +30955,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9719220422863409,
+          "exposure": 0.9719641592229115,
           "direct_familiarity": 0.7332182907512832,
           "trust": 0.1,
           "predictability": 0.3544685293428498,
@@ -30965,7 +30965,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.09988336231028608,
           "direct_turns": 1031,
-          "observed_turns": 2336,
+          "observed_turns": 2337,
           "repair_attempts": 17,
           "repair_successes": 0,
           "last_direct_cycle": 201,
@@ -32716,23 +32716,23 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat don't, please, remember as important (disagree).",
+            "belief_hypothesis": "mara currently seems to treat i take a stance as important (support).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat don't, take, burden as important (support).",
+            "belief_hypothesis": "jules currently seems to treat i take a stance as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "jules already covered: don't, take, burden",
-          "mara already covered: don't, please, remember",
-          "mara already covered: disagree"
+          "mara already covered: i take a stance",
+          "jules already covered: i take a stance",
+          "jules already covered: don't, take, burden"
         ],
-        "last_updated_cycle": 208
+        "last_updated_cycle": 209
       }
     },
     "jules": {
@@ -32753,21 +32753,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T132412307-sarah-v5",
-          "status": "observed",
-          "speaker": "sarah",
-          "target": "jules",
-          "text": "I'm glad to hear you're interested in art. I've been trying to stay in the zone, focusing on the bigger picture. I'm not sure what Sarah is trying to convey, but it seems like she's trying to distract me from the main point.",
-          "move": "disclose",
-          "discourse": "d-20260828T132412307-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002088",
-          "topic_episode": "topic-002084",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "sarah"
-        },
         {
           "source": "20260828T132610798-sarah-v5",
           "status": "observed",
@@ -36064,21 +36049,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "sarah"
+        },
+        {
+          "source": "20260829T195504158-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "jules",
+          "text": "don't, take, burden",
+          "move": "support",
+          "discourse": "d-20260829T195504158-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000209",
+          "topic_episode": "topic-000206",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T133125708-jules-v5",
-          "text": "But I love where we're going, Owen, to see how our nature might be linked. Let's follow the nature trail to the first city and explore the surrounding woods.",
-          "move": "repair",
-          "discourse": "d-20260828T133125708-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002092",
-          "topic_episode": "topic-002090",
-          "topic_facet": "nature",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T133325142-jules-v5",
           "text": "I think there's something missing in our relationship and I want to talk to Sarah about it.",
@@ -38706,10 +38694,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T195501690-jules-v5",
+          "text": "I refuse to change my stance",
+          "move": "repair",
+          "discourse": "d-20260829T195501690-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000209",
+          "topic_episode": "topic-000206",
+          "topic_facet": "i take a stance",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T195235794-jules-v5",
-      "spoken": 2336,
+      "last_event": "20260829T195504158-mara-v5",
+      "spoken": 2337,
       "silences": 0,
       "people": {
         "sarah": {
@@ -40238,22 +40238,21 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9721319961620654,
-          "direct_familiarity": 0.666058608355472,
+          "exposure": 0.9721737981678222,
+          "direct_familiarity": 0.6664593380254454,
           "trust": 0.1,
           "predictability": 0.3049578979929879,
           "reciprocity": 0.4166609273660947,
-          "warmth": 0.4119044127615595,
+          "warmth": 0.41225727011390256,
           "respect": 0.23804347690814573,
           "disclosure_depth": 0.0,
           "tension": 0.1313338991753774,
-          "direct_turns": 844,
-          "observed_turns": 2341,
+          "direct_turns": 845,
+          "observed_turns": 2342,
           "repair_attempts": 19,
           "repair_successes": 0,
-          "last_direct_cycle": 201,
+          "last_direct_cycle": 209,
           "shared_references": [
-            "clear",
             "see",
             "now",
             "we've",
@@ -40312,18 +40311,10 @@
             "agree",
             "i'm",
             "sorry",
-            "said"
+            "said",
+            "i take a stance"
           ],
           "events": [
-            {
-              "cycle": 1912,
-              "kind": "disclose",
-              "direct": true,
-              "message_id": "20260828T075556376-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1913,
               "kind": "answer",
@@ -41753,6 +41744,15 @@
               "message_id": "20260829T193548639-mara-v5",
               "risk": 0,
               "repair": true,
+              "disagreement": false
+            },
+            {
+              "cycle": 209,
+              "kind": "support",
+              "direct": true,
+              "message_id": "20260829T195504158-mara-v5",
+              "risk": 0,
+              "repair": false,
               "disagreement": false
             }
           ],
@@ -43531,7 +43531,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat don't, please, remember as important (disagree).",
+            "belief_hypothesis": "mara currently seems to treat i take a stance as important (support).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43543,11 +43543,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: i take a stance",
           "owen already covered: i take a stance, i take",
-          "mara already covered: don't, please, remember",
-          "mara already covered: disagree"
+          "mara already covered: don't, please, remember"
         ],
-        "last_updated_cycle": 208
+        "last_updated_cycle": 209
       }
     }
   },
