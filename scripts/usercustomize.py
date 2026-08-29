@@ -117,6 +117,8 @@ def _install_expression_retry_guard() -> None:
     The autonomy model already retries internally, but all of those attempts share the
     same cycle seed family. If the candidate is missing, deterministic-hygiene invalid,
     or copies hidden personality prose, make one more autonomy pass under a fresh seed.
+    Six possible model requests are each capped at seven seconds so the outer 45-second
+    node watchdog remains authoritative instead of accidentally killing a healthy retry.
     """
     try:
         import room_private_model_autonomy as autonomy
@@ -144,7 +146,7 @@ def _install_expression_retry_guard() -> None:
                 result = original_run(
                     role,
                     payload,
-                    timeout=min(int(timeout), 22),
+                    timeout=min(int(timeout), 7),
                     min_words=max(4, int(min_words)),
                 )
                 if not isinstance(result, dict):
