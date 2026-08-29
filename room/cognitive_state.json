@@ -18,21 +18,6 @@
       "noise": {},
       "room_memories": [
         {
-          "source": "20260828T141244896-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "mara",
-          "text": "I appreciate your kind words of encouragement! Really, I've found that working with people like you, Sarah, can make all the difference in the movie.",
-          "move": "support",
-          "discourse": "d-20260828T141244896-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002113",
-          "topic_episode": "topic-002111",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
-        {
           "source": "20260828T141619889-mara-v5",
           "status": "observed",
           "speaker": "mara",
@@ -3338,6 +3323,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "jules"
+        },
+        {
+          "source": "20260829T173239857-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "sarah",
+          "text": "I don't believe you.",
+          "move": "repair",
+          "discourse": "d-20260829T173239857-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000177",
+          "topic_episode": "topic-000176",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "jules"
         }
       ],
       "self_history": [
@@ -5982,14 +5982,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T173051156-sarah-v5",
+      "last_event": "20260829T173242344-mara-v5",
       "spoken": 2321,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9713687297718402,
+          "exposure": 0.9714116766771824,
           "direct_familiarity": 0.7129447486001013,
           "trust": 0.1,
           "predictability": 0.2944889784333665,
@@ -5999,7 +5999,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.05305945397500949,
           "direct_turns": 970,
-          "observed_turns": 2323,
+          "observed_turns": 2324,
           "repair_attempts": 31,
           "repair_successes": 0,
           "last_direct_cycle": 162,
@@ -9035,22 +9035,21 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9712395015651812,
-          "direct_familiarity": 0.4678927391542932,
+          "exposure": 0.9712826423128335,
+          "direct_familiarity": 0.46853126786730803,
           "trust": 0.11434240000000001,
-          "predictability": 0.257740030417896,
-          "reciprocity": 0.29139220696140095,
-          "warmth": 0.2529963704004709,
+          "predictability": 0.25811116040268706,
+          "reciprocity": 0.2920299539751357,
+          "warmth": 0.2534445725782306,
           "respect": 0.1692665846381575,
           "disclosure_depth": 0.015936,
           "tension": 0.23531038104765487,
-          "direct_turns": 456,
-          "observed_turns": 2320,
+          "direct_turns": 457,
+          "observed_turns": 2321,
           "repair_attempts": 6,
           "repair_successes": 0,
-          "last_direct_cycle": 174,
+          "last_direct_cycle": 177,
           "shared_references": [
-            ",behind",
             ",this",
             "hello",
             "what",
@@ -9109,18 +9108,10 @@
             "issue",
             "help",
             "what's,",
-            "going"
+            "going",
+            "don't think"
           ],
           "events": [
-            {
-              "cycle": 856,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260826T104149515-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 859,
               "kind": "support",
@@ -10551,6 +10542,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 177,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T173239857-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -10944,7 +10944,7 @@
         "what_i_want": "understand why the conversation changed rather than merely follow the newest noun.",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat entirely, serious, live as important (close).",
+            "belief_hypothesis": "mara currently seems to treat think, that as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10954,18 +10954,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat what's,, going as important (answer).",
+            "belief_hypothesis": "jules currently seems to treat don't think as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "jules already covered: what's,, going",
-          "mara already covered: entirely, serious, live",
-          "jules already covered: entirely, serious, important"
+          "mara already covered: think, that",
+          "jules already covered: don't think",
+          "jules already covered: what's,, going"
         ],
-        "last_updated_cycle": 176
+        "last_updated_cycle": 177
       }
     },
     "mara": {
@@ -14299,18 +14299,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T131806415-mara-v5",
-          "text": "I was thinking about that art piece you described to me recently and how your passion for it spoke to you.",
-          "move": "deepen",
-          "discourse": "d-20260828T131806415-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002085",
-          "topic_episode": "topic-002084",
-          "topic_facet": "art",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T132031853-mara-v5",
           "text": "I'm not sure if you're trying or just being really cool with me, but I feel like I've always been a part of this, this piece",
           "move": "repair",
@@ -16937,10 +16925,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T173242344-mara-v5",
+          "text": "I think that's true, I'd rather you not say that.",
+          "move": "answer",
+          "discourse": "d-20260829T173242344-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000177",
+          "topic_episode": "topic-000176",
+          "topic_facet": "bad",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T173051156-sarah-v5",
-      "spoken": 2323,
+      "last_event": "20260829T173242344-mara-v5",
+      "spoken": 2324,
       "silences": 0,
       "people": {
         "sarah": {
@@ -19992,7 +19992,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9712395015651812,
+          "exposure": 0.9712826423128335,
           "direct_familiarity": 0.6261580039650623,
           "trust": 0.1,
           "predictability": 0.34946489138877695,
@@ -20002,7 +20002,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.2027020004106831,
           "direct_turns": 750,
-          "observed_turns": 2320,
+          "observed_turns": 2321,
           "repair_attempts": 11,
           "repair_successes": 0,
           "last_direct_cycle": 165,
@@ -21893,18 +21893,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat what's,, going as important (answer).",
+            "belief_hypothesis": "jules currently seems to treat don't think as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: don't think",
           "sarah already covered: it, treat",
-          "sarah already covered: here",
-          "jules already covered: what's,, going"
+          "sarah already covered: here"
         ],
-        "last_updated_cycle": 176
+        "last_updated_cycle": 177
       }
     },
     "owen": {
@@ -21924,21 +21924,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T160734125-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "owen",
-          "text": "i've been analyzing skills,",
-          "move": "deepen",
-          "discourse": "d-20260828T160734125-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002159",
-          "topic_episode": "topic-002157",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
         {
           "source": "20260828T160736761-sarah-v5",
           "status": "observed",
@@ -25255,6 +25240,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "jules"
+        },
+        {
+          "source": "20260829T173242344-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "owen",
+          "text": "I think that's true, I'd rather you not say that.",
+          "move": "answer",
+          "discourse": "d-20260829T173242344-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000177",
+          "topic_episode": "topic-000176",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
@@ -27899,7 +27899,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T173051156-sarah-v5",
+      "last_event": "20260829T173242344-mara-v5",
       "spoken": 2313,
       "silences": 0,
       "people": {
@@ -29429,22 +29429,21 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9713687297718402,
-          "direct_familiarity": 0.44572021477148804,
+          "exposure": 0.9714116766771824,
+          "direct_familiarity": 0.44638535051376227,
           "trust": 0.1,
-          "predictability": 0.19050288561207332,
-          "reciprocity": 0.22513168616080645,
-          "warmth": 0.2559063908147951,
-          "respect": 0.16702006747930298,
+          "predictability": 0.1909076341692673,
+          "reciprocity": 0.22582906764326172,
+          "warmth": 0.25635284698030625,
+          "respect": 0.16739490844893729,
           "disclosure_depth": 0.0,
           "tension": 0.19209642223494072,
-          "direct_turns": 422,
-          "observed_turns": 2323,
+          "direct_turns": 423,
+          "observed_turns": 2324,
           "repair_attempts": 10,
           "repair_successes": 0,
-          "last_direct_cycle": 171,
+          "last_direct_cycle": 177,
           "shared_references": [
-            "gardens",
             "work",
             "refused to talk",
             "let's focus",
@@ -29503,18 +29502,10 @@
             "i am owen",
             "consensus is important",
             "picture",
-            "head"
+            "head",
+            "that"
           ],
           "events": [
-            {
-              "cycle": 791,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260826T072830397-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 792,
               "kind": "support",
@@ -30945,6 +30936,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 177,
+              "kind": "answer",
+              "direct": true,
+              "message_id": "20260829T173242344-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -30952,7 +30952,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9712395015651812,
+          "exposure": 0.9712826423128335,
           "direct_familiarity": 0.7303196844971467,
           "trust": 0.1,
           "predictability": 0.3522046436886928,
@@ -30962,7 +30962,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.09988336231028608,
           "direct_turns": 1022,
-          "observed_turns": 2320,
+          "observed_turns": 2321,
           "repair_attempts": 17,
           "repair_successes": 0,
           "last_direct_cycle": 172,
@@ -32713,23 +32713,23 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat entirely, serious, live as important (close).",
+            "belief_hypothesis": "mara currently seems to treat think, that as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat what's,, going as important (answer).",
+            "belief_hypothesis": "jules currently seems to treat don't think as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "sarah already covered: it, treat",
-          "sarah already covered: here",
-          "jules already covered: what's,, going"
+          "mara already covered: think, that",
+          "jules already covered: don't think",
+          "sarah already covered: it, treat"
         ],
-        "last_updated_cycle": 176
+        "last_updated_cycle": 177
       }
     },
     "jules": {
@@ -36064,18 +36064,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T125921274-jules-v5",
-          "text": "I'm happy when I'm doing something new and challenging,",
-          "move": "deepen",
-          "discourse": "d-20260828T125921274-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002075",
-          "topic_episode": "topic-002072",
-          "topic_facet": "better",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T130108420-jules-v5",
           "text": "i've had enough",
           "move": "disclose",
@@ -38702,10 +38690,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T173239857-jules-v5",
+          "text": "I don't believe you.",
+          "move": "repair",
+          "discourse": "d-20260829T173239857-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000177",
+          "topic_episode": "topic-000176",
+          "topic_facet": "bad",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T173051156-sarah-v5",
-      "spoken": 2320,
+      "last_event": "20260829T173242344-mara-v5",
+      "spoken": 2321,
       "silences": 0,
       "people": {
         "sarah": {
@@ -40234,7 +40234,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9713687297718402,
+          "exposure": 0.9714116766771824,
           "direct_familiarity": 0.6652557040770432,
           "trust": 0.1,
           "predictability": 0.304262334261666,
@@ -40244,7 +40244,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.14275423823410588,
           "direct_turns": 842,
-          "observed_turns": 2323,
+          "observed_turns": 2324,
           "repair_attempts": 18,
           "repair_successes": 0,
           "last_direct_cycle": 172,
@@ -43527,7 +43527,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat entirely, serious, live as important (close).",
+            "belief_hypothesis": "mara currently seems to treat think, that as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43539,11 +43539,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: think, that",
           "sarah already covered: it, treat",
-          "sarah already covered: here",
-          "sarah already covered: serious, entirely, live"
+          "sarah already covered: here"
         ],
-        "last_updated_cycle": 176
+        "last_updated_cycle": 177
       }
     }
   },
