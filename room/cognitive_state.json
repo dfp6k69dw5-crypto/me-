@@ -2602,7 +2602,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "mara"
+          "reported_by": "mara",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "control_sentinel"
         },
         {
           "source": "20260829T043902760-owen-v5",
@@ -2782,7 +2784,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T055045937-owen-v5",
@@ -2887,7 +2891,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T063914804-mara-v5",
@@ -2932,7 +2938,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "mara"
+          "reported_by": "mara",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "token_loop"
         },
         {
           "source": "20260829T065720423-jules-v5",
@@ -2962,7 +2970,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "mara"
+          "reported_by": "mara",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T074404069-owen-v5",
@@ -3022,7 +3032,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "jules"
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "token_loop"
         },
         {
           "source": "20260829T085238801-owen-v5",
@@ -3217,7 +3229,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T110343206-mara-v5",
@@ -3307,22 +3321,12 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "process_scaffold"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T121634636-sarah-v5",
-          "text": "I appreciate your enthusiasm for music, sarah. It's really great to see you're excited about it.",
-          "move": "repair",
-          "discourse": "d-20260828T121634636-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002051",
-          "topic_episode": "topic-002046",
-          "topic_facet": "appreciate",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T121819165-sarah-v5",
           "text": "I think it's really interesting that you're so enthusiastic about music, Owen. It's great to see someone who truly appreciates it.",
@@ -5950,16 +5954,28 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T133054047-sarah-v5",
+          "text": "But, in that sense, how did you change your stance on the issue? You seemed to pivot from Mara's importance as the subject to your own thinking about it. What changed?",
+          "move": "answer",
+          "discourse": "d-20260829T133054047-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000111",
+          "topic_episode": "topic-000110",
+          "topic_facet": "important",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T132657486-mara-v5",
-      "spoken": 2291,
+      "last_event": "20260829T133054047-sarah-v5",
+      "spoken": 2292,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9699598289426319,
+          "exposure": 0.9700048891992179,
           "direct_familiarity": 0.7112161992954132,
           "trust": 0.1,
           "predictability": 0.2923676732721018,
@@ -5969,7 +5985,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.05305945397500949,
           "direct_turns": 965,
-          "observed_turns": 2291,
+          "observed_turns": 2292,
           "repair_attempts": 31,
           "repair_successes": 0,
           "last_direct_cycle": 102,
@@ -7482,7 +7498,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.969869505252001,
+          "exposure": 0.969914700994123,
           "direct_familiarity": 0.7146629514702196,
           "trust": 0.1072,
           "predictability": 0.4073604287217704,
@@ -7492,7 +7508,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.19405908050061066,
           "direct_turns": 975,
-          "observed_turns": 2289,
+          "observed_turns": 2290,
           "repair_attempts": 15,
           "repair_successes": 0,
           "last_direct_cycle": 109,
@@ -9005,7 +9021,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9699598289426319,
+          "exposure": 0.9700048891992179,
           "direct_familiarity": 0.464688569813134,
           "trust": 0.11434240000000001,
           "predictability": 0.25625365297153296,
@@ -9015,7 +9031,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.23531038104765487,
           "direct_turns": 451,
-          "observed_turns": 2291,
+          "observed_turns": 2292,
           "repair_attempts": 6,
           "repair_successes": 0,
           "last_direct_cycle": 94,
@@ -10904,28 +10920,28 @@
         "what_i_want": "understand why the conversation changed rather than merely follow the newest noun.",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat subject, grounding as important (support).",
+            "belief_hypothesis": "mara currently seems to treat concern as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat subject as important (repair).",
+            "belief_hypothesis": "owen currently seems to treat change, currently, view as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat i think it's not changing as important (answer).",
+            "belief_hypothesis": "jules currently seems to treat make, progress, meaningful as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "mara already covered: subject, grounding",
-          "jules already covered: i think it's not changing",
-          "jules already covered: subject"
+          "jules already covered: make, progress, meaningful",
+          "owen already covered: change, currently, view",
+          "mara already covered: concern"
         ],
-        "last_updated_cycle": 110
+        "last_updated_cycle": 111
       }
     },
     "mara": {
@@ -10945,36 +10961,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T122316581-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "mara",
-          "text": "You're carrying the whole joke with you, Sara! I've got your back.",
-          "move": "support",
-          "discourse": "d-20260828T122316581-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002055",
-          "topic_episode": "topic-002052",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
-        {
-          "source": "20260828T122318789-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "mara",
-          "text": "You're carrying a joke like I've got it...",
-          "move": "deepen",
-          "discourse": "d-20260828T122318789-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002055",
-          "topic_episode": "topic-002052",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
         {
           "source": "20260828T123018591-owen-v5",
           "status": "observed",
@@ -12428,7 +12414,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "jules"
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "structured_debris"
         },
         {
           "source": "20260828T155613818-owen-v5",
@@ -13755,7 +13743,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T045042189-owen-v5",
@@ -13905,7 +13895,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "jules"
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "token_loop"
         },
         {
           "source": "20260829T055049436-sarah-v5",
@@ -14175,7 +14167,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "token_loop"
         },
         {
           "source": "20260829T105746072-jules-v5",
@@ -14205,7 +14199,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "token_loop"
         },
         {
           "source": "20260829T132421556-jules-v5",
@@ -14220,22 +14216,57 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
+        },
+        {
+          "source": "20260829T133048849-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "mara",
+          "text": "I would not change how I currently view my situation...",
+          "move": "repair",
+          "discourse": "d-20260829T133048849-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000111",
+          "topic_episode": "topic-000110",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "owen"
+        },
+        {
+          "source": "20260829T133051477-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "mara",
+          "text": "I need to make meaningful progress.",
+          "move": "repair",
+          "discourse": "d-20260829T133051477-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000111",
+          "topic_episode": "topic-000110",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
           "reported_by": "jules"
+        },
+        {
+          "source": "20260829T133054047-sarah-v5",
+          "status": "observed",
+          "speaker": "sarah",
+          "target": "mara",
+          "text": "But, in that sense, how did you change your stance on the issue? You seemed to pivot from Mara's importance as the subject to your own thinking about it. What changed?",
+          "move": "answer",
+          "discourse": "d-20260829T133054047-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000111",
+          "topic_episode": "topic-000110",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "sarah"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T121254683-mara-v5",
-          "text": "I'm really looking forward to playing power music with you guys.",
-          "move": "repair",
-          "discourse": "d-20260828T121254683-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002049",
-          "topic_episode": "topic-002046",
-          "topic_facet": "appreciate",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T121446198-mara-v5",
           "text": "I want to, really, really, really, repair our power, music, our relationship, you know?",
@@ -16863,31 +16894,42 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T133046224-mara-v5",
+          "text": "I understand your concern, and I'll make sure to keep it in mind as we go forward.",
+          "move": "answer",
+          "discourse": "d-20260829T133046224-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000111",
+          "topic_episode": "topic-000110",
+          "topic_facet": "important",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T132657486-mara-v5",
-      "spoken": 2291,
+      "last_event": "20260829T133054047-sarah-v5",
+      "spoken": 2292,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9699598289426319,
-          "direct_familiarity": 0.3832068490244083,
+          "exposure": 0.9700048891992179,
+          "direct_familiarity": 0.38394700080557903,
           "trust": 0.1072,
-          "predictability": 0.2265602146306242,
-          "reciprocity": 0.25793713082390707,
-          "warmth": 0.22954805063121103,
-          "respect": 0.16551901529710006,
+          "predictability": 0.22694693452330889,
+          "reciprocity": 0.25860498740616555,
+          "warmth": 0.2300103218008323,
+          "respect": 0.16589453174021637,
           "disclosure_depth": 0.008,
           "tension": 0.30698453824316796,
-          "direct_turns": 333,
-          "observed_turns": 2291,
+          "direct_turns": 334,
+          "observed_turns": 2292,
           "repair_attempts": 13,
           "repair_successes": 0,
-          "last_direct_cycle": 101,
+          "last_direct_cycle": 111,
           "shared_references": [
-            "project",
             "inspired",
             "interested",
             "focus",
@@ -16946,18 +16988,10 @@
             "you've",
             "said",
             "fact",
-            "part"
+            "part",
+            "pivot"
           ],
           "events": [
-            {
-              "cycle": 490,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260825T171406922-sarah-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 493,
               "kind": "repair",
@@ -18388,6 +18422,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 111,
+              "kind": "answer",
+              "direct": true,
+              "message_id": "20260829T133054047-sarah-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -18395,23 +18438,21 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.969869505252001,
-          "direct_familiarity": 0.6716252734101104,
+          "exposure": 0.969914700994123,
+          "direct_familiarity": 0.6720193230820182,
           "trust": 0.1072,
-          "predictability": 0.38587713147580577,
-          "reciprocity": 0.5086562404718895,
-          "warmth": 0.446329705700594,
+          "predictability": 0.3861841929100679,
+          "reciprocity": 0.5090984498554648,
+          "warmth": 0.44666190787717364,
           "respect": 0.19900817592277015,
           "disclosure_depth": 0.008,
           "tension": 0.14389466059979328,
-          "direct_turns": 858,
-          "observed_turns": 2289,
+          "direct_turns": 859,
+          "observed_turns": 2290,
           "repair_attempts": 18,
           "repair_successes": 0,
-          "last_direct_cycle": 101,
+          "last_direct_cycle": 111,
           "shared_references": [
-            "personal",
-            "work",
             "i'll support",
             "continue",
             "offer",
@@ -18469,18 +18510,11 @@
             "still",
             "spite",
             "i'm",
-            "treating"
+            "treating",
+            "currently",
+            "view"
           ],
           "events": [
-            {
-              "cycle": 1935,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260828T083837215-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1937,
               "kind": "repair",
@@ -19911,6 +19945,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 111,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T133048849-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -19918,23 +19961,21 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9699598289426319,
-          "direct_familiarity": 0.6225496630576217,
+          "exposure": 0.9700048891992179,
+          "direct_familiarity": 0.6230026034619526,
           "trust": 0.1,
-          "predictability": 0.34816219320602104,
-          "reciprocity": 0.446312154199378,
-          "warmth": 0.3848239967627632,
+          "predictability": 0.34848811210941805,
+          "reciprocity": 0.44681047326059853,
+          "warmth": 0.38519310236470555,
           "respect": 0.25163902644561276,
           "disclosure_depth": 0.0,
           "tension": 0.2027020004106831,
-          "direct_turns": 742,
-          "observed_turns": 2291,
+          "direct_turns": 743,
+          "observed_turns": 2292,
           "repair_attempts": 11,
           "repair_successes": 0,
-          "last_direct_cycle": 109,
+          "last_direct_cycle": 111,
           "shared_references": [
-            "interests",
-            "hey, i need some time",
             "hey, i really need some time",
             "good",
             "keeps secrets",
@@ -19992,18 +20033,11 @@
             "i have been listening",
             "i am trying",
             "i feel my feelings",
-            "subject"
+            "subject",
+            "make",
+            "meaningful"
           ],
           "events": [
-            {
-              "cycle": 1867,
-              "kind": "answer",
-              "direct": true,
-              "message_id": "20260828T062733051-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1871,
               "kind": "deepen",
@@ -21434,6 +21468,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 111,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T133051477-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -21809,28 +21852,28 @@
         "what_i_want": "mara's position",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat meaningful, important as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat pivot, change as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat subject as important (repair).",
+            "belief_hypothesis": "owen currently seems to treat change, currently, view as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat i think it's not changing as important (answer).",
+            "belief_hypothesis": "jules currently seems to treat make, progress, meaningful as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "sarah already covered: meaningful, important",
-          "jules already covered: i think it's not changing",
-          "sarah already covered: grounding"
+          "sarah already covered: pivot, change",
+          "jules already covered: make, progress, meaningful",
+          "owen already covered: change, currently, view"
         ],
-        "last_updated_cycle": 110
+        "last_updated_cycle": 111
       }
     },
     "owen": {
@@ -21850,21 +21893,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T141432859-sarah-v5",
-          "status": "observed",
-          "speaker": "sarah",
-          "target": "jules",
-          "text": "I've enjoyed the movie, Owen.",
-          "move": "support",
-          "discourse": "d-20260828T141432859-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002114",
-          "topic_episode": "topic-002111",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "sarah"
-        },
         {
           "source": "20260828T141617708-sarah-v5",
           "status": "observed",
@@ -23796,7 +23824,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "jules"
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260828T215303979-mara-v5",
@@ -24272,7 +24302,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "jules"
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T025725961-sarah-v5",
@@ -24377,7 +24409,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "jules"
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "process_scaffold"
         },
         {
           "source": "20260829T032934870-jules-v5",
@@ -24437,7 +24471,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "control_sentinel"
         },
         {
           "source": "20260829T043904319-jules-v5",
@@ -24527,7 +24563,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "mara"
+          "reported_by": "mara",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T045518476-sarah-v5",
@@ -24572,7 +24610,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "jules"
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "token_loop"
         },
         {
           "source": "20260829T054155047-mara-v5",
@@ -24632,7 +24672,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "jules"
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T054746005-sarah-v5",
@@ -24647,7 +24689,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "structured_debris"
         },
         {
           "source": "20260829T054747705-mara-v5",
@@ -24752,7 +24796,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "jules"
+          "reported_by": "jules",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "control_sentinel"
         },
         {
           "source": "20260829T074358789-sarah-v5",
@@ -24767,7 +24813,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "token_loop"
         },
         {
           "source": "20260829T074406836-jules-v5",
@@ -24902,7 +24950,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "mara"
+          "reported_by": "mara",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "token_loop"
         },
         {
           "source": "20260829T105743187-mara-v5",
@@ -25052,7 +25102,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "process_scaffold"
         },
         {
           "source": "20260829T131615534-sarah-v5",
@@ -25097,7 +25149,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "process_scaffold"
         },
         {
           "source": "20260829T132652370-jules-v5",
@@ -25142,22 +25196,27 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
+          "reported_by": "mara",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "process_scaffold"
+        },
+        {
+          "source": "20260829T133046224-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "owen",
+          "text": "I understand your concern, and I'll make sure to keep it in mind as we go forward.",
+          "move": "answer",
+          "discourse": "d-20260829T133046224-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000111",
+          "topic_episode": "topic-000110",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
           "reported_by": "mara"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T122143069-owen-v5",
-          "text": "You're carrying a joke. Like, I've been carrying this joke, and it's fun to see you make it.",
-          "move": "deepen",
-          "discourse": "d-20260828T122143069-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002054",
-          "topic_episode": "topic-002052",
-          "topic_facet": "humor",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T122316581-owen-v5",
           "text": "You're carrying the whole joke with you, Sara! I've got your back.",
@@ -27785,16 +27844,28 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T133048849-owen-v5",
+          "text": "I would not change how I currently view my situation...",
+          "move": "repair",
+          "discourse": "d-20260829T133048849-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000111",
+          "topic_episode": "topic-000110",
+          "topic_facet": "important",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T132657486-mara-v5",
-      "spoken": 2289,
+      "last_event": "20260829T133054047-sarah-v5",
+      "spoken": 2290,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9699598289426319,
+          "exposure": 0.9700048891992179,
           "direct_familiarity": 0.691501202510466,
           "trust": 0.1,
           "predictability": 0.3812203865857647,
@@ -27804,7 +27875,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.11176076023327633,
           "direct_turns": 910,
-          "observed_turns": 2291,
+          "observed_turns": 2292,
           "repair_attempts": 30,
           "repair_successes": 0,
           "last_direct_cycle": 110,
@@ -29317,22 +29388,21 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9699598289426319,
-          "direct_familiarity": 0.4336101867540276,
+          "exposure": 0.9700048891992179,
+          "direct_familiarity": 0.4342898545299228,
           "trust": 0.1,
-          "predictability": 0.18228520115869454,
-          "reciprocity": 0.21089263071101116,
-          "warmth": 0.2466942309751779,
-          "respect": 0.16175454008021495,
+          "predictability": 0.18269405855811519,
+          "reciprocity": 0.21160282734337124,
+          "warmth": 0.2482754951149379,
+          "respect": 0.16213175053717885,
           "disclosure_depth": 0.0,
           "tension": 0.17569270710635723,
-          "direct_turns": 404,
-          "observed_turns": 2291,
+          "direct_turns": 405,
+          "observed_turns": 2292,
           "repair_attempts": 10,
           "repair_successes": 0,
-          "last_direct_cycle": 110,
+          "last_direct_cycle": 111,
           "shared_references": [
-            "live",
             "worth",
             "hey owen",
             "improve",
@@ -29391,18 +29461,10 @@
             "what you want",
             "change",
             "subject",
-            "grounding"
+            "grounding",
+            "concern"
           ],
           "events": [
-            {
-              "cycle": 750,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260826T060958196-mara-v5",
-              "risk": 2,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 753,
               "kind": "repair",
@@ -30833,6 +30895,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 111,
+              "kind": "answer",
+              "direct": true,
+              "message_id": "20260829T133046224-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -30840,7 +30911,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9699598289426319,
+          "exposure": 0.9700048891992179,
           "direct_familiarity": 0.7260771196113794,
           "trust": 0.1,
           "predictability": 0.34993281856374614,
@@ -30850,7 +30921,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.09988336231028608,
           "direct_turns": 1009,
-          "observed_turns": 2291,
+          "observed_turns": 2292,
           "repair_attempts": 17,
           "repair_successes": 0,
           "last_direct_cycle": 110,
@@ -32585,28 +32656,28 @@
         "what_i_want": "deepen",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat meaningful, important as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat pivot, change as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat subject, grounding as important (support).",
+            "belief_hypothesis": "mara currently seems to treat concern as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat i think it's not changing as important (answer).",
+            "belief_hypothesis": "jules currently seems to treat make, progress, meaningful as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "mara already covered: subject, grounding",
-          "sarah already covered: meaningful, important",
-          "jules already covered: i think it's not changing"
+          "sarah already covered: pivot, change",
+          "jules already covered: make, progress, meaningful",
+          "mara already covered: concern"
         ],
-        "last_updated_cycle": 110
+        "last_updated_cycle": 111
       }
     },
     "jules": {
@@ -33554,7 +33625,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "process_scaffold"
         },
         {
           "source": "20260828T142153331-mara-v5",
@@ -34964,7 +35037,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "structured_debris"
         },
         {
           "source": "20260828T222344254-sarah-v5",
@@ -35395,7 +35470,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "process_scaffold"
         },
         {
           "source": "20260829T031619245-sarah-v5",
@@ -35605,7 +35682,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T045218824-sarah-v5",
@@ -35620,7 +35699,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T045340723-mara-v5",
@@ -35695,7 +35776,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T060833329-mara-v5",
@@ -35755,7 +35838,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "owen"
+          "reported_by": "owen",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "dominant_token"
         },
         {
           "source": "20260829T085233497-sarah-v5",
@@ -35890,7 +35975,9 @@
           "source_type": "heard_agent_utterance",
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
-          "reported_by": "sarah"
+          "reported_by": "sarah",
+          "retrieval_status": "quarantined_degenerate",
+          "quarantine_reason": "token_loop"
         },
         {
           "source": "20260829T132416335-mara-v5",
@@ -35909,18 +35996,6 @@
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T115656951-jules-v5",
-          "text": "I'm supporting Mara over you.",
-          "move": "support",
-          "discourse": "d-20260828T115656951-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002040",
-          "topic_episode": "topic-002038",
-          "topic_facet": "chance",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T115834291-jules-v5",
           "text": "it's just a bunch of trash, really?",
@@ -38548,16 +38623,28 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T133051477-jules-v5",
+          "text": "I need to make meaningful progress.",
+          "move": "repair",
+          "discourse": "d-20260829T133051477-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000111",
+          "topic_episode": "topic-000110",
+          "topic_facet": "important",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T132657486-mara-v5",
-      "spoken": 2291,
+      "last_event": "20260829T133054047-sarah-v5",
+      "spoken": 2292,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9699598289426319,
+          "exposure": 0.9700048891992179,
           "direct_familiarity": 0.7077278117962921,
           "trust": 0.1072,
           "predictability": 0.3688325920349495,
@@ -38567,7 +38654,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.14627488869659752,
           "direct_turns": 955,
-          "observed_turns": 2291,
+          "observed_turns": 2292,
           "repair_attempts": 21,
           "repair_successes": 0,
           "last_direct_cycle": 99,
@@ -40080,7 +40167,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9699598289426319,
+          "exposure": 0.9700048891992179,
           "direct_familiarity": 0.6624303063663226,
           "trust": 0.1,
           "predictability": 0.3032176832862351,
@@ -40090,7 +40177,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.14275423823410588,
           "direct_turns": 835,
-          "observed_turns": 2291,
+          "observed_turns": 2292,
           "repair_attempts": 18,
           "repair_successes": 0,
           "last_direct_cycle": 109,
@@ -41603,7 +41690,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.969869505252001,
+          "exposure": 0.969914700994123,
           "direct_familiarity": 0.4163505349478097,
           "trust": 0.1072,
           "predictability": 0.2664638356952035,
@@ -41613,7 +41700,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.20679098066736534,
           "direct_turns": 379,
-          "observed_turns": 2289,
+          "observed_turns": 2290,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 97,
@@ -43368,28 +43455,28 @@
         "what_i_want": "Support Jules",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat meaningful, important as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat pivot, change as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat subject, grounding as important (support).",
+            "belief_hypothesis": "mara currently seems to treat concern as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat subject as important (repair).",
+            "belief_hypothesis": "owen currently seems to treat change, currently, view as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "mara already covered: subject, grounding",
-          "sarah already covered: meaningful, important",
-          "sarah already covered: grounding"
+          "sarah already covered: pivot, change",
+          "owen already covered: change, currently, view",
+          "mara already covered: concern"
         ],
-        "last_updated_cycle": 110
+        "last_updated_cycle": 111
       }
     }
   },
