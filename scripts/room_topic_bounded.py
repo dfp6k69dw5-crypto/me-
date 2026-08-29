@@ -6,7 +6,7 @@ from collections import Counter
 
 import room_social_v5 as social
 
-SCHEMA = 8
+SCHEMA = 9
 MAX_FACETS = 8
 MAX_HISTORY = 8
 MAX_RECENT_TERMS = 10
@@ -43,6 +43,13 @@ _TOPIC_NOISE = {
     "tough", "hard", "difficult", "easy", "rough",
     "get", "gets", "got", "getting", "leave", "leaves", "left", "leaving",
     "convince", "convinces", "convinced", "convincing",
+    # Meta-conversational stance nouns repeatedly became fake persistent subjects.
+    # They may occur naturally in speech, but the object of the stance is the topic,
+    # not the fact that somebody has a position, perspective, issue, or direction.
+    "position", "positions", "stance", "stances", "perspective", "perspectives",
+    "importance", "important", "clarify", "clarifies", "clarified", "clarifying", "clarity",
+    "direction", "directions", "account", "accounts", "issue", "issues", "problem", "problems",
+    "conversation", "conversations", "discussion", "discussions", "subject", "subjects",
     # Pragmatic/discourse connectives organize clauses; they are not what the
     # Room is talking about. Treat the whole family generically rather than
     # banning the single canary word that exposed the bug.
