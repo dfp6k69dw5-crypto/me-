@@ -60,7 +60,7 @@ function kpSource(j){
 
 function wikiSource(events){
   const rate=events.length*2;
-  return {rate,score:clamp((rate-600)/900,-1,1)};
+  return {rate,score:Math.tanh((rate-600)/900)};
 }
 
 function hnSource(startId,endId,startMs,endMs){
@@ -135,7 +135,7 @@ async function wikiStreamSample(ms=SNAPSHOT_MS){
   const events=[];
   const sampleStart=new Date();
   try{
-    const r=await fetch(STREAM,{headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/8.0'},signal:ctl.signal});
+    const r=await fetch(STREAM,{headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/9.0'},signal:ctl.signal});
     if(!r.ok) throw new Error(`wiki stream ${r.status}`);
     if(!r.body) throw new Error('wiki stream has no body');
     const reader=r.body.getReader(),dec=new TextDecoder();
@@ -190,7 +190,7 @@ try{
   const at=new Date();
   const record={
     at:at.toISOString(),sampleStart:sample.sampleStart,sampleEnd:sample.sampleEnd,
-    model:'nonmarket-r-v8-world-human-50-50-fixed-four-roots',oracle,markets,
+    model:'nonmarket-r-v9-world-human-event-wiki-fixed-four-roots',oracle,markets,
   };
   const file=path.join(HISTORY_DIR,`${at.toISOString().slice(0,10)}.jsonl`);
   fs.appendFileSync(file,JSON.stringify(record)+'\n');
