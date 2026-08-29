@@ -10,17 +10,12 @@ const SNAPSHOT_MS = 30000;
 const MIN_INTERVAL_MS = 5*60*1000;
 const HISTORY_DIR = path.join('room','oracle-history');
 const LOCK_DIR = path.join('.room_model','fast-oracle-recorder.lock');
-const TAME_LIMIT = 1_000_000;
+const FIXED_ROOTS = 4;
 
-function tameRoots(exact){
-  let r = Number(exact), roots = 0;
-  while(Number.isFinite(r) && r > TAME_LIMIT){
-    r = Math.sqrt(r);
-    roots++;
-  }
-  r = Math.sqrt(r);
-  roots++;
-  return {r,roots};
+function fixedRoots(exact){
+  let r = Number(exact);
+  for(let i=0;i<FIXED_ROOTS;i++) r = Math.sqrt(r);
+  return {r,roots:FIXED_ROOTS};
 }
 
 function alex(seed){
@@ -32,8 +27,8 @@ function alex(seed){
     sumSquares += x*x;
   }
   const exact = sumSquares*sumSquares;
-  const tamed = tameRoots(exact);
-  return {r:tamed.r,rootCount:tamed.roots,rRawExact:exact.toString(),sumSquaresExact:sumSquares.toString()};
+  const transformed = fixedRoots(exact);
+  return {r:transformed.r,rootCount:transformed.roots,rRawExact:exact.toString(),sumSquaresExact:sumSquares.toString()};
 }
 
 function buildOracle(e){
@@ -100,7 +95,7 @@ async function wikiStreamSample(ms=SNAPSHOT_MS){
   const sampleStart=new Date();
   try{
     const r=await fetch(STREAM,{
-      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/7.0'},
+      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/8.0'},
       signal:ctl.signal,
     });
     if(!r.ok) throw new Error(`wiki stream ${r.status}`);
@@ -183,7 +178,7 @@ try{
     at:at.toISOString(),
     sampleStart:sample.sampleStart,
     sampleEnd:sample.sampleEnd,
-    model:'nonmarket-wikimedia-r-v7-sum-squares-squared-adaptive-roots-extra-root',
+    model:'nonmarket-wikimedia-r-v8-sum-squares-squared-fixed-four-roots',
     oracle,
     markets,
   };
