@@ -40,6 +40,8 @@ jobs:
           api_backoff=15
           last_cooled_failure=""
           queued_timeout=90
+          startup_grace=240
+          publish_stale_timeout=240
           next_oracle_at=0
           oracle_pid=""
 
@@ -114,8 +116,31 @@ jobs:
 
             case "$latest_status" in
               in_progress)
-                echo "Room beat $latest_id is running; checking again shortly"
-                sleep 8
+                now_epoch="$(date -u +%s)"
+                created_epoch="$(date -u -d "$latest_created" +%s 2>/dev/null || echo "$now_epoch")"
+                run_age=$((now_epoch - created_epoch))
+                last_run_iso="$(gh api "repos/$GITHUB_REPOSITORY/contents/room/state.json?ref=main" --jq '.content' 2>/tmp/room-state-error | tr -d '\n' | base64 -d 2>/dev/null | jq -r '.last_run // empty' 2>/dev/null || true)"
+                publish_age=0
+                if [ -n "$last_run_iso" ]; then
+                  last_run_epoch="$(date -u -d "$last_run_iso" +%s 2>/dev/null || echo "$now_epoch")"
+                  publish_age=$((now_epoch - last_run_epoch))
+                fi
+
+                if [ "$run_age" -ge "$startup_grace" ] && [ "$publish_age" -ge "$publish_stale_timeout" ]; then
+                  echo "Room run $latest_id is alive but has not published for ${publish_age}s; replacing stale runner"
+                  if gh run cancel "$latest_id" --repo "$GITHUB_REPOSITORY"; then
+                    last_cooled_failure="$latest_id"
+                    sleep 8
+                  else
+                    echo "GitHub did not accept stale-run cancellation yet; retrying shortly"
+                    sleep "$api_backoff"
+                    api_backoff=$((api_backoff * 2))
+                    [ "$api_backoff" -gt 120 ] && api_backoff=120
+                  fi
+                else
+                  echo "Room run $latest_id healthy enough: run_age=${run_age}s publish_age=${publish_age}s"
+                  sleep 8
+                fi
                 continue
                 ;;
               queued|pending|waiting|requested)
