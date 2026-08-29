@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-29T02:26:39.018843+00:00",
-  "cycle_key": "33228402434:1:13",
+  "generated_at": "2026-08-29T02:30:56.322104+00:00",
+  "cycle_key": "33228402434:1:17",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,31 +29,31 @@
   },
   "selected_skills": [
     {
-      "name": "emotional-attunement",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "affect",
-      "score": 1.33,
-      "confidence": 0.602,
-      "raw_score": 1.61,
-      "repeat_penalty": 0.28,
+      "domain": "critical-testing",
+      "score": 2.95,
+      "confidence": 0.965,
+      "raw_score": 2.95,
+      "repeat_penalty": 0.0,
       "matched_triggers": [
-        "feel",
-        "feeling"
+        "because",
+        "true"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "feel"
+            "because"
           ],
-          "weight": 1.15
+          "weight": 1.8
         },
         {
           "kind": "message",
           "matched": [
-            "feeling"
+            "true"
           ],
-          "weight": 0.46
+          "weight": 1.15
         }
       ]
     },
@@ -61,10 +61,10 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.15,
-      "confidence": 0.522,
-      "raw_score": 1.15,
-      "repeat_penalty": 0.0,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.28,
       "matched_triggers": [
         "connection"
       ],
@@ -74,13 +74,20 @@
           "matched": [
             "connection"
           ],
-          "weight": 1.15
+          "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "connection"
+          ],
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "1f1b94e1555b",
+  "context_fingerprint": "f59ef141c65c",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 1060,
-  "approx_added_tokens": 265
+  "temporary_skill_chars": 1045,
+  "approx_added_tokens": 261
 }
