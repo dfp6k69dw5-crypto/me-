@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-29T17:40:49.278024+00:00",
-  "cycle_key": "33264648682:1:15",
+  "generated_at": "2026-08-29T17:43:01.294974+00:00",
+  "cycle_key": "33264648682:1:16",
   "node": 10,
   "entity": "jules",
   "role": "thought",
@@ -29,43 +29,65 @@
   },
   "selected_skills": [
     {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.8,
+      "confidence": 0.779,
+      "raw_score": 1.8,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "answer"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "answer"
+          ],
+          "weight": 1.8
+        }
+      ]
+    },
+    {
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
+      "score": 1.63,
+      "confidence": 0.722,
+      "raw_score": 1.91,
       "repeat_penalty": 0.28,
       "matched_triggers": [
+        "because",
         "true"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "true"
+            "because"
           ],
-          "weight": 1.45
+          "weight": 1.15
         },
         {
           "kind": "message",
           "matched": [
             "true"
           ],
-          "weight": 0.92
+          "weight": 0.76
         },
         {
           "kind": "message",
           "matched": [
             "true"
           ],
-          "weight": 0.64
+          "weight": 0.54
         }
       ]
     }
   ],
-  "context_fingerprint": "b8c06bf335ff",
+  "context_fingerprint": "6979979f08ce",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 983,
+  "approx_added_tokens": 246
 }
