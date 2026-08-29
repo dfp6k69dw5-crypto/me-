@@ -62,8 +62,6 @@ def clean_terms(text: str, topic: dict):
         value = word.strip("'-")
         if len(value) < 3 or value in _PARTICIPANT_TOPIC_STOP:
             continue
-        # Collapse simple inflection variants for duplicate suppression while
-        # preserving the participant's original surface word as the topic label.
         key = value
         if len(key) > 5 and key.endswith("ies"):
             key = key[:-3] + "y"
@@ -109,9 +107,6 @@ def inject(item: dict, history: list, discourse: dict, state: dict):
     discourse_id = "d-" + message_id
     stamp = at.isoformat().replace("+00:00", "Z")
 
-    # Allen is deliberately represented in the same public conversational shape
-    # as the Room speakers. There is no human/operator flag in the context the
-    # entities receive.
     cognition = {
         "move_type": move,
         "target": target,
@@ -124,6 +119,10 @@ def inject(item: dict, history: list, discourse: dict, state: dict):
         "topic_facet": topic.get("current_facet"),
         "topic_terms": terms,
         "mandatory_speech": True,
+        # Epistemic metadata describes what listeners actually know.
+        "source_type": "heard_allen_claim",
+        "proposition_status": "unverified_report",
+        "observed_object": "utterance",
     }
     message = {
         "id": message_id,
@@ -135,6 +134,12 @@ def inject(item: dict, history: list, discourse: dict, state: dict):
         "beat_id": beat,
         "beat_index": -1,
         "cognition": cognition,
+        "epistemic": {
+            "source_type": "heard_allen_claim",
+            "reported_by": PARTICIPANT,
+            "proposition_status": "unverified_report",
+            "observed_object": "utterance",
+        },
         "discourse_id": discourse_id,
         "parent_discourse_id": parent,
         "derived_from": None,
@@ -153,6 +158,8 @@ def inject(item: dict, history: list, discourse: dict, state: dict):
         "topic_episode": topic.get("id"),
         "topic_facet": topic.get("current_facet"),
         "topic_terms": terms,
+        "source_type": "heard_allen_claim",
+        "proposition_status": "unverified_report",
     }
     history.append(message)
     discourse.setdefault("nodes", []).append(node)
@@ -177,7 +184,12 @@ def _remember_for_listener(mind: dict, listener: str, message: dict) -> None:
         memories.append({
             "source": source,
             "status": "observed",
+            "source_type": "heard_allen_claim",
+            "proposition_status": "unverified_report",
+            "observed_object": "utterance",
+            "reported_by": PARTICIPANT,
             "speaker": PARTICIPANT,
+            "target": cognition.get("target"),
             "text": str(message.get("text") or "")[:300],
             "discourse": message.get("discourse_id"),
             "beat_id": message.get("beat_id"),
@@ -227,9 +239,6 @@ def main():
     if len(sys.argv) != 3:
         raise SystemExit("usage: room_participant.py INBOX_JSON ACK_JSON")
 
-    # This is the one serialized ingress point before all 12 cognition nodes run.
-    # On the first post-repair beat it archives poisoned semantic history and
-    # preserves social/personality continuity; later beats are idempotent no-ops.
     migrate_files()
 
     inbox_path = Path(sys.argv[1])
