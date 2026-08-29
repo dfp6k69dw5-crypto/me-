@@ -61,6 +61,32 @@ async function marketData(url) {
   }
 }
 
+async function earthquakeData() {
+  const usgs = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
+  try {
+    const upstream = await fetch(usgs, {
+      headers: {
+        accept: "application/geo+json,application/json,text/plain,*/*",
+        "user-agent": "FastNonsensePredictor/1.0",
+      },
+      cf: { cacheTtl: 0, cacheEverything: false },
+    });
+    const text = await upstream.text();
+    if (!upstream.ok) {
+      return json({ error: "earthquake-upstream", status: upstream.status, detail: text.slice(0, 240) }, 502);
+    }
+    let payload;
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      return json({ error: "earthquake-invalid-json" }, 502);
+    }
+    return json(payload);
+  } catch (error) {
+    return json({ error: "earthquake-fetch-failed", detail: String(error?.message || error) }, 502);
+  }
+}
+
 const RESILIENT_VIEWER = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#08090d"><title>The Room — Live</title><style>
 html,body{margin:0;min-height:100%;background:#08090d;color:#f5f3ee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding:0 12px 70px}.top{position:sticky;top:0;background:#08090df5;padding:calc(14px + env(safe-area-inset-top)) 2px 11px;border-bottom:1px solid #252b36;z-index:2}.title{font-size:24px;font-weight:850}.sub{font-size:11px;color:#a3a9b3;margin-top:4px}.status{margin-top:9px;font-size:12px;color:#e0bf79}.status.live{color:#98dfc8}.chat{max-width:760px;margin:14px auto}.beat{font-size:10px;color:#6f7783;text-align:center;margin:18px 0 10px}.msg{background:#11141b;border:1px solid #2b3240;border-radius:16px;padding:11px 13px;margin:0 0 10px}.who{font-size:10px;font-weight:800;letter-spacing:.1em;color:#d7c18a;margin-bottom:6px}.text{font-size:16px;line-height:1.45}.when{font-size:9px;color:#707887;margin-top:7px}.err{padding:24vh 18px;text-align:center;color:#a3a9b3;line-height:1.5}</style></head><body>
@@ -88,6 +114,10 @@ export default {
 
     if (url.pathname === "/api/market" && request.method === "GET") {
       return marketData(url);
+    }
+
+    if (url.pathname === "/api/earthquakes" && request.method === "GET") {
+      return earthquakeData();
     }
 
     // Compare live relay state with authoritative GitHub history. A successful
