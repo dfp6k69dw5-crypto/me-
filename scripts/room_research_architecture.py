@@ -91,6 +91,13 @@ def autonomous_text_issue(item: Any) -> str | None:
     if (text.startswith("{") and text.endswith("}")) or (text.startswith("[") and text.endswith("]")):
         return "structured_debris"
 
+    # Truncated rhetorical headers and ellipsis-only stubs look grammatical enough
+    # to evade token-collapse checks, but are not complete conversational turns.
+    if re.search(r":\s*(?:\.{2,}|…+)\s*$", text):
+        return "unfinished_stub"
+    if re.search(r"\b(?:the importance|the point|the reason|what matters)\s+of\b[^.!?]{0,80}:\s*$", low):
+        return "unfinished_stub"
+
     # Internal deterministic goals have repeatedly leaked through the 1B model as
     # speech. Match their characteristic scaffold, not ordinary uses of progress.
     if re.search(r"\bi\s+(?:need|want)\s+to\s+make\s+meaningful\s+progress\b", low):
@@ -99,6 +106,33 @@ def autonomous_text_issue(item: Any) -> str | None:
         return "planner_scaffold"
     if "repair_needed" in low or "live issue" in low and "meaningful progress" in low:
         return "planner_scaffold"
+
+    # Catch polished orchestration language only when several cues co-occur. A
+    # human can naturally say "move" or "partner"; the combination below is the
+    # model narrating its task rather than participating in the conversation.
+    planner_cues = sum(
+        1 for token in (
+            "my move", "intended partner", "intended target", "addressing the issue",
+            "addressing issues", "clarify my position", "clarify my skepticism",
+            "reevaluating what i believe and what i want", "as the subject",
+        )
+        if token in low
+    )
+    meta_cues = sum(
+        1 for token in (
+            "statement needs to be rephrased", "rephrase it for clarity", "break it down into smaller parts",
+            "taking the opportunity to address", "a step towards addressing",
+        )
+        if token in low
+    )
+    if planner_cues >= 2 or meta_cues >= 1:
+        return "planner_scaffold"
+
+    # Identity perspective failure: an autonomous speaker referring to itself as
+    # "I, Sarah" / "me, Owen" is usually a leaked role-description construction.
+    own = re.escape(speaker)
+    if re.search(rf"\b(?:i|me)\s*,\s*{own}\b", low):
+        return "self_perspective_leak"
 
     words = _word_list(text)
     if not words:
@@ -287,8 +321,8 @@ def annotate_memory_provenance(mind: dict) -> dict:
                 item.setdefault("reported_by", speaker)
             issue = autonomous_text_issue(item)
             if issue:
-                item.setdefault("retrieval_status", "quarantined_degenerate")
-                item.setdefault("quarantine_reason", issue)
+                item["retrieval_status"] = "quarantined_degenerate"
+                item["quarantine_reason"] = issue
     return mind
 
 
@@ -328,6 +362,10 @@ def selftest() -> None:
     assert autonomous_text_issue(scaffold) == "process_scaffold"
     planner = {"speaker": "jules", "text": "I need to make meaningful progress."}
     assert autonomous_text_issue(planner) == "planner_scaffold"
+    assert autonomous_text_issue({"speaker": "jules", "text": "The importance of sharing with you:..."}) == "unfinished_stub"
+    assert autonomous_text_issue({"speaker": "jules", "text": "my move is a step towards addressing the issues of Owen, Sarah, and Mara."}) == "planner_scaffold"
+    assert autonomous_text_issue({"speaker": "owen", "text": "I don't think I believe Sarah's account, and I'm taking the opportunity to address the discussion with Sarah as the intended partner."}) == "planner_scaffold"
+    assert autonomous_text_issue({"speaker": "sarah", "text": "What is it about I, Sarah, that you're struggling to understand?"}) == "self_perspective_leak"
     assert autonomous_text_issue({"speaker": "jules", "text": "We made real progress fixing the bicycle."}) is None
     assert autonomous_text_issue({"speaker": "allen", "text": "like like like like like"}) is None
 
