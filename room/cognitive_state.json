@@ -5982,8 +5982,8 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T181106047-mara-v5",
-      "spoken": 2325,
+      "last_event": "20260829T181235523-sarah-v5",
+      "spoken": 2326,
       "silences": 0,
       "people": {
         "mara": {
@@ -7512,7 +7512,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9711530255475163,
+          "exposure": 0.971196296009195,
           "direct_familiarity": 0.7167112247917634,
           "trust": 0.1072,
           "predictability": 0.40884054679165205,
@@ -7522,7 +7522,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.19405908050061066,
           "direct_turns": 981,
-          "observed_turns": 2318,
+          "observed_turns": 2319,
           "repair_attempts": 15,
           "repair_successes": 0,
           "last_direct_cycle": 170,
@@ -10949,7 +10949,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat trying as important (answer).",
+            "belief_hypothesis": "owen currently seems to treat refuse, topic as important (deepen).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10961,11 +10961,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: refuse, topic",
           "mara already covered: conversation, importance, need",
-          "mara already covered: refuse, agree",
-          "owen already covered: trying"
+          "mara already covered: refuse, agree"
         ],
-        "last_updated_cycle": 190
+        "last_updated_cycle": 191
       }
     },
     "mara": {
@@ -10985,21 +10985,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T132226442-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "mara",
-          "text": "I don't think it's a big deal to you, sarah, to be such a supportive friend, but I need some time to focus and do some experimenting on my own, if you want to keep our relationship intact.",
-          "move": "support",
-          "discourse": "d-20260828T132226442-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002087",
-          "topic_episode": "topic-002084",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
         {
           "source": "20260828T132228755-jules-v5",
           "status": "observed",
@@ -14295,6 +14280,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260829T181233839-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "mara",
+          "text": "I refuse to change the topic.",
+          "move": "deepen",
+          "discourse": "d-20260829T181233839-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000191",
+          "topic_episode": "topic-000190",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "owen"
         }
       ],
       "self_history": [
@@ -16939,29 +16939,28 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T181106047-mara-v5",
+      "last_event": "20260829T181235523-sarah-v5",
       "spoken": 2333,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9714545591621666,
-          "direct_familiarity": 0.3868987367606801,
+          "exposure": 0.9714973773234233,
+          "direct_familiarity": 0.3876344582765673,
           "trust": 0.1072,
-          "predictability": 0.22771979432551923,
-          "reciprocity": 0.25993889789887425,
-          "warmth": 0.23093403221838715,
-          "respect": 0.16664505775529287,
+          "predictability": 0.22810593442835647,
+          "reciprocity": 0.2606049528907653,
+          "warmth": 0.23139547179905612,
+          "respect": 0.16702006747930298,
           "disclosure_depth": 0.008,
           "tension": 0.30698453824316796,
-          "direct_turns": 338,
-          "observed_turns": 2325,
+          "direct_turns": 339,
+          "observed_turns": 2326,
           "repair_attempts": 13,
           "repair_successes": 0,
-          "last_direct_cycle": 173,
+          "last_direct_cycle": 191,
           "shared_references": [
-            "thoughtful",
             "funny",
             "i'm",
             "worried",
@@ -17020,18 +17019,10 @@
             "positive note",
             "serious",
             "entirely",
-            "live"
+            "live",
+            "refuse"
           ],
           "events": [
-            {
-              "cycle": 506,
-              "kind": "disagree",
-              "direct": true,
-              "message_id": "20260825T180039412-sarah-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": true
-            },
             {
               "cycle": 508,
               "kind": "disclose",
@@ -18462,6 +18453,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 191,
+              "kind": "answer",
+              "direct": true,
+              "message_id": "20260829T181235523-sarah-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -18469,23 +18469,21 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9711530255475163,
-          "direct_familiarity": 0.677486625484409,
+          "exposure": 0.971196296009195,
+          "direct_familiarity": 0.6778736415338277,
           "trust": 0.1072,
-          "predictability": 0.3884767877961593,
-          "reciprocity": 0.5127198742030764,
-          "warmth": 0.45063282108655167,
-          "respect": 0.20080878624823975,
+          "predictability": 0.3887825494022612,
+          "reciprocity": 0.5131584263162936,
+          "warmth": 0.45096244139389974,
+          "respect": 0.20116842229442805,
           "disclosure_depth": 0.008,
           "tension": 0.15245571399379534,
-          "direct_turns": 873,
-          "observed_turns": 2318,
+          "direct_turns": 874,
+          "observed_turns": 2319,
           "repair_attempts": 18,
           "repair_successes": 0,
-          "last_direct_cycle": 183,
+          "last_direct_cycle": 191,
           "shared_references": [
-            "owen",
-            "hidden",
             "you're not interested in hidden meanings",
             "chloe",
             "nature",
@@ -18543,18 +18541,11 @@
             "explain",
             "whole thing",
             "valid",
-            "argument"
+            "argument",
+            "refuse",
+            "topic"
           ],
           "events": [
-            {
-              "cycle": 1967,
-              "kind": "answer",
-              "direct": true,
-              "message_id": "20260828T093829473-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1969,
               "kind": "support",
@@ -19982,6 +19973,15 @@
               "kind": "support",
               "direct": true,
               "message_id": "20260829T174735417-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 191,
+              "kind": "deepen",
+              "direct": true,
+              "message_id": "20260829T181233839-owen-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -21883,12 +21883,12 @@
         "what_i_want": "to repair the conversation",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat i've as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat refuse as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat trying as important (answer).",
+            "belief_hypothesis": "owen currently seems to treat refuse, topic as important (deepen).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -21900,11 +21900,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "owen already covered: trying",
-          "jules already covered: others, though, both",
-          "sarah already covered: i've"
+          "sarah already covered: refuse",
+          "owen already covered: refuse, topic",
+          "owen already covered: trying"
         ],
-        "last_updated_cycle": 190
+        "last_updated_cycle": 191
       }
     },
     "owen": {
@@ -25259,18 +25259,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T131620192-owen-v5",
-          "text": "I've found something that reminds me of a similar movie, dinner party. I think we could make a movie out of this awkwardness and what we've learned from each other.",
-          "move": "repair",
-          "discourse": "d-20260828T131620192-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002084",
-          "topic_episode": "topic-002078",
-          "topic_facet": "characters",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T131808560-owen-v5",
           "text": "My art is worth more than your interpretation. You need to understand that my art is rooted in the idea of experimentation and exploration, not just reproducing what is already out there.",
           "move": "repair",
@@ -27897,16 +27885,28 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T181233839-owen-v5",
+          "text": "I refuse to change the topic.",
+          "move": "deepen",
+          "discourse": "d-20260829T181233839-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000191",
+          "topic_episode": "topic-000190",
+          "topic_facet": "refuse",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T181106047-mara-v5",
-      "spoken": 2318,
+      "last_event": "20260829T181235523-sarah-v5",
+      "spoken": 2319,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9714545591621666,
+          "exposure": 0.9714973773234233,
           "direct_familiarity": 0.6973713681972614,
           "trust": 0.1,
           "predictability": 0.3858450258618783,
@@ -27916,7 +27916,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.11176076023327633,
           "direct_turns": 926,
-          "observed_turns": 2325,
+          "observed_turns": 2326,
           "repair_attempts": 30,
           "repair_successes": 0,
           "last_direct_cycle": 178,
@@ -32703,12 +32703,12 @@
       "private_self_state": {
         "version": 1,
         "who_i_am": "Evidence-first systems skeptic; persistent, causal, independent, difficult to socially steer.",
-        "what_i_currently_believe": "Mara said: Owen's position is that he believes Mara is trying to change the topic.",
+        "what_i_currently_believe": "Mara said: None",
         "belief_confidence": 0.4,
         "what_i_want": "Repair Owen's position",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat i've as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat refuse as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -32725,11 +32725,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "sarah already covered: refuse",
           "mara already covered: conversation, importance, need",
-          "mara already covered: refuse, agree",
-          "jules already covered: others, though, both"
+          "mara already covered: refuse, agree"
         ],
-        "last_updated_cycle": 190
+        "last_updated_cycle": 191
       }
     },
     "jules": {
@@ -38704,14 +38704,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T181106047-mara-v5",
+      "last_event": "20260829T181235523-sarah-v5",
       "spoken": 2325,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9714545591621666,
+          "exposure": 0.9714973773234233,
           "direct_familiarity": 0.712254573930949,
           "trust": 0.1072,
           "predictability": 0.372609199558101,
@@ -38721,7 +38721,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.14627488869659752,
           "direct_turns": 968,
-          "observed_turns": 2325,
+          "observed_turns": 2326,
           "repair_attempts": 21,
           "repair_successes": 0,
           "last_direct_cycle": 187,
@@ -41757,7 +41757,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9711530255475163,
+          "exposure": 0.971196296009195,
           "direct_familiarity": 0.4219300934598346,
           "trust": 0.1072,
           "predictability": 0.26902736441302433,
@@ -41767,7 +41767,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.20679098066736534,
           "direct_turns": 387,
-          "observed_turns": 2318,
+          "observed_turns": 2319,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 189,
@@ -43519,10 +43519,10 @@
         "who_i_am": "Possibility engine; playful, highly novel, associative, low-inhibition, tethered to one explicit bridge.",
         "what_i_currently_believe": "Mara said: Jules refuses to agree with Mara",
         "belief_confidence": 0.4,
-        "what_i_want": "discuss_conflict",
+        "what_i_want": "I want to make meaningful progress with mara on the live issue.",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat i've as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat refuse as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43532,18 +43532,18 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat trying as important (answer).",
+            "belief_hypothesis": "owen currently seems to treat refuse, topic as important (deepen).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "mara already covered: conversation, importance, need",
-          "mara already covered: refuse, agree",
-          "owen already covered: trying"
+          "sarah already covered: refuse",
+          "owen already covered: refuse, topic",
+          "mara already covered: conversation, importance, need"
         ],
-        "last_updated_cycle": 190
+        "last_updated_cycle": 191
       }
     }
   },
