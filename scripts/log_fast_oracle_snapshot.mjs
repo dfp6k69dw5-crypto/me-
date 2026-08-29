@@ -4,6 +4,7 @@ import path from 'node:path';
 const MOD = 1000003n;
 const MARKETS = ['ES=F','NQ=F','GC=F','CL=F','BTC-USD','ETH-USD'];
 const STREAM = 'https://stream.wikimedia.org/v2/stream/recentchange';
+const MARKET = 'https://room-live-mirror.dfp6k69dw5.workers.dev/api/market';
 const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
 const SNAPSHOT_MS = 30000;
 const MIN_INTERVAL_MS = 5*60*1000;
@@ -59,7 +60,7 @@ async function wikiStreamSample(ms=SNAPSHOT_MS){
         throw e;
       }
       if(part.done) break;
-      buf+=dec.decode(part.value,{stream:true});
+      buf=(buf+dec.decode(part.value,{stream:true})).replace(/\r\n/g,'\n');
       let cut;
       while((cut=buf.indexOf('\n\n'))>=0){
         const block=buf.slice(0,cut); buf=buf.slice(cut+2);
@@ -83,14 +84,16 @@ async function wikiStreamSample(ms=SNAPSHOT_MS){
 }
 
 async function yahoo(symbol){
-  const u = new URL(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}`);
+  const u = new URL(MARKET);
+  u.searchParams.set('symbol',symbol);
   u.searchParams.set('interval','1m');
   u.searchParams.set('range','1d');
-  u.searchParams.set('includePrePost','true');
-  const r=await fetch(u,{headers:{accept:'application/json','user-agent':'Mozilla/5.0 FastOracleRecorder/2.0'}});
-  if(!r.ok) throw new Error(`${symbol} ${r.status}`);
+  u.searchParams.set('prepost','1');
+  u.searchParams.set('fresh',Date.now().toString());
+  const r=await fetch(u,{headers:{accept:'application/json'}});
+  if(!r.ok) throw new Error(`${symbol} proxy ${r.status}`);
   const j=await r.json();
-  const c=j?.chart?.result?.[0], times=c?.timestamp||[], closes=c?.indicators?.quote?.[0]?.close||[];
+  const c=j?.payload?.chart?.result?.[0], times=c?.timestamp||[], closes=c?.indicators?.quote?.[0]?.close||[];
   for(let i=Math.min(times.length,closes.length)-1;i>=0;i--){
     if(Number.isFinite(Number(times[i]))&&Number.isFinite(Number(closes[i]))) return {price:Number(closes[i]),marketTs:Number(times[i])};
   }
