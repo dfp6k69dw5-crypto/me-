@@ -18,6 +18,8 @@ function tameRoots(exact){
     r = Math.sqrt(r);
     roots++;
   }
+  r = Math.sqrt(r);
+  roots++;
   return {r,roots};
 }
 
@@ -98,7 +100,7 @@ async function wikiStreamSample(ms=SNAPSHOT_MS){
   const sampleStart=new Date();
   try{
     const r=await fetch(STREAM,{
-      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/6.0'},
+      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/7.0'},
       signal:ctl.signal,
     });
     if(!r.ok) throw new Error(`wiki stream ${r.status}`);
@@ -181,7 +183,7 @@ try{
     at:at.toISOString(),
     sampleStart:sample.sampleStart,
     sampleEnd:sample.sampleEnd,
-    model:'nonmarket-wikimedia-r-v6-sum-squares-squared-adaptive-roots',
+    model:'nonmarket-wikimedia-r-v7-sum-squares-squared-adaptive-roots-extra-root',
     oracle,
     markets,
   };
