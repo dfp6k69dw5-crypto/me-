@@ -33,13 +33,13 @@ jobs:
       - name: Commit snapshot
         shell: bash
         run: |
-          if git diff --quiet -- data/fast-oracle; then
+          if git diff --quiet -- room/oracle-history; then
             echo 'No snapshot change to commit.'
             exit 0
           fi
           git config user.name 'fast-oracle-recorder'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/fast-oracle
+          git add room/oracle-history
           git commit -m "Log Fast Oracle snapshot"
           for attempt in 1 2 3; do
             git pull --rebase origin main || true
