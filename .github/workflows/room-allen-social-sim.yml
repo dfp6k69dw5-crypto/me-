@@ -10,7 +10,9 @@ on:
       - 'scripts/room_social_v5.py'
       - 'scripts/room_engine_v5.py'
       - 'scripts/room_private_model.py'
+      - 'scripts/room_private_model_autonomy.py'
       - 'scripts/room_private_commit.py'
+      - 'scripts/room_research_architecture.py'
       - '.github/workflows/room-allen-social-sim.yml'
   workflow_dispatch:
 
@@ -25,7 +27,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-      - name: Run Allen simulators and existing engine self-test
+      - name: Run Allen simulators and Room architecture self-tests
         shell: bash
         run: |
           set +e
@@ -35,23 +37,27 @@ jobs:
           observation_status=$?
           python3 scripts/room_engine_v5.py selftest > /tmp/engine-selftest.txt 2>&1
           engine_status=$?
+          python3 scripts/room_research_architecture.py > /tmp/research-selftest.txt 2>&1
+          research_status=$?
           set -e
-          python3 - "$response_status" "$observation_status" "$engine_status" <<'PY'
+          python3 - "$response_status" "$observation_status" "$engine_status" "$research_status" <<'PY'
           import json,sys
           from datetime import datetime,timezone
-          response_status,observation_status,engine_status=map(int,sys.argv[1:])
+          response_status,observation_status,engine_status,research_status=map(int,sys.argv[1:])
           def read(path):
               try:return open(path).read()[-6000:]
               except Exception:return ''
           payload={
               'checked_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
-              'pass':response_status==0 and observation_status==0 and engine_status==0,
+              'pass':response_status==0 and observation_status==0 and engine_status==0 and research_status==0,
               'response_sim_exit_code':response_status,
               'observation_sim_exit_code':observation_status,
               'engine_selftest_exit_code':engine_status,
+              'research_selftest_exit_code':research_status,
               'response_sim_output':read('/tmp/allen-response.txt'),
               'observation_sim_output':read('/tmp/allen-observation.txt'),
               'engine_selftest_output':read('/tmp/engine-selftest.txt'),
+              'research_selftest_output':read('/tmp/research-selftest.txt'),
               'tested_sha':'${{ github.sha }}',
           }
           open('room/allen-social-sim-diagnostic.json','w').write(json.dumps(payload,indent=2)+'\n')
