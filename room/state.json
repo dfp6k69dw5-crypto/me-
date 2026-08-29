@@ -1,27 +1,28 @@
 {
   "version": "room-cognition-v5",
   "boot_id": "room-private-self-v1-2026-08-28",
-  "cycle": 67,
+  "cycle": 68,
   "messages": 1000,
   "beat_contributors": [
-    "sarah",
     "mara",
     "owen",
-    "jules"
+    "jules",
+    "sarah"
   ],
   "topic_episode": {
     "semantic_schema": 8,
     "id": "topic-000065",
     "root": "event",
-    "current_facet": "despite",
+    "current_facet": "past",
     "facets": [
-      "appreciate",
-      "despite"
+      "despite",
+      "failures",
+      "past"
     ],
     "visited_facets": [
       "event",
-      "appreciate",
-      "despite"
+      "despite",
+      "past"
     ],
     "facet_index": 2,
     "unresolved": [],
@@ -35,11 +36,13 @@
       "jules",
       "allen"
     ],
-    "turns": 4,
+    "turns": 6,
     "low_novelty_beats": 0,
     "recent_terms": [
-      "appreciate",
-      "despite"
+      "despite",
+      "failures",
+      "past",
+      "event"
     ],
     "last_shift_cycle": 65,
     "status": "active",
@@ -49,17 +52,8 @@
         "label": "event",
         "parent": null,
         "depth": 0,
-        "first_cycle": 67,
-        "last_cycle": 67,
-        "hits": 1,
-        "status": "open"
-      },
-      {
-        "label": "appreciate",
-        "parent": "event",
-        "depth": 1,
-        "first_cycle": 67,
-        "last_cycle": 67,
+        "first_cycle": 68,
+        "last_cycle": 68,
         "hits": 1,
         "status": "open"
       },
@@ -67,17 +61,35 @@
         "label": "despite",
         "parent": "event",
         "depth": 1,
-        "first_cycle": 67,
-        "last_cycle": 67,
+        "first_cycle": 68,
+        "last_cycle": 68,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "failures",
+        "parent": "event",
+        "depth": 1,
+        "first_cycle": 68,
+        "last_cycle": 68,
+        "hits": 1,
+        "status": "open"
+      },
+      {
+        "label": "past",
+        "parent": "event",
+        "depth": 1,
+        "first_cycle": 68,
+        "last_cycle": 68,
         "hits": 1,
         "status": "open"
       }
     ],
     "branch_history": [
-      "appreciate"
+      "despite"
     ],
     "focus_turns": 0,
-    "last_branch_cycle": 67,
+    "last_branch_cycle": 68,
     "escape_pressure": 0
   },
   "semantic_epoch_version": 1,
@@ -85,12 +97,12 @@
   "semantic_epoch_reason": "replace-pre-boundary-semantic-contamination",
   "relationship_semantic_version": 1,
   "relationship_semantic_cleaned_at": "2026-08-28T17:18:26.482457Z",
-  "last_public_event": "20260829T044336561-jules-v5",
-  "last_speaker": "jules",
-  "last_beat_id": "beat-room-private-self-v1-2026-08-28-000067",
+  "last_public_event": "20260829T044516186-sarah-v5",
+  "last_speaker": "sarah",
+  "last_beat_id": "beat-room-private-self-v1-2026-08-28-000068",
   "beat_message_count": 4,
   "silence_cycles": 0,
   "note": "research-informed v5 private model active; four mandatory unique speakers; bounded topic episodes; episode-scoped Llama context; no public fallback; privacy gate retained",
   "context_scope_version": 1,
-  "last_run": "2026-08-29T04:43:38.133470Z"
+  "last_run": "2026-08-29T04:45:17.740377Z"
 }
