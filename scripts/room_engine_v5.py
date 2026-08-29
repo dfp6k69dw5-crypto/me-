@@ -13,6 +13,7 @@ import room_social_v5 as _social
 import room_topic_bounded as _bounded_topic
 
 LEGACY_RETRY_POLICY = 'attempts = 9 if role == "expression" else 2'
+_AUTONOMOUS = set(_social.ORDER)
 
 _DISCOURSE_CUE_NOISE = {
     "despite", "although", "though", "however", "nevertheless", "nonetheless",
@@ -80,6 +81,24 @@ def _message_episode(message: object) -> str:
     return str(cognition.get("topic_episode") or "").strip() if isinstance(cognition, dict) else ""
 
 
+def _poisoned_autonomous_event(message: object) -> bool:
+    """Quarantine old model collapse without ever suppressing Allen's input."""
+    if not isinstance(message, dict):
+        return False
+    speaker = str(message.get("speaker") or "").strip().lower()
+    if speaker not in _AUTONOMOUS:
+        return False
+    words = re.findall(r"[a-z0-9']+", str(message.get("text") or "").lower())
+    if not words:
+        return True
+    nonsemantic = _DISCOURSE_CUE_NOISE | _TOPIC_FILLER | _TOPIC_SOCIAL_MOVE_TERMS | _TOPIC_STATE_TERMS
+    if all(word in nonsemantic for word in words):
+        return True
+    counts = {word: words.count(word) for word in set(words)}
+    peak = max(counts.values(), default=0)
+    return len(words) >= 3 and peak >= 3 and peak / len(words) >= 0.40
+
+
 def _sanitize_topic_for_model(topic: object) -> dict:
     """Never let a persisted bad facet become model input before commit-time normalization."""
     if not isinstance(topic, dict):
@@ -95,10 +114,7 @@ def _sanitize_topic_for_model(topic: object) -> dict:
     clean["current_facet"] = facet or root or None
     for key in ("facets", "visited_facets", "recent_terms", "shared_references"):
         values = clean.get(key) if isinstance(clean.get(key), list) else []
-        clean[key] = [
-            str(value).strip().lower() for value in values
-            if _bounded_topic._valid_term(value)
-        ][:10]
+        clean[key] = [str(value).strip().lower() for value in values if _bounded_topic._valid_term(value)][:10]
     return clean
 
 
@@ -112,9 +128,12 @@ def _episode_scoped_payload(payload: dict) -> dict:
         return scoped
     context = scoped.get("context")
     if isinstance(context, list):
-        scoped["context"] = [item for item in context if _message_episode(item) == episode_id]
+        scoped["context"] = [
+            item for item in context
+            if _message_episode(item) == episode_id and not _poisoned_autonomous_event(item)
+        ]
     event = scoped.get("event")
-    if event is not None and _message_episode(event) != episode_id:
+    if event is not None and (_message_episode(event) != episode_id or _poisoned_autonomous_event(event)):
         scoped["event"] = None
     return scoped
 
@@ -140,14 +159,11 @@ def _mask_private_context(prompt: str) -> str:
     def transform(data: dict) -> dict:
         context = data.get("context")
         if isinstance(context, list):
-            data["context"] = [
-                {
-                    "speaker": item.get("speaker") if isinstance(item, dict) else None,
-                    "target": item.get("target") if isinstance(item, dict) else None,
-                    "cues": _semantic_cues(item.get("text") if isinstance(item, dict) else item, limit=5),
-                }
-                for item in context
-            ]
+            data["context"] = [{
+                "speaker": item.get("speaker") if isinstance(item, dict) else None,
+                "target": item.get("target") if isinstance(item, dict) else None,
+                "cues": _semantic_cues(item.get("text") if isinstance(item, dict) else item, limit=5),
+            } for item in context]
         return data
     return _rewrite_prompt_data(prompt, transform)
 
@@ -156,14 +172,11 @@ def _mask_expression_transcript(prompt: str) -> str:
     def transform(data: dict) -> dict:
         context = data.get("context")
         if isinstance(context, list):
-            data["context"] = [
-                {
-                    "speaker": item.get("speaker") if isinstance(item, dict) else None,
-                    "target": item.get("target") if isinstance(item, dict) else None,
-                    "cues": _semantic_cues(item.get("text") if isinstance(item, dict) else item),
-                }
-                for item in context
-            ]
+            data["context"] = [{
+                "speaker": item.get("speaker") if isinstance(item, dict) else None,
+                "target": item.get("target") if isinstance(item, dict) else None,
+                "cues": _semantic_cues(item.get("text") if isinstance(item, dict) else item),
+            } for item in context]
         event = data.get("event")
         if isinstance(event, dict):
             data["event"] = {
@@ -260,7 +273,6 @@ def _coherent_recurrent(node, key, bus_data):
     entity, _local, role, _tasks = _legacy._core.ni(node)
     if role != "expression":
         return _LLAMA_ORIGINAL_RECURRENT(node, key, bus_data)
-
     routed = copy.deepcopy(bus_data)
     source_part = _legacy._core.rp(routed, entity, role)
     base = source_part.get("private") if isinstance(source_part.get("private"), dict) else {}
@@ -268,7 +280,6 @@ def _coherent_recurrent(node, key, bus_data):
     thought = ((routed.get("recurrent", {}).get(entity, {}) or {}).get("thought", {}) or {})
     thought_private = thought.get("private") if isinstance(thought.get("private"), dict) else {}
     deliberation = thought_private.get("deliberation") if isinstance(thought_private.get("deliberation"), dict) else None
-
     participants = set(_social.PARTICIPANTS)
     planned = str((deliberation or {}).get("preferred_partner") or base.get("partner") or "").lower()
     live_partner = planned if planned in participants and planned != entity else None
@@ -278,19 +289,20 @@ def _coherent_recurrent(node, key, bus_data):
         cognition = message.get("cognition") if isinstance(message, dict) else {}
         target = str(cognition.get("target") or "").lower() if isinstance(cognition, dict) else ""
         speaker = str(message.get("speaker") or "").lower() if isinstance(message, dict) else ""
-        if target == entity and speaker in participants and speaker != entity:
+        if target == entity and speaker in participants and speaker != entity and not _poisoned_autonomous_event(message):
             live_event, live_partner, directly_addressed = message, speaker, True
             break
     if live_event is None and live_partner:
         for message in reversed(prior):
-            if str(message.get("speaker") or "").lower() == live_partner:
+            if str(message.get("speaker") or "").lower() == live_partner and not _poisoned_autonomous_event(message):
                 live_event = message
                 break
     if live_event is None and prior:
-        candidate = prior[-1]
-        speaker = str(candidate.get("speaker") or "").lower() if isinstance(candidate, dict) else ""
-        if speaker in participants and speaker != entity:
-            live_event, live_partner = candidate, speaker
+        for candidate in reversed(prior):
+            speaker = str(candidate.get("speaker") or "").lower() if isinstance(candidate, dict) else ""
+            if speaker in participants and speaker != entity and not _poisoned_autonomous_event(candidate):
+                live_event, live_partner = candidate, speaker
+                break
     if live_event is None or not live_partner:
         return _LLAMA_ORIGINAL_RECURRENT(node, key, routed)
 
@@ -313,7 +325,7 @@ def _coherent_recurrent(node, key, bus_data):
         else:
             deliberation["new_information_goal"] = "Pick up the latest speaker's concrete point before adding your own relevant thought. Do not start a separate conversation while another turn is active."
 
-    ordered = [item for item in prior if item is not live_event] + [live_event]
+    ordered = [item for item in prior if item is not live_event and not _poisoned_autonomous_event(item)] + [live_event]
     original_prior = _legacy._core.prior_expression_messages
     _legacy._core.prior_expression_messages = lambda _node: ordered
     try:
@@ -330,7 +342,6 @@ if os.environ.get("ROOM_BRAIN_ACTIVE", "").strip() == "llama3.2-1b":
     _LLAMA_ORIGINAL_RECURRENT = _legacy._core.recurrent
     _legacy._core.recurrent = _coherent_recurrent
     _legacy.recurrent = _coherent_recurrent
-
 
 for _name in dir(_legacy):
     if _name.startswith("__") or _name == "main":
