@@ -1,9 +1,7 @@
 """Production startup guards for the persistent Room world.
 
-Two invariants live here because they must exist before the Room engine imports:
-1. A configuration boot-id change must not silently erase an existing world.
-2. Expression generation should get a fresh-seed retry when the same deterministic
-   hygiene rules that protect publication would otherwise drop an agent entirely.
+These guards exist before the Room engine imports so continuity, expression quality,
+and semantic hygiene cannot be bypassed by a later wrapper layer.
 
 An explicitly destructive maintenance run can opt out of continuity protection with
 ``ROOM_ALLOW_DESTRUCTIVE_BOOT_RESET=1``.
@@ -13,6 +11,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import re
 
 _ORIGINAL_READ_TEXT = Path.read_text
 _ROOT = Path(__file__).resolve().parents[1]
@@ -62,14 +61,62 @@ def _install_room_boot_guard() -> None:
     )
 
 
+def _profile_strings(value):
+    if isinstance(value, str):
+        if value.strip():
+            yield value
+        return
+    if isinstance(value, dict):
+        for item in value.values():
+            yield from _profile_strings(item)
+        return
+    if isinstance(value, (list, tuple)):
+        for item in value:
+            yield from _profile_strings(item)
+
+
+def _words(value) -> list[str]:
+    return re.findall(r"[a-z0-9']+", str(value or "").lower())
+
+
+def _profile_echo(utterance: str, payload: dict, n: int = 5) -> bool:
+    """Profiles may shape a voice, but profile prose must not become dialogue."""
+    output = _words(utterance)
+    if len(output) < n:
+        return False
+    output_grams = {tuple(output[i:i + n]) for i in range(len(output) - n + 1)}
+    profile = (payload or {}).get("profile")
+    psychology = profile.get("psychology_v2") if isinstance(profile, dict) and isinstance(profile.get("psychology_v2"), dict) else {}
+    for source in _profile_strings(psychology):
+        source_words = _words(source)
+        for i in range(max(0, len(source_words) - n + 1)):
+            if tuple(source_words[i:i + n]) in output_grams:
+                return True
+    return False
+
+
+def _install_topic_noise_guard() -> None:
+    """Keep discourse/process abstractions from becoming persistent subjects."""
+    try:
+        import room_topic_bounded as bounded
+    except Exception:
+        return
+    bounded._TOPIC_NOISE.update({
+        "step", "steps", "important", "importance", "direction", "directions",
+        "issue", "issues", "point", "points", "subject", "subjects",
+        "conversation", "conversations", "discussion", "discussions",
+        "change", "changes", "changed", "changing", "avoid", "avoids", "avoided", "avoiding",
+        "progress", "meaningful", "current", "recent", "recently",
+        "stance", "stances", "view", "views", "perceive", "perceived", "perception",
+    })
+
+
 def _install_expression_retry_guard() -> None:
     """Align generation with publication hygiene without weakening the final gate.
 
     The autonomy model already retries internally, but all of those attempts share the
-    same cycle seed family. If the resulting candidate is still missing or would be
-    quarantined by the deterministic publication hygiene classifier, make one more
-    autonomy pass under a fresh cycle-key salt. This keeps invalid text out while
-    preventing a single unlucky seed from turning a four-person beat into one speaker.
+    same cycle seed family. If the candidate is missing, deterministic-hygiene invalid,
+    or copies hidden personality prose, make one more autonomy pass under a fresh seed.
     """
     try:
         import room_private_model_autonomy as autonomy
@@ -105,10 +152,10 @@ def _install_expression_retry_guard() -> None:
                 utterance = str(result.get("utterance") or "").strip()
                 issue = research.autonomous_text_issue({"speaker": entity, "text": utterance})
                 if issue:
-                    print(
-                        f"Expression pre-publication retry for {entity}: {issue}",
-                        flush=True,
-                    )
+                    print(f"Expression pre-publication retry for {entity}: {issue}", flush=True)
+                    continue
+                if _profile_echo(utterance, payload):
+                    print(f"Expression pre-publication retry for {entity}: profile_echo", flush=True)
                     continue
                 return result
             print(f"Expression exhausted pre-publication retries for {entity}", flush=True)
@@ -123,4 +170,5 @@ def _install_expression_retry_guard() -> None:
 
 
 _install_room_boot_guard()
+_install_topic_noise_guard()
 _install_expression_retry_guard()
