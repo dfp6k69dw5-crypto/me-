@@ -5976,14 +5976,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T140429456-owen-v5",
+      "last_event": "20260829T140637015-mara-v5",
       "spoken": 2295,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9702738348838291,
+          "exposure": 0.9703184241315034,
           "direct_familiarity": 0.7115627398562587,
           "trust": 0.1,
           "predictability": 0.2941360464565948,
@@ -5993,7 +5993,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.05305945397500949,
           "direct_turns": 966,
-          "observed_turns": 2298,
+          "observed_turns": 2299,
           "repair_attempts": 31,
           "repair_successes": 0,
           "last_direct_cycle": 112,
@@ -10928,7 +10928,7 @@
         "what_i_want": "understand why the conversation changed rather than merely follow the newest noun.",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat i'm not sure i'm on board with the direction of… as important (callback).",
+            "belief_hypothesis": "mara currently seems to treat hey, don't, subject as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10945,11 +10945,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: hey, don't, subject",
           "owen already covered: disagree",
-          "mara already covered: i'm not sure i'm on board with the direction of…",
-          "mara already covered: subject"
+          "mara already covered: i'm not sure i'm on board with the direction of…"
         ],
-        "last_updated_cycle": 120
+        "last_updated_cycle": 121
       }
     },
     "mara": {
@@ -14280,18 +14280,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T122314397-mara-v5",
-          "text": "Hey, that's just a joke, Mara.",
-          "move": "disclose",
-          "discourse": "d-20260828T122314397-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002055",
-          "topic_episode": "topic-002052",
-          "topic_facet": "joke",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T122656318-mara-v5",
           "text": "you're carrying the whole joke sarah. jules",
           "move": "support",
@@ -16918,10 +16906,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T140637015-mara-v5",
+          "text": "Hey Owen, I don't want OWen's subject to be explicit. Can we avoid discussing it?",
+          "move": "repair",
+          "discourse": "d-20260829T140637015-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000121",
+          "topic_episode": "topic-000120",
+          "topic_facet": "direction",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T140429456-owen-v5",
-      "spoken": 2298,
+      "last_event": "20260829T140637015-mara-v5",
+      "spoken": 2299,
       "silences": 0,
       "people": {
         "sarah": {
@@ -21885,7 +21885,7 @@
           "sarah already covered: integration",
           "owen already covered: make, progress, necessary"
         ],
-        "last_updated_cycle": 120
+        "last_updated_cycle": 121
       }
     },
     "owen": {
@@ -21905,21 +21905,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T142656954-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "owen",
-          "text": "Hey, Owen, I love food!",
-          "move": "support",
-          "discourse": "d-20260828T142656954-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002121",
-          "topic_episode": "topic-002119",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
         {
           "source": "20260828T142659096-sarah-v5",
           "status": "observed",
@@ -25232,6 +25217,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "mara"
+        },
+        {
+          "source": "20260829T140637015-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "owen",
+          "text": "Hey Owen, I don't want OWen's subject to be explicit. Can we avoid discussing it?",
+          "move": "repair",
+          "discourse": "d-20260829T140637015-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000121",
+          "topic_episode": "topic-000120",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
@@ -27876,7 +27876,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T140429456-owen-v5",
+      "last_event": "20260829T140637015-mara-v5",
       "spoken": 2295,
       "silences": 0,
       "people": {
@@ -29406,23 +29406,21 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9702738348838291,
-          "direct_familiarity": 0.43767597894625593,
+          "exposure": 0.9703184241315034,
+          "direct_familiarity": 0.43835076777152043,
           "trust": 0.1,
-          "predictability": 0.18563008083072563,
-          "reciprocity": 0.21671394587936096,
-          "warmth": 0.2505279640446134,
+          "predictability": 0.18603726579031027,
+          "reciprocity": 0.21741890332806954,
+          "warmth": 0.25097764726618665,
           "respect": 0.1640152581786007,
           "disclosure_depth": 0.0,
           "tension": 0.19209642223494072,
-          "direct_turns": 410,
-          "observed_turns": 2298,
+          "direct_turns": 411,
+          "observed_turns": 2299,
           "repair_attempts": 10,
           "repair_successes": 0,
-          "last_direct_cycle": 120,
+          "last_direct_cycle": 121,
           "shared_references": [
-            "sorry",
-            "didn't",
             "team",
             "you're the one who's been trying to...",
             "passion",
@@ -29480,18 +29478,11 @@
             "open",
             "hearing",
             "direction",
-            "i'm not sure i'm on board with the direction of the conversation"
+            "i'm not sure i'm on board with the direction of the conversation",
+            "hey",
+            "don't"
           ],
           "events": [
-            {
-              "cycle": 761,
-              "kind": "support",
-              "direct": true,
-              "message_id": "20260826T062956446-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 764,
               "kind": "support",
@@ -30922,6 +30913,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": true
+            },
+            {
+              "cycle": 121,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T140637015-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -32679,7 +32679,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat i'm not sure i'm on board with the direction of… as important (callback).",
+            "belief_hypothesis": "mara currently seems to treat hey, don't, subject as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -32691,11 +32691,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: hey, don't, subject",
           "mara already covered: i'm not sure i'm on board with the direction of…",
-          "mara already covered: subject",
-          "sarah already covered: integration"
+          "mara already covered: subject"
         ],
-        "last_updated_cycle": 120
+        "last_updated_cycle": 121
       }
     },
     "jules": {
@@ -38670,7 +38670,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T140429456-owen-v5",
+      "last_event": "20260829T140637015-mara-v5",
       "spoken": 2294,
       "silences": 0,
       "people": {
@@ -40200,7 +40200,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9702738348838291,
+          "exposure": 0.9703184241315034,
           "direct_familiarity": 0.6624303063663226,
           "trust": 0.1,
           "predictability": 0.3032176832862351,
@@ -40210,7 +40210,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.14275423823410588,
           "direct_turns": 835,
-          "observed_turns": 2298,
+          "observed_turns": 2299,
           "repair_attempts": 18,
           "repair_successes": 0,
           "last_direct_cycle": 109,
@@ -43493,7 +43493,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat i'm not sure i'm on board with the direction of… as important (callback).",
+            "belief_hypothesis": "mara currently seems to treat hey, don't, subject as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43505,11 +43505,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: hey, don't, subject",
           "owen already covered: disagree",
-          "mara already covered: i'm not sure i'm on board with the direction of…",
-          "mara already covered: subject"
+          "mara already covered: i'm not sure i'm on board with the direction of…"
         ],
-        "last_updated_cycle": 120
+        "last_updated_cycle": 121
       }
     }
   },
