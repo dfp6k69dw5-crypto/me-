@@ -5976,7 +5976,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T163808042-owen-v5",
+      "last_event": "20260829T165038047-jules-v5",
       "spoken": 2315,
       "silences": 0,
       "people": {
@@ -9029,7 +9029,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9709792926915818,
+          "exposure": 0.9710228237525445,
           "direct_familiarity": 0.4666133793414464,
           "trust": 0.11434240000000001,
           "predictability": 0.2569972133819747,
@@ -9039,7 +9039,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.23531038104765487,
           "direct_turns": 454,
-          "observed_turns": 2314,
+          "observed_turns": 2315,
           "repair_attempts": 6,
           "repair_successes": 0,
           "last_direct_cycle": 154,
@@ -10938,18 +10938,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat i have what it takes. owen., i believe. the way i do. matters as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat importance, sharing as important (disclose).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
-        "what_just_changed": "Mara said: picture; Mara said: head",
+        "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: importance, sharing",
           "owen already covered: way",
-          "mara already covered: way",
-          "jules already covered: i have what it takes. owen., i believe. the way i do. matters"
+          "mara already covered: way"
         ],
-        "last_updated_cycle": 164
+        "last_updated_cycle": 165
       }
     },
     "mara": {
@@ -10969,21 +10969,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T130258523-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "mara",
-          "text": "My apologies, I'm sorry",
-          "move": "repair",
-          "discourse": "d-20260828T130258523-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002077",
-          "topic_episode": "topic-002072",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
         {
           "source": "20260828T130304803-owen-v5",
           "status": "observed",
@@ -14275,6 +14260,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260829T165038047-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "mara",
+          "text": "The importance of sharing with you:...",
+          "move": "disclose",
+          "discourse": "d-20260829T165038047-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000165",
+          "topic_episode": "topic-000158",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "jules"
         }
       ],
       "self_history": [
@@ -16919,7 +16919,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T163808042-owen-v5",
+      "last_event": "20260829T165038047-jules-v5",
       "spoken": 2319,
       "silences": 0,
       "people": {
@@ -19972,8 +19972,8 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9709792926915818,
-          "direct_familiarity": 0.6257088545905709,
+          "exposure": 0.9710228237525445,
+          "direct_familiarity": 0.6261580039650623,
           "trust": 0.1,
           "predictability": 0.34946489138877695,
           "reciprocity": 0.4483027411355201,
@@ -19981,14 +19981,12 @@
           "respect": 0.25197578888371225,
           "disclosure_depth": 0.0,
           "tension": 0.2027020004106831,
-          "direct_turns": 749,
-          "observed_turns": 2314,
+          "direct_turns": 750,
+          "observed_turns": 2315,
           "repair_attempts": 11,
           "repair_successes": 0,
-          "last_direct_cycle": 162,
+          "last_direct_cycle": 165,
           "shared_references": [
-            "said",
-            "better",
             "strategy",
             "food",
             "truck",
@@ -20046,18 +20044,11 @@
             "conversation",
             "takes",
             "i have what it takes. owen.",
-            "i believe. the way i do. matters"
+            "i believe. the way i do. matters",
+            "importance",
+            "sharing"
           ],
           "events": [
-            {
-              "cycle": 1887,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260828T070716380-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1889,
               "kind": "deepen",
@@ -21488,6 +21479,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 165,
+              "kind": "disclose",
+              "direct": true,
+              "message_id": "20260829T165038047-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -21873,18 +21873,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat i have what it takes. owen., i believe. the way i do. matters as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat importance, sharing as important (disclose).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
-        "what_just_changed": "Mara said: i believe; Mara said: consensus; Mara said: takes; Mara said: owen; i believe",
+        "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: importance, sharing",
           "owen already covered: way",
-          "sarah already covered: i believe, consensus, philosophers",
-          "jules already covered: i have what it takes. owen., i believe. the way i do. matters"
+          "sarah already covered: i believe, consensus, philosophers"
         ],
-        "last_updated_cycle": 164
+        "last_updated_cycle": 165
       }
     },
     "owen": {
@@ -27875,7 +27875,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T163808042-owen-v5",
+      "last_event": "20260829T165038047-jules-v5",
       "spoken": 2311,
       "silences": 0,
       "people": {
@@ -30928,7 +30928,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9709792926915818,
+          "exposure": 0.9710228237525445,
           "direct_familiarity": 0.7299956793123215,
           "trust": 0.1,
           "predictability": 0.35188058398068317,
@@ -30938,7 +30938,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.09988336231028608,
           "direct_turns": 1021,
-          "observed_turns": 2314,
+          "observed_turns": 2315,
           "repair_attempts": 17,
           "repair_successes": 0,
           "last_direct_cycle": 159,
@@ -32694,18 +32694,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat i have what it takes. owen., i believe. the way i do. matters as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat importance, sharing as important (disclose).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
-        "what_just_changed": "Mara said: picture; Mara said: head; Mara said: takes; Mara said: owen; believe",
+        "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: importance, sharing",
           "mara already covered: way",
-          "sarah already covered: i believe, consensus, philosophers",
-          "jules already covered: i have what it takes. owen., i believe. the way i do. matters"
+          "sarah already covered: i believe, consensus, philosophers"
         ],
-        "last_updated_cycle": 164
+        "last_updated_cycle": 165
       }
     },
     "jules": {
@@ -36040,18 +36040,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T125109491-jules-v5",
-          "text": "You're really good at making people laugh, sarah.",
-          "move": "repair",
-          "discourse": "d-20260828T125109491-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002070",
-          "topic_episode": "topic-002064",
-          "topic_facet": "amusing",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T125242863-jules-v5",
           "text": "I know it’s amazing how much we could have enjoyed the paintings,",
           "move": "deepen",
@@ -38678,10 +38666,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T165038047-jules-v5",
+          "text": "The importance of sharing with you:...",
+          "move": "disclose",
+          "discourse": "d-20260829T165038047-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000165",
+          "topic_episode": "topic-000158",
+          "topic_facet": "head",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T163808042-owen-v5",
-      "spoken": 2314,
+      "last_event": "20260829T165038047-jules-v5",
+      "spoken": 2315,
       "silences": 0,
       "people": {
         "sarah": {
@@ -43519,7 +43519,7 @@
           "mara already covered: way",
           "sarah already covered: i believe, consensus, philosophers"
         ],
-        "last_updated_cycle": 164
+        "last_updated_cycle": 165
       }
     }
   },
