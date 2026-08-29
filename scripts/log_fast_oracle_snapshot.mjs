@@ -13,11 +13,14 @@ const LOCK_DIR = path.join('.room_model','fast-oracle-recorder.lock');
 
 function alex(seed){
   let x = BigInt(Math.abs(Math.trunc(seed))) % MOD;
+  let sumSquares = 0n;
   for(let i=1n;i<=1000n;i++){
     const tri = i*(i+1n)/2n;
     x = (x + i*x*x + x*tri) % MOD;
+    sumSquares += x*x;
   }
-  return Math.sqrt(Number(x));
+  const exact = sumSquares*sumSquares;
+  return {r:Number(exact),rExact:exact.toString(),sumSquaresExact:sumSquares.toString()};
 }
 
 function buildOracle(e){
@@ -38,7 +41,8 @@ function buildOracle(e){
   ];
   let seed=17;
   factors.forEach((v,i)=>{seed=(seed+Math.round((v+1)*50000)*(i+11))%1000003});
-  return {r:alex(seed),seed,factors,sourceCount:n,rate,bot,minor,newShare,logShare,meanBytes};
+  const value=alex(seed);
+  return {r:value.r,rExact:value.rExact,sumSquaresExact:value.sumSquaresExact,seed,factors,sourceCount:n,rate,bot,minor,newShare,logShare,meanBytes};
 }
 
 function latestRecordTime(){
@@ -83,7 +87,7 @@ async function wikiStreamSample(ms=SNAPSHOT_MS){
   const sampleStart=new Date();
   try{
     const r=await fetch(STREAM,{
-      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/4.0'},
+      headers:{accept:'text/event-stream','user-agent':'FastOracleRecorder/5.0'},
       signal:ctl.signal,
     });
     if(!r.ok) throw new Error(`wiki stream ${r.status}`);
@@ -166,13 +170,13 @@ try{
     at:at.toISOString(),
     sampleStart:sample.sampleStart,
     sampleEnd:sample.sampleEnd,
-    model:'nonmarket-wikimedia-r-v4-positive-market-prices',
+    model:'nonmarket-wikimedia-r-v5-sum-squares-squared',
     oracle,
     markets,
   };
   const file=path.join(HISTORY_DIR,`${at.toISOString().slice(0,10)}.jsonl`);
   fs.appendFileSync(file,JSON.stringify(record)+'\n');
-  console.log(JSON.stringify({at:record.at,sampleStart:record.sampleStart,sampleEnd:record.sampleEnd,r:record.oracle.r,events:sample.events.length,markets:record.markets},null,2));
+  console.log(JSON.stringify({at:record.at,sampleStart:record.sampleStart,sampleEnd:record.sampleEnd,r:record.oracle.r,rExact:record.oracle.rExact,events:sample.events.length,markets:record.markets},null,2));
 } finally {
   releaseLock();
 }
