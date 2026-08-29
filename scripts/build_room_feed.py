@@ -33,16 +33,16 @@ feed = {
 (ROOM / "feed.json").write_text(json.dumps(feed, ensure_ascii=False, separators=(",", ":")) + "\n")
 
 # Best-effort Oracle history piggybacks on the Room's already-reliable commits.
-# The Node recorder self-throttles to one snapshot per five minutes. A logging
-# failure must never make a Room beat fail.
+# Launch it asynchronously so a 30-second Wikimedia sample can never stall a Room
+# beat. The recorder owns its own single-process lock and five-minute throttle.
 try:
-    subprocess.run(
+    subprocess.Popen(
         ["node", str(ROOT / "scripts" / "log_fast_oracle_snapshot.mjs")],
         cwd=ROOT,
-        check=False,
-        timeout=45,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
+        start_new_session=True,
+        close_fds=True,
     )
 except Exception:
     pass
