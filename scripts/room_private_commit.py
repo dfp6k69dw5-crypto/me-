@@ -174,6 +174,9 @@ def validate_public_expression(entity: str, text: str, terms: list[str], context
     deterministic_issue = _publication_degenerate(text)
     if deterministic_issue:
         raise RuntimeError(f"private Room publish quarantine for {entity}: {deterministic_issue}")
+    hygiene_issue = _research.autonomous_text_issue({"speaker": entity, "text": text})
+    if hygiene_issue:
+        raise RuntimeError(f"private Room publish quarantine for {entity}: {hygiene_issue}")
     compact = {
         "context": list(context or [])[-8:],
         "event": (list(context or [])[-1] if context else None),
