@@ -200,28 +200,40 @@ def private_commit(parts: list[dict], key: str):
     order, E = c.order4(parts, prev, cycle)
     beat = f"beat-{c.BOOT}-{cycle:06d}"
 
-    expressions = {}
+    # A failed expression belongs to that agent, not to the whole Room. Preserve
+    # the hard quality boundary, but quarantine the failed candidate and allow
+    # independently valid peers to publish.
+    expressions: dict[str, dict] = {}
+    quarantined: list[str] = []
     for entity in c.ORDER:
         expr = (E[entity].get("private") or {}).get("expression")
         if not isinstance(expr, dict):
-            raise RuntimeError(f"private Room requires model expression for {entity}; no public fallback is permitted")
+            quarantined.append(f"{entity}:missing_expression")
+            continue
         if not semantic_values(expr):
-            raise RuntimeError(f"private Room expression lacks semantic fields for {entity}")
+            quarantined.append(f"{entity}:missing_semantic_fields")
+            continue
         expressions[entity] = expr
 
+    if not expressions:
+        print("All Room expressions quarantined before publication; skipping beat without state mutation")
+        return
+
+    valid_order = [entity for entity in order if entity in expressions]
     if not topic.get("root"):
-        topic = seed_topic(expressions, order, cycle, topic)
+        topic = seed_topic(expressions, valid_order, cycle, topic)
 
     plans = c.plan_actions(order, c.target(q) if q else None, M, topic, cycle)
     staged: list[tuple[str, str, str, str, list[str]]] = []
 
-    # Atomic publication. Candidate N is also checked against candidates 1..N-1,
-    # so same-beat copying cannot hide behind the fact that history is not written yet.
-    for entity in order:
+    # Candidate N is checked against accepted candidates 1..N-1. Any invalid
+    # candidate is dropped locally and never reaches history, memory, or topic state.
+    for entity in valid_order:
         expr = expressions[entity]
         text = c.model_text(expr)
         if not text:
-            raise RuntimeError(f"private Room expression invalid for {entity}; no public fallback is permitted")
+            quarantined.append(f"{entity}:invalid_model_text")
+            continue
 
         terms = clean_terms(expr, topic, text)
         if not terms:
@@ -232,7 +244,11 @@ def private_commit(parts: list[dict], key: str):
             {"speaker": speaker, "text": staged_text, "cognition": {"target": target}}
             for speaker, _move, target, staged_text, _terms in staged
         ]
-        validate_public_expression(entity, text, terms, validation_context)
+        try:
+            validate_public_expression(entity, text, terms, validation_context)
+        except RuntimeError as exc:
+            quarantined.append(f"{entity}:{str(exc)[:100]}")
+            continue
 
         planned = plans[entity]
         move = norm(expr.get("move") or planned["action"])
@@ -245,6 +261,12 @@ def private_commit(parts: list[dict], key: str):
             target = next(other for other in c.ORDER if other != entity)
         staged.append((entity, move, target, text, terms))
 
+    if not staged:
+        print("All Room expressions quarantined at final publication gate; skipping beat without state mutation")
+        if quarantined:
+            print("Room quarantine:", " | ".join(quarantined))
+        return
+
     spoken: list[dict] = []
     answer_msg = None
     for entity, move, target, text, terms in staged:
@@ -256,8 +278,6 @@ def private_commit(parts: list[dict], key: str):
             answer_msg = msg
 
     speakers = [m["speaker"] for m in spoken]
-    if len(spoken) != 4 or set(speakers) != set(c.ORDER):
-        raise RuntimeError(f"v5 mandatory speech invariant failed: {speakers}")
 
     # Migrate legacy memory non-destructively and label new memories by what was
     # actually observed. Hearing a proposition is not the same thing as witnessing it.
@@ -270,7 +290,7 @@ def private_commit(parts: list[dict], key: str):
     }
     topic = clean_topic(c.update_topic(topic, spoken, cycle))
     if not topic.get("root") or bad_term(topic.get("root")):
-        topic = seed_topic(expressions, order, cycle, topic)
+        topic = seed_topic(expressions, valid_order, cycle, topic)
 
     if context_scope_migration:
         topic = context_scope_reset(topic, key, cycle)
@@ -331,9 +351,9 @@ def private_commit(parts: list[dict], key: str):
         "last_speaker": spoken[-1]["speaker"],
         "last_beat_id": beat,
         "beat_contributors": speakers,
-        "beat_message_count": 4,
+        "beat_message_count": len(spoken),
         "silence_cycles": 0,
-        "note": "research-informed v5: selective agent context; provenance-tagged memory; guarded private beliefs; atomic quality+privacy publication gate",
+        "note": "research-informed v5: selective agent context; provenance-tagged memory; guarded private beliefs; per-agent quality+privacy quarantine",
     })
 
     c.audit_invariants(M, topic)
@@ -384,7 +404,7 @@ def private_commit(parts: list[dict], key: str):
             "voting": False,
             "public_bus": True,
             "private_scope": "agent-specific selective retrieval",
-            "beat_output": "4 mandatory unique speakers",
+            "beat_output": f"{len(spoken)} validated contribution(s); invalid candidates quarantined per agent",
             "private_pipeline": "selective evidence->perception->deliberation->expression",
             "public_fallback": False,
             "history_generation": c.BOOT,
@@ -392,10 +412,13 @@ def private_commit(parts: list[dict], key: str):
             "privacy_gate": True,
             "memory_provenance": True,
             "reported_claims_are_facts": False,
+            "per_agent_expression_quarantine": True,
         },
     }
     c.save(c.ROOM / "live.json", live)
     c.save(c.ROOT / "society" / "live.json", live)
+    if quarantined:
+        print("Room quarantine:", " | ".join(quarantined))
     print("Room private beat", cycle, ":", ", ".join(c.N[e] for e in speakers), "subject=", topic.get("root"))
 
 
