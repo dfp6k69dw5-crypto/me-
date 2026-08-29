@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 20
@@ -216,7 +216,7 @@ jobs:
             fi
           done
           if [ -n "$model_pid" ]; then kill "$model_pid" 2>/dev/null || true; fi
-          handoff_ok=0
-          for attempt in 1 2 3 4 5; do if gh workflow run sarah-society.yml --repo "$GITHUB_REPOSITORY" --ref main -f entity=auto; then handoff_ok=1; break; fi; sleep $((attempt * 5)); done
           if [ "$runner_exit_reason" = "repeated_beat_failure" ]; then exit 1; fi
+          # The Room Pulse is the single normal handoff authority. Do not dispatch
+          # another Room here or race the pulse chain with a duplicate replacement.
           exit 0
