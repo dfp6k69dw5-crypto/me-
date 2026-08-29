@@ -7,8 +7,8 @@
       },
       "medium": {
         "topics": [
-          "important",
-          "important"
+          "direction",
+          "direction"
         ],
         "branch_interest": 0.736
       },
@@ -5976,14 +5976,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T140152653-mara-v5",
+      "last_event": "20260829T140429456-owen-v5",
       "spoken": 2295,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9702291786518068,
+          "exposure": 0.9702738348838291,
           "direct_familiarity": 0.7115627398562587,
           "trust": 0.1,
           "predictability": 0.2941360464565948,
@@ -5993,7 +5993,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.05305945397500949,
           "direct_turns": 966,
-          "observed_turns": 2297,
+          "observed_turns": 2298,
           "repair_attempts": 31,
           "repair_successes": 0,
           "last_direct_cycle": 112,
@@ -7506,7 +7506,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.970094807042621,
+          "exposure": 0.970139664832057,
           "direct_familiarity": 0.7146629514702196,
           "trust": 0.1072,
           "predictability": 0.4073604287217704,
@@ -7516,7 +7516,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.19405908050061066,
           "direct_turns": 975,
-          "observed_turns": 2294,
+          "observed_turns": 2295,
           "repair_attempts": 15,
           "repair_successes": 0,
           "last_direct_cycle": 109,
@@ -10928,12 +10928,12 @@
         "what_i_want": "understand why the conversation changed rather than merely follow the newest noun.",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat subject as important (answer).",
+            "belief_hypothesis": "mara currently seems to treat i'm not sure i'm on board with the direction of… as important (callback).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat make, progress, necessary as important (support).",
+            "belief_hypothesis": "owen currently seems to treat disagree as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10945,11 +10945,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "mara already covered: subject",
-          "owen already covered: make, progress, necessary",
-          "mara already covered: change, subject"
+          "owen already covered: disagree",
+          "mara already covered: i'm not sure i'm on board with the direction of…",
+          "mara already covered: subject"
         ],
-        "last_updated_cycle": 119
+        "last_updated_cycle": 120
       }
     },
     "mara": {
@@ -10959,8 +10959,8 @@
       },
       "medium": {
         "topics": [
-          "important",
-          "important"
+          "direction",
+          "direction"
         ],
         "branch_interest": 0.576
       },
@@ -10969,21 +10969,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T123826150-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "mara",
-          "text": "You're going time,",
-          "move": "repair",
-          "discourse": "d-20260828T123826150-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002063",
-          "topic_episode": "topic-002058",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
         {
           "source": "20260828T123828344-jules-v5",
           "status": "observed",
@@ -14276,21 +14261,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260829T140429456-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "mara",
+          "text": "I disagree with the view that I'm not sure I agree...",
+          "move": "answer",
+          "discourse": "d-20260829T140429456-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000120",
+          "topic_episode": "topic-000118",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "owen"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T122140836-mara-v5",
-          "text": "I'm not laughing at your jokes, I'm just appreciating the humor in this situation.",
-          "move": "repair",
-          "discourse": "d-20260828T122140836-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002054",
-          "topic_episode": "topic-002052",
-          "topic_facet": "humor",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T122314397-mara-v5",
           "text": "Hey, that's just a joke, Mara.",
@@ -16918,10 +16906,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T140426897-mara-v5",
+          "text": "I'm not sure I agree",
+          "move": "callback",
+          "discourse": "d-20260829T140426897-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000120",
+          "topic_episode": "topic-000118",
+          "topic_facet": "important",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T140152653-mara-v5",
-      "spoken": 2297,
+      "last_event": "20260829T140429456-owen-v5",
+      "spoken": 2298,
       "silences": 0,
       "people": {
         "sarah": {
@@ -18450,22 +18450,21 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.970094807042621,
-          "direct_familiarity": 0.6731986372091493,
+          "exposure": 0.970139664832057,
+          "direct_familiarity": 0.6735907988444984,
           "trust": 0.1072,
-          "predictability": 0.3864911008136129,
-          "reciprocity": 0.5095402612505949,
-          "warmth": 0.4473257143860079,
-          "respect": 0.1993686222436049,
+          "predictability": 0.38602425955267966,
+          "reciprocity": 0.5099816750154694,
+          "warmth": 0.44765731895737626,
+          "respect": 0.19972890636359528,
           "disclosure_depth": 0.008,
-          "tension": 0.14389466059979328,
-          "direct_turns": 862,
-          "observed_turns": 2294,
+          "tension": 0.15245571399379534,
+          "direct_turns": 863,
+          "observed_turns": 2295,
           "repair_attempts": 18,
           "repair_successes": 0,
-          "last_direct_cycle": 119,
+          "last_direct_cycle": 120,
           "shared_references": [
-            "find",
             "gardens",
             "interest",
             "things",
@@ -18524,18 +18523,10 @@
             "issue",
             "make",
             "progress",
-            "necessary"
+            "necessary",
+            "disagree"
           ],
           "events": [
-            {
-              "cycle": 1945,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260828T085729073-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1947,
               "kind": "deepen",
@@ -19966,6 +19957,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 120,
+              "kind": "answer",
+              "direct": true,
+              "message_id": "20260829T140429456-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": true
             }
           ],
           "reports": []
@@ -21869,7 +21869,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat make, progress, necessary as important (support).",
+            "belief_hypothesis": "owen currently seems to treat disagree as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -21881,11 +21881,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: disagree",
           "sarah already covered: integration",
-          "owen already covered: make, progress, necessary",
-          "sarah already covered: issue, change"
+          "owen already covered: make, progress, necessary"
         ],
-        "last_updated_cycle": 119
+        "last_updated_cycle": 120
       }
     },
     "owen": {
@@ -21895,8 +21895,8 @@
       },
       "medium": {
         "topics": [
-          "important",
-          "important"
+          "direction",
+          "direction"
         ],
         "branch_interest": 0.68
       },
@@ -21905,21 +21905,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T142350560-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "owen",
-          "text": "I am still hungry, my partner needs me to fix him,",
-          "move": "repair",
-          "discourse": "d-20260828T142350560-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002119",
-          "topic_episode": "topic-002117",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
         {
           "source": "20260828T142656954-jules-v5",
           "status": "observed",
@@ -25232,21 +25217,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "mara"
+        },
+        {
+          "source": "20260829T140426897-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "owen",
+          "text": "I'm not sure I agree",
+          "move": "callback",
+          "discourse": "d-20260829T140426897-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000120",
+          "topic_episode": "topic-000118",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T123211576-owen-v5",
-          "text": "I've been holding back on sharing my thoughts on music until now because I wanted to make sure I understood your perspective better.",
-          "move": "support",
-          "discourse": "d-20260828T123211576-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002060",
-          "topic_episode": "topic-002058",
-          "topic_facet": "music",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T123427457-owen-v5",
           "text": "I've been analyzing the flaws in your concept of autonomy and autonomy is closely tied to the physical sensations of connection and touch.",
@@ -27874,10 +27862,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T140429456-owen-v5",
+          "text": "I disagree with the view that I'm not sure I agree...",
+          "move": "answer",
+          "discourse": "d-20260829T140429456-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000120",
+          "topic_episode": "topic-000118",
+          "topic_facet": "important",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T140152653-mara-v5",
-      "spoken": 2294,
+      "last_event": "20260829T140429456-owen-v5",
+      "spoken": 2295,
       "silences": 0,
       "people": {
         "sarah": {
@@ -29406,22 +29406,21 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9702291786518068,
-          "direct_familiarity": 0.4370003794015378,
+          "exposure": 0.9702738348838291,
+          "direct_familiarity": 0.43767597894625593,
           "trust": 0.1,
-          "predictability": 0.18395879000090729,
-          "reciprocity": 0.21443722785312488,
-          "warmth": 0.2500780108511241,
-          "respect": 0.16363889568165743,
+          "predictability": 0.18563008083072563,
+          "reciprocity": 0.21671394587936096,
+          "warmth": 0.2505279640446134,
+          "respect": 0.1640152581786007,
           "disclosure_depth": 0.0,
-          "tension": 0.18393578003529365,
-          "direct_turns": 409,
-          "observed_turns": 2297,
+          "tension": 0.19209642223494072,
+          "direct_turns": 410,
+          "observed_turns": 2298,
           "repair_attempts": 10,
           "repair_successes": 0,
-          "last_direct_cycle": 119,
+          "last_direct_cycle": 120,
           "shared_references": [
-            "i'm",
             "sorry",
             "didn't",
             "team",
@@ -29480,18 +29479,10 @@
             "issue",
             "open",
             "hearing",
-            "direction"
+            "direction",
+            "i'm not sure i'm on board with the direction of the conversation"
           ],
           "events": [
-            {
-              "cycle": 760,
-              "kind": "support",
-              "direct": true,
-              "message_id": "20260826T062759520-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 761,
               "kind": "support",
@@ -30919,6 +30910,15 @@
               "kind": "answer",
               "direct": true,
               "message_id": "20260829T140152653-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": true
+            },
+            {
+              "cycle": 120,
+              "kind": "callback",
+              "direct": true,
+              "message_id": "20260829T140426897-mara-v5",
               "risk": 0,
               "repair": false,
               "disagreement": true
@@ -32679,7 +32679,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat subject as important (answer).",
+            "belief_hypothesis": "mara currently seems to treat i'm not sure i'm on board with the direction of… as important (callback).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -32691,11 +32691,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: i'm not sure i'm on board with the direction of…",
           "mara already covered: subject",
-          "sarah already covered: integration",
-          "mara already covered: change, subject"
+          "sarah already covered: integration"
         ],
-        "last_updated_cycle": 119
+        "last_updated_cycle": 120
       }
     },
     "jules": {
@@ -32705,8 +32705,8 @@
       },
       "medium": {
         "topics": [
-          "important",
-          "important"
+          "direction",
+          "direction"
         ],
         "branch_interest": 0.508
       },
@@ -38670,7 +38670,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T140152653-mara-v5",
+      "last_event": "20260829T140429456-owen-v5",
       "spoken": 2294,
       "silences": 0,
       "people": {
@@ -40200,7 +40200,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9702291786518068,
+          "exposure": 0.9702738348838291,
           "direct_familiarity": 0.6624303063663226,
           "trust": 0.1,
           "predictability": 0.3032176832862351,
@@ -40210,7 +40210,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.14275423823410588,
           "direct_turns": 835,
-          "observed_turns": 2297,
+          "observed_turns": 2298,
           "repair_attempts": 18,
           "repair_successes": 0,
           "last_direct_cycle": 109,
@@ -41723,7 +41723,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.970094807042621,
+          "exposure": 0.970139664832057,
           "direct_familiarity": 0.4170509143058723,
           "trust": 0.1072,
           "predictability": 0.2668306037773559,
@@ -41733,7 +41733,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.20679098066736534,
           "direct_turns": 380,
-          "observed_turns": 2294,
+          "observed_turns": 2295,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 116,
@@ -43493,23 +43493,23 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat subject as important (answer).",
+            "belief_hypothesis": "mara currently seems to treat i'm not sure i'm on board with the direction of… as important (callback).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat make, progress, necessary as important (support).",
+            "belief_hypothesis": "owen currently seems to treat disagree as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "mara already covered: subject",
-          "sarah already covered: integration",
-          "owen already covered: make, progress, necessary"
+          "owen already covered: disagree",
+          "mara already covered: i'm not sure i'm on board with the direction of…",
+          "mara already covered: subject"
         ],
-        "last_updated_cycle": 119
+        "last_updated_cycle": 120
       }
     }
   },
