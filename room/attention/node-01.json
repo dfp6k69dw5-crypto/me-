@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-29T18:02:39.344842+00:00",
-  "cycle_key": "33266921924:1:4",
+  "generated_at": "2026-08-29T18:04:12.955389+00:00",
+  "cycle_key": "33266921924:1:5",
   "node": 1,
   "entity": "sarah",
   "role": "thought",
@@ -32,42 +32,55 @@
       "name": "critical-testing",
       "tier": "project",
       "domain": "critical-testing",
-      "score": 1.36,
-      "confidence": 0.615,
-      "raw_score": 1.64,
+      "score": 1.63,
+      "confidence": 0.722,
+      "raw_score": 1.91,
       "repeat_penalty": 0.28,
       "matched_triggers": [
-        "evidence",
-        "why",
-        "sure"
+        "sure",
+        "evidence"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "evidence"
-          ],
-          "weight": 0.64
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "why"
-          ],
-          "weight": 0.54
-        },
-        {
-          "kind": "message",
-          "matched": [
             "sure"
+          ],
+          "weight": 1.45
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "evidence"
           ],
           "weight": 0.46
         }
       ]
+    },
+    {
+      "name": "emotional-attunement",
+      "tier": "project",
+      "domain": "affect",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "felt"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "felt"
+          ],
+          "weight": 1.45
+        }
+      ]
     }
   ],
-  "context_fingerprint": "f7a615b04785",
+  "context_fingerprint": "e6e1cd677b93",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 529,
-  "approx_added_tokens": 132
+  "temporary_skill_chars": 890,
+  "approx_added_tokens": 222
 }
