@@ -41,12 +41,9 @@ jobs:
           last_cooled_failure=""
           queued_timeout=90
           next_oracle_at=0
+          oracle_pid=""
 
           record_oracle() {
-            now_epoch="$(date -u +%s)"
-            [ "$now_epoch" -ge "$next_oracle_at" ] || return 0
-            next_oracle_at=$((now_epoch + 300))
-
             echo "Recording synchronized Fast Oracle snapshot"
             git fetch origin main || return 0
             git reset --hard origin/main || return 0
@@ -76,8 +73,19 @@ jobs:
             git reset --hard origin/main || true
           }
 
+          launch_oracle() {
+            now_epoch="$(date -u +%s)"
+            [ "$now_epoch" -ge "$next_oracle_at" ] || return 0
+            if [ -n "$oracle_pid" ] && kill -0 "$oracle_pid" 2>/dev/null; then
+              return 0
+            fi
+            next_oracle_at=$((now_epoch + 300))
+            record_oracle &
+            oracle_pid=$!
+          }
+
           while [ "$SECONDS" -lt "$stop_at" ]; do
-            record_oracle
+            launch_oracle
 
             runs="$(gh run list \
               --repo "$GITHUB_REPOSITORY" \
@@ -154,6 +162,10 @@ jobs:
               [ "$api_backoff" -gt 120 ] && api_backoff=120
             fi
           done
+
+          if [ -n "$oracle_pid" ] && kill -0 "$oracle_pid" 2>/dev/null; then
+            wait "$oracle_pid" || true
+          fi
 
           echo "Handing The Room pulse to a fresh GitHub runner"
           for attempt in 1 2 3 4 5; do
