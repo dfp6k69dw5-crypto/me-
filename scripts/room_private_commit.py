@@ -9,11 +9,8 @@ import room_expression_quality as _expression_quality
 import room_social_v5 as _social
 import room_topic_bounded as _bounded_topic
 import room_private_self_state as _private_self_state
+import room_research_architecture as _research
 
-# Topic state is a bounded working-conversation episode. Keep the relationship
-# machinery in room_social_v5, but replace its recursive topic functions at the
-# commit boundary so old depth-N state is flattened before it can be published
-# again. Patch both exports because tests/importers may hold either module.
 for _topic_name in (
     "topic_template",
     "topic_terms_from_messages",
@@ -45,7 +42,6 @@ def norm(value) -> str:
 
 
 def infected_text(value) -> bool:
-    """Only genuine privacy leakage blocks publication."""
     text = norm(value)
     if not text:
         return True
@@ -97,7 +93,6 @@ def grounded(text: str, terms: list[str]) -> bool:
 
 
 def clean_terms(expr: dict, topic: dict, text: str) -> list[str]:
-    """Return only semantic terms supported by the actual public sentence."""
     out: list[str] = []
     for value in semantic_values(expr):
         s = norm(value)
@@ -139,7 +134,6 @@ def seed_topic(expressions: dict, order: list[str], cycle: int, prior: dict) -> 
 
 
 def context_scope_reset(topic: dict, key: str, cycle: int) -> dict:
-    """Start one clean semantic episode when episode-scoped context is deployed."""
     prior_root = norm((topic or {}).get("root"))
     subject = c.breakout_subject(f"{key}:context-scope")
     if prior_root and norm(subject) == prior_root:
@@ -153,7 +147,6 @@ def context_scope_reset(topic: dict, key: str, cycle: int) -> dict:
 
 
 def _publication_degenerate(text: str) -> str | None:
-    """Last-chance deterministic quarantine for malformed/control/collapse output."""
     raw = str(text or "").strip()
     low = norm(raw)
     if low in CONTROL_SENTINELS:
@@ -176,7 +169,6 @@ def _publication_degenerate(text: str) -> str | None:
 
 
 def validate_public_expression(entity: str, text: str, terms: list[str], context: list[dict]) -> None:
-    """Nothing becomes shared state until it passes the same quality boundary again."""
     if infected_text(text):
         raise RuntimeError(f"private Room privacy leak blocked for {entity}")
     deterministic_issue = _publication_degenerate(text)
@@ -223,8 +215,8 @@ def private_commit(parts: list[dict], key: str):
     plans = c.plan_actions(order, c.target(q) if q else None, M, topic, cycle)
     staged: list[tuple[str, str, str, str, list[str]]] = []
 
-    # Atomic publication: all four candidates are validated before any one of
-    # them can touch history, discourse, memory, private-self updates, or topic state.
+    # Atomic publication. Candidate N is also checked against candidates 1..N-1,
+    # so same-beat copying cannot hide behind the fact that history is not written yet.
     for entity in order:
         expr = expressions[entity]
         text = c.model_text(expr)
@@ -267,6 +259,10 @@ def private_commit(parts: list[dict], key: str):
     if len(spoken) != 4 or set(speakers) != set(c.ORDER):
         raise RuntimeError(f"v5 mandatory speech invariant failed: {speakers}")
 
+    # Migrate legacy memory non-destructively and label new memories by what was
+    # actually observed. Hearing a proposition is not the same thing as witnessing it.
+    _research.annotate_memory_provenance(M)
+
     previous_vocabulary = {
         norm(x)
         for x in [topic.get("root"), topic.get("current_facet")] + list(topic.get("facets", []))
@@ -303,6 +299,10 @@ def private_commit(parts: list[dict], key: str):
         thought_part = part_index.get((entity, "thought"), {})
         thought_private = thought_part.get("private") if isinstance(thought_part.get("private"), dict) else {}
         deliberation = thought_private.get("deliberation") if isinstance(thought_private.get("deliberation"), dict) else {}
+
+        latest_event = comprehension_source.get("event") if isinstance(comprehension_source.get("event"), dict) else prev
+        perception, deliberation = _research.guard_private_self_inputs(perception, deliberation, latest_event)
+
         prior_private_self = M["entities"][entity].get("private_self_state")
         M["entities"][entity]["private_self_state"] = _private_self_state.update(
             prior_private_self, c.P[entity], entity, c.ORDER, perception, deliberation, V, cycle
@@ -333,7 +333,7 @@ def private_commit(parts: list[dict], key: str):
         "beat_contributors": speakers,
         "beat_message_count": 4,
         "silence_cycles": 0,
-        "note": "research-informed v5 private model active; atomic quality+privacy publication gate; bounded topic episodes; episode-scoped Llama context; no public fallback",
+        "note": "research-informed v5: selective agent context; provenance-tagged memory; guarded private beliefs; atomic quality+privacy publication gate",
     })
 
     c.audit_invariants(M, topic)
@@ -362,7 +362,7 @@ def private_commit(parts: list[dict], key: str):
                     for other in ent.get("people", {})
                 },
             },
-            "memory": [{"text": x.get("text", "")} for x in ent.get("room_memories", [])[-12:]],
+            "memory": [_research.memory_public_slice(x) for x in ent.get("room_memories", [])[-12:]],
         }
 
     live = {
@@ -383,13 +383,15 @@ def private_commit(parts: list[dict], key: str):
             "active_processes": 48,
             "voting": False,
             "public_bus": True,
-            "private_scope": "same_entity",
+            "private_scope": "agent-specific selective retrieval",
             "beat_output": "4 mandatory unique speakers",
-            "private_pipeline": "perception->deliberation->expression",
+            "private_pipeline": "selective evidence->perception->deliberation->expression",
             "public_fallback": False,
             "history_generation": c.BOOT,
             "contamination_gate": True,
             "privacy_gate": True,
+            "memory_provenance": True,
+            "reported_claims_are_facts": False,
         },
     }
     c.save(c.ROOM / "live.json", live)
