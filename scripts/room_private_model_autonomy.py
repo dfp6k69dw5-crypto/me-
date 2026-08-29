@@ -392,11 +392,20 @@ def run(role: str, payload: dict, timeout: int = 30, min_words: int = 5):
         except urllib.error.HTTPError as exc:
             detail = base._safe_http_detail(exc)
             suffix = f": {detail}" if detail else ""
+            if role == "expression":
+                print(f"Expression quarantined for {self_entity}: HTTP {exc.code}{suffix}")
+                return None
             raise RuntimeError(f"private model request failed for {role}: HTTP {exc.code}{suffix}") from exc
         except ValueError as exc:
             last_reason = str(exc)[:80]
             continue
         except Exception as exc:
+            if role == "expression":
+                print(f"Expression quarantined for {self_entity}: {type(exc).__name__}")
+                return None
             raise RuntimeError(f"private model request failed for {role}: {type(exc).__name__}") from exc
 
+    if role == "expression":
+        print(f"Expression quarantined for {self_entity}: {last_reason}")
+        return None
     raise RuntimeError(f"private model output rejected for {role}: {last_reason}")
