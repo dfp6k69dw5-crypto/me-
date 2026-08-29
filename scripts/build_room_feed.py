@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import os
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,3 +31,18 @@ feed = {
 }
 (ROOM / "brain-status.json").write_text(json.dumps(brain, ensure_ascii=False, indent=2) + "\n")
 (ROOM / "feed.json").write_text(json.dumps(feed, ensure_ascii=False, separators=(",", ":")) + "\n")
+
+# Best-effort Oracle history piggybacks on the Room's already-reliable commits.
+# The Node recorder self-throttles to one snapshot per five minutes. A logging
+# failure must never make a Room beat fail.
+try:
+    subprocess.run(
+        ["node", str(ROOT / "scripts" / "log_fast_oracle_snapshot.mjs")],
+        cwd=ROOT,
+        check=False,
+        timeout=45,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+except Exception:
+    pass
