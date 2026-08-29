@@ -266,7 +266,14 @@ def _llama_model_run(role: str, payload: dict, timeout: int = 30):
         autonomy.base._too_similar_to_context = _production_too_similar
 
     effective_timeout = min(int(timeout), 10) if role in {"comprehension", "thought"} else timeout
-    return autonomy.run(role, payload, timeout=effective_timeout, min_words=1 if role == "expression" else 5)
+    try:
+        return autonomy.run(role, payload, timeout=effective_timeout, min_words=1 if role == "expression" else 5)
+    except Exception as exc:
+        if role == "thought":
+            entity = str(payload.get("entity") or "unknown")
+            print(f"Thought fail-soft for {entity}: {type(exc).__name__}: {str(exc)[:120]}")
+            return None
+        raise
 
 
 def _coherent_recurrent(node, key, bus_data):
