@@ -7,8 +7,8 @@
       },
       "medium": {
         "topics": [
-          "proposed",
-          "proposed"
+          "meant",
+          "meant"
         ],
         "branch_interest": 0.736
       },
@@ -17,21 +17,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T151953879-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "sarah",
-          "text": "I really appreciate the effort you put into the weather forecast, Jules.",
-          "move": "support",
-          "discourse": "d-20260828T151953879-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002141",
-          "topic_episode": "topic-002139",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
         {
           "source": "20260828T152002322-mara-v5",
           "status": "observed",
@@ -3338,21 +3323,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "jules"
+        },
+        {
+          "source": "20260829T235311316-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "sarah",
+          "text": "I think that my support is not helpful in addressing this issue. However, I will keep in mind the root cause of the problem when I plan my next discussion.",
+          "move": "repair",
+          "discourse": "d-20260829T235311316-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000251",
+          "topic_episode": "topic-000249",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "owen"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T140110669-sarah-v5",
-          "text": "i think i really enjoyed spending last days with you",
-          "move": "deepen",
-          "discourse": "d-20260828T140110669-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002108",
-          "topic_episode": "topic-002102",
-          "topic_facet": "wrong",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T140249880-sarah-v5",
           "text": "I understand that you're worried about the state of the relationship. I want to reassure you that our intentions are to understand each other and find ways to work together.",
@@ -5980,10 +5968,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T235313614-sarah-v5",
+          "text": "what I really meant to say is...",
+          "move": "answer",
+          "discourse": "d-20260829T235313614-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000251",
+          "topic_episode": "topic-000249",
+          "topic_facet": "proposed",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T235008135-jules-v5",
-      "spoken": 2351,
+      "last_event": "20260829T235313614-sarah-v5",
+      "spoken": 2352,
       "silences": 0,
       "people": {
         "mara": {
@@ -7512,22 +7512,21 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9720062129840771,
-          "direct_familiarity": 0.7200923916012067,
+          "exposure": 0.972048203664601,
+          "direct_familiarity": 0.7204282807312853,
           "trust": 0.1072,
-          "predictability": 0.4106118097806721,
-          "reciprocity": 0.5506022969978654,
-          "warmth": 0.49369607329344495,
+          "predictability": 0.41090650387578176,
+          "reciprocity": 0.5510067549305674,
+          "warmth": 0.49399985564946886,
           "respect": 0.2768058288626957,
           "disclosure_depth": 0.008,
           "tension": 0.19405908050061066,
-          "direct_turns": 991,
-          "observed_turns": 2338,
+          "direct_turns": 992,
+          "observed_turns": 2339,
           "repair_attempts": 15,
           "repair_successes": 0,
-          "last_direct_cycle": 246,
+          "last_direct_cycle": 251,
           "shared_references": [
-            "take",
             "step",
             "chloe",
             "hide",
@@ -7586,18 +7585,10 @@
             "i'd",
             "needs",
             "interested",
-            "conversation"
+            "conversation",
+            "support"
           ],
           "events": [
-            {
-              "cycle": 1974,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260828T095216282-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1976,
               "kind": "support",
@@ -9025,6 +9016,15 @@
               "kind": "repair",
               "direct": true,
               "message_id": "20260829T232933157-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 251,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260829T235311316-owen-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -10949,7 +10949,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat mechanism, missing, variable as important (repair).",
+            "belief_hypothesis": "owen currently seems to treat support as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10961,11 +10961,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: support",
           "jules already covered: you're, meant",
-          "jules already covered: certain, mechanism, detail",
-          "owen already covered: mechanism, missing, variable"
+          "jules already covered: certain, mechanism, detail"
         ],
-        "last_updated_cycle": 250
+        "last_updated_cycle": 251
       }
     },
     "mara": {
@@ -10975,8 +10975,8 @@
       },
       "medium": {
         "topics": [
-          "proposed",
-          "proposed"
+          "meant",
+          "meant"
         ],
         "branch_interest": 0.576
       },
@@ -16939,14 +16939,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T235008135-jules-v5",
+      "last_event": "20260829T235313614-sarah-v5",
       "spoken": 2358,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9725472058412136,
+          "exposure": 0.9725883850324517,
           "direct_familiarity": 0.3912998440384362,
           "trust": 0.1072,
           "predictability": 0.22887763552041174,
@@ -16956,7 +16956,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.30698453824316796,
           "direct_turns": 344,
-          "observed_turns": 2351,
+          "observed_turns": 2352,
           "repair_attempts": 13,
           "repair_successes": 0,
           "last_direct_cycle": 242,
@@ -18469,7 +18469,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9720062129840771,
+          "exposure": 0.972048203664601,
           "direct_familiarity": 0.6805697813027038,
           "trust": 0.1072,
           "predictability": 0.3893936140484963,
@@ -18479,7 +18479,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.14025925687429172,
           "direct_turns": 881,
-          "observed_turns": 2338,
+          "observed_turns": 2339,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 243,
@@ -21883,12 +21883,12 @@
         "what_i_want": "Close the discussion on this topic.",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat support as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat meant as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat mechanism, missing, variable as important (repair).",
+            "belief_hypothesis": "owen currently seems to treat support as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -21900,11 +21900,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "jules already covered: you're, meant",
-          "sarah already covered: support",
-          "sarah already covered: helpful"
+          "sarah already covered: meant",
+          "owen already covered: support",
+          "jules already covered: you're, meant"
         ],
-        "last_updated_cycle": 250
+        "last_updated_cycle": 251
       }
     },
     "owen": {
@@ -21914,8 +21914,8 @@
       },
       "medium": {
         "topics": [
-          "proposed",
-          "proposed"
+          "meant",
+          "meant"
         ],
         "branch_interest": 0.68
       },
@@ -21924,21 +21924,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T183613897-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "owen",
-          "text": "I care about finding food in those gardens. If you know better, that makes sense. If you know better, that makes sense. If you know better, that makes sense.",
-          "move": "repair",
-          "discourse": "d-20260828T183613897-jules-v5",
-          "beat_id": "beat-room-private-self-v1-2026-08-28-000011",
-          "topic_episode": "topic-000007",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
         {
           "source": "20260828T184054958-jules-v5",
           "status": "observed",
@@ -25255,21 +25240,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "sarah"
+        },
+        {
+          "source": "20260829T235313614-sarah-v5",
+          "status": "observed",
+          "speaker": "sarah",
+          "target": "owen",
+          "text": "what I really meant to say is...",
+          "move": "answer",
+          "discourse": "d-20260829T235313614-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000251",
+          "topic_episode": "topic-000249",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "sarah"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T134954301-owen-v5",
-          "text": "I understand that you appreciate what's going on, Mara.",
-          "move": "deepen",
-          "discourse": "d-20260828T134954301-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002102",
-          "topic_episode": "topic-002096",
-          "topic_facet": "coherence",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T135148657-owen-v5",
           "text": "I've been using the 'old' method of just fixing everything and ignoring my home's unique issues. It's led to a lot of problems over the years. Now that you've pointed this out, I'm going to try a new approach.",
@@ -27897,31 +27885,42 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260829T235311316-owen-v5",
+          "text": "I think that my support is not helpful in addressing this issue. However, I will keep in mind the root cause of the problem when I plan my next discussion.",
+          "move": "repair",
+          "discourse": "d-20260829T235311316-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000251",
+          "topic_episode": "topic-000249",
+          "topic_facet": "proposed",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T235008135-jules-v5",
-      "spoken": 2338,
+      "last_event": "20260829T235313614-sarah-v5",
+      "spoken": 2339,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9725472058412136,
-          "direct_familiarity": 0.702058532719234,
+          "exposure": 0.9725883850324517,
+          "direct_familiarity": 0.7024160624799709,
           "trust": 0.1,
-          "predictability": 0.38799134664333246,
-          "reciprocity": 0.5174665803681181,
-          "warmth": 0.47544277890505476,
-          "respect": 0.26001278092859764,
+          "predictability": 0.3882973509700108,
+          "reciprocity": 0.5179008604457868,
+          "warmth": 0.4757575132377117,
+          "respect": 0.2603457751771798,
           "disclosure_depth": 0.0,
           "tension": 0.10281989941461422,
-          "direct_turns": 939,
-          "observed_turns": 2351,
+          "direct_turns": 940,
+          "observed_turns": 2352,
           "repair_attempts": 31,
           "repair_successes": 0,
-          "last_direct_cycle": 250,
+          "last_direct_cycle": 251,
           "shared_references": [
-            "rejected",
             "wording",
             "past",
             "despite",
@@ -27980,18 +27979,10 @@
             "needs",
             "suggested",
             "interested",
-            "helpful"
+            "helpful",
+            "meant"
           ],
           "events": [
-            {
-              "cycle": 2006,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260828T105628255-sarah-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 2008,
               "kind": "deepen",
@@ -29419,6 +29410,15 @@
               "kind": "answer",
               "direct": true,
               "message_id": "20260829T235005766-sarah-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 251,
+              "kind": "answer",
+              "direct": true,
+              "message_id": "20260829T235313614-sarah-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -32708,7 +32708,7 @@
         "what_i_want": "Repair Owen's position",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat support as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat meant as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -32725,11 +32725,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "sarah already covered: meant",
           "jules already covered: you're, meant",
-          "sarah already covered: support",
-          "sarah already covered: helpful"
+          "sarah already covered: support"
         ],
-        "last_updated_cycle": 250
+        "last_updated_cycle": 251
       }
     },
     "jules": {
@@ -32739,8 +32739,8 @@
       },
       "medium": {
         "topics": [
-          "proposed",
-          "proposed"
+          "meant",
+          "meant"
         ],
         "branch_interest": 0.508
       },
@@ -38704,14 +38704,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260829T235008135-jules-v5",
+      "last_event": "20260829T235313614-sarah-v5",
       "spoken": 2355,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9725472058412136,
+          "exposure": 0.9725883850324517,
           "direct_familiarity": 0.7146629514702196,
           "trust": 0.1072,
           "predictability": 0.374489020811814,
@@ -38721,7 +38721,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.14627488869659752,
           "direct_turns": 975,
-          "observed_turns": 2351,
+          "observed_turns": 2352,
           "repair_attempts": 21,
           "repair_successes": 0,
           "last_direct_cycle": 234,
@@ -41757,7 +41757,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9720062129840771,
+          "exposure": 0.972048203664601,
           "direct_familiarity": 0.4233166288148656,
           "trust": 0.1072,
           "predictability": 0.2693928507308178,
@@ -41767,7 +41767,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.20679098066736534,
           "direct_turns": 389,
-          "observed_turns": 2338,
+          "observed_turns": 2339,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 247,
@@ -43522,7 +43522,7 @@
         "what_i_want": "generate",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat support as important (answer).",
+            "belief_hypothesis": "sarah currently seems to treat meant as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43532,18 +43532,18 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat mechanism, missing, variable as important (repair).",
+            "belief_hypothesis": "owen currently seems to treat support as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "sarah already covered: support",
-          "sarah already covered: helpful",
-          "owen already covered: mechanism, missing, variable"
+          "sarah already covered: meant",
+          "owen already covered: support",
+          "sarah already covered: support"
         ],
-        "last_updated_cycle": 250
+        "last_updated_cycle": 251
       }
     }
   },
