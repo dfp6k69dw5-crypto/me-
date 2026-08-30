@@ -5982,7 +5982,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T130414970-owen-v5",
+      "last_event": "20260830T130615459-owen-v5",
       "spoken": 2409,
       "silences": 0,
       "people": {
@@ -7512,7 +7512,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9756902686466761,
+          "exposure": 0.9757267332437061,
           "direct_familiarity": 0.7309665289146993,
           "trust": 0.1072,
           "predictability": 0.4164777795534582,
@@ -7522,7 +7522,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.19405908050061066,
           "direct_turns": 1024,
-          "observed_turns": 2432,
+          "observed_turns": 2433,
           "repair_attempts": 15,
           "repair_successes": 0,
           "last_direct_cycle": 434,
@@ -10949,7 +10949,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat close, meeting as important (close).",
+            "belief_hypothesis": "owen currently seems to treat don't, meeting as important (close).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10961,11 +10961,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: don't, meeting",
           "owen already covered: close, meeting",
-          "owen already covered: meeting, close, possible",
-          "owen already covered: ask_jules, close, meeting"
+          "owen already covered: meeting, close, possible"
         ],
-        "last_updated_cycle": 436
+        "last_updated_cycle": 437
       }
     },
     "mara": {
@@ -16937,7 +16937,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T130414970-owen-v5",
+      "last_event": "20260830T130615459-owen-v5",
       "spoken": 2431,
       "silences": 0,
       "people": {
@@ -18467,7 +18467,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9756902686466761,
+          "exposure": 0.9757267332437061,
           "direct_familiarity": 0.6933477582403809,
           "trust": 0.11434240000000001,
           "predictability": 0.39481210025544805,
@@ -18477,7 +18477,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.15736809766249332,
           "direct_turns": 915,
-          "observed_turns": 2432,
+          "observed_turns": 2433,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 431,
@@ -21886,7 +21886,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat close, meeting as important (close).",
+            "belief_hypothesis": "owen currently seems to treat don't, meeting as important (close).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -21898,11 +21898,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: don't, meeting",
           "owen already covered: close, meeting",
-          "owen already covered: meeting, close, possible",
-          "owen already covered: ask_jules, close, meeting"
+          "owen already covered: meeting, close, possible"
         ],
-        "last_updated_cycle": 436
+        "last_updated_cycle": 437
       }
     },
     "owen": {
@@ -25229,18 +25229,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T182545518-owen-v5",
-          "text": "Oh, you'd find the new food truck nearby, not far from here?!",
-          "move": "repair",
-          "discourse": "d-20260828T182545518-owen-v5",
-          "beat_id": "beat-room-private-self-v1-2026-08-28-000008",
-          "topic_episode": "topic-000007",
-          "topic_facet": "gardens",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T182917487-owen-v5",
           "text": "I'd be careful about finding food in those gardens if I was in your opinion, but if Sarah were to tell me about the place, that would be more helpful.",
           "move": "deepen",
@@ -27867,10 +27855,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T130615459-owen-v5",
+          "text": "don't ask me to close the meeting today.",
+          "move": "close",
+          "discourse": "d-20260830T130615459-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000437",
+          "topic_episode": "topic-000432",
+          "topic_facet": "meeting",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T130414970-owen-v5",
-      "spoken": 2432,
+      "last_event": "20260830T130615459-owen-v5",
+      "spoken": 2433,
       "silences": 0,
       "people": {
         "sarah": {
@@ -32699,7 +32699,7 @@
           "sarah already covered: needs, repair",
           "jules already covered: repair, meaningful"
         ],
-        "last_updated_cycle": 436
+        "last_updated_cycle": 437
       }
     },
     "jules": {
@@ -32719,21 +32719,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T153730886-sarah-v5",
-          "status": "observed",
-          "speaker": "sarah",
-          "target": "jules",
-          "text": "you're having the hardest time dealing with the wrongs that have been wrong about you...",
-          "move": "repair",
-          "discourse": "d-20260828T153730886-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002148",
-          "topic_episode": "topic-002145",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "sarah"
-        },
         {
           "source": "20260828T154104158-sarah-v5",
           "status": "observed",
@@ -36028,6 +36013,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260830T130615459-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "jules",
+          "text": "don't ask me to close the meeting today.",
+          "move": "close",
+          "discourse": "d-20260830T130615459-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000437",
+          "topic_episode": "topic-000432",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "owen"
         }
       ],
       "self_history": [
@@ -38672,7 +38672,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T130414970-owen-v5",
+      "last_event": "20260830T130615459-owen-v5",
       "spoken": 2436,
       "silences": 0,
       "people": {
@@ -41725,8 +41725,8 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9756902686466761,
-          "direct_familiarity": 0.44171258511542416,
+          "exposure": 0.9757267332437061,
+          "direct_familiarity": 0.44238253001328565,
           "trust": 0.1072,
           "predictability": 0.2721356565823482,
           "reciprocity": 0.3234617022785499,
@@ -41734,11 +41734,11 @@
           "respect": 0.1855569647863283,
           "disclosure_depth": 0.008,
           "tension": 0.2147230708606917,
-          "direct_turns": 416,
-          "observed_turns": 2432,
+          "direct_turns": 417,
+          "observed_turns": 2433,
           "repair_attempts": 9,
           "repair_successes": 0,
-          "last_direct_cycle": 436,
+          "last_direct_cycle": 437,
           "shared_references": [
             "i would like to clarify...",
             "clarify",
@@ -41802,15 +41802,6 @@
             "doesn't"
           ],
           "events": [
-            {
-              "cycle": 831,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260826T084242020-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 834,
               "kind": "repair",
@@ -43241,6 +43232,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 437,
+              "kind": "close",
+              "direct": true,
+              "message_id": "20260830T130615459-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -43500,18 +43500,18 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat close, meeting as important (close).",
+            "belief_hypothesis": "owen currently seems to treat don't, meeting as important (close).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: don't, meeting",
           "owen already covered: close, meeting",
-          "owen already covered: meeting, close, possible",
-          "owen already covered: ask_jules, close, meeting"
+          "owen already covered: meeting, close, possible"
         ],
-        "last_updated_cycle": 436
+        "last_updated_cycle": 437
       }
     }
   },
