@@ -18,21 +18,6 @@
       "noise": {},
       "room_memories": [
         {
-          "source": "20260828T171002674-mara-v5",
-          "status": "observed",
-          "speaker": "mara",
-          "target": "sarah",
-          "text": "But Sarah, I thought you'd support me even with all this effort,",
-          "move": "support",
-          "discourse": "d-20260828T171002674-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002183",
-          "topic_episode": "topic-002182",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "mara"
-        },
-        {
           "source": "20260828T171005421-owen-v5",
           "status": "observed",
           "speaker": "owen",
@@ -3338,21 +3323,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260830T091234976-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "sarah",
+          "text": "Sarah says that Sarah's current behavior has altered their discussion on the live issue.",
+          "move": "repair",
+          "discourse": "d-20260830T091234976-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000384",
+          "topic_episode": "topic-000383",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "owen"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T151735821-sarah-v5",
-          "text": "I really appreciate the effort you put into the weather forecast, Jules. It was really thoughtful of you to check the conditions like this.",
-          "move": "support",
-          "discourse": "d-20260828T151735821-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002140",
-          "topic_episode": "topic-002139",
-          "topic_facet": "weather",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T151959535-sarah-v5",
           "text": "I've considered your possibility, Owen. I appreciate the effort you've put into discussing the possibility.",
@@ -5980,10 +5968,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T091237143-sarah-v5",
+          "text": "I want to reestablish a connection to the speaker, making their contribution more engaging.",
+          "move": "repair",
+          "discourse": "d-20260830T091237143-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000384",
+          "topic_episode": "topic-000383",
+          "topic_facet": "progress",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T091036510-sarah-v5",
-      "spoken": 2391,
+      "last_event": "20260830T091237143-sarah-v5",
+      "spoken": 2392,
       "silences": 0,
       "people": {
         "mara": {
@@ -7512,22 +7512,21 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9745322830712894,
-          "direct_familiarity": 0.7260771196113794,
+          "exposure": 0.9745704846466824,
+          "direct_familiarity": 0.7264058270678457,
           "trust": 0.1072,
-          "predictability": 0.4141384302068051,
-          "reciprocity": 0.555431839317749,
-          "warmth": 0.49853477978346594,
+          "predictability": 0.4144313609917017,
+          "reciprocity": 0.555831950662363,
+          "warmth": 0.49883565891559584,
           "respect": 0.27745655716989964,
           "disclosure_depth": 0.008,
           "tension": 0.19405908050061066,
-          "direct_turns": 1009,
-          "observed_turns": 2401,
+          "direct_turns": 1010,
+          "observed_turns": 2402,
           "repair_attempts": 15,
           "repair_successes": 0,
-          "last_direct_cycle": 381,
+          "last_direct_cycle": 384,
           "shared_references": [
-            "spite",
             "subject",
             "change",
             "necessary",
@@ -7586,18 +7585,10 @@
             "affect",
             "participant",
             "important",
-            "approach"
+            "approach",
+            "current"
           ],
           "events": [
-            {
-              "cycle": 2004,
-              "kind": "support",
-              "direct": true,
-              "message_id": "20260828T105234025-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 2005,
               "kind": "repair",
@@ -9025,6 +9016,15 @@
               "kind": "support",
               "direct": true,
               "message_id": "20260830T085548417-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 384,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260830T091234976-owen-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -10949,7 +10949,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat value, approach as important (support).",
+            "belief_hypothesis": "owen currently seems to treat current as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10961,11 +10961,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: current",
           "mara already covered: i'm, favor, progress",
-          "jules already covered: value, approach",
-          "owen already covered: value, approach"
+          "jules already covered: value, approach"
         ],
-        "last_updated_cycle": 383
+        "last_updated_cycle": 384
       }
     },
     "mara": {
@@ -16939,14 +16939,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T091036510-sarah-v5",
+      "last_event": "20260830T091237143-sarah-v5",
       "spoken": 2416,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9741470966850352,
+          "exposure": 0.9741858760400076,
           "direct_familiarity": 0.3942163498237775,
           "trust": 0.1072,
           "predictability": 0.23003374082174805,
@@ -16956,7 +16956,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.30698453824316796,
           "direct_turns": 348,
-          "observed_turns": 2391,
+          "observed_turns": 2392,
           "repair_attempts": 13,
           "repair_successes": 0,
           "last_direct_cycle": 357,
@@ -18469,7 +18469,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9745322830712894,
+          "exposure": 0.9745704846466824,
           "direct_familiarity": 0.6907594705461392,
           "trust": 0.11434240000000001,
           "predictability": 0.39390340986692896,
@@ -18479,7 +18479,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.15736809766249332,
           "direct_turns": 908,
-          "observed_turns": 2401,
+          "observed_turns": 2402,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 375,
@@ -21883,12 +21883,12 @@
         "what_i_want": "I want to make meaningful progress with sarah on the live issue.",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat value, approach, suggest as important (repair).",
+            "belief_hypothesis": "sarah currently seems to treat want as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat value, approach as important (support).",
+            "belief_hypothesis": "owen currently seems to treat current as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -21900,11 +21900,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "sarah already covered: value, approach, suggest",
-          "jules already covered: value, approach",
-          "owen already covered: value, approach"
+          "sarah already covered: want",
+          "owen already covered: current",
+          "sarah already covered: value, approach, suggest"
         ],
-        "last_updated_cycle": 383
+        "last_updated_cycle": 384
       }
     },
     "owen": {
@@ -21924,21 +21924,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260829T105412133-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "owen",
-          "text": "I think despite Sarah's spite affects our social dynamics and overall harmony.",
-          "move": "repair",
-          "discourse": "d-20260829T105412133-jules-v5",
-          "beat_id": "beat-room-private-self-v1-2026-08-28-000098",
-          "topic_episode": "topic-000095",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
         {
           "source": "20260829T105413558-sarah-v5",
           "status": "observed",
@@ -25241,21 +25226,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "sarah"
+        },
+        {
+          "source": "20260830T091237143-sarah-v5",
+          "status": "observed",
+          "speaker": "sarah",
+          "target": "owen",
+          "text": "I want to reestablish a connection to the speaker, making their contribution more engaging.",
+          "move": "repair",
+          "discourse": "d-20260830T091237143-sarah-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000384",
+          "topic_episode": "topic-000383",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "sarah"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T161018086-owen-v5",
-          "text": "I'd like to take a closer look at your skills and interests, Owen",
-          "move": "repair",
-          "discourse": "d-20260828T161018086-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002160",
-          "topic_episode": "topic-002157",
-          "topic_facet": "skills",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T161243073-owen-v5",
           "text": "Hey, I've been thinking, it's been interesting to see how our interests intersect and diverge over time,",
@@ -27883,31 +27871,42 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T091234976-owen-v5",
+          "text": "Sarah says that Sarah's current behavior has altered their discussion on the live issue.",
+          "move": "repair",
+          "discourse": "d-20260830T091234976-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000384",
+          "topic_episode": "topic-000383",
+          "topic_facet": "progress",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T091036510-sarah-v5",
-      "spoken": 2401,
+      "last_event": "20260830T091237143-sarah-v5",
+      "spoken": 2402,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9741470966850352,
-          "direct_familiarity": 0.7112161992954132,
+          "exposure": 0.9741858760400076,
+          "direct_familiarity": 0.7115627398562587,
           "trust": 0.1,
-          "predictability": 0.394990871754959,
-          "reciprocity": 0.527356756766083,
-          "warmth": 0.4829445114907052,
+          "predictability": 0.3952933763190815,
+          "reciprocity": 0.5277821356849934,
+          "warmth": 0.4832547447838108,
           "respect": 0.2636674871715118,
           "disclosure_depth": 0.0,
           "tension": 0.10281989941461422,
-          "direct_turns": 965,
-          "observed_turns": 2391,
+          "direct_turns": 966,
+          "observed_turns": 2392,
           "repair_attempts": 31,
           "repair_successes": 0,
-          "last_direct_cycle": 383,
+          "last_direct_cycle": 384,
           "shared_references": [
-            "necessary",
             "step",
             "addressing",
             "person",
@@ -27966,18 +27965,10 @@
             "participant",
             "value",
             "approach",
-            "suggest"
+            "suggest",
+            "want"
           ],
           "events": [
-            {
-              "cycle": 2058,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260828T122829935-sarah-v5",
-              "risk": 0,
-              "repair": true,
-              "disagreement": false
-            },
             {
               "cycle": 2060,
               "kind": "deepen",
@@ -29405,6 +29396,15 @@
               "kind": "repair",
               "direct": true,
               "message_id": "20260830T091036510-sarah-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 384,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260830T091237143-sarah-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -32694,7 +32694,7 @@
         "what_i_want": "I want to make meaningful progress with jules on the live issue.",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat value, approach, suggest as important (repair).",
+            "belief_hypothesis": "sarah currently seems to treat want as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -32711,11 +32711,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "sarah already covered: want",
           "sarah already covered: value, approach, suggest",
-          "mara already covered: i'm, favor, progress",
-          "jules already covered: value, approach"
+          "mara already covered: i'm, favor, progress"
         ],
-        "last_updated_cycle": 383
+        "last_updated_cycle": 384
       }
     },
     "jules": {
@@ -38688,14 +38688,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T091036510-sarah-v5",
+      "last_event": "20260830T091237143-sarah-v5",
       "spoken": 2416,
       "silences": 0,
       "people": {
         "sarah": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9741470966850352,
+          "exposure": 0.9741858760400076,
           "direct_familiarity": 0.7177298410645272,
           "trust": 0.1072,
           "predictability": 0.3766750280415745,
@@ -38705,7 +38705,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.14627488869659752,
           "direct_turns": 984,
-          "observed_turns": 2391,
+          "observed_turns": 2392,
           "repair_attempts": 21,
           "repair_successes": 0,
           "last_direct_cycle": 366,
@@ -41741,7 +41741,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9745322830712894,
+          "exposure": 0.9745704846466824,
           "direct_familiarity": 0.4356467442564415,
           "trust": 0.1072,
           "predictability": 0.2717715423535249,
@@ -41751,7 +41751,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.2147230708606917,
           "direct_turns": 407,
-          "observed_turns": 2401,
+          "observed_turns": 2402,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 380,
@@ -43506,7 +43506,7 @@
         "what_i_want": "to get Jules to understand that value is important in the context of leaving and stopping",
         "models_of_others": {
           "sarah": {
-            "belief_hypothesis": "sarah currently seems to treat value, approach, suggest as important (repair).",
+            "belief_hypothesis": "sarah currently seems to treat want as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43516,18 +43516,18 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat value, approach as important (support).",
+            "belief_hypothesis": "owen currently seems to treat current as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "sarah already covered: value, approach, suggest",
-          "mara already covered: i'm, favor, progress",
-          "owen already covered: value, approach"
+          "sarah already covered: want",
+          "owen already covered: current",
+          "sarah already covered: value, approach, suggest"
         ],
-        "last_updated_cycle": 383
+        "last_updated_cycle": 384
       }
     }
   },
