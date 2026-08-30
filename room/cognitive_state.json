@@ -5982,7 +5982,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T113209074-mara-v5",
+      "last_event": "20260830T113351697-jules-v5",
       "spoken": 2407,
       "silences": 0,
       "people": {
@@ -9035,7 +9035,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9757267332437061,
+          "exposure": 0.9757631431438405,
           "direct_familiarity": 0.4767627473904151,
           "trust": 0.11434240000000001,
           "predictability": 0.25981937110397063,
@@ -9045,7 +9045,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.2429572772371783,
           "direct_turns": 470,
-          "observed_turns": 2433,
+          "observed_turns": 2434,
           "repair_attempts": 6,
           "repair_successes": 0,
           "last_direct_cycle": 407,
@@ -10954,18 +10954,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat reestablish as important (close).",
+            "belief_hypothesis": "jules currently seems to treat reestablish, reestablish as important as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: reestablish, reestablish as important",
           "mara already covered: reestablish, communication, issue",
-          "mara already covered: i don't think, best, course of action",
-          "jules already covered: reestablish"
+          "mara already covered: i don't think, best, course of action"
         ],
-        "last_updated_cycle": 427
+        "last_updated_cycle": 428
       }
     },
     "mara": {
@@ -10985,21 +10985,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T161900172-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "mara",
-          "text": "I understand that your argument about focus and interest are really relevant to your own priorities. I can see why you'd want to emphasize that point, but what I think is important is that you're not simply using that as a way to silence others or avoid attention.",
-          "move": "repair",
-          "discourse": "d-20260828T161900172-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002163",
-          "topic_episode": "topic-002160",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
         {
           "source": "20260828T162228436-owen-v5",
           "status": "observed",
@@ -14293,6 +14278,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260830T113351697-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "mara",
+          "text": "I'm reestablishing. What reestablish are we trying to reestablish?",
+          "move": "answer",
+          "discourse": "d-20260830T113351697-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000428",
+          "topic_episode": "topic-000427",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "jules"
         }
       ],
       "self_history": [
@@ -16937,7 +16937,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T113209074-mara-v5",
+      "last_event": "20260830T113351697-jules-v5",
       "spoken": 2429,
       "silences": 0,
       "people": {
@@ -19990,23 +19990,21 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9757267332437061,
-          "direct_familiarity": 0.6359040670510708,
+          "exposure": 0.9757631431438405,
+          "direct_familiarity": 0.6363409821706095,
           "trust": 0.1,
-          "predictability": 0.3543278352262095,
-          "reciprocity": 0.4548325520627475,
-          "warmth": 0.3952575874482805,
-          "respect": 0.2543288865604272,
+          "predictability": 0.35465067130859634,
+          "reciprocity": 0.455323202765891,
+          "warmth": 0.3956204328958115,
+          "respect": 0.25466443856147497,
           "disclosure_depth": 0.0,
           "tension": 0.2027020004106831,
-          "direct_turns": 772,
-          "observed_turns": 2433,
+          "direct_turns": 773,
+          "observed_turns": 2434,
           "repair_attempts": 11,
           "repair_successes": 0,
-          "last_direct_cycle": 409,
+          "last_direct_cycle": 428,
           "shared_references": [
-            "past",
-            "failures",
             "repair",
             "you've",
             "room",
@@ -20064,18 +20062,11 @@
             "scenario",
             "strong",
             "opening",
-            "keep things straightforward"
+            "keep things straightforward",
+            "reestablish",
+            "reestablish as important"
           ],
           "events": [
-            {
-              "cycle": 1943,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260828T085343417-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1945,
               "kind": "repair",
@@ -21506,6 +21497,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 428,
+              "kind": "answer",
+              "direct": true,
+              "message_id": "20260830T113351697-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -21891,18 +21891,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat reestablish as important (close).",
+            "belief_hypothesis": "jules currently seems to treat reestablish, reestablish as important as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: reestablish, reestablish as important",
           "jules already covered: reestablish",
-          "jules already covered: meeting, possible, close the meeting",
-          "owen already covered: close, meeting, doesn't"
+          "jules already covered: meeting, possible, close the meeting"
         ],
-        "last_updated_cycle": 427
+        "last_updated_cycle": 428
       }
     },
     "owen": {
@@ -27869,7 +27869,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T113209074-mara-v5",
+      "last_event": "20260830T113351697-jules-v5",
       "spoken": 2426,
       "silences": 0,
       "people": {
@@ -30922,7 +30922,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9757267332437061,
+          "exposure": 0.9757631431438405,
           "direct_familiarity": 0.7532479668049882,
           "trust": 0.1,
           "predictability": 0.3639589258171994,
@@ -30932,7 +30932,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.09970226643002357,
           "direct_turns": 1096,
-          "observed_turns": 2433,
+          "observed_turns": 2434,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 426,
@@ -32688,18 +32688,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat reestablish as important (close).",
+            "belief_hypothesis": "jules currently seems to treat reestablish, reestablish as important as important (answer).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: reestablish, reestablish as important",
           "mara already covered: reestablish, communication, issue",
-          "mara already covered: i don't think, best, course of action",
-          "jules already covered: reestablish"
+          "mara already covered: i don't think, best, course of action"
         ],
-        "last_updated_cycle": 427
+        "last_updated_cycle": 428
       }
     },
     "jules": {
@@ -36032,18 +36032,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T171529540-jules-v5",
-          "text": "i will focus on strategy over effort, and find ways to improve my work ethic.",
-          "move": "support",
-          "discourse": "d-20260828T171529540-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002185",
-          "topic_episode": "topic-002182",
-          "topic_facet": "strategy",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T173041894-jules-v5",
           "text": "food is best when it's warm.",
           "move": "support",
@@ -38670,10 +38658,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T113351697-jules-v5",
+          "text": "I'm reestablishing. What reestablish are we trying to reestablish?",
+          "move": "answer",
+          "discourse": "d-20260830T113351697-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000428",
+          "topic_episode": "topic-000427",
+          "topic_facet": "communication",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T113209074-mara-v5",
-      "spoken": 2433,
+      "last_event": "20260830T113351697-jules-v5",
+      "spoken": 2434,
       "silences": 0,
       "people": {
         "sarah": {
@@ -43511,7 +43511,7 @@
           "mara already covered: i don't think, best, course of action",
           "owen already covered: close, meeting, doesn't"
         ],
-        "last_updated_cycle": 427
+        "last_updated_cycle": 428
       }
     }
   },
