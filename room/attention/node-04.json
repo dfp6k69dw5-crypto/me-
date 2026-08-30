@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-30T09:34:50.258421+00:00",
-  "cycle_key": "33303851254:1:6",
+  "generated_at": "2026-08-30T09:36:53.285012+00:00",
+  "cycle_key": "33303851254:1:7",
   "node": 4,
   "entity": "mara",
   "role": "thought",
@@ -32,9 +32,9 @@
       "name": "creative-bridge",
       "tier": "project",
       "domain": "creative-bridge",
-      "score": 1.17,
-      "confidence": 0.531,
-      "raw_score": 1.45,
+      "score": 1.52,
+      "confidence": 0.68,
+      "raw_score": 1.8,
       "repeat_penalty": 0.28,
       "matched_triggers": [
         "connection"
@@ -45,7 +45,7 @@
           "matched": [
             "connection"
           ],
-          "weight": 1.45
+          "weight": 1.8
         },
         {
           "kind": "message",
@@ -59,13 +59,6 @@
           "matched": [
             "connection"
           ],
-          "weight": 0.92
-        },
-        {
-          "kind": "message",
-          "matched": [
-            "connection"
-          ],
           "weight": 0.76
         },
         {
@@ -73,13 +66,41 @@
           "matched": [
             "connection"
           ],
-          "weight": 0.46
+          "weight": 0.64
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "connection"
+          ],
+          "weight": 0.54
+        }
+      ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.15,
+      "confidence": 0.522,
+      "raw_score": 1.15,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "repair"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "repair"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "ecae9697165f",
+  "context_fingerprint": "d8739958c547",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 699,
-  "approx_added_tokens": 175
+  "temporary_skill_chars": 726,
+  "approx_added_tokens": 182
 }
