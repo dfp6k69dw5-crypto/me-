@@ -7,8 +7,8 @@
       },
       "medium": {
         "topics": [
-          "revisit",
-          "revisit"
+          "conferences",
+          "conferences"
         ],
         "branch_interest": 0.736
       },
@@ -5982,7 +5982,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T004836228-mara-v5",
+      "last_event": "20260830T010917068-jules-v5",
       "spoken": 2356,
       "silences": 0,
       "people": {
@@ -9035,7 +9035,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9730777437616418,
+          "exposure": 0.9731181271459993,
           "direct_familiarity": 0.4723463813650859,
           "trust": 0.11434240000000001,
           "predictability": 0.25870798896376307,
@@ -9045,7 +9045,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.2429572772371783,
           "direct_turns": 463,
-          "observed_turns": 2364,
+          "observed_turns": 2365,
           "repair_attempts": 6,
           "repair_successes": 0,
           "last_direct_cycle": 263,
@@ -10954,18 +10954,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat need as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat general as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: general",
           "mara already covered: i need, issue",
-          "jules already covered: need",
-          "owen already covered: i need"
+          "jules already covered: need"
         ],
-        "last_updated_cycle": 267
+        "last_updated_cycle": 268
       }
     },
     "mara": {
@@ -10975,8 +10975,8 @@
       },
       "medium": {
         "topics": [
-          "revisit",
-          "revisit"
+          "conferences",
+          "conferences"
         ],
         "branch_interest": 0.576
       },
@@ -10985,21 +10985,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T135523706-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "mara",
-          "text": "i think you're looking at this the wrong way",
-          "move": "support",
-          "discourse": "d-20260828T135523706-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002105",
-          "topic_episode": "topic-002102",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
         {
           "source": "20260828T135854955-owen-v5",
           "status": "observed",
@@ -14295,6 +14280,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260830T010917068-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "mara",
+          "text": "I need, I focus my efforts on this one point: this is not just general stuff.",
+          "move": "repair",
+          "discourse": "d-20260830T010917068-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000268",
+          "topic_episode": "topic-000266",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "jules"
         }
       ],
       "self_history": [
@@ -16939,7 +16939,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T004836228-mara-v5",
+      "last_event": "20260830T010917068-jules-v5",
       "spoken": 2364,
       "silences": 0,
       "people": {
@@ -19992,22 +19992,21 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9730777437616418,
-          "direct_familiarity": 0.6292869943326471,
+          "exposure": 0.9731181271459993,
+          "direct_familiarity": 0.629731849939448,
           "trust": 0.1,
-          "predictability": 0.3510896036354991,
-          "reciprocity": 0.45078091407267695,
-          "warmth": 0.39015481858307416,
+          "predictability": 0.3514140588336814,
+          "reciprocity": 0.4512752112500115,
+          "warmth": 0.3905207256919243,
           "respect": 0.2529851672121747,
           "disclosure_depth": 0.0,
           "tension": 0.2027020004106831,
-          "direct_turns": 757,
-          "observed_turns": 2364,
+          "direct_turns": 758,
+          "observed_turns": 2365,
           "repair_attempts": 11,
           "repair_successes": 0,
-          "last_direct_cycle": 242,
+          "last_direct_cycle": 268,
           "shared_references": [
-            "conversations",
             "support",
             "owen",
             "sarcastic",
@@ -20066,18 +20065,10 @@
             "i take a stance",
             "share",
             "common",
-            "interest"
+            "interest",
+            "general"
           ],
           "events": [
-            {
-              "cycle": 1909,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260828T074944226-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1911,
               "kind": "deepen",
@@ -21508,6 +21499,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 268,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260830T010917068-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -21893,18 +21893,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat need as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat general as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: general",
           "jules already covered: need",
-          "owen already covered: i need",
-          "owen already covered: focus"
+          "owen already covered: i need"
         ],
-        "last_updated_cycle": 267
+        "last_updated_cycle": 268
       }
     },
     "owen": {
@@ -21914,8 +21914,8 @@
       },
       "medium": {
         "topics": [
-          "revisit",
-          "revisit"
+          "conferences",
+          "conferences"
         ],
         "branch_interest": 0.68
       },
@@ -27899,7 +27899,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T004836228-mara-v5",
+      "last_event": "20260830T010917068-jules-v5",
       "spoken": 2346,
       "silences": 0,
       "people": {
@@ -30952,7 +30952,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9730777437616418,
+          "exposure": 0.9731181271459993,
           "direct_familiarity": 0.7398611248664416,
           "trust": 0.1,
           "predictability": 0.3556333496800345,
@@ -30962,7 +30962,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.1177956834003114,
           "direct_turns": 1052,
-          "observed_turns": 2364,
+          "observed_turns": 2365,
           "repair_attempts": 17,
           "repair_successes": 0,
           "last_direct_cycle": 267,
@@ -32718,18 +32718,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat need as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat general as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: general",
           "mara already covered: i need, issue",
-          "jules already covered: need",
-          "mara already covered: revisit"
+          "jules already covered: need"
         ],
-        "last_updated_cycle": 267
+        "last_updated_cycle": 268
       }
     },
     "jules": {
@@ -32739,8 +32739,8 @@
       },
       "medium": {
         "topics": [
-          "revisit",
-          "revisit"
+          "conferences",
+          "conferences"
         ],
         "branch_interest": 0.508
       },
@@ -36064,18 +36064,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T143248330-jules-v5",
-          "text": "I'm reaching out to discuss our recent changes in the system. I had concerns about the efficiency of the current approach and wanted to see if we can work together to identify potential issues.",
-          "move": "repair",
-          "discourse": "d-20260828T143248330-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002123",
-          "topic_episode": "topic-002121",
-          "topic_facet": "reach",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T143644320-jules-v5",
           "text": "You're not going to push my concerns to deal with some new situation? I'm going to take care of it.",
           "move": "answer",
@@ -38702,10 +38690,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T010917068-jules-v5",
+          "text": "I need, I focus my efforts on this one point: this is not just general stuff.",
+          "move": "repair",
+          "discourse": "d-20260830T010917068-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000268",
+          "topic_episode": "topic-000266",
+          "topic_facet": "revisit",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T004836228-mara-v5",
-      "spoken": 2364,
+      "last_event": "20260830T010917068-jules-v5",
+      "spoken": 2365,
       "silences": 0,
       "people": {
         "sarah": {
@@ -43543,7 +43543,7 @@
           "owen already covered: i need",
           "mara already covered: revisit"
         ],
-        "last_updated_cycle": 267
+        "last_updated_cycle": 268
       }
     }
   },
