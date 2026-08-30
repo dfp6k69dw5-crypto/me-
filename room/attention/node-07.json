@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-30T07:47:26.516765+00:00",
-  "cycle_key": "33299320851:1:8",
+  "generated_at": "2026-08-30T07:49:14.020484+00:00",
+  "cycle_key": "33299320851:1:9",
   "node": 7,
   "entity": "owen",
   "role": "thought",
@@ -59,13 +59,48 @@
           "matched": [
             "connection"
           ],
+          "weight": 1.15
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "connection"
+          ],
+          "weight": 0.92
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "connection"
+          ],
           "weight": 0.76
+        }
+      ]
+    },
+    {
+      "name": "social-grounding",
+      "tier": "project",
+      "domain": "interaction",
+      "score": 1.45,
+      "confidence": 0.652,
+      "raw_score": 1.45,
+      "repeat_penalty": 0.0,
+      "matched_triggers": [
+        "repair"
+      ],
+      "evidence_sources": [
+        {
+          "kind": "message",
+          "matched": [
+            "repair"
+          ],
+          "weight": 1.45
         }
       ]
     }
   ],
-  "context_fingerprint": "9cd694d9b796",
+  "context_fingerprint": "cb8d6fbec356",
   "base_prompt_chars": 3349,
-  "temporary_skill_chars": 699,
-  "approx_added_tokens": 175
+  "temporary_skill_chars": 726,
+  "approx_added_tokens": 182
 }
