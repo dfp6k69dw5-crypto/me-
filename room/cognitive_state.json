@@ -18,21 +18,6 @@
       "noise": {},
       "room_memories": [
         {
-          "source": "20260828T183254368-mara-v5",
-          "status": "observed",
-          "speaker": "mara",
-          "target": "sarah",
-          "text": "I want to support you, Sarah, and your interests in finding a place to eat. Your gardening knowledge is so valuable and important. I care about the garden's well-being and the people who care about it.",
-          "move": "support",
-          "discourse": "d-20260828T183254368-mara-v5",
-          "beat_id": "beat-room-private-self-v1-2026-08-28-000010",
-          "topic_episode": "topic-000007",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "mara"
-        },
-        {
           "source": "20260828T183256924-owen-v5",
           "status": "observed",
           "speaker": "owen",
@@ -3338,6 +3323,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260830T101943141-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "sarah",
+          "text": "I'm okay with your move, I've already been thinking about it, but I just need to make sure you understand the context of what I need from you before I proceed.",
+          "move": "close",
+          "discourse": "d-20260830T101943141-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000402",
+          "topic_episode": "topic-000401",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "jules"
         }
       ],
       "self_history": [
@@ -5982,7 +5982,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T101743937-sarah-v5",
+      "last_event": "20260830T101943141-jules-v5",
       "spoken": 2401,
       "silences": 0,
       "people": {
@@ -9035,8 +9035,8 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9752855244955243,
-          "direct_familiarity": 0.47550471397717214,
+          "exposure": 0.975322596208781,
+          "direct_familiarity": 0.47613410832039954,
           "trust": 0.11434240000000001,
           "predictability": 0.2594490956517965,
           "reciprocity": 0.2952100897836543,
@@ -9044,13 +9044,12 @@
           "respect": 0.17076089574747738,
           "disclosure_depth": 0.015936,
           "tension": 0.2429572772371783,
-          "direct_turns": 468,
-          "observed_turns": 2421,
+          "direct_turns": 469,
+          "observed_turns": 2422,
           "repair_attempts": 6,
           "repair_successes": 0,
-          "last_direct_cycle": 387,
+          "last_direct_cycle": 402,
           "shared_references": [
-            "i'm",
             "here",
             "home",
             "make",
@@ -9109,18 +9108,10 @@
             "action",
             "contribution",
             "connection",
-            "reestablish"
+            "reestablish",
+            "move"
           ],
           "events": [
-            {
-              "cycle": 891,
-              "kind": "disclose",
-              "direct": true,
-              "message_id": "20260826T133038272-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 894,
               "kind": "repair",
@@ -10551,6 +10542,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 402,
+              "kind": "close",
+              "direct": true,
+              "message_id": "20260830T101943141-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -10954,18 +10954,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat connection, i will repair the connection to get more… as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat i'm, move, i've as important (close).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: i'm, move, i've",
           "owen already covered: response",
-          "mara already covered: clarify",
-          "jules already covered: connection, i will repair the connection to get more…"
+          "mara already covered: clarify"
         ],
-        "last_updated_cycle": 401
+        "last_updated_cycle": 402
       }
     },
     "mara": {
@@ -16939,7 +16939,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T101743937-sarah-v5",
+      "last_event": "20260830T101943141-jules-v5",
       "spoken": 2420,
       "silences": 0,
       "people": {
@@ -19992,7 +19992,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9752855244955243,
+          "exposure": 0.975322596208781,
           "direct_familiarity": 0.635466627003475,
           "trust": 0.1,
           "predictability": 0.3543278352262095,
@@ -20002,7 +20002,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.2027020004106831,
           "direct_turns": 771,
-          "observed_turns": 2421,
+          "observed_turns": 2422,
           "repair_attempts": 11,
           "repair_successes": 0,
           "last_direct_cycle": 393,
@@ -21893,18 +21893,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat connection, i will repair the connection to get more… as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat i'm, move, i've as important (close).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: i'm, move, i've",
           "sarah already covered: response, clarify",
-          "owen already covered: response",
-          "sarah already covered: i'll, clarify, response"
+          "owen already covered: response"
         ],
-        "last_updated_cycle": 401
+        "last_updated_cycle": 402
       }
     },
     "owen": {
@@ -27879,7 +27879,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T101743937-sarah-v5",
+      "last_event": "20260830T101943141-jules-v5",
       "spoken": 2413,
       "silences": 0,
       "people": {
@@ -30932,7 +30932,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9752855244955243,
+          "exposure": 0.975322596208781,
           "direct_familiarity": 0.7505669847067247,
           "trust": 0.1,
           "predictability": 0.36268525197465323,
@@ -30942,7 +30942,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.09970226643002357,
           "direct_turns": 1087,
-          "observed_turns": 2421,
+          "observed_turns": 2422,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 399,
@@ -32698,18 +32698,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat connection, i will repair the connection to get more… as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat i'm, move, i've as important (close).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: i'm, move, i've",
           "sarah already covered: response, clarify",
-          "mara already covered: clarify",
-          "sarah already covered: i'll, clarify, response"
+          "mara already covered: clarify"
         ],
-        "last_updated_cycle": 401
+        "last_updated_cycle": 402
       }
     },
     "jules": {
@@ -36042,18 +36042,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T164747090-jules-v5",
-          "text": "Sarah, we're in a tough spot now. I appreciate the time we've spent on this journey, and I'm willing to support you through anything,",
-          "move": "support",
-          "discourse": "d-20260828T164747090-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002174",
-          "topic_episode": "topic-002172",
-          "topic_facet": "travel",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T165004967-jules-v5",
           "text": "I've had a crazy dream about our neighborhood,",
           "move": "repair",
@@ -38680,10 +38668,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T101943141-jules-v5",
+          "text": "I'm okay with your move, I've already been thinking about it, but I just need to make sure you understand the context of what I need from you before I proceed.",
+          "move": "close",
+          "discourse": "d-20260830T101943141-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000402",
+          "topic_episode": "topic-000401",
+          "topic_facet": "i'll",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T101743937-sarah-v5",
-      "spoken": 2421,
+      "last_event": "20260830T101943141-jules-v5",
+      "spoken": 2422,
       "silences": 0,
       "people": {
         "sarah": {
@@ -43521,7 +43521,7 @@
           "owen already covered: response",
           "mara already covered: clarify"
         ],
-        "last_updated_cycle": 401
+        "last_updated_cycle": 402
       }
     }
   },
