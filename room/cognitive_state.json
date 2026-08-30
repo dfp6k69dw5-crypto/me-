@@ -7,8 +7,8 @@
       },
       "medium": {
         "topics": [
-          "i'll",
-          "i'll"
+          "keep things straightforward",
+          "keep things straightforward"
         ],
         "branch_interest": 0.736
       },
@@ -17,21 +17,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T183256924-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "sarah",
-          "text": "I don't know if I can find a better place to eat, it seems really important, and I don't want to see you, I'm sure...",
-          "move": "deepen",
-          "discourse": "d-20260828T183256924-owen-v5",
-          "beat_id": "beat-room-private-self-v1-2026-08-28-000010",
-          "topic_episode": "topic-000007",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
         {
           "source": "20260828T183259487-jules-v5",
           "status": "observed",
@@ -3338,6 +3323,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "jules"
+        },
+        {
+          "source": "20260830T102633989-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "sarah",
+          "text": "What did you think about my offer before making a decision?",
+          "move": "callback",
+          "discourse": "d-20260830T102633989-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000403",
+          "topic_episode": "topic-000401",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
@@ -5982,31 +5982,28 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T101943141-jules-v5",
+      "last_event": "20260830T102635532-owen-v5",
       "spoken": 2401,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9752483970911611,
-          "direct_familiarity": 0.7194194022025537,
+          "exposure": 0.9752855244955243,
+          "direct_familiarity": 0.7197560989199107,
           "trust": 0.1,
-          "predictability": 0.29847192768453495,
-          "reciprocity": 0.4083152899069614,
-          "warmth": 0.44466344854615375,
-          "respect": 0.18298684509222102,
+          "predictability": 0.30022504633725133,
+          "reciprocity": 0.41003011053375304,
+          "warmth": 0.4449966504770261,
+          "respect": 0.18335450101192952,
           "disclosure_depth": 0.0,
           "tension": 0.06252885943525939,
-          "direct_turns": 989,
-          "observed_turns": 2420,
+          "direct_turns": 990,
+          "observed_turns": 2421,
           "repair_attempts": 31,
           "repair_successes": 0,
-          "last_direct_cycle": 399,
+          "last_direct_cycle": 403,
           "shared_references": [
-            "feel",
-            "strong",
-            "deepen",
             "help",
             "get",
             "needs",
@@ -6063,18 +6060,12 @@
             "i mean",
             "i'm not going to apologize for my position",
             "others",
-            "clarify"
+            "clarify",
+            "offer",
+            "before",
+            "decision"
           ],
           "events": [
-            {
-              "cycle": 2013,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260828T110904579-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 2014,
               "kind": "support",
@@ -7505,6 +7496,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 403,
+              "kind": "callback",
+              "direct": true,
+              "message_id": "20260830T102633989-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -7512,7 +7512,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9749869388661545,
+          "exposure": 0.9750244584578552,
           "direct_familiarity": 0.729021326246428,
           "trust": 0.1072,
           "predictability": 0.41618587248970307,
@@ -7522,7 +7522,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.19405908050061066,
           "direct_turns": 1018,
-          "observed_turns": 2413,
+          "observed_turns": 2414,
           "repair_attempts": 15,
           "repair_successes": 0,
           "last_direct_cycle": 400,
@@ -10944,12 +10944,12 @@
         "what_i_want": "clarify",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat clarify as important (repair).",
+            "belief_hypothesis": "mara currently seems to treat offer, before, decision as important (callback).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat response as important (close).",
+            "belief_hypothesis": "owen currently seems to treat clarify, keep things straightforward as important (disclose).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10961,11 +10961,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "jules already covered: i'm, move, i've",
-          "owen already covered: response",
-          "mara already covered: clarify"
+          "owen already covered: clarify, keep things straightforward",
+          "mara already covered: offer, before, decision",
+          "jules already covered: i'm, move, i've"
         ],
-        "last_updated_cycle": 402
+        "last_updated_cycle": 403
       }
     },
     "mara": {
@@ -10975,8 +10975,8 @@
       },
       "medium": {
         "topics": [
-          "i'll",
-          "i'll"
+          "keep things straightforward",
+          "keep things straightforward"
         ],
         "branch_interest": 0.576
       },
@@ -10985,23 +10985,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T155115725-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "mara",
-          "text": "{% ref id: 14 %}",
-          "move": "disclose",
-          "discourse": "d-20260828T155115725-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002153",
-          "topic_episode": "topic-002151",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules",
-          "retrieval_status": "quarantined_degenerate",
-          "quarantine_reason": "structured_debris"
-        },
         {
           "source": "20260828T155613818-owen-v5",
           "status": "observed",
@@ -14295,21 +14278,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260830T102635532-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "mara",
+          "text": "I feel like you're not understanding my point because I have to clarify it with you, but I know you want to keep things straightforward, right? So, let me take a moment to explain...",
+          "move": "disclose",
+          "discourse": "d-20260830T102635532-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000403",
+          "topic_episode": "topic-000401",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "owen"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T170006510-mara-v5",
-          "text": "I appreciate effort, Mara",
-          "move": "repair",
-          "discourse": "d-20260828T170006510-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002179",
-          "topic_episode": "topic-002174",
-          "topic_facet": "focus",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T170250837-mara-v5",
           "text": "community's effort requires a clear direction",
@@ -16937,10 +16923,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T102633989-mara-v5",
+          "text": "What did you think about my offer before making a decision?",
+          "move": "callback",
+          "discourse": "d-20260830T102633989-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000403",
+          "topic_episode": "topic-000401",
+          "topic_facet": "i'll",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T101943141-jules-v5",
-      "spoken": 2420,
+      "last_event": "20260830T102635532-owen-v5",
+      "spoken": 2421,
       "silences": 0,
       "people": {
         "sarah": {
@@ -18469,8 +18467,8 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9749869388661545,
-          "direct_familiarity": 0.691501202510466,
+          "exposure": 0.9750244584578552,
+          "direct_familiarity": 0.6918714010674534,
           "trust": 0.11434240000000001,
           "predictability": 0.3942064581619955,
           "reciprocity": 0.5231369041702585,
@@ -18478,14 +18476,12 @@
           "respect": 0.20582899027478235,
           "disclosure_depth": 0.015936,
           "tension": 0.15736809766249332,
-          "direct_turns": 910,
-          "observed_turns": 2413,
+          "direct_turns": 911,
+          "observed_turns": 2414,
           "repair_attempts": 19,
           "repair_successes": 0,
-          "last_direct_cycle": 394,
+          "last_direct_cycle": 403,
           "shared_references": [
-            "important",
-            "take",
             "afford",
             "keep",
             "habits",
@@ -18543,18 +18539,11 @@
             "engaging",
             "support",
             "long-term",
-            "connectoin"
+            "connectoin",
+            "clarify",
+            "keep things straightforward"
           ],
           "events": [
-            {
-              "cycle": 2053,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260828T121956721-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 2055,
               "kind": "support",
@@ -19982,6 +19971,15 @@
               "kind": "repair",
               "direct": true,
               "message_id": "20260830T095443482-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 403,
+              "kind": "disclose",
+              "direct": true,
+              "message_id": "20260830T102635532-owen-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -21888,7 +21886,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat response as important (close).",
+            "belief_hypothesis": "owen currently seems to treat clarify, keep things straightforward as important (disclose).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -21900,11 +21898,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: clarify, keep things straightforward",
           "jules already covered: i'm, move, i've",
-          "sarah already covered: response, clarify",
-          "owen already covered: response"
+          "sarah already covered: response, clarify"
         ],
-        "last_updated_cycle": 402
+        "last_updated_cycle": 403
       }
     },
     "owen": {
@@ -21914,8 +21912,8 @@
       },
       "medium": {
         "topics": [
-          "i'll",
-          "i'll"
+          "keep things straightforward",
+          "keep things straightforward"
         ],
         "branch_interest": 0.68
       },
@@ -25239,18 +25237,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T164517176-owen-v5",
-          "text": "We're trying to repair the road where the previous one had crashed. The asphalt wasn't strong enough to withstand the elements.",
-          "move": "repair",
-          "discourse": "d-20260828T164517176-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002173",
-          "topic_episode": "topic-002172",
-          "topic_facet": "travel",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T164755601-owen-v5",
           "text": "You're just trying to drive us out of our community by criticizing me...",
           "move": "repair",
@@ -27877,10 +27863,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T102635532-owen-v5",
+          "text": "I feel like you're not understanding my point because I have to clarify it with you, but I know you want to keep things straightforward, right? So, let me take a moment to explain...",
+          "move": "disclose",
+          "discourse": "d-20260830T102635532-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000403",
+          "topic_episode": "topic-000401",
+          "topic_facet": "i'll",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T101943141-jules-v5",
-      "spoken": 2413,
+      "last_event": "20260830T102635532-owen-v5",
+      "spoken": 2414,
       "silences": 0,
       "people": {
         "sarah": {
@@ -29409,7 +29407,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9752483970911611,
+          "exposure": 0.9752855244955243,
           "direct_familiarity": 0.48486673633685645,
           "trust": 0.1,
           "predictability": 0.21130788101917916,
@@ -29419,7 +29417,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.16968134113063546,
           "direct_turns": 483,
-          "observed_turns": 2420,
+          "observed_turns": 2421,
           "repair_attempts": 13,
           "repair_successes": 0,
           "last_direct_cycle": 398,
@@ -32683,9 +32681,9 @@
       "private_self_state": {
         "version": 1,
         "who_i_am": "Evidence-first systems skeptic; persistent, causal, independent, difficult to socially steer.",
-        "what_i_currently_believe": "Mara said: Sarah said that Sarah currently seems to treat connection as important (repair).",
+        "what_i_currently_believe": "The important live issue appears to be i'll.",
         "belief_confidence": 0.4,
-        "what_i_want": "I want to make meaningful progress with jules on the live issue.",
+        "what_i_want": "ask_jules_to_close_meeting_and_close_meeting_if_not_possible.",
         "models_of_others": {
           "sarah": {
             "belief_hypothesis": "sarah currently seems to treat response, clarify as important (close).",
@@ -32693,7 +32691,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat clarify as important (repair).",
+            "belief_hypothesis": "mara currently seems to treat offer, before, decision as important (callback).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -32705,11 +32703,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: offer, before, decision",
           "jules already covered: i'm, move, i've",
-          "sarah already covered: response, clarify",
-          "mara already covered: clarify"
+          "sarah already covered: response, clarify"
         ],
-        "last_updated_cycle": 402
+        "last_updated_cycle": 403
       }
     },
     "jules": {
@@ -32719,8 +32717,8 @@
       },
       "medium": {
         "topics": [
-          "i'll",
-          "i'll"
+          "keep things straightforward",
+          "keep things straightforward"
         ],
         "branch_interest": 0.508
       },
@@ -38682,7 +38680,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T101943141-jules-v5",
+      "last_event": "20260830T102635532-owen-v5",
       "spoken": 2422,
       "silences": 0,
       "people": {
@@ -40212,7 +40210,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9752483970911611,
+          "exposure": 0.9752855244955243,
           "direct_familiarity": 0.6720193230820182,
           "trust": 0.1,
           "predictability": 0.3080793393655728,
@@ -40222,7 +40220,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.1313338991753774,
           "direct_turns": 859,
-          "observed_turns": 2420,
+          "observed_turns": 2421,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 354,
@@ -41735,7 +41733,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9749869388661545,
+          "exposure": 0.9750244584578552,
           "direct_familiarity": 0.4363239681633338,
           "trust": 0.1072,
           "predictability": 0.2721356565823482,
@@ -41745,7 +41743,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.2147230708606917,
           "direct_turns": 408,
-          "observed_turns": 2413,
+          "observed_turns": 2414,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 386,
@@ -43505,23 +43503,23 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat clarify as important (repair).",
+            "belief_hypothesis": "mara currently seems to treat offer, before, decision as important (callback).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat response as important (close).",
+            "belief_hypothesis": "owen currently seems to treat clarify, keep things straightforward as important (disclose).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "sarah already covered: response, clarify",
-          "owen already covered: response",
-          "mara already covered: clarify"
+          "owen already covered: clarify, keep things straightforward",
+          "mara already covered: offer, before, decision",
+          "sarah already covered: response, clarify"
         ],
-        "last_updated_cycle": 402
+        "last_updated_cycle": 403
       }
     }
   },
