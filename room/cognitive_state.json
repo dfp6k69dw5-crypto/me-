@@ -5982,7 +5982,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T032327583-mara-v5",
+      "last_event": "20260830T032520613-owen-v5",
       "spoken": 2366,
       "silences": 0,
       "people": {
@@ -7512,7 +7512,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9727933563078198,
+          "exposure": 0.9728341662733581,
           "direct_familiarity": 0.7214335316539253,
           "trust": 0.1072,
           "predictability": 0.4112010506238439,
@@ -7522,7 +7522,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.19405908050061066,
           "direct_turns": 995,
-          "observed_turns": 2357,
+          "observed_turns": 2358,
           "repair_attempts": 15,
           "repair_successes": 0,
           "last_direct_cycle": 288,
@@ -10949,7 +10949,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat can't, prove as important (repair).",
+            "belief_hypothesis": "owen currently seems to treat happened as important (close).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10961,11 +10961,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: happened",
           "mara already covered: can't, hear me",
-          "jules already covered: cannot, prove",
-          "mara already covered: said, avoid, heard"
+          "jules already covered: cannot, prove"
         ],
-        "last_updated_cycle": 298
+        "last_updated_cycle": 299
       }
     },
     "mara": {
@@ -10985,21 +10985,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T142518966-jules-v5",
-          "status": "observed",
-          "speaker": "jules",
-          "target": "mara",
-          "text": "I think I'm going to get an unexpected twist in this meal,",
-          "move": "answer",
-          "discourse": "d-20260828T142518966-jules-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002120",
-          "topic_episode": "topic-002119",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "jules"
-        },
         {
           "source": "20260828T142849178-jules-v5",
           "status": "observed",
@@ -14295,6 +14280,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "owen"
+        },
+        {
+          "source": "20260830T032520613-owen-v5",
+          "status": "observed",
+          "speaker": "owen",
+          "target": "mara",
+          "text": "That's not how it happened.",
+          "move": "close",
+          "discourse": "d-20260830T032520613-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000299",
+          "topic_episode": "topic-000298",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "owen"
         }
       ],
       "self_history": [
@@ -16939,7 +16939,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T032327583-mara-v5",
+      "last_event": "20260830T032520613-owen-v5",
       "spoken": 2383,
       "silences": 0,
       "people": {
@@ -18469,8 +18469,8 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9727933563078198,
-          "direct_familiarity": 0.6840031146846738,
+          "exposure": 0.9728341662733581,
+          "direct_familiarity": 0.6843823109470522,
           "trust": 0.1072,
           "predictability": 0.391831769619175,
           "reciprocity": 0.517522297625982,
@@ -18478,13 +18478,12 @@
           "respect": 0.20224635970694066,
           "disclosure_depth": 0.008,
           "tension": 0.14025925687429172,
-          "direct_turns": 890,
-          "observed_turns": 2357,
+          "direct_turns": 891,
+          "observed_turns": 2358,
           "repair_attempts": 19,
           "repair_successes": 0,
-          "last_direct_cycle": 296,
+          "last_direct_cycle": 299,
           "shared_references": [
-            "treating",
             "currently",
             "view",
             "big",
@@ -18543,18 +18542,10 @@
             "good",
             "control",
             "can't",
-            "prove"
+            "prove",
+            "happened"
           ],
           "events": [
-            {
-              "cycle": 2011,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260828T110510976-owen-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 2015,
               "kind": "repair",
@@ -19982,6 +19973,15 @@
               "kind": "repair",
               "direct": true,
               "message_id": "20260830T031932544-owen-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
+            },
+            {
+              "cycle": 299,
+              "kind": "close",
+              "direct": true,
+              "message_id": "20260830T032520613-owen-v5",
               "risk": 0,
               "repair": false,
               "disagreement": false
@@ -21888,7 +21888,7 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat can't, prove as important (repair).",
+            "belief_hypothesis": "owen currently seems to treat happened as important (close).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -21900,11 +21900,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: happened",
           "jules already covered: cannot, prove",
-          "owen already covered: can't, prove",
-          "sarah already covered: here"
+          "owen already covered: can't, prove"
         ],
-        "last_updated_cycle": 298
+        "last_updated_cycle": 299
       }
     },
     "owen": {
@@ -25263,18 +25263,6 @@
       ],
       "self_history": [
         {
-          "source": "20260828T142855557-owen-v5",
-          "text": "I'm reaching out to discuss our recent changes in the system. I had concerns about the efficiency of the current approach and wanted to see if we can work together to identify potential issues.",
-          "move": "repair",
-          "discourse": "d-20260828T142855557-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002122",
-          "topic_episode": "topic-002121",
-          "topic_facet": "reach",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260828T143254896-owen-v5",
           "text": "I am going to focus on his concerns about Mara's tired skin...",
           "move": "deepen",
@@ -27901,10 +27889,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T032520613-owen-v5",
+          "text": "That's not how it happened.",
+          "move": "close",
+          "discourse": "d-20260830T032520613-owen-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000299",
+          "topic_episode": "topic-000298",
+          "topic_facet": "prove",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T032327583-mara-v5",
-      "spoken": 2357,
+      "last_event": "20260830T032520613-owen-v5",
+      "spoken": 2358,
       "silences": 0,
       "people": {
         "sarah": {
@@ -32733,7 +32733,7 @@
           "jules already covered: cannot, prove",
           "mara already covered: said, avoid, heard"
         ],
-        "last_updated_cycle": 298
+        "last_updated_cycle": 299
       }
     },
     "jules": {
@@ -38708,7 +38708,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T032327583-mara-v5",
+      "last_event": "20260830T032520613-owen-v5",
       "spoken": 2377,
       "silences": 0,
       "people": {
@@ -41761,7 +41761,7 @@
         "owen": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9727933563078198,
+          "exposure": 0.9728341662733581,
           "direct_familiarity": 0.4274563126388297,
           "trust": 0.1072,
           "predictability": 0.2699482371635042,
@@ -41771,7 +41771,7 @@
           "disclosure_depth": 0.008,
           "tension": 0.2147230708606917,
           "direct_turns": 395,
-          "observed_turns": 2357,
+          "observed_turns": 2358,
           "repair_attempts": 9,
           "repair_successes": 0,
           "last_direct_cycle": 271,
@@ -43536,18 +43536,18 @@
             "basis": "latest observed public turn"
           },
           "owen": {
-            "belief_hypothesis": "owen currently seems to treat can't, prove as important (repair).",
+            "belief_hypothesis": "owen currently seems to treat happened as important (close).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "owen already covered: happened",
           "mara already covered: can't, hear me",
-          "mara already covered: said, avoid, heard",
-          "owen already covered: can't, prove"
+          "mara already covered: said, avoid, heard"
         ],
-        "last_updated_cycle": 298
+        "last_updated_cycle": 299
       }
     }
   },
