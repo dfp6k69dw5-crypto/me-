@@ -5982,14 +5982,14 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T022507503-mara-v5",
+      "last_event": "20260830T022656843-mara-v5",
       "spoken": 2362,
       "silences": 0,
       "people": {
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.973518644307814,
+          "exposure": 0.9735583663413523,
           "direct_familiarity": 0.7170511713220133,
           "trust": 0.1,
           "predictability": 0.2967154737012178,
@@ -5999,7 +5999,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.06252885943525939,
           "direct_turns": 982,
-          "observed_turns": 2375,
+          "observed_turns": 2376,
           "repair_attempts": 31,
           "repair_successes": 0,
           "last_direct_cycle": 258,
@@ -9035,7 +9035,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9733591585509629,
+          "exposure": 0.9733991198131364,
           "direct_familiarity": 0.47297956570744776,
           "trust": 0.11434240000000001,
           "predictability": 0.2590786349692812,
@@ -9045,7 +9045,7 @@
           "disclosure_depth": 0.015936,
           "tension": 0.2429572772371783,
           "direct_turns": 464,
-          "observed_turns": 2371,
+          "observed_turns": 2372,
           "repair_attempts": 6,
           "repair_successes": 0,
           "last_direct_cycle": 275,
@@ -10944,7 +10944,7 @@
         "what_i_want": "clarify",
         "models_of_others": {
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat i'm, explain as important (answer).",
+            "belief_hypothesis": "mara currently seems to treat i repair, i clarify, i bring to the conversation as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -10954,18 +10954,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat treat as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat participant, action, supportive as important (support).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "mara already covered: i'm, explain",
-          "jules already covered: treat",
-          "jules already covered: action, supportive, in this scenario"
+          "mara already covered: i repair, i clarify, i bring to the conversation",
+          "jules already covered: participant, action, supportive",
+          "mara already covered: i'm, explain"
         ],
-        "last_updated_cycle": 284
+        "last_updated_cycle": 285
       }
     },
     "mara": {
@@ -10985,21 +10985,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T141437419-owen-v5",
-          "status": "observed",
-          "speaker": "owen",
-          "target": "mara",
-          "text": "Sara I need a fresh start",
-          "move": "support",
-          "discourse": "d-20260828T141437419-owen-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002114",
-          "topic_episode": "topic-002111",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "owen"
-        },
         {
           "source": "20260828T141806007-owen-v5",
           "status": "observed",
@@ -14295,21 +14280,24 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "jules"
+        },
+        {
+          "source": "20260830T022654488-jules-v5",
+          "status": "observed",
+          "speaker": "jules",
+          "target": "mara",
+          "text": "The participant's action is supportive in this scenario. The action is well-timed, meaning that it happens when the…",
+          "move": "support",
+          "discourse": "d-20260830T022654488-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000285",
+          "topic_episode": "topic-000284",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "jules"
         }
       ],
       "self_history": [
-        {
-          "source": "20260828T151025912-mara-v5",
-          "text": "I feel when I'm talking to you about nature, Mara, I feel something that is not just about talking, I feel like we're not just talking, we're exploring and understanding each other. Like we're making something new, something real. Like we're growing as individuals, as a team, as a connection.",
-          "move": "deepen",
-          "discourse": "d-20260828T151025912-mara-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002137",
-          "topic_episode": "topic-002133",
-          "topic_facet": "illusion",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
         {
           "source": "20260828T151257744-mara-v5",
           "text": "oh my god, i feel like we've been like, talking about our nature journey and tree alignment and everything, and i thought for sure our perception of each other would be so much deeper, but it feels like, like, you've been, like, taking your distance and that's, like, really hard for me to…",
@@ -16937,10 +16925,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T022656843-mara-v5",
+          "text": "Jules, I want to repair Owen's situation and clarify what I think others believe. I want to bring it into the conversation and address the situation directly.",
+          "move": "repair",
+          "discourse": "d-20260830T022656843-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000285",
+          "topic_episode": "topic-000284",
+          "topic_facet": "explain",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T022507503-mara-v5",
-      "spoken": 2375,
+      "last_event": "20260830T022656843-mara-v5",
+      "spoken": 2376,
       "silences": 0,
       "people": {
         "sarah": {
@@ -19992,22 +19992,21 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9733591585509629,
-          "direct_familiarity": 0.6306199603134572,
+          "exposure": 0.9733991198131364,
+          "direct_familiarity": 0.6310632163610811,
           "trust": 0.1,
           "predictability": 0.3533583576631057,
           "reciprocity": 0.4533579464598772,
-          "warmth": 0.3912518814085552,
+          "warmth": 0.39161713027971007,
           "respect": 0.25365732929118007,
           "disclosure_depth": 0.0,
           "tension": 0.2027020004106831,
-          "direct_turns": 760,
-          "observed_turns": 2371,
+          "direct_turns": 761,
+          "observed_turns": 2372,
           "repair_attempts": 11,
           "repair_successes": 0,
-          "last_direct_cycle": 283,
+          "last_direct_cycle": 285,
           "shared_references": [
-            "feelings",
             "i'm",
             "feeling",
             "uncomfortable",
@@ -20066,18 +20065,10 @@
             "important",
             "action",
             "supportive",
-            "in this scenario"
+            "in this scenario",
+            "participant"
           ],
           "events": [
-            {
-              "cycle": 1915,
-              "kind": "deepen",
-              "direct": true,
-              "message_id": "20260828T080203734-jules-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 1917,
               "kind": "repair",
@@ -21508,6 +21499,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 285,
+              "kind": "support",
+              "direct": true,
+              "message_id": "20260830T022654488-jules-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -21893,18 +21893,18 @@
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat treat as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat participant, action, supportive as important (support).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "jules already covered: participant, action, supportive",
           "sarah already covered: keep, move",
-          "jules already covered: treat",
-          "sarah already covered: currently, treat, might"
+          "jules already covered: treat"
         ],
-        "last_updated_cycle": 284
+        "last_updated_cycle": 285
       }
     },
     "owen": {
@@ -21924,21 +21924,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T223008842-mara-v5",
-          "status": "observed",
-          "speaker": "mara",
-          "target": "owen",
-          "text": "I see what's great about this idea, Sarah. Like, focus on gardens, and it shares a great idea. You've chosen the right path, Sarah. You're focusing, and that's what matters.",
-          "move": "repair",
-          "discourse": "d-20260828T223008842-mara-v5",
-          "beat_id": "beat-room-private-self-v1-2026-08-28-000033",
-          "topic_episode": "topic-000029",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "mara"
-        },
         {
           "source": "20260828T223327973-jules-v5",
           "status": "observed",
@@ -25255,6 +25240,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "mara"
+        },
+        {
+          "source": "20260830T022656843-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "owen",
+          "text": "Jules, I want to repair Owen's situation and clarify what I think others believe. I want to bring it into the conversation and address the situation directly.",
+          "move": "repair",
+          "discourse": "d-20260830T022656843-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000285",
+          "topic_episode": "topic-000284",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
@@ -27899,7 +27899,7 @@
           "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T022507503-mara-v5",
+      "last_event": "20260830T022656843-mara-v5",
       "spoken": 2352,
       "silences": 0,
       "people": {
@@ -29429,24 +29429,21 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.973518644307814,
-          "direct_familiarity": 0.4653309435293582,
+          "exposure": 0.9735583663413523,
+          "direct_familiarity": 0.465972546397123,
           "trust": 0.1,
-          "predictability": 0.20019283146800948,
-          "reciprocity": 0.24184929945267603,
-          "warmth": 0.26940397210685674,
+          "predictability": 0.20059273505227548,
+          "reciprocity": 0.2425316350831686,
+          "warmth": 0.2698423297235926,
           "respect": 0.17187986485102688,
           "disclosure_depth": 0.0,
           "tension": 0.17619822258523873,
-          "direct_turns": 452,
-          "observed_turns": 2375,
+          "direct_turns": 453,
+          "observed_turns": 2376,
           "repair_attempts": 12,
           "repair_successes": 0,
-          "last_direct_cycle": 284,
+          "last_direct_cycle": 285,
           "shared_references": [
-            "issue",
-            "open",
-            "hearing",
             "direction",
             "i'm not sure i'm on board with the direction of the conversation",
             "hey",
@@ -29503,18 +29500,12 @@
             "what can you say?",
             "owen",
             "i'm",
-            "explain"
+            "explain",
+            "i repair",
+            "i clarify",
+            "i bring to the conversation"
           ],
           "events": [
-            {
-              "cycle": 871,
-              "kind": "repair",
-              "direct": true,
-              "message_id": "20260826T122231558-mara-v5",
-              "risk": 0,
-              "repair": false,
-              "disagreement": false
-            },
             {
               "cycle": 872,
               "kind": "repair",
@@ -30945,6 +30936,15 @@
               "risk": 0,
               "repair": false,
               "disagreement": false
+            },
+            {
+              "cycle": 285,
+              "kind": "repair",
+              "direct": true,
+              "message_id": "20260830T022656843-mara-v5",
+              "risk": 0,
+              "repair": false,
+              "disagreement": false
             }
           ],
           "reports": []
@@ -30952,7 +30952,7 @@
         "jules": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.9733591585509629,
+          "exposure": 0.9733991198131364,
           "direct_familiarity": 0.7407965014665019,
           "trust": 0.1,
           "predictability": 0.3562775552386919,
@@ -30962,7 +30962,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.1177956834003114,
           "direct_turns": 1055,
-          "observed_turns": 2371,
+          "observed_turns": 2372,
           "repair_attempts": 17,
           "repair_successes": 0,
           "last_direct_cycle": 284,
@@ -32713,23 +32713,23 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat i'm, explain as important (answer).",
+            "belief_hypothesis": "mara currently seems to treat i repair, i clarify, i bring to the conversation as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
           "jules": {
-            "belief_hypothesis": "jules currently seems to treat treat as important (repair).",
+            "belief_hypothesis": "jules currently seems to treat participant, action, supportive as important (support).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           }
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
-          "mara already covered: i'm, explain",
-          "sarah already covered: keep, move",
-          "jules already covered: treat"
+          "mara already covered: i repair, i clarify, i bring to the conversation",
+          "jules already covered: participant, action, supportive",
+          "mara already covered: i'm, explain"
         ],
-        "last_updated_cycle": 284
+        "last_updated_cycle": 285
       }
     },
     "jules": {
@@ -32749,21 +32749,6 @@
       },
       "noise": {},
       "room_memories": [
-        {
-          "source": "20260828T141432859-sarah-v5",
-          "status": "observed",
-          "speaker": "sarah",
-          "target": "jules",
-          "text": "I've enjoyed the movie, Owen.",
-          "move": "support",
-          "discourse": "d-20260828T141432859-sarah-v5",
-          "beat_id": "beat-room-sterile-v4-2026-08-18-002114",
-          "topic_episode": "topic-002111",
-          "source_type": "heard_agent_utterance",
-          "proposition_status": "unverified_report",
-          "observed_object": "utterance",
-          "reported_by": "sarah"
-        },
         {
           "source": "20260828T141435199-mara-v5",
           "status": "observed",
@@ -36060,6 +36045,21 @@
           "proposition_status": "unverified_report",
           "observed_object": "utterance",
           "reported_by": "sarah"
+        },
+        {
+          "source": "20260830T022656843-mara-v5",
+          "status": "observed",
+          "speaker": "mara",
+          "target": "owen",
+          "text": "Jules, I want to repair Owen's situation and clarify what I think others believe. I want to bring it into the conversation and address the situation directly.",
+          "move": "repair",
+          "discourse": "d-20260830T022656843-mara-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000285",
+          "topic_episode": "topic-000284",
+          "source_type": "heard_agent_utterance",
+          "proposition_status": "unverified_report",
+          "observed_object": "utterance",
+          "reported_by": "mara"
         }
       ],
       "self_history": [
@@ -38668,18 +38668,6 @@
           "observed_object": "utterance"
         },
         {
-          "source": "20260830T021627164-jules-v5",
-          "text": "Saraah said that the participant's action is supportive in this scenario. The action is well-timed, meaning that it happens when the…",
-          "move": "support",
-          "discourse": "d-20260830T021627164-jules-v5",
-          "beat_id": "beat-room-private-self-v1-2026-08-28-000282",
-          "topic_episode": "topic-000280",
-          "topic_facet": "clarifly",
-          "source_type": "self_spoken",
-          "proposition_status": "self_utterance_record",
-          "observed_object": "utterance"
-        },
-        {
           "source": "20260830T022258365-jules-v5",
           "text": "The participant's action is supportive in this scenario.",
           "move": "answer",
@@ -38702,10 +38690,22 @@
           "source_type": "self_spoken",
           "proposition_status": "self_utterance_record",
           "observed_object": "utterance"
+        },
+        {
+          "source": "20260830T022654488-jules-v5",
+          "text": "The participant's action is supportive in this scenario. The action is well-timed, meaning that it happens when the…",
+          "move": "support",
+          "discourse": "d-20260830T022654488-jules-v5",
+          "beat_id": "beat-room-private-self-v1-2026-08-28-000285",
+          "topic_episode": "topic-000284",
+          "topic_facet": "explain",
+          "source_type": "self_spoken",
+          "proposition_status": "self_utterance_record",
+          "observed_object": "utterance"
         }
       ],
-      "last_event": "20260830T022507503-mara-v5",
-      "spoken": 2371,
+      "last_event": "20260830T022656843-mara-v5",
+      "spoken": 2372,
       "silences": 0,
       "people": {
         "sarah": {
@@ -40234,7 +40234,7 @@
         "mara": {
           "social_model": 3,
           "legacy_familiarity": 0.02,
-          "exposure": 0.973518644307814,
+          "exposure": 0.9735583663413523,
           "direct_familiarity": 0.6692510134647635,
           "trust": 0.1,
           "predictability": 0.3066937665113359,
@@ -40244,7 +40244,7 @@
           "disclosure_depth": 0.0,
           "tension": 0.1313338991753774,
           "direct_turns": 852,
-          "observed_turns": 2375,
+          "observed_turns": 2376,
           "repair_attempts": 19,
           "repair_successes": 0,
           "last_direct_cycle": 272,
@@ -43527,7 +43527,7 @@
             "basis": "latest observed public turn"
           },
           "mara": {
-            "belief_hypothesis": "mara currently seems to treat i'm, explain as important (answer).",
+            "belief_hypothesis": "mara currently seems to treat i repair, i clarify, i bring to the conversation as important (repair).",
             "confidence": 0.62,
             "basis": "latest observed public turn"
           },
@@ -43539,11 +43539,11 @@
         },
         "what_just_changed": "Latest grounding status: observed_utterance.",
         "do_not_repeat": [
+          "mara already covered: i repair, i clarify, i bring to the conversation",
           "mara already covered: i'm, explain",
-          "sarah already covered: keep, move",
-          "sarah already covered: currently, treat, might"
+          "sarah already covered: keep, move"
         ],
-        "last_updated_cycle": 284
+        "last_updated_cycle": 285
       }
     }
   },
