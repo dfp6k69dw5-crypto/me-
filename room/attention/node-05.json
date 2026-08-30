@@ -1,7 +1,7 @@
 {
   "version": "room-attention-v2",
-  "generated_at": "2026-08-30T10:25:35.550350+00:00",
-  "cycle_key": "33306387761:1:1",
+  "generated_at": "2026-08-30T10:28:00.762490+00:00",
+  "cycle_key": "33306387761:1:2",
   "node": 5,
   "entity": "mara",
   "role": "expression",
@@ -29,29 +29,37 @@
   },
   "selected_skills": [
     {
-      "name": "memory-callback",
+      "name": "critical-testing",
       "tier": "project",
-      "domain": "memory-callback",
-      "score": 1.8,
-      "confidence": 0.746,
-      "raw_score": 1.8,
+      "domain": "critical-testing",
+      "score": 2.95,
+      "confidence": 0.959,
+      "raw_score": 2.95,
       "repeat_penalty": 0.0,
       "matched_triggers": [
-        "before"
+        "because",
+        "sure"
       ],
       "evidence_sources": [
         {
           "kind": "message",
           "matched": [
-            "before"
+            "because"
           ],
           "weight": 1.8
+        },
+        {
+          "kind": "message",
+          "matched": [
+            "sure"
+          ],
+          "weight": 1.15
         }
       ]
     }
   ],
-  "context_fingerprint": "27750f4e0a92",
+  "context_fingerprint": "9b0bdb124a60",
   "base_prompt_chars": 2782,
-  "temporary_skill_chars": 209,
-  "approx_added_tokens": 52
+  "temporary_skill_chars": 529,
+  "approx_added_tokens": 132
 }
